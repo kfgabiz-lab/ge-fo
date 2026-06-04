@@ -1,0 +1,2289 @@
+/* Devices & Systems — Product Detail Level 3 (Figma 2232:51843) */
+
+.devices-page--product {
+  position: relative;
+  scroll-behavior: auto;
+}
+
+/* In-page anchors — clear sticky GNB + product sub-nav */
+#product-key-feature,
+#product-lineup,
+#product-downloads,
+#product-video,
+#product-other,
+#product-markets,
+#product-help {
+  scroll-margin-top: 200px;
+}
+
+@media (min-width: 781px) {
+  /* Side navigation — sticky from #product-key-feature (nav-scope) */
+  .devices_product_nav-scope {
+    --devices-nav-width: 156px;
+    --devices-nav-gap: 60px;
+    display: grid;
+    grid-template-columns: minmax(0, 1224px) var(--devices-nav-width);
+    column-gap: var(
+    --devices-nav-gap);
+    align-items: start;
+    width: min(
+      100%,
+      calc(var(
+    --inner-max) + var(--devices-nav-gap) + var(--devices-nav-width))
+    );
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+
+  .devices_product_nav-scope__content {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  .devices_product_nav {
+    position: sticky;
+    top: 200px;
+    z-index: 20;
+    grid-column: 2;
+    grid-row: 1;
+    width: var(--devices-nav-width);
+    align-self: start;
+    padding-top: 150px;
+  }
+
+  .devices_product_nav__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .devices_product_nav__link {
+    display: block;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    position: relative;
+  }
+
+  .devices_product_nav__link:hover,
+  .devices_product_nav__link.is-active {
+    color: var(--color-primary);
+  }
+ .devices_product_nav__link.is-active:before{
+    display:block;
+    content:'';
+    width: 4px;
+    height: 4px;
+    background: #222222;
+    border-radius: 3px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .devices_product_nav__link.is-active {
+    font-weight: 600;
+    padding-left: 12px;
+  }
+
+  /* Hero */
+  section.devices_product_hero {
+    padding: 80px 0 150px;
+    background: #fff;
+  }
+  .devices-page--product section.devices_product_hero > .inner {
+    padding: 0;
+  }
+  section.devices_product_hero .devices_product_hero__inner {
+    display: grid;
+    grid-template-columns: 540px 1fr;
+    gap: 160px;
+    align-items: start;
+  }
+
+  section.devices_product_hero .devices_product_hero__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 540px;
+    padding: 40px 0 0 0;
+  }
+
+  section.devices_product_hero .devices_product_hero__img {
+    display: block;
+    max-width: 390px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  section.devices_product_hero .devices_product_hero__meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  section.devices_product_hero .devices_product_hero__brand {
+    display: block;
+    height: 24px;
+    width: auto;
+  }
+
+  section.devices_product_hero .devices_product_hero__category {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--color-primary);
+  }
+
+  section.devices_product_hero .devices_product_hero__series {
+    margin-bottom: 8px;
+    font-family: jaka, Arial, Helvetica, sans-serif;
+    font-size: 70px;
+    font-weight: 800;
+    line-height: 80px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.devices_product_hero .devices_product_hero__subtitle {
+    margin-bottom: 20px;
+    font-size: 24px;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_product_hero .devices_product_hero__desc {
+    margin-bottom: 30px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.devices_product_hero .devices_product_hero__line {
+    margin: 0 0 30px;
+    border: none;
+    border-top: 1px solid #e8e8e8;
+  }
+
+  section.devices_product_hero .devices_product_hero__specs {
+    margin: 0 0 50px;
+  }
+
+  section.devices_product_hero .devices_product_hero__spec-row {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_hero .devices_product_hero__spec-row:last-child {
+    margin-bottom: 0;
+  }
+
+  section.devices_product_hero .devices_product_hero__spec-row dt {
+    flex-shrink: 0;
+    width: 120px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 26px;
+    color: var(--color-primary);
+  }
+
+  section.devices_product_hero .devices_product_hero__spec-row dd {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 40px;
+    color: #222;
+  }
+
+  section.devices_product_hero .devices_product_hero__btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  section.devices_product_hero .devices_product_hero__btns .btn-lv01--line {
+    gap: 8px;
+  }
+  @keyframes devices-product-hero-icon-download-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    50% {
+      transform: translateY(6px);
+      opacity: 0.65;
+    }
+  }
+
+  section.devices_product_hero .devices_product_hero__btns .icon_download {
+    display: block;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    background: url("/ico/ico_scrto_18.svg") center / contain no-repeat;
+    animation: devices-product-hero-icon-download-bounce 1.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    section.devices_product_hero .devices_product_hero__btns .icon_download {
+      animation: none;
+    }
+  }
+  /* Key Feature */
+  section.devices_product_features {
+    padding: 150px 0 213px;
+    position: relative;
+  }
+    section.devices_product_features:before{
+      display:block;
+      content:'';
+      width: 200vw;
+      position: absolute;
+      height: 100%;
+      left: -30vw;
+      background: #F5F7FA;
+      top: 0;
+    }
+  .devices-page--product section > .inner {
+    padding-right: 0;
+    z-index: 10;
+    position: relative;
+  }
+
+  .devices-page--product section.highlight_news .inner {
+    padding: 0;
+  }
+  section.devices_product_features .section_tit {
+    margin-bottom: 40px;
+  }
+
+  section.devices_product_features .devices_product_features__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  section.devices_product_features .devices_product_features__card {
+    min-height: 262px;
+    padding: 40px;
+    background: #fff;
+    border-radius: 4px;
+  }
+
+  section.devices_product_features .devices_product_features__icon {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 30px;
+    background: #f5f7fa url("/img/devices-systems/keyfeature_01.svg") center /
+      contain no-repeat;
+    border-radius: 4px;
+  }
+
+  section.devices_product_features .devices_product_features__tit {
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_product_features .devices_product_features__desc {
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+    max-width: 373px;
+  }
+
+  /* Product Benefits (HVDC) — same layout pattern as Key Feature */
+  section.devices_product_benefits {
+    position: relative;
+    padding: 150px 0;
+  }
+
+  section.devices_product_benefits::before {
+    display: block;
+    content: "";
+    width: 200vw;
+    position: absolute;
+    height: 100%;
+    left: -30vw;
+    background: #f5f7fa;
+    top: 0;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__head {
+    margin-bottom: 40px;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__head .section_desc {
+    margin-top: 10px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__card {
+    min-height: 292px;
+    padding: 40px;
+    background: #fff;
+    border-radius: 4px;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__icon {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 30px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+  }
+
+  section.devices_product_benefits
+    .devices_product_benefits__card--data
+    .devices_product_benefits__icon {
+    background-image: url("/img/devices-systems/keyfeature_01.svg");
+  }
+
+  section.devices_product_benefits
+    .devices_product_benefits__card--reliability
+    .devices_product_benefits__icon {
+    background-image: url("/img/devices-systems/keyfeature_02.svg");
+  }
+
+  section.devices_product_benefits
+    .devices_product_benefits__card--analysis
+    .devices_product_benefits__icon {
+    background-image: url("/img/devices-systems/keyfeature_03.svg");
+  }
+
+  section.devices_product_benefits
+    .devices_product_benefits__card--connectivity
+    .devices_product_benefits__icon {
+    background-image: url("/img/devices-systems/keyfeature_04.svg");
+  }
+
+  section.devices_product_benefits .devices_product_benefits__tit {
+    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__list li {
+    position: relative;
+    padding-left: 12px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #888;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__list li + li {
+    margin-top: 6px;
+  }
+
+  /* CommonBanner02 — product page overlap spacing */
+  .devices-page--product section.common_banner_02 {
+    margin-top: -90px;
+    margin-bottom: 150px;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Lineup */
+  section.devices_product_lineup {
+    padding-bottom: 150px;
+    background: #fff;
+  }
+
+  section.devices_product_lineup .section_tit {
+    margin-bottom: 40px;
+  }
+
+  /* Figma 2910:32776 TAB — 1224px, collapsed max 860px */
+  section.devices_product_lineup .devices_product_lineup__grid {
+    margin-bottom: 40px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__grid-scroll {
+    position: relative;
+    max-width: 1224px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__grid-scroll.is-collapsed {
+    max-height: 860px;
+    overflow: hidden;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__grid-scroll.is-expanded {
+    max-height: none;
+    overflow: visible;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 150px;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, #fff 100%);
+  }
+
+  section.devices_product_lineup .devices_product_lineup__head-row,
+  section.devices_product_lineup .devices_product_lineup__row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  section.devices_product_lineup .devices_product_lineup__head-row {
+    border-top: 2px solid #0f1f45;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__head-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 64px;
+    padding: 20px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    text-align: center;
+    color: #222;
+    background: #fff;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__row {
+    min-height: 222px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__row--tall {
+    min-height: 246px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__row--tall .devices_product_lineup__type-cell,
+  section.devices_product_lineup .devices_product_lineup__row--tall .devices_product_lineup__cell {
+    min-height: 246px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__type-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 222px;
+    padding: 24px 30px;
+    background: #f5f7fa;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__row:first-of-type .devices_product_lineup__type-cell {
+    border-bottom-color: #ddd;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__type-img {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 136px;
+    height: 136px;
+    overflow: hidden;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__type-img img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__type-label {
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 26px;
+    text-align: center;
+    color: #222;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 222px;
+    padding: 24px 16px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+    text-align: center;
+    background: #fff;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__cell-values {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__cell-sep {
+    flex-shrink: 0;
+    width: 1px;
+    height: 12px;
+    background: #ddd;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    max-width: 1224px;
+    margin-top: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #222;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  section.devices_product_lineup .devices_product_lineup__more .devices_product_lineup__more-inner{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+  section.devices_product_lineup .devices_product_lineup__more::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: #888;
+  }
+
+
+
+  section.devices_product_lineup .devices_product_lineup__more-icon {
+    display: block;
+    width: 14px;
+    height: 16px;
+    background: url("/ico/ico_down_16.svg") center 4px / contain no-repeat;
+    transition: transform 0.2s ease;
+    background-size: 14px 14px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__more-icon.is-up {
+    transform: rotate(180deg);
+  }
+
+  section.devices_product_lineup .devices_product_lineup__footer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    max-width: 1224px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__note {
+    flex: 1;
+    max-width: 960px;
+    font-size: 15px;
+    line-height: 23px;
+    color: #666;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__note p {
+    margin: 0;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__note p + p {
+    margin-top: 0;
+  }
+
+  section.devices_product_lineup .btn-lv02--solid .icon_link-14 {
+    flex-shrink: 0;
+    margin-left: 8px;
+    background: url(/ico/ico_arrow_right_18_white.svg);
+    width: 9px;
+    height: 9px;
+    background-size: contain;
+  }
+
+  /* Downloads */
+  section.devices_product_downloads {
+    padding-bottom: 150px;
+    background: #fff;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__head {
+    margin-bottom: 40px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__body {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__filter {
+    padding: 28px 30px;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #E8E8E8;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__filter-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__filter-tit {
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__refresh {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    font-size: 14px;
+    color: #666;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__refresh-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    background: url("/ico/ico_refresh_14.svg") center / contain no-repeat;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__filter-panel {
+    margin-top: 8px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__filter-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #222;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__filter-arrow {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    background: url("/ico/ico_up_16.svg") center / contain no-repeat;
+    transform: rotate(180deg);
+    transition: transform 0.25s ease;
+  }
+
+  section.devices_product_downloads
+    .devices_product_downloads__filter-label.is-open
+    .devices_product_downloads__filter-arrow {
+    transform: rotate(0deg);
+  }
+
+  section.devices_product_downloads .devices_product_downloads__filter-list {
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__filter-list li {
+    margin-bottom: 20px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__filter-list li:last-child {
+    margin-bottom: 0;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__check-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__check {
+    padding: 0;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__check-label {
+    font-size: 16px;
+    line-height: 16px;
+    color: #222;
+    cursor: pointer;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__pagination {
+    margin-top: 40px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__toolbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 20px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__count {
+    font-size: 15px;
+    line-height: 23px;
+    color: #666;
+    font-weight: 500;
+  }
+  section.devices_product_downloads .devices_product_downloads__count strong {
+    color: #222;
+  }
+  section.devices_product_downloads .devices_product_downloads__search-row {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__item {
+    margin-bottom: 10px;
+    padding: 30px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__item-head {
+    margin-bottom: 0;
+  }
+
+  /* Figma — Catalog + date 한 줄, 제목 다음 줄 */
+  section.devices_product_downloads .devices_product_downloads__item-head-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__item-body {
+    margin-top: 0;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__item-version {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+
+  /* Figma Drop down 38px — version row (overrides guide_field 50px in globals) */
+  section.devices_product_downloads
+    .devices_product_downloads__item-version
+    .devices_product_downloads__version-select.guide_field--h38
+    .MuiOutlinedInput-root {
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  section.devices_product_downloads
+    .devices_product_downloads__item-version
+    .devices_product_downloads__version-select.guide_field--h38
+    .MuiSelect-select {
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+    padding: 12px 30px 12px 16px;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  section.devices_product_downloads
+    .devices_product_downloads__item-version
+    .devices_product_downloads__version-select.guide_field--h38
+    .MuiSelect-icon,
+  section.devices_product_downloads
+    .devices_product_downloads__item-version
+    .devices_product_downloads__version-select.guide_field--h38
+    .guide_field__select-icon {
+    right: 12px;
+    width: 14px;
+    height: 14px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__version-select {
+    flex-shrink: 0;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__type {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 15px;
+    color: var(--color-accent);
+  }
+
+  section.devices_product_downloads .devices_product_downloads__item-tit {
+    margin: 8px 0 0;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    color: #222;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__date {
+    flex-shrink: 0;
+    font-size: 14px;
+    line-height: 1;
+    color: #666;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* Figma 3082:53215 — files panel + View Description */
+  section.devices_product_downloads .devices_product_downloads__files-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px;
+    background: #f5f7fa;
+    border-radius: 4px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__view-desc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    height: 30px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1;
+    color: #0c1625;
+    background: #fff;
+    border: 1px solid rgb(15 31 69 / 30%);
+    border-radius: 3px;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__view-desc:hover {
+    background: #f5f7fa;
+    border-color: rgb(15 31 69 / 45%);
+  }
+
+  section.devices_product_downloads .devices_product_downloads__files {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 15px;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__pdf {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__pdf img {
+    display: block;
+    width: 18px;
+    height: 18px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file-main {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    max-width: 537px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file-name {
+    min-width: 0;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    min-width: 209px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 500;
+    min-width: 105px;
+    line-height: 1;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file-btn-icon {
+    flex-shrink: 0;
+    min-width: 14px;
+    min-height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file-btn--copy {
+    color: #fff;
+    background: #888;
+  }
+
+  section.devices_product_downloads
+    .devices_product_downloads__file-btn--copy
+    .devices_product_downloads__file-btn-icon {
+    background-image: url("/ico/ico_copy_white_14.svg");
+    background-size: 14px 14px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file-btn--copy:hover {
+    background: #777;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file-btn--download {
+    color: #fff;
+    background: var(--color-primary);
+  }
+
+  section.devices_product_downloads
+    .devices_product_downloads__file-btn--download
+    .devices_product_downloads__file-btn-icon {
+    background-image: url("/ico/ico_download.svg");
+    filter: brightness(0) invert(1);
+  }
+
+  section.devices_product_downloads .devices_product_downloads__file-btn--download:hover {
+    background: #0a1838;
+  }
+
+  /* Download description modal — Figma 3082:54197 */
+  .devices_download_desc_modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  .devices_download_desc_modal__dim {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border: none;
+    background: rgb(0 0 0 / 60%);
+    cursor: pointer;
+  }
+
+  .devices_download_desc_modal__panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    max-height: min(700px, calc(100vh - 48px));
+    overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+  }
+
+  .devices_download_desc_modal__head {
+    flex-shrink: 0;
+    padding: 40px 40px 0;
+  }
+
+  .devices_download_desc_modal__head-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .devices_download_desc_modal__tit {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  .devices_download_desc_modal__version {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: #666;
+  }
+
+  .devices_download_desc_modal__line {
+    margin: 20px 0 0;
+    border: none;
+    border-top: 1px solid #d9d9d9;
+  }
+
+  .devices_download_desc_modal__close {
+    position: relative;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .devices_download_desc_modal__close::before,
+  .devices_download_desc_modal__close::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 2px;
+    background: #222;
+    content: "";
+  }
+
+  .devices_download_desc_modal__close::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .devices_download_desc_modal__close::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .devices_download_desc_modal__body {
+    flex: 1;
+    min-height: 0;
+    padding: 30px 40px 40px;
+    overflow-y: auto;
+  }
+
+  .devices_download_desc_modal__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  .devices_download_desc_modal__text p {
+    margin: 0;
+  }
+
+  .devices_download_desc_modal__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Video — custom play/pause only (no YouTube toolbar) */
+  section.devices_product_video {
+    padding-bottom: 150px;
+    background: #fff;
+  }
+  section.common_banner_03 + section.devices_product_video,
+  section.common_banner_03 + section.devices_product_other {
+    margin-top: 150px;
+  }
+  section.devices_product_video .section_tit {
+    margin-bottom: 40px;
+  }
+
+  section.devices_product_video .devices_product_video__player {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    aspect-ratio: 1224 / 689;
+    background: #000;
+  }
+
+  section.devices_product_video .devices_product_video__embed {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  section.devices_product_video .devices_product_video__iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(1.14);
+  }
+
+  section.devices_product_video .devices_product_video__poster {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  section.devices_product_video .devices_product_video__poster.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  section.devices_product_video .devices_product_video__poster-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  section.devices_product_video .devices_product_video__dim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  section.devices_product_video .devices_product_video__toggle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    padding: 0;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  section.devices_product_video .devices_product_video__toggle:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  section.devices_product_video .devices_product_video__icon {
+    display: block;
+  }
+
+  section.devices_product_video .devices_product_video__icon--play {
+    width: 0;
+    height: 0;
+    margin-left: 6px;
+    border-style: solid;
+    border-width: 12px 0 12px 20px;
+    border-color: transparent transparent transparent #fff;
+  }
+
+  section.devices_product_video .devices_product_video__icon--pause {
+    width: 20px;
+    height: 24px;
+    background:
+      linear-gradient(#fff, #fff) left center / 5px 24px no-repeat,
+      linear-gradient(#fff, #fff) right center / 5px 24px no-repeat;
+  }
+
+  /* Other Products — Figma 2910:32265, Rolling 50px (swiper_type_01) */
+  section.devices_product_other {
+    padding-bottom: 150px;
+    background: #fff;
+  }
+
+  section.devices_product_other .section_tit {
+    margin-bottom: 40px;
+  }
+
+  section.devices_product_other .devices_product_other__body {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+  }
+
+  section.devices_product_other .devices_product_other__swiper-wrap {
+    overflow: hidden;
+  }
+
+  section.devices_product_other .devices_product_other__swiper {
+    overflow: visible;
+  }
+
+  section.devices_product_other .devices_product_other__slide {
+    width: auto;
+    height: auto;
+  }
+
+  section.devices_product_other .devices_product_other__card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.devices_product_other .devices_product_other__img-wrap {
+    position: relative;
+    width: 288px;
+    height: 288px;
+  }
+
+  section.devices_product_other .devices_product_other__img-area {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    overflow: hidden;
+    background: #f5f7fa;
+    box-sizing: border-box;
+  }
+
+  section.devices_product_other .devices_product_other__img-area img {
+    display: block;
+    width: 100%;
+    max-width: 228px;
+    max-height: 228px;
+    object-fit: contain;
+  }
+
+  section.devices_product_other .devices_product_other__tit {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_product_other .devices_product_other__card:hover .devices_product_other__tit {
+    text-decoration: underline;
+  }
+
+  section.devices_product_other .swiper_type_01_controls {
+    gap: 30px;
+  }
+
+  section.devices_product_other .swiper_type_01_nav {
+    gap: 20px;
+  }
+
+  section.devices_product_other .swiper_type_01_pagination {
+    max-width: none;
+  }
+
+  /* Markets inside product detail (Figma 3082:53025, 1224 layout) */
+  .devices-page--product section.devices_markets {
+    padding-bottom: 150px;
+  }
+
+  .devices-page--product section.devices_markets > .inner {
+    max-width: 1224px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .devices-page--product section.devices_markets .devices_markets__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 50px 24px;
+  }
+
+  .devices-page--product section.devices_markets .img_area {
+    margin-bottom: 20px;
+  }
+
+  .devices-page--product section.devices_markets .tit {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  .devices-page--product section.devices_markets .tagline {
+    margin-bottom: 10px;
+  }
+
+  /* Help overlay — Figma 2910:32225 */
+  section.devices_help.devices_help--overlay {
+    padding: 150px 0;
+    background: #f5f7fa;
+    position: relative;
+  }
+    section.devices_help.devices_help--overlay:before{
+      display:block;
+      content:'';
+      width: 300vw;
+      position: absolute;
+      height: 100%;
+      left: -100vw;
+      background: #F5F7FA;
+      top: 0;
+    }
+  section.devices_help.devices_help--overlay .section_tit {
+    margin-bottom: 10px;
+    color: #222;
+  }
+
+  section.devices_help.devices_help--overlay .section_desc {
+    max-width: 819px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.devices_help.devices_help--overlay .devices_help__head {
+    margin-bottom: 40px;
+  }
+
+  .devices-page--product section.devices_help.devices_help--overlay > .inner {
+    max-width: 1224px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  section.devices_help .devices_help__cards--overlay {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  section.devices_help .devices_help__card--overlay {
+    display: flex;
+    flex-direction: column;
+    min-height: 460px;
+    padding: 0;
+    overflow: hidden;
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.devices_help .devices_help__card--overlay .devices_help__card-body {
+    flex: 1;
+    padding: 36px 34px 0;
+  }
+
+  section.devices_help .devices_help__card--overlay .devices_help__card-tit {
+    margin-bottom: 14px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_help .devices_help__card--overlay .devices_help__card-desc {
+    margin-bottom: 24px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+    min-height: 112px;
+  }
+
+  section.devices_help .devices_help__card--overlay .devices_help__card-cta {
+    color: #222;
+    margin-bottom: 40px;
+  }
+
+  section.devices_help .devices_help__card-visual {
+    flex-shrink: 0;
+    height: 170px;
+    overflow: hidden;
+  }
+
+  section.devices_help .devices_help__card-visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  section.devices_help .devices_help__card--overlay:hover .btn-text-30__icon {
+    background: var(--color-accent);
+  }
+
+  section.devices_help .devices_help__card--overlay:hover .icon_external-18,
+  section.devices_help .devices_help__card--overlay:hover .icon_arrow-18 {
+    filter: brightness(0) invert(1);
+  }
+
+  /* HVDC / Software product (Figma 3082:51663) */
+  section.devices_hvdc_hero {
+    padding: 80px 0 120px;
+    background: #fff;
+  }
+
+  section.devices_hvdc_hero .devices_hvdc_hero__inner {
+    max-width: 1440px;
+  }
+
+  section.devices_hvdc_hero .devices_hvdc_hero__tagline {
+    margin: 0 0 20px;
+    max-width: 640px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--color-primary);
+  }
+
+  section.devices_hvdc_hero .devices_hvdc_hero__title {
+    margin: 0 0 20px;
+    font-family: var(--font-display, "Plus Jakarta Sans", sans-serif);
+    font-size: 70px;
+    font-weight: 800;
+    line-height: 80px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.devices_hvdc_hero .devices_hvdc_hero__desc {
+    margin: 0 0 50px;
+    max-width: 1225px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.devices_hvdc_overview {
+    padding-bottom: 150px;
+  }
+
+  section.devices_hvdc_overview .devices_hvdc_overview__visual {
+    margin-bottom: 40px;
+    height: 450px;
+    border-radius: 4px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  section.devices_hvdc_overview .devices_hvdc_overview__body {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  section.devices_hvdc_overview .devices_hvdc_overview__title {
+    margin: 0;
+    font-family: var(--font-display, "Plus Jakarta Sans", sans-serif);
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 62px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.devices_hvdc_overview .devices_hvdc_overview__desc {
+    margin: 0;
+    font-size: 18px;
+    line-height: 28px;
+    color: #222;
+    max-width: 708px;
+    align-self: flex-end;
+  }
+
+  section.devices_product_applications {
+    padding: 150px 0 168px;
+    background: #fff;
+  }
+
+  section.devices_product_applications .devices_product_applications__head {
+    margin-bottom: 40px;
+  }
+
+  section.devices_product_applications .devices_product_applications__head .section_tit {
+    max-width: 1224px;
+    white-space: pre-line;
+  }
+
+  section.devices_product_applications .devices_product_applications__head .section_desc {
+    margin-top: 10px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.devices_product_applications .devices_product_applications__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  section.devices_product_applications .devices_product_applications__visual {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #f5f7fa;
+  }
+
+  section.devices_product_applications .devices_product_applications__visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  section.devices_product_applications .devices_product_applications__body {
+    margin-top: 24px;
+  }
+
+  section.devices_product_applications .devices_product_applications__tit {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_product_applications .devices_product_applications__sub {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 26px;
+    color: #222;
+  }
+
+  section.devices_product_applications .devices_product_applications__desc {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  section.devices_product_why {
+    padding-bottom: 150px;
+  }
+
+  section.devices_product_why > .inner > .section_tit {
+    margin-bottom: 40px;
+  }
+
+  section.devices_product_why .devices_product_why__blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  section.devices_product_why .devices_product_why__block {
+    padding: 60px;
+    background: #f5f7fa;
+    border-radius: 4px;
+  }
+
+  section.devices_product_why .devices_product_why__block-tit {
+    margin: 0 0 10px;
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 44px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_product_why .devices_product_why__block-lead {
+    margin: 0 0 50px;
+    max-width: 854px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  section.devices_product_why .devices_product_why__cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px 30px;
+  }
+
+  section.devices_product_why .devices_product_why__card-visual {
+    aspect-ratio: 537 / 330;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #ddd;
+  }
+
+  section.devices_product_why .devices_product_why__card-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  section.devices_product_why .devices_product_why__card-body {
+    margin-top: 24px;
+  }
+
+  section.devices_product_why .devices_product_why__card-tit {
+    margin: 0 0 8px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_product_why .devices_product_why__card-desc {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+    min-height: 48px;
+  }
+
+  .devices_product_nav-scope:has(.devices_product_benefits) .devices_product_nav {
+    padding-top: 150px;
+  }
+}
+
+@media (max-width: 780px) {
+  .devices_product_nav-scope {
+    display: block;
+    width: 100%;
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  .devices_product_nav {
+    display: none;
+  }
+
+  section.devices_product_hero {
+    padding: 60px 0 80px;
+  }
+
+  section.devices_product_hero .devices_product_hero__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  section.devices_product_hero .devices_product_hero__visual {
+    min-height: 0;
+    padding: 0;
+  }
+
+  section.devices_product_hero .devices_product_hero__img {
+    max-width: 280px;
+  }
+
+  section.devices_product_hero .devices_product_hero__series {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  section.devices_product_hero .devices_product_hero__subtitle {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  section.devices_product_hero .devices_product_hero__desc {
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  section.devices_product_hero .devices_product_hero__spec-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  section.devices_product_hero .devices_product_hero__spec-row dt {
+    width: auto;
+  }
+
+  section.devices_product_hero .devices_product_hero__spec-row dd {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  section.devices_product_hero .devices_product_hero__btns {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .devices-page--product section.common_banner_02 {
+    margin-top: 0;
+    margin-bottom: 80px;
+  }
+
+  section.devices_product_features {
+    position: relative;
+    padding: 80px 0;
+  }
+
+  section.devices_product_features::before {
+    display: block;
+    content: "";
+    width: 200vw;
+    position: absolute;
+    height: 100%;
+    left: -30vw;
+    background: #f5f7fa;
+    top: 0;
+    z-index: 0;
+  }
+
+  section.devices_product_features > .inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.devices_product_features .section_tit {
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_features .devices_product_features__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  section.devices_product_features .devices_product_features__card {
+    min-height: 0;
+    padding: 24px 20px;
+    background: #fff;
+    border-radius: 4px;
+  }
+
+  section.devices_product_features .devices_product_features__icon {
+    display: block;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 20px;
+    background: #f5f7fa url("/img/devices-systems/keyfeature_01.svg") center /
+      contain no-repeat;
+    border-radius: 4px;
+  }
+
+  section.devices_product_features .devices_product_features__tit {
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_product_features .devices_product_features__desc {
+    font-size: 15px;
+    line-height: 22px;
+    color: #666;
+    max-width: none;
+  }
+
+  section.devices_product_benefits {
+    position: relative;
+    padding: 80px 0;
+  }
+
+  section.devices_product_benefits::before {
+    display: block;
+    content: "";
+    width: 200vw;
+    position: absolute;
+    height: 100%;
+    left: -30vw;
+    background: #f5f7fa;
+    top: 0;
+    z-index: 0;
+  }
+
+  section.devices_product_benefits > .inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__head {
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__card {
+    min-height: 0;
+    padding: 24px 20px;
+    background: #fff;
+    border-radius: 4px;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__icon {
+    display: block;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 20px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+  }
+
+  section.devices_product_benefits
+    .devices_product_benefits__card--data
+    .devices_product_benefits__icon {
+    background-image: url("/img/devices-systems/keyfeature_01.svg");
+  }
+
+  section.devices_product_benefits
+    .devices_product_benefits__card--reliability
+    .devices_product_benefits__icon {
+    background-image: url("/img/devices-systems/keyfeature_02.svg");
+  }
+
+  section.devices_product_benefits
+    .devices_product_benefits__card--analysis
+    .devices_product_benefits__icon {
+    background-image: url("/img/devices-systems/keyfeature_03.svg");
+  }
+
+  section.devices_product_benefits
+    .devices_product_benefits__card--connectivity
+    .devices_product_benefits__icon {
+    background-image: url("/img/devices-systems/keyfeature_04.svg");
+  }
+
+  section.devices_product_benefits .devices_product_benefits__tit {
+    margin: 0 0 8px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__list li {
+    position: relative;
+    padding-left: 12px;
+    font-size: 15px;
+    line-height: 22px;
+    color: #666;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #888;
+  }
+
+  section.devices_product_benefits .devices_product_benefits__list li + li {
+    margin-top: 6px;
+  }
+
+  section.devices_product_downloads {
+    padding-bottom: 80px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__head {
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__body {
+    grid-template-columns: 1fr;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__search-row {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__item {
+    padding: 20px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__item-head-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  section.devices_product_lineup {
+    padding-bottom: 80px;
+  }
+
+  section.devices_product_lineup .section_tit {
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__grid-scroll.is-collapsed {
+    max-height: none;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__fade {
+    display: none;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__head-row,
+  section.devices_product_lineup .devices_product_lineup__row {
+    grid-template-columns: 1fr;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__head-cell {
+    display: none;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__row,
+  section.devices_product_lineup .devices_product_lineup__row--tall {
+    min-height: 0;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__type-cell {
+    min-height: 0;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__cell {
+    justify-content: flex-start;
+    min-height: 0;
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__cell-values {
+    justify-content: flex-start;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  section.devices_help.devices_help--overlay {
+    padding: 80px 0;
+  }
+
+  section.devices_help.devices_help--overlay .devices_help__head {
+    margin-bottom: 24px;
+  }
+
+  section.devices_help .devices_help__cards--overlay {
+    grid-template-columns: 1fr;
+  }
+
+  section.devices_help .devices_help__card--overlay {
+    min-height: 0;
+  }
+
+  section.devices_product_video {
+    padding-bottom: 80px;
+  }
+
+  section.common_banner_03 + section.devices_product_video,
+  section.common_banner_03 + section.devices_product_other {
+    margin-top: 80px;
+  }
+
+  section.devices_product_video .section_tit {
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_video .devices_product_video__toggle {
+    width: 60px;
+    height: 60px;
+  }
+
+  section.devices_product_other {
+    padding-bottom: 80px;
+  }
+
+  section.devices_product_other .section_tit {
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_other .devices_product_other__body {
+    gap: 32px;
+  }
+
+  section.devices_product_other .devices_product_other__slide {
+    width: auto;
+  }
+
+  section.devices_product_other .devices_product_other__img-wrap {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .devices-page--product section.devices_markets {
+    padding: 0;
+    margin: 80px 0;
+  }
+
+  .devices-page--product section.devices_markets .devices_markets__head {
+    margin-bottom: 24px;
+  }
+
+  .devices-page--product section.devices_markets .devices_markets__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .devices-page--product section.devices_markets .img_area {
+    aspect-ratio: 464 / 500;
+    width: 100%;
+    height: 347px;
+    margin-bottom: 20px;
+  }
+
+  .devices-page--product section.devices_markets .tit {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  .devices-page--product section.devices_markets .tagline {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .devices-page--product section.devices_markets .desc {
+    font-size: 15px;
+    line-height: 21px;
+  }
+
+  section.devices_hvdc_hero {
+    padding: 60px 0 80px;
+  }
+
+  section.devices_hvdc_hero .devices_hvdc_hero__inner {
+    max-width: none;
+  }
+
+  section.devices_hvdc_hero .devices_hvdc_hero__title {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  section.devices_hvdc_hero .devices_hvdc_hero__desc {
+    margin-bottom: 32px;
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  section.devices_hvdc_overview {
+    padding-bottom: 80px;
+  }
+
+  section.devices_hvdc_overview .devices_hvdc_overview__visual {
+    height: 220px;
+    margin-bottom: 24px;
+    background-attachment: scroll;
+  }
+
+  section.devices_hvdc_overview .devices_hvdc_overview__body {
+    gap: 24px;
+  }
+
+  section.devices_hvdc_overview .devices_hvdc_overview__body,
+  section.devices_hvdc_overview .devices_hvdc_overview__title {
+    max-width: none;
+  }
+
+  section.devices_hvdc_overview .devices_hvdc_overview__desc {
+    max-width: none;
+    align-self: auto;
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  section.devices_product_applications {
+    padding: 80px 0;
+  }
+
+  section.devices_product_applications .devices_product_applications__head {
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_applications .devices_product_applications__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  section.devices_product_applications .devices_product_applications__body {
+    margin-top: 16px;
+  }
+
+  section.devices_product_applications .devices_product_applications__tit {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  section.devices_product_why {
+    padding-bottom: 80px;
+  }
+
+  section.devices_product_why > .inner > .section_tit {
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_why .devices_product_why__block {
+    padding: 24px 20px;
+  }
+
+  section.devices_product_why .devices_product_why__block-tit {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  section.devices_product_why .devices_product_why__block-lead {
+    margin-bottom: 24px;
+  }
+
+  section.devices_product_why .devices_product_why__cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  section.devices_product_why .devices_product_why__card-body {
+    margin-top: 16px;
+  }
+
+  section.devices_product_why .devices_product_why__card-tit {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  section.devices_product_why .devices_product_why__card-desc {
+    min-height: 0;
+    font-size: 15px;
+    line-height: 22px;
+  }
+}
+

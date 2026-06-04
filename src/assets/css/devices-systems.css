@@ -1,0 +1,775 @@
+/* Devices & Systems ? Motor Control (2232:51609), VFD (2232:51425) */
+
+.devices-page section .section_tit {
+  font-weight: 700;
+}
+
+@media (min-width: 781px) {
+  /* Category list ? VFD (split intro + product scroll) */
+  section.devices_category {
+    background: #fff;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  section.devices_category .devices_category__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+
+  section.devices_category .devices_category__intro {
+    position: relative;
+    padding: 128px 0 120px;
+  }
+
+  section.devices_category .devices_category__intro-bg {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+  }
+
+  section.devices_category .devices_category__intro-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    position: sticky;
+    top: 120px;
+    margin: 0 80px 0 0px;
+  }
+
+  section.devices_category .devices_category__parent {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  section.devices_category a.devices_category__parent:hover {
+    text-decoration: underline;
+  }
+
+  section.devices_category .devices_category__tit {
+    margin-bottom: 20px;
+    font-family: jaka, Arial, Helvetica, sans-serif;
+    font-size: 70px;
+    font-weight: 800;
+    line-height: 80px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.devices_category .devices_category__desc {
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+    white-space: pre-line;
+  }
+
+  section.devices_category .devices_category__list {
+    padding: 150px 0 120px;
+    position: relative;
+    overflow: visible;
+  }
+  section.devices_category .devices_category__list:before {
+    display: block;
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 200%;
+    background: #f5f7fa;
+    top: 0;
+  }
+  section.devices_category .devices_category__list-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 640px;
+    margin: 0 0px 0 80px;
+    padding: 0;
+    position: relative;
+  }
+
+  section.devices_category .devices_category__item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 40px 40px 40px 30px;
+    background: #fff;
+  }
+
+  section.devices_category .devices_category__item-img {
+    flex-shrink: 0;
+    width: 180px;
+    height: 180px;
+    overflow: hidden;
+  }
+
+  section.devices_category .devices_category__item-img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  section.devices_category .devices_category__item-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+    min-width: 0;
+    max-width: 370px;
+  }
+
+  section.devices_category .devices_category__item-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  section.devices_category .devices_category__item-tit {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_category .devices_category__item-desc {
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  /* Category ? stacked (LV Automation, Figma 3082:52770) */
+  section.devices_category.devices_category--stacked {
+    max-width: none;
+    margin: 0;
+    background: #fff;
+  }
+
+  section.devices_category--stacked .devices_category__header {
+    padding: 80px 0 0;
+  }
+
+  section.devices_category--stacked .devices_category__header .devices_category__tit {
+    margin-bottom: 30px;
+  }
+
+  section.devices_category--stacked .devices_category__header .devices_category__desc {
+    max-width: 1440px;
+  }
+
+  section.devices_category--stacked .devices_category__grid-wrap {
+    position: relative;
+    margin-top: 120px;
+    padding: 0 0 120px;
+  }
+
+  section.devices_category--stacked .devices_category__grid-wrap::before {
+    position: absolute;
+    inset: 0;
+    left: 50%;
+    z-index: 0;
+    width: 100vw;
+    content: "";
+  }
+
+  section.devices_category--stacked .devices_category__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 23px 24px;
+  }
+
+  section.devices_category--stacked .devices_category__item {
+    min-height: 294px;
+    padding: 50px 30px;
+    box-sizing: border-box;
+    background: #f5f7fa;
+    text-decoration: none;
+    color: inherit;
+  }
+  section.devices_category .devices_category__item:hover .btn-lv03--solid {
+    background: var(--color-primary-hover);
+  }
+  section.devices_category--stacked a.devices_category__item:focus-visible {
+    outline: 2px solid var(--color-primary, #e60012);
+    outline-offset: 2px;
+  }
+
+  section.devices_category--stacked .devices_category__item-body {
+    max-width: 428px;
+    gap: 30px;
+  }
+
+  /* Hero ? Figma 3082:52982 (01_Title) + 52961 (02_List) */
+  section.devices_hero {
+    position: relative;
+    padding: 80px 0 184px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  section.devices_hero .devices_hero__bg {
+    position: absolute;
+    inset: 0;
+    background-color: #f5f7fa;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  section.devices_hero .devices_hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 588px;
+    margin-bottom: 120px;
+  }
+
+  section.devices_hero .devices_hero__tit {
+    margin-bottom: 20px;
+    font-family: jaka, Arial, Helvetica, sans-serif;
+    font-size: 70px;
+    font-weight: 800;
+    line-height: 80px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.devices_hero .devices_hero__desc {
+    margin-bottom: 0;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.devices_hero .devices_hero__btns {
+    margin-top: 50px;
+  }
+
+  section.devices_hero.devices_hero--with-products .devices_products--embedded {
+    position: relative;
+    z-index: 1;
+    padding: 0;
+    background: transparent;
+  }
+
+  section.devices_hero.devices_hero--with-products .devices_products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 50px 24px;
+  }
+
+  /* Products */
+  .devices_products {
+    padding: 120px 0 184px;
+    background: #fff;
+  }
+
+  .devices_products .devices_products__head {
+    margin-bottom: 40px;
+  }
+
+  .devices_products .devices_products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 50px 24px;
+  }
+
+  .devices_products .item {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .devices_products .img_area {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 342 / 342;
+    margin-bottom: 20px;
+    padding: 30px;
+    overflow: hidden;
+    background: #f5f7fa;
+  }
+
+  .devices_products .img_area img {
+    display: block;
+    width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .devices_products .tit {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+    transition: 0.3s;
+  }
+
+  .devices_products .item:hover .tit {
+    text-decoration: underline;
+  }
+
+  /* Markets grid */
+  section.devices_markets {
+    padding: 0 0 150px;
+    background: #fff;
+  }
+
+  section.devices_markets .devices_markets__head {
+    margin-bottom: 40px;
+  }
+
+  section.devices_markets .devices_markets__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px 22px;
+  }
+
+  section.devices_markets .item {
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.devices_markets .img_area {
+    position: relative;
+    margin-bottom: 24px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #f0f0f0;
+  }
+  section.devices_markets .img_area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  section.devices_markets .item:hover .img_area img {
+    transform: scale(1.03);
+  }
+
+  section.devices_markets .item .btn-icon-56 {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    border-color: rgb(255 255 255 / 70%);
+  }
+  section.devices_markets .item .icon_arrow-20 {
+    background: url(/ico/ico_arrow_righ_24_white.svg) center / contain no-repeat;
+    width: 20px;
+    height: 20px;
+    display: block;
+  }
+  section.devices_markets .item:hover .btn-icon-56 {
+    background: #e60040b3;
+    border-color: #0000;
+  }
+
+  section.devices_markets .tit {
+    margin-bottom: 2px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_markets .tagline {
+    margin-bottom: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 23px;
+    color: var(--color-primary);
+  }
+
+  section.devices_markets .desc {
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  /* Help */
+  section.devices_help {
+    padding: 150px 0 150px;
+    background: #fff;
+  }
+
+  section.devices_help .devices_help__head {
+    margin-bottom: 40px;
+  }
+
+  section.devices_help .devices_help__body {
+    display: grid;
+    grid-template-columns: 624px 1fr;
+    gap: 10px;
+    align-items: stretch;
+    margin-left: -240px;
+    width: calc(100% + 240px);
+  }
+
+  section.devices_help .devices_help__visual {
+    overflow: hidden;
+    border-radius: 0 4px 4px 0;
+  }
+
+  section.devices_help .devices_help__visual-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    object-fit: cover;
+  }
+
+  section.devices_help .devices_help__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  section.devices_help .devices_help__card {
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+    padding: 36px;
+    background: #fff;
+    border: none;
+    border-radius: 4px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s ease;
+  }
+
+  section.devices_help .devices_help__card:hover {
+    border-color: #ccc;
+  }
+
+  section.devices_help .devices_help__card:hover .btn-text-30__icon {
+    background: var(--color-accent);
+  }
+
+  section.devices_help .devices_help__card:hover .icon_external-18,
+  section.devices_help .devices_help__card:hover .icon_arrow-18 {
+    filter: brightness(0) invert(1);
+  }
+
+  section.devices_help .devices_help__card-tit {
+    margin-bottom: 16px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: -0.01em;
+    color: #222;
+    white-space: pre-line;
+  }
+
+  section.devices_help .devices_help__card-desc {
+    flex: 1;
+    margin-bottom: 24px;
+    font-size: 15px;
+    line-height: 23px;
+    color: #666;
+  }
+
+  section.devices_help .devices_help__card-cta {
+    align-self: flex-start;
+    margin-top: auto;
+    pointer-events: none;
+    margin-bottom: 40px;
+  }
+
+  /* Help overlay ? Figma 3082:52922 */
+  section.devices_help.devices_help--overlay {
+    position: relative;
+    padding: 150px 0;
+    background: transparent;
+  }
+
+  section.devices_help.devices_help--overlay::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: url("/img/devices-systems/help_section_bg.jpg") center / cover no-repeat;
+    content: "";
+    background: #f5f7fa;
+  }
+
+  section.devices_help.devices_help--overlay .inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.devices_help.devices_help--overlay .section_tit {
+    margin-bottom: 10px;
+    color: #222;
+  }
+
+  section.devices_help.devices_help--overlay .section_desc {
+    max-width: 819px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.devices_help.devices_help--overlay .devices_help__head {
+    margin-bottom: 40px;
+  }
+
+  section.devices_help .devices_help__cards--overlay {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  section.devices_help .devices_help__card--overlay {
+    display: flex;
+    flex-direction: column;
+    min-height: 460px;
+    padding: 0;
+    overflow: hidden;
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.devices_help .devices_help__card--overlay .devices_help__card-body {
+    flex: 1;
+    padding: 36px 36px 0;
+  }
+
+  section.devices_help .devices_help__card--overlay .devices_help__card-tit {
+    margin-bottom: 14px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.devices_help .devices_help__card--overlay .devices_help__card-desc {
+    margin-bottom: 24px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+    min-height: 112px;
+  }
+
+  section.devices_help .devices_help__card--overlay .devices_help__card-cta {
+    margin-bottom: 0;
+    color: #222;
+  }
+
+  section.devices_help .devices_help__card-visual {
+    flex-shrink: 0;
+    height: 170px;
+    overflow: hidden;
+  }
+
+  section.devices_help .devices_help__card-visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  section.devices_help .devices_help__card--overlay:hover .btn-text-30__icon {
+    background: var(--color-accent);
+  }
+
+  section.devices_help .devices_help__card--overlay:hover .icon_external-18,
+  section.devices_help .devices_help__card--overlay:hover .icon_arrow-18 {
+    filter: brightness(0) invert(1);
+  }
+}
+
+@media (max-width: 780px) {
+  section.devices_category .devices_category__layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  section.devices_category .devices_category__intro {
+    padding: 80px 0 40px;
+  }
+
+  section.devices_category .devices_category__tit {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  section.devices_category.devices_category--stacked .devices_category__header {
+    padding: 60px 0 0;
+  }
+
+  section.devices_category--stacked .devices_category__grid-wrap {
+    margin-top: 40px;
+    padding-bottom: 80px;
+  }
+
+  section.devices_category--stacked .devices_category__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  section.devices_category--stacked .devices_category__item {
+    flex-direction: column;
+    min-height: 0;
+    padding: 24px 20px;
+  }
+
+  section.devices_category .devices_category__list {
+    padding: 0 0 80px;
+  }
+
+  section.devices_category .devices_category__list-inner {
+    max-width: none;
+    padding: 0 20px;
+    gap: 12px;
+  }
+
+  section.devices_category .devices_category__item {
+    flex-direction: column;
+    padding: 24px 20px;
+  }
+
+  section.devices_category .devices_category__item-img {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  section.devices_category .devices_category__item-body {
+    max-width: none;
+    width: 100%;
+  }
+
+  section.devices_hero {
+    padding: 60px 0 80px;
+  }
+
+  section.devices_hero .devices_hero__bg {
+    background-attachment: scroll;
+  }
+
+  section.devices_hero .devices_hero__inner {
+    max-width: none;
+    margin-bottom: 40px;
+  }
+
+  section.devices_hero .devices_hero__tit {
+    font-size: 36px;
+    line-height: 44px;
+  }
+
+  section.devices_hero .devices_hero__desc {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  section.devices_hero.devices_hero--with-products .devices_products__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  section.devices_products {
+    padding: 80px 0;
+  }
+
+  section.devices_products .devices_products__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  section.devices_help.devices_help--overlay {
+    padding: 80px 0;
+  }
+
+  section.devices_help .devices_help__cards--overlay {
+    grid-template-columns: 1fr;
+  }
+
+  section.devices_help .devices_help__card--overlay {
+    min-height: 0;
+  }
+
+  section.devices_markets {
+    padding: 0;
+    margin: 80px 0;
+  }
+
+  section.devices_markets .devices_markets__head {
+    margin-bottom: 24px;
+  }
+
+  section.devices_markets .devices_markets__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  section.devices_markets .item + .item {
+    margin-top: 0;
+  }
+
+  section.devices_markets .img_area {
+    aspect-ratio: 464 / 500;
+    width: 100%;
+    height: 347px;
+    margin-bottom: 20px;
+  }
+
+  section.devices_markets .item .btn-icon-56 {
+    right: 20px;
+    bottom: 20px;
+  }
+
+  section.devices_markets .tit {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  section.devices_markets .tagline {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  section.devices_markets .desc {
+    font-size: 15px;
+    line-height: 21px;
+  }
+
+  section.devices_help {
+    padding-bottom: 80px;
+  }
+
+  section.devices_help .devices_help__body {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  section.devices_help .devices_help__cards {
+    grid-template-columns: 1fr;
+  }
+
+  section.devices_help .devices_help__card {
+    min-height: 0;
+  }
+}

@@ -1,0 +1,65 @@
+"use client";
+
+import GnbMegaItemLink from "@/components/layout/shared/gnb-mega/GnbMegaItemLink";
+import type { GnbMegaSimplePanelStateProps } from "@/components/layout/shared/gnb-mega/types";
+import type { GnbSimpleMegaSection } from "@/data/gnb";
+import { supportMegaMenu } from "@/data/gnb/mega/support";
+
+export default function GnbSupportMegaPanel({
+  activeItemId,
+  onItemEnter,
+  onItemClick,
+}: GnbMegaSimplePanelStateProps) {
+  const sections =
+    supportMegaMenu.layout === "sections" ? supportMegaMenu.sections : [];
+
+  return (
+    <div className="gnb_mega__inner gnb_mega__inner--sections">
+      <div className="gnb_mega__head">
+        <h2 className="gnb_mega__tit">Support</h2>
+      </div>
+      <div className="gnb_mega__divider" aria-hidden />
+      <div className="gnb_mega__columns">
+        {sections.map((section) => (
+          <SectionsColumn
+            key={section.id}
+            section={section}
+            activeItemId={activeItemId}
+            onItemEnter={onItemEnter}
+            onItemClick={onItemClick}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SectionsColumn({
+  section,
+  activeItemId,
+  onItemEnter,
+  onItemClick,
+}: {
+  section: GnbSimpleMegaSection;
+  activeItemId: string;
+  onItemEnter: (itemId: string) => void;
+  onItemClick?: () => void;
+}) {
+  return (
+    <section className="gnb_mega__col" aria-label={section.label}>
+      <p className="gnb_mega__col-label">{section.label}</p>
+      <div className="gnb_mega__col-list">
+        {section.items.map((item) => (
+          <GnbMegaItemLink
+            key={item.id}
+            item={item}
+            isActive={item.id === activeItemId}
+            onItemEnter={onItemEnter}
+            onItemClick={onItemClick}
+            descVariant="section"
+          />
+        ))}
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,2253 @@
+/* =============================================================================
+   GNB — Global Navigation Bar (MainHeader, SubHeader, mega menu)
+   ============================================================================= */
+
+/* --- tokens --- */
+:root {
+  --gnb-mega-duration: 0.35s;
+  --gnb-mega-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --gnb-dim-duration: 0.35s;
+  /* GNB row(80) + breadcrumb(48) — 최상단 메가 fixed 기준 */
+  --gnb-mega-fixed-top: 128px;
+}
+
+/* --- breadcrumb --- */
+.markets_breadcrumb {
+  flex-shrink: 0;
+  /* border-bottom: 1px solid rgb(34 34 34 / 10%); */
+  background: #fff;
+}
+
+.sub_header-wrap:not(.is-at-top) .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .markets_breadcrumb {
+  background: #0f1f45;
+}
+
+.markets_breadcrumb .inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1440px;
+  min-height: 48px;
+  margin: 0 auto;
+}
+
+.markets_breadcrumb .breadcrumb_nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.markets_breadcrumb .breadcrumb_nav__group {
+  display: contents;
+}
+
+.markets_breadcrumb .breadcrumb_nav a,
+.markets_breadcrumb .breadcrumb_links a {
+  color: #888;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.markets_breadcrumb .breadcrumb_nav a:hover,
+.markets_breadcrumb .breadcrumb_links a:hover {
+  color: #222;
+}
+
+.markets_breadcrumb .breadcrumb_nav a.breadcrumb_current {
+  color: #222;
+}
+
+.markets_breadcrumb .breadcrumb_sep {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: url("/ico/ico_right.svg") center / contain no-repeat;
+  opacity: 0.4;
+}
+
+.markets_breadcrumb .breadcrumb_home {
+  display: block;
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+  background: url("/ico/ico_home.svg") no-repeat center / contain;
+}
+
+.sub_header-wrap:not(.is-at-top) .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .markets_breadcrumb .breadcrumb_sep {
+  background-image: url("/ico/ico_right_white.svg");
+  opacity: .6;
+}
+
+.sub_header-wrap:not(.is-at-top) .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .markets_breadcrumb .breadcrumb_current{
+  color: #fff;
+}
+.sub_header-wrap:not(.is-at-top) .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .markets_breadcrumb .breadcrumb_nav a,
+.sub_header-wrap:not(.is-at-top)
+  .gnb_menu_wrap.markets.sub_header.is-gnb-hidden
+  .markets_breadcrumb
+  .breadcrumb_links
+  a {
+  color: #fff;
+  opacity: 0.5;
+}
+
+.sub_header-wrap:not(.is-at-top)
+  .gnb_menu_wrap.markets.sub_header.is-gnb-hidden
+  .markets_breadcrumb
+  .breadcrumb_links
+  a {
+    opacity: 1;
+  }
+
+.sub_header-wrap:not(.is-at-top)
+  .gnb_menu_wrap.markets.sub_header.is-gnb-hidden
+  .markets_breadcrumb
+  .breadcrumb_nav
+  a.breadcrumb_current {
+  opacity: 1;
+}
+
+.sub_header-wrap:not(.is-at-top) .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .markets_breadcrumb .breadcrumb_home {
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+}
+
+.markets_breadcrumb .breadcrumb_links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 14px;
+  font-weight: 500;
+}
+header.main_header.is-invert.is-gnb-hidden .breadcrumb_links a {
+    color: #fff;
+}
+.markets_breadcrumb .breadcrumb_links a {
+  color: #666;
+}
+
+.markets_breadcrumb .breadcrumb_external {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+header.main_header.is-invert.is-gnb-hidden .markets_breadcrumb .icon_external{
+  background: url("/ico/ico_arrow_right_18_white.svg") center / contain no-repeat;
+}
+.markets_breadcrumb .icon_external {
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: url("/ico/ico_arrow_right_18.svg") center / contain no-repeat;
+
+}
+.sub_header-wrap:not(.is-at-top) .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .icon_external { display: block;
+  width: 12px;
+  height: 12px;
+  background: url("/ico/ico_arrow_right_18_white.svg") center / contain no-repeat;
+
+}
+
+@media (max-width: 1200px) {
+  .markets_breadcrumb {
+    display: none;
+  }
+}
+
+/* --- SubHeader (markets) --- */
+/* Sub (markets) — GNB + breadcrumb in one header */
+
+@media (min-width: 781px) {
+  .sub_header-wrap.is-at-top {
+    position: relative;
+    z-index: 1000;
+    border-bottom: 1px solid #2222221a;
+  }
+
+  .sub_header-wrap:not(.is-at-top)::after {
+    display: block;
+    height: 108px;
+    content: "";
+    transition: height var(--gnb-mega-duration, 0.35s) ease;
+  }
+
+  /* mega open — devices: 80 GNB + 48 breadcrumb + 698 panel */
+  .sub_header-wrap:not(.is-at-top):has(.gnb_mega--devices.is-mounted)::after {
+    height: 826px;
+  }
+
+  /* mega open — simple grid: 80 + 48 + 284 — Figma 2741:10579 */
+  .sub_header-wrap:not(.is-at-top):has(.gnb_mega--grid.is-mounted)::after {
+    height: 412px;
+  }
+
+  /* mega open — simple sections: 80 + 48 + 580 — Figma 2769:35678 */
+  .sub_header-wrap:not(.is-at-top):has(.gnb_mega--sections.is-mounted)::after {
+    height: 708px;
+  }
+
+  /* mega open — services sections: 80 + 48 + 396 — Figma 2769:35379 */
+  .sub_header-wrap:not(.is-at-top):has(.gnb_mega--services.is-mounted)::after {
+    height: 524px;
+  }
+
+  /* mega open — careers sections: 80 + 48 + 304 — Figma 2769:35857 */
+  .sub_header-wrap:not(.is-at-top):has(.gnb_mega--careers.is-mounted)::after {
+    height: 432px;
+  }
+
+  /* mega open — company sections: 80 + 48 + 474 — Figma 2769:35523 */
+  .sub_header-wrap:not(.is-at-top):has(.gnb_mega--company.is-mounted)::after {
+    height: 602px;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-mega-open.is-gnb-hidden .sub_header__gnb-row {
+    height: 60px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sub_header-wrap:not(.is-at-top):has(.gnb_menu_wrap.is-mega-open).is-gnb-hidden
+    .markets_breadcrumb {
+    background: #fff;
+  }
+
+  @media (max-width: 1200px) {
+    .sub_header-wrap:not(.is-at-top)::after {
+      height: 60px;
+    }
+  }
+
+  /* header = gnb_menu_wrap.markets.sub_header */
+  .gnb_menu_wrap.markets.sub_header {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: auto;
+    background: #fff;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .sub_header-wrap.is-at-top .gnb_menu_wrap.markets.sub_header {
+    position: relative;
+    background: none;
+  }
+
+  .sub_header-wrap:not(.is-at-top) .gnb_menu_wrap.markets.sub_header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .sub_header__gnb-row {
+    flex-shrink: 0;
+    height: 80px;
+    overflow: hidden;
+    transition: height 0.2s ease, opacity 0.2s ease;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .sub_header__gnb-row {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-gnb-revealed .sub_header__gnb-row,
+  .gnb_menu_wrap.markets.sub_header.is-mega-open .sub_header__gnb-row {
+    height: 80px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .gnb_mobile_menu {
+    top: 0;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .gnb_mobile_dim {
+    inset: 0 0 0;
+    top: 0;
+  }
+
+  .gnb_menu_wrap.markets.sub_header .gnb_menu_inner {
+    height: 80px;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-top {
+    background: var(--color-bg);
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-top .sub_header__gnb-row {
+    border-bottom: 1px solid #2222221a;
+    background: #fff;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-invert {
+    border-bottom: none;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-top .gnb_nav_list .link {
+    color: var(--color-primary);
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-top .icon_menu span {
+    background: var(--color-primary);
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-invert .gnb_nav_list .link {
+    color: var(--color-primary, #0f1f45);
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-invert .icon_menu span {
+    background: var(--color-primary, #0f1f45);
+  }
+
+  .gnb_menu_wrap.markets.sub_header:has(.gnb_mobile_menu.is-open) {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .gnb_menu_wrap.markets.sub_header:has(.gnb_mobile_menu.is-open) .icon_menu span {
+    background: var(--color-primary, #0f1f45);
+  }
+}
+
+@media (max-width: 1200px) {
+  .sub_header-wrap:not(.is-at-top)::after {
+    height: 60px;
+  }
+}
+
+@media (max-width: 780px) {
+  .sub_header-wrap.is-at-top {
+    position: relative;
+    z-index: 1000;
+  }
+
+  .sub_header-wrap:not(.is-at-top)::after {
+    display: block;
+    height: 60px;
+    content: "";
+  }
+
+  .gnb_menu_wrap.markets.sub_header {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: auto;
+    background: #fff;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .sub_header-wrap.is-at-top .gnb_menu_wrap.markets.sub_header {
+    position: relative;
+  }
+
+  .sub_header-wrap:not(.is-at-top) .gnb_menu_wrap.markets.sub_header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  .sub_header__gnb-row {
+    flex-shrink: 0;
+    height: 60px;
+    overflow: hidden;
+    transition: height 0.2s ease, opacity 0.2s ease;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .sub_header__gnb-row {
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .gnb_mobile_menu {
+    top: 0;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-gnb-hidden .gnb_mobile_dim {
+    inset: 0 0 0;
+    top: 0;
+  }
+
+  .gnb_menu_wrap.markets.sub_header .gnb_menu_inner {
+    height: 60px;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-top {
+    background: var(--color-bg);
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-invert {
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-top .gnb_nav_list .link {
+    color: var(--color-primary);
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-top .icon_menu span {
+    background: var(--color-primary);
+  }
+
+  .gnb_menu_wrap.markets.sub_header.is-invert .icon_menu span {
+    background: var(--color-primary, #0f1f45);
+  }
+
+  .gnb_menu_wrap.markets.sub_header:has(.gnb_mobile_menu.is-open) {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .gnb_menu_wrap.markets.sub_header:has(.gnb_mobile_menu.is-open) .icon_menu span {
+    background: var(--color-primary, #0f1f45);
+  }
+}
+
+/* --- MainHeader --- */
+/* Main GNB — Figma 2575:17048 */
+
+.main_header .markets_breadcrumb .breadcrumb_nav {
+  display: none;
+}
+
+.main_header .markets_breadcrumb .inner {
+  justify-content: flex-end;
+}
+
+/* wrap + spacer */
+.main_header-wrap.is-at-top {
+  position: relative;
+  z-index: 1000;
+  height: 0;
+  overflow: visible;
+}
+
+.main_header-wrap:not(.is-at-top)::after {
+  display: block;
+  height: 80px;
+  content: "";
+  transition: height var(--gnb-mega-duration, 0.35s) ease;
+}
+
+@media (min-width: 1201px) {
+  .main_header-wrap:not(.is-at-top)::after {
+    height: 128px;
+  }
+
+  /* mega open — devices */
+  .main_header-wrap:not(.is-at-top):has(.gnb_mega--devices.is-mounted)::after {
+    height: 826px;
+  }
+
+  /* mega open — simple grid — Figma 2741:10579 */
+  .main_header-wrap:not(.is-at-top):has(.gnb_mega--grid.is-mounted)::after {
+    height: 412px;
+  }
+
+  /* mega open — simple sections — Figma 2769:35678 */
+  .main_header-wrap:not(.is-at-top):has(.gnb_mega--sections.is-mounted)::after {
+    height: 708px;
+  }
+
+  /* mega open — services sections — Figma 2769:35379 */
+  .main_header-wrap:not(.is-at-top):has(.gnb_mega--services.is-mounted)::after {
+    height: 524px;
+  }
+
+  /* mega open — careers sections — Figma 2769:35857 */
+  .main_header-wrap:not(.is-at-top):has(.gnb_mega--careers.is-mounted)::after {
+    height: 432px;
+  }
+
+  /* mega open — company sections — Figma 2769:35523 */
+  .main_header-wrap:not(.is-at-top):has(.gnb_mega--company.is-mounted)::after {
+    height: 602px;
+  }
+}
+
+/* header shell */
+.main_header {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: auto;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.main_header-wrap.is-at-top .main_header,
+.main_header-wrap:not(.is-at-top) .main_header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.main_header .markets_breadcrumb {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+.main_header-wrap.is-gnb-hidden 
+.main_header .markets_breadcrumb {
+    background: #0f1f45;
+    color: #fff;
+}
+.main_header.is-top .markets_breadcrumb {
+  background: transparent;
+  border-bottom: 1px solid rgb(255 255 255 / 20%);
+}
+
+.main_header.is-top .markets_breadcrumb .breadcrumb_nav a,
+.main_header.is-top .markets_breadcrumb .breadcrumb_links a {
+  color: rgb(255 255 255 / 70%);
+}
+
+.main_header.is-top .markets_breadcrumb .breadcrumb_nav a:hover,
+.main_header.is-top .markets_breadcrumb .breadcrumb_links a:hover {
+  color: #fff;
+}
+
+.main_header.is-top .markets_breadcrumb .breadcrumb_nav a.breadcrumb_current {
+  color: #fff;
+}
+
+.main_header.is-top .markets_breadcrumb .breadcrumb_home {
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+}
+
+.main_header.is-top .markets_breadcrumb .breadcrumb_sep {
+  filter: brightness(0) invert(1);
+  opacity: 0.5;
+}
+
+.main_header.is-top .markets_breadcrumb .icon_external {
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+}
+
+.main_header__gnb-row {
+  flex-shrink: 0;
+  height: 80px;
+  overflow: hidden;
+  transition: height 0.2s ease, opacity 0.2s ease;
+}
+
+.main_header.is-gnb-hidden .main_header__gnb-row {
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.main_header.is-gnb-revealed .main_header__gnb-row,
+.main_header.is-mega-open .main_header__gnb-row {
+  height: 80px;
+  opacity: 1;
+  pointer-events: auto;
+  border-bottom: 1px solid #2222221a;
+}
+
+.main_header__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+/* top / invert */
+.main_header.is-top {
+  background: transparent;
+  border-bottom: none;
+}
+
+.main_header.is-top .main_header__gnb-row {
+  border-bottom: 1px solid rgb(255 255 255 / 20%);
+}
+
+.main_header.is-top .main_header__nav-link {
+  color: #fff;
+}
+
+.main_header.is-top .main_header__btn-search {
+  background-image: url("/ico/ico_search_24_white.svg");
+}
+
+.main_header.is-top .main_header__btn-global {
+  background-image: url("/ico/ico_global_24_white.svg");
+}
+
+.main_header.is-top .main_header__icon-menu span {
+  background: #fff;
+}
+
+.main_header.is-invert {
+  background: #fff;
+  border-bottom: none;
+}
+
+.main_header.is-invert .main_header__nav-link {
+  color: var(--color-primary, #0f1f45);
+}
+
+.main_header.is-invert .main_header__icon-menu span {
+  background: var(--color-primary, #0f1f45);
+}
+
+/* mega menu open — Sub GNB와 동일 동작 */
+.main_header.is-mega-open {
+  background: #fff;
+  border-bottom: none;
+}
+
+.main_header.is-mega-open .main_header__gnb-row {
+  border-bottom: 1px solid rgb(34 34 34 / 10%);
+}
+
+.main_header.is-mega-open .markets_breadcrumb {
+  background: #fff;
+  border-bottom: 1px solid rgb(34 34 34 / 10%);
+}
+
+.main_header.is-mega-open.is-top .markets_breadcrumb {
+}
+
+.main_header.is-mega-open.is-top .markets_breadcrumb .breadcrumb_links a {
+  color: #666;
+}
+
+.main_header.is-mega-open.is-top .main_header__nav-link {
+  color: #222;
+}
+
+.main_header.is-mega-open.is-top .main_header__logo-img--white {
+  display: none;
+}
+
+.main_header.is-mega-open.is-top .main_header__logo-img--dark {
+  display: block;
+}
+
+.main_header.is-mega-open.is-top .main_header__btn-search {
+  background-image: url("/ico/ico_search_24.svg");
+}
+
+.main_header.is-mega-open.is-top .main_header__btn-global {
+  background-image: url("/ico/ico_global_24.svg");
+}
+
+.main_header.is-mega-open.is-top .main_header__icon-menu span {
+  background: var(--color-primary, #0f1f45);
+}
+
+.main_header.is-mega-open.is-gnb-hidden .main_header__gnb-row {
+  height: 80px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.main_header-wrap:not(.is-at-top):has(.main_header.is-mega-open).is-gnb-hidden
+  .markets_breadcrumb {
+  background: #fff;
+}
+
+/* logo — CSS swap (no JS src toggle) */
+.main_header__logo {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.main_header__logo a {
+  display: block;
+}
+
+.main_header__logo-img {
+  display: block;
+  width: auto;
+  height: 26px;
+  transition: filter 0.3s ease;
+}
+
+.main_header__logo-img--dark {
+  display: none;
+}
+
+.main_header.is-invert .main_header__logo-img--white {
+  display: none;
+}
+
+.main_header.is-invert .main_header__logo-img--dark {
+  display: block;
+}
+
+/* actions */
+.main_header__actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.main_header__btn-search,
+.main_header__btn-global {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+.main_header.is-invert  .main_header__btn-search {
+  background-image: url("/ico/ico_search_24.svg");
+}
+.main_header__btn-search {
+  background-image: url("/ico/ico_search_24_white.svg");
+}
+.main_header.is-invert  .main_header__btn-global{
+  background-image: url("/ico/ico_global_24.svg");
+}
+.main_header__btn-global {
+  background-image: url("/ico/ico_global_24_white.svg");
+}
+
+.main_header__btn-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.main_header__icon-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 24px;
+  height: 24px;
+}
+
+.main_header__icon-menu span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  transition:
+    transform 0.2s,
+    opacity 0.2s,
+    background-color 0.3s ease;
+}
+
+.main_header__btn-menu.is-active .main_header__icon-menu span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.main_header__btn-menu.is-active .main_header__icon-menu span:nth-child(2) {
+  opacity: 0;
+}
+
+.main_header__btn-menu.is-active .main_header__icon-menu span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* desktop */
+@media (min-width: 1201px) {
+  .main_header.is-gnb-hidden .main_header__mobile-menu,
+  .main_header.is-gnb-hidden .main_header__mobile-dim {
+    top: 48px;
+  }
+
+  .main_header.is-gnb-hidden .main_header__mobile-dim {
+    inset: 48px 0 0;
+  }
+
+  .main_header__inner {
+    padding: 0;
+  }
+
+  .main_header__nav {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+  }
+
+  .main_header__nav-list {
+    display: flex;
+    align-items: center;
+    gap: 70px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .main_header__nav-link {
+    display: inline-flex;
+    align-items: flex-end;
+    padding: 23px 0 25px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 28px;
+    min-height: 28px;
+    white-space: nowrap;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition:
+      color 0.3s ease,
+      border-color 0.2s ease,
+      font-weight 0.2s ease;
+  }
+
+  .main_header__nav-item.is-active .main_header__nav-link {
+    font-weight: 600;
+    border-bottom-color: #0f1f45;
+  }
+
+  .main_header.is-mega-open .main_header__nav-item.is-active .main_header__nav-link {
+    color: #222;
+    border-bottom-color: #0f1f45;
+  }
+
+  .main_header__actions--desktop {
+    gap: 40px;
+  }
+
+  .main_header__actions--mobile,
+  .main_header__mobile-menu,
+  .main_header__mobile-dim {
+    display: none;
+  }
+}
+
+/* mobile / tablet */
+@media (max-width: 1200px) {
+  .main_header__inner {
+    padding: 0 20px;
+  }
+
+  .main_header__nav,
+  .main_header__actions--desktop {
+    display: none;
+  }
+
+  .main_header__actions--mobile {
+    display: flex;
+    gap: 23px;
+  }
+
+  .main_header.is-gnb-hidden .main_header__mobile-menu,
+  .main_header.is-gnb-hidden .main_header__mobile-dim {
+    top: 0;
+  }
+
+  .main_header.is-gnb-hidden .main_header__mobile-dim {
+    inset: 0;
+  }
+
+  .main_header__mobile-menu {
+    display: none;
+    position: fixed;
+    top: 80px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1001;
+    padding: 24px 20px;
+    overflow-y: auto;
+    background: #111;
+  }
+
+  .main_header__mobile-menu.is-open {
+    display: block;
+  }
+
+  .main_header__mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .main_header__mobile-link {
+    display: block;
+    padding: 16px 0;
+    border-bottom: 1px solid rgb(255 255 255 / 12%);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 28px;
+    text-decoration: none;
+  }
+
+  .main_header__mobile-dim {
+    display: block;
+    position: fixed;
+    inset: 80px 0 0;
+    z-index: 1000;
+    border: none;
+    background: rgb(0 0 0 / 50%);
+    cursor: pointer;
+  }
+
+  .main_header.is-mobile-open {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .main_header.is-mobile-open .main_header__logo-img--white {
+    display: none;
+  }
+
+  .main_header.is-mobile-open .main_header__logo-img--dark {
+    display: block;
+  }
+
+  .main_header.is-mobile-open .main_header__icon-menu span {
+    background: var(--color-primary, #0f1f45);
+  }
+}
+
+
+/* --- nav, mega, mobile --- */
+/* GNB — Sub (markets) */
+.gnb_menu_wrap {
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.gnb_menu_wrap.is-hidden {
+  transform: translateY(-100%);
+}
+
+.gnb_menu_wrap.markets .gnb_menu_inner {
+  display: flex;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+}
+
+.gnb_menu_wrap.markets .logo {
+  flex-shrink: 0;
+}
+
+.gnb_menu_wrap.markets .logo a {
+  display: block;
+}
+
+.gnb_menu_wrap.markets .logo img {
+  display: block;
+  height: 24px;
+  width: auto;
+  transition: filter 0.3s ease;
+}
+
+.gnb_menu_wrap.markets.is-invert {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.gnb_menu_wrap.markets.is-invert.is-mega-open {
+  border-bottom: none;
+}
+
+.gnb_menu_wrap.markets.is-invert .gnb_nav_list .link {
+  color: #0f1f45;
+}
+
+.gnb_menu_wrap.markets.is-invert .icon_menu span {
+  background: #0f1f45;
+}
+
+.gnb_menu_wrap.markets .gnb_nav_wrap {
+  display: flex;
+}
+
+.gnb_menu_wrap.markets .gnb_nav_list {
+  display: flex;
+  gap: 70px;
+  min-height: 80px;
+}
+
+.gnb_menu_wrap.markets .gnb_nav_list .link {
+  display: inline-flex;
+  align-items: flex-end;
+  padding-bottom: 25px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: none;
+  font-family: inherit;
+  font-size: 18px;
+  line-height: 28px;
+  min-height: 28px;
+  font-weight: 500;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 0.3s ease,
+    border-color 0.2s ease,
+    font-weight 0.2s ease;
+  box-sizing: border-box;
+  padding-top: 23px;
+}
+
+.gnb_menu_wrap.markets .depth_1.is-active .link {
+  font-weight: 600;
+  border-bottom-color: #0f1f45;
+}
+
+.gnb_menu_wrap.markets.is-mega-open .depth_1.is-active .link {
+  color: #222;
+  border-bottom-color: #0f1f45;
+}
+
+.gnb_menu_wrap.markets.is-mega-open {
+  background: #fff;
+  border-bottom: none;
+}
+
+.gnb_menu_wrap.markets.sub_header.is-mega-open .sub_header__gnb-row {
+  border-bottom: 1px solid rgb(34 34 34 / 10%);
+  height: 80px;
+}
+
+.gnb_menu_wrap.markets.sub_header.is-mega-open .markets_breadcrumb {
+  border-bottom: 1px solid rgb(34 34 34 / 10%);
+}
+
+.gnb_menu_wrap.markets.is-mega-open.is-top .gnb_nav_list .link,
+.gnb_menu_wrap.markets.is-mega-open.is-invert .gnb_nav_list .link {
+  color: #222;
+}
+
+.gnb_menu_wrap.markets.is-mega-open.is-top .logo img,
+.gnb_menu_wrap.markets.is-mega-open.is-invert .logo img {
+  filter: none;
+}
+
+.gnb_menu_wrap.markets.is-mega-open.is-top .btn_search,
+.gnb_menu_wrap.markets.is-mega-open.is-top .btn_global,
+.gnb_menu_wrap.markets.is-mega-open.is-invert .btn_search,
+.gnb_menu_wrap.markets.is-mega-open.is-invert .btn_global {
+  filter: none;
+}
+
+.gnb_menu_wrap.markets.is-mega-open.is-top .icon_menu span,
+.gnb_menu_wrap.markets.is-mega-open.is-invert .icon_menu span {
+  background: #0f1f45;
+}
+
+/* 4depth mega menu — Figma 2769:34864, 2769:34951 */
+.gnb_menu_wrap.markets.sub_header {
+  height: auto;
+}
+
+.gnb_menu_wrap.markets.sub_header,
+.main_header {
+  overflow: visible;
+}
+
+.gnb_mega {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #fff;
+  border-top: none;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gnb_mega--devices.is-mounted {
+  max-height: 720px;
+}
+
+.gnb_mega--simple.gnb_mega--grid.is-mounted {
+  max-height: 284px;
+}
+
+.gnb_mega--simple.gnb_mega--sections.is-mounted {
+  max-height: 580px;
+}
+
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--services.is-mounted {
+  max-height: 396px;
+}
+
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--careers.is-mounted {
+  max-height: 304px;
+}
+
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--company.is-mounted {
+  max-height: 474px;
+}
+
+.gnb_mega.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity var(--gnb-mega-duration) ease;
+}
+
+/* 최상단: 메가 메뉴 fixed 오버레이 — hero/본문 레이아웃 밀림 방지 */
+@media (min-width: 781px) {
+  .sub_header-wrap.is-at-top
+    .gnb_menu_wrap.markets.sub_header
+    .gnb_mega.is-mounted,
+  .main_header-wrap.is-at-top .main_header .gnb_mega.is-mounted {
+    position: fixed;
+    top: var(--gnb-mega-fixed-top);
+    right: 0;
+    left: 0;
+    z-index: 1001;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-top:1px solid rgb(34 34 34 / 10%);
+  }
+
+  .sub_header-wrap.is-at-top
+    .gnb_menu_wrap.markets.sub_header
+    .gnb_mega.is-mounted
+    .gnb_mega__inner,
+  .main_header-wrap.is-at-top .main_header .gnb_mega.is-mounted .gnb_mega__inner {
+    max-width: 1520px;
+    margin: 0 auto;
+  }
+}
+
+/* Simple mega — grid: Figma 2741:10579 (Markets) / sections: Figma 2769:35678 */
+.gnb_mega__inner--simple {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1520px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  border-top: 1px solid #e8e8e8;
+}
+
+.gnb_mega__inner--grid {
+  height: 284px;
+}
+
+.gnb_mega__inner--sections {
+  height: 580px;
+}
+
+.gnb_mega__simple-head {
+  flex: 0 0 220px;
+  box-sizing: border-box;
+  padding: 40px 24px 40px 40px;
+}
+
+.gnb_mega__simple-tit {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.28px;
+  color: #0f1f45;
+}
+
+.gnb_mega__simple-divider {
+  flex-shrink: 0;
+  width: 1px;
+  background: #e8e8e8;
+}
+
+.gnb_mega__simple-columns {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  min-width: 0;
+}
+
+.gnb_mega__simple-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.gnb_mega__simple-col-label {
+  margin: 0;
+  padding-left: 34px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #0f1f45;
+}
+
+.gnb_mega__simple-col-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.gnb_mega__simple-grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.gnb_mega__simple-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  padding: 20px 34px;
+  border: none;
+  background: #fff;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.gnb_mega__simple-item--section {
+  width: 100%;
+}
+
+.gnb_mega__simple-item-head {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.gnb_mega__simple-item-link {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  background: url("/ico/ico_link.svg") no-repeat center / contain;
+}
+
+.gnb_mega__simple-item:hover,
+.gnb_mega__simple-item.is-active {
+  background: #f5f7fa;
+}
+
+.gnb_mega__simple-item-tit {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 26px;
+  color: #222;
+}
+
+.gnb_mega__simple-item-desc {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #666;
+}
+
+.gnb_mega__simple-item-desc p {
+  margin: 0;
+}
+
+.gnb_mega__simple-item-desc--single {
+  margin: 0;
+  max-width: 365px;
+}
+
+/* Simple mega — shared layout (id-scoped per panel) */
+#gnb-mega-panel-markets .gnb_mega__inner--grid,
+#gnb-mega-panel-services .gnb_mega__inner--sections,
+#gnb-mega-panel-support .gnb_mega__inner--sections,
+#gnb-mega-panel-careers .gnb_mega__inner--sections,
+#gnb-mega-panel-company .gnb_mega__inner--sections {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1520px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+#gnb-mega-panel-markets .gnb_mega__head,
+#gnb-mega-panel-services .gnb_mega__head,
+#gnb-mega-panel-support .gnb_mega__head,
+#gnb-mega-panel-careers .gnb_mega__head,
+#gnb-mega-panel-company .gnb_mega__head {
+  flex: 0 0 220px;
+  box-sizing: border-box;
+  padding: 40px 24px 40px 40px;
+}
+
+#gnb-mega-panel-markets .gnb_mega__tit,
+#gnb-mega-panel-services .gnb_mega__tit,
+#gnb-mega-panel-support .gnb_mega__tit,
+#gnb-mega-panel-careers .gnb_mega__tit,
+#gnb-mega-panel-company .gnb_mega__tit {
+  margin: 0;
+  max-width: 140px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.28px;
+  color: #0f1f45;
+  word-break: break-word;
+}
+
+#gnb-mega-panel-markets .gnb_mega__divider,
+#gnb-mega-panel-services .gnb_mega__divider,
+#gnb-mega-panel-support .gnb_mega__divider,
+#gnb-mega-panel-careers .gnb_mega__divider,
+#gnb-mega-panel-company .gnb_mega__divider {
+  flex-shrink: 0;
+  width: 1px;
+  background: #e8e8e8;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item,
+#gnb-mega-panel-services .gnb_mega__item,
+#gnb-mega-panel-support .gnb_mega__item,
+#gnb-mega-panel-careers .gnb_mega__item,
+#gnb-mega-panel-company .gnb_mega__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px 34px;
+  border: none;
+  background: #fff;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item:hover,
+#gnb-mega-panel-markets .gnb_mega__item.is-active,
+#gnb-mega-panel-markets .gnb_mega__item:focus-visible,
+#gnb-mega-panel-services .gnb_mega__item:hover,
+#gnb-mega-panel-services .gnb_mega__item.is-active,
+#gnb-mega-panel-services .gnb_mega__item:focus-visible,
+#gnb-mega-panel-support .gnb_mega__item:hover,
+#gnb-mega-panel-support .gnb_mega__item.is-active,
+#gnb-mega-panel-support .gnb_mega__item:focus-visible,
+#gnb-mega-panel-careers .gnb_mega__item:hover,
+#gnb-mega-panel-careers .gnb_mega__item.is-active,
+#gnb-mega-panel-careers .gnb_mega__item:focus-visible,
+#gnb-mega-panel-company .gnb_mega__item:hover,
+#gnb-mega-panel-company .gnb_mega__item.is-active,
+#gnb-mega-panel-company .gnb_mega__item:focus-visible {
+  background: #f5f7fa;
+  outline: none;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item-head,
+#gnb-mega-panel-services .gnb_mega__item-head,
+#gnb-mega-panel-support .gnb_mega__item-head,
+#gnb-mega-panel-careers .gnb_mega__item-head,
+#gnb-mega-panel-company .gnb_mega__item-head {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item-tit,
+#gnb-mega-panel-services .gnb_mega__item-tit,
+#gnb-mega-panel-support .gnb_mega__item-tit,
+#gnb-mega-panel-careers .gnb_mega__item-tit,
+#gnb-mega-panel-company .gnb_mega__item-tit {
+  display: block;
+  margin: 0;
+  max-width: 365px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 26px;
+  color: #222;
+  word-break: break-word;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item-desc,
+#gnb-mega-panel-services .gnb_mega__item-desc,
+#gnb-mega-panel-support .gnb_mega__item-desc,
+#gnb-mega-panel-careers .gnb_mega__item-desc,
+#gnb-mega-panel-company .gnb_mega__item-desc {
+  display: block;
+  max-width: 365px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #666;
+  word-break: break-word;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item-desc-line {
+  display: block;
+}
+
+#gnb-mega-panel-services .gnb_mega__item-external,
+#gnb-mega-panel-support .gnb_mega__item-external,
+#gnb-mega-panel-careers .gnb_mega__item-external,
+#gnb-mega-panel-company .gnb_mega__item-external {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  background: url("/ico/ico_link.svg") no-repeat center / contain;
+}
+
+/* Markets — Figma 2741:10579 (#gnb-mega-panel-markets) */
+#gnb-mega-panel-markets.gnb_mega--grid.is-mounted {
+  max-height: 284px;
+}
+
+#gnb-mega-panel-markets .gnb_mega__inner--grid {
+  height: 284px;
+}
+
+#gnb-mega-panel-markets .gnb_mega__grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#gnb-mega-panel-markets .gnb_mega__cell {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item {
+  height: 100%;
+  height: 112px;
+}
+
+@media (min-width: 1520px) {
+  #gnb-mega-panel-markets .gnb_mega__grid {
+    grid-template-columns: repeat(3, 433px);
+    padding-bottom: 40px;
+  }
+}
+
+/* Services — Figma 2769:35379 (#gnb-mega-panel-services) */
+#gnb-mega-panel-services.gnb_mega--simple.gnb_mega--sections.gnb_mega--services.is-mounted {
+  max-height: 396px;
+}
+
+#gnb-mega-panel-services .gnb_mega__inner--sections {
+  height: 396px;
+}
+
+#gnb-mega-panel-support.gnb_mega--simple.gnb_mega--sections.is-mounted {
+  max-height: fit-content;
+}
+
+#gnb-mega-panel-support .gnb_mega__inner--sections {
+  height: fit-content;
+}
+
+#gnb-mega-panel-services .gnb_mega__columns {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  min-width: 0;
+}
+
+#gnb-mega-panel-services .gnb_mega__col,
+#gnb-mega-panel-support .gnb_mega__col,
+#gnb-mega-panel-careers .gnb_mega__col,
+#gnb-mega-panel-company .gnb_mega__col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  margin: 0;
+  padding: 40px 0;
+}
+
+#gnb-mega-panel-services .gnb_mega__col-label,
+#gnb-mega-panel-support .gnb_mega__col-label,
+#gnb-mega-panel-careers .gnb_mega__col-label,
+#gnb-mega-panel-company .gnb_mega__col-label {
+  margin: 0;
+  padding-left: 34px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: #0f1f45;
+}
+
+#gnb-mega-panel-services .gnb_mega__col-list,
+#gnb-mega-panel-support .gnb_mega__col-list,
+#gnb-mega-panel-careers .gnb_mega__col-list,
+#gnb-mega-panel-company .gnb_mega__col-list {
+  display: flex;
+  flex-direction: column;
+}
+
+#gnb-mega-panel-services .gnb_mega__item,
+#gnb-mega-panel-support .gnb_mega__item,
+#gnb-mega-panel-careers .gnb_mega__item,
+#gnb-mega-panel-company .gnb_mega__item {
+  min-height: 86px;
+}
+
+@media (min-width: 1520px) {
+  #gnb-mega-panel-services .gnb_mega__columns {
+    grid-template-columns: repeat(2, 433px);
+  }
+}
+
+/* Support — aligned to Services (#gnb-mega-panel-services) */
+#gnb-mega-panel-support .gnb_mega__columns {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  min-width: 0;
+}
+
+/* Careers — Figma 2769:35857 (#gnb-mega-panel-careers) */
+#gnb-mega-panel-careers.gnb_mega--simple.gnb_mega--sections.gnb_mega--careers.is-mounted {
+  max-height: 304px;
+}
+
+#gnb-mega-panel-careers .gnb_mega__inner--sections {
+  height: 304px;
+}
+
+#gnb-mega-panel-careers .gnb_mega__columns {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  min-width: 0;
+}
+
+@media (min-width: 1520px) {
+  #gnb-mega-panel-careers .gnb_mega__columns {
+    grid-template-columns: 433px;
+  }
+}
+
+/* Company — Figma 2769:35523 (#gnb-mega-panel-company) */
+#gnb-mega-panel-company.gnb_mega--simple.gnb_mega--sections.gnb_mega--company.is-mounted {
+  max-height: 474px;
+}
+
+#gnb-mega-panel-company .gnb_mega__inner--sections {
+  height: 474px;
+}
+
+#gnb-mega-panel-company .gnb_mega__columns {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  min-width: 0;
+}
+
+@media (min-width: 1520px) {
+  #gnb-mega-panel-company .gnb_mega__columns {
+    grid-template-columns: repeat(2, 433px);
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1519px) {
+  #gnb-mega-panel-markets .gnb_mega__inner--grid,
+  #gnb-mega-panel-services .gnb_mega__inner--sections,
+  #gnb-mega-panel-support .gnb_mega__inner--sections,
+  #gnb-mega-panel-careers .gnb_mega__inner--sections,
+  #gnb-mega-panel-company .gnb_mega__inner--sections {
+    max-width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+
+  #gnb-mega-panel-markets .gnb_mega__head,
+  #gnb-mega-panel-services .gnb_mega__head,
+  #gnb-mega-panel-support .gnb_mega__head,
+  #gnb-mega-panel-careers .gnb_mega__head,
+  #gnb-mega-panel-company .gnb_mega__head {
+    flex: 0 0 200px;
+    padding-left: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #gnb-mega-panel-markets .gnb_mega__item,
+  #gnb-mega-panel-services .gnb_mega__item,
+  #gnb-mega-panel-support .gnb_mega__item,
+  #gnb-mega-panel-careers .gnb_mega__item,
+  #gnb-mega-panel-company .gnb_mega__item {
+    transition: none;
+  }
+}
+
+.gnb_mega__inner {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1520px;
+  height: 698px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* depth 2 — 362px, active #0F1F45 */
+.gnb_mega__col--depth2 {
+  flex-shrink: 0;
+  width: 362px;
+  box-sizing: border-box;
+}
+
+.gnb_mega__depth2-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px 0 40px;
+  box-sizing: border-box;
+}
+
+.gnb_mega__depth2-list {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.gnb_mega__depth2-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 68px;
+  padding: 20px 40px;
+  border: none;
+  background: #fff;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  color: #222;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    font-weight 0.2s ease;
+  box-sizing: border-box;
+}
+
+.gnb_mega__depth2-btn:hover:not(.is-active) {
+  background: #f5f7fa;
+  color: #222;
+}
+
+.gnb_mega__depth2-btn.is-active,
+.gnb_mega__depth2-btn.is-active:hover {
+  background: #0f1f45;
+  color: #fff;
+  font-weight: 600;
+}
+
+.gnb_mega__explore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 276px;
+  height: 52px;
+  margin: 16px 40px 0;
+  padding: 17px 24px;
+  border: 1px solid rgb(15 31 69 / 30%);
+  border-radius: 4px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  color: #0f1f45;
+  text-decoration: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.gnb_mega__explore:hover {
+  background: #f5f7fa;
+}
+
+/* Explore All — Figma 2769:35038 */
+.gnb_mega--explore-all {
+  overflow: hidden;
+}
+
+.gnb_mega__inner--explore {
+  display: flex;
+  flex-direction: column;
+  height: 698px;
+  padding: 20px 0 40px;
+  box-sizing: border-box;
+}
+
+.gnb_mega__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin: 0 0 20px 40px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 23px;
+  color: #666;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.gnb_mega__back:hover {
+  color: #222;
+}
+
+.gnb_mega__back-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  background: url("/ico/ico_arrow_right_14.svg") center / contain no-repeat;
+  transform: rotate(180deg);
+}
+
+.gnb_mega__explore-grid {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(4, 342px);
+  gap: 0 51px;
+  min-height: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.gnb_mega__explore-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.gnb_mega__explore-col-tit {
+  flex-shrink: 0;
+  margin: 0;
+  padding-left: 40px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.28px;
+  color: #0f1f45;
+}
+
+.gnb_mega__explore-list {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd transparent;
+}
+
+.gnb_mega__explore-list::-webkit-scrollbar {
+  width: 3px;
+}
+
+.gnb_mega__explore-list::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: #ddd;
+}
+
+.gnb_mega__explore-link {
+  display: block;
+  padding: 14px 0 14px 40px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  color: #666;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.gnb_mega__explore-link:hover {
+  color: #222;
+  background: #f5f7fa;
+}
+
+/* depth 3 — 314px, border #E8E8E8 */
+.gnb_mega__col--depth3 {
+  flex-shrink: 0;
+  width: 314px;
+  border-left: 1px solid #e8e8e8;
+  border-right: 1px solid #e8e8e8;
+  box-sizing: border-box;
+}
+
+.gnb_mega__depth3-scroll {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd transparent;
+}
+
+.gnb_mega__depth3-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+.gnb_mega__depth3-scroll::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: #ddd;
+}
+
+.gnb_mega__depth3-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gnb_mega__depth3-btn {
+  display: block;
+  width: 100%;
+  padding: 14px 34px;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  color: #666;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    font-weight 0.2s ease;
+  box-sizing: border-box;
+}
+
+.gnb_mega__depth3-btn:hover:not(.is-active) {
+  color: #222;
+}
+
+.gnb_mega__depth3-btn.is-active,
+.gnb_mega__depth3-btn.is-active:hover {
+  background: #f5f7fa;
+  color: #222;
+  font-weight: 500;
+}
+
+/* depth 4 — 764px content, gap 30px */
+.gnb_mega__col--depth4 {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 30px 40px 40px;
+  box-sizing: border-box;
+}
+
+.gnb_mega__depth4-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gnb_mega__depth4-head {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  color: #222;
+  text-decoration: none;
+}
+
+.gnb_mega__depth4-head:hover .gnb_mega__depth4-tit {
+}
+
+.gnb_mega__depth4-tit {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 44px;
+  letter-spacing: -0.34px;
+}
+
+/* Arrow · Hover — btn-text-30 패턴 (ComponentGuide) */
+.gnb_mega__depth4-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.gnb_mega__depth4-arrow-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: url("/ico/ico_arrow_right_24_blue.svg") center / contain no-repeat;
+  transition: filter 0.2s ease;
+}
+
+.gnb_mega__depth4-head:hover .gnb_mega__depth4-arrow {
+  background: var(--color-accent);
+}
+
+.gnb_mega__depth4-head:hover .gnb_mega__depth4-arrow-icon {
+  filter: brightness(0) invert(1);
+}
+
+.gnb_mega__depth4-desc {
+  max-width: 770px;
+  font-size: 15px;
+  line-height: 23px;
+  color: #666;
+}
+
+.gnb_mega__depth4-desc p {
+  margin: 0;
+}
+
+.gnb_mega__products {
+  display: grid;
+  grid-template-columns: repeat(2, 377px);
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.gnb_mega__product {
+  position: relative;
+  display: block;
+  width: 377px;
+  max-width: 100%;
+  height: 120px;
+  border-radius: 4px;
+  background: #f5f7fa;
+  color: inherit;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background 0.2s ease;
+  min-width: 377px;
+}
+
+.gnb_mega__product:hover {
+  background: #eef1f6;
+}
+
+.gnb_mega__product:hover .gnb_mega__product-tit {
+  text-decoration: underline;
+}
+
+.gnb_mega__product-text {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  width: 237px;
+}
+
+.gnb_mega__product-tit {
+  margin: 0 0 5px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  color: #222;
+}
+
+.gnb_mega__product-sub {
+  margin: 0;
+  font-size: 15px;
+  line-height: 23px;
+  color: #666;
+}
+
+.gnb_mega__product-img {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 84px;
+  height: 84px;
+}
+
+.gnb_mega__product-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gnb_mega_dim {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  border: none;
+  background: rgb(0 0 0 / 60%);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--gnb-dim-duration) ease;
+}
+
+.gnb_mega_dim.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gnb_mega,
+  .gnb_mega_dim {
+    transition: none;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1599px) {
+  .gnb_mega__inner {
+    max-width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+
+  .gnb_mega__products {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .gnb_mega__product {
+    width: calc(50% - 4px);
+  }
+
+  .gnb_mega__explore-grid {
+    grid-template-columns: repeat(4, minmax(240px, 1fr));
+    gap: 0 24px;
+    padding: 0 24px;
+  }
+}
+
+.gnb_menu_wrap.markets .btn_search {
+  width: 24px;
+  height: 24px;
+  background: url("/ico/ico_search_24.svg") no-repeat center / contain;
+  transition: filter 0.3s ease;
+}
+
+.gnb_menu_wrap.markets .btn_global {
+  width: 24px;
+  height: 24px;
+  background: url("/ico/ico_global_24.svg") no-repeat center / contain;
+  transition: filter 0.3s ease;
+}
+
+.gnb_menu_wrap.markets .btn_area {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  justify-self: flex-end;
+}
+
+.gnb_menu_wrap.markets .btn_area--mobile {
+  display: none;
+}
+
+.gnb_menu_wrap.markets .btn_menu {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gnb_menu_wrap.markets .icon_menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 24px;
+  height: 24px;
+}
+
+.gnb_menu_wrap.markets .icon_menu span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  transition:
+    transform 0.2s,
+    opacity 0.2s,
+    background-color 0.3s ease;
+}
+
+.gnb_menu_wrap.markets .btn_menu.is-active .icon_menu span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.gnb_menu_wrap.markets .btn_menu.is-active .icon_menu span:nth-child(2) {
+  opacity: 0;
+}
+
+.gnb_menu_wrap.markets .btn_menu.is-active .icon_menu span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.gnb_menu_wrap.markets .gnb_mobile_menu,
+.gnb_menu_wrap.markets .gnb_mobile_dim {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .gnb_menu_wrap.markets .gnb_menu_inner {
+    padding: 0 20px;
+  }
+
+  .gnb_mega,
+  .gnb_mega_dim {
+    display: none;
+  }
+
+  .gnb_menu_wrap.markets .gnb_nav_wrap,
+  .gnb_menu_wrap.markets .btn_area--desktop {
+    display: none;
+  }
+
+  .gnb_menu_wrap.markets .btn_area--mobile {
+    display: flex;
+    gap: 23px;
+  }
+
+  .gnb_menu_wrap.markets .gnb_mobile_menu {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+    padding: 24px 20px;
+    background: #111;
+    overflow-y: auto;
+  }
+
+  .gnb_menu_wrap.markets .gnb_mobile_menu.is-open {
+    display: block;
+  }
+
+  .gnb_menu_wrap.markets .gnb_mobile_list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .gnb_menu_wrap.markets .gnb_mobile_list .link {
+    display: block;
+    padding: 16px 0;
+    color: #fff;
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 500;
+    border-bottom: 1px solid rgb(255 255 255 / 12%);
+  }
+
+  .gnb_menu_wrap.markets .gnb_mobile_dim {
+    display: block;
+    position: fixed;
+    inset: 60px 0 0;
+    z-index: 1000;
+    border: none;
+    background: rgb(0 0 0 / 50%);
+    cursor: pointer;
+  }
+
+  .gnb_menu_wrap.markets.is-top:has(.gnb_mobile_menu.is-open),
+  .gnb_menu_wrap.markets.is-invert:has(.gnb_mobile_menu.is-open) {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .gnb_menu_wrap.markets.is-top:has(.gnb_mobile_menu.is-open) .icon_menu span,
+  .gnb_menu_wrap.markets.is-invert:has(.gnb_mobile_menu.is-open) .icon_menu span {
+    background: #0f1f45;
+  }
+}

@@ -1,0 +1,685 @@
+/* Main footer — Figma 2483:64162 */
+
+.main_footer {
+  margin-top: auto;
+  color: #fff;
+  background-color: var(--color-primary, #0f1f45);
+  background-image: url("/img/footer/bg_common_footer.png");
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-size: cover;
+}
+
+.main_footer__inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 70px 0 0;
+}
+
+/* Newsletter */
+.main_footer__inner {
+  display: flex;
+  gap: 80px;
+  align-items: start;
+  padding-top: 100px;
+  padding-bottom: 80px;
+  justify-content: space-between;
+}
+
+.main_footer__tit {
+  font-family: "jaka";
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 54px; /* 128.571% */
+  letter-spacing: -0.84px;
+  margin-bottom: 20px;
+}
+
+.main_footer__desc {
+  margin: 0;
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  color: rgb(255 255 255 / 80%);
+}
+.main_footer__form {
+  width: 560px;
+}
+
+.main_footer__form form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.main_footer__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 560px;
+  margin-bottom: 34px;
+}
+
+.main_footer__fields .main_footer__products {
+  grid-column: 1 / -1;
+}
+
+.main_footer__field {
+  width: 100%;
+}
+
+.main_footer__field .MuiInputLabel-root {
+  font-size: 15px;
+  line-height: 23px;
+  color: rgb(255 255 255 / 70%);
+}
+
+.main_footer__field .MuiInputLabel-root.Mui-focused {
+  color: #fff;
+}
+
+.main_footer__field .MuiOutlinedInput-root {
+  height: 50px;
+  color: #fff;
+  background-color: transparent;
+}
+
+.main_footer__field .MuiOutlinedInput-input,
+.main_footer__field .MuiSelect-select {
+  height: 50px;
+  padding: 13px 14px;
+  font-size: 15px;
+  line-height: 23px;
+  box-sizing: border-box;
+}
+
+.main_footer__field .MuiSelect-select {
+  display: flex;
+  align-items: center;
+  padding-right: 40px;
+}
+
+.main_footer__field .MuiOutlinedInput-root fieldset {
+  border-color: rgb(255 255 255 / 30%);
+}
+
+.main_footer__field .MuiOutlinedInput-root:hover fieldset {
+  border-color: rgb(255 255 255 / 55%);
+}
+
+.main_footer__field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #fff;
+}
+
+.main_footer__field .MuiSelect-icon,
+.main_footer__field .main_footer__select-icon {
+  width: 14px;
+  height: 14px;
+  top: calc(50% - 7px);
+  right: 14px;
+  background: url("/ico/ico_bottom_14_white.svg") center / contain no-repeat;
+  pointer-events: none;
+}
+
+.main_footer__field .main_footer__select-icon svg {
+  display: none;
+}
+
+.main_footer__select-menu {
+  max-width: calc(100vw - 40px);
+}
+
+.main_footer__form .main_footer__checkbox.MuiCheckbox-root {
+  padding: 0;
+  color: transparent;
+  border-radius: 4px;
+}
+
+.main_footer__form .main_footer__checkbox.MuiCheckbox-root.Mui-checked,
+.main_footer__form .main_footer__checkbox.MuiCheckbox-root:hover,
+.main_footer__form .main_footer__checkbox.MuiCheckbox-root.Mui-focusVisible {
+  color: transparent;
+  background-color: transparent;
+}
+
+.main_footer__form .main_footer__checkbox.MuiCheckbox-root .MuiSvgIcon-root {
+  display: none;
+}
+
+.main_footer__fields .main_footer__checkbox-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.main_footer__products-tit {
+  color: var(--Grayscale-White, #fff);
+  font-family: "Pretendard Variable";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%; /* 18px */
+}
+
+.main_footer__product-checks {
+  gap: 30px;
+  position: relative;
+  top: 10px;
+  padding-bottom: 20px;
+}
+
+.main_footer__product-check.MuiFormControlLabel-root {
+  margin: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.main_footer__product-check .MuiFormControlLabel-label {
+  font-size: 16px;
+  line-height: 1;
+  color: rgb(255 255 255 / 85%);
+  font-weight: 400;
+  font-family: "Pretendard Variable";
+}
+
+.main_footer__submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+}
+.main_footer__submit .btn_flat {
+  text-align: center;
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 100%;
+  border-radius: 4px;
+  background: #fff;
+  color: #0f1f45;
+  width: 100%;
+  margin-bottom: 18px;
+  transition: none;
+}
+
+.main_footer__submit .btn_flat:hover {
+  background: #fff;
+  color: #0f1f45;
+}
+.main_footer__agree {
+  margin: 0;
+  color: #fff;
+  font-family: "Pretendard Variable";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 100%;
+}
+
+.main_footer__agree a {
+  color: #fff;
+  text-decoration: unset;
+  font-family: "Pretendard Variable";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 100%;
+}
+
+/* Bottom — Figma 2575:16951 */
+.main_footer_02 {
+  border-top: 1px solid rgb(255 255 255 / 10%);
+}
+
+.main_footer_02__inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+.main_footer_02__left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.main_footer_02__logo img {
+  display: block;
+  width: auto;
+  height: 28px;
+}
+
+.main_footer_02__copyright {
+  font-family: "Pretendard Variable";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 100%;
+  color: rgb(255 255 255 / 50%);
+  margin-top: 18px;
+  margin-bottom: 30px;
+}
+
+.main_footer_02__affiliate {
+  width: 245px;
+  max-width: 100%;
+}
+
+.main_footer_02__affiliate .MuiOutlinedInput-root {
+  height: 44px;
+  color: #fff;
+  background-color: transparent;
+}
+
+.main_footer_02__affiliate .MuiSelect-select {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 10px 40px 10px 14px;
+  font-family: "Pretendard Variable", var(--font-pretendard);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  box-sizing: border-box;
+}
+
+.main_footer_02__affiliate .MuiOutlinedInput-root fieldset {
+  border-color: rgb(255 255 255 / 30%);
+}
+
+.main_footer_02__affiliate .MuiOutlinedInput-root:hover fieldset {
+  border-color: rgb(255 255 255 / 55%);
+}
+
+.main_footer_02__affiliate .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #fff;
+}
+
+.main_footer_02__affiliate .MuiSelect-icon,
+.main_footer_02__affiliate .main_footer__select-icon {
+  width: 14px;
+  height: 14px;
+  top: calc(50% - 7px);
+  right: 14px;
+  background: url("/ico/ico_bottom_14_white.svg") center / contain no-repeat;
+  pointer-events: none;
+}
+
+.main_footer_02__affiliate .main_footer__select-icon svg {
+  display: none;
+}
+
+.main_footer_02__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 30px;
+  min-width: 0;
+}
+
+.main_footer_02__legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  margin-top: 42px;
+}
+
+.main_footer_02__legal-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.main_footer_02__legal-link {
+  font-family: "Pretendard Variable", var(--font-pretendard);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1;
+  color: rgb(255 255 255 / 70%);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.main_footer_02__legal-link:hover {
+  color: #fff;
+}
+
+.main_footer_02__legal-sep {
+  margin: 0 16px;
+  font-size: 12px;
+  line-height: 22px;
+  color: rgb(255 255 255 / 35%);
+}
+
+.main_footer_02__sns {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.main_footer_02__sns a {
+  display: block;
+  flex-shrink: 0;
+  line-height: 0;
+  transition: opacity 0.2s ease;
+}
+
+.main_footer_02__sns a:hover {
+  opacity: 0.85;
+}
+
+.main_footer_02__sns img {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+
+@media (max-width: 780px) {
+  .main_footer__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 64px 20px 48px;
+  }
+
+  .main_footer__inner {
+    padding-left: var(--inner-padding-x-mobile, 20px);
+    padding-right: var(--inner-padding-x-mobile, 20px);
+    flex-direction: column;
+  }
+  .main_footer {
+    background-position: right bottom;
+    background-image: url("/img/footer/mo_bg_common_footer.png");
+  }
+  .main_footer__tit {
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 38px; /* 135.714% */
+    letter-spacing: -0.56px;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+
+  .main_footer__desc {
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 23px;
+  }
+
+  .main_footer__br-pc {
+    display: none;
+  }
+
+  .main_footer__fields {
+    grid-template-columns: 1fr;
+    width: calc(100vw - 40px);
+    margin-bottom: 30px;
+  }
+
+  .main_footer__product-checks {
+    flex-direction: row;
+    width: calc(100vw - 40px);
+  }
+
+  .main_footer__submit {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .main_footer__submit .btn_flat {
+    width: 100%;
+  }
+
+  .main_footer_02__inner {
+    flex-direction: column;
+    gap: 32px;
+    padding: 28px 20px 36px;
+  }
+
+  .main_footer_02__right {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .main_footer_02__legal {
+    justify-content: flex-start;
+  }
+
+  .main_footer_02__legal-link,
+  .main_footer_02__legal-sep {
+    white-space: normal;
+  }
+
+  .main_footer_02__affiliate {
+    width: 100%;
+  }
+  .main_footer__products-tit {
+    color: var(--Grayscale-White, #fff);
+    font-family: "Pretendard Variable";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 100;
+    line-height: 100%; /* 18px */
+  }
+
+  .main_footer__product-checks {
+    gap: 30px;
+    position: relative;
+    top: 10px;
+    padding-bottom: 20px;
+  }
+
+  .main_footer__product-check.MuiFormControlLabel-root {
+    margin: 0;
+    display: flex;
+    gap: 10px;
+  }
+
+  .main_footer__product-check .MuiFormControlLabel-label {
+    font-size: 14px;
+    line-height: 1;
+    color: rgb(255 255 255 / 85%);
+    font-weight: 400;
+    font-family: "Pretendard Variable";
+  }
+  .main_footer__form {
+    width: 100%;
+  }
+  .main_footer__submit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin-top: 20px;
+  }
+  .main_footer__submit .btn_flat {
+    text-align: center;
+    font-family: "Pretendard Variable";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 100%;
+    border-radius: 4px;
+    background: #fff;
+    color: #0f1f45;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .main_footer__agree {
+    margin: 0;
+    color: #fff;
+    font-family: "Pretendard Variable";
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 21px;
+  }
+
+  .main_footer__agree a {
+    color: #fff;
+    text-decoration: unset;
+    font-family: "Pretendard Variable";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 100%;
+  }
+
+  /* Bottom — Figma 2575:16951 */
+  .main_footer_02 {
+    border-top: 1px solid rgb(255 255 255 / 10%);
+    padding: 30px 20px;
+  }
+
+  .main_footer_02__inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .main_footer_02__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    min-width: 0;
+  }
+
+  .main_footer_02__logo img {
+    display: block;
+    width: auto;
+    height: 28px;
+  }
+
+  .main_footer_02__copyright {
+    font-family: "Pretendard Variable";
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 100%;
+    color: rgb(255 255 255 / 50%);
+    margin-top: 18px;
+    margin-bottom: 30px;
+  }
+
+  .main_footer_02__affiliate {
+    width: 320px;
+    max-width: 100%;
+  }
+
+  .main_footer_02__affiliate .MuiOutlinedInput-root {
+    height: 44px;
+    color: #fff;
+    background-color: transparent;
+  }
+
+  .main_footer_02__affiliate .MuiSelect-select {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding: 10px 40px 10px 14px;
+    font-family: "Pretendard Variable", var(--font-pretendard);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    box-sizing: border-box;
+  }
+
+  .main_footer_02__affiliate .MuiOutlinedInput-root fieldset {
+    border-color: rgb(255 255 255 / 30%);
+  }
+
+  .main_footer_02__affiliate .MuiOutlinedInput-root:hover fieldset {
+    border-color: rgb(255 255 255 / 55%);
+  }
+
+  .main_footer_02__affiliate .MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: #fff;
+  }
+
+  .main_footer_02__affiliate .MuiSelect-icon,
+  .main_footer_02__affiliate .main_footer__select-icon {
+    width: 14px;
+    height: 14px;
+    top: calc(50% - 7px);
+    right: 14px;
+    background: url("/ico/ico_bottom_14_white.svg") center / contain no-repeat;
+    pointer-events: none;
+  }
+
+  .main_footer_02__affiliate .main_footer__select-icon svg {
+    display: none;
+  }
+
+  .main_footer_02__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 30px;
+    min-width: 0;
+  }
+
+  .main_footer_02__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px 0;
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
+
+  .main_footer_02__legal-item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .main_footer_02__legal-link {
+    font-family: "Pretendard Variable", var(--font-pretendard);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1;
+    color: rgb(255 255 255 / 70%);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  .main_footer_02__legal-link:hover {
+    color: #fff;
+  }
+
+  .main_footer_02__legal-sep {
+    margin: 0 12px;
+    font-size: 12px;
+    line-height: 22px;
+    color: rgb(255 255 255 / 35%);
+  }
+
+  .main_footer_02__sns {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+}
