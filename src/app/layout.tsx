@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-
-import HistoryReloadOnNavigate from "@/components/layout/HistoryReloadOnNavigate";
-import ScrollToTopOnNavigate from "@/components/layout/ScrollToTopOnNavigate";
-import "../assets/css/reset.css";
-import "../assets/css/fonts.css";
-import "../assets/css/globals.css";
-import "../assets/css/components/product-award-badge.css";
+import HistoryReloadOnNavigate from "@/components/common/history-reload-on-navigate";
+import ScrollToTopOnNavigate from "@/components/common/scroll-to-top-on-navigate";
+import LenisScrollProvider from "@/components/layout/LenisScrollProvider";
+import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
+import "@/assets/css/reset.css";
+import "@/assets/css/fonts.css";
+import "@/assets/css/globals.css";
+import "@/assets/css/components/product-award-badge.css";
 
 export const metadata: Metadata = {
   title: "LS ELECTRIC | Smart Energy Global Leader",
@@ -46,9 +47,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
-        <HistoryReloadOnNavigate />
-        <ScrollToTopOnNavigate />
+        <LenisScrollProvider>
+          {children}
+          <HistoryReloadOnNavigate />
+          <ScrollToTopOnNavigate />
+          <ScrollToTopButton />
+        </LenisScrollProvider>
       </body>
     </html>
   );

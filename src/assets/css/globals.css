@@ -36,6 +36,8 @@
   --btn-lv03-px: 24px;
   --btn-icon-56: 56px;
   --btn-rolling-50: 50px;
+  --mui-focus-outline-color: var(--color-primary);
+  --mui-focus-outline-offset: 2px;
 }
 
 /* Base */
@@ -44,6 +46,37 @@ html {
   overflow-y: scroll;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #e8e8e8;
+}
+
+html *::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+html *::-webkit-scrollbar-track {
+  background: #e8e8e8;
+  border-radius: 2px;
+}
+
+html *::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2px;
+}
+
+*::-webkit-scrollbar {
+  width: 3px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #e8e8e8;
+  border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2px;
 }
 html,
 body {
@@ -85,14 +118,14 @@ section .section_tit {
   color: var(--color-text);
 }
 section .section_desc {
-  margin-top: 10px;
+  margin-top: 11px;
   font-size: 18px;
   font-weight: 400;
   line-height: 28px;
   color: var(--color-text-muted);
 }
 
-/* === Buttons — Figma 04_Button === */
+/* === Buttons ??Figma 04_Button === */
 section .btn-base {
   display: inline-flex;
   align-items: center;
@@ -116,7 +149,7 @@ section .btn-base.is-disabled {
   pointer-events: none;
 }
 
-/* Level 01 — 52px */
+/* Level 01 ??52px */
 section .btn-lv01 {
   min-height: var(--btn-lv01-h);
   min-width: var(--btn-lv01-min-w);
@@ -135,10 +168,7 @@ section .btn-lv01--line-solid:hover {
   background: #fff;
 }
 section .btn-lv01--line-solid:hover .icon_arrow-18 {
-  background-color: #666;
-  background-image: none;
-  mask: url("/ico/ico_arrow_right_18_white.svg") center / contain no-repeat;
-  -webkit-mask: url("/ico/ico_arrow_right_18_white.svg") center / contain no-repeat;
+  background: url("/ico/ico_arrow_right_18.svg") center / contain no-repeat;
 }
 section .btn-lv01--solid,
 section .btn_primary {
@@ -170,12 +200,21 @@ section .btn_outline .icon_download {
   transition: opacity 0.2s ease;
 }
 
-section .btn-lv01--line:hover .icon_download,
-section .btn_outline:hover .icon_download {
-  opacity: 0.85;
+section .btn-lv01--line .icon_link,
+section .btn_outline .icon_link {
+  display: block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  background: url("/ico/ico_link.svg") center / contain no-repeat;
 }
 
-/* Level 02 — 46px */
+section .btn-lv01--line:hover .icon_download,
+section .btn_outline:hover .icon_download {
+  /* opacity: 0.85; */
+}
+
+/* Level 02 ??46px */
 section .btn-lv02 {
   min-height: var(--btn-lv02-h);
   min-width: var(--btn-lv02-min-w);
@@ -221,7 +260,7 @@ section .btn-lv02--more:hover .icon_more {
   filter: brightness(0) invert(1);
 }
 
-/* Level 03 — 42px */
+/* Level 03 ??42px */
 section .btn-lv03 {
   min-height: var(--btn-lv03-h);
   min-width: var(--btn-lv03-min-w);
@@ -244,6 +283,66 @@ section .btn-lv03--line {
 }
 section .btn-lv03--line:hover {
   border-color: var(--color-primary);
+}
+
+section .btn-lv03--line .icon_download {
+  display: block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  background: url("/ico/ico_download.svg") center / contain no-repeat;
+  transition: opacity 0.2s ease;
+}
+
+section .btn-lv03--line:hover .icon_download {
+  opacity: 0.85;
+}
+
+/* Btn 30px Line (Figma Btn / 30px / Line) */
+section .btn-line-30 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-sizing: border-box;
+  height: 30px;
+  min-height: 30px;
+  min-width: 0;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-primary, #0f1f45);
+  background: #fff;
+  border: 1px solid rgb(15 31 69 / 30%);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+section .btn-line-30:hover {
+  border-color: var(--color-primary);
+}
+section .btn-line-30--on-dark {
+  color: #fff;
+  background: transparent;
+  border-color: rgb(255 255 255 / 30%);
+}
+section .btn-line-30--on-dark:hover {
+  border-color: #fff;
+}
+section .btn-line-30__icon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 14px 14px;
+}
+section .btn-line-30__icon--copy {
+  background-image: url("/ico/ico_copy_14.svg");
+}
+section .btn-line-30--on-dark .btn-line-30__icon--copy {
+  background-image: url("/ico/ico_copy_white_14.svg");
 }
 
 /* Accent CTA (footer newsletter) */
@@ -301,6 +400,84 @@ section .btn-icon-56:hover .icon_arrow-20 {
   filter: brightness(0) invert(1);
 }
 
+/* Btn / 56px / Top — Figma 4249:16817 */
+.scroll_to_top {
+  position: fixed;
+  right: clamp(16px, 4vw, 40px);
+  bottom: clamp(16px, 4vw, 40px);
+  z-index: 900;
+}
+
+.scroll_to_top__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--btn-icon-56);
+  height: var(--btn-icon-56);
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.scroll_to_top__btn:hover {
+  border-color: #bbb;
+}
+
+.scroll_to_top__btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.scroll_to_top__icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: url("/ico/ico_arrow_up_20.svg") center / contain no-repeat;
+}
+
+/* Btn / 56px / Top — mobile — Figma 5970:72855 (46px instance) */
+@media (max-width: 780px) {
+  .scroll_to_top {
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .scroll_to_top__btn {
+    width: 46px;
+    height: 46px;
+  }
+
+  .scroll_to_top__icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+section .btn-icon-56--top {
+  border-color: #ddd;
+  background: #fff;
+}
+
+section .btn-icon-56--top:hover {
+  background: #fff;
+  border-color: #bbb;
+}
+
+section .btn-icon-56--top .icon_arrow-top-20 {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: url("/ico/ico_arrow_up_20.svg") center / contain no-repeat;
+}
+
+section .btn-icon-56--top:hover .icon_arrow-top-20 {
+  filter: none;
+}
+
 /* Text 30px */
 section .btn-text-30 {
   display: inline-flex;
@@ -343,12 +520,12 @@ section .btn-text-30 .icon_link-14 {
 section .btn-text-30:hover .icon_link-14 {
   filter: brightness(0) invert(1);
 }
-/* btn-text-30 — external link vs right arrow (Figma Help CTA) */
+/* btn-text-30 ??external link vs right arrow (Figma Help CTA) */
 section .btn-text-30 .icon_external-18 {
   display: block;
   width: 14px;
   height: 14px;
-  background: url("/ico/ico_arrow_right_18.svg") center / contain no-repeat;
+  background: url("/ico/ico_arrow_right_18_gray.svg") center / contain no-repeat;
 }
 section .btn-text-30 .icon_arrow-18 {
   display: block;
@@ -361,7 +538,7 @@ section .btn-text-30:hover .icon_arrow-18 {
   filter: brightness(0) invert(1);
 }
 
-/* Arrow link (banner) — alias btn_arrow */
+/* Arrow link (banner) ??alias btn_arrow */
 section .btn_arrow {
   display: inline-flex;
   align-items: center;
@@ -393,8 +570,28 @@ section .icon_arrow-18 {
   background: url("/ico/ico_arrow_right_18_white.svg") center / contain no-repeat;
   transition: background-color 0.2s ease;
 }
-
-/* common_banner_01 — shared dark CTA banner */
+/* Responsive zoom (legacy) */
+@media (max-height: 1442px) and (min-width: 781px) {
+  body section.main_visual .video-pagination {
+    bottom: 50px;
+  }
+}
+@media (max-width: 1440px) and (min-width: 1024px) {
+  .gnb_menu_inner,header .main_header__inner,.sub_breadcrumb .inner{
+  /* padding:0 20px;  */
+}
+ main,footer {
+    zoom: 0.7;
+    /* padding:0 20px; */
+  }
+}
+@media (max-width: 1023px) and (min-width: 780px) {
+ main,footer {
+    zoom: 0.5;
+    padding:0 20px;
+  }
+}
+/* common_banner_01 ??shared dark CTA banner */
 @media (min-width: 781px) {
   section.common_banner_01 {
     position: relative;
@@ -463,9 +660,13 @@ section .icon_arrow-18 {
     justify-content: center;
   }
 
-  section.common_banner_01:hover .btn_area a:first-child {
+  section.common_banner_01:hover .btn_area .btn-lv01--line-solid {
     color: var(--color-primary);
     background: #fff;
+  }
+
+  section.common_banner_01:hover .btn_area .btn-lv01--line-solid .icon_arrow-18 {
+    background: url("/ico/ico_arrow_right_18.svg") center / contain no-repeat;
   }
 }
 
@@ -548,7 +749,7 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   flex-shrink: 0;
 }
 
-/* common_banner_03 — Figma 3082:53145 ## 05_HUB Banner */
+/* common_banner_03 ??Figma 3082:53145 ## 05_HUB Banner */
 @media (min-width: 781px) {
   section.common_banner_03 {
     padding: 0;
@@ -571,50 +772,18 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     pointer-events: none;
   }
 
-  section.common_banner_03 .common_banner_03__video {
+  section.common_banner_03 .common_banner_03__img {
     position: absolute;
     top: 0;
     right: 0;
     width: 562px;
     height: 316px;
     overflow: hidden;
+    text-decoration: none;
+    color: inherit;
   }
 
-  /* embed / iframe */
-  section.common_banner_03 .common_banner_03__embed {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-  }
-
-  section.common_banner_03 .common_banner_03__iframe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    border: none;
-    pointer-events: none;
-    transform: translate(-50%, -50%) scale(1.14);
-  }
-
-  /* poster */
-  section.common_banner_03 .common_banner_03__poster {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-  }
-
-  section.common_banner_03 .common_banner_03__poster.is-visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  section.common_banner_03 .common_banner_03__video-img {
+  section.common_banner_03 .common_banner_03__img img {
     display: block;
     width: 100%;
     height: 100%;
@@ -624,54 +793,7 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   section.common_banner_03 .common_banner_03__dim {
     position: absolute;
     inset: 0;
-    background: rgb(0 0 0 / 45%);
-  }
-
-  /* toggle button */
-  section.common_banner_03 .common_banner_03__toggle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 72px;
-    height: 72px;
-    padding: 0;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    background: transparent;
-    cursor: pointer;
-    transform: translate(-50%, -50%);
-    transition:
-      background 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  section.common_banner_03 .common_banner_03__toggle:hover {
-    background: rgb(255 255 255 / 12%);
-  }
-
-  section.common_banner_03 .common_banner_03__icon {
-    display: block;
-  }
-
-  section.common_banner_03 .common_banner_03__icon--play {
-    width: 0;
-    height: 0;
-    margin-left: 6px;
-    border-style: solid;
-    border-width: 10px 0 10px 18px;
-    border-color: transparent transparent transparent #fff;
-  }
-
-  section.common_banner_03 .common_banner_03__icon--pause {
-    width: 18px;
-    height: 22px;
-    background:
-      linear-gradient(#fff, #fff) left center / 5px 22px no-repeat,
-      linear-gradient(#fff, #fff) right center / 5px 22px no-repeat;
+    background: rgb(0 0 0 / 60%);
   }
 
   section.common_banner_03 .common_banner_03__body {
@@ -689,10 +811,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     color: inherit;
   }
 
-  section.common_banner_03 a.common_banner_03__body:focus-visible {
-    outline: 2px solid var(--color-primary, #e60012);
-    outline-offset: 2px;
-  }
 
   section.common_banner_03 a.common_banner_03__body:hover .btn-text-30__icon {
     background: var(--color-accent);
@@ -754,7 +872,7 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     object-fit: cover;
   }
 
-  section.common_banner_03 .common_banner_03__video {
+  section.common_banner_03 .common_banner_03__img {
     display: none;
   }
 
@@ -770,10 +888,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     color: inherit;
   }
 
-  section.common_banner_03 a.common_banner_03__body:focus-visible {
-    outline: 2px solid var(--color-primary, #e60012);
-    outline-offset: 2px;
-  }
 
   section.common_banner_03 a.common_banner_03__body:hover .btn-text-30__icon {
     background: var(--color-accent);
@@ -818,31 +932,48 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   }
 }
 
-/* common_banner_04 — Expert CTA (legacy devices_expert_banner) */
+/* common_banner_04 ??Expert CTA (legacy devices_expert_banner) */
 @media (min-width: 781px) {
   section.common_banner_04 {
-    position: relative;
-    padding: 82px 0;
+    padding: 0;
     text-align: center;
     color: #fff;
   }
 
-  section.common_banner_04 .common_banner_04__bg {
-    position: absolute;
-    inset: 0;
-    background: #0f1f45 url("/img/banner/bg_banner_03.png") center / cover no-repeat;
+  section.common_banner_04 .common_banner_04__body {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    padding: 82px 0;
+    color: inherit;
+    text-decoration: none;
   }
 
-  section.common_banner_04 .common_banner_04__bg::after {
+  section.common_banner_04 .common_banner_04__body .common_banner_04__bg {
     position: absolute;
     inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  section.common_banner_04 .common_banner_04__body .common_banner_04__bg--mo {
+    display: none;
+  }
+
+  section.common_banner_04 .common_banner_04__dim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     background: rgb(15 31 69 / 55%);
-    content: "";
+    pointer-events: none;
   }
 
   section.common_banner_04 .common_banner_04__inner {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 
   section.common_banner_04 .common_banner_04__tit {
@@ -860,20 +991,15 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     line-height: 24px;
   }
 
-  section.common_banner_04 .common_banner_04__link {
-    display: inline-block;
-    text-decoration: none;
-  }
-
-  section.common_banner_04:hover .btn-lv01--line-solid {
+  section.common_banner_04 .common_banner_04__body:hover .btn-lv01--line-solid {
     color: var(--color-primary);
     background: #fff;
   }
 }
 
 @media (max-width: 780px) {
-  section.common_banner_04 {
-    padding: 60px 20px;
+  section.common_banner_04 .common_banner_04__body {
+    padding: 60px 0;
   }
 
   section.common_banner_04 .common_banner_04__tit {
@@ -882,7 +1008,7 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   }
 }
 
-/* common_banner_02 — Figma 2910:32832 ## 02_Banner */
+/* common_banner_02 ??Figma 2910:32832 ## 02_Banner */
 @media (min-width: 781px) {
   section.common_banner_02 {
     padding: 0;
@@ -899,44 +1025,20 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     color: inherit;
   }
 
-  section.common_banner_02 a.common_banner_02__panel:focus-visible {
-    outline: 2px solid var(--color-primary, #e60012);
-    outline-offset: 2px;
-  }
 
-  section.common_banner_02 a.common_banner_02__panel:hover .btn-text-30__icon {
+  section.common_banner_02 .common_banner_02__panel:hover .btn-text-30__icon,
+  section.common_banner_02 .common_banner_02__link:hover .btn-text-30__icon {
     background: var(--color-accent);
   }
 
-  section.common_banner_02 .common_banner_02__bg {
+  section.common_banner_02 .common_banner_02__body .common_banner_02__bg {
     position: absolute;
     inset: 0;
+    z-index: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     pointer-events: none;
-  }
-
-  section.common_banner_02 .common_banner_02__decor {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  section.common_banner_02 .common_banner_02__ellipse {
-    position: absolute;
-    top: 0;
-    width: 220px;
-    height: 220px;
-    object-fit: contain;
-  }
-
-  section.common_banner_02 .common_banner_02__ellipse--1 {
-    right: 140px;
-  }
-
-  section.common_banner_02 .common_banner_02__ellipse--2 {
-    right: 30px;
   }
 
   section.common_banner_02 .common_banner_02__body {
@@ -946,11 +1048,14 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     align-items: center;
     justify-content: space-between;
     gap: 40px;
+    overflow: hidden;
     min-height: 220px;
     padding: 60px;
   }
 
   section.common_banner_02 .common_banner_02__text {
+    position: relative;
+    z-index: 1;
     flex: 1;
     min-width: 0;
   }
@@ -977,8 +1082,11 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   }
 
   section.common_banner_02 .common_banner_02__link {
+    position: relative;
+    z-index: 1;
     flex-shrink: 0;
     color: #fff;
+    text-decoration: none;
   }
 
   section.common_banner_02 .common_banner_02__link .icon_link-14 {
@@ -1002,45 +1110,20 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     color: inherit;
   }
 
-  section.common_banner_02 a.common_banner_02__panel:focus-visible {
-    outline: 2px solid var(--color-primary, #e60012);
-    outline-offset: 2px;
-  }
 
-  section.common_banner_02 a.common_banner_02__panel:hover .btn-text-30__icon {
+  section.common_banner_02 .common_banner_02__panel:hover .btn-text-30__icon,
+  section.common_banner_02 .common_banner_02__link:hover .btn-text-30__icon {
     background: var(--color-accent);
   }
 
-  section.common_banner_02 .common_banner_02__bg {
+  section.common_banner_02 .common_banner_02__body .common_banner_02__bg {
     position: absolute;
     inset: 0;
+    z-index: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     pointer-events: none;
-  }
-
-  section.common_banner_02 .common_banner_02__decor {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  section.common_banner_02 .common_banner_02__ellipse {
-    position: absolute;
-    top: 0;
-    width: 160px;
-    height: 160px;
-    object-fit: contain;
-    opacity: 0.85;
-  }
-
-  section.common_banner_02 .common_banner_02__ellipse--1 {
-    right: -20px;
-  }
-
-  section.common_banner_02 .common_banner_02__ellipse--2 {
-    right: 80px;
   }
 
   section.common_banner_02 .common_banner_02__body {
@@ -1050,7 +1133,18 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     flex-direction: column;
     align-items: flex-start;
     gap: 24px;
+    overflow: hidden;
     padding: 40px 24px;
+  }
+
+  section.common_banner_02 .common_banner_02__text {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.common_banner_02 .common_banner_02__link {
+    position: relative;
+    z-index: 1;
   }
 
   section.common_banner_02 .banner_tit {
@@ -1165,6 +1259,7 @@ section .products_swipers_pagination__item.is-active .products_swipers_paginatio
 section .products_swipers_pagination__item:hover .products_swipers_pagination__bar {
   height: 2px;
   background: var(--color-text-light);
+  margin-top: -1px;
 }
 section .swiper_type_01_controls,
 section .products_swipers_controls {
@@ -1184,7 +1279,7 @@ section .products_swipers_nav {
   gap: 20px;
 }
 
-/* Page numbering — Figma 994:2611 */
+/* Page numbering ??Figma 994:2611 */
 section .page-numbering {
   display: flex;
   justify-content: center;
@@ -1316,7 +1411,7 @@ section .tab_area {
   gap: 40px;
 }
 
-/* common_faq — shared FAQ accordion */
+/* common_faq ??shared FAQ accordion */
 section.common_faq .section_tit {
   font-weight: 700;
 }
@@ -1468,28 +1563,30 @@ section.common_faq .faq_item.is-open .faq_answer {
   }
 }
 
-/* === Check — Figma 05_Check (2483:63468, MUI) === */
+body section.devices_product_downloads{display: block;}
+
+/* === Check ??Figma 05_Check (2483:63468, MUI) === */
 section.component-guide .guide_checkbox,
-section.devices_product_downloads .guide_checkbox.MuiCheckbox-root {
+section.devices_product_downloads .guide_checkbox.MuiCheckbox-root , section.support_download_contents .guide_checkbox.MuiCheckbox-root , section.support_download_search .guide_checkbox.MuiCheckbox-root , section.support_contact_form .guide_checkbox.MuiCheckbox-root {
   padding: 0;
   color: transparent;
   border-radius: 4px;
 }
 section.component-guide .guide_checkbox,
-section.devices_product_downloads .guide_checkbox.MuiCheckbox-root.Mui-checked,
+section.devices_product_downloads .guide_checkbox.MuiCheckbox-root.Mui-checked, section.support_download_contents .guide_checkbox.MuiCheckbox-root.Mui-checked, section.support_download_search .guide_checkbox.MuiCheckbox-root.Mui-checked, section.support_contact_form .guide_checkbox.MuiCheckbox-root.Mui-checked,
 section.component-guide .guide_checkbox,
-section.devices_product_downloads .guide_checkbox.MuiCheckbox-root:hover,
+section.devices_product_downloads .guide_checkbox.MuiCheckbox-root:hover, section.support_download_contents .guide_checkbox.MuiCheckbox-root:hover, section.support_download_search .guide_checkbox.MuiCheckbox-root:hover, section.support_contact_form .guide_checkbox.MuiCheckbox-root:hover,
 section.component-guide .guide_checkbox,
-section.devices_product_downloads .guide_checkbox.MuiCheckbox-root.Mui-focusVisible {
+section.devices_product_downloads .guide_checkbox.MuiCheckbox-root.Mui-focusVisible , section.support_download_contents .guide_checkbox.MuiCheckbox-root.Mui-focusVisible , section.support_download_search .guide_checkbox.MuiCheckbox-root.Mui-focusVisible , section.support_contact_form .guide_checkbox.MuiCheckbox-root.Mui-focusVisible {
   color: transparent;
   background-color: transparent;
 }
 section.component-guide .guide_checkbox,
-section.devices_product_downloads .guide_checkbox.MuiCheckbox-root .MuiSvgIcon-root {
+section.devices_product_downloads .guide_checkbox.MuiCheckbox-root .MuiSvgIcon-root , section.support_download_contents .guide_checkbox.MuiCheckbox-root .MuiSvgIcon-root , section.support_download_search .guide_checkbox.MuiCheckbox-root .MuiSvgIcon-root , section.support_contact_form .guide_checkbox.MuiCheckbox-root .MuiSvgIcon-root {
   display: none;
 }
 section.component-guide .guide_checkbox,
-section.devices_product_downloads .guide_checkbox__icon {
+section.devices_product_downloads .guide_checkbox__icon , section.support_download_contents .guide_checkbox__icon , section.support_download_search .guide_checkbox__icon , section.support_contact_form .guide_checkbox__icon {
   display: block;
   width: 22px;
   height: 22px;
@@ -1499,20 +1596,20 @@ section.devices_product_downloads .guide_checkbox__icon {
 
 /* === Textfield — Figma 06_Textfield (MUI) === */
 section.component-guide .guide_field,
-section.devices_product_downloads .guide_field {
+section.devices_product_downloads .guide_field , section.support_download_contents .guide_field , section.support_download_search .guide_field , section.support_where_to_buy_contents .guide_field , section.support_where_to_buy_search .guide_field , section.support_contact_form .guide_field, section.support_service_training_curriculum .guide_field , section.support_service_training_detail_schedule .guide_field , section.support_service_training_session_detail .guide_field , section.support_service_training_request .guide_field, section.devices_explore .guide_field {
   width: 280px;
 }
 section.component-guide .guide_field--w200,
-section.devices_product_downloads .guide_field--w200 {
+section.devices_product_downloads .guide_field--w200 , section.support_download_contents .guide_field--w200 , section.support_download_search .guide_field--w200 , section.support_where_to_buy_contents .guide_field--w200 , section.support_where_to_buy_search .guide_field--w200, section.support_service_training_curriculum .guide_field--w200 , section.support_service_training_detail_schedule .guide_field--w200 , section.support_service_training_session_detail .guide_field--w200 , section.support_service_training_request .guide_field--w200, section.devices_explore .guide_field--w200 {
   width: 200px;
 }
 section.component-guide .guide_field--w120,
-section.devices_product_downloads .guide_field--w120 {
+section.devices_product_downloads .guide_field--w120 , section.support_download_contents .guide_field--w120 , section.support_download_search .guide_field--w120 , section.support_where_to_buy_contents .guide_field--w120 , section.support_where_to_buy_search .guide_field--w120, section.support_service_training_curriculum .guide_field--w120 , section.support_service_training_detail_schedule .guide_field--w120 , section.support_service_training_session_detail .guide_field--w120 , section.support_service_training_request .guide_field--w120, section.devices_explore .guide_field--w120 {
   width: 120px;
   max-width: 120px;
 }
 section.component-guide .guide_field--h38 .MuiOutlinedInput-root,
-section.devices_product_downloads .guide_field--h38 .MuiOutlinedInput-root {
+section.devices_product_downloads .guide_field--h38 .MuiOutlinedInput-root , section.support_download_contents .guide_field--h38 .MuiOutlinedInput-root , section.support_download_search .guide_field--h38 .MuiOutlinedInput-root , section.support_where_to_buy_contents .guide_field--h38 .MuiOutlinedInput-root , section.support_where_to_buy_search .guide_field--h38 .MuiOutlinedInput-root, section.support_service_training_curriculum .guide_field--h38 .MuiOutlinedInput-root , section.support_service_training_detail_schedule .guide_field--h38 .MuiOutlinedInput-root , section.support_service_training_session_detail .guide_field--h38 .MuiOutlinedInput-root , section.support_service_training_request .guide_field--h38 .MuiOutlinedInput-root, section.devices_explore .guide_field--h38 .MuiOutlinedInput-root {
   height: 38px;
   min-height: 38px;
   max-height: 38px;
@@ -1521,8 +1618,8 @@ section.devices_product_downloads .guide_field--h38 .MuiOutlinedInput-root {
 }
 section.component-guide .guide_field--h38 .MuiOutlinedInput-input,
 section.component-guide .guide_field--h38 .MuiSelect-select,
-section.devices_product_downloads .guide_field--h38 .MuiOutlinedInput-input,
-section.devices_product_downloads .guide_field--h38 .MuiSelect-select {
+section.devices_product_downloads .guide_field--h38 .MuiOutlinedInput-input, section.support_download_contents .guide_field--h38 .MuiOutlinedInput-input, section.support_download_search .guide_field--h38 .MuiOutlinedInput-input , section.support_where_to_buy_contents .guide_field--h38 .MuiOutlinedInput-input , section.support_where_to_buy_search .guide_field--h38 .MuiOutlinedInput-input,
+section.devices_product_downloads .guide_field--h38 .MuiSelect-select , section.support_download_contents .guide_field--h38 .MuiSelect-select , section.support_download_search .guide_field--h38 .MuiSelect-select , section.support_where_to_buy_contents .guide_field--h38 .MuiSelect-select , section.support_where_to_buy_search .guide_field--h38 .MuiSelect-select, section.support_service_training_curriculum .guide_field--h38 .MuiSelect-select , section.support_service_training_detail_schedule .guide_field--h38 .MuiSelect-select , section.support_service_training_session_detail .guide_field--h38 .MuiSelect-select , section.support_service_training_request .guide_field--h38 .MuiSelect-select, section.devices_explore .guide_field--h38 .MuiSelect-select {
   height: 38px;
   min-height: 38px;
   max-height: 38px;
@@ -1533,18 +1630,18 @@ section.devices_product_downloads .guide_field--h38 .MuiSelect-select {
 }
 section.component-guide .guide_field--h38 .guide_field__select-icon,
 section.component-guide .guide_field--h38 .MuiSelect-icon,
-section.devices_product_downloads .guide_field--h38 .guide_field__select-icon,
-section.devices_product_downloads .guide_field--h38 .MuiSelect-icon {
+section.devices_product_downloads .guide_field--h38 .guide_field__select-icon, section.support_download_contents .guide_field--h38 .guide_field__select-icon, section.support_download_search .guide_field--h38 .guide_field__select-icon , section.support_where_to_buy_contents .guide_field--h38 .guide_field__select-icon , section.support_where_to_buy_search .guide_field--h38 .guide_field__select-icon,
+section.devices_product_downloads .guide_field--h38 .MuiSelect-icon , section.support_download_contents .guide_field--h38 .MuiSelect-icon , section.support_download_search .guide_field--h38 .MuiSelect-icon , section.support_where_to_buy_contents .guide_field--h38 .MuiSelect-icon , section.support_where_to_buy_search .guide_field--h38 .MuiSelect-icon, section.support_service_training_curriculum .guide_field--h38 .MuiSelect-icon , section.support_service_training_detail_schedule .guide_field--h38 .MuiSelect-icon , section.support_service_training_session_detail .guide_field--h38 .MuiSelect-icon , section.support_service_training_request .guide_field--h38 .MuiSelect-icon, section.devices_explore .guide_field--h38 .MuiSelect-icon {
   right: 12px;
   width: 14px;
   height: 14px;
 }
 section.component-guide .guide_field--error-gap,
-section.devices_product_downloads .guide_field--error-gap {
+section.devices_product_downloads .guide_field--error-gap , section.support_download_contents .guide_field--error-gap , section.support_download_search .guide_field--error-gap , section.support_where_to_buy_contents .guide_field--error-gap , section.support_where_to_buy_search .guide_field--error-gap, section.support_service_training_curriculum .guide_field--error-gap , section.support_service_training_detail_schedule .guide_field--error-gap , section.support_service_training_session_detail .guide_field--error-gap , section.support_service_training_request .guide_field--error-gap, section.devices_explore .guide_field--error-gap {
   gap: 8px;
 }
 section.component-guide .guide_field .MuiInputLabel-root,
-section.devices_product_downloads .guide_field .MuiInputLabel-root {
+section.devices_product_downloads .guide_field .MuiInputLabel-root , section.support_download_contents .guide_field .MuiInputLabel-root , section.support_download_search .guide_field .MuiInputLabel-root , section.support_where_to_buy_contents .guide_field .MuiInputLabel-root , section.support_where_to_buy_search .guide_field .MuiInputLabel-root , section.support_contact_form .guide_field .MuiInputLabel-root, section.support_service_training_curriculum .guide_field .MuiInputLabel-root , section.support_service_training_detail_schedule .guide_field .MuiInputLabel-root , section.support_service_training_session_detail .guide_field .MuiInputLabel-root , section.support_service_training_request .guide_field .MuiInputLabel-root, section.devices_explore .guide_field .MuiInputLabel-root {
   position: relative;
   transform: none;
   max-width: none;
@@ -1555,12 +1652,12 @@ section.devices_product_downloads .guide_field .MuiInputLabel-root {
 }
 section.component-guide .guide_field .MuiInputLabel-root.Mui-focused,
 section.component-guide .guide_field .MuiInputLabel-root.Mui-error,
-section.devices_product_downloads .guide_field .MuiInputLabel-root.Mui-focused,
-section.devices_product_downloads .guide_field .MuiInputLabel-root.Mui-error {
+section.devices_product_downloads .guide_field .MuiInputLabel-root.Mui-focused, section.support_download_contents .guide_field .MuiInputLabel-root.Mui-focused, section.support_download_search .guide_field .MuiInputLabel-root.Mui-focused , section.support_where_to_buy_contents .guide_field .MuiInputLabel-root.Mui-focused , section.support_where_to_buy_search .guide_field .MuiInputLabel-root.Mui-focused , section.support_contact_form .guide_field .MuiInputLabel-root.Mui-focused,
+section.devices_product_downloads .guide_field .MuiInputLabel-root.Mui-error , section.support_download_contents .guide_field .MuiInputLabel-root.Mui-error , section.support_download_search .guide_field .MuiInputLabel-root.Mui-error , section.support_where_to_buy_contents .guide_field .MuiInputLabel-root.Mui-error , section.support_where_to_buy_search .guide_field .MuiInputLabel-root.Mui-error , section.support_contact_form .guide_field .MuiInputLabel-root.Mui-error, section.support_service_training_curriculum .guide_field .MuiInputLabel-root.Mui-error , section.support_service_training_detail_schedule .guide_field .MuiInputLabel-root.Mui-error , section.support_service_training_session_detail .guide_field .MuiInputLabel-root.Mui-error , section.support_service_training_request .guide_field .MuiInputLabel-root.Mui-error, section.devices_explore .guide_field .MuiInputLabel-root.Mui-error {
   color: var(--color-text);
 }
 section.component-guide .guide_field .MuiOutlinedInput-root,
-section.devices_product_downloads .guide_field .MuiOutlinedInput-root {
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root , section.support_download_contents .guide_field .MuiOutlinedInput-root , section.support_download_search .guide_field .MuiOutlinedInput-root , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root , section.support_contact_form .guide_field .MuiOutlinedInput-root, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root , section.support_service_training_request .guide_field .MuiOutlinedInput-root, section.devices_explore .guide_field .MuiOutlinedInput-root {
   height: 50px;
   min-height: 50px;
   max-height: 50px;
@@ -1573,76 +1670,81 @@ section.devices_product_downloads .guide_field .MuiOutlinedInput-root {
   border-radius: var(--field-radius);
 }
 section.component-guide .guide_field .MuiOutlinedInput-root fieldset,
-section.devices_product_downloads .guide_field .MuiOutlinedInput-root fieldset {
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root fieldset , section.support_download_contents .guide_field .MuiOutlinedInput-root fieldset , section.support_download_search .guide_field .MuiOutlinedInput-root fieldset , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root fieldset , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root fieldset , section.support_contact_form .guide_field .MuiOutlinedInput-root fieldset, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root fieldset , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root fieldset , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root fieldset , section.support_service_training_request .guide_field .MuiOutlinedInput-root fieldset, section.devices_explore .guide_field .MuiOutlinedInput-root fieldset {
   border-color: var(--color-border);
 }
 section.component-guide .guide_field .MuiOutlinedInput-root:hover fieldset,
-section.devices_product_downloads .guide_field .MuiOutlinedInput-root:hover fieldset {
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_download_contents .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_download_search .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_contact_form .guide_field .MuiOutlinedInput-root:hover fieldset, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_service_training_request .guide_field .MuiOutlinedInput-root:hover fieldset, section.devices_explore .guide_field .MuiOutlinedInput-root:hover fieldset {
   border-color: var(--color-border);
 }
 section.component-guide .guide_field .MuiOutlinedInput-root.Mui-focused fieldset,
-section.devices_product_downloads .guide_field .MuiOutlinedInput-root.Mui-focused fieldset {
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_download_contents .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_download_search .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_contact_form .guide_field .MuiOutlinedInput-root.Mui-focused fieldset, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_service_training_request .guide_field .MuiOutlinedInput-root.Mui-focused fieldset, section.devices_explore .guide_field .MuiOutlinedInput-root.Mui-focused fieldset {
   border-color: var(--color-border);
   border-width: 1px;
 }
 section.component-guide .guide_field .MuiOutlinedInput-root.Mui-error fieldset,
-section.devices_product_downloads .guide_field .MuiOutlinedInput-root.Mui-error fieldset {
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root.Mui-error fieldset , section.support_download_contents .guide_field .MuiOutlinedInput-root.Mui-error fieldset , section.support_download_search .guide_field .MuiOutlinedInput-root.Mui-error fieldset , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root.Mui-error fieldset , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root.Mui-error fieldset , section.support_contact_form .guide_field .MuiOutlinedInput-root.Mui-error fieldset, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root.Mui-error fieldset , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root.Mui-error fieldset , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root.Mui-error fieldset , section.support_service_training_request .guide_field .MuiOutlinedInput-root.Mui-error fieldset, section.devices_explore .guide_field .MuiOutlinedInput-root.Mui-error fieldset {
   border-color: var(--color-error);
 }
 section.component-guide .guide_field .MuiOutlinedInput-root.Mui-disabled,
-section.devices_product_downloads .guide_field .MuiOutlinedInput-root.Mui-disabled {
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root.Mui-disabled , section.support_download_contents .guide_field .MuiOutlinedInput-root.Mui-disabled , section.support_download_search .guide_field .MuiOutlinedInput-root.Mui-disabled , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root.Mui-disabled , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root.Mui-disabled , section.support_contact_form .guide_field .MuiOutlinedInput-root.Mui-disabled, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root.Mui-disabled , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root.Mui-disabled , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root.Mui-disabled , section.support_service_training_request .guide_field .MuiOutlinedInput-root.Mui-disabled, section.devices_explore .guide_field .MuiOutlinedInput-root.Mui-disabled {
   background: var(--color-bg-muted);
 }
 section.component-guide .guide_field .MuiOutlinedInput-input,
-section.devices_product_downloads .guide_field .MuiOutlinedInput-input {
+section.devices_product_downloads .guide_field .MuiOutlinedInput-input , section.support_download_contents .guide_field .MuiOutlinedInput-input , section.support_download_search .guide_field .MuiOutlinedInput-input , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-input , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-input , section.support_contact_form .guide_field .MuiOutlinedInput-input, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-input , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-input , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-input , section.support_service_training_request .guide_field .MuiOutlinedInput-input, section.devices_explore .guide_field .MuiOutlinedInput-input {
   height: 50px;
   padding: 0 20px;
   box-sizing: border-box;
 }
 section.component-guide .guide_field .MuiOutlinedInput-input::placeholder,
-section.devices_product_downloads .guide_field .MuiOutlinedInput-input::placeholder {
+section.devices_product_downloads .guide_field .MuiOutlinedInput-input::placeholder , section.support_download_contents .guide_field .MuiOutlinedInput-input::placeholder , section.support_download_search .guide_field .MuiOutlinedInput-input::placeholder , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-input::placeholder , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-input::placeholder , section.support_contact_form .guide_field .MuiOutlinedInput-input::placeholder, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-input::placeholder , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-input::placeholder , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-input::placeholder , section.support_service_training_request .guide_field .MuiOutlinedInput-input::placeholder, section.devices_explore .guide_field .MuiOutlinedInput-input::placeholder {
   color: var(--color-border);
   opacity: 1;
 }
 section.component-guide .guide_field .MuiFormHelperText-root,
-section.devices_product_downloads .guide_field .MuiFormHelperText-root {
+section.devices_product_downloads .guide_field .MuiFormHelperText-root , section.support_download_contents .guide_field .MuiFormHelperText-root , section.support_download_search .guide_field .MuiFormHelperText-root , section.support_where_to_buy_contents .guide_field .MuiFormHelperText-root , section.support_where_to_buy_search .guide_field .MuiFormHelperText-root , section.support_contact_form .guide_field .MuiFormHelperText-root, section.support_service_training_curriculum .guide_field .MuiFormHelperText-root , section.support_service_training_detail_schedule .guide_field .MuiFormHelperText-root , section.support_service_training_session_detail .guide_field .MuiFormHelperText-root , section.support_service_training_request .guide_field .MuiFormHelperText-root, section.devices_explore .guide_field .MuiFormHelperText-root {
   margin: 0;
   font-size: 15px;
   line-height: 23px;
 }
 section.component-guide .guide_field .MuiFormHelperText-root.Mui-error,
-section.devices_product_downloads .guide_field .MuiFormHelperText-root.Mui-error {
+section.devices_product_downloads .guide_field .MuiFormHelperText-root.Mui-error , section.support_download_contents .guide_field .MuiFormHelperText-root.Mui-error , section.support_download_search .guide_field .MuiFormHelperText-root.Mui-error , section.support_where_to_buy_contents .guide_field .MuiFormHelperText-root.Mui-error , section.support_where_to_buy_search .guide_field .MuiFormHelperText-root.Mui-error , section.support_contact_form .guide_field .MuiFormHelperText-root.Mui-error, section.support_service_training_curriculum .guide_field .MuiFormHelperText-root.Mui-error , section.support_service_training_detail_schedule .guide_field .MuiFormHelperText-root.Mui-error , section.support_service_training_session_detail .guide_field .MuiFormHelperText-root.Mui-error , section.support_service_training_request .guide_field .MuiFormHelperText-root.Mui-error, section.devices_explore .guide_field .MuiFormHelperText-root.Mui-error {
   color: var(--color-error);
 }
 section.component-guide .guide_field--search .MuiOutlinedInput-root,
-section.devices_product_downloads .guide_field--search .MuiOutlinedInput-root {
+section.devices_product_downloads .guide_field--search .MuiOutlinedInput-root , section.support_download_contents .guide_field--search .MuiOutlinedInput-root , section.support_download_search .guide_field--search .MuiOutlinedInput-root , section.support_where_to_buy_contents .guide_field--search .MuiOutlinedInput-root , section.support_where_to_buy_search .guide_field--search .MuiOutlinedInput-root, section.support_service_training_curriculum .guide_field--search .MuiOutlinedInput-root , section.support_service_training_detail_schedule .guide_field--search .MuiOutlinedInput-root , section.support_service_training_session_detail .guide_field--search .MuiOutlinedInput-root , section.support_service_training_request .guide_field--search .MuiOutlinedInput-root, section.devices_explore .guide_field--search .MuiOutlinedInput-root {
   padding: 0 20px;
   gap: 12px;
 }
 section.component-guide .guide_field--search .MuiOutlinedInput-input,
-section.devices_product_downloads .guide_field--search .MuiOutlinedInput-input {
+section.devices_product_downloads .guide_field--search .MuiOutlinedInput-input , section.support_download_contents .guide_field--search .MuiOutlinedInput-input , section.support_download_search .guide_field--search .MuiOutlinedInput-input , section.support_where_to_buy_contents .guide_field--search .MuiOutlinedInput-input , section.support_where_to_buy_search .guide_field--search .MuiOutlinedInput-input, section.support_service_training_curriculum .guide_field--search .MuiOutlinedInput-input , section.support_service_training_detail_schedule .guide_field--search .MuiOutlinedInput-input , section.support_service_training_session_detail .guide_field--search .MuiOutlinedInput-input , section.support_service_training_request .guide_field--search .MuiOutlinedInput-input, section.devices_explore .guide_field--search .MuiOutlinedInput-input {
   flex: 1;
   min-width: 0;
   height: 50px;
   padding: 0;
 }
 section.component-guide .guide_field--search .guide_field__search-adorn,
-section.devices_product_downloads .guide_field--search .guide_field__search-adorn {
+section.devices_product_downloads .guide_field--search .guide_field__search-adorn , section.support_download_contents .guide_field--search .guide_field__search-adorn , section.support_download_search .guide_field--search .guide_field__search-adorn , section.support_where_to_buy_contents .guide_field--search .guide_field__search-adorn , section.support_where_to_buy_search .guide_field--search .guide_field__search-adorn, section.support_service_training_curriculum .guide_field--search .guide_field__search-adorn , section.support_service_training_detail_schedule .guide_field--search .guide_field__search-adorn , section.support_service_training_session_detail .guide_field--search .guide_field__search-adorn , section.support_service_training_request .guide_field--search .guide_field__search-adorn, section.devices_explore .guide_field--search .guide_field__search-adorn {
   flex-shrink: 0;
   height: auto;
   max-height: none;
   margin: 0;
   padding: 0;
 }
-section.component-guide .guide_field--search .guide_field__search-adorn .MuiTypography-root,
+/* section.component-guide .guide_field--search .guide_field__search-adorn .MuiTypography-root,
 section.devices_product_downloads
+, section.support_download_contents
+, section.support_download_search
+, section.support_where_to_buy_contents
+, section.support_where_to_buy_search
+, section.support_contact_form
   .guide_field--search
   .guide_field__search-adorn
   .MuiTypography-root {
   display: none;
-}
+} */
 section.component-guide .guide_field--search .guide_field__search-icon,
-section.devices_product_downloads .guide_field--search .guide_field__search-icon {
+section.devices_product_downloads .guide_field--search .guide_field__search-icon , section.support_download_contents .guide_field--search .guide_field__search-icon , section.support_download_search .guide_field--search .guide_field__search-icon , section.support_where_to_buy_contents .guide_field--search .guide_field__search-icon , section.support_where_to_buy_search .guide_field--search .guide_field__search-icon, section.support_service_training_curriculum .guide_field--search .guide_field__search-icon , section.support_service_training_detail_schedule .guide_field--search .guide_field__search-icon , section.support_service_training_session_detail .guide_field--search .guide_field__search-icon , section.support_service_training_request .guide_field--search .guide_field__search-icon, section.devices_explore .guide_field--search .guide_field__search-icon {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -1651,13 +1753,33 @@ section.devices_product_downloads .guide_field--search .guide_field__search-icon
   height: 18px;
 }
 section.component-guide .guide_field--search .guide_field__search-icon img,
-section.devices_product_downloads .guide_field--search .guide_field__search-icon img {
+section.devices_product_downloads .guide_field--search .guide_field__search-icon img , section.support_download_contents .guide_field--search .guide_field__search-icon img , section.support_download_search .guide_field--search .guide_field__search-icon img , section.support_where_to_buy_contents .guide_field--search .guide_field__search-icon img , section.support_where_to_buy_search .guide_field--search .guide_field__search-icon img, section.support_service_training_curriculum .guide_field--search .guide_field__search-icon img , section.support_service_training_detail_schedule .guide_field--search .guide_field__search-icon img , section.support_service_training_session_detail .guide_field--search .guide_field__search-icon img , section.support_service_training_request .guide_field--search .guide_field__search-icon img, section.devices_explore .guide_field--search .guide_field__search-icon img {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+section.component-guide .guide_field--search .guide_field__search-icon-button,
+section.devices_product_downloads .guide_field--search .guide_field__search-icon-button , section.support_download_contents .guide_field--search .guide_field__search-icon-button , section.support_download_search .guide_field--search .guide_field__search-icon , section.support_where_to_buy_contents .guide_field--search .guide_field__search-icon , section.support_where_to_buy_search .guide_field--search .guide_field__search-icon-button, section.support_service_training_curriculum .guide_field--search .guide_field__search-icon-button , section.support_service_training_detail_schedule .guide_field--search .guide_field__search-icon-button , section.support_service_training_session_detail .guide_field--search .guide_field__search-icon-button , section.support_service_training_request .guide_field--search .guide_field__search-icon-button, section.devices_explore .guide_field--search .guide_field__search-icon-button {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+section.component-guide .guide_field--search .guide_field__search-icon-button img,
+section.devices_product_downloads .guide_field--search .guide_field__search-icon-button img , section.support_download_contents .guide_field--search .guide_field__search-icon-button img , section.support_download_search .guide_field--search .guide_field__search-icon-button img , section.support_where_to_buy_contents .guide_field--search .guide_field__search-icon-button img , section.support_where_to_buy_search .guide_field--search .guide_field__search-icon-button img, section.support_service_training_curriculum .guide_field--search .guide_field__search-icon-button img , section.support_service_training_detail_schedule .guide_field--search .guide_field__search-icon-button img , section.support_service_training_session_detail .guide_field--search .guide_field__search-icon-button img , section.support_service_training_request .guide_field--search .guide_field__search-icon-button img, section.devices_explore .guide_field--search .guide_field__search-icon-button img {
   display: block;
   width: 18px;
   height: 18px;
 }
 section.component-guide .guide_field .MuiSelect-select,
-section.devices_product_downloads .guide_field .MuiSelect-select {
+section.devices_product_downloads .guide_field .MuiSelect-select , section.support_download_contents .guide_field .MuiSelect-select , section.support_download_search .guide_field .MuiSelect-select , section.support_where_to_buy_contents .guide_field .MuiSelect-select , section.support_where_to_buy_search .guide_field .MuiSelect-select , section.support_contact_form .guide_field .MuiSelect-select, section.support_service_training_curriculum .guide_field .MuiSelect-select , section.support_service_training_detail_schedule .guide_field .MuiSelect-select , section.support_service_training_session_detail .guide_field .MuiSelect-select , section.support_service_training_request .guide_field .MuiSelect-select, section.devices_explore .guide_field .MuiSelect-select , section.company-blog-list .guide_field .MuiSelect-select , section.company-press-list .guide_field .MuiSelect-select , section.company-articles-list .guide_field .MuiSelect-select , section.company-events-past .guide_field .MuiSelect-select {
   height: 50px;
   min-height: 50px;
   padding: 0 44px 0 20px;
@@ -1666,11 +1788,54 @@ section.devices_product_downloads .guide_field .MuiSelect-select {
   align-items: center;
   font-size: 15px;
   line-height: 23px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+section .guide_field .MuiNativeSelect-select {
+  height: 50px;
+  min-height: 50px;
+  padding: 0 44px 0 20px;
+  box-sizing: border-box;
+  font-size: 15px;
+  line-height: 23px;
+  color: var(--color-text);
+  background: transparent;
+}
+section .guide_field .MuiNativeSelect-root .MuiNativeSelect-icon {
+  top: calc(50% - 0.35em);
+  right: 20px;
+  color: var(--color-text);
+}
+section.component-guide .guide_field .MuiSelect-select.MuiSelect-outlined,
+section.devices_product_downloads .guide_field .MuiSelect-select.MuiSelect-outlined , section.support_download_contents .guide_field .MuiSelect-select.MuiSelect-outlined , section.support_download_search .guide_field .MuiSelect-select.MuiSelect-outlined , section.support_where_to_buy_contents .guide_field .MuiSelect-select.MuiSelect-outlined , section.support_where_to_buy_search .guide_field .MuiSelect-select.MuiSelect-outlined , section.support_contact_form .guide_field .MuiSelect-select.MuiSelect-outlined, section.support_service_training_curriculum .guide_field .MuiSelect-select.MuiSelect-outlined , section.support_service_training_detail_schedule .guide_field .MuiSelect-select.MuiSelect-outlined , section.support_service_training_session_detail .guide_field .MuiSelect-select.MuiSelect-outlined , section.support_service_training_request .guide_field .MuiSelect-select.MuiSelect-outlined, section.devices_explore .guide_field .MuiSelect-select.MuiSelect-outlined {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+section.component-guide .guide_field .guide_field__select-value,
+section.devices_product_downloads .guide_field .guide_field__select-value , section.support_download_contents .guide_field .guide_field__select-value , section.support_download_search .guide_field .guide_field__select-value , section.support_where_to_buy_contents .guide_field .guide_field__select-value , section.support_where_to_buy_search .guide_field .guide_field__select-value , section.support_contact_form .guide_field .guide_field__select-value, section.support_service_training_curriculum .guide_field .guide_field__select-value , section.support_service_training_detail_schedule .guide_field .guide_field__select-value , section.support_service_training_session_detail .guide_field .guide_field__select-value , section.support_service_training_request .guide_field .guide_field__select-value, section.devices_explore .guide_field .guide_field__select-value {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+section.component-guide .guide_field .MuiSelect-select > span,
+section.component-guide .guide_field .MuiSelect-select .notranslate,
+section.devices_product_downloads .guide_field .MuiSelect-select > span, section.support_download_contents .guide_field .MuiSelect-select > span, section.support_download_search .guide_field .MuiSelect-select > span, section.support_where_to_buy_contents .guide_field .MuiSelect-select > span, section.support_where_to_buy_search .guide_field .MuiSelect-select > span, section.support_contact_form .guide_field .MuiSelect-select > span,
+section.devices_product_downloads .guide_field .MuiSelect-select .notranslate , section.support_download_contents .guide_field .MuiSelect-select .notranslate , section.support_download_search .guide_field .MuiSelect-select .notranslate , section.support_where_to_buy_contents .guide_field .MuiSelect-select .notranslate , section.support_where_to_buy_search .guide_field .MuiSelect-select .notranslate , section.support_contact_form .guide_field .MuiSelect-select .notranslate, section.support_service_training_curriculum .guide_field .MuiSelect-select .notranslate , section.support_service_training_detail_schedule .guide_field .MuiSelect-select .notranslate , section.support_service_training_session_detail .guide_field .MuiSelect-select .notranslate , section.support_service_training_request .guide_field .MuiSelect-select .notranslate, section.devices_explore .guide_field .MuiSelect-select .notranslate {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 section.component-guide .guide_field .guide_field__select-icon,
 section.component-guide .guide_field .MuiSelect-icon,
-section.devices_product_downloads .guide_field .guide_field__select-icon,
-section.devices_product_downloads .guide_field .MuiSelect-icon {
+section.devices_product_downloads .guide_field .guide_field__select-icon, section.support_download_contents .guide_field .guide_field__select-icon, section.support_download_search .guide_field .guide_field__select-icon , section.support_where_to_buy_contents .guide_field .guide_field__select-icon , section.support_where_to_buy_search .guide_field .guide_field__select-icon , section.support_contact_form .guide_field .guide_field__select-icon,
+section.devices_product_downloads .guide_field .MuiSelect-icon , section.support_download_contents .guide_field .MuiSelect-icon , section.support_download_search .guide_field .MuiSelect-icon , section.support_where_to_buy_contents .guide_field .MuiSelect-icon , section.support_where_to_buy_search .guide_field .MuiSelect-icon , section.support_contact_form .guide_field .MuiSelect-icon, section.support_service_training_curriculum .guide_field .MuiSelect-icon , section.support_service_training_detail_schedule .guide_field .MuiSelect-icon , section.support_service_training_session_detail .guide_field .MuiSelect-icon , section.support_service_training_request .guide_field .MuiSelect-icon, section.devices_explore .guide_field .MuiSelect-icon {
   position: absolute;
   top: 50%;
   right: 20px;
@@ -1685,9 +1850,154 @@ section.devices_product_downloads .guide_field .MuiSelect-icon {
   background: url("/ico/ico_up_16.svg") center / contain no-repeat;
 }
 section.component-guide .guide_field .MuiSelect-icon.MuiSelect-iconOpen,
-section.devices_product_downloads .guide_field .MuiSelect-icon.MuiSelect-iconOpen {
+section.devices_product_downloads .guide_field .MuiSelect-icon.MuiSelect-iconOpen , section.support_download_contents .guide_field .MuiSelect-icon.MuiSelect-iconOpen , section.support_download_search .guide_field .MuiSelect-icon.MuiSelect-iconOpen , section.support_where_to_buy_contents .guide_field .MuiSelect-icon.MuiSelect-iconOpen , section.support_where_to_buy_search .guide_field .MuiSelect-icon.MuiSelect-iconOpen , section.support_contact_form .guide_field .MuiSelect-icon.MuiSelect-iconOpen, section.support_service_training_curriculum .guide_field .MuiSelect-icon.MuiSelect-iconOpen , section.support_service_training_detail_schedule .guide_field .MuiSelect-icon.MuiSelect-iconOpen , section.support_service_training_session_detail .guide_field .MuiSelect-icon.MuiSelect-iconOpen , section.support_service_training_request .guide_field .MuiSelect-icon.MuiSelect-iconOpen, section.devices_explore .guide_field .MuiSelect-icon.MuiSelect-iconOpen {
   transform: translateY(-50%) rotate(180deg);
 }
+
+/* Company list toolbars — GuideSelectIcon · COMPONENT_GUIDE #dropdown · ICON_GUIDE guide_field__select-icon */
+section.company-press-list .guide_field .guide_field__select-icon,
+section.company-press-list .guide_field .MuiSelect-icon,
+section.company-articles-list .guide_field .guide_field__select-icon,
+section.company-articles-list .guide_field .MuiSelect-icon,
+section.company-events-past .guide_field .guide_field__select-icon,
+section.company-events-past .guide_field .MuiSelect-icon,
+section.company-blog-list .guide_field .guide_field__select-icon,
+section.company-blog-list .guide_field .MuiSelect-icon {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  transform: translateY(-50%) rotate(0deg);
+  transform-origin: center center;
+  transition: transform 0.25s ease;
+  pointer-events: none;
+  background: url("/ico/ico_up_16.svg") center / contain no-repeat;
+}
+
+section.company-press-list .guide_field .MuiSelect-icon.MuiSelect-iconOpen,
+section.company-articles-list .guide_field .MuiSelect-icon.MuiSelect-iconOpen,
+section.company-events-past .guide_field .MuiSelect-icon.MuiSelect-iconOpen,
+section.company-blog-list .guide_field .MuiSelect-icon.MuiSelect-iconOpen {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+section.company-press-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen),
+section.company-articles-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen),
+section.company-events-past .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) {
+  border-radius: 4px 4px 0 0;
+}
+
+section.company-press-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.company-articles-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.company-events-past .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset {
+  border-color: var(--color-text-light, #888);
+  border-bottom-width: 0;
+}
+
+
+section.component-guide .guide_field--fill-muted .MuiOutlinedInput-root,
+section.support_service_training_curriculum .guide_field--fill-muted .MuiOutlinedInput-root,
+section.support_service_training_detail_schedule .guide_field--fill-muted .MuiOutlinedInput-root,
+section.support_service_training_session_detail .guide_field--fill-muted .MuiOutlinedInput-root  , section.support_service_training_request .guide_field--fill-muted .MuiOutlinedInput-root {
+  background: var(--color-bg-muted);
+}
+
+/* Select open — Figma Drop down / M / Open (3871:114063) */
+section.component-guide .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen),
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen),
+section.support_download_contents .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen),
+section.support_download_search .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen),
+section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen),
+section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen),
+section.support_contact_form .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen),
+section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen), section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) , section.support_service_training_request .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen), section.devices_explore .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) {
+  border-radius: 4px 4px 0 0;
+}
+
+section.component-guide .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_download_contents .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_download_search .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_contact_form .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset , section.support_service_training_request .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset, section.devices_explore .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset {
+  border-color: var(--color-text-light, #888);
+}
+
+section.component-guide .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_download_contents .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_download_search .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.support_contact_form .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset,
+section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset , section.support_service_training_request .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset, section.devices_explore .guide_field .MuiOutlinedInput-root:has(.MuiSelect-iconOpen) fieldset {
+  border-bottom-width: 0;
+}
+
+/* Menu renders in portal — no section ancestor */
+.guide_field__select-menu,
+.guide_field__select-menu.MuiPaper-root,
+.guide_field__select-menu.MuiPopover-paper,
+.guide_field__select-menu.MuiMenu-paper {
+  margin-top: 0 !important;
+  border: 1px solid var(--color-text-light, #888);
+  /* border-top: none; */
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  box-shadow: none;
+  background: var(--color-bg, #fff);
+}
+
+.guide_field__select-menu-list,
+.guide_field__select-menu-list.MuiList-root,
+.guide_field__select-menu-list.MuiMenu-list,
+.guide_field__select-menu .MuiList-root.MuiMenu-list {
+  padding: 0 !important;
+}
+
+.guide_field__select-menu-list .MuiMenuItem-root {
+  min-height: 50px;
+  height: 50px;
+  padding: 0 20px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 23px;
+  color: var(--color-text, #222);
+  background: var(--color-bg, #fff);
+}
+
+.guide_field__select-menu-list .MuiMenuItem-root:hover,
+.guide_field__select-menu-list .MuiMenuItem-root.Mui-selected,
+.guide_field__select-menu-list .MuiMenuItem-root.Mui-selected:hover,
+.guide_field__select-menu-list .MuiMenuItem-root.Mui-focusVisible {
+  background: #f5f7fa;
+}
+
+.guide_field__select-menu-list .MuiMenuItem-root + .MuiMenuItem-root {
+  border-top: none;
+}
+
+/* === MUI focus outline === */
+.main_footer,
+.common_footer {
+  --mui-focus-outline-color: #fff;
+}
+
+.MuiOutlinedInput-root.Mui-focused,
+.MuiOutlinedInput-root.Mui-focused.Mui-error,
+.MuiCheckbox-root.Mui-focusVisible,
+.MuiButtonBase-root.Mui-focusVisible,
+.MuiMenuItem-root.Mui-focusVisible {
+  outline: none;
+}
+
 @media (max-width: 780px) {
   section .inner {
     padding-left: var(--inner-padding-x-mobile);
@@ -1700,89 +2010,418 @@ section.devices_product_downloads .guide_field .MuiSelect-icon.MuiSelect-iconOpe
   }
 
   section .section_desc {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 24px;
   }
 
   section.common_faq {
-    padding: 80px 0;
-    background: #F5F7FA;
+    padding: 70px 0 80px;
+    background: #f5f7fa;
   }
 
   section.common_faq .common_faq__head {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     max-width: none;
     margin-bottom: 24px;
   }
 
+  section.common_faq .common_faq__head .section_tit {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  section.common_faq .common_faq__head .section_desc {
+    margin: 0;
+    color: #666;
+  }
+
   section.common_faq .common_faq__list {
+    display: flex;
+    flex-direction: column;
     gap: 0;
-    border-top: none;
     width: 100vw;
-    margin-left: -20px;
+    margin-left: 0;
     border-top: 1px solid #ddd;
+    padding-top: 24px;
+    margin-left: -20px;
+    margin-right: -20px;
   }
 
   section.common_faq .faq_item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     border-bottom: none;
+    padding: 25px 20px;
+    box-sizing: border-box;
   }
 
   section.common_faq .faq_item + .faq_item {
+    margin-top: 24px;
+    padding-top: 24px;
     border-top: 1px solid #ddd;
   }
 
   section.common_faq .faq_question {
+    display: flex;
     align-items: flex-start;
+    justify-content: space-between;
     gap: 10px;
-    padding: 24px 20px;
+    padding: 0;
     font-size: 18px;
     line-height: 26px;
-    position: relative;
+    position: static;
   }
 
   section.common_faq .faq_item.is-open .faq_question {
-    padding-bottom: 10px;
+    padding-bottom: 0;
   }
 
   section.common_faq .faq_question .txt {
     flex: 1;
+    min-width: 0;
     gap: 10px;
     font-size: 18px;
     line-height: 26px;
-    display: flex;
-    text-align: left;
     font-weight: 600;
-    padding-right: 46px;
+    text-align: left;
+    padding-right: 0;
   }
 
   section.common_faq .faq_question .txt .impact {
+    flex-shrink: 0;
     font-size: 20px;
     line-height: 26px;
     font-weight: 800;
-    font-family: 'jaka';
-    color: #0F1F45;
+    font-family: jaka, "Plus Jakarta Sans", Arial, Helvetica, sans-serif;
+    color: #0f1f45;
   }
 
   section.common_faq .faq_icon {
+    position: static;
+    flex-shrink: 0;
     width: 36px;
     height: 36px;
-    background-position: center;
-    margin-bottom: 0;
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    margin-top: -18px;
-    background-position: 12px 15px;
+    margin: 0;
+    background-position: 10px 15px;
+    background-size: 14px 10px;
+    display: flex;
+    align-self: center;
   }
 
   section.common_faq .faq_answer {
-    padding: 0 20px 16px 28px;
+    padding: 0 0 0 28px;
     font-size: 15px;
     line-height: 23px;
     color: #222;
   }
 }
 
-/* === Highlight news — HighlightNewsSection (main + markets) === */
+/* common_modal — shared dialog overlay */
+@keyframes guide_refresh_spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes common-modal-dim-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes common-modal-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.common_modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.common_modal__dim {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: none;
+  background: rgb(0 0 0 / 60%);
+  cursor: pointer;
+  animation: common-modal-dim-in 0.2s ease forwards;
+}
+
+.common_modal__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 4px;
+  animation: common-modal-panel-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.common_modal__head {
+  flex-shrink: 0;
+}
+
+.common_modal__head-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.common_modal__tit {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #222;
+}
+
+.common_modal__line {
+  margin: 0;
+  border: none;
+  border-top: 1px solid #d9d9d9;
+}
+
+.common_modal__close {
+  position: relative;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.common_modal__close::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  background: url("/ico/ico_cl.svg") center / contain no-repeat;
+  content: "";
+}
+
+.common_modal__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #e8e8e8;
+}
+
+.common_modal__foot {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.common_modal--embedded {
+  position: relative;
+  inset: auto;
+  z-index: 0;
+  display: block;
+  padding: 0;
+  background: rgb(0 0 0 / 60%);
+}
+
+.common_modal--embedded .common_modal__panel {
+  margin: 0 auto;
+  animation: none;
+}
+
+@media (min-width: 781px) {
+  .common_modal {
+    padding: 24px;
+  }
+
+  .common_modal__panel {
+    max-width: 800px;
+    max-height: min(700px, calc(100vh - 48px));
+  }
+
+  .common_modal__head {
+    padding: 40px 40px 0;
+  }
+
+  .common_modal__tit {
+    font-size: 28px;
+    line-height: 38px;
+  }
+
+  .common_modal__line {
+    margin-top: 24px;
+  }
+
+  .common_modal__foot {
+    padding: 30px 40px 40px;
+  }
+}
+
+@media (max-width: 780px) {
+  .common_modal {
+    padding: 16px;
+  }
+
+  .common_modal__panel {
+    max-height: calc(100vh - 32px);
+  }
+
+  .common_modal__head {
+    padding: 24px 20px 0;
+  }
+
+  .common_modal__tit {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .common_modal__line {
+    margin-top: 16px;
+  }
+
+  .common_modal__foot {
+    padding: 24px 20px 32px;
+  }
+}
+
+/* privacy_policy_modal — Figma 5565:128525 · shell: common_modal */
+.privacy_policy_modal .common_modal__body {
+  max-height: 445px;
+}
+
+.privacy_policy_modal__section + .privacy_policy_modal__section {
+  margin-top: 24px;
+}
+
+.privacy_policy_modal__section-tit {
+  margin: 0 0 10px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #222;
+}
+
+.privacy_policy_modal__text {
+  color: #666;
+}
+
+.privacy_policy_modal__text p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.privacy_policy_modal__text strong {
+  font-weight: 600;
+  line-height: 26px;
+}
+
+.privacy_policy_modal__confirm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--btn-lv01-h);
+  min-width: var(--btn-lv01-min-w);
+  padding: 0 var(--btn-lv01-px);
+  border: none;
+  border-radius: var(--btn-radius, 4px);
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+  background: var(--color-primary);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.privacy_policy_modal__confirm:hover {
+  background: var(--color-primary-hover);
+}
+
+@media (min-width: 781px) {
+  .privacy_policy_modal .common_modal__body {
+    padding: 40px 80px 0 40px;
+  }
+
+  .privacy_policy_modal__section-tit {
+    font-size: 22px;
+    line-height: 32px;
+  }
+
+  .privacy_policy_modal__text {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .privacy_policy_modal__confirm {
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 780px) {
+  .privacy_policy_modal .common_modal__body {
+    max-height: none;
+    padding: 24px 20px 0;
+  }
+
+  .privacy_policy_modal__section + .privacy_policy_modal__section {
+    margin-top: 20px;
+  }
+
+  .privacy_policy_modal__section-tit {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .privacy_policy_modal__text {
+    font-size: 15px;
+    line-height: 23px;
+  }
+
+  .privacy_policy_modal__text strong {
+    line-height: 23px;
+  }
+
+  .privacy_policy_modal__confirm {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* === Highlight news ??HighlightNewsSection (main + markets) === */
 section.highlight_news .item:hover .tit {
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -1889,7 +2528,7 @@ section.highlight_news--markets .section_tit {
 
 @media (max-width: 780px) {
   section.highlight_news {
-    padding: 80px 0;
+    padding: 70px 0;
     background: #fff;
   }
 
@@ -1898,7 +2537,7 @@ section.highlight_news--markets .section_tit {
   }
 
   section.highlight_news--main .section_tit {
-    margin-bottom: 24px;
+    margin-bottom: 30px;
     font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 30px;
     font-weight: 700;
@@ -1939,7 +2578,7 @@ section.highlight_news--markets .section_tit {
   }
 
   section.highlight_news--main .tag {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   section.highlight_news .tit {
@@ -1980,5 +2619,11 @@ section.highlight_news--markets .section_tit {
   section.common_faq .faq_icon {
     transition: none;
   }
+
+  .common_modal__dim,
+  .common_modal__panel {
+    animation: none;
+  }
+
 }
 

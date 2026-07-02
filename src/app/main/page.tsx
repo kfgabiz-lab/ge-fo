@@ -1,20 +1,19 @@
-import MainVisual from "./components/MainVisual";
-import MainInfo from "./components/MainInfo";
-import WhatWeDoSwiper from "./components/WhatWeDoSwiper";
-import HighlightNewsSection from "@/components/content/HighlightNewsSection";
-import { mainHighlightNewsItems } from "@/data/highlightNews";
-import MainCards from "./components/MainCards";
-import MainProducts from "./components/MainProducts";
-import CommonBanner01 from "@/components/banners/CommonBanner01";
-import CommonBanner03Link from "@/components/banners/CommonBanner03Link";
-import IconCards from "./components/IconCards";
+import MainVisual from "@/components/main/main-visual";
+import MainInfo from "@/components/main/main-info";
+import WhatWeDoSwiper from "@/components/main/what-we-do-swiper";
+import HighlightNewsSection from "@/components/common/content/highlight-news-section";
+import { mainHighlightNewsItems } from "@/data/highlight-news";
+import MainCards from "@/components/main/main-cards";
+import MainProducts from "@/components/main/main-products";
+import CommonBanner01 from "@/components/common/banners/common-banner01";
+import CommonBanner03Link from "@/components/common/banners/common-banner03-link";
+import IconCards from "@/components/main/icon-cards";
 import "@/assets/css/main.css";
 
 export default function MainPage() {
   return (
     <main className="main-page" id="Page_main">
       <MainVisual />
-   
       <MainInfo />
       <WhatWeDoSwiper />
       <HighlightNewsSection
@@ -31,13 +30,13 @@ export default function MainPage() {
         items={[
           {
             title: "Contact Us",
-            description:
-              "Connect with our experts to find the right solution for your business.",
+            description: "Connect with our experts to find the right solution for your business.",
+            href: "/support/contact-us",
           },
           {
             title: "Where to buy",
-            description:
-              "Find authorized retailers and partners to purchase our products.",
+            description: "Find authorized retailers and partners to purchase our products.",
+            href: "/support/where-to-buy",
           },
         ]}
       />

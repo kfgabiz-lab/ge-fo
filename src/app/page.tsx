@@ -1,5 +1,6 @@
-import { redirect } from "next/navigation";
+import PageIndexTable from "@/components/dev/PageIndexTable";
+import "@/assets/css/components/page-index.css";
 
 export default function HomePage() {
-  redirect("/main");
+  return <PageIndexTable />;
 }

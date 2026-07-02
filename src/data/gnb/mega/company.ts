@@ -1,8 +1,7 @@
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
-import { GNB_MEGA_SECTION_DESC } from "@/data/gnb/shared";
 import type { GnbSimpleMegaMenu } from "@/data/gnb/types";
 
-/** Figma 2769:35523 — Company mega menu */
+/** Figma 5683:60839 — Company mega (About Us · Articles · Careers) */
 export const companyMegaMenu: GnbSimpleMegaMenu = {
   type: "simple",
   panelId: GNB_MEGA_PANEL_ID.company,
@@ -15,26 +14,26 @@ export const companyMegaMenu: GnbSimpleMegaMenu = {
         {
           id: "ls-electric-america",
           title: "LS ELECTRIC America",
-          description: GNB_MEGA_SECTION_DESC,
-          href: "",
+          description: "About LS ELECTRIC America",
+          href: "/company/ls-electric-america",
         },
         {
           id: "ls-electric",
           title: "LS ELECTRIC",
-          description: GNB_MEGA_SECTION_DESC,
-          href: "",
+          description: "About LS ELECTRIC",
+          href: "/company/ls-electric",
         },
         {
           id: "affiliate-in-america",
           title: "Affiliate in America",
-          description: GNB_MEGA_SECTION_DESC,
-          href: "",
+          description: "Our US affiliates and partners.",
+          href: "/company/affiliate-in-america",
         },
         {
           id: "esg",
           title: "ESG",
-          description: GNB_MEGA_SECTION_DESC,
-          href: "",
+          description: "Environmental, Social & Governance.",
+          href: "/company/esg",
         },
       ],
     },
@@ -45,26 +44,46 @@ export const companyMegaMenu: GnbSimpleMegaMenu = {
         {
           id: "blog",
           title: "Blog",
-          description: GNB_MEGA_SECTION_DESC,
-          href: "",
+          description: "Read our latest blog posts",
+          href: "/company/blog",
         },
         {
           id: "press",
           title: "Press",
-          description: GNB_MEGA_SECTION_DESC,
-          href: "",
+          description: "Latest news and press releases",
+          href: "/company/press",
         },
         {
           id: "events",
           title: "Events",
-          description: GNB_MEGA_SECTION_DESC,
-          href: "",
+          description: "Upcoming conference schedules",
+          href: "/company/events",
         },
         {
-          id: "magazine-articles",
-          title: "Magazine Articles",
-          description: GNB_MEGA_SECTION_DESC,
-          href: "",
+          id: "articles",
+          title: "Articles",
+          description: "Read featured articles & insights",
+          href: "/company/articles",
+        },
+      ],
+    },
+    {
+      id: "careers",
+      label: "Careers",
+      items: [
+        {
+          id: "careers-at-lsea",
+          title: "Careers at LS ELECTRIC America",
+          description:
+            "Read our latest blog posts.",
+          href: "/company/careers",
+        },
+        {
+          id: "search-and-apply",
+          title: "Search and Apply",
+          description: "Critical short-circuit protection for MV grids.",
+          href: "https://www.linkedin.com/company/lselectricamerica/jobs/",
+          external: true,
         },
       ],
     },

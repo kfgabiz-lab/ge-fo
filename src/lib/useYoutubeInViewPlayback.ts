@@ -1,6 +1,18 @@
 import { useCallback, useEffect, useRef, type RefObject } from "react";
 import { postYoutubeCommand } from "@/lib/youtubeEmbed";
 
+function entryVisibleRatio(element: HTMLElement) {
+  const rect = element.getBoundingClientRect();
+  if (rect.height <= 0 || rect.width <= 0) return 0;
+
+  const viewportHeight =
+    window.innerHeight || document.documentElement.clientHeight;
+  const visibleHeight =
+    Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+
+  return Math.max(0, visibleHeight) / rect.height;
+}
+
 type UseYoutubeInViewPlaybackOptions = {
   enabled?: boolean;
   /** Visible ratio before autoplay (default 0.35) */
@@ -52,7 +64,21 @@ export function useYoutubeInViewPlayback(
     );
 
     observer.observe(section);
-    return () => observer.disconnect();
+
+    const runInitialCheck = () => {
+      const ratio = entryVisibleRatio(section);
+      if (ratio >= threshold && !userPausedRef.current) {
+        onEnterView();
+      }
+    };
+
+    runInitialCheck();
+    const rafId = window.requestAnimationFrame(runInitialCheck);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      observer.disconnect();
+    };
   }, [
     enabled,
     iframeRef,

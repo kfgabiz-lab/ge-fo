@@ -70,27 +70,19 @@
   }
 }
 
-/* main_products — larger badge than other product grids */
+/* main_products per4 — Figma 5885:153535 AWARD 50×50 단일 */
 @media (min-width: 781px) {
-  section.main_products .type1 .product_award_badge__icon {
-    width: 100px;
-    height: 50px;
-  }
-
-  section.main_products .type2 .product_award_badge__icon {
+  section.main_products .product_award_badge__icon {
     width: 50px;
     height: 50px;
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
   }
 }
 
 @media (max-width: 780px) {
-  section.main_products .type1 .product_award_badge__icon {
-    width: 80px;
-    height: 40px;
-  }
-
-  section.main_products .type2 .product_award_badge__icon {
-    width: 40px;
-    height: 40px;
+  section.main_products .product_award_badge__icon {
+    width: 50px;
+    height: 50px;
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
   }
 }

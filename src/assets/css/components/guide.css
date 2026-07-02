@@ -92,7 +92,8 @@ main.guide-hub .guide-hub__meta {
 /* Shared guide doc layout (GuidePageHeader, GuideRelated, …) */
 section.guide-doc,
 section.ico-guide,
-section.section-guide {
+section.section-guide,
+section.gnb-guide {
   flex: 1;
   width: 100%;
   max-width: 1200px;
@@ -459,7 +460,7 @@ section.component-guide .component-guide__date-sep {
 section.component-guide .component-guide__body {
   max-width: 1640px;
   margin: 0 auto;
-  padding: 80px 140px 120px;
+  padding: 75px 140px 120px;
 }
 section.component-guide .component-guide__section {
   margin-bottom: 120px;
@@ -600,17 +601,7 @@ section.component-guide .component-guide__preview-modal-trigger {
 }
 
 /* Component guide — responsive zoom */
-/* Responsive zoom (legacy) */
-@media (max-width: 1440px) and (min-width: 1024px) {
-  main:not(.component-guide-page) {
-    zoom: 0.7;
-  }
-}
-@media (max-width: 1023px) and (min-width: 780px) {
-  main:not(.component-guide-page) {
-    zoom: 0.5;
-  }
-}
+
 
 /* Section guide */
 /* Section guide — /guide/sections */
@@ -770,6 +761,25 @@ section.section-guide .section-guide__meta code {
   background: var(--color-bg);
   border-radius: 4px;
 }
+section.section-guide .section-guide__article-detail-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+section.section-guide .section-guide__variant-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+section.section-guide .section-guide__variant-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
 section.section-guide .section-guide__note,
 section.section-guide .section-guide__registry-only {
   margin: 12px 0 0;
@@ -779,13 +789,333 @@ section.section-guide .section-guide__registry-only {
 }
 section.section-guide .section-guide__preview {
   overflow-x: auto;
+  isolation: isolate;
 }
 section.section-guide .section-guide__preview > section,
 section.section-guide .section-guide__preview > div {
   margin: 0;
 }
 
+section.section-guide .section-guide__scope section.common_banner_02 .common_banner_02__panel {
+  text-decoration: none;
+  color: inherit;
+}
+
+section.section-guide
+  .section-guide__scope
+  section.common_banner_02
+  .common_banner_02__panel:hover
+  .btn-text-30__icon,
+section.section-guide
+  .section-guide__scope
+  section.common_banner_02
+  .common_banner_02__link:hover
+  .btn-text-30__icon {
+  background: var(--color-accent);
+}
+
+/* Services — Service Center offering: full-bleed absolute layout → guide grid */
+@media (min-width: 781px) {
+  section.section-guide
+    .section-guide__scope.support-page--service-center
+    section.support_service_offering {
+    overflow: hidden;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--service-center
+    section.support_service_offering
+    .support_service_offering__body {
+    position: relative;
+    left: auto;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1440px;
+    padding: 0 24px;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 363px);
+    gap: 40px 24px;
+    align-items: start;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--service-center
+    section.support_service_offering
+    .support_service_offering__carousel {
+    width: 100%;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--service-center
+    section.support_service_offering
+    .support_service_offering__panel {
+    grid-column: 2;
+    grid-row: 1;
+    padding-top: 0;
+    width: auto;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--service-center
+    section.support_service_offering
+    .support_service_offering__preview {
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    max-width: 363px;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--service-center
+    section.support_service_offering
+    .support_service_offering__preview-slide,
+  section.section-guide
+    .section-guide__scope.support-page--service-center
+    section.support_service_offering
+    .support_service_offering__slide {
+    height: 200px;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--service-center
+    section.support_service_offering
+    .swiper_type_01_controls {
+    position: relative;
+    bottom: auto;
+    margin-top: 24px;
+  }
+}
+
+/* Services — Warranty Policy: guide preview layout */
+@media (min-width: 781px) {
+  section.section-guide .section-guide__scope.support-page--warranty-policy .inner {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--warranty-policy
+    section.support_service_warranty_banner {
+    padding: 60px 0;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--warranty-policy
+    section.support_service_warranty_extension,
+  section.section-guide
+    .section-guide__scope.support-page--warranty-policy
+    section.support_service_warranty_apply {
+    padding-bottom: 60px;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--warranty-policy
+    .support_service_warranty_cards__list {
+    flex-wrap: wrap;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--warranty-policy
+    .support_service_warranty_cards__item {
+    flex: 1 1 calc(50% - 12px);
+    min-width: 220px;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--warranty-policy
+    .support_service_warranty_extension__panels {
+    flex-wrap: wrap;
+  }
+
+  section.section-guide
+    .section-guide__scope.support-page--warranty-policy
+    .support_service_warranty_panel {
+    flex: 1 1 320px;
+  }
+}
+
+/* GNB guide */
+section.gnb-guide .gnb-guide__lead {
+  margin: -8px 0 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+section.gnb-guide .gnb-guide__tree {
+  margin: 0 0 16px;
+  padding: 16px 20px;
+  font-size: 13px;
+  line-height: 1.5;
+  background: var(--color-bg-muted);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+section.gnb-guide .gnb-guide-table-wrap {
+  overflow-x: auto;
+}
+
+section.gnb-guide .gnb-guide-table {
+  width: 100%;
+  min-width: 880px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+section.gnb-guide .gnb-guide-table th,
+section.gnb-guide .gnb-guide-table td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+section.gnb-guide .gnb-guide-table th {
+  font-weight: 600;
+  background: var(--color-bg-muted);
+}
+
+section.gnb-guide .gnb-guide-table code {
+  font-size: 12px;
+}
+
+section.gnb-guide .gnb-guide-table__code {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-text-muted);
+}
+
+section.gnb-guide .gnb-guide-table__figma {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+section.gnb-guide .gnb-guide-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+section.gnb-guide .gnb-guide-icon-card {
+  padding: 16px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+}
+
+section.gnb-guide .gnb-guide-icon-card__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  margin-bottom: 12px;
+}
+
+section.gnb-guide .gnb-guide-icon-card h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+section.gnb-guide .gnb-guide-icon-card p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+section.gnb-guide .gnb-guide-icon-card__used {
+  margin-top: 8px !important;
+}
+
+section.gnb-guide .gnb-guide-class-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+section.gnb-guide .gnb-guide-class-list li {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  gap: 12px 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: 14px;
+}
+
+section.gnb-guide .gnb-guide-class-list code {
+  font-size: 13px;
+}
+
+section.gnb-guide .gnb-guide-class-list span {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+section.gnb-guide .gnb-guide-preview {
+  margin-bottom: 8px;
+}
+
+section.gnb-guide .gnb-guide-preview__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+section.gnb-guide .gnb-guide-preview__tab {
+  padding: 8px 16px;
+  border: 1px solid rgb(15 31 69 / 20%);
+  border-radius: 4px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+section.gnb-guide .gnb-guide-preview__tab.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+section.gnb-guide .gnb-guide-preview__scroll {
+  overflow-x: auto;
+  border: 1px solid var(--color-border-light);
+  border-radius: 8px;
+  background: #fff;
+}
+
+section.gnb-guide .gnb-guide-preview__scroll .main_header-wrap,
+section.gnb-guide .gnb-guide-preview__scroll .sub_header-wrap {
+  min-width: 1440px;
+}
+
+section.gnb-guide .gnb-guide-preview__hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
 @media (max-width: 780px) {
+  section.gnb-guide .gnb-guide-class-list li {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
   section.component-guide .component-guide__top {
     padding: 48px 20px;
   }

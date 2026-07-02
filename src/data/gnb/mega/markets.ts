@@ -1,7 +1,7 @@
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
 import type { GnbSimpleMegaMenu } from "@/data/gnb/types";
 
-/** Figma 2741:10579 — 3열 × 2행 그리드 */
+/** Figma 17660:104944 — 3열 × 2행 (열 우선) Markets mega grid */
 export const marketsMegaMenu: GnbSimpleMegaMenu = {
   type: "simple",
   panelId: GNB_MEGA_PANEL_ID.markets,
@@ -23,16 +23,7 @@ export const marketsMegaMenu: GnbSimpleMegaMenu = {
         "Federal, State, and Municipal Government / Airports / ",
         "Water and Wastewater / Healthcare",
       ],
-      href: "/markets/commercial-residential",
-    },
-    {
-      id: "oil-gas-mining",
-      title: "Oil & Gas, Mining Industries",
-      descriptionLines: [
-        "Petroleum, Chemical Refineries / Metals & Mining / ",
-        "Marine",
-      ],
-      href: "/markets/commercial-residential",
+      href: "/markets/public-infrastructure",
     },
     {
       id: "power-grid",
@@ -41,7 +32,7 @@ export const marketsMegaMenu: GnbSimpleMegaMenu = {
         "Power Generation, Transmission and Distribution / ",
         "Microgrids / BESS / Utilities / Renewables",
       ],
-      href: "/markets/commercial-residential",
+      href: "/markets/power-grid",
     },
     {
       id: "industrial",
@@ -50,7 +41,16 @@ export const marketsMegaMenu: GnbSimpleMegaMenu = {
         "Automotive / Semiconductor / Machinery /",
         "Food & Beverage",
       ],
-      href: "/markets/commercial-residential",
+      href: "/markets/industrial",
+    },
+    {
+      id: "oil-gas-mining",
+      title: "Oil & Gas, Mining Industries",
+      descriptionLines: [
+        "Petroleum, Chemical Refineries / Metals & Mining / ",
+        "Marine",
+      ],
+      href: "/markets/oil-gas-mining",
     },
     {
       id: "commercial-residential",
