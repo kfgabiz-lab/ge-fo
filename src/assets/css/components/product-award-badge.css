@@ -1,0 +1,88 @@
+/* IF Design award badge — shared (main_products, markets_products, devices_products, devices_product_other) */
+
+@media (min-width: 781px) {
+  .product_award_badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    pointer-events: none;
+  }
+
+  .product_award_badge__icon {
+    display: block;
+    flex-shrink: 0;
+    font-size: 0;
+    color: transparent;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: contain;
+  }
+
+  .type1 .product_award_badge__icon {
+    width: 80px;
+    height: 40px;
+    background-image: url("/img/devices-systems/products/badge_if_award_lg.png");
+  }
+
+  .type2 .product_award_badge__icon {
+    width: 40px;
+    height: 40px;
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+  }
+}
+
+@media (max-width: 780px) {
+  .product_award_badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    pointer-events: none;
+  }
+
+  .product_award_badge__icon {
+    display: block;
+    flex-shrink: 0;
+    font-size: 0;
+    color: transparent;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-size: contain;
+  }
+
+  .type1 .product_award_badge__icon {
+    width: 48px;
+    height: 24px;
+    background-image: url("/img/devices-systems/products/badge_if_award_lg.png");
+  }
+
+  .type2 .product_award_badge__icon {
+    width: 24px;
+    height: 24px;
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+  }
+}
+
+/* main_products per4 — Figma 5885:153535 AWARD 50×50 단일 */
+@media (min-width: 781px) {
+  section.main_products .product_award_badge__icon {
+    width: 50px;
+    height: 50px;
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+  }
+}
+
+@media (max-width: 780px) {
+  section.main_products .product_award_badge__icon {
+    width: 50px;
+    height: 50px;
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+  }
+}

@@ -1,0 +1,233 @@
+.common_footer {
+  margin-top: auto;
+  background: url(/img/footer/bg_common_footer.png);
+  color: #fff;
+}
+
+.common_footer .inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.common_footer > .inner {
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  gap: 80px;
+  align-items: start;
+  padding-top: 100px;
+  padding-bottom: 80px;
+}
+
+.common_footer .tit_newsletter {
+  margin-bottom: 20px;
+  font-family: jaka, Arial, Helvetica, sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 52px;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.common_footer .txt {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  color: rgb(255 255 255 / 75%);
+}
+
+.common_footer .form_news form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.common_footer .row_fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.common_footer .footer_field {
+  width: 100%;
+}
+
+.common_footer .footer_field .MuiInputLabel-root {
+  color: rgb(255 255 255 / 70%);
+}
+
+.common_footer .footer_field .MuiInputLabel-root.Mui-focused {
+  color: #fff;
+}
+
+.common_footer .footer_field .MuiOutlinedInput-root {
+  color: #fff;
+  background-color: rgb(255 255 255 / 6%);
+}
+
+.common_footer .footer_field .MuiOutlinedInput-root fieldset {
+  border-color: rgb(255 255 255 / 30%);
+}
+
+.common_footer .footer_field .MuiOutlinedInput-root:hover fieldset {
+  border-color: rgb(255 255 255 / 55%);
+}
+
+.common_footer .footer_field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #fff;
+}
+
+.common_footer .footer_field .MuiSelect-icon {
+  color: #fff;
+}
+
+.footer_select_menu {
+  max-width: calc(100vw - 40px);
+}
+
+.common_footer .footer_checkbox {
+  color: rgb(255 255 255 / 55%);
+}
+
+.common_footer .footer_checkbox.Mui-checked {
+  color: #e60040;
+}
+
+.common_footer .row_tit {
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #fff;
+}
+
+.common_footer .product_checks {
+  gap: 24px;
+}
+
+.common_footer .product_check {
+  margin: 0;
+}
+
+.common_footer .product_check .MuiFormControlLabel-label {
+  font-size: 15px;
+  line-height: 23px;
+  color: rgb(255 255 255 / 85%);
+}
+
+.common_footer .btn_area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+}
+
+.common_footer .btn_flat {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  min-height: 52px;
+  padding: 0 28px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  background: #e60040;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.common_footer .btn_flat:hover {
+  background: #c90038;
+}
+
+.common_footer .warn {
+  font-size: 14px;
+  line-height: 22px;
+  color: rgb(255 255 255 / 65%);
+}
+
+.common_footer .warn a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.common_footer .footer_bottom {
+  border-top: 1px solid rgb(255 255 255 / 12%);
+}
+
+.common_footer .footer_bottom .inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+
+.common_footer .footer_logo img {
+  display: block;
+  width: auto;
+  height: 28px;
+}
+
+.common_footer .copyright {
+  font-size: 14px;
+  line-height: 22px;
+  color: rgb(255 255 255 / 55%);
+}
+
+@media (max-width: 780px) {
+  .common_footer > .inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 64px 20px 48px;
+  }
+
+  .common_footer .inner {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .common_footer .tit_newsletter {
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .common_footer .txt {
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  .common_footer .br_pc {
+    display: none;
+  }
+
+  .common_footer .row_fields {
+    grid-template-columns: 1fr;
+  }
+
+  .common_footer .product_checks {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .common_footer .btn_area {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .common_footer .btn_flat {
+    width: 100%;
+  }
+
+  .common_footer .footer_bottom .inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}

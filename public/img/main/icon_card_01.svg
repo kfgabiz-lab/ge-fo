@@ -1,0 +1,24 @@
+<svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M76 1H11C18.6 1.4 20.8333 7.16667 21 10V99H49H86V47V11C86 5.47715 81.5229 1 76 1Z" fill="white"/>
+<path d="M0 11C0 4.92487 4.92487 0 11 0C17.0751 0 22 4.92487 22 11V58H0V11Z" fill="white"/>
+<path d="M11 1C16.5228 1 21 5.47715 21 11V57H1V11C1 5.47715 5.47715 1 11 1Z" stroke="#666666" stroke-width="2"/>
+<path d="M11 1L76 1C81.5228 1 86 5.47715 86 11V47M21 10V99H49" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
+<mask id="path-5-inside-1_5923_29544" fill="white">
+<rect x="29" y="17" width="12" height="12" rx="1"/>
+</mask>
+<rect x="29" y="17" width="12" height="12" rx="1" stroke="#666666" stroke-width="4" mask="url(#path-5-inside-1_5923_29544)"/>
+<path d="M48 23H74" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
+<path d="M48 43H74" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
+<path d="M48 63H74" stroke="#666666" stroke-width="2" stroke-linecap="round"/>
+<mask id="path-9-inside-2_5923_29544" fill="white">
+<rect x="29" y="37" width="12" height="12" rx="1"/>
+</mask>
+<rect x="29" y="37" width="12" height="12" rx="1" stroke="#666666" stroke-width="4" mask="url(#path-9-inside-2_5923_29544)"/>
+<mask id="path-10-inside-3_5923_29544" fill="white">
+<rect x="29" y="57" width="12" height="12" rx="1"/>
+</mask>
+<rect x="29" y="57" width="12" height="12" rx="1" stroke="#666666" stroke-width="4" mask="url(#path-10-inside-3_5923_29544)"/>
+<circle cx="82" cy="82" r="28" fill="#E60040"/>
+<path opacity="0.2" d="M65.4316 59.4268C62.0176 64.0674 60 69.7989 60 76.002C60 91.4659 72.536 104.002 88 104.002C94.1999 104.002 99.9279 101.985 104.567 98.5742C99.4703 105.503 91.261 110 82 110C66.536 110 54 97.464 54 82C54 72.736 58.4994 64.5235 65.4316 59.4268Z" fill="black"/>
+<path d="M71 82L78.0714 90L93 74" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

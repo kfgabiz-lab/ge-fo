@@ -1,0 +1,60 @@
+.index-page {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+
+.index-header {
+  margin-bottom: 24px;
+}
+
+.index-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.index-header p {
+  font-size: 14px;
+  color: #666;
+}
+
+.index-grid-wrap {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.index-link {
+  color: #1976d2;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.index-link:hover {
+  color: #1565c0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .index-header p {
+    color: #999;
+  }
+
+  .index-grid-wrap {
+    background: #141414;
+    border-color: #2a2a2a;
+  }
+
+  .index-link {
+    color: #90caf9;
+  }
+
+  .index-link:hover {
+    color: #bbdefb;
+  }
+}

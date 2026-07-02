@@ -1,0 +1,89 @@
+/* Fonts */
+@font-face {
+  font-family: jaka;
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/plus-jakarta-sans/PlusJakartaSans-variable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: jaka;
+  font-style: italic;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/plus-jakarta-sans/PlusJakartaSans-Italic-variable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/pretendard/Pretendard-Thin.subset.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/pretendard/Pretendard-ExtraLight.subset.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/pretendard/Pretendard-Light.subset.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/pretendard/Pretendard-Regular.subset.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/pretendard/Pretendard-Medium.subset.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/pretendard/Pretendard-SemiBold.subset.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/pretendard/Pretendard-Bold.subset.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/pretendard/Pretendard-ExtraBold.subset.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/pretendard/Pretendard-Black.subset.woff") format("woff");
+}
+

@@ -1,0 +1,6 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pin">
+<path id="Ellipse 759" d="M18 9.51724C18 14.6963 11.7339 21.3159 9.65865 23.3662C9.28885 23.7315 8.71115 23.7315 8.34135 23.3662C6.26609 21.3159 0 14.6963 0 9.51724C0 4.26101 4.02944 0 9 0C13.9706 0 18 4.26101 18 9.51724Z" fill="var(--fill-0, #E60040)"/>
+<circle id="Ellipse 1143" cx="9" cy="9" r="3" fill="var(--fill-0, white)"/>
+</g>
+</svg>
