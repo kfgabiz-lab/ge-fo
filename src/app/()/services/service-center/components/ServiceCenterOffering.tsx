@@ -177,7 +177,14 @@ export default function ServiceCenterOffering() {
                   ))}
                 </h3>
                 <p className="support_service_offering__slide-desc">
-                  {activeSlide.description}
+                  {"descriptionLines" in activeSlide && activeSlide.descriptionLines
+                    ? activeSlide.descriptionLines.map((line, index) => (
+                        <span key={line}>
+                          {index > 0 ? <br /> : null}
+                          {line}
+                        </span>
+                      ))
+                    : activeSlide.description}
                 </p>
               </div>
             </div>

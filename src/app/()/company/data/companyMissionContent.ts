@@ -48,7 +48,7 @@ export const companyMission = {
       icon: `${IMG}/pillar-energy.svg`,
     },
   ] satisfies CompanyMissionPillar[],
-  coreValueLogo: `${IMG}/core-value-logo.png`,
+  coreValueLogo: `${IMG}/core-value-logo.svg`,
   coreValueDesc: "Fundamental transformation for the growth era",
   coreValueArrow: `${IMG}/mission-arrow.png`,
   coreValuePlusIcon: `${IMG}/mission-value-plus.svg`,

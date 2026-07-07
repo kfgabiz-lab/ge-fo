@@ -19,10 +19,10 @@ export const esgIntro = {
 
 export const esgVision = {
   backgroundImage: `${IMG}/vision-bg.jpg`,
-  missionImage: `${IMG}/mission.png`,
-  arrowImage: `${IMG}/arrow.png`,
-  visionEmblemImage: `${IMG}/vision-emblem.png`,
-  managementVisionImage: `${IMG}/esg-management-vision.png`,
+  missionImage: `/img/company/america/mission-logo.svg`,
+  arrowImage: `${IMG}/arrow.svg`,
+  visionEmblemImage: `${IMG}/vision-emblem.svg`,
+  managementVisionImage: `${IMG}/esg-management-vision.svg`,
   directivityCards: [
     {
       id: "reduce-carbon",
@@ -62,12 +62,12 @@ export const esgClimate = {
   roadmapTitle: "Roadmap for Achieving Carbon Neutrality",
   roadmapBodyImage: `${IMG}/roadmap-body.svg`,
   roadmapBodyAlt:
-    "Roadmap for achieving carbon neutrality: Phase 1 (2022–2025) build the foundation, Phase 2 (2026–2035) implement decarbonization strategies, Phase 3 (2036–2040) achieve carbon neutrality",
+    "Roadmap for achieving carbon neutrality: Phase 1 (2022–2025) LS ELECTRIC’s carbon neutrality declaration October 2022, Phase 2 (2026–2035) implement decarbonization strategies, Phase 3 (2036–2040) achieve carbon neutrality",
   roadmapPhases: [
     {
       id: "phase-1",
       phaseLabel: "Phase 1 (2022–2025)",
-      title: "Build the foundation for carbon neutrality",
+      title: "LS ELECTRIC’s carbon neutrality declaration October 2022",
       lineProgressHeight: 74,
       items: [
         {
@@ -75,7 +75,7 @@ export const esgClimate = {
           subItems: ["Establish short-, medium-, and long-term roadmaps"],
         },
         {
-          text: "Join RE100 and take action",
+          text: "Join RE100(2023.12) and take action",
           subItems: [
             "Build self-generation facilities and purchase RECs to transition to renewable energy",
           ],

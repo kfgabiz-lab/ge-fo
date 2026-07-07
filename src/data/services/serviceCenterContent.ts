@@ -38,7 +38,7 @@ export const serviceCenterPage = {
       },
       {
         id: "request-service",
-        title: "Request Service",
+        title: "Request for Service",
         description:
           "Need technical assistance that cannot be resolved through the Knowledge Base? Submit a service request and connect directly with our service specialists.",
         icon: "/img/services/service-center/icon-request-service.svg",
@@ -47,7 +47,7 @@ export const serviceCenterPage = {
       },
       {
         id: "training",
-        title: "Training",
+        title: "Request for Training",
         description:
           "Enhance your product knowledge with instructor-led training programs.",
         icon: "/img/services/service-center/icon-training.svg",
@@ -66,6 +66,7 @@ export const serviceCenterPage = {
       {
         id: "tech-hub",
         title: "Tech Hub",
+        titleParts: ["Video Tutorials", "Tech Hub"] as const,
         description:
           "Explore how-to videos, troubleshooting guides, and technical tutorials.",
         icon: "/img/services/service-center/icon-tech-hub.svg",
@@ -90,9 +91,9 @@ export const serviceCenterPage = {
         id: "offering-01",
         number: "01",
         title: "Lifecycle Service Support",
-        titleLines: ["Lifecycle", "Service Support"],
+        titleLines: ["Technical Support"],
         description:
-          "Comprehensive support across commissioning, operation, and optimization to keep your power systems running at peak performance.",
+          "Our team provides guidance through remote assistance or direct consultation to ensure stable operation and minimize disruption.",
         image: "/img/services/service-center/offering-01.jpg",
       },
       {
@@ -100,35 +101,36 @@ export const serviceCenterPage = {
         number: "02",
         title: "Coordinated Claim Handling",
         titleLines: ["Coordinated", "Claim Handling"],
-        description:
-          "Our team provides guidance through remote assistance or direct consultation to ensure stable operation and minimize disruption.",
+        descriptionLines: [
+          "Centralized claim management to ensure efficient handling of product-related issues, including investigation, coordination, and resolution follow-up.",
+        ],
         image: "/img/services/service-center/offering-02.jpg",
       },
       {
         id: "offering-03",
         number: "03",
-        title: "Preventive Maintenance",
-        titleLines: ["Preventive", "Maintenance"],
+        title: "Field Support",
+        titleLines: ["Field Support"],
         description:
-          "Scheduled inspections and maintenance programs help prevent failures, extend equipment life, and reduce unplanned downtime.",
+          "Reliable field support for troubleshooting, repair, and system stabilization, delivered by experienced engineers in coordination with LS ELECTRIC.",
         image: "/img/services/service-center/offering-03.jpg",
       },
-      {
-        id: "offering-04",
-        number: "04",
-        title: "On-Site Field Service",
-        titleLines: ["On-Site", "Field Service"],
-        description:
-          "Qualified field engineers deliver hands-on troubleshooting, repair, and replacement services wherever your operations are located.",
-        image: "/img/services/service-center/offering-04.jpg",
-      },
+      // {
+      //   id: "offering-04",
+      //   number: "04",
+      //   title: "On-Site Field Service",
+      //   titleLines: ["On-Site", "Field Service"],
+      //   description:
+      //     "Qualified field engineers deliver hands-on troubleshooting, repair, and replacement services wherever your operations are located.",
+      //   image: "/img/services/service-center/offering-04.jpg",
+      // },
     ],
   },
   serviceFlow: {
     title: "Service Flow",
     description:
       "From initial request to final resolution—our coordinated service process keeps you informed at every step.",
-    ctaLabel: "Request Service",
+    ctaLabel: "Request for Service",
     ctaHref: GICS_REQUEST_URL,
     backgroundImage: "/img/main/bg_section_main_info.jpg",
     pathImage: "/img/services/service-center/service-flow-line.svg",
@@ -226,10 +228,10 @@ export const serviceCenterPage = {
     cards: [
       {
         id: "request-service",
-        title: "Request Service & Support",
+        title: "Request for Service & Support",
         description:
           "Submit a request for technical support, maintenance, or field service.",
-        cta: "Request Service",
+        cta: "Request for Service",
         ctaIcon: "arrow" as const,
         href: GICS_REQUEST_URL,
         external: true,
@@ -268,7 +270,7 @@ export const serviceCenterFaqDescriptionLines = [
 
 export const serviceCenterFaqItems: CommonFaqEntry[] = [
   {
-    question: "How do I request service?",
+    question: "How do I Request for Service?",
     answer:
       "You can submit a service request through G-ICS, our online service portal, or contact your local LS ELECTRIC representative by phone or email. Include your product details, location, and a brief description of the issue to help us respond faster.",
   },
