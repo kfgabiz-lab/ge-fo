@@ -1,16 +1,16 @@
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
 import { acbDescription, microGridMegaDescription, scadaMegaDescription, smartFactoryMegaDescription, xemsMegaDescription } from "@/data/gnb/shared";
 import type { GnbDevicesMegaMenu, GnbMegaDepth3 } from "@/data/gnb/types";
-
+ 
 /** GNB mega depth3-btn destination */
 const LV_AUTOMATION_HREF = "/products-systems/lv-automation";
-
+ 
 /** GNB mega depth2-btn destination — Figma / motor-control L2 */
 const MOTOR_CONTROL_HREF = "/products-systems/motor-control";
-
+ 
 /** GNB mega depth2 · breadcrumb L2 — Software */
 export const SOFTWARE_HREF = "/products-systems/software";
-
+ 
 /** Software product detail routes — breadcrumb L3 */
 export const softwareProductHrefs = {
   scada: "/products-systems/software/scada",
@@ -18,25 +18,25 @@ export const softwareProductHrefs = {
   microGrid: "/products-systems/software/micro-grid",
   smartFactory: "/products-systems/software/smart-factory",
 } as const;
-
+ 
 /** GNB mega open defaults when pathname is under Software */
 export function resolveDevicesMegaStateFromPath(pathname: string) {
   if (!pathname.startsWith(SOFTWARE_HREF)) {
     return null;
   }
-
+ 
   if (pathname.startsWith(softwareProductHrefs.xems)) {
     return { categoryId: "software", depth3Id: "xems-sw" };
   }
-
+ 
   if (pathname.startsWith(softwareProductHrefs.microGrid)) {
     return { categoryId: "software", depth3Id: "micro-grid-sw" };
   }
-
+ 
   if (pathname.startsWith(softwareProductHrefs.smartFactory)) {
     return { categoryId: "software", depth3Id: "diganosis-system-sw" };
   }
-
+ 
   return { categoryId: "software", depth3Id: "scada-sw" };
 }
 
@@ -101,7 +101,7 @@ export const productImg = {
   xgb: "/img/devices-systems/products/xgb.webp",
   xgt: "/img/devices-systems/products/xgt.webp",
 } as const;
-
+ 
 const lvDepth3: GnbMegaDepth3[] = [
   {
     id: "acb-pcb",
@@ -394,7 +394,7 @@ const lvDepth3: GnbMegaDepth3[] = [
     ],
   },
 ];
-
+ 
 export const devicesMegaMenu: GnbDevicesMegaMenu = {
   type: "devices",
   panelId: GNB_MEGA_PANEL_ID.devices,
@@ -879,6 +879,6 @@ export const devicesMegaMenu: GnbDevicesMegaMenu = {
     },
   ],
 };
-
+ 
 export const devicesMegaDefaultCategoryId = "lv";
 export const devicesMegaDefaultDepth3Id = "acb-pcb";

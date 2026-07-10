@@ -198,18 +198,3 @@ export function chunkLetterGroups<T>(items: T[], size: number): T[][] {
   }
   return rows;
 }
-
-const EXPLORE_ALL_COLUMN_COUNT = 4;
-
-/** letter groups distributed round-robin into columns for the GNB mega "explore all" panel */
-export const gnbExploreAllColumns: GnbExploreLetterGroup[][] = (() => {
-  const groups = groupExploreProductsByLetter(gnbExploreAllProducts);
-  const columns: GnbExploreLetterGroup[][] = Array.from(
-    { length: EXPLORE_ALL_COLUMN_COUNT },
-    () => [],
-  );
-  groups.forEach((group, index) => {
-    columns[index % EXPLORE_ALL_COLUMN_COUNT].push(group);
-  });
-  return columns;
-})();

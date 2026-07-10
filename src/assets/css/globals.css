@@ -506,7 +506,8 @@ section .btn-text-30 .icon_arrow-14 {
   display: block;
   width: 14px;
   height: 14px;
-  background: url("/ico/ico_arrow_right_24_blue.svg") center / contain no-repeat;
+  background: url("/ico/ico_arrow_right_14.svg") center / contain no-repeat;
+  filter: brightness(0) invert();
 }
 section .btn-text-30:hover .icon_arrow-14 {
   filter: brightness(0) invert(1);
@@ -1586,6 +1587,7 @@ section.devices_product_downloads .guide_checkbox.MuiCheckbox-root .MuiSvgIcon-r
   display: none;
 }
 section.component-guide .guide_checkbox,
+section.devices_product_downloads .guide_checkbox.MuiCheckbox-root.MuiCheckbox-indeterminate .guide_checkbox__icon , section.support_download_contents .guide_checkbox.MuiCheckbox-root.MuiCheckbox-indeterminate .guide_checkbox__icon , section.support_download_search .guide_checkbox.MuiCheckbox-root.MuiCheckbox-indeterminate .guide_checkbox__icon , section.support_contact_form .guide_checkbox.MuiCheckbox-root.MuiCheckbox-indeterminate .guide_checkbox__icon ,
 section.devices_product_downloads .guide_checkbox__icon , section.support_download_contents .guide_checkbox__icon , section.support_download_search .guide_checkbox__icon , section.support_contact_form .guide_checkbox__icon {
   display: block;
   width: 22px;
@@ -1607,6 +1609,46 @@ section.component-guide .guide_field--w120,
 section.devices_product_downloads .guide_field--w120 , section.support_download_contents .guide_field--w120 , section.support_download_search .guide_field--w120 , section.support_where_to_buy_contents .guide_field--w120 , section.support_where_to_buy_search .guide_field--w120, section.support_service_training_curriculum .guide_field--w120 , section.support_service_training_detail_schedule .guide_field--w120 , section.support_service_training_session_detail .guide_field--w120 , section.support_service_training_request .guide_field--w120, section.devices_explore .guide_field--w120 {
   width: 120px;
   max-width: 120px;
+}
+
+@media (max-width: 780px) {
+  section.component-guide .guide_field,
+  section.component-guide .guide_field--w200,
+  section.component-guide .guide_field--w120,
+  section.devices_product_downloads .guide_field,
+  section.devices_product_downloads .guide_field--w200,
+  section.devices_product_downloads .guide_field--w120,
+  section.support_download_contents .guide_field,
+  section.support_download_contents .guide_field--w200,
+  section.support_download_contents .guide_field--w120,
+  section.support_download_search .guide_field,
+  section.support_download_search .guide_field--w200,
+  section.support_download_search .guide_field--w120,
+  section.support_where_to_buy_contents .guide_field,
+  section.support_where_to_buy_contents .guide_field--w200,
+  section.support_where_to_buy_contents .guide_field--w120,
+  section.support_where_to_buy_search .guide_field,
+  section.support_where_to_buy_search .guide_field--w200,
+  section.support_where_to_buy_search .guide_field--w120,
+  section.support_contact_form .guide_field,
+  section.support_service_training_curriculum .guide_field,
+  section.support_service_training_curriculum .guide_field--w200,
+  section.support_service_training_curriculum .guide_field--w120,
+  section.support_service_training_detail_schedule .guide_field,
+  section.support_service_training_detail_schedule .guide_field--w200,
+  section.support_service_training_detail_schedule .guide_field--w120,
+  section.support_service_training_session_detail .guide_field,
+  section.support_service_training_session_detail .guide_field--w200,
+  section.support_service_training_session_detail .guide_field--w120,
+  section.support_service_training_request .guide_field,
+  section.support_service_training_request .guide_field--w200,
+  section.support_service_training_request .guide_field--w120,
+  section.devices_explore .guide_field,
+  section.devices_explore .guide_field--w200,
+  section.devices_explore .guide_field--w120 {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 section.component-guide .guide_field--h38 .MuiOutlinedInput-root,
 section.devices_product_downloads .guide_field--h38 .MuiOutlinedInput-root , section.support_download_contents .guide_field--h38 .MuiOutlinedInput-root , section.support_download_search .guide_field--h38 .MuiOutlinedInput-root , section.support_where_to_buy_contents .guide_field--h38 .MuiOutlinedInput-root , section.support_where_to_buy_search .guide_field--h38 .MuiOutlinedInput-root, section.support_service_training_curriculum .guide_field--h38 .MuiOutlinedInput-root , section.support_service_training_detail_schedule .guide_field--h38 .MuiOutlinedInput-root , section.support_service_training_session_detail .guide_field--h38 .MuiOutlinedInput-root , section.support_service_training_request .guide_field--h38 .MuiOutlinedInput-root, section.devices_explore .guide_field--h38 .MuiOutlinedInput-root {
@@ -2309,7 +2351,7 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   }
 
   .common_modal__foot {
-    padding: 24px 20px 32px;
+    padding: 40px 24px;
   }
 }
 

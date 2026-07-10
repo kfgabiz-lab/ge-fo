@@ -1,1 +1,0 @@
-export { mainHighlightNewsItems } from "./main";

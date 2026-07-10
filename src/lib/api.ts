@@ -1,41 +1,27 @@
-/** 서버 컴포넌트에서 fo 자기 자신(같은 origin)을 절대주소로 호출하기 위한 base — 브라우저에서는 상대경로 그대로 사용 */
+// fo → bo-api 공통 호출 함수
+// 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md 4절
+// - 컴포넌트에서 직접 fetch() 금지, 반드시 이 함수 경유
+// - endpoint 는 항상 "/api/v1/fo/..." 로 시작 (next.config.ts rewrites 프록시 대상과 일치)
+// - 브라우저 실행 시: 상대경로 그대로 (현재 origin 기준 해석)
+// - 서버(SSR/서버 컴포넌트) 실행 시: Node fetch 는 상대경로를 해석 못 하므로
+//   NEXT_PUBLIC_SITE_URL 을 붙여 절대주소로 호출 (내부적으로는 여전히 fo 서버 rewrites 프록시를 거침)
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3002";
 
-type RequestOptions = {
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  body?: unknown;
-  headers?: Record<string, string>;
-  cache?: RequestCache;
-  revalidate?: number;
-};
+export async function fetchApi<T>(
+  endpoint: string,
+  init?: RequestInit,
+): Promise<T> {
+  const isServer = typeof window === "undefined";
+  const url = isServer ? `${SITE_URL}${endpoint}` : endpoint;
 
-/**
- * 공통 API fetch 유틸 — bo-api `/api/v1/fo/**` 프록시 전용 (next.config.ts rewrites 참고)
- * 서버 컴포넌트/브라우저 어디서 호출하든 동일하게 동작하도록 실행 환경에 따라 base를 다르게 붙인다
- * (Node fetch는 상대경로를 해석 못하므로 서버 실행 시에만 SITE_URL을 붙임).
- * @param endpoint - API 경로, 반드시 /api/v1/fo/ 로 시작 (예: /api/v1/fo/main/banners)
- * @param options - 요청 옵션
- */
-export async function fetchApi<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
-  const { method = "GET", body, headers = {}, cache, revalidate } = options;
+  const res = await fetch(url, init);
 
-  const fetchOptions: RequestInit = {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-    ...(cache ? { cache } : {}),
-    ...(revalidate !== undefined ? { next: { revalidate } } : {}),
-  };
-
-  const url = typeof window === "undefined" ? `${SITE_URL}${endpoint}` : endpoint;
-  const response = await fetch(url, fetchOptions);
-
-  if (!response.ok) {
-    throw new Error(`API 오류: ${response.status} ${response.statusText}`);
+  if (!res.ok) {
+    throw new Error(
+      `fetchApi 실패: ${res.status} ${res.statusText} (${endpoint})`,
+    );
   }
 
-  return response.json() as Promise<T>;
+  return (await res.json()) as T;
 }

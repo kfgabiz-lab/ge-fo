@@ -200,6 +200,13 @@ const configs: Record<string, BreadcrumbConfig> = {
     ],
     current: "Articles",
   },
+  "/company/articles/no-data": {
+    crumbs: [
+      { label: "Company", href: "/company/blog" },
+      { label: "Media" },
+    ],
+    current: "Articles",
+  },
   "/company/press": {
     crumbs: [
       { label: "Company", href: "/company/blog" },
@@ -243,6 +250,10 @@ const configs: Record<string, BreadcrumbConfig> = {
     crumbs: [{ label: "Support" }],
     current: "Download Center",
   },
+  "/support/download-center/no-data": {
+    crumbs: [{ label: "Support" }],
+    current: "Download Center",
+  },
   "/support/tech-hub": {
     crumbs: [{ label: "Support" }],
     current: "LS ELECTRIC Tech Hub",
@@ -279,7 +290,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/services/service-center": {
     crumbs: [{ label: "Services" }],
-    current: "Service center",
+    current: "Service Center",
   },
   "/services/warranty-policy": {
     crumbs: [{ label: "Services" }],

@@ -40,9 +40,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1440px;
+  max-width: 1460px;
   min-height: 48px;
   margin: 0 auto;
+  padding: 0 10px;
 }
 
 .sub_breadcrumb .breadcrumb_nav {
@@ -758,7 +759,7 @@ color: #fff;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1440px;
+  max-width: 1460px;
   height: 80px;
   margin: 0 auto;
 }
@@ -832,7 +833,7 @@ html.is-mega-open-scroll-lock body {
 .main_header.is-search-open .sub_breadcrumb,
 .gnb_menu_wrap.sub_header.is-mega-open .sub_breadcrumb,
 .gnb_menu_wrap.sub_header.is-search-open .sub_breadcrumb {
-  display: none;
+  visibility: hidden;
 }
 
 .main_header.is-mega-open.is-top .main_header__nav-link,
@@ -899,7 +900,7 @@ html.is-mega-open-scroll-lock body {
 .main_header__logo-img {
   display: block;
   width: auto;
-  height: 26px;
+  height: 30px;
   transition: filter 0.3s ease;
 }
 
@@ -1041,7 +1042,7 @@ html.is-mega-open-scroll-lock body {
   }
 
   .main_header__inner {
-    padding: 0;
+    padding: 0 10px;
   }
 
   .main_header__nav {
@@ -1219,12 +1220,13 @@ html.is-mega-open-scroll-lock body {
 
 .gnb_menu_wrap .gnb_menu_inner {
   display: flex;
-  max-width: 1440px;
+  max-width: 1460px;
   margin: 0 auto;
   width: 100%;
   align-items: center;
   justify-content: space-between;
   height: 80px;
+  padding: 0 10px;
 }
 
 .gnb_menu_wrap .logo {
@@ -1237,7 +1239,7 @@ html.is-mega-open-scroll-lock body {
 
 .gnb_menu_wrap .logo img {
   display: block;
-  height: 24px;
+  height: 30px;
   width: auto;
   transition: filter 0.3s ease;
 }
@@ -1358,7 +1360,7 @@ html.is-mega-open-scroll-lock body {
   position: relative;
   flex-shrink: 0;
   width: 100%;
-  max-width: 1560px;
+  max-width: 1440px;
   margin: 0 auto;
   overflow: hidden;
   background: #fff;
@@ -1373,27 +1375,15 @@ html.is-mega-open-scroll-lock body {
 }
 
 .gnb_mega--simple.gnb_mega--grid.is-mounted {
-  max-height: 240px;
+  max-height: calc(100vh - 144px);
 }
 
-.gnb_mega--simple.gnb_mega--sections.is-mounted {
-  max-height: 580px;
-}
-
-.gnb_mega--simple.gnb_mega--sections.gnb_mega--services.is-mounted {
-  max-height: 474px;
-}
-
-.gnb_mega--simple.gnb_mega--sections.gnb_mega--support.is-mounted {
-  max-height: 574px;
-}
-
-.gnb_mega--simple.gnb_mega--sections.gnb_mega--careers.is-mounted {
-  max-height: 304px;
-}
-
+.gnb_mega--simple.gnb_mega--sections.is-mounted,
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--services.is-mounted,
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--support.is-mounted,
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--careers.is-mounted,
 .gnb_mega--simple.gnb_mega--sections.gnb_mega--company.is-mounted {
-  max-height: 474px;
+  max-height: calc(100vh - 144px);
 }
 
 .gnb_mega.is-open {
@@ -1455,11 +1445,11 @@ html.is-mega-open-scroll-lock body {
 }
 
 .gnb_mega__inner--grid {
-  height: 240px;
+  height: auto;
 }
 
 .gnb_mega__inner--sections {
-  height: 580px;
+  height: auto;
 }
 
 .gnb_mega__simple-head {
@@ -1591,6 +1581,7 @@ html.is-mega-open-scroll-lock body {
   align-items: stretch;
   width: 100%;
   max-width: 1520px;
+  height: auto;
   margin: 0 auto;
   box-sizing: border-box;
   background: #fff;
@@ -1641,14 +1632,14 @@ html.is-mega-open-scroll-lock body {
   gap: 6px;
   box-sizing: border-box;
   width: 100%;
-  padding: 24px 34px;
+  min-width: 0;
+  padding: 34px 34px;
   border: none;
   background: #fff;
   color: inherit;
   text-align: left;
   text-decoration: none;
   cursor: pointer;
-  
   transition: background-color 0.15s ease;
 }
 
@@ -1681,7 +1672,17 @@ html.is-mega-open-scroll-lock body {
   align-items: center;
   justify-content: flex-start;
   width: 100%;
+  min-width: 0;
+}
 
+#gnb-mega-panel-markets .gnb_mega__item-head:has(.gnb_mega__item-arrow),
+#gnb-mega-panel-services .gnb_mega__item-head:has(.gnb_mega__item-arrow),
+#gnb-mega-panel-support .gnb_mega__item-head:has(.gnb_mega__item-arrow),
+#gnb-mega-panel-careers .gnb_mega__item-head:has(.gnb_mega__item-arrow),
+#gnb-mega-panel-company .gnb_mega__item-head:has(.gnb_mega__item-arrow) {
+  width: auto;
+  max-width: 100%;
+  align-items: center;
 }
 
 #gnb-mega-panel-markets .gnb_mega__item-tit,
@@ -1690,17 +1691,16 @@ html.is-mega-open-scroll-lock body {
 #gnb-mega-panel-careers .gnb_mega__item-tit,
 #gnb-mega-panel-company .gnb_mega__item-tit {
   display: block;
+  flex: 0 1 auto;
   min-width: 0;
+  max-width: 100%;
   margin: 0;
-  width: fit-content;
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
   color: #222;
+  overflow-wrap: anywhere;
   word-break: break-word;
-
-
-
 }
 
 #gnb-mega-panel-markets .gnb_mega__item-desc,
@@ -1709,16 +1709,23 @@ html.is-mega-open-scroll-lock body {
 #gnb-mega-panel-careers .gnb_mega__item-desc,
 #gnb-mega-panel-company .gnb_mega__item-desc {
   display: block;
-  max-width: 365px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
   color: #666;
+  overflow-wrap: anywhere;
   word-break: break-word;
 }
 
 #gnb-mega-panel-markets .gnb_mega__item-desc-line {
   display: block;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 #gnb-mega-panel-markets .gnb_mega__item-external,
@@ -1781,24 +1788,27 @@ html.is-mega-open-scroll-lock body {
 
 /* Markets — Figma 17660:104944 (#gnb-mega-panel-markets) */
 #gnb-mega-panel-markets.gnb_mega--grid.is-mounted {
-  max-height: 240px;
+  max-height: calc(100vh - 144px);
 }
 
 #gnb-mega-panel-markets .gnb_mega__inner--grid {
-  height: 240px;
+  height: auto;
 }
 
 #gnb-mega-panel-markets .gnb_mega__head {
-  padding-top: 30px;
+  padding-top: 26px;
   padding-bottom: 30px;
 }
 
 #gnb-mega-panel-markets .gnb_mega__grid {
   display: grid;
-  flex: 1;
+  flex: 0 0 auto;
+  align-self: stretch;
   grid-auto-flow: column;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: repeat(2, 120px);
+  grid-template-rows: repeat(2, auto);
+  grid-auto-rows: auto;
+  height: auto;
   min-width: 0;
   margin: 0;
   padding: 0;
@@ -1812,8 +1822,8 @@ html.is-mega-open-scroll-lock body {
 }
 
 #gnb-mega-panel-markets .gnb_mega__item {
-  height: 100%;
-  min-height: 120px;
+  height: auto;
+  min-height: 0;
 }
 
 #gnb-mega-panel-markets .gnb_mega__item.is-disabled {
@@ -1828,43 +1838,37 @@ html.is-mega-open-scroll-lock body {
 @media (min-width: 1520px) {
   #gnb-mega-panel-markets .gnb_mega__grid {
     grid-template-columns: repeat(3, 433px);
-    grid-template-rows: repeat(2, 120px);
+    grid-template-rows: repeat(2, auto);
+  }
+
+  #gnb-mega-panel-markets .gnb_mega__item-desc,
+  #gnb-mega-panel-services .gnb_mega__item-desc,
+  #gnb-mega-panel-support .gnb_mega__item-desc,
+  #gnb-mega-panel-careers .gnb_mega__item-desc,
+  #gnb-mega-panel-company .gnb_mega__item-desc {
+    max-width: 365px;
   }
 }
 
 /* Services — Figma 3670:14629 (#gnb-mega-panel-services) */
-#gnb-mega-panel-services.gnb_mega--simple.gnb_mega--sections.gnb_mega--services.is-mounted {
-  max-height: 474px;
-}
-
-#gnb-mega-panel-services .gnb_mega__inner--sections {
-  height: 474px;
-}
-
 #gnb-mega-panel-services .gnb_mega__head {
-  padding-top: 30px;
+  padding-top: 26px;
   padding-bottom: 30px;
 }
 
 /* Support — Figma 3670:14792 (#gnb-mega-panel-support) */
-#gnb-mega-panel-support.gnb_mega--simple.gnb_mega--sections.gnb_mega--support.is-mounted {
-  max-height: 594px;
-}
-
-#gnb-mega-panel-support .gnb_mega__inner--sections {
-  height: 100%;
-}
-
 #gnb-mega-panel-support .gnb_mega__head {
-  padding-top: 30px;
+  padding-top: 26px;
   padding-bottom: 30px;
 }
 
-#gnb-mega-panel-services .gnb_mega__columns {
-  display: grid;
-  flex: 1;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
+#gnb-mega-panel-services .gnb_mega__columns,
+#gnb-mega-panel-support .gnb_mega__columns,
+#gnb-mega-panel-careers .gnb_mega__columns,
+#gnb-mega-panel-company .gnb_mega__columns {
+  flex: 0 0 auto;
+  align-self: stretch;
+  height: auto;
   min-width: 0;
 }
 
@@ -1874,11 +1878,10 @@ html.is-mega-open-scroll-lock body {
 #gnb-mega-panel-company .gnb_mega__col {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   min-width: 0;
   margin: 0;
-  padding: 34px 0;
-  
+  padding: 34px 0 0;
 }
 .gnb_mega__col +  .gnb_mega__col{
   border-left: 1px solid #ebebeb;
@@ -1901,26 +1904,21 @@ html.is-mega-open-scroll-lock body {
 #gnb-mega-panel-company .gnb_mega__col-list {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
-#gnb-mega-panel-services .gnb_mega__item {
-  min-height: 100px;
-}
-
-#gnb-mega-panel-support .gnb_mega__item {
-  min-height: 100px;
-}
-
-#gnb-mega-panel-support .gnb_mega__item:not(:has(.gnb_mega__item-desc)) {
-  min-height: 74px;
-}
-
-#gnb-mega-panel-careers .gnb_mega__item {
-  min-height: 86px;
-}
-
+#gnb-mega-panel-services .gnb_mega__item,
+#gnb-mega-panel-support .gnb_mega__item,
+#gnb-mega-panel-careers .gnb_mega__item,
 #gnb-mega-panel-company .gnb_mega__item {
-  min-height: 100px;
+  min-height: 0;
+  height: auto;
+}
+
+#gnb-mega-panel-services .gnb_mega__columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
 }
 
 #gnb-mega-panel-services .gnb_mega__columns .gnb_mega__item.is-disabled {
@@ -1949,10 +1947,8 @@ html.is-mega-open-scroll-lock body {
 
 #gnb-mega-panel-support .gnb_mega__columns {
   display: grid;
-  flex: 1;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
-  min-width: 0;
 }
 
 @media (min-width: 1520px) {
@@ -1962,14 +1958,6 @@ html.is-mega-open-scroll-lock body {
 }
 
 /* Careers — Figma 2769:35857 (#gnb-mega-panel-careers) */
-#gnb-mega-panel-careers.gnb_mega--simple.gnb_mega--sections.gnb_mega--careers.is-mounted {
-  max-height: 304px;
-}
-
-#gnb-mega-panel-careers .gnb_mega__inner--sections {
-  height: 304px;
-}
-
 #gnb-mega-panel-careers .gnb_mega__columns .gnb_mega__item.is-disabled {
   cursor: not-allowed;
 }
@@ -1981,10 +1969,8 @@ html.is-mega-open-scroll-lock body {
 
 #gnb-mega-panel-careers .gnb_mega__columns {
   display: grid;
-  flex: 1;
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
-  min-width: 0;
 }
 
 @media (min-width: 1520px) {
@@ -1994,16 +1980,8 @@ html.is-mega-open-scroll-lock body {
 }
 
 /* Company — Figma 3670:14673 (#gnb-mega-panel-company) */
-#gnb-mega-panel-company.gnb_mega--simple.gnb_mega--sections.gnb_mega--company.is-mounted {
-  max-height: 474px;
-}
-
-#gnb-mega-panel-company .gnb_mega__inner--sections {
-  height: 474px;
-}
-
 #gnb-mega-panel-company .gnb_mega__head {
-  padding-top: 30px;
+  padding-top: 26px;
   padding-bottom: 30px;
 }
 
@@ -2018,10 +1996,8 @@ html.is-mega-open-scroll-lock body {
 
 #gnb-mega-panel-company .gnb_mega__columns {
   display: grid;
-  flex: 1;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
-  min-width: 0;
 }
 
 @media (min-width: 1520px) {
@@ -2049,6 +2025,15 @@ html.is-mega-open-scroll-lock body {
   #gnb-mega-panel-company .gnb_mega__head {
     flex: 0 0 200px;
     padding-left: 16px;
+  }
+
+  #gnb-mega-panel-markets .gnb_mega__grid,
+  #gnb-mega-panel-services .gnb_mega__columns,
+  #gnb-mega-panel-support .gnb_mega__columns,
+  #gnb-mega-panel-careers .gnb_mega__columns,
+  #gnb-mega-panel-company .gnb_mega__columns {
+    min-width: 0;
+    max-width: calc(100vw - 200px);
   }
 }
 
@@ -2196,6 +2181,7 @@ html.is-mega-open-scroll-lock body {
   margin: 0;
   padding: 0;
   list-style: none;
+  background: #fff;
 }
 
 .gnb_mega__depth3-btn {
@@ -2224,6 +2210,7 @@ html.is-mega-open-scroll-lock body {
 }
 .gnb_mega__depth3-btn span{
     white-space: normal;
+    text-wrap: balance;
 }
 
 .gnb_mega__depth3-btn:hover:not(.is-active) {
@@ -2244,7 +2231,7 @@ html.is-mega-open-scroll-lock body {
   flex-direction: column;
   gap: 8px;
   min-width: 0;
-  padding: 30px 40px 40px;
+  padding: 30px 0 40px 0;
   box-sizing: border-box;
 }
 
@@ -2253,6 +2240,7 @@ html.is-mega-open-scroll-lock body {
   flex-direction: column;
   gap: 4px;
   margin-bottom: 30px;
+  padding: 0 38px 0 40px;
 }
 
 .gnb_mega__depth4-head {
@@ -2269,9 +2257,9 @@ html.is-mega-open-scroll-lock body {
 
 .gnb_mega__depth4-tit {
   margin: 0;
-  font-size: 34px;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 44px;
+  line-height: 34px;
   letter-spacing: -0.34px;
 }
 
@@ -2304,7 +2292,7 @@ html.is-mega-open-scroll-lock body {
 }
 
 .gnb_mega__depth4-desc {
-  max-width: 770px;
+  max-width: 854px;
   font-size: 15px;
   line-height: 23px;
   color: #666;
@@ -2316,20 +2304,20 @@ html.is-mega-open-scroll-lock body {
 
 .gnb_mega__products {
   display: grid;
-  grid-template-columns: repeat(2, 384px);
-  gap: 8px;
+  grid-template-columns: repeat(2, 408px);
+  gap: 0;
   width: 100%;
   max-width: 100%;
 }
 
+/* Product card — default Figma 6379:11158 · hover Figma 6379:11101 */
 .gnb_mega__product {
   position: relative;
   display: block;
-  width: 384px;
+  width: 408px;
   max-width: 100%;
-  height: 120px;
-  border-radius: 4px;
-  background: #f5f7fa;
+  height: 132px;
+  background: #fff;
   color: inherit;
   text-decoration: none;
   box-sizing: border-box;
@@ -2338,29 +2326,41 @@ html.is-mega-open-scroll-lock body {
 }
 
 .gnb_mega__product:hover {
-  background: #eef1f6;
-}
-
-.gnb_mega__product:hover .gnb_mega__product-tit {
-  text-decoration: underline;
+  background: #f5f7fa;
 }
 
 .gnb_mega__product-text {
+  max-width: 278px;
+  padding: 10px 10px 10px 40px;
   position: relative;
-  padding: 20px 24px;
-  max-width: 290px;
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .gnb_mega__product-tit {
   margin: 0 0 5px;
+  max-width: 240px;
   font-size: 18px;
   font-weight: 600;
   line-height: 26px;
   color: #222;
+  /* text-decoration: underline; */
+  /* text-decoration-thickness: 1px; */
+  /* text-underline-position: from-font; */
+  transition: text-decoration-color 0.2s ease;
+}
+
+.gnb_mega__product:hover .gnb_mega__product-tit {
+  text-decoration: underline; 
+    text-decoration-thickness: 1px; 
+    text-underline-position: from-font;
 }
 
 .gnb_mega__product-sub {
   margin: 0;
+  max-width: 240px;
   font-size: 15px;
   line-height: 23px;
   color: #666;
@@ -2596,11 +2596,16 @@ html.is-mega-open-scroll-lock body {
   background: #fff;
   border: 1px solid rgb(15 31 69 / 80%);
   border-radius: 4px;
-  transition: border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .gnb_search__tag:hover {
   border-color: #0f1f45;
+  background: #0f1f45;
+  color: #fff;
 }
 
 .gnb_menu_wrap .btn_global {

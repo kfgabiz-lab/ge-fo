@@ -55,6 +55,8 @@ export type ProductDownloadItem = {
   versions?: string[];
   files: ProductDownloadFile[];
   description?: ProductDownloadDescription;
+  /** Search results — title/file name highlight (inline or suffix) */
+  highlight?: string;
 };
 
 export type ProductOtherItem = {

@@ -13,7 +13,7 @@ export const servicesMegaMenu: GnbSimpleMegaMenu = {
       items: [
         {
           id: "Service-center",
-          title: "Service center",
+          title: "Service Center",
           description: "General service info & requests",
           href: "/services/service-center",
         },

@@ -74,8 +74,7 @@ export const companyMegaMenu: GnbSimpleMegaMenu = {
         {
           id: "careers-at-lsea",
           title: "Careers at LS ELECTRIC America",
-          description:
-            "Read our latest blog posts.",
+          description: "Read our latest blog posts",
           href: "/company/careers",
         },
         {

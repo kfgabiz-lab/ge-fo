@@ -1,93 +1,97 @@
 # GE-FO 프로젝트 구조
 
 > Next.js(App Router) 기반 FO(Front Office) 프로젝트 — 포트 3002
-> `ge-fo`(https://github.com/kfgabiz-lab/ge-fo) 전체 반영 이후 기준으로 갱신됨
+> **본 문서는 fo/src 하위에 실제로 존재하는 파일·구조만 기준으로 작성됨** (2026-07 기준, Glob/Read로 직접 확인)
+> `ge-fo`(https://github.com/kfgabiz-lab/ge-fo) 전체 반영본 기준의 대규모 구조는 현재 코드에 없음 — 지금은 `main` + `markets`(data-center, power-grid) 2개 메뉴만 마이그레이션된 상태
 > 전체 tsx 파일별 목록·data slug 매핑은 [`fo-data-binding.md`](./fo-data-binding.md) 참고
 
 ---
 
 ## 1. 라우트 구조 개요
 
-기존에는 `main`(홈) 페이지 1개만 존재했으나, `ge-fo` 전체 반영 이후 실제 서비스 페이지들이 대거 추가되어 **route group 기반의 다중 섹션 구조**로 확장되었습니다.
+현재 `src/app` 하위에 실제로 존재하는 라우트는 `main`(홈)과 `markets`(data-center, power-grid) 뿐입니다. company/products-systems/search/services/support/guide 등 다른 메뉴는 아직 마이그레이션되지 않았습니다.
 
 ```
 src/app/
-├── layout.tsx                  # [Root Layout] 전역 CSS·메타데이터·공통 유틸 마운트
-├── page.tsx                    # Root 페이지
+├── layout.tsx                  # [Root Layout] 전역 CSS·메타데이터 마운트
+│                                # ※ src/app/page.tsx(루트 페이지)는 존재하지 않음
 │
-├── main/                       # 홈(메인) — route group 밖의 독립 라우트
-│   ├── layout.tsx               # Header + {children} + Footer 조합
+├── main/                       # 홈(메인)
+│   ├── layout.tsx               # MainHeader + {children} + MainFooter
 │   ├── page.tsx                 # 메인 페이지 — 섹션 컴포넌트 조립
-│   └── components/              # 메인 페이지 전용 섹션 (8개 섹션)
+│   └── components/              # 메인 페이지 전용 섹션 8개
+│       ├── MainVisual.tsx, VideoSwiper.tsx, BannerSwiper.tsx
+│       ├── MainInfo.tsx, WhatWeDoSwiper.tsx
+│       ├── MainCards.tsx, MainProducts.tsx, IconCards.tsx
+│       └── mainVisualData.ts    # MainVisual 전용 데이터 (컴포넌트 폴더에 colocate)
 │
-├── (company, markets, products-systems, search, services, support)/
-│   └── layout.tsx               # Route Group 공통 레이아웃 (GNB/Footer 등)
-│       ├── company/             # 회사소개 — 연혁, 채용, 뉴스룸(Press/Blog/Articles), ESG, 이벤트 등
-│       ├── markets/             # 산업분야별 솔루션 — 데이터센터/전력망/산업/오일가스/공공인프라 등
-│       ├── products-systems/    # 제품/시스템 — HVDC, Micro Grid, XEMS, 모터제어, VFD 등 제품 상세
-│       ├── search/               # 통합검색 (문서/미디어/페이지/제품 탭별 검색)
-│       ├── services/             # 서비스 — 엔지니어링 트레이닝, 서비스센터, 보증정책, 교육신청
-│       └── support/               # 고객지원 — Contact Us, Download Center, Tech Hub, Where to Buy, Connect Portal
-│
-└── guide/                      # 개발용 컴포넌트/섹션/GNB/아이콘 가이드 페이지 (운영 배포 대상 아님)
-    ├── layout.tsx
-    ├── page.tsx
-    ├── components/              # 컴포넌트 가이드
-    ├── gnb/                     # GNB 가이드
-    ├── ico/                     # 아이콘 가이드
-    └── sections/                # 섹션 가이드
+└── markets/                    # 산업분야별 솔루션 (route group 괄호 없음)
+    ├── layout.tsx               # SubHeader + {children} + SubFooter
+    ├── components/              # markets 공용 섹션 컴포넌트 15개
+    │   ├── MarketsHero.tsx (variant: "default" | "key-visual")
+    │   ├── MarketsIntro.tsx, MarketsExplore.tsx, MarketsStats.tsx
+    │   ├── MarketsReferences.tsx, MarketsReferencesModal.tsx
+    │   ├── MarketsBenefits.tsx, MarketsSolutions.tsx
+    │   ├── MarketsSustainability.tsx, MarketsSmartGrid.tsx, MarketsSmartGridDiagram.tsx
+    │   ├── MarketsWhy.tsx, MarketsProducts.tsx, MarketsFaq.tsx
+    │   └── MarketsHeroScrollDown.tsx
+    ├── data/                    # route 전용 정적 데이터 — 페이지별로 분리
+    │   ├── marketsContent.ts          # 공용 타입 + 공용 references 등
+    │   ├── marketsDataCenterContent.ts
+    │   ├── marketsPowerGridContent.ts
+    │   └── marketsSolutions.ts
+    ├── lib/
+    │   └── scrollToMarketsHeroNextSection.ts
+    ├── data-center/page.tsx      # 조립: Hero, Intro, Stats, References, Benefits, Solutions, Why, Products, CommonBanner01, HighlightNewsSection, Faq
+    └── power-grid/page.tsx       # 조립: Hero(key-visual), Intro, Explore(wide-tabs), References, Benefits, Sustainability, SmartGrid, Why, Products(badgesType2Only), CommonBanner01, HighlightNewsSection, Faq
+
+# 잔여 파일 (정리 필요, 사용자 확인 대상)
+src/app/()/products-systems/data/productDetailContent.ts
+  # 이름 없는 route group "()" 아래 데이터 파일만 남아있음 — 대응하는 page.tsx 없음
 ```
 
-각 route group(`company`, `markets`, `products-systems`, `search`, `services`, `support`) 내부는 대체로 다음 패턴을 따릅니다:
-
-```
-{route-group}/
-├── page.tsx                    # 대분류 목록/랜딩 페이지
-├── {세부기능}/
-│   ├── page.tsx                 # 세부 페이지
-│   └── components/              # 해당 페이지 전용 컴포넌트 (Pascal 네이밍)
-├── components/                  # 대분류 공용 컴포넌트
-└── data/                        # 대분류 전용 정적 데이터 (.ts)
-```
+markets 하위 2개 페이지(`data-center`, `power-grid`)는 위 공용 컴포넌트를 공유하되, 컴포넌트마다 `variant`/`items`/`layout` 등 **props로 페이지별 차이를 흡수**하는 패턴을 씁니다 (예: `MarketsHero`의 `variant="default"`(data-center, 변경 없음) vs `variant="key-visual"`(power-grid, 신규)). 새 markets 메뉴를 추가할 때는 이 패턴을 우선 검토합니다.
 
 ---
 
-## 2. 레이아웃 영역 구조 (main 홈 기준)
+## 2. 레이아웃 영역 구조
 
+### main
 ```
-┌─────────────────────────────────────────────────────┐
-│  app/layout.tsx  (Root Layout)                      │
-│  └─ <html>, <body> 전체 감싸기                        │
-│     전역 CSS (reset, fonts, globals)                 │
-│     공통 유틸 컴포넌트 (히스토리/스크롤 초기화)            │
-│                                                     │
-│  ┌───────────────────────────────────────────────┐  │
-│  │  app/main/layout.tsx  (Main Layout)           │  │
-│  │                                               │  │
-│  │  ┌─────────────────────────────────────────┐  │  │
-│  │  │  components/common/header.tsx           │  │  │
-│  │  │  GNB + 메가메뉴 (최상단 고정 영역)          │  │  │
-│  │  └─────────────────────────────────────────┘  │  │
-│  │                                               │  │
-│  │  ┌─────────────────────────────────────────┐  │  │
-│  │  │  app/main/page.tsx  (메인 콘텐츠)         │  │  │
-│  │  │  [섹션1] MainVisual    (풀스크린 비주얼)   │  │  │
-│  │  │  [섹션2] MainInfo      (브랜드 소개)      │  │  │
-│  │  │  [섹션3] WhatWeDoSwiper (슬라이더)        │  │  │
-│  │  │  [섹션5] MainCards      (카드 목록)       │  │  │
-│  │  │  [섹션6] MainProducts   (제품 목록)       │  │  │
-│  │  │  [섹션8] IconCards      (아이콘 카드)     │  │  │
-│  │  └─────────────────────────────────────────┘  │  │
-│  │                                               │  │
-│  │  ┌─────────────────────────────────────────┐  │  │
-│  │  │  components/common/footer.tsx           │  │  │
-│  │  │  뉴스레터 구독 폼 + SNS + 법적고지 (최하단)  │  │  │
-│  │  └─────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│  app/layout.tsx (Root Layout)                │
+│  └─ <html>, <body> 전체 감싸기, 전역 CSS       │
+│                                               │
+│  ┌─────────────────────────────────────────┐ │
+│  │ app/main/layout.tsx                     │ │
+│  │  ┌───────────────────────────────────┐  │ │
+│  │  │ components/layout/main/MainHeader │  │ │
+│  │  └───────────────────────────────────┘  │ │
+│  │  ┌───────────────────────────────────┐  │ │
+│  │  │ app/main/page.tsx                 │  │ │
+│  │  │  MainVisual → MainInfo →          │  │ │
+│  │  │  WhatWeDoSwiper →                 │  │ │
+│  │  │  HighlightNewsSection(variant     │  │ │
+│  │  │   ="main") → MainCards →          │  │ │
+│  │  │  MainProducts → CommonBanner01 →  │  │ │
+│  │  │  IconCards → CommonBanner03Link   │  │ │
+│  │  └───────────────────────────────────┘  │ │
+│  │  ┌───────────────────────────────────┐  │ │
+│  │  │ components/layout/main/MainFooter │  │ │
+│  │  └───────────────────────────────────┘  │ │
+│  └─────────────────────────────────────────┘ │
+└───────────────────────────────────────────────┘
 ```
 
-> route group(company/markets/products-systems/search/services/support) 페이지들은 `(그룹)/layout.tsx`에서 동일한 GNB/Footer 패턴을 공유합니다.
+### markets (data-center / power-grid)
+```
+app/markets/layout.tsx
+ ├─ components/layout/markets/SubHeader
+ ├─ {children}  # data-center/page.tsx 또는 power-grid/page.tsx
+ └─ components/layout/markets/SubFooter
+```
+
+두 레이아웃 모두 GNB/메가메뉴는 `components/layout/shared/` 하위 공용 컴포넌트(`GnbMenu`, `GnbMegaPanel`, `gnb-mega/*` 등)를 가져다 씁니다.
 
 ---
 
@@ -99,57 +103,50 @@ fo/
 │   ├── fo-structure.md              # 프로젝트 구조 문서 (현재 파일)
 │   └── fo-data-binding.md           # tsx 파일 ↔ BO data slug 매핑표
 │
-├── public/                          # 정적 파일 (이미지, 아이콘 900여개, 폰트)
+├── public/                          # 정적 파일 (이미지, 아이콘, 폰트)
 │
 ├── src/
 │   ├── app/                         # Next.js App Router — 상세는 1절 참고
 │   │
-│   ├── components/                  # 공용 컴포넌트 (카테고리별 분리, 총 73개 tsx)
-│   │   ├── banners/                  # 배너 컴포넌트 (PascalCase 네이밍)
-│   │   ├── common/                   # 헤더/푸터/GNB(+메가메뉴)/공용 배너(kebab-case)
-│   │   ├── content/                  # 콘텐츠 섹션 (뉴스 하이라이트, 제품 특징)
-│   │   ├── dev/                      # 개발용 디버그 테이블
-│   │   ├── faq/                      # FAQ 컴포넌트
-│   │   ├── form/                     # 폼 관련 (날짜선택, 셀렉트, 필드 아이콘)
-│   │   ├── guide/                    # 가이드 페이지용 컴포넌트 (app/guide 대응)
-│   │   ├── layout/                   # 레이아웃 보조 (Lenis 스크롤, markets 서브헤더/푸터)
-│   │   ├── main/                     # 메인 페이지 섹션 컴포넌트 (kebab-case, app/main/components와 중복 — 4절 참고)
-│   │   ├── modals/                   # 모달 (개인정보 정책 등)
-│   │   ├── pagination/               # 페이지네이션
-│   │   ├── product/                  # 제품 뱃지 등
-│   │   ├── swiper/                   # Swiper 컨트롤 (네비/페이지네이션 버튼)
-│   │   ├── ui/                       # 기본 UI 요소 (버튼, 탭)
-│   │   └── video/                    # 영상 플레이어
+│   ├── components/                  # 공용 컴포넌트 (실제 존재하는 카테고리만)
+│   │   ├── banners/                  # CommonBanner01, CommonBanner03Link (PascalCase)
+│   │   ├── content/                  # HighlightNewsSection
+│   │   ├── faq/                      # CommonFaq
+│   │   ├── layout/                   # LenisScrollProvider, ScrollToTop*, HistoryReloadOnNavigate
+│   │   │   ├── main/                  # MainHeader, MainFooter
+│   │   │   ├── markets/               # SubHeader, SubFooter
+│   │   │   └── shared/                # GnbMenu, GnbMegaPanel, GnbGlobalMenu/Trigger, GnbSearchPanel, HeaderBreadcrumb
+│   │   │       └── gnb-mega/           # GnbCareersMegaPanel 등 6개 도메인별 메가패널 + GnbMegaItemLink
+│   │   ├── modals/                   # PrivacyPolicyModal
+│   │   ├── product/                  # ProductAwardBadge
+│   │   ├── swiper/                   # BannerNavButtons, SwiperBar/DotPagination, SwiperNavButtons
+│   │   └── ui/                       # FaqItem, TabButton
 │   │
-│   ├── hooks/                       # 공용 커스텀 React Hook
-│   │   ├── use-header-scroll.ts      # 스크롤 방향에 따른 헤더 상태 관리
-│   │   └── use-media-query.ts        # 반응형 감지 훅
+│   ├── hooks/                       # useCountUp, useInView, useMediaQuery
 │   │
 │   ├── lib/                         # 순수 유틸리티 함수
 │   │   ├── api.ts                    # API fetch 공통 유틸
-│   │   ├── googleMaps/                # Google Maps 로더 (Where to Buy 지도)
-│   │   ├── navigation/                # GNB 닫기 이벤트, 히스토리 네비게이션 판별
-│   │   ├── utils/                     # 날짜·숫자·문자열 포맷 유틸
-│   │   ├── lenisScroll.ts / lenisOptions.ts / gnbScrollState.ts  # 신규 — Lenis 부드러운 스크롤 연동
-│   │   ├── youtubeEmbed.ts / useYoutubeInViewPlayback.ts         # 신규 — 유튜브 임베드/뷰포트 재생 제어
-│   │   ├── productBadge.ts           # 신규 — 제품 수상 뱃지 로직
-│   │   └── useModalFocusTrap.ts      # 신규 — 모달 포커스 트랩
+│   │   ├── navigation/                # crossSectionNav, gnbCloseEvent, historyNavigation
+│   │   ├── createThrottledScrollHandler.ts
+│   │   ├── lenisScroll.ts / lenisOptions.ts / gnbScrollState.ts   # Lenis 부드러운 스크롤 연동
+│   │   ├── youtubeEmbed.ts           # 유튜브 임베드 유틸
+│   │   ├── productBadge.ts           # 제품 수상 뱃지 로직
+│   │   └── useModalFocusTrap.ts      # 모달 포커스 트랩
 │   │
-│   ├── data/                        # 정적 데이터 (API 연동 전 목업 포함)
+│   ├── data/                        # 전역 정적 데이터 (route 전용 데이터는 각 app/{route}/data/ 참고)
 │   │   ├── gnb/                       # GNB 메뉴 구조 + 메가메뉴 데이터(mega/)
-│   │   ├── highlight-news/            # 뉴스 하이라이트 목업
-│   │   ├── main/                      # 메인 페이지 목업
-│   │   ├── search/                    # 검색 탭별(문서/미디어/페이지/제품) 콘텐츠
-│   │   ├── services/                  # 서비스센터/트레이닝/보증정책 콘텐츠
-│   │   ├── support/                   # Contact Us/Download Center/Tech Hub/Where to Buy 콘텐츠
-│   │   └── breadcrumbConfig.ts, commonAssets.ts, pageIndex.ts 등  # 공용 데이터
+│   │   ├── highlightNews/             # 뉴스 하이라이트 (index/main/markets)
+│   │   ├── services/                  # 엔지니어링 트레이닝 상세 콘텐츠
+│   │   ├── search/                    # 통합검색 콘텐츠
+│   │   ├── support/                   # Connect Portal/Download Center 콘텐츠
+│   │   └── breadcrumbConfig.ts, commonAssets.ts, footerAffiliateOptions.ts, privacyPolicyContent.ts, gnbExploreAllProducts.ts
 │   │
-│   ├── types/                       # 전역 TypeScript 타입 정의
+│   ├── types/                       # 전역 TypeScript 타입 (highlightNews.ts)
 │   │
-│   └── assets/css/                  # 전역 스타일시트 (ls-publish 기준)
+│   └── assets/css/                  # 전역 스타일시트
 │       ├── reset.css / fonts.css / globals.css   # 초기화·폰트·디자인 토큰
-│       ├── main.css / markets.css / support.css / services.css / company.css / devices-systems.css / search.css / training.css  # 페이지별 스타일
-│       └── components/                # gnb.css, MainFooter.css, CommonFooter.css, SubFooter.css 등
+│       ├── main.css / markets.css                # 마이그레이션된 페이지별 스타일 (support/services/company 등은 없음)
+│       └── components/                # product-award-badge.css, MainFooter.css, gnb.css
 │
 ├── .env.local                       # 환경변수 (NEXT_PUBLIC_API_URL)
 ├── next.config.ts                   # Next.js 설정 (이미지 remotePatterns 등)
@@ -157,29 +154,33 @@ fo/
 └── package.json                     # 의존성 (포트: 3002)
 ```
 
----
-
-## 4. ⚠️ 확인 필요 — 중복/네이밍 불일치
-
-`ge-fo` 전체 반영 과정에서 유입된 코드 중, **같은 목적으로 보이는 파일이 서로 다른 위치·네이밍 컨벤션으로 중복 존재**합니다. 임의로 정리하지 않고 목록만 남겨두며, 실제 사용 여부 확인 후 별도로 정리 필요:
-
-| 항목 | 위치 A | 위치 B |
-|---|---|---|
-| 배너 컴포넌트 | `components/banners/CommonBanner01.tsx` (PascalCase) | `components/common/banners/common-banner01.tsx` (kebab-case) |
-| 메인 섹션 컴포넌트 | `app/main/components/MainVisual.tsx` (PascalCase) | `components/main/main-visual.tsx` (kebab-case) |
-| Cross-section nav 유틸 | `lib/navigation/cross-section-nav.ts` | `lib/navigation/crossSectionNav.ts` |
-| 뉴스 하이라이트 데이터 | `data/highlightNews.ts` | `data/highlight-news/index.ts`, `main.ts` |
-| 뉴스 하이라이트 컴포넌트 | `components/content/HighlightNewsSection.tsx` | `components/common/content/highlight-news-section.tsx` |
+> `data/`, `services/` 등 전역 폴더와 별개로, markets처럼 **route 전용 데이터는 `app/{route}/data/`에 분리 배치**하는 패턴이 새로 생겼습니다(main은 `mainVisualData.ts` 하나만 컴포넌트 폴더에 colocate). 새 메뉴를 마이그레이션할 때 데이터 위치는 이 두 패턴 중 어느 쪽을 따를지 확인 후 결정합니다.
 
 ---
 
-## 5. 신규 주요 의존성 (package.json 기준)
+## 4. 재사용 패턴 — markets 공용 컴포넌트의 variant/props 분기
+
+`markets/components/*`는 data-center·power-grid 두 페이지가 공유하되, 페이지별 차이는 **props로만 흡수**하고 기존 분기(예: data-center용 `"default"`)는 절대 변경하지 않는 방식으로 확장합니다.
+
+| 컴포넌트 | 분기 방식 | data-center | power-grid |
+|---|---|---|---|
+| `MarketsHero` | `variant` prop | `"default"`(변경 없음) | `"key-visual"`(스티키 래퍼, `MarketsHeroScrollDown`, `secondaryCta`) |
+| `MarketsIntro` | `titleLines`/`text`/`paragraphs` prop | `titleLines` + `text` | `titleLines` + `paragraphs`(여러 단락) |
+| `MarketsExplore` | `layout` prop | (미사용) | `layout="wide-tabs"` |
+| `MarketsProducts` | `badgesType2Only` prop | 미지정(기본) | `badgesType2Only`(수상 뱃지 타입2만 표시) |
+| `MarketsReferences` | `items` prop | `dataCenterReferences` | `powerGridReferences` |
+
+신규 markets 메뉴를 추가할 때는 이 표의 컴포넌트부터 재사용 가능 여부를 확인하고, 필요한 차이만 새 prop으로 추가합니다(새 파일 생성 지양).
+
+---
+
+## 5. 주요 의존성 (package.json 기준)
 
 | 패키지 | 용도 |
 |---|---|
 | `lenis` | 부드러운 스크롤(smooth scroll) 처리 |
 | `swiper` | 슬라이더/캐러셀 (배너, 비주얼, What We Do 등) |
-| `@mui/material`, `@mui/x-date-pickers`, `@mui/x-data-grid` | UI 컴포넌트 (Select, DatePicker, 가이드용 데이터 테이블 등) |
+| `@mui/material`, `@mui/x-date-pickers`, `@mui/x-data-grid` | UI 컴포넌트 (Select, DatePicker 등) |
 | `dayjs` | 날짜 처리 |
 
 ---

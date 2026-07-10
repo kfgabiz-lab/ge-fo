@@ -6,8 +6,24 @@ export const downloadCenterPage = {
   description:
     "You can download manuals and various files related to LS ELECTRIC products.",
   searchPlaceholder: "Find products, solutions, or resources for your business",
+  searchPlaceholderMobile: "Find products, solutions, or...",
   popularSearchLabel: "Popular Keywords :",
+  popularSearchLabelMobile: "Popular Search :",
+  filterByLabel: "Filter by",
+  sortByLabel: "Sort by",
+  applyLabel: "Apply",
+  mobileSortDefault: "Document Type",
+  mobileSortOptions: [
+    "Document Type",
+    "Most Recent",
+    "A to Z",
+    "Z to A",
+  ] as const,
   popularTags: ["MCCB", "AC Drives", "VCB", "PLC", "How to size a contactor for motor control?"],
+  popularTagsMobile: {
+    row1: ["MCCB", "AC Drives", "VCB", "PLC"],
+    row2: ["How to size a contactor for motor control?"],
+  },
   totalResults: 2658,
   pageSize: 10,
 } as const;
@@ -32,7 +48,10 @@ export type DownloadActiveFilterChip = {
   value: string;
 };
 
-/** Figma 3670:31496 — Download Center / No Data */
+/** Figma 6561:73639 — Download Center / No Data search field */
+export const downloadCenterNoDataSearchQuery = "XYZ" as const;
+
+/** Figma 5565:128770 — Download Center / No Data empty state */
 export const downloadCenterEmptyContent = {
   title: "We could not find any results",
   iconSrc: emptyStateIconSrc,
@@ -47,7 +66,7 @@ export const downloadCenterEmptyContent = {
     linkLabel: "Contact Us",
     after: " page.",
   },
-  contactHref: "",
+  contactHref: "/support/contact-us",
 } as const;
 
 export const downloadCenterActiveFilterDefaults: DownloadActiveFilterChip[] = [
@@ -63,46 +82,41 @@ export const downloadCenterActiveFilterDefaults: DownloadActiveFilterChip[] = [
 
 export const downloadProductCategories: DownloadCategoryOption[] = [
   {
-    id: "lv-motor",
-    label: "LV Motor Control",
-    count: 100,
-    hasArrow: true,
-    nested: [
-      { id: "magnetic-contactor", label: "Magnetic Contactors", count: 42 },
-      { id: "manual-motor-starter", label: "Manual Motor Starters", count: 18 },
-      { id: "empr", label: "EMPR / Overload Relays", count: 28 },
-      { id: "soft-starter", label: "Soft Starters", count: 12 },
-    ],
-  },
-  {
-    id: "lv-auto",
-    label: "LV Automation",
-    count: 100,
-    hasArrow: true,
-    nested: [
-      { id: "plc", label: "PLC (XGT / XGB)", count: 46 },
-      { id: "hmi", label: "HMI (XGT Panel)", count: 22 },
-      { id: "ac-drives", label: "AC Drives", count: 24 },
-      { id: "servo-motion", label: "Servo & Motion", count: 8 },
-    ],
-  },
-  {
-    id: "lv-pd",
-    label: "LV Power Distribution",
-    count: 100,
+    id: "lv-products",
+    label: "LV Products and Systems",
+    count: 124,
     hasArrow: true,
     defaultExpanded: true,
     nested: [
-      { id: "mccb", label: "MCCB", count: 352 },
-      { id: "mcb-rccb", label: "MCB / RCCB", count: 120 },
-      { id: "acb", label: "ACB", count: 88 },
-      { id: "metering", label: "Metering & Power Monitoring", count: 40 },
+      {
+        id: "acb-pcb",
+        label: "Air Circuit Breaker / Power Circuit Breaker",
+        count: 60,
+        defaultChecked: true,
+      },
+      {
+        id: "mccb",
+        label: "Molded Case Circuit Breaker",
+        count: 60,
+        defaultChecked: true,
+      },
     ],
   },
-  { id: "mv-pd", label: "MV Power Distribution", count: 352 },
-  { id: "dc-device", label: "DC Device", count: 100 },
-  { id: "hv-system", label: "HV System", count: 30 },
-  { id: "software-cat", label: "Software", count: 0 },
+  {
+    id: "mv-products",
+    label: "MV Products and Systems",
+    count: 200,
+    hasArrow: true,
+  },
+  { id: "hv-systems", label: "HV Systems", count: 98, hasArrow: true },
+  { id: "dc-products", label: "DC Products", count: 352, hasArrow: true },
+  {
+    id: "industrial-auto",
+    label: "Industrial Automation and Control",
+    count: 100,
+    hasArrow: true,
+  },
+  { id: "software-cat", label: "Software", count: 30, hasArrow: true },
 ];
 
 export const downloadDocumentTypes: DownloadFilterOption[] = [

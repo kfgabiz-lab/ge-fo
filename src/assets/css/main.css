@@ -7,8 +7,8 @@
       width: 100%;
       background: #000;
       position: relative;
-      height: calc(100vh - 78px);
-      max-height: calc(100vh - 78px);
+      height: calc(100vh - 70px);
+      max-height: calc(100vh - 70px);
     }
 
     .video-swiper {
@@ -444,10 +444,16 @@
     }
   }
 
-  /* Notice — Figma 1335:19534 */
+  /* Notice — Figma 6316:243987 Banner_Hover (default) · 6316:243988 Banner_Default (hover) */
   section.main_notic {
-    background: #F5F7FA;
-    border-bottom: 1px solid var(--color-border-light, #e8e8e8);
+    background: #0C1625;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  section.main_notic:has(.item:hover) {
+    background: #FFFFFF;
   }
 
   section.main_notic .inner {
@@ -461,15 +467,17 @@
     align-items: center;
     justify-content: space-between;
     gap: 40px;
-    min-height: 50px;
-    padding: 24px 0;
-    color: inherit;
+    min-height: 70px;
+    padding: 20px 0;
+    box-sizing: border-box;
+    color: #fff;
     text-decoration: none;
     transition: background-color 0.2s ease;
   }
 
   section.main_notic .item:hover {
-    /* background-color: rgb(15 31 69 / 3%); */
+    background-color: transparent;
+    color: #222;
   }
 
   section.main_notic .tit_area {
@@ -477,47 +485,65 @@
     align-items: center;
     min-width: 0;
     flex: 1;
-    gap: 0;
+    gap: 16px;
   }
-section.main_notic .tit_area .tit{
-  display: flex;
-  gap: 8px;
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 500;
-  color: #0F1F45;
-  align-items: center;
-}
+
+  section.main_notic .tit_area .tit {
+    display: flex;
+    gap: 8px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    align-items: center;
+    transition: color 0.2s ease;
+  }
+
   section.main_notic .tit_area img {
     flex-shrink: 0;
     display: block;
     width: 20px;
     height: 20px;
+    transition: filter 0.2s ease;
+    filter: brightness(0) invert();
   }
 
   section.main_notic .txt {
-   font-family: "Pretendard Variable";
-   font-size: 20px;
-   font-style: normal;
-   font-weight: 500;
-   line-height: 28px; /* 140% */
-   transition: color 0.2s ease;
-   padding-left: 40px;
-   position: relative;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: inherit;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+    padding-left: 16px;
+    min-width: 0;
+    position: relative;
   }
-  section.main_notic .txt:before {
-    display:block;
-    content:"";
-    width: 1px;
-    height: 14px;
-    border-left: rgb(15 31 69 / 30%) 1px solid;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 20px;
+section.main_notic .txt:before {
+  display:inline-flex;
+  content:'';
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 14px;
+  background: rgb(255 255 255 / 30%);
+  top: 50%;
+  transform: translateY(-50%);
+}
+  section.main_notic .item:hover .txt:before {
+    background: rgb(34 34 34 / 30%);
+}
+  section.main_notic .item:hover .tit_area .tit {
+    color: inherit;
   }
+
+  section.main_notic .item:hover .tit_area img {
+    filter: none;
+  }
+
   section.main_notic .item:hover .txt {
-    color: var(--color-primary, #0f1f45);
+    color: inherit;
+    border-left-color: rgb(255 255 255 / 30%);
   }
 
   section.main_notic .btn_area {
@@ -525,24 +551,23 @@ section.main_notic .tit_area .tit{
   }
 
   section.main_notic .btn_area .btn-text-30 {
-    font-size: 14px;
-    line-height: 22px;
     min-height: auto;
-    gap: 6px;
-    color: var(--color-text, #222);
+    color: inherit;
     transition: color 0.2s ease;
   }
 
   section.main_notic .item:hover .btn-text-30 {
-    color: var(--color-primary, #0f1f45);
+    color: inherit;
   }
 
-  section.main_notic .item:hover .btn-text-30 .btn-text-30__icon {
-    background: var(--color-accent);
+  section.main_notic .item:hover .btn-text-30 .btn-text-30__icon,
+  section.main_notic .item:hover .btn-text-30:hover .btn-text-30__icon {
+    background: #E60040;
   }
 
   section.main_notic .item:hover .btn-text-30 .icon_arrow-14 {
-    filter: brightness(0) invert(1);
+    background-image: url("/ico/ico_arrow_right_14_white.svg");
+    filter: none;
   }
 
   section.main_info {
@@ -1832,9 +1857,17 @@ section.main_notic .tit_area .tit{
   }
 
   section.main_notic {
-    background: #f5f7fa;
-    border-bottom: none;
+    background: #fff;
+    border-bottom: 1px solid var(--color-border-light, #e8e8e8);
     min-height: 123px;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  section.main_notic:has(.item:hover) {
+    background: #0c1625;
+    border-bottom-color: #0c1625;
   }
 
   section.main_notic .inner {
@@ -1851,22 +1884,28 @@ section.main_notic .tit_area .tit{
   }
 
   section.main_notic .tit_area {
+    flex-direction: column;
     align-items: flex-start;
     gap: 6px;
   }
-section.main_notic .tit_area .tit{
-  display: flex;
-  gap: 6px;
-  font-size: 15px;
-  line-height: 23px;
-  font-weight: 500;
-  color: #0F1F45;
-  align-items: center;
-}
+
+  section.main_notic .tit_area .tit {
+    display: flex;
+    gap: 6px;
+    font-size: 15px;
+    line-height: 23px;
+    font-weight: 400;
+    color: #222;
+    align-items: center;
+    transition: color 0.2s ease;
+  }
+
   section.main_notic .tit_area img {
     width: 18px;
     height: 18px;
+    transition: filter 0.2s ease;
   }
+
   section.main_notic .txt {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -1875,14 +1914,21 @@ section.main_notic .tit_area .tit{
     font-size: 15px;
     line-height: 23px;
     white-space: normal;
-    margin-top: 6px;
+    margin-top: 0;
     padding-left: 0;
-    font-weight: 500;
+    border-left: none;
+    font-weight: 400;
     color: #222;
+    transition: color 0.2s ease;
   }
 
-  section.main_notic .txt:before {
-    display: none;
+  section.main_notic .item:hover .tit_area .tit,
+  section.main_notic .item:hover .txt {
+    color: #fff;
+  }
+
+  section.main_notic .item:hover .tit_area img {
+    filter: brightness(0) invert(1);
   }
 
   section.main_info {
@@ -2405,3 +2451,5 @@ section.main_info .info_box .info_box__count-live {
 section.main_info .info_box .info_box__count-ghost {
   visibility: hidden;
 }
+
+

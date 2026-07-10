@@ -1,5 +1,4 @@
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
-import { GNB_MEGA_SECTION_DESC } from "@/data/gnb/shared";
 import type { GnbSimpleMegaMenu } from "@/data/gnb/types";
 
 /** Figma 2769:35857 — Careers mega menu */
@@ -14,14 +13,14 @@ export const careersMegaMenu: GnbSimpleMegaMenu = {
       items: [
         {
           id: "careers-at-lsea",
-          title: "Careers at LSEA",
-          description: GNB_MEGA_SECTION_DESC,
+          title: "Careers at LS ELECTRIC America",
+          description: "Read our latest blog posts",
           href: "/company/careers",
         },
         {
           id: "search-and-apply",
           title: "Search and Apply",
-          description: GNB_MEGA_SECTION_DESC,
+          description: "Critical short-circuit protection for MV grids.",
           href: "https://www.linkedin.com/company/lselectricamerica/jobs/",
           external: true,
         },
