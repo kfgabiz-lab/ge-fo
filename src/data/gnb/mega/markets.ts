@@ -56,8 +56,8 @@ export const marketsMegaMenu: GnbSimpleMegaMenu = {
       id: "commercial-residential",
       title: "Commercial & Residential",
       descriptionLines: [
-        "Hotels / Retail Stores / Logistics /",
-        "Commercial Buildings / Residential",
+        "Hotels / Retail Stores / Logistics / Commercial /",
+        "Buildings / Residential",
       ],
       href: "/markets/commercial-residential",
     },

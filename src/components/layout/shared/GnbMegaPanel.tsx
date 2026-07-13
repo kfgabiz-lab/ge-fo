@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { GnbMegaDepth2, GnbMegaDepth3, GnbMegaProduct } from "@/data/gnb";
@@ -13,6 +14,8 @@ type GnbMegaPanelProps = {
   onDepth3Change: (depth3Id: string) => void;
   onLinkClick?: () => void;
 };
+
+const DEPTH_HOVER_DELAY_MS = 200;
 
 function findDepth3(
   categories: GnbMegaDepth2[],
@@ -73,6 +76,63 @@ export default function GnbMegaPanel({
   onLinkClick,
 }: GnbMegaPanelProps) {
   const router = useRouter();
+  const depth2HoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const depth3HoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+
+  const clearDepth2HoverTimeout = useCallback(() => {
+    if (depth2HoverTimeoutRef.current !== null) {
+      clearTimeout(depth2HoverTimeoutRef.current);
+      depth2HoverTimeoutRef.current = null;
+    }
+  }, []);
+
+  const clearDepth3HoverTimeout = useCallback(() => {
+    if (depth3HoverTimeoutRef.current !== null) {
+      clearTimeout(depth3HoverTimeoutRef.current);
+      depth3HoverTimeoutRef.current = null;
+    }
+  }, []);
+
+  const handleDepth2MouseEnter = useCallback(
+    (categoryId: string) => {
+      if (categoryId === activeCategoryId) {
+        return;
+      }
+
+      clearDepth2HoverTimeout();
+      depth2HoverTimeoutRef.current = setTimeout(() => {
+        onCategoryChange(categoryId);
+        depth2HoverTimeoutRef.current = null;
+      }, DEPTH_HOVER_DELAY_MS);
+    },
+    [activeCategoryId, clearDepth2HoverTimeout, onCategoryChange],
+  );
+
+  const handleDepth3MouseEnter = useCallback(
+    (depth3Id: string) => {
+      if (depth3Id === activeDepth3Id) {
+        return;
+      }
+
+      clearDepth3HoverTimeout();
+      depth3HoverTimeoutRef.current = setTimeout(() => {
+        onDepth3Change(depth3Id);
+        depth3HoverTimeoutRef.current = null;
+      }, DEPTH_HOVER_DELAY_MS);
+    },
+    [activeDepth3Id, clearDepth3HoverTimeout, onDepth3Change],
+  );
+
+  useEffect(() => {
+    return () => {
+      clearDepth2HoverTimeout();
+      clearDepth3HoverTimeout();
+    };
+  }, [clearDepth2HoverTimeout, clearDepth3HoverTimeout]);
 
   const navigateFromMegaLink = (
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -118,7 +178,8 @@ export default function GnbMegaPanel({
                         ? "gnb_mega__depth2-btn is-active"
                         : "gnb_mega__depth2-btn"
                     }
-                    onMouseEnter={() => onCategoryChange(category.id)}
+                    onMouseEnter={() => handleDepth2MouseEnter(category.id)}
+                    onMouseLeave={clearDepth2HoverTimeout}
                     onFocus={() => onCategoryChange(category.id)}
                     onClick={(event) => {
                       const href =
@@ -164,7 +225,8 @@ export default function GnbMegaPanel({
                       ? "gnb_mega__depth3-btn is-active"
                       : "gnb_mega__depth3-btn"
                   }
-                  onMouseEnter={() => onDepth3Change(item.id)}
+                  onMouseEnter={() => handleDepth3MouseEnter(item.id)}
+                  onMouseLeave={clearDepth3HoverTimeout}
                   onFocus={() => onDepth3Change(item.id)}
                   onClick={(event) => navigateFromMegaLink(event, item.href)}
                 >

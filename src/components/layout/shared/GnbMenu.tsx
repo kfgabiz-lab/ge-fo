@@ -1,18 +1,11 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GNB_CLOSE_EVENT } from "@/lib/navigation/gnbCloseEvent";
 import { createThrottledScrollHandler } from "@/lib/createThrottledScrollHandler";
-import { getLenisInstance, scrollWindowTo } from "@/lib/lenisScroll";
+import { getLenisInstance, getWindowScrollY, lockPageScroll, unlockPageScroll, scrollWindowTo } from "@/lib/lenisScroll";
 import {
   GNB_SCROLL_THROTTLE_MS,
   resolveAtTop,
@@ -24,11 +17,14 @@ import {
   gnbMegaPanelComponents,
   isGnbMegaPanelNavId,
 } from "@/components/layout/shared/gnb-mega";
+import GnbMegaCloseButton from "@/components/layout/shared/gnb-mega/GnbMegaCloseButton";
 import GnbGlobalTrigger, {
   GnbGlobalTriggerMainContent,
   GnbGlobalTriggerSubContent,
 } from "@/components/layout/shared/GnbGlobalTrigger";
+import GnbMobileGlobalSelect from "@/components/layout/shared/GnbMobileGlobalSelect";
 import GnbSearchPanel from "@/components/layout/shared/GnbSearchPanel";
+import GnbMobileMenuPanel from "@/components/layout/shared/GnbMobileMenuPanel";
 import {
   gnbNavItems,
   isDevicesMegaMenu,
@@ -165,6 +161,10 @@ function getHeaderClassName(
     classes.push("is-hidden");
   }
 
+  if (isMobileMenuOpen) {
+    classes.push("is-mobile-open");
+  }
+
   return classes.join(" ");
 }
 
@@ -288,8 +288,12 @@ export default function GnbMenu({
       setIsSearchOpen(false);
       setIsGlobalOpen(false);
       onSearchOpenChange?.(false);
+
+      const scrollY = getWindowScrollY();
+      megaOpenScrollYRef.current = scrollY;
+      lockPageScroll(scrollY);
+
       onMegaOpenChange?.(true);
-      megaOpenScrollYRef.current = window.scrollY;
       ignoreMegaScrollCloseUntilRef.current = Date.now() + 400;
 
       const defaults = getDefaultMegaState(navId, pathname);
@@ -368,12 +372,12 @@ export default function GnbMenu({
     closeMega();
     closeGlobal();
     setIsMobileMenuOpen(false);
-    const scrollY = window.scrollY;
+    const scrollY = getWindowScrollY();
     megaOpenScrollYRef.current = scrollY;
     ignoreMegaScrollCloseUntilRef.current = Date.now() + 400;
     setIsSearchOpen(true);
     requestAnimationFrame(() => {
-      if (window.scrollY !== scrollY) {
+      if (Math.abs(getWindowScrollY() - scrollY) > 2) {
         scrollWindowTo(scrollY, { immediate: true });
       }
     });
@@ -398,9 +402,19 @@ export default function GnbMenu({
     closeAllGnbMenus();
   }, [closeAllGnbMenus]);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen((prev) => !prev);
-  };
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen((prev) => {
+      const next = !prev;
+
+      if (next) {
+        closeMega();
+        closeSearch();
+        closeGlobal();
+      }
+
+      return next;
+    });
+  }, [closeGlobal, closeMega, closeSearch]);
 
   useEffect(() => {
     onMegaOpenChange?.(isMegaActive);
@@ -480,29 +494,13 @@ export default function GnbMenu({
     };
   }, [closeMobileMenu, isMobileMenuOpen]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isMegaActive) return;
 
-    const scrollY = window.scrollY;
-    const lenis = getLenisInstance();
-    lenis?.stop();
-
-    document.documentElement.classList.add("is-mega-open-scroll-lock");
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.left = "0";
-    document.body.style.right = "0";
-    document.body.style.width = "100%";
+    lockPageScroll(megaOpenScrollYRef.current);
 
     return () => {
-      document.documentElement.classList.remove("is-mega-open-scroll-lock");
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.width = "";
-      scrollWindowTo(scrollY, { immediate: true });
-      lenis?.start();
+      unlockPageScroll(megaOpenScrollYRef.current);
     };
   }, [isMegaActive]);
 
@@ -539,7 +537,7 @@ export default function GnbMenu({
     if (!isSearchOpen) return;
 
     const syncScrollAnchor = () => {
-      megaOpenScrollYRef.current = window.scrollY;
+      megaOpenScrollYRef.current = getWindowScrollY();
     };
 
     syncScrollAnchor();
@@ -551,7 +549,7 @@ export default function GnbMenu({
       }
 
       /* 레이아웃 변화·미세 스크롤 무시 — 실제 페이지 스크롤만 닫기 */
-      if (Math.abs(window.scrollY - megaOpenScrollYRef.current) < 8) {
+      if (Math.abs(getWindowScrollY() - megaOpenScrollYRef.current) < 8) {
         return;
       }
       closeSearch();
@@ -678,200 +676,255 @@ export default function GnbMenu({
     </ul>
   );
 
-  const gnbRow = isMain ? (
-    <div className="main_header__gnb-row">
-      <div className="main_header__inner">
-        <h1 className="main_header__logo">
-          <Link href={logoHref} prefetch={false} onClick={handleGnbLinkClick}>
-            <img loading="eager" decoding="async"
-              src="/img/logo_white.svg"
-              alt=""
-              className="main_header__logo-img main_header__logo-img--white"
-              aria-hidden
-            />
-            <img loading="eager" decoding="async"
-              src="/img/logo.svg"
-              alt="LS ELECTRIC"
-              className="main_header__logo-img main_header__logo-img--dark"
-            />
-          </Link>
-        </h1>
+  const renderGnbRow = (placement: "fixed" | "panel") => {
+    const isPanel = placement === "panel";
 
-        <nav className="main_header__nav" aria-label="주 메뉴">
-          {navList}
-        </nav>
+    if (isMain) {
+      const rowClassName = isPanel
+        ? "main_header__gnb-row gnb_mobile_panel__gnb-row"
+        : "main_header__gnb-row";
 
-        <div className="main_header__actions main_header__actions--desktop">
-          <button
-            type="button"
-            className={
-              isSearchOpen
-                ? "main_header__btn-search is-close"
-                : "main_header__btn-search"
-            }
-            aria-label={isSearchOpen ? "Close search" : "Open search"}
-            aria-expanded={isSearchOpen}
-            aria-controls="gnb-search-panel"
-            onClick={toggleSearch}
-          >
-            <span className="ir">{isSearchOpen ? "close search" : "search"}</span>
-          </button>
-          <GnbGlobalTrigger
-            isOpen={isGlobalOpen}
-            onToggle={toggleGlobal}
-            onClose={closeGlobal}
-            wrapClassName="main_header__global-wrap"
-            buttonClassName="main_header__btn-global"
-          >
-            <GnbGlobalTriggerMainContent />
-          </GnbGlobalTrigger>
+      return (
+        <div className={rowClassName}>
+          <div className="main_header__inner">
+            {!isPanel ? (
+              <h1 className="main_header__logo">
+                <Link href={logoHref} prefetch={false} onClick={handleGnbLinkClick}>
+                  <img loading="eager" decoding="async"
+                    src="/img/logo_white.svg"
+                    alt=""
+                    className="main_header__logo-img main_header__logo-img--white"
+                    aria-hidden
+                  />
+                  <img loading="eager" decoding="async"
+                    src="/img/logo.svg"
+                    alt="LS ELECTRIC"
+                    className="main_header__logo-img main_header__logo-img--dark"
+                  />
+                </Link>
+              </h1>
+            ) : (
+              <div className="gnb_mobile_global-slot">
+                <GnbMobileGlobalSelect />
+              </div>
+            )}
+
+            {!isPanel ? (
+              <>
+                <nav className="main_header__nav" aria-label="주 메뉴">
+                  {navList}
+                </nav>
+
+                <div className="main_header__actions main_header__actions--desktop">
+                  <button
+                    type="button"
+                    className={
+                      isSearchOpen
+                        ? "main_header__btn-search is-close"
+                        : "main_header__btn-search"
+                    }
+                    aria-label={isSearchOpen ? "Close search" : "Open search"}
+                    aria-expanded={isSearchOpen}
+                    aria-controls="gnb-search-panel"
+                    onClick={toggleSearch}
+                  >
+                    <span className="ir">{isSearchOpen ? "close search" : "search"}</span>
+                  </button>
+                  <GnbGlobalTrigger
+                    isOpen={isGlobalOpen}
+                    onToggle={toggleGlobal}
+                    onClose={closeGlobal}
+                    wrapClassName="main_header__global-wrap"
+                    buttonClassName="main_header__btn-global"
+                  >
+                    <GnbGlobalTriggerMainContent />
+                  </GnbGlobalTrigger>
+                </div>
+              </>
+            ) : null}
+
+            <div className="main_header__actions main_header__actions--mobile">
+              {!isPanel ? (
+                <>
+                  <button
+                    type="button"
+                    className={
+                      isSearchOpen
+                        ? "main_header__btn-search is-close"
+                        : "main_header__btn-search"
+                    }
+                    aria-label={isSearchOpen ? "Close search" : "Open search"}
+                    aria-expanded={isSearchOpen}
+                    aria-controls="gnb-search-panel"
+                    onClick={toggleSearch}
+                  >
+                    <span className="ir">{isSearchOpen ? "close search" : "search"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="btn_menu"
+                    aria-label="메뉴 열기"
+                    aria-expanded={isMobileMenuOpen}
+                    aria-controls={mobileMenuId}
+                    onClick={toggleMobileMenu}
+                  >
+                    <span className="ir">open menu</span>
+                    <span className="icon_menu" aria-hidden="true">
+                      <span />
+                      <span />
+                      <span />
+                    </span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className={
+                      isSearchOpen
+                        ? "main_header__btn-search is-close"
+                        : "main_header__btn-search"
+                    }
+                    aria-label={isSearchOpen ? "Close search" : "Open search"}
+                    aria-expanded={isSearchOpen}
+                    aria-controls="gnb-search-panel"
+                    onClick={toggleSearch}
+                  >
+                    <span className="ir">{isSearchOpen ? "close search" : "search"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="gnb_mobile_close"
+                    aria-label="메뉴 닫기"
+                    onClick={closeMobileMenu}
+                  >
+                    <span className="ir">close menu</span>
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
         </div>
+      );
+    }
 
-        <div className="main_header__actions main_header__actions--mobile">
-          <button
-            type="button"
-            className={
-              isSearchOpen
-                ? "main_header__btn-search is-close"
-                : "main_header__btn-search"
-            }
-            aria-label={isSearchOpen ? "Close search" : "Open search"}
-            aria-expanded={isSearchOpen}
-            aria-controls="gnb-search-panel"
-            onClick={toggleSearch}
-          >
-            <span className="ir">{isSearchOpen ? "close search" : "search"}</span>
-          </button>
-          <button
-            type="button"
-            className={
-              isMobileMenuOpen
-                ? "main_header__btn-menu is-active"
-                : "main_header__btn-menu"
-            }
-            aria-label={isMobileMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls={mobileMenuId}
-            onClick={toggleMobileMenu}
-          >
-            <span className="ir">
-              {isMobileMenuOpen ? "close menu" : "open menu"}
-            </span>
-            <span className="main_header__icon-menu" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  ) : (
-    <div className="sub_header__gnb-row">
-      <div className="gnb_menu_inner">
-        <h1 className="logo">
-          <Link href={logoHref} prefetch={false} onClick={handleGnbLinkClick}>
-            <img loading="eager" decoding="async" src="/img/logo.svg" alt="LS ELECTRIC" />
-          </Link>
-        </h1>
+    const rowClassName = isPanel
+      ? "sub_header__gnb-row gnb_mobile_panel__gnb-row"
+      : "sub_header__gnb-row";
 
-        <nav className="gnb_nav_wrap" aria-label="주 메뉴">
-          {navList}
-        </nav>
-
-        <div className="btn_area btn_area--desktop">
-          <button
-            type="button"
-            className={isSearchOpen ? "btn_search is-close" : "btn_search"}
-            aria-label={isSearchOpen ? "Close search" : "Open search"}
-            aria-expanded={isSearchOpen}
-            aria-controls="gnb-search-panel"
-            onClick={toggleSearch}
-          >
-            <p className="ir">{isSearchOpen ? "close search" : "search"}</p>
-            <span className="icon_search" aria-hidden />
-          </button>
-          <GnbGlobalTrigger
-            isOpen={isGlobalOpen}
-            onToggle={toggleGlobal}
-            onClose={closeGlobal}
-            wrapClassName="gnb_global_wrap"
-            buttonClassName="btn_global"
-          >
-            <GnbGlobalTriggerSubContent />
-          </GnbGlobalTrigger>
-        </div>
-
-        <div className="btn_area btn_area--mobile">
-          <button
-            type="button"
-            className={isSearchOpen ? "btn_search is-close" : "btn_search"}
-            aria-label={isSearchOpen ? "Close search" : "Open search"}
-            aria-expanded={isSearchOpen}
-            aria-controls="gnb-search-panel"
-            onClick={toggleSearch}
-          >
-            <p className="ir">{isSearchOpen ? "close search" : "search"}</p>
-            <span className="icon_search" aria-hidden />
-          </button>
-          <button
-            type="button"
-            className={isMobileMenuOpen ? "btn_menu is-active" : "btn_menu"}
-            aria-label={isMobileMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls={mobileMenuId}
-            onClick={toggleMobileMenu}
-          >
-            <p className="ir">{isMobileMenuOpen ? "close menu" : "open menu"}</p>
-            <span className="icon_menu" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const mobileMenu = isMain ? (
-    <>
-      <nav
-        id={mobileMenuId}
-        className={
-          isMobileMenuOpen
-            ? "main_header__mobile-menu is-open"
-            : "main_header__mobile-menu"
-        }
-        aria-label="모바일 메뉴"
-        aria-hidden={!isMobileMenuOpen}
-      >
-        <ul className="main_header__mobile-list">
-          {navItems.map((item) => (
-            <li key={item.id}>
-              <Link
-                href={item.href}
-                prefetch={false}
-                className="main_header__mobile-link"
-                onClick={handleGnbLinkClick}
-              >
-                {item.label}
+    return (
+      <div className={rowClassName}>
+        <div className="gnb_menu_inner">
+          {!isPanel ? (
+            <h1 className="logo">
+              <Link href={logoHref} prefetch={false} onClick={handleGnbLinkClick}>
+                <img loading="eager" decoding="async" src="/img/logo.svg" alt="LS ELECTRIC" />
               </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      {isMobileMenuOpen ? (
-        <button
-          type="button"
-          className="main_header__mobile-dim"
-          aria-label="메뉴 닫기"
-          onClick={closeMobileMenu}
-        />
-      ) : null}
-    </>
-  ) : (
-    <>
+            </h1>
+          ) : (
+            <div className="gnb_mobile_global-slot">
+              <GnbMobileGlobalSelect />
+            </div>
+          )}
+
+          {!isPanel ? (
+            <>
+              <nav className="gnb_nav_wrap" aria-label="주 메뉴">
+                {navList}
+              </nav>
+
+              <div className="btn_area btn_area--desktop">
+                <button
+                  type="button"
+                  className={isSearchOpen ? "btn_search is-close" : "btn_search"}
+                  aria-label={isSearchOpen ? "Close search" : "Open search"}
+                  aria-expanded={isSearchOpen}
+                  aria-controls="gnb-search-panel"
+                  onClick={toggleSearch}
+                >
+                  <p className="ir">{isSearchOpen ? "close search" : "search"}</p>
+                  <span className="icon_search" aria-hidden />
+                </button>
+                <GnbGlobalTrigger
+                  isOpen={isGlobalOpen}
+                  onToggle={toggleGlobal}
+                  onClose={closeGlobal}
+                  wrapClassName="gnb_global_wrap"
+                  buttonClassName="btn_global"
+                >
+                  <GnbGlobalTriggerSubContent />
+                </GnbGlobalTrigger>
+              </div>
+            </>
+          ) : null}
+
+          <div className="btn_area btn_area--mobile">
+            {!isPanel ? (
+              <>
+                <button
+                  type="button"
+                  className={isSearchOpen ? "btn_search is-close" : "btn_search"}
+                  aria-label={isSearchOpen ? "Close search" : "Open search"}
+                  aria-expanded={isSearchOpen}
+                  aria-controls="gnb-search-panel"
+                  onClick={toggleSearch}
+                >
+                  <p className="ir">{isSearchOpen ? "close search" : "search"}</p>
+                  <span className="icon_search" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  className="btn_menu"
+                  aria-label="메뉴 열기"
+                  aria-expanded={isMobileMenuOpen}
+                  aria-controls={mobileMenuId}
+                  onClick={toggleMobileMenu}
+                >
+                  <p className="ir">open menu</p>
+                  <span className="icon_menu" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className={isSearchOpen ? "btn_search is-close" : "btn_search"}
+                  aria-label={isSearchOpen ? "Close search" : "Open search"}
+                  aria-expanded={isSearchOpen}
+                  aria-controls="gnb-search-panel"
+                  onClick={toggleSearch}
+                >
+                  <p className="ir">{isSearchOpen ? "close search" : "search"}</p>
+                  <span className="icon_search" aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  className="gnb_mobile_close"
+                  aria-label="메뉴 닫기"
+                  onClick={closeMobileMenu}
+                >
+                  <p className="ir">close menu</p>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const gnbMobilePanel = (
+    <div
+      className={
+        isMobileMenuOpen ? "gnb_mobile_shell is-open" : "gnb_mobile_shell"
+      }
+      aria-hidden={!isMobileMenuOpen}
+    >
+      {renderGnbRow("panel")}
       <nav
         id={mobileMenuId}
         className={
@@ -880,25 +933,13 @@ export default function GnbMenu({
         aria-label="모바일 메뉴"
         aria-hidden={!isMobileMenuOpen}
       >
-        <ul className="gnb_mobile_list">
-          {navItems.map((item) => (
-            <li key={item.id} className="depth_1">
-              <Link href={item.href} prefetch={false} className="link" onClick={handleGnbLinkClick}>
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      {isMobileMenuOpen ? (
-        <button
-          type="button"
-          className="gnb_mobile_dim"
-          aria-label="메뉴 닫기"
-          onClick={closeMobileMenu}
+        <GnbMobileMenuPanel
+          isOpen={isMobileMenuOpen}
+          onClose={closeMobileMenu}
+          navItems={navItems}
         />
-      ) : null}
-    </>
+      </nav>
+    </div>
   );
 
   let megaPanel: ReactNode = null;
@@ -918,6 +959,7 @@ export default function GnbMenu({
         aria-label={`${activeNav?.label ?? ""} menu`}
         className={getMegaPanelClassName(megaMenu, isPanelOpen)}
       >
+        {activeNavId === "devices" ? <GnbMegaCloseButton onClose={closeMega} /> : null}
         {isDevicesMegaMenu(megaMenu) ? (
           <PanelComponent
             activeCategoryId={activeCategoryId}
@@ -948,13 +990,22 @@ export default function GnbMenu({
           showBreadcrumbNav,
         )}
       >
-        {gnbRow}
+        {renderGnbRow("fixed")}
 
         {breadcrumb}
 
         {megaPanel}
 
-        {mobileMenu}
+        {gnbMobilePanel}
+
+        {isMobileMenuOpen ? (
+          <button
+            type="button"
+            className="gnb_mobile_dim"
+            aria-label="메뉴 닫기"
+            onClick={closeMobileMenu}
+          />
+        ) : null}
       </header>
 
       {isSearchOpen ? <GnbSearchPanel onNavigate={closeSearch} /> : null}

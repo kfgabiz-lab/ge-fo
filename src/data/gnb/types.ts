@@ -34,6 +34,10 @@ export type GnbSimpleMegaItem = {
   descriptionLines?: string[];
   href?: string;
   external?: boolean;
+  /** 모바일 depth2 외부 링크 아이콘 (미지정 시 external과 동일) */
+  externalIcon?: boolean;
+  /** 모바일 depth2에서 설명 숨김 */
+  hideMobileDescription?: boolean;
   disabled?: boolean;
 };
 
