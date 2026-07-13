@@ -44,6 +44,11 @@ function toSimpleItem(node: FoGnbMenuApiNode): GnbSimpleMegaItem {
     id: String(node.id),
     title: node.name,
     description: node.description ?? undefined,
+    // DB description은 여러 줄일 경우 "\n"으로 구분해 저장(예: Public Infrastructure) → grid 레이아웃(GnbMegaItemLink descVariant="grid")은
+    // descriptionLines 배열만 렌더링하므로 여기서 분리해 채워줘야 함
+    descriptionLines: node.description
+      ? node.description.split("\n")
+      : undefined,
     href,
     // http로 시작하면 외부 링크로 처리(새 창 등 GnbMegaItemLink에서 사용)
     external: href?.startsWith("http") ?? false,
