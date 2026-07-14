@@ -14,19 +14,19 @@ export const servicesMegaMenu: GnbSimpleMegaMenu = {
         {
           id: "Service-center",
           title: "Service Center",
-          description: "General service info & requests",
+          description: "General service info & requests.",
           href: "/services/service-center",
         },
         {
           id: "warranty-policy",
           title: "Warranty Policy",
-          description: "Product warranty terms & extensions",
+          description: "Product warranty terms & extensions.",
           href: "/services/warranty-policy",
         },
         {
           id: "request-for-service",
           title: "Request for Service",
-          description: "Submit a service request online",
+          description: "Submit a service request online.",
           href: "https://gics.ls-electric.com/public/index.do",
           external: true,
         },

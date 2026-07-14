@@ -9,32 +9,33 @@ import { gnbSearchContent } from "@/data/gnb/gnbSearchContent";
 import { buildSearchAllHref } from "@/data/search/searchAllContent";
 
 type GnbSearchPanelProps = {
+  isOpen: boolean;
   onNavigate?: () => void;
 };
 
 /** Figma 4288:54315 — #gnb-search-panel (body portal) */
-export default function GnbSearchPanel({ onNavigate }: GnbSearchPanelProps) {
+export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [canPortal, setCanPortal] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const hasQuery = query.length > 0;
 
   useEffect(() => {
     setCanPortal(true);
   }, []);
 
+  // 열릴 때 검색 입력에 포커스
   useEffect(() => {
-    const showFrame = requestAnimationFrame(() => {
-      setIsVisible(true);
-      requestAnimationFrame(() => {
-        inputRef.current?.focus({ preventScroll: true });
-      });
-    });
+    if (!isOpen) return;
+    inputRef.current?.focus({ preventScroll: true });
+  }, [isOpen]);
 
-    return () => cancelAnimationFrame(showFrame);
-  }, []);
+  // 닫힐 때 검색어 초기화
+  useEffect(() => {
+    if (isOpen) return;
+    setQuery("");
+  }, [isOpen]);
 
   if (!canPortal) {
     return null;
@@ -43,7 +44,8 @@ export default function GnbSearchPanel({ onNavigate }: GnbSearchPanelProps) {
   return createPortal(
     <div
       id="gnb-search-panel"
-      className={isVisible ? "gnb_search is-open" : "gnb_search"}
+      className={isOpen ? "gnb_search is-open" : "gnb_search"}
+      aria-hidden={!isOpen}
     >
       <div className="gnb_search__inner">
         <form
@@ -118,6 +120,7 @@ export default function GnbSearchPanel({ onNavigate }: GnbSearchPanelProps) {
                   href={tag.href}
                   className="gnb_search__tag"
                   prefetch={false}
+                  tabIndex={isOpen ? undefined : -1}
                   onClick={() => onNavigate?.()}
                 >
                   {tag.label}

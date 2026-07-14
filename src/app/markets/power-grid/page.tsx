@@ -23,9 +23,13 @@ import {
   powerGridSustainabilityCards,
   powerGridWhyItems,
 } from "../data/marketsPowerGridContent";
+import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
-export default function MarketsPowerGridPage() {
+export default async function MarketsPowerGridPage() {
+  // Power Grid FAQ(markets=004) 조회 → MarketsFaq 에 items 로 전달
+  const faqItems = await fetchMarketsFaqItems(MARKETS_FAQ_CODE.powerGrid);
+
   return (
     <main
       className="markets-page markets-page--power-grid"
@@ -58,7 +62,7 @@ export default function MarketsPowerGridPage() {
         items={marketsHighlightNewsItems}
         sectionId="markets-highlights"
       />
-      <MarketsFaq />
+      <MarketsFaq items={faqItems} />
     </main>
   );
 }

@@ -1,7 +1,7 @@
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
 import type { GnbSimpleMegaMenu } from "@/data/gnb/types";
 
-/** Figma 3670:14792 — Support mega (3 columns) */
+/** Figma 3670:14792 — Support mega (2 columns) */
 export const supportMegaMenu: GnbSimpleMegaMenu = {
   type: "simple",
   panelId: GNB_MEGA_PANEL_ID.support,
@@ -20,25 +20,25 @@ export const supportMegaMenu: GnbSimpleMegaMenu = {
         {
           id: "download-center",
           title: "Download Center",
-          description: "Download documents and resources",
+          description: "Download documents and resources.",
           href: "/support/download-center",
         },
         {
           id: "tech-hub",
           title: "Tech Hub",
-          description: "Video tutorials for our products",
+          description: "Video tutorials for our products.",
           href: "/support/tech-hub",
         },
         {
           id: "where-to-buy",
           title: "Where to Buy",
-          description: "Find locations of our distributors",
+          description: "Find locations of our distributors.",
           href: "/support/where-to-buy",
         },
         {
           id: "contact-us",
           title: "Contact Us",
-          description: "Reach out to us via contact form",
+          description: "Reach out to us via contact form.",
           href: "/support/contact-us",
         },
       ],
@@ -53,6 +53,7 @@ export const supportMegaMenu: GnbSimpleMegaMenu = {
           description: "Information hub for power products",
           href: "https://gics.ls-electric.com/public/knowledgeBasePopup.do",
           external: true,
+          externalIcon: false,
         },
         {
           id: "Knowledge-Base-Automation",
@@ -60,6 +61,7 @@ export const supportMegaMenu: GnbSimpleMegaMenu = {
           description: "Information hub for automation products",
           href: "https://sol.ls-electric.com/us/en/community/blog",
           external: true,
+          externalIcon: false,
         },
         {
           id: "product-match",
@@ -78,24 +80,10 @@ export const supportMegaMenu: GnbSimpleMegaMenu = {
         {
           id: "request-service",
           title: "Request for Service",
-          description: "Submit a support request online",
+          description: "Submit a support request online.",
           href: "https://gics.ls-electric.com/public/index.do",
           external: true,
         },
-      ],
-    },
-    {
-      id: "training",
-      label: "Training",
-      items: [
-        { id: "sales-training", title: "Sales Training", disabled: true },
-        {
-          id: "engineering-training",
-          title: "Engineering Training",
-          description: "Training for engineering works",
-          href: "/services/engineering-training",
-        },
-        { id: "service-training", title: "Service Training", disabled: true },
       ],
     },
   ],

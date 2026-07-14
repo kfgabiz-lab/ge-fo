@@ -29,7 +29,7 @@ export default function MainHeader({
       hideGnbOnScroll: !isMobileMenuOpen && !isMegaOpen,
     });
 
-  const isGnbHidden = scrollGnbHidden && !isSearchOpen;
+  const isGnbHidden = scrollGnbHidden && !isSearchOpen && !isMegaOpen;
   const resolvedIsAtTop =
     frozenWrapAtTop !== null ? frozenWrapAtTop : isAtTop;
 
@@ -39,7 +39,7 @@ export default function MainHeader({
         (prev) => prev ?? window.scrollY <= MAIN_TOP_THRESHOLD,
       );
     } else if (!isSearchOpen) {
-      setFrozenWrapAtTop(null);
+      requestAnimationFrame(() => setFrozenWrapAtTop(null));
     }
     setIsMegaOpen(open);
   }, [isSearchOpen]);
@@ -50,7 +50,7 @@ export default function MainHeader({
         (prev) => prev ?? window.scrollY <= MAIN_TOP_THRESHOLD,
       );
     } else if (!isMegaOpen) {
-      setFrozenWrapAtTop(null);
+      requestAnimationFrame(() => setFrozenWrapAtTop(null));
     }
     setIsSearchOpen(open);
   }, [isMegaOpen]);

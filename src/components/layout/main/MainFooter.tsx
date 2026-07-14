@@ -229,7 +229,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
                     aria-controls="main-footer-affiliate-listbox"
                     onClick={toggleAffiliateMenu}
                   >
-                    Affiliated &amp; Subsidiaries
+                    LS ELECTRIC Affiliated &amp; Subsidiaries
                     <FooterSelectIcon className="main_footer_02__affiliate-trigger__icon" />
                   </button>
                   {affiliateOpen ? (

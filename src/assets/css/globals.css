@@ -2669,3 +2669,54 @@ section.highlight_news--markets .section_tit {
 
 }
 
+/* 페이지 상단 타이틀 섹션 공통 기본 스타일 (company/services 등 서브페이지 공용, ls-publish company.css 기원)
+   페이지별 여백 등 세부 조정은 각 페이지 CSS에서 .support-page--{name} 스코프로 오버라이드 */
+@media (min-width: 781px) {
+  section.company-about-title {
+    padding: 75px 0 0;
+  }
+
+  section.company-about-title .inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  section.company-about-title .company-about-title__heading {
+    font-family: jaka;
+    font-size: 70px;
+    font-weight: 800;
+    line-height: 80px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.company-about-title .company-about-title__desc {
+    margin-top: 11px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+}
+
+@media (max-width: 780px) {
+  section.company-about-title {
+    padding: 40px 0 0;
+  }
+
+  section.company-about-title .company-about-title__heading {
+    font-family: jaka;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 46px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.company-about-title .company-about-title__desc {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+}
+

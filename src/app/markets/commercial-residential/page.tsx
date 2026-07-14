@@ -20,9 +20,15 @@ import {
   commercialResidentialReferences,
   commercialResidentialStats,
 } from "../data/marketsCommercialResidentialContent";
+import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
-export default function MarketsCommercialResidentialPage() {
+export default async function MarketsCommercialResidentialPage() {
+  // Commercial & Residential FAQ(markets=006) 조회 → MarketsFaq 에 items 로 전달
+  const faqItems = await fetchMarketsFaqItems(
+    MARKETS_FAQ_CODE.commercialResidential,
+  );
+
   return (
     <main className="markets-page markets-page--commercial-residential" id="Page_markets">
       <MarketsHero
@@ -51,7 +57,7 @@ export default function MarketsCommercialResidentialPage() {
         items={marketsHighlightNewsItems}
         sectionId="markets-highlights"
       />
-      <MarketsFaq />
+      <MarketsFaq items={faqItems} />
     </main>
   );
 }

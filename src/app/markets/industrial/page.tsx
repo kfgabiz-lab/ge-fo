@@ -22,9 +22,13 @@ import {
   industrialStats,
   industrialWhyItems,
 } from "../data/marketsIndustrialContent";
+import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
-export default function MarketsIndustrialPage() {
+export default async function MarketsIndustrialPage() {
+  // Industrial FAQ(markets=005) 조회 → MarketsFaq 에 items 로 전달
+  const faqItems = await fetchMarketsFaqItems(MARKETS_FAQ_CODE.industrial);
+
   return (
     <main className="markets-page markets-page--industrial" id="Page_markets_industrial">
       <MarketsHero
@@ -51,7 +55,7 @@ export default function MarketsIndustrialPage() {
         items={marketsHighlightNewsItems}
         sectionId="markets-highlights"
       />
-      <MarketsFaq />
+      <MarketsFaq items={faqItems} />
     </main>
   );
 }

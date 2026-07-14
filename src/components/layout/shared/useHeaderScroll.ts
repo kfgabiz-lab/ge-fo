@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createRafScrollHandler } from "@/lib/createThrottledScrollHandler";
+import { getWindowScrollY } from "@/lib/lenisScroll";
 import {
   resolveAtTop,
   resolveGnbScrollVisibility,
@@ -39,7 +40,9 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
   hideGnbRef.current = hideGnbOnScroll;
 
   const updateScrollState = useCallback(() => {
-    const currentScrollY = window.scrollY;
+    if (!hideGnbRef.current) return;
+
+    const currentScrollY = getWindowScrollY();
     const atTop = resolveAtTop(currentScrollY, isAtTopRef.current, topThreshold);
 
     if (atTop !== isAtTopRef.current) {
@@ -82,11 +85,11 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
 
   useEffect(() => {
     isAtTopRef.current = resolveAtTop(
-      window.scrollY,
+      getWindowScrollY(),
       isAtTopRef.current,
       topThreshold,
     );
-    anchorScrollYRef.current = window.scrollY;
+    anchorScrollYRef.current = getWindowScrollY();
     lastModeChangeAtRef.current = 0;
     setIsAtTop(isAtTopRef.current);
     updateScrollState();
@@ -100,7 +103,9 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
     };
   }, [topThreshold, updateScrollState]);
 
+  /* 메가·모바일 메뉴 오픈 중(body scroll lock)에는 scrollY가 0으로 보이므로 isAtTop 갱신 생략 */
   useEffect(() => {
+    if (!hideGnbOnScroll) return;
     updateScrollState();
   }, [hideGnbOnScroll, updateScrollState]);
 
@@ -109,7 +114,7 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
       const now = Date.now();
       headerModeRef.current = "revealed";
       visibilityRef.current = "visible";
-      anchorScrollYRef.current = window.scrollY;
+      anchorScrollYRef.current = getWindowScrollY();
       lastModeChangeAtRef.current = now;
       setHeaderMode("revealed");
     }

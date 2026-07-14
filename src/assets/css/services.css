@@ -1,0 +1,2257 @@
+/* Services — Service Center (Figma 6023:137684 · P-FO-SERV-010000P) */
+
+@media (min-width: 781px) {
+  .support-page--service-center section.company-about-title .inner,
+  .support-page--service-center section.support_service_cards .inner,
+  .support-page--service-center section.support_service_flow .inner,
+  .support-page--service-center section.support_service_gics .inner,
+  .support-page--service-center section.common_faq .inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .support-page--service-center section.company-about-title {
+    padding-bottom: 0;
+  }
+
+  section.support_service_cards {
+    padding: 60px 0 150px;
+  }
+
+  section.support_service_cards .support_service_cards__row {
+    display: flex;
+    gap: 20px;
+  }
+
+  section.support_service_cards .support_service_cards__row + .support_service_cards__row {
+    margin-top: 30px;
+  }
+
+  section.support_service_cards .support_service_cards__row--primary {
+    align-items: stretch;
+    min-height: 320px;
+  }
+
+  section.support_service_cards .support_service_cards__kb {
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+    width: 642px;
+    flex-shrink: 0;
+    padding: 52px 36px;
+    border-radius: 4px;
+    background: #0f1f45;
+    color: #fff;
+  }
+
+  section.support_service_cards .support_service_cards__kb-text {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  section.support_service_cards .support_service_cards__kb-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  section.support_service_cards .support_service_cards__kb-btn {
+    width: auto;
+    min-width: 0;
+    height: 46px;
+    padding: 0 24px;
+    border-radius: 4px;
+    gap: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 23px;
+    color: #0f1f45;
+    background: #fff;
+    transition: background-color 0.3s ease;
+  }
+
+  section.support_service_cards .support_service_cards__kb-btn:first-child {
+    width: 215px;
+    min-width: 215px;
+  }
+
+  section.support_service_cards .support_service_cards__kb-btn .icon_link-14 {
+    display: block;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    background: url("/ico/ico_link.svg") center / contain no-repeat;
+  }
+
+  section.support_service_cards .support_service_cards__kb-btn:hover,
+  section.support_service_cards .support_service_cards__kb-btn:focus-visible {
+    background: #ddd;
+  }
+
+  section.support_service_cards .support_service_cards__pair {
+    display: flex;
+    flex: 1 1 0;
+    gap: 20px;
+    min-width: 0;
+  }
+
+  section.support_service_cards .support_service_cards__card {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+    padding: 36px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  section.support_service_cards .support_service_cards__row--secondary
+    .support_service_cards__card {
+    min-height: 272px;
+  }
+
+  section.support_service_cards .support_service_cards__row--secondary
+    .support_service_cards__card:first-child {
+    flex: 0 0 466px;
+    width: 466px;
+  }
+
+  section.support_service_cards .support_service_cards__row--secondary
+    .support_service_cards__card--tech-hub {
+    border: 1px solid #e8e8e8;
+    background: #fff;
+  }
+
+  section.support_service_cards .support_service_cards__card:hover,
+  section.support_service_cards .support_service_cards__card:focus-visible {
+    background: #f5f7fa;
+  }
+
+  section.support_service_cards .support_service_cards__card:hover
+    .support_service_cards__tit,
+  section.support_service_cards .support_service_cards__card:focus-visible
+    .support_service_cards__tit,
+  section.support_service_cards .support_service_cards__card:hover
+    .support_service_cards__tit-part,
+  section.support_service_cards .support_service_cards__card:focus-visible
+    .support_service_cards__tit-part {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  section.support_service_cards .support_service_cards__tit-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  section.support_service_cards .support_service_cards__tit-part {
+    white-space: nowrap;
+  }
+
+  section.support_service_cards .support_service_cards__tit-divider {
+    flex: none;
+    width: 1px;
+    height: 18px;
+    background: #222;
+  }
+
+  section.support_service_cards .support_service_cards__icon {
+    display: block;
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  section.support_service_cards .support_service_cards__card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  section.support_service_cards .support_service_cards__row--secondary
+    .support_service_cards__tit {
+    letter-spacing: -0.28px;
+  }
+
+  section.support_service_cards .support_service_cards__tit {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.support_service_cards .support_service_cards__card .support_service_cards__tit {
+    transition: text-decoration-color 0.3s ease;
+  }
+
+  section.support_service_cards .support_service_cards__kb .support_service_cards__tit,
+  section.support_service_cards .support_service_cards__kb .support_service_cards__desc {
+    color: #fff;
+  }
+
+  section.support_service_cards .support_service_cards__kb .support_service_cards__desc {
+    opacity: 0.7;
+  }
+
+  section.support_service_cards .support_service_cards__desc {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+    opacity: 0.7;
+  }
+
+  section.support_service_cards .support_service_cards__kb .support_service_cards__desc {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  section.support_service_banner {
+    position: relative;
+    min-height: 340px;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  section.support_service_banner .support_service_banner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: #0c1625;
+  }
+
+  section.support_service_banner .support_service_banner__bg-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  section.support_service_banner .support_service_banner__bg-image--mo {
+    display: none;
+  }
+
+  section.support_service_banner .support_service_banner__bg::after {
+    position: absolute;
+    inset: 0;
+    /* background: rgb(12 22 37 / 55%); */
+    content: "";
+    pointer-events: none;
+  }
+
+  section.support_service_banner .support_service_banner__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 340px;
+    padding: 82px 20px 52px;
+    text-align: center;
+  }
+
+  section.support_service_banner .support_service_banner__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  section.support_service_banner .support_service_banner__tit {
+    margin: 0;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 52px;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  section.support_service_banner .support_service_banner__desc {
+    margin: 8px 0 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #fff;
+  }
+
+  section.support_service_banner .support_service_banner__cta {
+    margin-top: 32px;
+    min-width: 220px;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  section.support_service_banner:hover .support_service_banner__cta {
+    color: var(--color-primary);
+    background: #fff;
+    border-color: #fff;
+  }
+
+  .support-page--service-center section.support_service_offering .inner {
+    overflow: visible;
+    max-width: unset;
+  }
+
+  section.support_service_offering {
+    padding: 150px 0;
+  }
+
+  section.support_service_offering .support_service_offering__head {
+    margin-bottom: 40px;
+    max-width: 1440px;
+    margin: 0 auto 40px;
+  }
+
+  section.support_service_offering .support_service_offering__head .section_tit {
+    margin-bottom: 11px;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 62px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.support_service_offering .support_service_offering__head .section_desc {
+    max-width: 981px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.support_service_offering .support_service_offering__body {
+    position: relative;
+    display: grid;
+    grid-template-columns: 974px 1fr;
+    gap: 80px;
+    align-items: start;
+    max-width: 2050px;
+    margin: 0 auto;
+    left: 50%;
+    margin-left: -1025px;
+  }
+
+  section.support_service_offering .support_service_offering__carousel {
+    width: 974px;
+    min-width: 0;
+  }
+
+  section.support_service_offering .support_service_offering__main-swiper,
+  section.support_service_offering .support_service_offering__preview-swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  section.support_service_offering .support_service_offering__preview {
+    position: absolute;
+    top: 0;
+    left: 1548px;
+    width: 504px;
+    height: 540px;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  section.support_service_offering .support_service_offering__preview-swiper .swiper-slide {
+    width: 240px;
+  }
+
+  section.support_service_offering .support_service_offering__preview-slide {
+    display: block;
+    width: 240px;
+    height: 540px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  section.support_service_offering .support_service_offering__preview-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    pointer-events: none;
+  }
+
+  section.support_service_offering .support_service_offering__slide {
+    height: 540px;
+    overflow: hidden;
+  }
+
+  section.support_service_offering .support_service_offering__slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  section.support_service_offering .support_service_offering__panel {
+    padding-top: 40px;
+    width: 363px;
+  }
+
+  section.support_service_offering .support_service_offering__panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: support_service_offering_panel_in 0.4s ease;
+  }
+
+  section.support_service_offering .support_service_offering__panel-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  section.support_service_offering .support_service_offering__num {
+    display: block;
+    margin: 0;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 70px;
+    font-weight: 800;
+    line-height: 80px;
+    letter-spacing: -0.02em;
+    color: #e8e8e8;
+  }
+
+  section.support_service_offering .support_service_offering__slide-tit {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 44px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.support_service_offering .support_service_offering__slide-tit-line {
+    display: block;
+  }
+
+  section.support_service_offering .support_service_offering__slide-desc {
+    margin: 0;
+    max-width: 373px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  section.support_service_offering .swiper_type_01_controls {
+    max-width: 363px;
+    margin-top: 40px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+
+  @keyframes support_service_offering_panel_in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  section.support_service_flow {
+    position: relative;
+    padding: 150px 0;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  section.support_service_flow .support_service_flow__bg {
+    position: absolute;
+    inset: 0;
+    background-color: #0c1625;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image--mo {
+    display: none;
+  }
+
+  section.support_service_flow .inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.support_service_flow .support_service_flow__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 40px;
+    row-gap: 10px;
+  }
+
+  section.support_service_flow .support_service_flow__head-copy {
+    display: contents;
+  }
+
+  section.support_service_flow .support_service_flow__desc--mo {
+    display: none;
+  }
+
+  section.support_service_flow .support_service_flow__tit {
+    grid-column: 1 / -1;
+    margin: 0;
+    max-width: 683px;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 62px;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__desc {
+    max-width: 981px;
+    margin: 0;
+    font-size: 18px;
+    line-height: 28px;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__desc--pc {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  section.support_service_flow .support_service_flow__cta {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: flex-start;
+    flex-shrink: 0;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__cta-icon--mo {
+    display: none;
+  }
+
+  section.support_service_flow .support_service_flow__track {
+    display: none;
+  }
+
+  section.support_service_flow .support_service_flow__cta .icon_arrow-14--white {
+    background-image: url("/ico/ico_arrow_right_14_white.svg");
+  }
+
+  section.support_service_flow .support_service_flow__cta:hover .icon_arrow-14--white {
+    filter: brightness(0) invert(1);
+  }
+
+  section.support_service_flow .support_service_flow__diagram {
+    position: relative;
+    min-height: 506px;
+    margin-top: 42px;
+  }
+
+  section.support_service_flow .support_service_flow__path {
+    position: absolute;
+    left: 0;
+    top: 46px;
+    width: 100%;
+    height: 441px;
+    object-fit: fill;
+    pointer-events: none;
+  }
+
+  section.support_service_flow .support_service_flow__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  section.support_service_flow .support_service_flow__step {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 200px;
+  }
+
+  section.support_service_flow .support_service_flow__step--assign {
+    width: 209px;
+  }
+
+  section.support_service_flow .support_service_flow__step--icon-bottom {
+    gap: 20px;
+  }
+
+  section.support_service_flow .support_service_flow__step--issue {
+    left: 99px;
+    top: 79px;
+    gap: 0;
+  }
+
+  section.support_service_flow .support_service_flow__step--issue .support_service_flow__step-icon--pin {
+    position: absolute;
+    left: -2px;
+    top: -59px;
+    width: 32px;
+    height: 39.68px;
+  }
+
+  section.support_service_flow .support_service_flow__step--request {
+    left: 531px;
+    top: 35px;
+  }
+
+  section.support_service_flow .support_service_flow__step--assign {
+    left: 979px;
+    top: 35px;
+  }
+
+  section.support_service_flow .support_service_flow__step--support {
+    left: 336px;
+    top: 327px;
+  }
+
+  section.support_service_flow .support_service_flow__step--resolution {
+    left: 776px;
+    top: 327px;
+  }
+
+  section.support_service_flow .support_service_flow__step-icon--check,
+  section.support_service_flow .support_service_flow__step-icon--checkEnd {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  section.support_service_flow .support_service_flow__step-copy {
+    display: block;
+  }
+
+  section.support_service_flow .support_service_flow__step-tit {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__step-sub {
+    margin: 0;
+    font-size: 16px;
+    line-height: 26px;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__step-desc {
+    margin: 16px 0 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  section.support_service_flow .support_service_flow__step-desc-line {
+    display: inline;
+  }
+
+  section.support_service_flow .support_service_flow__end-dot {
+    position: absolute;
+    left: 1424px;
+    top: 479px;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+  }
+
+  section.support_service_gics {
+    padding: 150px 0 0;
+  }
+
+  section.support_service_gics .support_service_gics__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  section.support_service_gics .support_service_gics__head-text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  section.support_service_gics .support_service_gics__head .section_tit {
+    margin: 0;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 62px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.support_service_gics .support_service_gics__head .section_desc {
+    margin: 0;
+    max-width: 800px;
+    font-size: 18px;
+    line-height: 28px;
+    color: rgba(102, 102, 102, 0.8);
+  }
+
+  section.support_service_gics .support_service_gics__cta {
+    flex-shrink: 0;
+    color: #222;
+  }
+
+  section.support_service_gics .support_service_gics__body {
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+    align-items: center;
+  }
+
+  section.support_service_gics .support_service_gics__media {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 380px;
+    overflow: hidden;
+  }
+
+  section.support_service_gics .support_service_gics__media-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  section.support_service_gics .support_service_gics__features {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  section.support_service_gics .support_service_gics__feature {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 0;
+  }
+
+  section.support_service_gics .support_service_gics__feature-num-wrap {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 5px 0;
+  }
+
+  section.support_service_gics .support_service_gics__feature-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: #0c1625;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    color: #fff;
+  }
+
+  section.support_service_gics .support_service_gics__feature-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+  }
+
+  section.support_service_gics .support_service_gics__feature--simpler .support_service_gics__feature-body,
+  section.support_service_gics .support_service_gics__feature--faster .support_service_gics__feature-body,
+  section.support_service_gics .support_service_gics__feature--closer .support_service_gics__feature-body {
+    width: auto;
+    max-width: none;
+  }
+
+  section.support_service_gics .support_service_gics__feature-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  section.support_service_gics .support_service_gics__feature-tit {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.support_service_gics .support_service_gics__feature-sub {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 28px;
+    color: #222;
+  }
+
+  section.support_service_gics .support_service_gics__feature--faster .support_service_gics__feature-desc,
+  section.support_service_gics .support_service_gics__feature--closer .support_service_gics__feature-desc {
+    max-width: none;
+  }
+
+  section.support_service_gics .support_service_gics__feature-desc {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  section.support_service_help {
+    position: relative;
+    padding: 150px 0;
+    background: #f5f7fa;
+  }
+
+  section.support_service_help::before {
+    display: block;
+    content: "";
+    width: 300vw;
+    position: absolute;
+    height: 100%;
+    left: -100vw;
+    background: #f5f7fa;
+    top: 0;
+    z-index: 0;
+  }
+
+  section.support_service_help .inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.support_service_help .support_service_help__head {
+    margin-bottom: 40px;
+  }
+
+  section.support_service_help .support_service_help__head .section_tit {
+    margin-bottom: 10px;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 62px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.support_service_help .support_service_help__head .section_desc {
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.support_service_help .support_service_help__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  section.support_service_help .support_service_help__card {
+    display: flex;
+    flex-direction: column;
+    min-height: 436px;
+    overflow: hidden;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.support_service_help .support_service_help__card-body {
+    flex: 1;
+    padding: 36px 36px 0;
+  }
+
+  section.support_service_help .support_service_help__card-tit {
+    margin: 0 0 14px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.support_service_help .support_service_help__card-desc {
+    margin: 0 0 24px;
+    min-height: 89px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  section.support_service_help .support_service_help__card-cta {
+    margin-bottom: 40px;
+    color: #222;
+  }
+
+  section.support_service_help .btn-text-30 .icon_external-18 {
+    background: url("/ico/ico_arrow_right_14_2.svg") center / contain no-repeat;
+  }
+
+  section.support_service_help .btn-text-30 .icon_arrow-18 {
+    background: url("/ico/ico_arrow_right_14_2.svg") center / contain no-repeat;
+    transform: rotate(45deg);
+  }
+
+  section.support_service_help .support_service_help__card-visual {
+    flex-shrink: 0;
+    height: 170px;
+    overflow: hidden;
+  }
+
+  section.support_service_help .support_service_help__card-visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  section.support_service_help .support_service_help__card:hover .btn-text-30__icon {
+    background: var(--color-accent);
+  }
+
+  section.support_service_help .support_service_help__card:hover .icon_external-18,
+  section.support_service_help .support_service_help__card:hover .icon_arrow-18 {
+    filter: brightness(0) invert(1);
+  }
+
+  .support-page--service-center section.common_faq {
+    padding-bottom: 150px;
+  }
+   .support-page--service-center section.common_faq .common_faq__bg{
+    background: #fff;
+}
+}
+
+/* Services — Service Center mobile (Figma 6880:146534) */
+@media (max-width: 780px) {
+  .support-page--service-center section.support_service_cards .inner,
+  .support-page--service-center section.support_service_flow .inner,
+  .support-page--service-center section.support_service_gics .inner,
+  .support-page--service-center section.support_service_offering .inner,
+  .support-page--service-center section.common_faq .inner {
+    padding-left: var(--inner-padding-x-mobile);
+    padding-right: var(--inner-padding-x-mobile);
+  }
+
+  section.support_service_cards {
+    padding: 40px 0 70px;
+  }
+
+  section.support_service_cards .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  section.support_service_cards .support_service_cards__row,
+  section.support_service_cards .support_service_cards__pair {
+    display: contents;
+  }
+
+  section.support_service_cards .support_service_cards__row + .support_service_cards__row {
+    margin-top: 0;
+  }
+
+  section.support_service_cards .support_service_cards__row--primary {
+    min-height: 0;
+  }
+
+  section.support_service_cards .support_service_cards__kb {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    padding: 30px 24px;
+    border-radius: 4px;
+    background: #0f1f45;
+    box-sizing: border-box;
+  }
+
+  section.support_service_cards .support_service_cards__kb-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  section.support_service_cards .support_service_cards__kb-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  section.support_service_cards .support_service_cards__kb-btn,
+  section.support_service_cards .support_service_cards__kb-btn:first-child {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    min-height: 44px;
+    padding: 12px 24px;
+    border: 0;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #0f1f45;
+    background: #fff;
+    box-sizing: border-box;
+  }
+
+  section.support_service_cards .support_service_cards__kb-btn .icon_link-14 {
+    display: block;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    background: url("/ico/ico_link.svg") center / contain no-repeat;
+  }
+
+  section.support_service_cards .support_service_cards__card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    box-sizing: border-box;
+    min-height: 0;
+    padding: 24px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  section.support_service_cards .support_service_cards__card--warranty,
+  section.support_service_cards .support_service_cards__card--request-service {
+    min-height: 246px;
+  }
+
+  section.support_service_cards .support_service_cards__card--training,
+  section.support_service_cards .support_service_cards__card--download-center,
+  section.support_service_cards .support_service_cards__card--tech-hub {
+    min-height: 200px;
+  }
+
+  section.support_service_cards .support_service_cards__row--secondary
+    .support_service_cards__card:first-child {
+    flex: none;
+    width: 100%;
+  }
+
+  section.support_service_cards .support_service_cards__icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+  }
+
+  section.support_service_cards .support_service_cards__card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  section.support_service_cards .support_service_cards__card .support_service_cards__tit {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    letter-spacing: 0;
+    color: #222;
+  }
+
+  section.support_service_cards .support_service_cards__card .support_service_cards__desc {
+    margin: 0;
+    font-size: 15px;
+    line-height: 23px;
+    color: #222;
+    opacity: 0.7;
+  }
+
+  section.support_service_cards .support_service_cards__kb .support_service_cards__tit {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    color: #fff;
+  }
+
+  section.support_service_cards .support_service_cards__kb .support_service_cards__desc {
+    font-size: 16px;
+    line-height: 24px;
+    color: #fff;
+    opacity: 0.7;
+  }
+
+  section.support_service_cards .support_service_cards__tit-group {
+    gap: 8px;
+  }
+
+  section.support_service_cards .support_service_cards__tit-divider {
+    flex: none;
+    width: 1px;
+    height: 14px;
+    background: #222;
+  }
+
+  section.support_service_cards .support_service_cards__card:hover,
+  section.support_service_cards .support_service_cards__card:focus-visible {
+    background: #fff;
+  }
+
+  section.support_service_cards .support_service_cards__card:hover
+    .support_service_cards__tit,
+  section.support_service_cards .support_service_cards__card:focus-visible
+    .support_service_cards__tit,
+  section.support_service_cards .support_service_cards__card:hover
+    .support_service_cards__tit-part,
+  section.support_service_cards .support_service_cards__card:focus-visible
+    .support_service_cards__tit-part {
+    text-decoration: none;
+  }
+
+  section.support_service_banner {
+    position: relative;
+    min-height: 370px;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  section.support_service_banner .support_service_banner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: #0c1625;
+  }
+
+  section.support_service_banner .support_service_banner__bg-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  section.support_service_banner .support_service_banner__bg-image--pc {
+    display: none;
+  }
+
+  section.support_service_banner .support_service_banner__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    max-width: none;
+    min-height: 370px;
+    padding: 0 var(--inner-padding-x-mobile);
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  section.support_service_banner .support_service_banner__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    max-width: 335px;
+    text-align: center;
+  }
+
+  section.support_service_banner .support_service_banner__tit {
+    margin: 0;
+    font-family: var(--font-sans, "Pretendard Variable", sans-serif);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+
+  section.support_service_banner .support_service_banner__desc {
+    margin: 0;
+    width: 100%;
+    font-size: 15px;
+    line-height: 23px;
+    color: #fff;
+  }
+
+  section.support_service_banner .support_service_banner__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 225px;
+    min-width: 225px;
+    height: 50px;
+    min-height: 50px;
+    margin: 0;
+    padding: 0 20px;
+    border: 1px solid rgb(255 255 255 / 30%);
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+    color: #fff;
+    background: transparent;
+    box-sizing: border-box;
+  }
+
+  section.support_service_banner:hover .support_service_banner__cta,
+  section.support_service_banner .support_service_banner__cta:hover,
+  section.support_service_banner .support_service_banner__cta:focus-visible {
+    color: #fff;
+    background: transparent;
+    border-color: rgb(255 255 255 / 30%);
+  }
+
+  section.support_service_offering {
+    padding: 70px 0 70px;
+  }
+
+  section.support_service_offering .support_service_offering__head {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 30px;
+  }
+
+  section.support_service_offering .support_service_offering__head .section_tit {
+    margin-bottom: 0;
+    font-size: 30px;
+    line-height: 40px;
+    letter-spacing: -0.02em;
+  }
+
+  section.support_service_offering .support_service_offering__head .section_desc {
+    font-size: 16px;
+    line-height: 24px;
+    margin-top: 0;
+  }
+
+  section.support_service_offering .support_service_offering__body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    left: auto;
+    max-width: none;
+    margin: 0;
+  }
+
+  section.support_service_offering .support_service_offering__carousel {
+    width: calc(100% - -20px);
+    margin-left: calc(-1 * var(--inner-padding-x-mobile));
+    margin-right: calc(-1 * var(--inner-padding-x-mobile));
+  }
+
+  section.support_service_offering .support_service_offering__slide {
+    height: auto;
+    aspect-ratio: 355/240;
+  }
+  section.support_service_offering .support_service_offering__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+  section.support_service_offering .support_service_offering__preview {
+    display: none;
+  }
+
+  section.support_service_offering .support_service_offering__panel {
+    width: 100%;
+    padding-top: 0;
+  }
+
+  section.support_service_offering .support_service_offering__panel-content {
+    gap: 8px;
+  }
+
+  section.support_service_offering .support_service_offering__panel-copy {
+    gap: 8px;
+  }
+
+  section.support_service_offering .support_service_offering__num {
+    color: var(--Grayscale-Gray-04, #E8E8E8);
+    font-family: "Pretendard Variable";
+    font-size: 34px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 44px; /* 129.412% */
+    letter-spacing: -0.34px;
+  }
+
+  section.support_service_offering .support_service_offering__slide-tit {
+    font-size: 24px;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  section.support_service_offering .support_service_offering__slide-desc {
+    max-width: none;
+    font-size: 15px;
+    line-height: 23px;
+    margin-top: 8px;
+    color: rgb(102 102 102 / 85%);
+  }
+
+  section.support_service_offering .swiper_type_01_controls {
+    position: static;
+    max-width: none;
+    margin-top: 30px;
+  }
+
+  section.support_service_flow {
+    position: relative;
+    padding: 70px 0 70px;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: #0c1625;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Figma 6880:146610 — h 206.01% / top -28.83% */
+    object-position: center 14%;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image--pc {
+    display: none;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image--mo {
+    display: block;
+  }
+
+  section.support_service_flow .inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.support_service_flow .support_service_flow__head {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  section.support_service_flow .support_service_flow__head-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  section.support_service_flow .support_service_flow__tit {
+    margin: 0;
+    max-width: none;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 40px;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__desc--pc {
+    display: none;
+  }
+
+  section.support_service_flow .support_service_flow__desc--mo {
+    display: block;
+    max-width: none;
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #fff;
+    opacity: 0.8;
+  }
+
+  section.support_service_flow .support_service_flow__cta {
+    align-self: flex-start;
+    min-height: 22px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__cta .btn-text-30__icon {
+    width: 22px;
+    height: 22px;
+    padding: 8px 0;
+    box-sizing: border-box;
+  }
+
+  section.support_service_flow .support_service_flow__cta-icon--pc {
+    display: none;
+  }
+
+  section.support_service_flow .support_service_flow__cta-icon--mo {
+    display: block;
+    filter: brightness(0) invert(1);
+  }
+
+  section.support_service_flow .support_service_flow__cta:hover .btn-text-30__icon,
+  section.support_service_flow .support_service_flow__cta:focus-visible .btn-text-30__icon {
+    background: transparent;
+  }
+
+  section.support_service_flow .support_service_flow__diagram {
+    display: flex;
+    gap: 18px;
+    align-items: stretch;
+    min-height: 0;
+    margin-top: 30px;
+  }
+
+  section.support_service_flow .support_service_flow__path,
+  section.support_service_flow .support_service_flow__end-dot {
+    display: none;
+  }
+
+  section.support_service_flow .support_service_flow__track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 30px;
+    position: relative;
+  }
+
+  section.support_service_flow .support_service_flow__track-pin {
+    display: block;
+    width: 24px;
+    height: 30px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  section.support_service_flow .support_service_flow__track-line {
+    flex: 1;
+    width: 1px;
+    min-height: 0;
+    margin-top: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 90%) 0 4px,
+      transparent 4px 8px
+    );
+    position: absolute;
+    top: 30px;
+    bottom: 62px;
+    left: 14px;
+  }
+
+  section.support_service_flow .support_service_flow__steps {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 40px;
+    min-width: 0;
+    max-width: 287px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.support_service_flow .support_service_flow__step {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+
+  section.support_service_flow .support_service_flow__step-icon {
+    display: none;
+  }
+
+  /* Figma 6880:146628 — 18px red check + soft glow (28px), centered on 30px track */
+  section.support_service_flow .support_service_flow__step:not(.support_service_flow__step--issue)::before {
+    position: absolute;
+    top: 1px;
+    left: -47px;
+    width: 28px;
+    height: 28px;
+    background: url("/img/services/service-center/service-flow-icon-dot.svg")
+      center / 28px 28px no-repeat;
+    content: "";
+  }
+
+  section.support_service_flow .support_service_flow__step-copy {
+    display: block;
+  }
+
+  section.support_service_flow .support_service_flow__step-tit {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__step-sub {
+    margin: 0;
+    font-size: 15px;
+    line-height: 23px;
+    color: #fff;
+  }
+
+  section.support_service_flow .support_service_flow__step-desc {
+    margin: 10px 0 0;
+    font-size: 15px;
+    line-height: 23px;
+    color: rgb(255 255 255 / 60%);
+  }
+
+  /* Service Platform — Figma 6880:146573 */
+  section.support_service_gics {
+    padding: 70px 0;
+  }
+
+  section.support_service_gics .support_service_gics__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  section.support_service_gics .support_service_gics__head-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  section.support_service_gics .support_service_gics__head .section_tit {
+    margin: 0;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 40px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.support_service_gics .support_service_gics__head .section_desc {
+    margin: 0;
+    max-width: none;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #666;
+  }
+
+  section.support_service_gics .support_service_gics__cta {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 4px;
+    min-height: 22px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    color: #222;
+  }
+
+  section.support_service_gics .support_service_gics__cta .btn-text-30__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  section.support_service_gics .support_service_gics__cta .icon_link-14 {
+    display: block;
+    width: 14px;
+    height: 14px;
+  }
+
+  section.support_service_gics .support_service_gics__cta:hover .btn-text-30__icon,
+  section.support_service_gics .support_service_gics__cta:focus-visible .btn-text-30__icon {
+    background: transparent;
+  }
+
+  section.support_service_gics .support_service_gics__body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  section.support_service_gics .support_service_gics__media {
+    flex: none;
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    overflow: hidden;
+    aspect-ratio: 335/197;
+  }
+
+  section.support_service_gics .support_service_gics__media-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  section.support_service_gics .support_service_gics__features {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.support_service_gics .support_service_gics__feature {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 0;
+  }
+
+  section.support_service_gics .support_service_gics__feature-num-wrap {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    height: 30px;
+    padding: 5px 0;
+    box-sizing: border-box;
+  }
+
+  section.support_service_gics .support_service_gics__feature-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    padding: 0;
+    border-radius: 999px;
+    background: #0c1625;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    color: #fff;
+    box-sizing: border-box;
+    margin-top: 3px;
+  }
+
+  section.support_service_gics .support_service_gics__feature-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  section.support_service_gics .support_service_gics__feature-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  section.support_service_gics .support_service_gics__feature-tit {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    letter-spacing: 0;
+    color: #222;
+  }
+
+  section.support_service_gics .support_service_gics__feature-sub {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.support_service_gics .support_service_gics__feature-desc {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #666;
+  }
+
+  .support-page--service-center section.common_faq {
+    padding: 70px 0 80px;
+    background: #f5f7fa;
+  }
+
+  .support-page--service-center section.common_faq .common_faq__bg {
+    background: #f5f7fa;
+  }
+}
+
+/* Service Center cards — tablet 2-col (640–1200px) */
+@media (min-width: 640px) and (max-width: 1200px) {
+  section.support_service_cards .inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  section.support_service_cards .support_service_cards__row,
+  section.support_service_cards .support_service_cards__pair {
+    display: contents;
+  }
+
+  section.support_service_cards .support_service_cards__row + .support_service_cards__row {
+    margin-top: 0;
+  }
+
+  section.support_service_cards .support_service_cards__row--primary {
+    min-height: 0;
+  }
+
+  section.support_service_cards .support_service_cards__kb {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  section.support_service_cards .support_service_cards__card {
+    flex: none;
+    width: auto;
+    min-width: 0;
+  }
+
+  section.support_service_cards .support_service_cards__row--secondary
+    .support_service_cards__card:first-child {
+    flex: none;
+    width: auto;
+  }
+
+  /* Service Flow — mobile layout diagram center */
+  section.support_service_flow .support_service_flow__diagram {
+    justify-content: center;
+  }
+}
+
+/* Service Flow — PC diagram center on tablet */
+@media (min-width: 781px) and (max-width: 1200px) {
+  section.support_service_flow .support_service_flow__diagram {
+    width: 1440px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Services — Warranty Policy (Figma 5552:123797 · P-FO-SERV-020000P) */
+
+@media (min-width: 781px) {
+  .support-page--warranty-policy section.company-about-title .inner,
+  .support-page--warranty-policy section.support_service_warranty_coverage .inner,
+  .support-page--warranty-policy section.support_service_warranty_extension .inner,
+  .support-page--warranty-policy section.support_service_warranty_apply .inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  section.support_service_warranty_coverage {
+    padding: 75px 0 0;
+  }
+
+  section.support_service_warranty_coverage .section_tit {
+    margin: 0 0 24px;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 62px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.support_service_warranty_coverage .support_service_warranty_coverage__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  section.support_service_warranty_coverage .support_service_warranty_coverage__cards-heading,
+  section.support_service_warranty_extension .support_service_warranty_extension__cards-heading {
+    margin: 0 0 20px;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  .support_service_warranty_cards__list {
+    display: flex;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .support_service_warranty_cards__item {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .support_service_warranty_cards__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    border: 1px solid #e8e8e8;
+    background: #fff;
+    text-align: center;
+  }
+
+  .support_service_warranty_cards--coverage .support_service_warranty_cards__card {
+    min-height: 264px;
+    padding: 39px 24px 24px;
+  }
+
+  .support_service_warranty_cards--extension .support_service_warranty_cards__card {
+    min-height: 284px;
+    padding: 49px 24px 24px;
+  }
+
+  .support_service_warranty_cards__num {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .support_service_warranty_cards__num img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .support_service_warranty_cards__num-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .support_service_warranty_cards__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 110px;
+    margin-bottom: 18px;
+    border: 1px solid #e8e8e8;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 2px 2px 8px rgb(170 182 222 / 25%);
+  }
+
+  .support_service_warranty_cards__icon img {
+    display: block;
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+  }
+
+  .support_service_warranty_cards__tit {
+    margin: 0;
+    max-width: 180px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+    color: #0f1f45;
+  }
+
+  .support_service_warranty_cards__tit-line {
+    display: block;
+  }
+
+  .support_service_warranty_cards__footnote {
+    margin: 16px 0 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #888;
+    text-align: right;
+  }
+
+  .support_service_warranty_table-wrap {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .support_service_warranty_table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    border-top: 2px solid #0f1f45;
+  }
+
+  .support_service_warranty_table thead th {
+    min-height: 66px;
+    padding: 20px 16px;
+    border: 0;
+    border-right: 1px solid #ddd;
+    background: #f5f7fa;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #222;
+    text-align: center;
+    vertical-align: middle;
+    word-break: break-word;
+  }
+
+  .support_service_warranty_table thead th:first-child {
+    line-height: 26px;
+  }
+
+  .support_service_warranty_table tbody th[scope="row"],
+  .support_service_warranty_table tbody td {
+    padding: 20px 16px;
+    border: 0;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+    text-align: center;
+    vertical-align: middle;
+    word-break: break-word;
+  }
+
+  .support_service_warranty_table tbody tr:first-child th,
+  .support_service_warranty_table tbody tr:first-child td {
+    border-top: 1px solid #ddd;
+  }
+
+  .support_service_warranty_table tbody th[scope="row"] {
+    font-weight: 600;
+  }
+
+  .support_service_warranty_table tbody td {
+    font-weight: 400;
+  }
+
+  .support_service_warranty_table__cell--multiline {
+    white-space: normal;
+  }
+
+  .support_service_warranty_table--3col thead th:first-child,
+  .support_service_warranty_table--3col tbody th[scope="row"] {
+    width: 280px;
+  }
+
+  .support_service_warranty_table--3col thead th:nth-child(2),
+  .support_service_warranty_table--3col tbody td:nth-child(2) {
+    width: 250px;
+  }
+
+  .support_service_warranty_table--2col thead th:first-child,
+  .support_service_warranty_table--2col tbody th[scope="row"] {
+    width: 280px;
+  }
+
+  .support_service_warranty_notes {
+    padding: 30px 40px;
+    background: #f5f7fa;
+    margin-top: 40px;
+  }
+
+  .support_service_warranty_notes__tit {
+    margin: 0 0 10px;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: #0f1f45;
+  }
+
+  .support_service_warranty_bullets {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .support_service_warranty_bullets__item {
+    position: relative;
+    padding-left: 12px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+  }
+
+  .support_service_warranty_bullets__item + .support_service_warranty_bullets__item {
+    margin-top: 4px;
+  }
+
+  .support_service_warranty_bullets__item::before {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 4px;
+    height: 4px;
+    background: #666;
+  }
+
+  section.support_service_warranty_banner {
+    padding: 150px 0;
+    color: #fff;
+    text-align: center;
+  }
+  section.support_service_warranty_banner .inner{
+    max-width: none;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__panel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 340px;
+    overflow: hidden;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__bg img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 82px 24px 56px;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__tit {
+    margin: 0;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 52px;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__desc {
+    margin: 0;
+    max-width: 1440px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #fff;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__cta {
+    margin-top: 16px;
+    min-width: 220px;
+  }
+
+  section.support_service_warranty_banner:hover .support_service_warranty_banner__cta {
+    color: var(--color-primary);
+    background: #fff;
+    border-color: #fff;
+  }
+
+  section.support_service_warranty_extension {
+    padding: 0 0 150px;
+  }
+
+  section.support_service_warranty_extension .support_service_warranty_extension__head {
+    margin-bottom: 40px;
+  }
+
+  section.support_service_warranty_extension .section_tit {
+    margin: 0 0 16px;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 62px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.support_service_warranty_extension .section_desc {
+    margin: 0;
+    /* max-width: 981px; */
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.support_service_warranty_extension .support_service_warranty_extension__body {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  section.support_service_warranty_extension .support_service_warranty_extension__panels {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .support_service_warranty_panel {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 30px 40px;
+    background: #f5f7fa;
+  }
+
+  .support_service_warranty_panel__tit {
+    margin: 0 0 10px;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: #0f1f45;
+  }
+
+  .support_service_warranty_panel__intro {
+    margin: 0 0 4px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+  }
+
+  .support_service_warranty_panel__footnote {
+    margin: 14px 0 0;
+    font-size: 15px;
+    line-height: 23px;
+    color: #666;
+  }
+
+  section.support_service_warranty_apply {
+    padding: 0 0 150px;
+  }
+
+  section.support_service_warranty_apply .support_service_warranty_apply__head {
+    margin-bottom: 40px;
+  }
+
+  section.support_service_warranty_apply .section_tit {
+    margin: 0 0 10px;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 62px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.support_service_warranty_apply .section_desc {
+    margin: 0;
+    /* max-width: 981px; */
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  .support_service_warranty_apply__link {
+    color: #222;
+    text-decoration: underline;
+    text-underline-position: from-font;
+  }
+
+  .support_service_warranty_apply__link:hover {
+    color: var(--color-primary);
+  }
+}
+

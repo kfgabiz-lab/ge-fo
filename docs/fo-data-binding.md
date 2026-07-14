@@ -30,7 +30,7 @@
 | Main Info | `src/app/main/components/MainInfo.tsx` | 스크롤 진입 시 통계 숫자 3개를 카운트업 애니메이션으로 보여주는 컴포넌트 | TODO |
 | What We Do Swiper | `src/app/main/components/WhatWeDoSwiper.tsx` | "What we do" 슬라이드 3개를 fade 효과 오토플레이 Swiper로 보여주는 컴포넌트 | TODO |
 | Main Cards | `src/app/main/components/MainCards.tsx` | 산업분야 카드를 IntersectionObserver 기반 순차 페이드인 애니메이션과 함께 보여주는 "Industries We Serve" 섹션 컴포넌트 (`@/data/gnb/mega/markets` 데이터 재사용) | TODO |
-| Main Products | `src/app/main/components/MainProducts.tsx` | New Arrivals/Best Sellers 탭 전환과 Swiper 슬라이더로 상품 카드를 보여주는 "Discover Our Products" 섹션 컴포넌트 | TODO |
+| Main Products | `src/app/main/components/MainProducts.tsx` | New Arrivals/Best Sellers 탭 전환과 Swiper 슬라이더로 상품 카드를 보여주는 "Discover Our Products" 섹션 컴포넌트 | prdGrp-data (승인됨 — `fo/docs/dev/main/prdGrp-data.md` 참고) |
 | Icon Cards | `src/app/main/components/IconCards.tsx` | Connect Portal/Tech Hub/Download Center/Training 4개 아이콘 카드를 렌더링하는 "Explore More" 섹션 컴포넌트 | TODO |
 
 ### 1-3. markets
@@ -54,7 +54,7 @@
 | Markets Smart Grid Diagram | `src/app/markets/components/MarketsSmartGridDiagram.tsx` | 마이크로그리드 시스템 구성도 이미지를 렌더링하는 다이어그램 컴포넌트 | TODO |
 | Markets Why | `src/app/markets/components/MarketsWhy.tsx` | 배경 이미지 위에 아이콘·타이틀·설명 아이템들을 나열하는 "Why LS ELECTRIC?" 섹션 | TODO |
 | Markets Products | `src/app/markets/components/MarketsProducts.tsx` | 관련 제품 목록을 그리드로 보여주고 수상 배지를 표시하는 "Relavant Products" 섹션. `badgesType2Only`로 뱃지 타입 제한(power-grid) | TODO |
-| Markets Faq | `src/app/markets/components/MarketsFaq.tsx` | 공통 FAQ 컴포넌트(CommonFaq)에 마켓 전용 설명 문구와 FAQ 항목을 넘겨 렌더링하는 래퍼 | TODO |
+| Markets Faq | `src/app/markets/components/MarketsFaq.tsx` | 공통 FAQ 컴포넌트(CommonFaq)에 마켓 전용 설명 문구와 FAQ 항목을 넘겨 렌더링하는 래퍼 | faq-data (승인됨 — `fo/docs/dev/markets/faq-data.md` 참고) |
 
 > 이전 버전에 있던 `(markets)/commercial-residential`, `industrial`, `oil-gas-mining`, `public-infrastructure`, `references-modal`, `page.tsx`(리다이렉트), `MarketsSolutionsPanel`, `MarketsReferencesModalPageClient`, `MarketsReferencesModalPreview`는 현재 코드에 없습니다.
 
@@ -104,8 +104,23 @@
 > Company 하위 서브메뉴 중 `careers`는 아직 fo에 마이그레이션되지 않았습니다 — GNB에는 `GnbCareersMegaPanel`이 있으나 `src/app/company/careers` 라우트는 현재 코드에 없습니다. Blog/Press/Articles/Events(구 articles feed)는 이번 마이그레이션으로 모두 이관되었습니다.
 > `src/app/company/articleDetailClass.ts`와 `src/app/company/data/*.ts`는 tsx가 아니므로(BEM 헬퍼·데이터 파일) 본 표에서 제외했습니다.
 
+### 1-5. services
+
+| 패널명 | tsx 파일 경로 | 설명 | data slug |
+|---|---|---|---|
+| Services 레이아웃 | `src/app/services/layout.tsx` | SubHeader(`components/layout/markets/SubHeader`)와 SubFooter(`components/layout/markets/SubFooter`)로 children을 감싸는 서브페이지 공통 레이아웃(markets와 동일 헤더/푸터 재사용) | TODO |
+| Service Center 페이지 | `src/app/services/service-center/page.tsx` | Service Center(고객지원 센터) 페이지 — Title, Cards, Banner, Offering, Flow, Gics, CommonFaq(공통, sectionId 지정) 순으로 조립하는 페이지 | TODO |
+| Service Center Title | `src/app/services/service-center/components/ServiceCenterTitle.tsx` | 페이지 상단 대제목(heading)과 설명(desc)을 표시하는 타이틀 섹션(`company-about-title` 공통 타이틀 스타일 사용) | TODO |
+| Service Center Cards | `src/app/services/service-center/components/ServiceCenterCards.tsx` | Knowledge Base 카드와 Warranty/Request/Training/Download/Tech Hub 링크 카드들을 2행 그리드로 보여주는 섹션(내부/외부 링크 분기) | TODO |
+| Service Center Banner | `src/app/services/service-center/components/ServiceCenterBanner.tsx` | PC/모바일 배경 이미지 위에 카피와 CTA 버튼을 얹은 프로모션 배너 섹션 | TODO |
+| Service Center Offering | `src/app/services/service-center/components/ServiceCenterOffering.tsx` | 메인 Swiper(fade)와 프리뷰 Swiper 2개를 상호 동기화하고 공통 SwiperBarControls로 제어하는 "Our Offering" 캐러셀 섹션 | TODO |
+| Service Center Flow | `src/app/services/service-center/components/ServiceCenterFlow.tsx` | 아이콘·타이틀·설명으로 구성된 서비스 처리 단계(steps)를 경로 다이어그램과 함께 나열하는 "Service Flow" 섹션 | TODO |
+| Service Center Gics | `src/app/services/service-center/components/ServiceCenterGics.tsx` | 미디어 이미지와 번호가 매겨진 기능(feature) 리스트를 좌우 배치로 보여주는 GICS 소개 섹션 | TODO |
+
+> Service Center의 FAQ 영역은 별도 컴포넌트가 아니라 공통 `CommonFaq`(2-3절)를 페이지에서 직접 사용합니다(`sectionId="service-center-faq"` 앵커 지정).
+
 ### 미마이그레이션 섹션 (참고)
-products-systems, search, services, support, guide — 아직 fo에 마이그레이션되지 않았습니다. 필요 시 fo-orchestrator의 STEP 0-0(페이지 분석)부터 시작합니다.
+products-systems, search, support, guide — 아직 fo에 마이그레이션되지 않았습니다(company/services는 이관 완료). 필요 시 fo-orchestrator의 STEP 0-0(페이지 분석)부터 시작합니다.
 
 ### 잔여 파일 (정리 필요)
 `src/app/()/products-systems/data/productDetailContent.ts` — 이름 없는 route group 폴더 아래 데이터 파일만 남아 있고 대응하는 페이지가 없습니다. 삭제 여부는 사용자 확인 필요.
@@ -134,7 +149,7 @@ products-systems, search, services, support, guide — 아직 fo에 마이그레
 
 | 패널명 | tsx 파일 경로 | 설명 | data slug |
 |---|---|---|---|
-| Common Faq | `src/components/faq/CommonFaq.tsx` | 질문/답변 아코디언 패널들을 펼치고 접을 수 있는 공통 FAQ 섹션 컴포넌트 | TODO |
+| Common Faq | `src/components/faq/CommonFaq.tsx` | 질문/답변 아코디언 패널들을 펼치고 접을 수 있는 공통 FAQ 섹션 컴포넌트 | faq-data (승인됨 — `fo/docs/dev/markets/faq-data.md` 참고) |
 
 ### 2-4. form
 
@@ -205,7 +220,7 @@ products-systems, search, services, support, guide — 아직 fo에 마이그레
 
 | 패널명 | tsx 파일 경로 | 설명 | data slug |
 |---|---|---|---|
-| Faq Item | `src/components/ui/FaqItem.tsx` | 질문 클릭 시 답변 영역이 펼쳐지는 아코디언형 FAQ 아이템 컴포넌트 | TODO |
+| Faq Item | `src/components/ui/FaqItem.tsx` | 질문 클릭 시 답변 영역이 펼쳐지는 아코디언형 FAQ 아이템 컴포넌트 | faq-data (승인됨 — `fo/docs/dev/markets/faq-data.md` 참고) |
 | Tab Button | `src/components/ui/TabButton.tsx` | role="tab" 접근성 속성을 가진 탭 전환용 버튼 공통 컴포넌트 | TODO |
 
 > 이전 버전에 있던 `components/ui/BtnArrow.tsx`, `BtnFlat.tsx`는 현재 코드에 없습니다. `components/dev`(PageIndexTable 등)도 마찬가지로 없습니다. (`components/video`의 DevicesProductVideoPlayer는 이번 company 마이그레이션으로 신규 추가되어 아래 2-11 섹션에 반영함.)

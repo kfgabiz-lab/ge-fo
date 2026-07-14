@@ -20,9 +20,13 @@ import {
   oilGasMiningWhyItems,
 } from "../data/marketsOilGasMiningContent";
 import { oilGasMiningSolutionsPanel } from "../data/marketsOilGasMiningSolutionsPanel";
+import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
-export default function MarketsOilGasMiningPage() {
+export default async function MarketsOilGasMiningPage() {
+  // Oil & Gas, Mining FAQ(markets=003) 조회 → MarketsFaq 에 items 로 전달
+  const faqItems = await fetchMarketsFaqItems(MARKETS_FAQ_CODE.oilGasMining);
+
   return (
     <main
       className="markets-page markets-page--oil-gas-mining"
@@ -51,7 +55,7 @@ export default function MarketsOilGasMiningPage() {
         items={marketsHighlightNewsItems}
         sectionId="markets-highlights"
       />
-      <MarketsFaq />
+      <MarketsFaq items={faqItems} />
     </main>
   );
 }

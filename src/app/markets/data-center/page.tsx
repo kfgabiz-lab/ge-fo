@@ -12,7 +12,6 @@ import MarketsStats from "../components/MarketsStats";
 import MarketsWhy from "../components/MarketsWhy";
 import {
   dataCenterBenefits,
-  dataCenterFaqItems,
   dataCenterHero,
   dataCenterIntro,
   dataCenterProducts,
@@ -21,9 +20,12 @@ import {
   dataCenterWhyDescription,
   dataCenterWhyItems,
 } from "../data/marketsDataCenterContent";
+import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
-export default function MarketsDataCenterPage() {
+export default async function MarketsDataCenterPage() {
+  // Data Center FAQ(markets=001) 조회 → MarketsFaq 에 items 로 전달
+  const faqItems = await fetchMarketsFaqItems(MARKETS_FAQ_CODE.dataCenter);
   return (
     <main className="markets-page markets-page--data-center" id="Page_markets_data_center">
       <MarketsHero
@@ -49,7 +51,7 @@ export default function MarketsDataCenterPage() {
         items={marketsHighlightNewsItems}
         sectionId="markets-highlights"
       />
-      <MarketsFaq items={dataCenterFaqItems} />
+      <MarketsFaq items={faqItems} />
     </main>
   );
 }

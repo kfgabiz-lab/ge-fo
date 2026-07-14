@@ -45,6 +45,32 @@ bo 홈페이지관리에서 콘텐츠 입력
 - 단건: `data-slug`가 붙은 요소 하나에 `data-slugKey` 필드들이 직접 들어감
 - 다건(배열): `data-slug` + `data-slug-repeat="true"`가 붙은 바깥 컨테이너 안에, 실제 반복(`.map()`) 대상 요소에 `data-slug-item`을 붙이고 그 안에 `data-slugKey`를 태깅. (예시는 `fo/docs/dev/_examples/main-cards.md` 참고)
 - 속성 바인딩: `data-slugKey-attr`가 있으면 그 속성(예: `href`, `src`)에 값을 쓰고, 없으면 텍스트 콘텐츠에 쓴다. 에이전트가 요소 종류로 추측하지 않도록 반드시 명시한다.
+- 중첩 다건(그룹 다건 안에 다시 목록 다건이 있는 경우): 상위·하위 반복 모두 **동일하게** `data-slug-repeat`/`data-slug-item` 어휘를 재사용한다. 별도의 중첩 전용 어휘는 없다. 아이템이 어느 반복에 속하는지는 **"가장 가까운 조상 `data-slug-repeat`"** 기준으로 판정한다.
+
+```html
+<!-- 중첩 다건 — 그룹(다건) 안에 그룹별 목록(다건)이 다시 있는 경우 -->
+<div data-slug="prdGrp-data" data-slug-repeat="true">
+  <div data-slug-item>
+    <div data-slugKey="prdGrpNm"></div>
+    <!-- 중첩: 이 그룹 1건 안에 있는 목록(다건). 아이템은 "가장 가까운 조상 data-slug-repeat"인 이 태그에 속함 -->
+    <div data-slug="ms" data-slug-repeat="true">
+      <div data-slug-item>
+        <div data-slugKey="productDataForm.productNm"></div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+동일한 최상위 `data-slug`가 서로 다른 두 DOM 영역(예: 탭 라벨 영역과 실제 목록 영역)에 이중으로 붙는 경우도 있다 — 이건 같은 배열을 두 군데서 다르게 렌더링하는 것뿐이므로, **연동(STEP6) 시 fetch는 반드시 1회만** 하고 그 결과를 두 렌더링에 공유해야 한다(중복 fetch 금지). 실제 적용 사례: `fo/docs/dev/main/prdGrp-data.md`(Discover Our Products, 그룹 안에 제품 목록이 중첩된 케이스).
+
+### 공용 컴포넌트가 여러 페이지(라우트)에서 다른 where로 재사용되는 경우
+
+한 컴포넌트가 여러 `page.tsx`에서 공용으로 쓰이는데 페이지마다 조회 조건(where)이 달라야 하는 경우가 있다(예: 같은 FAQ 컴포넌트를 6개 markets 하위 페이지가 쓰지만 각 페이지가 자기 시장(markets) 값만 보여줘야 함). 공용 컴포넌트 자체는 페이지 구분자를 받지 않으므로 내부에서 where를 라우트별로 분기할 수단이 없다.
+
+→ 이런 경우 **각 page.tsx가 자기 페이지의 where로 fetchApi를 직접 호출하고, 결과를 공용 컴포넌트의 prop으로 전달**하는 구조를 쓴다(STEP6). 공용 컴포넌트에 태깅된 `data-slug`/`data-slugKey`는 "이 트리가 어떤 slug를 렌더하는지" 표시 용도로 유지하되, 실제 fetch 호출은 각 `page.tsx`에 위치시킨다. 기존 코드에 이미 페이지별로 다른 데이터를 prop으로 넘기는 패턴이 있으면 그 패턴을 그대로 재사용한다(신규 prop/구조를 억지로 만들지 않는다).
+
+실제 적용 사례: `fo/docs/dev/markets/faq-data.md`(Markets FAQ, 6개 markets 페이지 공용 `CommonFaq`/`FaqItem`에 각기 다른 markets where 적용).
 
 이 속성은 **에이전트가 코드를 분석해서 직접 마크업에 추가**하는 것이며, 자동으로 값을 읽어 채우는 런타임 라이브러리/컴포넌트가 아니다.
 

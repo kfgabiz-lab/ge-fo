@@ -20,9 +20,15 @@ import {
   publicInfrastructureWhyItems,
 } from "../data/marketsPublicInfrastructureContent";
 import { publicInfrastructureSolutionsPanel } from "../data/marketsPublicInfrastructureSolutionsPanel";
+import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
-export default function MarketsPublicInfrastructurePage() {
+export default async function MarketsPublicInfrastructurePage() {
+  // Public Infrastructure FAQ(markets=002) 조회 → MarketsFaq 에 items 로 전달
+  const faqItems = await fetchMarketsFaqItems(
+    MARKETS_FAQ_CODE.publicInfrastructure,
+  );
+
   return (
     <main
       className="markets-page markets-page--public-infrastructure"
@@ -51,7 +57,7 @@ export default function MarketsPublicInfrastructurePage() {
         items={marketsHighlightNewsItems}
         sectionId="markets-highlights"
       />
-      <MarketsFaq />
+      <MarketsFaq items={faqItems} />
     </main>
   );
 }
