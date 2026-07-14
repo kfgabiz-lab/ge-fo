@@ -24,6 +24,17 @@ type CompanyFeedListSectionProps = {
   viewAllHref?: string;
   currentPage?: number;
   totalPages?: number;
+  // 페이지네이션 클릭 핸들러(선택). 미지정 시 정적 표시만(기존 Articles 동작 유지)
+  onPageChange?: (page: number) => void;
+  // 툴바(월/연도/검색/정렬) 상태 — 그대로 CompanyFeedListToolbar에 전달. 미지정 시 비연동 장식 UI 유지
+  monthValue?: string;
+  onMonthChange?: (value: string) => void;
+  yearValue?: string;
+  onYearChange?: (value: string) => void;
+  searchValue?: string;
+  onSearchSubmit?: (value: string) => void;
+  sortValue?: "latest" | "oldest";
+  onSortChange?: (value: "latest" | "oldest") => void;
 };
 
 export default function CompanyFeedListSection({
@@ -34,6 +45,15 @@ export default function CompanyFeedListSection({
   viewAllHref,
   currentPage = 1,
   totalPages = 5,
+  onPageChange,
+  monthValue,
+  onMonthChange,
+  yearValue,
+  onYearChange,
+  searchValue,
+  onSearchSubmit,
+  sortValue,
+  onSortChange,
 }: CompanyFeedListSectionProps) {
   const prefix = `company-${variant}-list`;
   const sectionClass = empty ? `${prefix} ${prefix}--no-data` : prefix;
@@ -41,7 +61,17 @@ export default function CompanyFeedListSection({
   return (
     <section className={sectionClass}>
       <div className="inner">
-        <CompanyFeedListToolbar variant={variant} />
+        <CompanyFeedListToolbar
+          variant={variant}
+          monthValue={monthValue}
+          onMonthChange={onMonthChange}
+          yearValue={yearValue}
+          onYearChange={onYearChange}
+          searchValue={searchValue}
+          onSearchSubmit={onSearchSubmit}
+          sortValue={sortValue}
+          onSortChange={onSortChange}
+        />
 
         <div className={`${prefix}__body`}>
           {empty ? (
@@ -53,6 +83,7 @@ export default function CompanyFeedListSection({
                 className={`${prefix}__pagination`}
                 currentPage={currentPage}
                 totalPages={totalPages}
+                onPageChange={onPageChange}
                 ariaLabel={paginationLabels[variant]}
               />
             </>

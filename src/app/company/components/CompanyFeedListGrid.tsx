@@ -22,7 +22,8 @@ export default function CompanyFeedListGrid({
     <ul className={`${prefix}__grid`}>
       {items.map((item) => (
         <li key={item.id} className={`${prefix}__item`}>
-          <Link href={detailHref} className={`${prefix}__card`}>
+          {/* 항목별 href 우선(id 기반 동적 라우트), 없으면 공통 detailHref 폴백 */}
+          <Link href={item.href ?? detailHref} className={`${prefix}__card`}>
             <div className={`${prefix}__image`}>
               <img src={item.image} alt={item.title} />
             </div>

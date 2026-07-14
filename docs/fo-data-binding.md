@@ -69,8 +69,8 @@
 | Company ESG 페이지 | `src/app/company/esg/page.tsx` | CompanyEsgPage를 렌더하고 company.css를 로드하는 About Us > ESG 라우트 진입점 | TODO |
 | Company Blog 목록 페이지 | `src/app/company/blog/page.tsx` | CompanyBlogPage를 렌더하는 블로그 목록 라우트 진입점 | blog-data (승인됨 — `fo/docs/dev/company/blog-data.md` 참고) |
 | Company Blog 상세 페이지 | `src/app/company/blog/detail/page.tsx` | CompanyArticleDetail(variant="blog")에 blogDetailContent 데이터(히어로·문단·불릿·본문 이미지·태그·이전/다음)를 넘겨 블로그 상세를 조립하는 클라이언트 페이지 | blog-data (승인됨 — `fo/docs/dev/company/blog-data.md` 참고) |
-| Company Press 목록 페이지 | `src/app/company/press/page.tsx` | 공통 CompanyFeedPage(variant="press")를 렌더하는 보도자료 목록 라우트 진입점 | TODO |
-| Company Press 상세 페이지 | `src/app/company/press/detail/page.tsx` | CompanyArticleDetail(variant="press")에 pressDetailContent와 DevicesProductVideoPlayer(유튜브 영상)를 넘겨 보도자료 상세를 조립하는 클라이언트 페이지 | TODO |
+| Company Press 목록 페이지 | `src/app/company/press/page.tsx` | 공통 CompanyFeedPage(variant="press")를 렌더하는 보도자료 목록 라우트 진입점 | press-data (승인됨 — `fo/docs/dev/company/press-data.md` 참고) |
+| Company Press 상세 페이지 | `src/app/company/press/detail/page.tsx` | CompanyArticleDetail(variant="press")에 pressDetailContent와 DevicesProductVideoPlayer(유튜브 영상)를 넘겨 보도자료 상세를 조립하는 클라이언트 페이지 | press-data (승인됨 — `fo/docs/dev/company/press-data.md` 참고) |
 | Company Articles 목록 페이지 | `src/app/company/articles/page.tsx` | 공통 CompanyFeedPage(variant="articles")를 렌더하는 미디어 아티클 목록 라우트 진입점 | TODO |
 | Company Articles 상세 페이지 | `src/app/company/articles/detail/page.tsx` | CompanyArticleDetail(variant="articles")에 mediaArticleDetailContent 데이터를 넘겨 미디어 아티클 상세를 조립하는 클라이언트 페이지 | TODO |
 | Company Events 목록 페이지 | `src/app/company/events/page.tsx` | CompanyEventsPage를 렌더하는 이벤트 목록 라우트 진입점 | TODO |

@@ -6,7 +6,7 @@
 > - `fo/src/app/company/data/blogData.ts` (신규 — fetchApi 조회/가공 헬퍼)
 > - `fo/src/app/company/components/CompanyArticleDetail.tsx` (공용 컴포넌트 — press/articles/events와 공유, 직접 태깅 대상 아님. prev/next를 optional로 변경)
 > - 참고(정적 폴백 이미지로 일부 유지): `fo/src/app/company/data/blogListContent.ts`, `fo/src/app/company/data/blogDetailContent.ts`
-> 상태: 구현 완료 (QA 검증 완료, 비차단 이슈 2건 — 8절 참고)
+> 상태: 구현 완료 (QA 검증 완료, 비차단 이슈 2건 — 8절 참고) / **필터·검색·정렬·월/연도 확장 구현+API 검증 완료(2026-07-14, 브라우저 UI 검증은 미완 — 9절 참고)**
 
 ## 1. data-slug
 - 값: `blog-data` (목록 Featured / 목록 리스트 / 상세 전부 동일 slug 재사용 — 별도 분리 없음)
@@ -196,3 +196,41 @@ FE 바인딩 시 참조 경로: `content[i].id` / `content[i].dataJson.blogForm.
 ## 8. 비차단(non-blocking) 알려진 이슈 — 코드 수정 없이 종료
 1. **레거시 스키마 레코드 5건 목록 공백**(id 1290/1283/1172/1171/1011, 939는 필드 자체 없음) — 구(舊) 필드명(`blogTitle`/`blogImage`/`blogContent`/`blogHashtag`/`blogPubDttm`/`blogCategory`)으로 저장된 과거 테스트 데이터라 현재 `blogForm.{title|image|content|hashtag|publishDttm|category}` 스키마로 값을 못 읽어 목록에서 제목/카테고리/날짜/태그가 공백으로 표시됨(id 링크는 정상). **FE에 구스키마 호환 코드를 추가하지 않기로 함** — 오래된 테스트 데이터를 위한 영구적 이중 스키마 유지비용이 더 크다고 판단. 해당 레코드를 BO 관리자 화면에서 현재 폼으로 다시 저장하면 자동 해결됨(데이터 정리 필요, 코드 변경 아님).
 2. **이미지 전부 404(FILE_NOT_FOUND)**: `blogForm.image`가 가리키는 `page-files/{id}`(231/216 등) 실체가 로컬 환경에 없음 — 로컬 DB 시드 데이터에 대응하는 실제 업로드 파일이 없는 로컬 개발 환경 이슈로, FE/BE 코드 문제 아님.
+
+## 9. 필터·검색·정렬 확장 (2026-07-14 신규 스코프, 설계 확정·승인 완료·개발 대기)
+
+### 배경
+press-data 작업 중 `/bo/admin/widget/press-list` 관리자 화면을 Playwright로 직접 조작해 네트워크 요청을 실측한 결과, BO의 "게시상태" 판정식(`isVisible=001,publishDttm>=today()?'게시':'미게시'`)이 FO where 조건에 반영되어 있지 않은 것을 발견. `/bo/admin/widget/blog-list` 위젯도 동일한 설정(`configJson`)으로 동일 이슈가 있음을 실측 확인. 이를 계기로 FO 툴바(검색·정렬)와 BO 위젯 검색 필드 전체를 재분석했다.
+
+### A. 게시상태 조건 수정 (버그 픽스)
+- 기존 where `eq_blogForm.isVisible=001`을 **BO와 동일한 조건식으로 교체**: `condexpr_status=isVisible=001,publishDttm>=today()?'게시':'미게시'&condval_status=게시` (category 필터 `eq_blogForm.category={코드}`는 그대로 병행 유지)
+- `PageDataService.appendWhereConditions()`의 `condexpr_`/`condval_` 처리(기존 기능, BO 위젯 검색 필드가 이미 사용 중)를 그대로 재사용 — **BE 변경 없음**. isVisible=001 조건이 이 식 안에 포함되어 있어 별도 `eq_isVisible` 파라미터 불필요.
+- 실측 검증: BO `blog-list` 위젯에서 "게시상태=게시"로 검색 시 위 파라미터가 실제로 전송되는 것을 네트워크 요청으로 확인(2026-07-14).
+
+### B. 검색 — 제목 + 본문
+- 파라미터: `title|content=검색어` (`blogForm.title`/`blogForm.content`가 아니라 접두어 없는 단순 키 — `PageDataService`가 최상위 1단계 중첩 object까지 자동 탐색하는 `|` OR-ILIKE 기능(기존 기능, `appendWhereConditions` 1152~1171행)을 그대로 재사용)
+- **BE 변경 없음** — press-data와 동일 로직이라 별도 재검증 없이 재사용(라이브 API 실측은 press-data에서 완료, 2026-07-14).
+- FE 대상: `CompanyBlogListToolbar.tsx`의 검색 `TextField`(현재 `value`/`onChange`/제출 핸들러 전혀 없는 장식 UI) 연동
+
+### C. 정렬 — Latest / Oldest
+- 파라미터: `sort=createdAt,desc`(Latest) / `sort=createdAt,asc`(Oldest)
+- `PageDataService`의 기존 `sort` 파라미터(감사 컬럼 매핑) 재사용 — **BE 변경 없음**
+- FE 대상: `CompanyBlogListToolbar.tsx`의 정렬 `GuideSelect`(현재 `defaultValue="Latest"`만 있고 `onChange` 없음) 연동. 카테고리 필터는 이미 연동되어 있으므로 변경 없음.
+
+### D. 게시월 필터 (신규 BE 로직 — 연도 무관, 월만 비교)
+- 파라미터: `month_publishDttm=07` 형식(월 2자리, `01`~`12`) — **점(dot) 없는 단순 키**(press-data.md 9절 D 참고, `blogForm.publishDttm`처럼 점 표기하면 별도 코드 경로를 타서 최상위+중첩 자동탐색 재사용이 안 됨)
+- **BE 신규 추가 필요**: press-data와 완전히 동일한 `month_` 접두사 분기를 `appendWhereConditions()`에 신설(공용 로직, press/blog 모두 이 하나의 분기로 처리됨 — slug별 분기 아님)
+- FE 대상: `CompanyBlogListToolbar.tsx`에는 현재 Month/Year 필드 자체가 없음(카테고리+검색+정렬 3개뿐) — **Month `GuideSelect` 신규 추가** 완료(Jan~Dec 1~12월, 값 `01`~`12`)
+- **구현 완료·검증 완료(2026-07-14)**: press-data와 동일 BE 로직 공유이므로 별도 재검증 없이 press-data.md 9절 D의 검증 결과 그대로 적용됨
+
+### D-2. 게시연도 필터 (2026-07-14 스코프 확장)
+- 파라미터: `year_publishDttm=2026` 형식(4자리), press-data.md 9절 D-2와 완전히 동일한 BE 로직(공용, slug별 분기 아님)
+- FE 대상: `CompanyBlogListToolbar.tsx`에 **Year `GuideSelect` 신규 추가**(옵션 `2026`/`2025` 하드코딩, press 툴바와 동일 — 사용자 확인 완료)
+- **구현 완료·검증 완료(2026-07-14)**: BE 공용 로직이라 press-data.md 9절 D-2 검증 결과 그대로 적용됨
+
+### 승인 이력
+| 일자 | 내용 |
+|---|---|
+| 2026-07-14 | A+B+C+D(월만) 스코프로 사용자 승인 완료(`#승인`). 개발(STEP6 FE 연동 + BE `month_` 추가) 착수 대기 |
+| 2026-07-14 | `#개발` 승인 → BE(`month_` 분기)+FE(툴바 연동) 구현 완료. `bo-api` 재기동 후 A/B/C/D 전부 검증 완료(press-data와 BE 공용 로직) |
+| 2026-07-14 | 사용자가 Year 필터도 추가 요청 → D-2(연도 필터) 신규 승인, BE `year_` 분기 구현+검증 완료 |

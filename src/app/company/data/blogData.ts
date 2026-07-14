@@ -100,17 +100,26 @@ export interface BlogListResult {
   page: number; // 0-based
 }
 
-// 목록 조회(공개글 고정 + 선택 카테고리 필터, 기본 정렬 created_at DESC)
+// 목록 조회(게시 상태 고정 + 카테고리/검색/정렬/월/연도 필터, 기본 정렬 created_at DESC)
 export async function fetchBlogList(params: {
   page: number; // 0-based
   category?: string; // 코드값, 없으면 전체
+  search?: string; // 제목+본문 검색어(설계문서 9-B)
+  sort?: "latest" | "oldest"; // 기본 latest(설계문서 9-C)
+  month?: string; // 게시월 "01"~"12", 연도 무관(설계문서 9-D)
+  year?: string; // 게시연도 "YYYY"(설계문서 9-D 확장)
 }): Promise<BlogListResult> {
   const sp = new URLSearchParams();
   sp.set("page", String(params.page));
   sp.set("size", String(BLOG_LIST_SIZE));
-  // 항상 공개글만(설계 6-11)
-  sp.set("eq_blogForm.isVisible", "001");
+  // 공개 + 게시일 도래(BO 게시상태 판정식과 동일, 설계문서 9-A) — eq_isVisible 단독 조건을 대체
+  sp.set("condexpr_status", "isVisible=001,publishDttm>=today()?'게시':'미게시'");
+  sp.set("condval_status", "게시");
   if (params.category) sp.set("eq_blogForm.category", params.category);
+  if (params.search) sp.set("title|content", params.search);
+  if (params.month) sp.set("month_publishDttm", params.month);
+  if (params.year) sp.set("year_publishDttm", params.year);
+  if (params.sort === "oldest") sp.set("sort", "createdAt,asc");
 
   const res = await fetchApi<BlogPageResponse>(
     `/api/v1/fo/page-data/blog-data?${sp.toString()}`,
@@ -122,12 +131,16 @@ export async function fetchBlogList(params: {
   };
 }
 
-// 상세 단건 조회(top-level id 정확일치 + 공개글)
+// 상세 단건 조회(top-level id 정확일치 + 공개·게시 상태, 설계문서 9-A와 동일 조건 적용)
 export async function fetchBlogDetail(
   id: string | number,
 ): Promise<BlogRow | null> {
+  const sp = new URLSearchParams();
+  sp.set("eq_id", String(id));
+  sp.set("condexpr_status", "isVisible=001,publishDttm>=today()?'게시':'미게시'");
+  sp.set("condval_status", "게시");
   const res = await fetchApi<BlogPageResponse>(
-    `/api/v1/fo/page-data/blog-data?eq_id=${encodeURIComponent(String(id))}&eq_blogForm.isVisible=001`,
+    `/api/v1/fo/page-data/blog-data?${sp.toString()}`,
   );
   return res.content?.[0] ?? null;
 }

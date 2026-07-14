@@ -386,6 +386,21 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     return configs["/company/blog/detail"];
   }
 
+  // 프레스 상세도 id 기반 동적 라우트(/company/press/detail/{id}) — 고정 경로와 동일한 breadcrumb 사용
+  if (/^\/company\/press\/detail\/[^/]+$/.test(pathname)) {
+    return configs["/company/press/detail"];
+  }
+
+  // 아티클 상세도 id 기반 동적 라우트(/company/articles/detail/{id}) — 고정 경로와 동일한 breadcrumb 사용
+  if (/^\/company\/articles\/detail\/[^/]+$/.test(pathname)) {
+    return configs["/company/articles/detail"];
+  }
+
+  // 이벤트 상세도 id 기반 동적 라우트(/company/events/detail/{id}) — 고정 경로와 동일한 breadcrumb 사용
+  if (/^\/company\/events\/detail\/[^/]+$/.test(pathname)) {
+    return configs["/company/events/detail"];
+  }
+
   return (
     configs[pathname] ?? {
       crumbs: [],

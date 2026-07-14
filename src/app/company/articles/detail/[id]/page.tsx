@@ -1,0 +1,88 @@
+import { notFound } from "next/navigation";
+import { articleDetailClass } from "@/app/company/articleDetailClass";
+import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
+import { mediaArticleDetailHero } from "@/app/company/data/mediaArticleDetailContent";
+import {
+  fetchArticlesDetail,
+  fetchArticlesList,
+  articlesDetailHref,
+  articlesImageSrc,
+} from "@/app/company/data/articlesData";
+import { flattenPageDataItem } from "@/lib/pageData";
+import "@/assets/css/company.css";
+
+type CompanyArticlesDetailPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function CompanyArticlesDetailPage({
+  params,
+}: CompanyArticlesDetailPageProps) {
+  const { id } = await params;
+
+  // 상세 단건 + pager 계산용 전체 목록 병렬 조회(articles엔 category 라벨 조회 불필요, press와 동일)
+  const [detail, listResult] = await Promise.all([
+    fetchArticlesDetail(id),
+    fetchArticlesList({ page: 0 }),
+  ]);
+
+  // 존재하지 않거나 비공개/미게시 글이면 404
+  if (!detail) {
+    notFound();
+  }
+
+  // flattenPageDataItem: articlesForm/seo 섹션 간 키 충돌 없음 → title/publishDttm/image/content가 root로 flat 병합됨
+  const row = flattenPageDataItem(detail);
+  const contentHtml = (row.content as string) ?? "";
+
+  // hero 이미지: articlesForm.image[0] → page-files, 미등록 시 정적 폴백(별도 heroImage 필드 없음)
+  const imageArr = row.image;
+  const mediaId =
+    Array.isArray(imageArr) && imageArr.length > 0 ? (imageArr[0] as number) : null;
+  const heroImage =
+    mediaId != null
+      ? { src: articlesImageSrc(mediaId), alt: (row.title as string) ?? "" }
+      : mediaArticleDetailHero;
+
+  // pager: 정렬된 전체 목록에서 현재 id 의 index 로 prev(index-1)/next(index+1) 계산
+  const rows = listResult.rows;
+  const idx = rows.findIndex((r) => r.id === detail.id);
+  const prevItem = idx > 0 ? rows[idx - 1] : null;
+  const nextItem = idx >= 0 && idx < rows.length - 1 ? rows[idx + 1] : null;
+  const prev = prevItem
+    ? {
+        href: articlesDetailHref(prevItem.id),
+        title: (flattenPageDataItem(prevItem).title as string) ?? "",
+      }
+    : undefined;
+  const next = nextItem
+    ? {
+        href: articlesDetailHref(nextItem.id),
+        title: (flattenPageDataItem(nextItem).title as string) ?? "",
+      }
+    : undefined;
+
+  return (
+    <CompanyArticleDetail
+      variant="articles"
+      pageId="Page_company_articles_detail"
+      title={(row.title as string) ?? ""}
+      date={(row.publishDttm as string) ?? ""}
+      heroImage={heroImage}
+      pagerAriaLabel="Articles post navigation"
+      prev={prev}
+      next={next}
+      listHref="/company/articles"
+    >
+      {/* data-slug: articles-data (목록·상세 통합 slug). 상세 본문은 리치텍스트 HTML 단일 필드 content로 태깅 */}
+      {/* 영상은 content(리치텍스트 HTML)에 iframe으로 이미 포함되어 dangerouslySetInnerHTML로 함께 렌더됨(press와 동일 전례) */}
+      {/* title/date/heroImage/pager 는 CompanyArticleDetail props 로 전달(공용 컴포넌트 내부 렌더). */}
+      <div className={articleDetailClass("body")} data-slug="articles-data">
+        <div
+          data-slugKey="content"
+          dangerouslySetInnerHTML={{ __html: contentHtml }}
+        />
+      </div>
+    </CompanyArticleDetail>
+  );
+}

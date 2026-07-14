@@ -10,11 +10,13 @@ import {
 } from "@/app/company/data/articlesListContent";
 
 // 공통 피드 리스트 아이템 타입 (Press/Articles 동일 구조)
+// href: 항목별 상세 링크(선택). 미지정 시 Grid의 detailHref 폴백 사용(기존 Articles 동작 유지)
 export type CompanyFeedListItem = {
   id: string;
   title: string;
   date: string;
   image: string;
+  href?: string;
 };
 
 // 공통 피드 variant (Press/Articles)

@@ -28,8 +28,6 @@ type CompanyArticleDetailBaseProps = {
   next?: CompanyArticleDetailPagerLink;
   listHref: string;
   children: ReactNode;
-  /** 히어로 이미지 바로 아래 (예: devices_product_video__player) */
-  afterHero?: ReactNode;
   embedded?: boolean;
 };
 
@@ -95,7 +93,6 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
     next,
     listHref,
     children,
-    afterHero,
     embedded = false,
   } = props;
 
@@ -142,7 +139,6 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
               title={heroVideo.title}
             />
           ) : null}
-          {afterHero}
           {children}
         </article>
 
