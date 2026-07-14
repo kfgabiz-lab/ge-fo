@@ -1,6 +1,6 @@
 import CommonBanner01 from "@/components/banners/CommonBanner01";
 import HighlightNewsSection from "@/components/content/HighlightNewsSection";
-import { marketsHighlightNewsItems } from "@/data/highlightNews";
+import { fetchMarketHighlightNews } from "@/data/highlightNews";
 import MarketsBenefits from "../components/MarketsBenefits";
 import MarketsFaq from "../components/MarketsFaq";
 import MarketsHero from "../components/MarketsHero";
@@ -24,8 +24,11 @@ import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsDataCenterPage() {
-  // Data Center FAQ(markets=001) 조회 → MarketsFaq 에 items 로 전달
-  const faqItems = await fetchMarketsFaqItems(MARKETS_FAQ_CODE.dataCenter);
+  // Data Center FAQ(markets=001) + 하이라이트 뉴스(자기 market=001 포함 press/blog/articles 통합 최신 3건) 병렬 조회
+  const [faqItems, highlightNewsItems] = await Promise.all([
+    fetchMarketsFaqItems(MARKETS_FAQ_CODE.dataCenter),
+    fetchMarketHighlightNews(MARKETS_FAQ_CODE.dataCenter),
+  ]);
   return (
     <main className="markets-page markets-page--data-center" id="Page_markets_data_center">
       <MarketsHero
@@ -48,7 +51,7 @@ export default async function MarketsDataCenterPage() {
       <HighlightNewsSection
         variant="markets"
         title="Highlights"
-        items={marketsHighlightNewsItems}
+        items={highlightNewsItems}
         sectionId="markets-highlights"
       />
       <MarketsFaq items={faqItems} />

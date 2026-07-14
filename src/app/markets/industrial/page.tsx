@@ -9,7 +9,7 @@ import { industrialSolutionsPanel } from "../data/marketsIndustrialSolutionsPane
 import MarketsWhy from "../components/MarketsWhy";
 import MarketsProducts from "../components/MarketsProducts";
 import HighlightNewsSection from "@/components/content/HighlightNewsSection";
-import { marketsHighlightNewsItems } from "@/data/highlightNews";
+import { fetchMarketHighlightNews } from "@/data/highlightNews";
 import MarketsFaq from "../components/MarketsFaq";
 import CommonBanner01 from "@/components/banners/CommonBanner01";
 import {
@@ -26,8 +26,11 @@ import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsIndustrialPage() {
-  // Industrial FAQ(markets=005) 조회 → MarketsFaq 에 items 로 전달
-  const faqItems = await fetchMarketsFaqItems(MARKETS_FAQ_CODE.industrial);
+  // Industrial FAQ(markets=005) + 하이라이트 뉴스(자기 market=005 포함 press/blog/articles 통합 최신 3건) 병렬 조회
+  const [faqItems, highlightNewsItems] = await Promise.all([
+    fetchMarketsFaqItems(MARKETS_FAQ_CODE.industrial),
+    fetchMarketHighlightNews(MARKETS_FAQ_CODE.industrial),
+  ]);
 
   return (
     <main className="markets-page markets-page--industrial" id="Page_markets_industrial">
@@ -52,7 +55,7 @@ export default async function MarketsIndustrialPage() {
       <HighlightNewsSection
         variant="markets"
         title="Highlights"
-        items={marketsHighlightNewsItems}
+        items={highlightNewsItems}
         sectionId="markets-highlights"
       />
       <MarketsFaq items={faqItems} />

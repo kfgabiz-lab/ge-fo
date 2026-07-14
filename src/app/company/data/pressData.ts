@@ -72,6 +72,7 @@ export async function fetchPressList(params: {
   sort?: "latest" | "oldest"; // 기본 latest(설계문서 9-C)
   month?: string; // 게시월 "01"~"12", 연도 무관(설계문서 9-D)
   year?: string; // 게시연도 "YYYY"(설계문서 9-D 확장)
+  market?: string; // markets 필터(3자리 코드) — dataJson.markets CSV 토큰 포함 항목만(BE has_markets_markets)
 }): Promise<PressListResult> {
   const sp = new URLSearchParams();
   sp.set("page", String(params.page));
@@ -82,6 +83,8 @@ export async function fetchPressList(params: {
   if (params.search) sp.set("title|content", params.search);
   if (params.month) sp.set("month_publishDttm", params.month);
   if (params.year) sp.set("year_publishDttm", params.year);
+  // markets 코드가 넘어온 경우에만 필터 추가(옵션이라 기존 호출부는 그대로 전체 조회)
+  if (params.market) sp.set("has_markets_markets", params.market);
   if (params.sort === "oldest") sp.set("sort", "createdAt,asc");
 
   const res = await fetchApi<PressPageResponse>(

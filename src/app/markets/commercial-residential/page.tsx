@@ -9,7 +9,7 @@ import MarketsStats from "../components/MarketsStats";
 import MarketsWhy from "../components/MarketsWhy";
 import MarketsProducts from "../components/MarketsProducts";
 import HighlightNewsSection from "@/components/content/HighlightNewsSection";
-import { marketsHighlightNewsItems } from "@/data/highlightNews";
+import { fetchMarketHighlightNews } from "@/data/highlightNews";
 import MarketsFaq from "../components/MarketsFaq";
 import CommonBanner01 from "@/components/banners/CommonBanner01";
 import { commercialResidentialHero } from "../data/marketsContent";
@@ -24,10 +24,11 @@ import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsCommercialResidentialPage() {
-  // Commercial & Residential FAQ(markets=006) 조회 → MarketsFaq 에 items 로 전달
-  const faqItems = await fetchMarketsFaqItems(
-    MARKETS_FAQ_CODE.commercialResidential,
-  );
+  // Commercial & Residential FAQ(markets=006) + 하이라이트 뉴스(자기 market=006 포함 press/blog/articles 통합 최신 3건) 병렬 조회
+  const [faqItems, highlightNewsItems] = await Promise.all([
+    fetchMarketsFaqItems(MARKETS_FAQ_CODE.commercialResidential),
+    fetchMarketHighlightNews(MARKETS_FAQ_CODE.commercialResidential),
+  ]);
 
   return (
     <main className="markets-page markets-page--commercial-residential" id="Page_markets">
@@ -54,7 +55,7 @@ export default async function MarketsCommercialResidentialPage() {
       <HighlightNewsSection
         variant="markets"
         title="Highlights"
-        items={marketsHighlightNewsItems}
+        items={highlightNewsItems}
         sectionId="markets-highlights"
       />
       <MarketsFaq items={faqItems} />

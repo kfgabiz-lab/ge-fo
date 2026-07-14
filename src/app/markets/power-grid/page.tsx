@@ -8,7 +8,7 @@ import MarketsSmartGrid from "../components/MarketsSmartGrid";
 import MarketsWhy from "../components/MarketsWhy";
 import MarketsProducts from "../components/MarketsProducts";
 import HighlightNewsSection from "@/components/content/HighlightNewsSection";
-import { marketsHighlightNewsItems } from "@/data/highlightNews";
+import { fetchMarketHighlightNews } from "@/data/highlightNews";
 import MarketsFaq from "../components/MarketsFaq";
 import CommonBanner01 from "@/components/banners/CommonBanner01";
 import {
@@ -27,8 +27,11 @@ import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsPowerGridPage() {
-  // Power Grid FAQ(markets=004) 조회 → MarketsFaq 에 items 로 전달
-  const faqItems = await fetchMarketsFaqItems(MARKETS_FAQ_CODE.powerGrid);
+  // Power Grid FAQ(markets=004) + 하이라이트 뉴스(자기 market=004 포함 press/blog/articles 통합 최신 3건) 병렬 조회
+  const [faqItems, highlightNewsItems] = await Promise.all([
+    fetchMarketsFaqItems(MARKETS_FAQ_CODE.powerGrid),
+    fetchMarketHighlightNews(MARKETS_FAQ_CODE.powerGrid),
+  ]);
 
   return (
     <main
@@ -59,7 +62,7 @@ export default async function MarketsPowerGridPage() {
       <HighlightNewsSection
         variant="markets"
         title="Highlights"
-        items={marketsHighlightNewsItems}
+        items={highlightNewsItems}
         sectionId="markets-highlights"
       />
       <MarketsFaq items={faqItems} />
