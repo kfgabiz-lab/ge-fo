@@ -1,7 +1,7 @@
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
 import type { GnbSimpleMegaMenu } from "@/data/gnb/types";
 
-/** Figma 3670:14792 — Support mega (3 columns) */
+/** Figma 3670:14792 — Support mega (2 columns) */
 export const supportMegaMenu: GnbSimpleMegaMenu = {
   type: "simple",
   panelId: GNB_MEGA_PANEL_ID.support,
@@ -84,21 +84,6 @@ export const supportMegaMenu: GnbSimpleMegaMenu = {
           href: "https://gics.ls-electric.com/public/index.do",
           external: true,
         },
-      ],
-    },
-    {
-      id: "training",
-      label: "Training",
-      items: [
-        { id: "sales-training", title: "Sales Training", disabled: true },
-        {
-          id: "engineering-training",
-          title: "Engineering Training",
-          description: "Training for engineering works",
-          href: "/services/engineering-training",
-          hideMobileDescription: true,
-        },
-        { id: "service-training", title: "Service Training", disabled: true },
       ],
     },
   ],

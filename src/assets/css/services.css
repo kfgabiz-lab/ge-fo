@@ -486,10 +486,21 @@
   section.support_service_flow .support_service_flow__bg {
     position: absolute;
     inset: 0;
-    background: url(/img/main/bg_section_main_info.jpg);
     background-color: #0c1625;
-    background-size: cover;
-    background-position: center;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image--mo {
+    display: none;
   }
 
   section.support_service_flow .inner {
@@ -1247,7 +1258,7 @@
   }
 
   section.support_service_offering {
-    padding: 70px 0 80px;
+    padding: 70px 0 70px;
   }
 
   section.support_service_offering .support_service_offering__head {
@@ -1267,6 +1278,7 @@
   section.support_service_offering .support_service_offering__head .section_desc {
     font-size: 16px;
     line-height: 24px;
+    margin-top: 0;
   }
 
   section.support_service_offering .support_service_offering__body {
@@ -1279,15 +1291,20 @@
   }
 
   section.support_service_offering .support_service_offering__carousel {
-    width: calc(100% + 2 * var(--inner-padding-x-mobile));
+    width: calc(100% - -20px);
     margin-left: calc(-1 * var(--inner-padding-x-mobile));
     margin-right: calc(-1 * var(--inner-padding-x-mobile));
   }
 
   section.support_service_offering .support_service_offering__slide {
-    height: 240px;
+    height: auto;
+    aspect-ratio: 355/240;
   }
-
+  section.support_service_offering .support_service_offering__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
   section.support_service_offering .support_service_offering__preview {
     display: none;
   }
@@ -1306,21 +1323,29 @@
   }
 
   section.support_service_offering .support_service_offering__num {
+    color: var(--Grayscale-Gray-04, #E8E8E8);
+    font-family: "Pretendard Variable";
     font-size: 34px;
-    line-height: 44px;
-    letter-spacing: -0.01em;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 44px; /* 129.412% */
+    letter-spacing: -0.34px;
   }
 
   section.support_service_offering .support_service_offering__slide-tit {
     font-size: 24px;
     line-height: 34px;
     letter-spacing: -0.01em;
+    font-weight: 600;
+    margin-top: 8px;
   }
 
   section.support_service_offering .support_service_offering__slide-desc {
     max-width: none;
     font-size: 15px;
     line-height: 23px;
+    margin-top: 8px;
+    color: rgb(102 102 102 / 85%);
   }
 
   section.support_service_offering .swiper_type_01_controls {
@@ -1331,7 +1356,7 @@
 
   section.support_service_flow {
     position: relative;
-    padding: 70px 0 80px;
+    padding: 70px 0 70px;
     overflow: hidden;
     color: #fff;
   }
@@ -1341,10 +1366,25 @@
     inset: 0;
     z-index: 0;
     background-color: #0c1625;
-    background-image: url(/img/services/service-center/service-flow-bg.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center 29%;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Figma 6880:146610 — h 206.01% / top -28.83% */
+    object-position: center 14%;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image--pc {
+    display: none;
+  }
+
+  section.support_service_flow .support_service_flow__bg-image--mo {
+    display: block;
   }
 
   section.support_service_flow .inner {
@@ -1438,6 +1478,7 @@
     align-items: center;
     flex-shrink: 0;
     width: 30px;
+    position: relative;
   }
 
   section.support_service_flow .support_service_flow__track-pin {
@@ -1450,10 +1491,18 @@
 
   section.support_service_flow .support_service_flow__track-line {
     flex: 1;
-    width: 2px;
+    width: 1px;
     min-height: 0;
     margin-top: 0;
-    background: rgb(255 255 255 / 25%);
+    background: repeating-linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 90%) 0 4px,
+      transparent 4px 8px
+    );
+    position: absolute;
+    top: 30px;
+    bottom: 62px;
+    left: 14px;
   }
 
   section.support_service_flow .support_service_flow__steps {
@@ -1478,14 +1527,15 @@
     display: none;
   }
 
+  /* Figma 6880:146628 — 18px red check + soft glow (28px), centered on 30px track */
   section.support_service_flow .support_service_flow__step:not(.support_service_flow__step--issue)::before {
     position: absolute;
-    top: 6px;
-    left: -48px;
-    width: 18px;
-    height: 18px;
+    top: 1px;
+    left: -47px;
+    width: 28px;
+    height: 28px;
     background: url("/img/services/service-center/service-flow-icon-dot.svg")
-      center / contain no-repeat;
+      center / 28px 28px no-repeat;
     content: "";
   }
 
@@ -1509,7 +1559,7 @@
   }
 
   section.support_service_flow .support_service_flow__step-desc {
-    margin: 8px 0 0;
+    margin: 10px 0 0;
     font-size: 15px;
     line-height: 23px;
     color: rgb(255 255 255 / 60%);
@@ -1517,7 +1567,7 @@
 
   /* Service Platform — Figma 6880:146573 */
   section.support_service_gics {
-    padding: 70px 0 0;
+    padding: 70px 0;
   }
 
   section.support_service_gics .support_service_gics__head {
@@ -1597,9 +1647,10 @@
   section.support_service_gics .support_service_gics__media {
     flex: none;
     width: 100%;
-    height: 197px;
+    height: auto;
     min-width: 0;
     overflow: hidden;
+    aspect-ratio: 335/197;
   }
 
   section.support_service_gics .support_service_gics__media-img {
@@ -1656,6 +1707,7 @@
     line-height: 1;
     color: #fff;
     box-sizing: border-box;
+    margin-top: 3px;
   }
 
   section.support_service_gics .support_service_gics__feature-body {
@@ -1704,6 +1756,59 @@
 
   .support-page--service-center section.common_faq .common_faq__bg {
     background: #f5f7fa;
+  }
+}
+
+/* Service Center cards — tablet 2-col (640–1200px) */
+@media (min-width: 640px) and (max-width: 1200px) {
+  section.support_service_cards .inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  section.support_service_cards .support_service_cards__row,
+  section.support_service_cards .support_service_cards__pair {
+    display: contents;
+  }
+
+  section.support_service_cards .support_service_cards__row + .support_service_cards__row {
+    margin-top: 0;
+  }
+
+  section.support_service_cards .support_service_cards__row--primary {
+    min-height: 0;
+  }
+
+  section.support_service_cards .support_service_cards__kb {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  section.support_service_cards .support_service_cards__card {
+    flex: none;
+    width: auto;
+    min-width: 0;
+  }
+
+  section.support_service_cards .support_service_cards__row--secondary
+    .support_service_cards__card:first-child {
+    flex: none;
+    width: auto;
+  }
+
+  /* Service Flow — mobile layout diagram center */
+  section.support_service_flow .support_service_flow__diagram {
+    justify-content: center;
+  }
+}
+
+/* Service Flow — PC diagram center on tablet */
+@media (min-width: 781px) and (max-width: 1200px) {
+  section.support_service_flow .support_service_flow__diagram {
+    width: 1440px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 

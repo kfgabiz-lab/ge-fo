@@ -138,7 +138,7 @@ export const serviceCenterPage = {
     ctaHref: GICS_REQUEST_URL,
     backgroundImage: "/img/main/bg_section_main_info.jpg",
     backgroundImageMobile:
-      "/img/services/service-center/service-flow-bg.jpg",
+      "/img/services/service-center/service-flow-bg-mo.png",
     pathImage: "/img/services/service-center/service-flow-line.svg",
     icons: {
       pin: "/img/services/service-center/service-flow-icon-pin.svg",

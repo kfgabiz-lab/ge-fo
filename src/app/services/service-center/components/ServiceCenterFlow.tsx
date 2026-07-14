@@ -14,7 +14,24 @@ export default function ServiceCenterFlow() {
 
   return (
     <section className="support_service_flow" id="service-center-flow">
-      <div className="support_service_flow__bg" aria-hidden="true" />
+      <div className="support_service_flow__bg" aria-hidden="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="support_service_flow__bg-image support_service_flow__bg-image--pc"
+          loading="lazy"
+          decoding="async"
+          src={serviceFlow.backgroundImage}
+          alt=""
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="support_service_flow__bg-image support_service_flow__bg-image--mo"
+          loading="lazy"
+          decoding="async"
+          src={serviceFlow.backgroundImageMobile}
+          alt=""
+        />
+      </div>
       <div className="inner">
         <div className="support_service_flow__head">
           <div className="support_service_flow__head-copy">

@@ -36,7 +36,7 @@ import { resolveDevicesMegaStateFromPath } from "@/data/gnb/mega/devices";
 import "@/assets/css/components/gnb.css";
 
 const SCROLL_THRESHOLD = 3;
-const MEGA_TRANSITION_MS = 350;
+const MEGA_TRANSITION_MS = 0;
 
 export type GnbMenuVariant = "main" | "markets";
 
@@ -297,14 +297,11 @@ export default function GnbMenu({
       ignoreMegaScrollCloseUntilRef.current = Date.now() + 400;
 
       const defaults = getDefaultMegaState(navId, pathname);
-      setIsPanelOpen(false);
       setIsMegaActive(true);
       setActiveNavId(navId);
       setActiveCategoryId(defaults.categoryId);
       setActiveDepth3Id(defaults.depth3Id);
-      requestAnimationFrame(() => {
-        setIsPanelOpen(true);
-      });
+      setIsPanelOpen(true);
     },
     [navItems, onMegaOpenChange, onRevealHeader, onSearchOpenChange, pathname],
   );
@@ -462,11 +459,7 @@ export default function GnbMenu({
   useEffect(() => {
     if (!showMegaPanel) return;
 
-    const frame = requestAnimationFrame(() => {
-      setIsPanelOpen(true);
-    });
-
-    return () => cancelAnimationFrame(frame);
+    setIsPanelOpen(true);
   }, [showMegaPanel, activeNavId]);
 
   useEffect(() => {
@@ -1008,7 +1001,7 @@ export default function GnbMenu({
         ) : null}
       </header>
 
-      {isSearchOpen ? <GnbSearchPanel onNavigate={closeSearch} /> : null}
+      <GnbSearchPanel isOpen={isSearchOpen} onNavigate={closeSearch} />
 
       {isDimMounted ? (
         <button

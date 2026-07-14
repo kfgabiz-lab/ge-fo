@@ -630,19 +630,13 @@ color: #fff;
   flex-shrink: 0;
   height: 80px;
   overflow: visible;
-  transition:
-    height var(--sub-header-scroll-duration) var(--sub-header-scroll-ease),
-    opacity var(--sub-header-scroll-duration) var(--sub-header-scroll-ease);
 }
 
-.main_header.is-gnb-hidden .main_header__gnb-row {
+.main_header.is-gnb-hidden:not(.is-mega-open):not(.is-search-open) .main_header__gnb-row {
   height: 0;
-  opacity: 0;
+  overflow: hidden;
+  visibility: hidden;
   pointer-events: none;
-  transition:
-    height var(--sub-header-scroll-duration-hide) var(--sub-header-scroll-ease),
-    opacity calc(var(--sub-header-scroll-duration-hide) * 0.85)
-      var(--sub-header-scroll-ease);
 }
 
 .main_header__gnb-row,
@@ -793,7 +787,8 @@ html.is-mega-open-scroll-lock body {
 .main_header.is-mega-open.is-gnb-hidden .main_header__gnb-row,
 .main_header.is-search-open.is-gnb-hidden .main_header__gnb-row {
   height: 80px;
-  opacity: 1;
+  overflow: visible;
+  visibility: visible;
   pointer-events: auto;
 }
 
@@ -821,7 +816,6 @@ html.is-mega-open-scroll-lock body {
   display: block;
   width: auto;
   height: 30px;
-  transition: filter 0.3s ease;
 }
 
 .main_header__logo-img--dark {
@@ -851,7 +845,6 @@ html.is-mega-open-scroll-lock body {
   border: none;
   background-color: transparent;
   cursor: pointer;
-  transition: color 0.3s ease, filter 0.3s ease;
 }
 
 .main_header__btn-search {
@@ -1303,7 +1296,6 @@ html.is-mega-open-scroll-lock body {
 .gnb_mega.is-open {
   opacity: 1;
   pointer-events: auto;
-  transition: opacity var(--gnb-mega-duration) ease;
 }
 
 /* 메가 메뉴 fixed 오버레이 — breadcrumb(48px) 레이아웃 유지, 패널만 GNB(80px) 바로 아래에 겹침 */
@@ -2324,7 +2316,6 @@ html.is-mega-open-scroll-lock body {
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--gnb-dim-duration) ease;
 }
 
 .gnb_mega_dim.is-open {
@@ -2404,7 +2395,6 @@ html.is-mega-open-scroll-lock body {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition: opacity var(--gnb-mega-duration, 0.35s) ease;
 }
 
 #gnb-search-panel .gnb_search__inner {
