@@ -4,23 +4,43 @@ import {
   FormControl,
   InputAdornment,
   MenuItem,
+  type SelectChangeEvent,
   TextField,
 } from "@mui/material";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import { guideSearchFieldMobileSlotProps } from "@/components/form/guideFieldMobileProps";
 import GuideSelect from "@/components/form/GuideSelect";
 
-export default function CompanyBlogListToolbar() {
+// 카테고리 옵션(BLOGCATEGORY 코드 목록)
+type ToolbarCategory = { code: string; name: string };
+
+type CompanyBlogListToolbarProps = {
+  categories?: ToolbarCategory[];
+  selectedCategory?: string; // 선택된 코드값("" = 전체)
+  onCategoryChange?: (code: string) => void;
+};
+
+export default function CompanyBlogListToolbar({
+  categories = [],
+  selectedCategory = "",
+  onCategoryChange,
+}: CompanyBlogListToolbarProps) {
   return (
     <div className="company-blog-list__toolbar">
       <FormControl className="guide_field guide_field--w200">
         <GuideSelect
-          defaultValue=""
+          value={selectedCategory}
           displayEmpty
           IconComponent={GuideSelectIcon}
           inputProps={{ "aria-label": "Blog category filter" }}
+          onChange={(event: SelectChangeEvent<unknown>) =>
+            onCategoryChange?.(String(event.target.value))
+          }
           renderValue={(value) => {
-            const text = value ? String(value) : "All";
+            const code = value ? String(value) : "";
+            const text = code
+              ? (categories.find((c) => c.code === code)?.name ?? code)
+              : "All";
             return (
               <span className="guide_field__select-value" title={text}>
                 {text}
@@ -29,11 +49,11 @@ export default function CompanyBlogListToolbar() {
           }}
         >
           <MenuItem value="">All</MenuItem>
-          <MenuItem value="Power Distribution & Infrastructure">
-            Power Distribution & Infrastructure
-          </MenuItem>
-          <MenuItem value="Energy Solutions">Energy Solutions</MenuItem>
-          <MenuItem value="Automation Solutions">Automation Solutions</MenuItem>
+          {categories.map((category) => (
+            <MenuItem key={category.code} value={category.code}>
+              {category.name}
+            </MenuItem>
+          ))}
         </GuideSelect>
       </FormControl>
 

@@ -381,6 +381,11 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     }
   }
 
+  // 블로그 상세는 id 기반 동적 라우트(/company/blog/detail/{id}) — 고정 경로와 동일한 breadcrumb 사용
+  if (/^\/company\/blog\/detail\/[^/]+$/.test(pathname)) {
+    return configs["/company/blog/detail"];
+  }
+
   return (
     configs[pathname] ?? {
       crumbs: [],

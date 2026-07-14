@@ -96,7 +96,7 @@ flatten 후(예상 — 래퍼 `heroForm` 처리 방식은 6.비고 참고):
 ## 6. 비고
 1) 미디어 필드: `hero-data`의 `content`(media 타입, 미디어ID 배열)를 실 이미지로 연동 완료(2026-07-09, STEP5 추가 반영). 상세는 아래 6번 참고.
 2) title vs titleText: sl_tit→titleText 매핑, 2026-07-09 실데이터 대조로 확정 완료 (titleText="타이틀1/2/3" 화면 표시, title은 관리자 라벨).
-3) dataJson 최상위가 `heroForm`으로 래핑되어 있어 flatten 시 이 래퍼 처리 방식 확인 필요.
+3) ✅ dataJson 최상위 `heroForm` 래퍼 처리 — 해결됨. `fo/src/lib/pageData.ts`의 `flattenPageDataItem`(bo `utils.ts` 동명 함수 포팅)으로 처리한다. 섹션이 `heroForm` 하나뿐이라 키 충돌 없이 `sub`/`titleText`/`btnUrl`/`btnText`/`orderNo`/`content`가 root로 flat 병합된다.
 4) orderNo 빈 문자열("") 실데이터 존재 — 정렬 시 빈 값 처리 방법(맨 뒤 배치 등) 확인 필요.
 5) 버튼 라벨 span 래핑으로 인한 `.btn-base` 스타일 영향 가능성(렌더 확인 권장).
 6) 미디어(이미지) 실데이터 연동 완료(2026-07-09, STEP5 추가):
@@ -116,3 +116,4 @@ flatten 후(예상 — 래퍼 `heroForm` 처리 방식은 6.비고 참고):
 | STEP4 | fo-be-analyzer | 2026-07-09 | 기존 bo-api page-data 조회 API 재사용 확정(BE 신규 개발 없음). 엔드포인트: `GET /api/v1/fo/page-data/hero-data?drs_postDate=in_range&sort=heroForm.orderNo,asc&size=100` |
 | STEP5 | fo-fe-builder | 2026-07-09 | fetchApi 공통함수(src/lib/api.ts) 신규 생성. MainVisual(서버 컴포넌트)에서 hero-data 조회→heroForm 언랩→FE 정렬(orderNo 숫자ASC·빈값 뒤·id ASC tie-break)→VideoSwiper에 props 전달. sub/titleText/btnUrl/btnText 실데이터 바인딩. 미디어(content)는 목업 유지+TODO. tsc 통과, SSR HTML 검증(타이틀1/2/3 순서·btnUrl 반영) 완료 |
 | STEP5(추가) | fo-fe-builder | 2026-07-09 | 미디어(이미지) 실연동. `HeroItem.mediaId`(content[0]) 추가, mediaId 있으면 슬라이드를 이미지 타입으로 강제하고 src=`/api/v1/fo/page-files/{mediaId}`(프록시). 영상/유튜브는 미처리(비고 6-6). tsc 통과, SSR HTML에 `_next/image?url=...page-files/234,236,237,238` 반영 확인, 미디어 응답 200 image/png 확인 |
+| STEP6(리팩터) | 호출자 | 2026-07-14 | `fetchHeroItems`가 `heroForm`을 직접 언랩하던 수동 코드를 `fo/src/lib/pageData.ts`의 `flattenPageDataItem`(bo와 동일 accessor 규칙) 사용으로 교체. tsc 통과, SSR HTML에서 titleText="타이틀1/2/3" 회귀 없음 재확인 |

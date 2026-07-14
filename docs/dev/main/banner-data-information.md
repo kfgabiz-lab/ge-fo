@@ -86,7 +86,7 @@ flatten 후(예상 — 래퍼 `bannerForm` 처리 방식은 6.비고 참고):
 ## 6. 비고
 1) prefix 필드는 코드값(001/002)이 그대로 저장되므로, 화면에 라벨(뉴스레터/Power)을 표시하려면 STEP5(FE)에서 코드그룹 `BANNER_PREFIX` 코드→라벨 변환이 필요하다.
 2) 기존 테스트데이터(id=1330)의 prefix 값이 "1"로 저장돼 있어 코드 "001"과 정확히 일치하지 않으므로, 코드→라벨 변환이 정상 동작하려면 데이터 재저장(prefix="001" 등)이 필요할 수 있다.
-3) dataJson 최상위가 `bannerForm`으로 래핑 — flatten 시 래퍼 처리 방식은 HERO 배너(`banner-data-hero.md`)와 동일하게 처리 필요.
+3) ✅ dataJson 최상위 `bannerForm` 래퍼 처리 — 해결됨. HERO 배너(`banner-data-hero.md`)와 동일하게 `fo/src/lib/pageData.ts`의 `flattenPageDataItem`으로 처리한다.
 4) 벨 아이콘(`ico_bell_20.svg`)과 More 버튼(라벨/화살표)은 고정 UI로 slugKey 미부여.
 5) 단건 노출 구조 — 다건 API 응답에서 조건에 맞는 여러 건 중 orderBy(updatedAt DESC) + limit=1로 좁혀 최신 1건만 화면에 바인딩.
 
@@ -101,3 +101,4 @@ flatten 후(예상 — 래퍼 `bannerForm` 처리 방식은 6.비고 참고):
 | STEP5 | fo-be-builder | 2026-07-09 | `FoCodeController`, `FoCodeResponse` 신규 + `CodeDetailRepository`/`CodeService`에 목록 조회 메서드 각 1개 추가. `./gradlew compileJava` 성공. bo-api 재기동 후 curl 검증: `GET /api/v1/fo/codes/BANNER_PREFIX` → `[{"code":"001","name":"뉴스레터"},{"code":"002","name":"Power"}]` 정상 확인 |
 | STEP6 | fo-fe-builder | 2026-07-09 | FE 연동 완료. `mainVisualData.ts`에 `fetchNoticeItem()` 추가(공지 배너 최신1건 + `BANNER_PREFIX` 코드목록 `Promise.all` 병렬 조회, 코드→라벨 변환). `MainVisual.tsx` main_notic 섹션을 실데이터/정적 목업 폴백 분기로 변경. `npx tsc --noEmit` 통과. SSR 확인: 실데이터 매칭됨(bottomText="dsfsdfsdfsdf", url="https://www.lselectricamerica.com/"). **단, prefix 저장값이 "1"이라 `BANNER_PREFIX`(001/002)와 불일치 → 코드→라벨 변환 폴백으로 원본값 "1" 표시**(6.비고 2) 케이스 실제 재현). 라벨 정상 표시하려면 데이터 재저장(prefix="001" 등) 필요 |
 | STEP7 | fo-qa-validator(대체: SSR 검증) | 2026-07-10 | Playwright 미가용으로 SSR HTML 검증으로 대체(핵심 원칙 3에 따라 사전 고지). HTTP 200, 에러 마커 0건, url/bottomText 실데이터 반영, 섹션 순서(main_visual→main_notic→main_info→main_cards→main_products) 정상·인접 섹션 침범 없음 확인. prefix 라벨 이슈는 알려진 데이터 문제로 확정, 사용자 확인하에 컴포넌트 작업 완료 처리 |
+| STEP8(리팩터) | 호출자 | 2026-07-14 | `fetchNoticeItem`이 `bannerForm`을 직접 언랩하던 수동 코드를 `fo/src/lib/pageData.ts`의 `flattenPageDataItem` 사용으로 교체. tsc 통과, SSR HTML에서 url/bottomText 값 회귀 없음 재확인 |

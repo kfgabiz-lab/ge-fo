@@ -2,28 +2,14 @@
 // - 서버 컴포넌트(MainVisual)에서 호출하여 결과를 각 클라이언트 컴포넌트에 props 로 전달
 // - 설계 문서: fo/docs/dev/main/video-swiper.md, fo/docs/dev/main/banner-swiper.md
 import { fetchApi } from "@/lib/api";
+import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
 
 // bo-api page-data 응답(Spring Data Page) 공통 형태
-interface PageDataResponse<TForm> {
-  content: Array<{
-    id: number;
-    dataJson: TForm;
-  }>;
+interface PageDataResponse {
+  content: PageDataItem[];
 }
 
 // ---------------- hero-data (VideoSwiper) ----------------
-
-interface HeroFormRow {
-  heroForm?: {
-    sub?: string;
-    titleText?: string;
-    btnUrl?: string;
-    btnText?: string;
-    orderNo?: string;
-    // content = 미디어ID 배열(예: [234]). 첫 요소를 대표 이미지로 사용
-    content?: number[];
-  };
-}
 
 // 화면 바인딩에 실제 사용하는 히어로 항목(텍스트/링크 + 대표 미디어ID)
 export interface HeroItem {
@@ -45,24 +31,26 @@ function orderNoValue(orderNo: string): number {
 }
 
 export async function fetchHeroItems(): Promise<HeroItem[]> {
-  const res = await fetchApi<PageDataResponse<HeroFormRow>>(
+  const res = await fetchApi<PageDataResponse>(
     "/api/v1/fo/page-data/hero-data?drs_postDate=in_range&sort=heroForm.orderNo,asc&size=100",
   );
 
-  const items: HeroItem[] = (res.content ?? []).map((row) => {
-    const form = row.dataJson?.heroForm ?? {};
+  const items: HeroItem[] = (res.content ?? []).map((item) => {
+    // flattenPageDataItem: heroForm 섹션 1개(중복 없음) → sub/titleText/btnUrl/btnText/orderNo/content가 root로 flat 병합됨
+    const row = flattenPageDataItem(item);
+    const contentArr = row.content;
     // content 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
     const mediaId =
-      Array.isArray(form.content) && form.content.length > 0
-        ? form.content[0]
+      Array.isArray(contentArr) && contentArr.length > 0
+        ? (contentArr[0] as number)
         : null;
     return {
-      id: row.id,
-      sub: form.sub ?? "",
-      titleText: form.titleText ?? "",
-      btnUrl: form.btnUrl ?? "",
-      btnText: form.btnText ?? "",
-      orderNo: form.orderNo ?? "",
+      id: item.id,
+      sub: (row.sub as string) ?? "",
+      titleText: (row.titleText as string) ?? "",
+      btnUrl: (row.btnUrl as string) ?? "",
+      btnText: (row.btnText as string) ?? "",
+      orderNo: (row.orderNo as string) ?? "",
       mediaId,
     };
   });
@@ -82,17 +70,6 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
 
 // ---------------- banner-data (BannerSwiper) ----------------
 
-interface BannerFormRow {
-  bannerForm?: {
-    url?: string;
-    mainTitle?: string;
-    subTitle?: string;
-    sortOrder?: string;
-    // image = 미디어ID 배열(예: [233]). 첫 요소를 대표 이미지로 사용
-    image?: number[];
-  };
-}
-
 // 화면 바인딩에 실제 사용하는 배너 항목(텍스트/링크 + 대표 미디어ID)
 export interface BannerItem {
   id: number;
@@ -111,23 +88,25 @@ function sortOrderValue(sortOrder: string): number {
 }
 
 export async function fetchBannerItems(): Promise<BannerItem[]> {
-  const res = await fetchApi<PageDataResponse<BannerFormRow>>(
+  const res = await fetchApi<PageDataResponse>(
     "/api/v1/fo/page-data/banner-data?eq_bannerPosition=HERO&eq_isVisible=001&sort=bannerForm.sortOrder,asc&size=100",
   );
 
-  const items: BannerItem[] = (res.content ?? []).map((row) => {
-    const form = row.dataJson?.bannerForm ?? {};
+  const items: BannerItem[] = (res.content ?? []).map((item) => {
+    // flattenPageDataItem: bannerForm 섹션 1개(중복 없음) → url/mainTitle/subTitle/sortOrder/image가 root로 flat 병합됨
+    const row = flattenPageDataItem(item);
+    const imageArr = row.image;
     // image 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
     const mediaId =
-      Array.isArray(form.image) && form.image.length > 0
-        ? form.image[0]
+      Array.isArray(imageArr) && imageArr.length > 0
+        ? (imageArr[0] as number)
         : null;
     return {
-      id: row.id,
-      url: form.url ?? "",
-      mainTitle: form.mainTitle ?? "",
-      subTitle: form.subTitle ?? "",
-      sortOrder: form.sortOrder ?? "",
+      id: item.id,
+      url: (row.url as string) ?? "",
+      mainTitle: (row.mainTitle as string) ?? "",
+      subTitle: (row.subTitle as string) ?? "",
+      sortOrder: (row.sortOrder as string) ?? "",
       mediaId,
     };
   });
@@ -149,16 +128,6 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
 // - HERO 배너와 동일 slug(banner-data), where 조건으로 INFORMATION 위치만 구분
 // - 다건 조회이나 size=1 + updatedAt DESC 로 최신 1건만 노출(단건 구조)
 
-// INFORMATION 위치 공지 배너 응답 form(필요한 필드만 선언)
-interface NoticeFormRow {
-  bannerForm?: {
-    url?: string;
-    // prefix = 코드값(001/002 등)이 그대로 저장 → 화면 표시는 코드→라벨 변환 필요
-    prefix?: string;
-    bottomText?: string;
-  };
-}
-
 // 코드그룹 조회 응답 항목(GET /api/v1/fo/codes/BANNER_PREFIX)
 interface CodeItem {
   code: string;
@@ -176,18 +145,19 @@ export interface NoticeItem {
 export async function fetchNoticeItem(): Promise<NoticeItem | null> {
   // 공지 배너(최신 1건) + prefix 코드목록을 병렬 조회
   const [bannerRes, codes] = await Promise.all([
-    fetchApi<PageDataResponse<NoticeFormRow>>(
+    fetchApi<PageDataResponse>(
       "/api/v1/fo/page-data/banner-data?eq_bannerPosition=INFORMATION&eq_isVisible=001&sort=updatedAt,desc&size=1",
     ),
     fetchApi<CodeItem[]>("/api/v1/fo/codes/BANNER_PREFIX"),
   ]);
 
   // 조건 매칭 0건이면 null → 호출부(MainVisual)에서 정적 목업으로 폴백
-  const row = bannerRes.content?.[0];
-  if (!row) return null;
+  const item = bannerRes.content?.[0];
+  if (!item) return null;
 
-  const form = row.dataJson?.bannerForm ?? {};
-  const prefixCode = form.prefix ?? "";
+  // flattenPageDataItem: bannerForm 섹션 1개(중복 없음) → url/prefix/bottomText가 root로 flat 병합됨
+  const row = flattenPageDataItem(item);
+  const prefixCode = (row.prefix as string) ?? "";
 
   // 코드→라벨 맵 구성(code → name)
   const codeMap = new Map<string, string>(
@@ -199,7 +169,7 @@ export async function fetchNoticeItem(): Promise<NoticeItem | null> {
 
   return {
     prefixLabel,
-    bottomText: form.bottomText ?? "",
-    url: form.url ?? "",
+    bottomText: (row.bottomText as string) ?? "",
+    url: (row.url as string) ?? "",
   };
 }

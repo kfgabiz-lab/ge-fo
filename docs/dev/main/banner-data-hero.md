@@ -99,7 +99,7 @@ flatten 후(예상 — 래퍼 `bannerForm` 처리 방식은 6.비고 참고):
 > 확인 완료(2026-07-09): `subTitle` 필드는 실제 dataJson(bannerForm)에 존재함. id=1289는 빈 값(""), id=1285는 "SUB TITLE TEST" 실값 확인.
 
 ## 6. 비고
-1) dataJson 최상위가 `bannerForm`으로 래핑 — flatten 시 래퍼 처리 방식 확인 필요.
+1) ✅ dataJson 최상위 `bannerForm` 래퍼 처리 — 해결됨. `fo/src/lib/pageData.ts`의 `flattenPageDataItem`(bo `utils.ts` 동명 함수 포팅)으로 처리한다. 섹션이 `bannerForm` 하나뿐이라 키 충돌 없이 `url`/`mainTitle`/`subTitle`/`sortOrder`/`image`가 root로 flat 병합된다.
 2) image(이미지) 실데이터 연동 완료(2026-07-09, STEP5 추가):
    - `bannerForm.image`(미디어ID 배열)의 **첫 요소**만 대표 미디어ID(`BannerItem.mediaId`)로 사용. 여러 개 있어도 나머지는 이번 범위 밖.
    - `mediaId`가 있으면 이미지 src를 업로드 미디어 스트리밍 엔드포인트 `/api/v1/fo/page-files/{mediaId}`(fo 오리진 상대경로 → `next.config.ts` rewrites 로 bo-api:8080 프록시)로 사용. `next/image`가 `/_next/image?url=...`로 최적화(같은 오리진 상대경로라 remotePatterns 불필요).
@@ -119,3 +119,4 @@ flatten 후(예상 — 래퍼 `bannerForm` 처리 방식은 6.비고 참고):
 | STEP4 | fo-be-analyzer | 2026-07-09 | 기존 bo-api page-data 조회 API 재사용 확정(BE 신규 개발 없음). 엔드포인트: `GET /api/v1/fo/page-data/banner-data?eq_bannerPosition=HERO&eq_isVisible=001&sort=bannerForm.sortOrder,asc&size=100` |
 | STEP5 | fo-fe-builder | 2026-07-09 | MainVisual(서버 컴포넌트)에서 banner-data 조회→bannerForm 언랩→FE 정렬(sortOrder ASC·id ASC tie-break)→BannerSwiper에 props 전달. url/mainTitle/subTitle 실데이터 바인딩. 이미지(image)는 목업 유지+TODO. 실데이터 2건(id=1285,1289) 다건 처리 확인. tsc 통과, SSR HTML 검증(TITLE TEST→hero test 순서) 완료 |
 | STEP5(추가) | fo-fe-builder | 2026-07-09 | 이미지 실연동. `BannerItem.mediaId`(image[0]) 추가, mediaId 있으면 이미지 src=`/api/v1/fo/page-files/{mediaId}`(프록시), 없으면 목업 유지. tsc 통과, SSR HTML에 `_next/image?url=...page-files/233` 반영 확인, 미디어 응답 200 image/png 확인 |
+| STEP6(리팩터) | 호출자 | 2026-07-14 | `fetchBannerItems`가 `bannerForm`을 직접 언랩하던 수동 코드를 `fo/src/lib/pageData.ts`의 `flattenPageDataItem` 사용으로 교체. tsc 통과, SSR HTML에서 mainTitle 값 회귀 없음 재확인 |

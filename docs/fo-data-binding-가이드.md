@@ -18,7 +18,9 @@ bo 홈페이지관리에서 콘텐츠 입력
 ```
 
 - `data-slug` = bo PageData의 slug 값 (bo 빌더 위젯의 `sourceSlug`/`dbSlug`와 동일한 개념 — `docs/ge_guide/builder/00-1.builder_widget_components.md`의 `sourceSlug` 참고)
-- `data-slugKey` = 그 PageData의 `dataJson`을 `flattenPageDataItem`(bo와 동일 개념)으로 flatten한 후의 필드명
+- `data-slugKey` = 그 PageData의 `dataJson`을 `flattenPageDataItem`으로 flatten한 후의 필드명
+
+  > ⚠️ **fo API 응답 자체는 flatten되지 않는다.** `GET /api/v1/fo/page-data/{slug}`(`PageDataService.search()`)는 `dataJson`을 원본 그대로(폼 섹션 중첩 유지, 예: `dataJson.blogForm.title`) 내려준다. flatten은 fo 쪽에서 응답을 받은 **뒤에** `fo/src/lib/pageData.ts`의 `flattenPageDataItem`(bo `utils.ts`의 동명 함수를 포팅한 것)을 호출해야 일어난다. STEP6(FE 개발)에서 이 함수를 거치지 않고 `dataJson.blogForm.title`처럼 직접 접근하면, STEP1~3에서 정한 단순한 `data-slugKey` 이름(`title` 등)과 실제 코드의 접근 경로가 어긋난다. **fetchApi로 받은 item은 반드시 `flattenPageDataItem(item)`을 거친 뒤 필드에 접근할 것.**
 
 ```html
 <!-- 단건 (텍스트 콘텐츠 바인딩) -->
@@ -85,6 +87,8 @@ STEP 5. BE 개발 (fo-be-builder)
 STEP 6. FE 연동 개발 (fo-fe-builder)
         → 완료된 BE + 승인된 문서를 바탕으로 fetchApi<T>() 연동 및 마크업 바인딩
           (docs/ge_guide/fo/fo-api연동가이드.md 규칙 준수)
+        → fetchApi로 받은 item은 dataJson을 직접 파고들지 말고, 반드시 `fo/src/lib/pageData.ts`의
+          `flattenPageDataItem(item)`을 거친 뒤 flat key(`row.title` 등)로 접근할 것 (1절 참고)
 
 STEP 7. QA 검증 (fo-qa-validator)
         → 실제 화면에서 데이터 바인딩 결과(where 필터링, row limit 등)를 Playwright로 검증

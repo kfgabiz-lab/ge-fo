@@ -23,8 +23,9 @@ type CompanyArticleDetailBaseProps = {
   heroImage?: { src: string; alt: string };
   heroVideo?: { youtubeVideoId: string; title: string };
   pagerAriaLabel: string;
-  prev: CompanyArticleDetailPagerLink;
-  next: CompanyArticleDetailPagerLink;
+  // prev/next 는 인접 레코드가 없을 수 있어 선택값(맨 처음/끝이면 해당 방향 미노출)
+  prev?: CompanyArticleDetailPagerLink;
+  next?: CompanyArticleDetailPagerLink;
   listHref: string;
   children: ReactNode;
   /** 히어로 이미지 바로 아래 (예: devices_product_video__player) */
@@ -146,43 +147,47 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
         </article>
 
         <nav className={articleDetailClass("pager")} aria-label={pagerAriaLabel}>
-          <Link
-            href={prev.href}
-            className={`${articleDetailClass("pager-item")} ${articleDetailClass("pager-item", "prev")}`}
-          >
-            <span className={articleDetailClass("pager-dir")}>
-              <span className={articleDetailClass("pager-leading")}>
-                <span className={articleDetailClass("pager-label")}>PREV</span>
-                <img
-                  src="/ico/ico_arrow_pager_14.svg"
-                  alt=""
-                  aria-hidden="true"
-                  width={14}
-                  height={14}
-                  className={`${articleDetailClass("pager-chev")} ${articleDetailClass("pager-chev", "up")}`}
-                />
+          {prev ? (
+            <Link
+              href={prev.href}
+              className={`${articleDetailClass("pager-item")} ${articleDetailClass("pager-item", "prev")}`}
+            >
+              <span className={articleDetailClass("pager-dir")}>
+                <span className={articleDetailClass("pager-leading")}>
+                  <span className={articleDetailClass("pager-label")}>PREV</span>
+                  <img
+                    src="/ico/ico_arrow_pager_14.svg"
+                    alt=""
+                    aria-hidden="true"
+                    width={14}
+                    height={14}
+                    className={`${articleDetailClass("pager-chev")} ${articleDetailClass("pager-chev", "up")}`}
+                  />
+                </span>
+                <span className={articleDetailClass("pager-sep")} aria-hidden="true" />
               </span>
-              <span className={articleDetailClass("pager-sep")} aria-hidden="true" />
-            </span>
-            <span className={articleDetailClass("pager-title")}>{prev.title}</span>
-          </Link>
-          <Link href={next.href} className={articleDetailClass("pager-item")}>
-            <span className={articleDetailClass("pager-dir")}>
-              <span className={articleDetailClass("pager-leading")}>
-                <span className={articleDetailClass("pager-label")}>NEXT</span>
-                <img
-                  src="/ico/ico_arrow_pager_14.svg"
-                  alt=""
-                  aria-hidden="true"
-                  width={14}
-                  height={14}
-                  className={`${articleDetailClass("pager-chev")} ${articleDetailClass("pager-chev", "down")}`}
-                />
+              <span className={articleDetailClass("pager-title")}>{prev.title}</span>
+            </Link>
+          ) : null}
+          {next ? (
+            <Link href={next.href} className={articleDetailClass("pager-item")}>
+              <span className={articleDetailClass("pager-dir")}>
+                <span className={articleDetailClass("pager-leading")}>
+                  <span className={articleDetailClass("pager-label")}>NEXT</span>
+                  <img
+                    src="/ico/ico_arrow_pager_14.svg"
+                    alt=""
+                    aria-hidden="true"
+                    width={14}
+                    height={14}
+                    className={`${articleDetailClass("pager-chev")} ${articleDetailClass("pager-chev", "down")}`}
+                  />
+                </span>
+                <span className={articleDetailClass("pager-sep")} aria-hidden="true" />
               </span>
-              <span className={articleDetailClass("pager-sep")} aria-hidden="true" />
-            </span>
-            <span className={articleDetailClass("pager-title")}>{next.title}</span>
-          </Link>
+              <span className={articleDetailClass("pager-title")}>{next.title}</span>
+            </Link>
+          ) : null}
         </nav>
 
         <div className={articleDetailClass("btn-wrap")}>
