@@ -114,7 +114,7 @@ export async function fetchBlogList(params: {
   sp.set("page", String(params.page));
   sp.set("size", String(BLOG_LIST_SIZE));
   // 공개 + 게시일 도래(BO 게시상태 판정식과 동일, 설계문서 9-A) — eq_isVisible 단독 조건을 대체
-  sp.set("condexpr_status", "isVisible=001,publishDttm>=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "isVisible=001,publishDttm<=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
   if (params.category) sp.set("eq_blogForm.category", params.category);
   if (params.search) sp.set("title|content", params.search);
@@ -140,7 +140,7 @@ export async function fetchBlogDetail(
 ): Promise<BlogRow | null> {
   const sp = new URLSearchParams();
   sp.set("eq_id", String(id));
-  sp.set("condexpr_status", "isVisible=001,publishDttm>=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "isVisible=001,publishDttm<=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
   const res = await fetchApi<BlogPageResponse>(
     `/api/v1/fo/page-data/blog-data?${sp.toString()}`,

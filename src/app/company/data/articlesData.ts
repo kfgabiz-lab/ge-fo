@@ -78,7 +78,7 @@ export async function fetchArticlesList(params: {
   sp.set("page", String(params.page));
   sp.set("size", String(ARTICLES_LIST_SIZE));
   // 공개 + 게시일 도래(BO 게시상태 판정식과 동일, press-data.md 9-A와 동일 조건)
-  sp.set("condexpr_status", "isVisible=001,publishDttm>=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "isVisible=001,publishDttm<=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
   if (params.search) sp.set("title|content", params.search);
   if (params.month) sp.set("month_publishDttm", params.month);
@@ -103,7 +103,7 @@ export async function fetchArticlesDetail(
 ): Promise<ArticlesRow | null> {
   const sp = new URLSearchParams();
   sp.set("eq_id", String(id));
-  sp.set("condexpr_status", "isVisible=001,publishDttm>=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "isVisible=001,publishDttm<=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
   const res = await fetchApi<ArticlesPageResponse>(
     `/api/v1/fo/page-data/articles-data?${sp.toString()}`,
