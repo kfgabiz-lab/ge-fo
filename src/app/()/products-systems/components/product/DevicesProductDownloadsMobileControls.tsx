@@ -2,7 +2,7 @@
 
 import { TextField, InputAdornment } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import SupportFilterModal from "@/app/()/support/components/SupportFilterModal";
+import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import DevicesProductDownloadsDocumentFilter from "./DevicesProductDownloadsDocumentFilter";
 
 const SORT_OPTIONS = ["Most Recent", "A to Z", "Z to A"] as const;
