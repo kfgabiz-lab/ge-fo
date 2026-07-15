@@ -56,10 +56,9 @@ const PRODUCT_TYPE_LABEL: Record<string, string> = {
 export async function fetchWarrantyCoverageRows(): Promise<WarrantyCoverageRow[]> {
   let res: WarrantyPolicyListResponse;
   try {
-    // BE eq_/sort 미적용(전건) + X-Site-Id: 1 로 site 1 스코프
+    // BE eq_/sort 미적용(전건). X-Site-Id: 1 은 공통 fetchApi에서 전역 주입되므로 여기서 별도 지정 불필요
     res = await fetchApi<WarrantyPolicyListResponse>(
       "/api/v1/fo/page-data/warrantyPolicy-data?size=100",
-      { headers: { "X-Site-Id": "1" } },
     );
   } catch {
     // fetch 실패 시 빈 목록 폴백(표 구조는 유지)

@@ -15,7 +15,14 @@ export async function fetchApi<T>(
   const isServer = typeof window === "undefined";
   const url = isServer ? `${SITE_URL}${endpoint}` : endpoint;
 
-  const res = await fetch(url, init);
+  // 북미(site_id=1) 사이트 스코프 — X-Site-Id 헤더 전역 주입
+  // 호출자가 명시적으로 지정한 경우는 존중(덮어쓰지 않음)
+  const headers = new Headers(init?.headers);
+  if (!headers.has("X-Site-Id")) {
+    headers.set("X-Site-Id", "1");
+  }
+
+  const res = await fetch(url, { ...init, headers });
 
   if (!res.ok) {
     throw new Error(
