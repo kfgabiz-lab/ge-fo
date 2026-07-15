@@ -2,7 +2,7 @@
 // - 설계 문서: fo/docs/dev/company/blog-data.md
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
 import { fetchApi } from "@/lib/api";
-import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
+import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 
 // 목록 페이지당 개수(설계 4절: size=10 페이지네이션)
 export const BLOG_LIST_SIZE = 10;
@@ -41,7 +41,7 @@ export interface BlogCardItem {
   categoryCode: string;
   categoryLabel: string; // BLOGCATEGORY 코드→라벨 변환 결과
   title: string;
-  description: string; // seo.metaDescription 재사용(설계 6-10)
+  description: string; // seo.meta_description(신)/seo.metaDescription(구) 재사용(설계 6-10)
   date: string; // publishDttm(YYYY-MM-DD) 원본
   imageSrc: string | null; // 미디어 없으면 null → 호출부에서 정적 폴백
   tags: string[]; // hashtag split 결과
@@ -68,7 +68,7 @@ export function toBlogCard(
   item: BlogRow,
   categoryMap: Map<string, string>,
 ): BlogCardItem {
-  // flattenPageDataItem: blogForm/seo 섹션 간 키 충돌 없음 → title/category/hashtag/publishDttm/image/metaDescription 전부 root로 flat 병합됨
+  // flattenPageDataItem: blogForm/seo 섹션 간 키 충돌 없음 → title/category/hashtag/publish_dttm/image/meta_description 전부 root로 flat 병합됨
   const row = flattenPageDataItem(item);
   const imageArr = row.image;
   const mediaId =
@@ -80,8 +80,10 @@ export function toBlogCard(
     // 코드 매칭 실패 시 원본 코드값 유지(빈 값보다 정보 손실 적음)
     categoryLabel: categoryMap.get(code) ?? code,
     title: (row.title as string) ?? "",
-    description: (row.metaDescription as string) ?? "",
-    date: (row.publishDttm as string) ?? "",
+    // 신규(meta_description)/구(metaDescription) seo 스키마 모두 지원 — 신규 우선
+    description: (pickField(row, "meta_description", "metaDescription") as string) ?? "",
+    // 신규(publish_dttm)/구(publishDttm) 스키마 모두 지원 — 신규 우선
+    date: (pickField(row, "publish_dttm", "publishDttm") as string) ?? "",
     imageSrc: mediaId != null ? blogImageSrc(mediaId) : null,
     tags: splitHashtag(row.hashtag as string | undefined),
   };
@@ -114,12 +116,14 @@ export async function fetchBlogList(params: {
   sp.set("page", String(params.page));
   sp.set("size", String(BLOG_LIST_SIZE));
   // 공개 + 게시일 도래(BO 게시상태 판정식과 동일, 설계문서 9-A) — eq_isVisible 단독 조건을 대체
-  sp.set("condexpr_status", "isVisible=001,publishDttm<=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "is_visible=001,publish_dttm>=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
-  if (params.category) sp.set("eq_blogForm.category", params.category);
+  // page_template(blog-basicInfo) contentKey가 blogForm→blog로 변경됨. dot-notation eq_는 래퍼키 정확일치 필요(BE PageDataService.appendWhereConditions eq_ dot 경로)
+  if (params.category) sp.set("eq_blog.category", params.category);
   if (params.search) sp.set("title|content", params.search);
-  if (params.month) sp.set("month_publishDttm", params.month);
-  if (params.year) sp.set("year_publishDttm", params.year);
+  // month_/year_는 필드키만(래퍼키 무관, 최상위+중첩 자동탐색). 필드명이 publishDttm→publish_dttm(snake)로 변경됨
+  if (params.month) sp.set("month_publish_dttm", params.month);
+  if (params.year) sp.set("year_publish_dttm", params.year);
   // markets 코드가 넘어온 경우에만 필터 추가(옵션이라 기존 호출부는 그대로 전체 조회)
   if (params.market) sp.set("has_markets_markets", params.market);
   if (params.sort === "oldest") sp.set("sort", "createdAt,asc");
@@ -140,7 +144,7 @@ export async function fetchBlogDetail(
 ): Promise<BlogRow | null> {
   const sp = new URLSearchParams();
   sp.set("eq_id", String(id));
-  sp.set("condexpr_status", "isVisible=001,publishDttm<=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "is_visible=001,publish_dttm>=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
   const res = await fetchApi<BlogPageResponse>(
     `/api/v1/fo/page-data/blog-data?${sp.toString()}`,

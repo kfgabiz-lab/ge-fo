@@ -11,7 +11,7 @@ import {
   splitHashtag,
   toCategoryMap,
 } from "@/app/company/data/blogData";
-import { flattenPageDataItem } from "@/lib/pageData";
+import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import "@/assets/css/company.css";
 
 type CompanyBlogDetailPageProps = {
@@ -77,7 +77,7 @@ export default async function CompanyBlogDetailPage({
       pageId="Page_company_blog_detail"
       category={categoryLabel}
       title={(row.title as string) ?? ""}
-      date={(row.publishDttm as string) ?? ""}
+      date={(pickField(row, "publish_dttm", "publishDttm") as string) ?? ""}
       heroImage={heroImage}
       pagerAriaLabel="Blog post navigation"
       prev={prev}

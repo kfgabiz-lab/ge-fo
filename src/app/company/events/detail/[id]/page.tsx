@@ -7,7 +7,7 @@ import {
   fetchEventsPast,
   eventsImageSrc,
 } from "@/app/company/data/eventsData";
-import { flattenPageDataItem } from "@/lib/pageData";
+import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import "@/assets/css/company.css";
 
 type CompanyEventsDetailPageProps = {
@@ -33,8 +33,9 @@ export default async function CompanyEventsDetailPage({
   // flattenPageDataItem: eventsForm/seo 섹션 간 키 충돌 없음 → title/content/location/period_from/period_to가 root로 flat 병합됨
   const row = flattenPageDataItem(detail);
   const contentHtml = (row.content as string) ?? "";
-  const periodFrom = (row.period_from as string) ?? "";
-  const periodTo = (row.period_to as string) ?? "";
+  // 신규(period_from/period_to)/구(periodFrom/periodTo) 스키마 모두 지원 — 신규 우선
+  const periodFrom = (pickField(row, "period_from", "periodFrom") as string) ?? "";
+  const periodTo = (pickField(row, "period_to", "periodTo") as string) ?? "";
 
   // hero 이미지: eventsForm.image[0] → page-files, 미등록 시 정적 폴백(별도 heroImage 필드 없음)
   const imageArr = row.image;

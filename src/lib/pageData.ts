@@ -102,3 +102,26 @@ export function flattenPageDataItem(item: PageDataItem): Record<string, unknown>
     updatedBy: item.updatedBy ?? null,
   };
 }
+
+/**
+ * flatten된 row에서 camelCase/snake_case 어느 스키마든 허용하며 값을 읽는 accessor.
+ * BO page_template 스키마가 camelCase(publishDttm)→snake_case(publish_dttm)로 바뀌면서
+ * 신규 레코드(snake)와 구 레코드(camel)가 DB에 혼재하는 상황에 대응하기 위한 읽기 전용 헬퍼.
+ * 인자로 준 키 순서대로 처음 만나는 유효값(null/undefined/빈문자열 제외)을 반환, 없으면 undefined.
+ *
+ * ⚠️ flattenPageDataItem 자체는 bo 위젯 렌더러 유틸의 포팅본이므로 원본 accessor 규칙을 그대로 유지한다.
+ *    스키마 필드명 정규화는 공용 함수에 넣지 않고(다른 slug 파급/중복 억제 키 부활/audit 키 오염 위험),
+ *    화면 바인딩 지점에서 이 헬퍼로만 처리한다.
+ *
+ * @example pickField(row, "publish_dttm", "publishDttm") // 신규 우선, 없으면 구 스키마
+ */
+export function pickField(
+  row: Record<string, unknown>,
+  ...keys: string[]
+): unknown {
+  for (const key of keys) {
+    const v = row[key];
+    if (v !== undefined && v !== null && v !== "") return v;
+  }
+  return undefined;
+}
