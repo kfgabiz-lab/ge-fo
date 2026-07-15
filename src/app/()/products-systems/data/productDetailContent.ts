@@ -17,7 +17,7 @@ export type ProductLineupTypeCell = {
 export type ProductLineupRow = {
   type: ProductLineupTypeCell;
   ratedCurrent: string;
-  /** Figma: pipe-separated interrupting values */
+  /** Figma: pipe-separated interrupting values (MCCB type1) */
   interrupting: string[];
   standard: string;
   /** Taller row (e.g. long type label) — Figma 246px */
@@ -31,6 +31,8 @@ export type ProductFrameLineupRow = {
 };
 
 export type ProductFrameLineup = {
+  /** type2 테이블 좌상단 헤더 — 기본 "Frame" */
+  cornerHeader?: string;
   columns: string[];
   rows: ProductFrameLineupRow[];
 };
@@ -105,7 +107,7 @@ export type ProductDetail = {
   expertContactEmail?: string;
 };
 
-/** Figma 4288:43926 — H100 Plus Key Features */
+/** Figma 6843:64936 — H100 Plus Key Features */
 const h100PlusKeyFeatures: ProductKeyFeature[] = [
   {
     id: "kf-1",
@@ -233,21 +235,6 @@ const sharedDownloads: ProductDownloadItem[] = [
   },
 ];
 
-/** Figma 4288:43889 — H100 Plus frame lineup */
-const h100PlusFrameLineup: ProductFrameLineup = {
-  columns: ["A~F Frame", "G~I Frame", "J~L Frame"],
-  rows: [
-    {
-      label: "Horse Power",
-      values: ["1~125", "150~400", "500~1000"],
-    },
-    {
-      label: "Motor Rating",
-      values: ["0.75 kW~90 kW", "110 kW~250 kW", "315kW~750kW"],
-    },
-  ],
-};
-
 /** Figma 5841:132459 — downloads list (5 items) */
 const metasolMsDownloads: ProductDownloadItem[] = [
   {
@@ -312,9 +299,83 @@ const metasolMsDownloads: ProductDownloadItem[] = [
   },
 ];
 
-/** Figma 4288:43648 — H100 Plus product detail (metasol-ms route) */
+/** Figma 6788:8339 — Metasol MS Key Features */
+const metasolMsKeyFeatures: ProductKeyFeature[] = [
+  {
+    id: "kf-1",
+    title: "Control Performance",
+    description:
+      "Provides reliable switching control for industrial motor and load circuits. Designed for dependable control performance across various operating environments.",
+  },
+  {
+    id: "kf-2",
+    title: "Safety Design",
+    description:
+      "Enclosed construction helps minimize arc exposure. Finger-proof design helps enhance operator safety during installation and maintenance.",
+  },
+  {
+    id: "kf-3",
+    title: "Wide Product Lineup",
+    description:
+      "Available in 9 frame sizes and 25 current ratings. Allows flexible product selection for different equipment capacities.",
+  },
+  {
+    id: "kf-4",
+    title: "Configuration Efficiency",
+    description:
+      "Compact design helps improve space efficiency in control panels. Easily configured with accessories such as auxiliary contacts, interlocks, and surge units.",
+  },
+];
+
+/** Figma 6788:8339 — Metasol MS product detail */
 export const metasolMsDetail: ProductDetail = {
   slug: "metasol-ms",
+  parentHref: "/products-systems/motor-control",
+  parentLabel: "Magnetic Contactor",
+  category: "Magnetic Contactor",
+  series: "Metasol MS",
+  subtitle: "",
+  description:
+    "Metasol MS is a high-reliability motor starter solution designed for stable control and protection of industrial motor circuits. It provides dependable switching and protection functions required for motor operation, while its enclosed structure helps minimize arc exposure. With a compact design, Metasol MS supports safer operation and efficient control panel configuration. A wide range of ratings, various accessories, and support for global standards make it suitable for industrial motor control applications.",
+  image: "/img/devices-systems/product/product_metasol_ms_hero.png",
+  specs: [
+    { label: "Rated Current", value: "6 ~ 2650 A" },
+    { label: "Rated Operational Voltage", value: "690, 1000 V" },
+    { label: "Standard", value: "UL 60947-4-1" },
+  ],
+  keyFeatures: metasolMsKeyFeatures,
+  downloads: metasolMsDownloads,
+  youtubeVideoId: "E3wi6qPy1Cc",
+  configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
+  configuratorExternal: true,
+  configuratorBannerBg: "/img/devices/product/banner_configurator_bg.png",
+  expertBannerHref: "/support/contact-us",
+  expertContactEmail: "automation_support.us@lselectricamerica.com",
+  otherProducts: [],
+};
+
+export const metasolMsFaqItems = [
+  {
+    question:
+      "What is a Hoist private auxiliary contact and what is the difference with the normal auxiliary contact?",
+    answer:
+      "A hoist private auxiliary contact is dedicated to hoist control circuits and signals hoist-specific operating states. A normal auxiliary contact provides general status indication for standard motor control applications and is not configured for hoist-specific interlocking sequences.",
+  },
+  {
+    question: "In what standard should I decide the Thermal type overload relay?",
+    answer:
+      "Select the thermal overload relay class based on the applicable motor protection standard for your region and application, such as IEC 60947-4-1 or UL 508. Match the relay trip class and current range to the motor full-load current and starting duty.",
+  },
+  {
+    question: "In which case would the off delay unit be used?",
+    answer:
+      "An off-delay unit is used when a controlled output must remain energized for a set time after the input signal turns off, such as cooling fan run-on, sequential shutdown, or maintaining auxiliary power during transfer operations.",
+  },
+];
+
+/** Figma 6843:64936 — H100 Plus product detail */
+export const h100PlusDetail: ProductDetail = {
+  slug: "h100_plus",
   parentHref: "/products-systems/lv-automation",
   parentLabel: "Variable Frequency Drive",
   category: "Variable Frequency Drive",
@@ -324,16 +385,14 @@ export const metasolMsDetail: ProductDetail = {
     "H100+ is an HVAC drive designed for fan and pump applications. It provides dedicated protection functions and control technology to support energy-efficient operation in HVAC systems. With intuitive operation and support for various building automation communication protocols, H100+ enables smart and efficient HVAC control.",
   image: "/img/devices-systems/product/product_h100_plus_hero.png",
   specs: [
-    { label: "Motor rating", value: "1~1000HP (7.5~400HP/600VAC)" },
-    { label: "Standard", value: "UL61800-5-1 based design" },
+    { label: "Motor rating", value: "1 - 1000HP" },
     {
-      label: "Marine Cert.",
-      value: "ABS, DNV/GL, LR, KR, NK, BV, RINA, CCS, RS",
+      label: "Supply Voltage",
+      value: "3 x 200-240VAC, 380-480VAC, 525-600VAC",
     },
+    { label: "Standard", value: "UL, cUL, CE, RoHS, Marine, OSHPD" },
   ],
   keyFeatures: h100PlusKeyFeatures,
-  lineupVariant: "type2",
-  frameLineup: h100PlusFrameLineup,
   downloads: metasolMsDownloads,
   youtubeVideoId: "E3wi6qPy1Cc",
   configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
@@ -341,6 +400,21 @@ export const metasolMsDetail: ProductDetail = {
   configuratorBannerBg: "/img/devices/product/banner_configurator_bg.png",
   expertBannerHref: "/support/contact-us",
   expertContactEmail: "automation_support.us@lselectricamerica.com",
+  otherProducts: [],
+};
+
+export const h100PlusFaqItems = metasolMsFaqItems;
+
+/** Product detail page template — copied from H100 Plus (`/motor-control/h100_plus`) */
+export const productTemplateDetail: ProductDetail = {
+  ...h100PlusDetail,
+  slug: "template",
+  series: "Product Template",
+  category: "Product Category",
+  parentLabel: "Product Category",
+  parentHref: "/products-systems/motor-control",
+  description:
+    "Product detail page template based on the H100 Plus layout. Replace hero copy, specs, key features, lineup, downloads, video, and other products for each new product page.",
   otherProducts: [
     {
       id: "op-sp100",
@@ -348,7 +422,6 @@ export const metasolMsDetail: ProductDetail = {
       image: "/img/devices-systems/products/other/product_other_sp100.png",
       title: "SP100",
       subtitle: "H100 add-on optimizer",
-      // badges: 2,
     },
     {
       id: "op-g100",
@@ -381,65 +454,40 @@ export const metasolMsDetail: ProductDetail = {
   ],
 };
 
-export const metasolMsFaqItems = [
-  {
-    question:
-      "What is a Hoist private auxiliary contact and what is the difference with the normal auxiliary contact?",
-    answer:
-      "A hoist private auxiliary contact is dedicated to hoist control circuits and signals hoist-specific operating states. A normal auxiliary contact provides general status indication for standard motor control applications and is not configured for hoist-specific interlocking sequences.",
-  },
-  {
-    question: "In what standard should I decide the Thermal type overload relay?",
-    answer:
-      "Select the thermal overload relay class based on the applicable motor protection standard for your region and application, such as IEC 60947-4-1 or UL 508. Match the relay trip class and current range to the motor full-load current and starting duty.",
-  },
-  {
-    question: "In which case would the off delay unit be used?",
-    answer:
-      "An off-delay unit is used when a controlled output must remain energized for a set time after the input signal turns off, such as cooling fan run-on, sequential shutdown, or maintaining auxiliary power during transfer operations.",
-  },
-];
+export const productTemplateFaqItems = h100PlusFaqItems;
 
-/** H100 Plus product detail — /devices-systems/motor-control/h100_plus */
-export const h100PlusDetail: ProductDetail = {
-  ...metasolMsDetail,
-  slug: "h100_plus",
-};
-
-export const h100PlusFaqItems = metasolMsFaqItems;
-
-/** Figma 4513:49636 — Susol UL Smart MCCB Key Features */
+/** Figma 6788:7460 — Susol UL ACB Key Features */
 const susolUlSmartMccbKeyFeatures: ProductKeyFeature[] = [
   {
     id: "kf-1",
-    title: "Energy Optimization",
+    title: "Efficiency",
     description:
-      "Measures current, voltage, power, and energy to help analyze power consumption by equipment. This supports energy efficiency improvements and power quality monitoring.",
+      "Modular, compact design improves space efficiency. High interrupting performance and low power loss support stable power management.",
   },
   {
     id: "kf-2",
-    title: "Flexible Application",
+    title: "Convenience",
     description:
-      "Available in 150–1200 AF frames with multiple Trip Unit options, from ETSi to ETLi. Users can select the appropriate functionality for different low-voltage distribution applications.",
+      "Replaceable Trip Units and Plugs simplify maintenance. Multiple connection options and draw-out construction provide design flexibility. Field-installable accessories help improve installation efficiency.",
   },
   {
     id: "kf-3",
-    title: "Reliable Protection",
+    title: "Reliability",
     description:
-      "Supports LSIG protection functions to respond to various fault conditions. With interrupting capacity up to 150 kA and a UL-compliant design, it provides reliable power system protection.",
+      "Supports performance ratings up to 130 kA and 847 Vac. Electronic Trip technology enables precise protection and metering. Tested for industrial environmental conditions to support reliable application.",
   },
   {
     id: "kf-4",
-    title: "Smart Management",
+    title: "Smart Features",
     description:
-      "Provides event logs, fault history, and power data recording. Communication-based remote monitoring helps support maintenance and system management.",
+      "Supports Modbus, BLE, NFC, and USB connectivity. Integrates protection, metering, diagnostics, and communication functions.",
   },
 ];
 
 const mccbInterrupting = ["35 kA(Ni)", "65 kA(Hi)", "100 kA(Li)"];
 
-/** Figma 4513:49818 — Susol UL Smart MCCB lineup (variant=type1) */
-const susolUlSmartMccbLineup: ProductLineupRow[] = [
+/** Figma 4513:49818 — MCCB interrupting lineup (items · type1 mccb layout) */
+export const susolUlSmartMccbInterruptingLineup: ProductLineupRow[] = [
   {
     type: {
       image: "/img/devices-systems/lineup/lineup_uts150.png",
@@ -496,28 +544,30 @@ const susolUlSmartMccbLineup: ProductLineupRow[] = [
   },
 ];
 
-/** Figma 4513:49636 — Susol UL Smart MCCB product detail */
+/** Figma 6788:7460 — Susol UL ACB product detail (route: susol-ul-smart-mccb) */
 export const susolUlSmartMccbDetail: ProductDetail = {
   slug: "susol-ul-smart-mccb",
   parentHref: "/products-systems/motor-control",
-  parentLabel: "Molded Case Circuit Breaker",
-  category: "Molded Case Circuit Breaker",
-  series: "Susol UL Smart MCCB",
-  subtitle: "High Voltage Direct Current Transmission System",
+  parentLabel: "Air Circuit Breaker / Power Circuit Breaker",
+  category: "Air Circuit Breaker / Power Circuit Breaker",
+  series: "Susol UL ACB",
+  subtitle: "",
   description:
-    "The premium Susol UL Smart MCCB is a digitally enabled molded case circuit breaker designed for low-voltage power distribution systems. With a wide range of current ratings and interrupting capacities, it supports various system requirements while providing reliable circuit protection. Equipped with a Smart Trip Unit, the Susol UL Smart MCCB integrates metering, diagnostics, and communication functions to support stable protection and more efficient energy management.",
+    "The premium Susol UL Air Circuit Breaker (ACB) is designed to meet customer requirements with high interrupting capacity, a lineup up to 6000 A, and a frame structure optimized for switchboard design. The Susol UL ACB is equipped with advanced Trip Relays that support measurement, diagnostics, analysis, and communication. Together with a complete power monitoring and protection coordination system, it provides an integrated solution for power distribution applications.",
   image: "/img/devices-systems/product/product_susol_ul_smart_mccb_hero.png",
   specs: [
-    { label: "Rated Current", value: "40–1200 A" },
+    { label: "Rated Current", value: "400~6000 A" },
     {
-      label: "Interrupting Capacity",
-      value: "Up to 150 kA at 240 Vac\nUp to 100 kA at 480 Vac",
+      label: "Rated Short Circuit Current (Sym.)",
+      value: "Up to 130 kA (at 508 Vac, 6000 A)\nUp to 85 kA (at 847 Vac, 4000 A)",
     },
-    { label: "Standards", value: "UL 489, CSA" },
+    {
+      label: "Standard",
+      value: "UL 489 (C-frame), UL 1066 (D, E, G-frame)",
+    },
   ],
   keyFeatures: susolUlSmartMccbKeyFeatures,
   lineupVariant: "type1",
-  lineup: susolUlSmartMccbLineup,
   downloads: metasolMsDownloads,
   youtubeVideoId: "",
   configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
@@ -525,21 +575,7 @@ export const susolUlSmartMccbDetail: ProductDetail = {
   configuratorBannerBg: "/img/devices/product/banner_configurator_bg.png",
   expertBannerHref: "/support/contact-us",
   expertContactEmail: "automation_support.us@lselectricamerica.com",
-  otherProducts: [
-    {
-      id: "op-susol-ul-mccb",
-      href: "#",
-      image: "/img/devices-systems/products/other/product_other_susol_ul_mccb_1.png",
-      title: "Susol UL MCCB",
-      // badges: 2,
-    },
-    {
-      id: "op-susol-ul-mccb-1000v",
-      href: "#",
-      image: "/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
-      title: "Susol UL MCCB(up to 1000V)",
-    },
-  ],
+  otherProducts: [],
 };
 
 export const susolUlSmartMccbFaqItems = metasolMsFaqItems;
@@ -548,6 +584,7 @@ export const productDetailsBySlug: Record<string, ProductDetail> = {
   "metasol-ms": metasolMsDetail,
   h100_plus: h100PlusDetail,
   "susol-ul-smart-mccb": susolUlSmartMccbDetail,
+  template: productTemplateDetail,
 };
 
 export function getProductDetail(slug: string): ProductDetail | undefined {
@@ -564,12 +601,31 @@ export const productDetailNavItems = [
   { id: "product-help", label: "Help" },
 ] as const;
 
-/** Figma 4513:50001 — Susol UL Smart MCCB (no Video section) */
+/** Figma 6788:8339 — Metasol MS (no Other Products) */
+export const metasolMsNavItems = [
+  { id: "product-key-feature", label: "Key Feature" },
+  { id: "product-lineup", label: "Lineup" },
+  { id: "product-downloads", label: "Downloads" },
+  { id: "product-video", label: "Video" },
+  { id: "product-markets", label: "Markets" },
+  { id: "product-help", label: "Help" },
+] as const;
+
+/** Figma 6843:64936 — H100 Plus (no Other Products) */
+export const h100PlusNavItems = [
+  { id: "product-key-feature", label: "Key Feature" },
+  { id: "product-lineup", label: "Lineup" },
+  { id: "product-downloads", label: "Downloads" },
+  { id: "product-video", label: "Video" },
+  { id: "product-markets", label: "Markets" },
+  { id: "product-help", label: "Help" },
+] as const;
+
+/** Figma 6788:7460 — Susol UL ACB (no Video / Other Products) */
 export const susolUlSmartMccbNavItems = [
   { id: "product-key-feature", label: "Key Feature" },
   { id: "product-lineup", label: "Lineup" },
   { id: "product-downloads", label: "Downloads" },
-  { id: "product-other", label: "Other Products" },
   { id: "product-markets", label: "Markets" },
   { id: "product-help", label: "Help" },
 ] as const;

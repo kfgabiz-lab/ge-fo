@@ -128,10 +128,10 @@
 > Warranty Policy는 제품 보증표(`WarrantyPolicyCoverage`의 tableRows)만 `warrantyPolicy-data` slug로 bo 연동하며(공개=is_visible 001 필터, product_type 코드→영문 라벨 변환, id ASC), 그 외 섹션은 fo 정적 데이터(`warrantyPolicyContent.ts`)로 유지합니다.
 
 ### 미마이그레이션 섹션 (참고)
-products-systems(motor-control만 이관), search, support(contact-us·where-to-buy만 이관), guide — 아직 fo에 마이그레이션되지 않았습니다(company/services는 이관 완료, 나머지 하위 메뉴는 미이관). 필요 시 fo-orchestrator의 STEP 0-0(페이지 분석)부터 시작합니다.
+search, support(contact-us·where-to-buy만 이관), guide — 아직 fo에 마이그레이션되지 않았습니다(company/services는 이관 완료, 나머지 하위 메뉴는 미이관). 필요 시 fo-orchestrator의 STEP 0-0(페이지 분석)부터 시작합니다.
 
-### 잔여 파일 (정리 필요)
-`src/app/()/products-systems/data/productDetailContent.ts` — 이름 없는 route group 폴더 아래 데이터 파일만 남아 있고 대응하는 페이지가 없습니다. 삭제 여부는 사용자 확인 필요.
+### products-systems (이관 완료, 바인딩 미착수)
+1depth 5개(`lv-automation`/`motor-control`/`software`/`variable-frequency-drive`/`explore-all`) + 2depth 상세 7개(motor-control 하위 `h100_plus`/`metasol-ms`/`susol-ul-smart-mccb`, software 하위 `micro-grid`/`scada`/`smart-factory`/`xems`) 전체가 `src/app/()/products-systems`로 이관 완료됐습니다. `data-slug`/`data-slugKey` 마크업은 아직 없는 정적 상태 — 데이터바인딩이 필요하면 `#FO데이터바인딩`으로 STEP1(`fo-slug-analyzer`)부터 시작합니다.
 
 ---
 
@@ -145,7 +145,7 @@ products-systems(motor-control만 이관), search, support(contact-us·where-to-
 | Common Banner03 Link | `src/components/banners/CommonBanner03Link.tsx` | 여러 항목(title/description/href)을 호버 인터랙션과 함께 나열하는 링크형 배너 섹션 | TODO |
 | Common Banner04 | `src/components/banners/CommonBanner04.tsx` | 배경 이미지(PC/모바일)·딤·타이틀·설명·CTA 버튼을 표시하는 문의 유도형 배너 섹션. linkHref의 내부/외부 링크를 자동 분기(company America Careers 배너 등에서 사용) | TODO |
 
-> `CommonBanner02`, `CommonBanner02CopyLink`, `CommonBanner03`는 현재 코드에 없습니다. (`CommonBanner04`는 이번 company 마이그레이션으로 신규 추가됨.)
+> `CommonBanner02`, `CommonBanner02CopyLink`, `CommonBanner03`는 products-systems 이관 시 함께 추가됐습니다. (`CommonBanner04`는 company 마이그레이션으로 신규 추가됨.)
 
 ### 2-2. content
 
