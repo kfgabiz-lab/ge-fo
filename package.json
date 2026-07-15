@@ -7,7 +7,8 @@
     "build": "next build",
     "typecheck": "tsc --noEmit",
     "start": "next start -p 3002",
-    "lint": "eslint"
+    "lint": "eslint",
+    "dup-check": "jscpd src --min-lines 5 --min-tokens 30 --format tsx,typescript --reporters console,json --output ./jscpd-report"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -29,6 +30,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "jscpd": "^5.0.12",
     "sharp": "^0.34.5",
     "typescript": "^5"
   }

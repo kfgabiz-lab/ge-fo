@@ -999,13 +999,74 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
 }
 
 @media (max-width: 780px) {
+  section.common_banner_04 {
+    padding: 0;
+    text-align: center;
+    color: #fff;
+  }
+
   section.common_banner_04 .common_banner_04__body {
-    padding: 60px 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 370px;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.common_banner_04 .common_banner_04__body .common_banner_04__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  section.common_banner_04 .common_banner_04__body .common_banner_04__bg--mo {
+    display: block;
+  }
+
+  section.common_banner_04 .common_banner_04__body .common_banner_04__bg--pc {
+    display: none;
+  }
+
+  /* Figma 6584:98491 — 모바일 전용 배경(이미 어두움), dim 없음 */
+  section.common_banner_04 .common_banner_04__body:has(.common_banner_04__bg--mo)
+    .common_banner_04__dim {
+    display: none;
+  }
+
+  section.common_banner_04 .common_banner_04__inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   section.common_banner_04 .common_banner_04__tit {
-    font-size: 28px;
-    line-height: 36px;
+    margin: 0 0 10px;
+    font-family: inherit;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+  }
+
+  section.common_banner_04 .common_banner_04__desc {
+    margin: 0 0 30px;
+    font-size: 15px;
+    line-height: 23px;
+  }
+
+  section.common_banner_04 .common_banner_04__body:hover .btn-lv01--line-solid {
+    color: var(--color-primary);
+    background: #fff;
   }
 }
 

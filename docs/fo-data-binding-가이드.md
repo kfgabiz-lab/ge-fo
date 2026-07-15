@@ -89,12 +89,14 @@ fo-orchestrator는 요청을 "페이지 머지"와 "slug 개념(데이터 바인
 STEP 0-0. 페이지 분석 (fo-page-analyzer)
 STEP 0-1. 페이지 이관 (fo-page-migrator) — ls-publish 소스를 그대로 fo/src/app에 이식
 STEP 0-2. 공통화 (fo-common-refactor) — 반복 UI/로직을 공통 컴포넌트·함수로 추출
+         → 마무리 시점에 ls-publish와 fo를 브라우저로 나란히 열어 시각 비교한다. fo 단독 렌더 확인(SSR 200, 콘솔 에러 없음)만으로는 통과하지만, 헤더/푸터 같은 기존 공용 컴포넌트에 이미 있던 CSS 드리프트(예: 고정폭 값 하나가 달라 텍스트가 줄바꿈되는 것)는 나란히 비교해야 드러난다
 
 [slug 개념 — 데이터 바인딩. 본 가이드가 다루는 범위]
 STEP 1. 마크업 태깅 (fo-slug-analyzer)
         → 대상 tsx 파일을 분석해서 실제 JSX에 data-slug-repeat/data-slug-item/data-slugKey(+data-slugKey-attr) "구조"를 직접 추가
         → data-slug 값(실제 slug명)은 에이전트가 짓지 않는다 — 사용자가 지정한 값을 그대로 쓰거나, 아직 없으면 TODO로 비워두고 "확인 필요"로 표시
         → 이 시점엔 실제 데이터 연결(fetch) 안 함 — 위치 표시만
+        → (권장) slug 값이 이미 정해져 있다면, 태깅에 들어가기 전에 그 slug가 bo에 실제 등록돼 있는지·실제 dataJson 구조가 무엇인지 먼저 스팟체크한다 — STEP4까지 미루면 구조 불일치로 STEP1~3 전체를 재작업하게 될 수 있다
 
 STEP 2. where 파라미터 / row limit 확인 (fo-slug-analyzer)
         → 해당 slug 조회 시 필터 조건(where)이 필요한지 확인

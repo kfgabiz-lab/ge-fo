@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# jscpd 중복코드 분석 리포트 (fo-common-refactor 참고용, 커밋 대상 아님)
+/jscpd-report
+
 # next.js
 /.next/
 /out/

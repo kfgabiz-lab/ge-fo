@@ -116,11 +116,19 @@
 | Service Center Offering | `src/app/services/service-center/components/ServiceCenterOffering.tsx` | 메인 Swiper(fade)와 프리뷰 Swiper 2개를 상호 동기화하고 공통 SwiperBarControls로 제어하는 "Our Offering" 캐러셀 섹션 | TODO |
 | Service Center Flow | `src/app/services/service-center/components/ServiceCenterFlow.tsx` | 아이콘·타이틀·설명으로 구성된 서비스 처리 단계(steps)를 경로 다이어그램과 함께 나열하는 "Service Flow" 섹션 | TODO |
 | Service Center Gics | `src/app/services/service-center/components/ServiceCenterGics.tsx` | 미디어 이미지와 번호가 매겨진 기능(feature) 리스트를 좌우 배치로 보여주는 GICS 소개 섹션 | TODO |
+| Warranty Policy 페이지 | `src/app/services/warranty-policy/page.tsx` | Warranty Policy(보증정책) 페이지 — Title, Coverage, Banner, Extension, Apply 순으로 조립하는 페이지 | TODO(정적) |
+| Warranty Policy Title | `src/app/services/warranty-policy/components/WarrantyPolicyTitle.tsx` | 페이지 상단 대제목/설명 타이틀 섹션(`company-about-title` 공통 스타일 인라인) | TODO(정적) |
+| Warranty Policy Coverage | `src/app/services/warranty-policy/components/WarrantyPolicyCoverage.tsx` | Warranty Coverage 섹션 — 카드/제품 보증표/Notes. **제품 보증표(tableRows)만** bo 연동 | warrantyPolicy-data (승인됨·개발완료 — `fo/docs/dev/services/warrantyPolicy-data.md` 참고. 표 외 섹션은 정적) |
+| Warranty Policy Banner | `src/app/services/warranty-policy/components/WarrantyPolicyBanner.tsx` | 배경 이미지 배너 + Contact Us CTA(Warranty Support) | TODO(정적) |
+| Warranty Policy Extension | `src/app/services/warranty-policy/components/WarrantyPolicyExtension.tsx` | Warranty Extension Overview 섹션 — 카드/Important Notes/Exclusions 패널 | TODO(정적) |
+| Warranty Policy Apply | `src/app/services/warranty-policy/components/WarrantyPolicyApply.tsx` | How to Apply 섹션 — 제품 카테고리별 연락처(mailto) 2열 표 | TODO(정적) |
+| Warranty Feature Cards | `src/app/services/warranty-policy/components/WarrantyFeatureCards.tsx` | Coverage/Extension 공용 번호 카드 리스트(`variant`로 구분) | TODO(정적) |
 
 > Service Center의 FAQ 영역은 별도 컴포넌트가 아니라 공통 `CommonFaq`(2-3절)를 페이지에서 직접 사용합니다(`sectionId="service-center-faq"` 앵커 지정).
+> Warranty Policy는 제품 보증표(`WarrantyPolicyCoverage`의 tableRows)만 `warrantyPolicy-data` slug로 bo 연동하며(공개=is_visible 001 필터, product_type 코드→영문 라벨 변환, id ASC), 그 외 섹션은 fo 정적 데이터(`warrantyPolicyContent.ts`)로 유지합니다.
 
 ### 미마이그레이션 섹션 (참고)
-products-systems, search, support, guide — 아직 fo에 마이그레이션되지 않았습니다(company/services는 이관 완료). 필요 시 fo-orchestrator의 STEP 0-0(페이지 분석)부터 시작합니다.
+products-systems(motor-control만 이관), search, support(contact-us·where-to-buy만 이관), guide — 아직 fo에 마이그레이션되지 않았습니다(company/services는 이관 완료, 나머지 하위 메뉴는 미이관). 필요 시 fo-orchestrator의 STEP 0-0(페이지 분석)부터 시작합니다.
 
 ### 잔여 파일 (정리 필요)
 `src/app/()/products-systems/data/productDetailContent.ts` — 이름 없는 route group 폴더 아래 데이터 파일만 남아 있고 대응하는 페이지가 없습니다. 삭제 여부는 사용자 확인 필요.
