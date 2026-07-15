@@ -1757,6 +1757,229 @@
   .support-page--service-center section.common_faq .common_faq__bg {
     background: #f5f7fa;
   }
+  .support_service_warranty_table-viewport {
+    position: relative;
+    width: 100%;
+    margin-top: 0;
+    margin-right: -20px;
+    width: calc(100vw - 20px);
+  }
+
+  .support_service_warranty_table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 30px;
+  }
+
+  /* Figma 6880:144915 — coverage table swipe hint */
+  .support_service_warranty_table-swipe {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgb(34 34 34 / 80%);
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+    left: -20px;
+    right: -20px;
+  }
+
+  .support_service_warranty_table-swipe.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .support_service_warranty_table-swipe__icon {
+    display: block;
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+  }
+
+  .support_service_warranty_table-swipe__label {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 28px;
+    color: #fff;
+    text-align: center;
+  }
+
+  .support_service_warranty_table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    border-top: 2px solid #0f1f45;
+  }
+
+  .support_service_warranty_table--2col {
+    min-width: 528px;
+  }
+
+  .support_service_warranty_table thead th {
+    padding: 14px 20px;
+    border: 0;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background: #f5f7fa;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 23px;
+    color: #222;
+    text-align: center;
+    vertical-align: middle;
+    word-break: break-word;
+  }
+
+  .support_service_warranty_table--2col thead th {
+    font-size: 14px;
+  }
+
+  .support_service_warranty_table tbody th[scope="row"],
+  .support_service_warranty_table tbody td {
+    padding: 14px 20px;
+    border: 0;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+    line-height: 23px;
+    color: #222;
+    text-align: center;
+    vertical-align: middle;
+    word-break: break-word;
+  }
+
+  .support_service_warranty_table--2col tbody th[scope="row"],
+  .support_service_warranty_table--2col tbody td {
+    font-size: 14px;
+  }
+
+  .support_service_warranty_table tbody th[scope="row"] {
+    font-weight: 600;
+    /* text-align: left; */
+  }
+
+  .support_service_warranty_table tbody td {
+    font-weight: 400;
+  }
+
+  .support_service_warranty_table__cell--multiline {
+    white-space: normal;
+  }
+
+  .support_service_warranty_table--3col thead th:first-child,
+  .support_service_warranty_table--3col tbody th[scope="row"] {
+    width: 253px;
+  }
+
+  .support_service_warranty_table--3col thead th:nth-child(2),
+  .support_service_warranty_table--3col tbody td:nth-child(2) {
+    width: 159px;
+  }
+
+  .support_service_warranty_table--2col {
+    min-width: 528px;
+  }
+
+  .support_service_warranty_table--2col thead th:first-child,
+  .support_service_warranty_table--2col tbody th[scope="row"] {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    width: 195px;
+    min-width: 195px;
+    max-width: 195px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .support_service_warranty_table--2col thead th:first-child {
+    z-index: 3;
+    background: #f5f7fa;
+  }
+
+  .support_service_warranty_table--2col tbody th[scope="row"] {
+    background: #fff;
+  }
+
+  /* Figma 6880:144605 — sticky col edge shadow (40px · black 25% @ 30% opacity → transparent 73%) */
+  .support_service_warranty_table--2col thead th:first-child::after,
+  .support_service_warranty_table--2col tbody th[scope="row"]::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -40px;
+    width: 40px;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      rgb(0 0 0 / 25%),
+      rgb(0 0 0 / 0%) 73%
+    );
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .support_service_warranty_table--2col thead th:last-child,
+  .support_service_warranty_table--2col tbody td {
+    min-width: 333px;
+    white-space: nowrap;
+  }
+
+  /* Figma 6880:144606 — scroll indicator under table (gap 30 · track #888 · thumb #222 · 2px) */
+  .support_service_warranty_table-viewport--sticky .support_service_warranty_table-wrap {
+    padding-bottom: 30px;
+    scrollbar-width: thin;
+    /* scrollbar-color: #222 #888; */
+  }
+
+  .support_service_warranty_table-viewport--sticky
+    .support_service_warranty_table-wrap::-webkit-scrollbar {
+    height: 2px;
+  }
+
+  .support_service_warranty_table-viewport--sticky
+    .support_service_warranty_table-wrap::-webkit-scrollbar-track {
+    background: #888;
+  }
+
+  .support_service_warranty_table-viewport--sticky
+    .support_service_warranty_table-wrap::-webkit-scrollbar-thumb {
+    background: #222;
+  }
+
+  section.support_service_warranty_apply .support_service_warranty_table-viewport {
+    margin-top: 0;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__bg-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__bg-image--pc {
+    display: none;
+  }
+
 }
 
 /* Service Center cards — tablet 2-col (640–1200px) */
@@ -1956,9 +2179,17 @@
     text-align: right;
   }
 
-  .support_service_warranty_table-wrap {
+  .support_service_warranty_table-viewport {
     width: 100%;
     margin-top: 40px;
+  }
+
+  .support_service_warranty_table-wrap {
+    width: 100%;
+  }
+
+  .support_service_warranty_table-swipe {
+    display: none;
   }
 
   .support_service_warranty_table {
@@ -2101,13 +2332,17 @@
     z-index: 0;
   }
 
-  section.support_service_warranty_banner .support_service_warranty_banner__bg img {
+  section.support_service_warranty_banner .support_service_warranty_banner__bg-image {
     position: absolute;
     inset: 0;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  section.support_service_warranty_banner .support_service_warranty_banner__bg-image--mo {
+    display: none;
   }
 
   section.support_service_warranty_banner .support_service_warranty_banner__content {

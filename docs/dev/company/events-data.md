@@ -29,10 +29,11 @@
 
 ### 3-1. Featured(상단) — "이번달 + 이전달 전체" (사용자 확정)
 ```
-condexpr_status=isVisible=001,publishDttm>=today()?'게시':'미게시'&condval_status=게시
+condexpr_status=isVisible=001,publishDttm<=today()?'게시':'미게시'&condval_status=게시
 period_from_gte={이전달 1일}&period_from_lte={이번달 마지막날}
 sort=eventsForm.period_from,asc
 ```
+- ⚠️ 방향 확정: `publishDttm`은 "게시 시작일시"이며 이미 지난(과거) 날짜여야 노출되므로 `<=`(blog-data.md 9-A와 동일 사유).
 - `_gte`/`_lte` 접미사는 `appendWhereConditions()`의 fieldKey(접미사 제거한 base key)로 JSONB 최상위+1단계 중첩 비교 — **`_from`/`_to` 접미사와는 다른 코드 경로**임에 주의(`_from`/`_to`는 필드명 자체가 `_from`/`_to`로 끝나는 range 쌍 필드 전용이라 `period_from`엔 안 맞음, 실측으로 확인). 개수 제한 없음(전체) → size는 넉넉히(예: 100) 요청
 
 ### 3-2. Calendar — Upcoming을 `period_from` 월별 그룹핑

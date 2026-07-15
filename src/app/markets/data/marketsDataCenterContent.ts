@@ -9,7 +9,7 @@ import type {
 export const dataCenterHero = {
   subtitle: "Agile, modular power for the AI-driven era.",
   title: "Data Centers",
-  heroImage: "/img/markets/data-center/hero.jpg",
+  heroImage: "/img/markets/data-center/hero.png",
 };
 
 export const dataCenterIntro = {

@@ -26,6 +26,9 @@ function MarketsStatValue({ item, isActive, delay }: MarketsStatValueProps) {
   const displayValue = parsed
     ? formatStatNumber(count, parsed.useComma, parsed.decimalPlaces)
     : item.value;
+  // 원본 값이 "+"로 끝나면(별도 valueSuffix가 없을 때) 인라인 "+" 접미사로 표시
+  const inlinePlusSuffix =
+    !item.valueSuffix && item.value.trim().endsWith("+") ? "+" : null;
 
   return (
     <p className="markets_stats__value">
@@ -33,15 +36,18 @@ function MarketsStatValue({ item, isActive, delay }: MarketsStatValueProps) {
       {item.valueUnit ? (
         <span className="markets_stats__value-unit">{item.valueUnit}</span>
       ) : null}
-      {item.valueSuffix ? (
-        <span className="markets_stats__value-suffix">{item.valueSuffix}</span>
+      {item.valueSuffix || inlinePlusSuffix ? (
+        <span className="markets_stats__value-suffix">
+          {item.valueSuffix ?? inlinePlusSuffix}
+        </span>
       ) : null}
     </p>
   );
 }
 
 export default function MarketsStats({ items }: MarketsStatsProps) {
-  const { ref: panelRef, isInView } = useInView<HTMLDivElement>();
+  // 최초 1회 진입 감지(fo 공통 useInView, 임계값 0.18은 pub useInViewOnce 기준과 동일)
+  const { ref: panelRef, isInView } = useInView<HTMLDivElement>(0.18);
 
   return (
     <section className="markets_stats">
@@ -57,7 +63,9 @@ export default function MarketsStats({ items }: MarketsStatsProps) {
                     isActive={isInView}
                     delay={index * 120}
                   />
-                  <p className="markets_stats__sublabel">{item.sublabel}</p>
+                  {item.sublabel ? (
+                    <p className="markets_stats__sublabel">{item.sublabel}</p>
+                  ) : null}
                 </div>
                 <p className="markets_stats__desc">{item.description}</p>
               </article>

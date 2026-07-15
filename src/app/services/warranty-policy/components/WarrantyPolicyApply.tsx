@@ -1,3 +1,4 @@
+import WarrantyTableScroll from "./WarrantyTableScroll";
 import { warrantyPolicyPage } from "@/data/services/warrantyPolicyContent";
 
 export default function WarrantyPolicyApply() {
@@ -10,7 +11,7 @@ export default function WarrantyPolicyApply() {
           <h2 className="section_tit">{apply.title}</h2>
           <p className="section_desc">{apply.description}</p>
         </div>
-        <div className="support_service_warranty_table-wrap">
+        <WarrantyTableScroll stickyFirstCol>
           <table className="support_service_warranty_table support_service_warranty_table--2col">
             <thead>
               <tr>
@@ -34,7 +35,7 @@ export default function WarrantyPolicyApply() {
               ))}
             </tbody>
           </table>
-        </div>
+        </WarrantyTableScroll>
       </div>
     </section>
   );

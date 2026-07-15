@@ -9,10 +9,20 @@ export default function WarrantyPolicyBanner() {
       <div className="inner">
         <div className="support_service_warranty_banner__panel">
           <div className="support_service_warranty_banner__bg" aria-hidden>
+            {/* PC 배경 이미지 */}
             <img
+              className="support_service_warranty_banner__bg-image support_service_warranty_banner__bg-image--pc"
               loading="lazy"
               decoding="async"
               src={banner.backgroundImage}
+              alt=""
+            />
+            {/* 모바일 배경 이미지(없으면 PC 이미지로 폴백) */}
+            <img
+              className="support_service_warranty_banner__bg-image support_service_warranty_banner__bg-image--mo"
+              loading="lazy"
+              decoding="async"
+              src={banner.backgroundImageMobile ?? banner.backgroundImage}
               alt=""
             />
           </div>

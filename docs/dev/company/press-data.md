@@ -130,7 +130,8 @@ FE 바인딩 시 참조 경로: `content[i].id` / `content[i].dataJson.pressForm
 `/bo/admin/widget/press-list` 관리자 화면을 Playwright로 직접 조작해 네트워크 요청을 실측한 결과, BO의 "게시상태" 판정식(`isVisible=001,publishDttm>=today()?'게시':'미게시'`)이 FO where 조건에는 반영되어 있지 않음을 확인(4절의 `eq_pressForm.isVisible=001`만 있고 `publishDttm` 조건 없음). 이 문제를 계기로 FO 툴바(검색·정렬)와 BO 위젯 검색 필드(`press-list`/`blog-list` templateJson) 전체를 재분석했다.
 
 ### A. 게시상태 조건 수정 (버그 픽스)
-- 기존 where `eq_pressForm.isVisible=001`을 **BO와 동일한 조건식으로 교체**: `condexpr_status=isVisible=001,publishDttm>=today()?'게시':'미게시'&condval_status=게시`
+- 기존 where `eq_pressForm.isVisible=001`을 **BO와 동일한 조건식으로 교체**: `condexpr_status=isVisible=001,publishDttm<=today()?'게시':'미게시'&condval_status=게시`
+- ⚠️ 방향 확정: `publishDttm`은 "게시 시작일시"이며, **이미 지난(과거) 날짜여야 노출**된다. 조건은 `publishDttm<=today()`(작거나 같음)이 맞다(blog-data.md 9-A와 동일 사유).
 - `PageDataService.appendWhereConditions()`의 `condexpr_`/`condval_` 처리(기존 기능, BO 위젯 검색 필드가 이미 사용 중)를 그대로 재사용 — **BE 변경 없음**. isVisible=001 조건이 이 식 안에 포함되어 있어 별도 `eq_` 파라미터 불필요.
 - 실측 검증: BO `press-list`/`blog-list` 위젯에서 "게시상태=게시"로 검색 시 위 파라미터가 실제로 전송되는 것을 네트워크 요청으로 확인(2026-07-14).
 

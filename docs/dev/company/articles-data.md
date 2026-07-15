@@ -39,7 +39,7 @@
 - 이미지: `GET /api/v1/fo/page-files/{fileId}`
 
 ## 4. 조회 조건 (press-data.md 4절과 완전히 동일 — category만 없음)
-- where: `condexpr_status=isVisible=001,publishDttm>=today()?'게시':'미게시'&condval_status=게시` (게시상태, press-data.md 9-A와 동일)
+- where: `condexpr_status=isVisible=001,publishDttm<=today()?'게시':'미게시'&condval_status=게시` (게시상태 — `publishDttm`은 이미 지난 날짜여야 노출되므로 `<=`, press-data.md 9-A와 동일)
 - 검색: `title|content=검색어` (press-data.md 9-B)
 - 정렬: `sort=createdAt,desc|asc` (press-data.md 9-C)
 - 월/연도 필터: `month_publishDttm=01~12`, `year_publishDttm=YYYY`(옵션 2026/2025 하드코딩, press와 동일) (press-data.md 9-D/D-2)

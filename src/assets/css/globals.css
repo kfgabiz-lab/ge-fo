@@ -2416,6 +2416,384 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   }
 }
 
+/* cookie_settings_modal — Figma 7334:130893 · bottom-right banner */
+.cookie_settings_modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  box-sizing: border-box;
+}
+
+.cookie_settings_modal__dim {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: none;
+  background: rgb(0 0 0 / 50%);
+  cursor: pointer;
+  animation: common-modal-dim-in 0.2s ease forwards;
+}
+
+.cookie_settings_modal__panel {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 4px;
+  animation: common-modal-panel-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.cookie_settings_modal__tit {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 34px;
+  letter-spacing: -0.01em;
+  color: #222;
+}
+
+.cookie_settings_modal__desc {
+  margin: 6px 0 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  color: #666;
+}
+
+.cookie_settings_modal__desc p {
+  margin: 0;
+}
+
+.cookie_settings_modal__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.cookie_settings_modal__btn {
+  display: inline-flex;
+  flex: 1 0 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 0;
+  height: 42px;
+  padding: 0 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.cookie_settings_modal__btn--line {
+  border: 1px solid rgb(15 31 69 / 30%);
+  background: #fff;
+  color: #0f1f45;
+}
+
+.cookie_settings_modal__btn--line:hover {
+  border-color: #0f1f45;
+}
+
+.cookie_settings_modal__btn--solid {
+  border: none;
+  background: #0f1f45;
+  color: #fff;
+}
+
+.cookie_settings_modal__btn--solid:hover {
+  background: var(--color-primary-hover);
+}
+
+.cookie_settings_modal--embedded {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 280px;
+  padding: 24px;
+  background: #0c1625;
+}
+
+.cookie_settings_modal--embedded .cookie_settings_modal__panel {
+  position: relative;
+  right: auto;
+  bottom: auto;
+}
+
+@media (min-width: 781px) {
+  .cookie_settings_modal__panel {
+    right: 40px;
+    bottom: 40px;
+    width: 530px;
+    min-height: 241px;
+    padding: 30px;
+  }
+
+  .cookie_settings_modal__actions {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 780px) {
+  /* Figma 7334:131063 — 375 기준 inset 20 · 패널 335×377 중앙 */
+  .cookie_settings_modal:not(.cookie_settings_modal--embedded) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .cookie_settings_modal__panel {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    max-width: 335px;
+    min-height: 377px;
+    padding: 20px 24px 30px;
+  }
+
+  .cookie_settings_modal__tit {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    letter-spacing: -0.01em;
+  }
+
+  .cookie_settings_modal__desc {
+    margin-top: 6px;
+    font-size: 15px;
+    line-height: 23px;
+  }
+
+  .cookie_settings_modal__actions {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 30px;
+  }
+
+  .cookie_settings_modal__btn {
+    width: 100%;
+    flex: none;
+  }
+}
+
+/* cookie_preferences_modal — P-FO-COMMON-040000M · Figma 7334:130670 */
+.cookie_preferences_modal .common_modal__dim {
+  background: rgb(0 0 0 / 50%);
+}
+
+.cookie_preferences_modal__intro {
+  margin: 0;
+  color: #666;
+}
+
+.cookie_preferences_modal__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cookie_preferences_modal__item + .cookie_preferences_modal__item {
+  margin-top: 30px;
+}
+
+.cookie_preferences_modal__check {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.cookie_preferences_modal__check .MuiCheckbox-root {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+}
+
+.cookie_preferences_modal__check .MuiCheckbox-root.Mui-disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.cookie_preferences_modal__check .guide_checkbox__icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+.cookie_preferences_modal__item-tit {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+  color: #222;
+}
+
+.cookie_preferences_modal__item-desc {
+  margin: 6px 0 0 34px;
+  color: #666;
+}
+
+.cookie_preferences_modal__actions {
+  gap: 14px;
+}
+
+.cookie_preferences_modal__btn {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  min-width: 220px;
+  height: 52px;
+  padding: 0 24px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.cookie_preferences_modal__btn.btn-lv01--line {
+  background: #fff;
+  border: 1px solid rgb(15 31 69 / 30%);
+  color: var(--color-primary);
+}
+
+.cookie_preferences_modal__btn.btn-lv01--line:hover {
+  border-color: var(--color-primary);
+}
+
+.cookie_preferences_modal__btn.btn-lv01--solid {
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.cookie_preferences_modal__btn.btn-lv01--solid:hover {
+  background: var(--color-primary-hover);
+}
+
+@media (min-width: 781px) {
+  .cookie_preferences_modal .common_modal__panel {
+    max-width: 1200px;
+    height: min(700px, calc(100vh - 48px));
+    max-height: 700px;
+  }
+
+  .cookie_preferences_modal .common_modal__body {
+    padding: 14px 40px 0;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .cookie_preferences_modal__list {
+    margin: 26px 20px 0;
+  }
+
+  .cookie_preferences_modal .common_modal__foot {
+    padding-top: 30px;
+  }
+}
+
+@media (max-width: 780px) {
+  .common_modal.cookie_preferences_modal {
+    padding: 61px 20px;
+  }
+
+  .cookie_preferences_modal .common_modal__panel {
+    width: 100%;
+    max-width: 335px;
+    height: calc(100dvh - 122px);
+    max-height: calc(100dvh - 122px);
+  }
+
+  .cookie_preferences_modal .common_modal__head {
+    padding: 24px 24px 0;
+  }
+
+  .cookie_preferences_modal .common_modal__head-row {
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .cookie_preferences_modal .common_modal__tit {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  .cookie_preferences_modal .common_modal__close {
+    margin-top: 3px;
+  }
+
+  .cookie_preferences_modal .common_modal__line {
+    margin-top: 0;
+  }
+
+  .cookie_preferences_modal .common_modal__body {
+    padding: 20px 24px 24px;
+    font-size: 15px;
+    line-height: 23px;
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+  }
+
+  .cookie_preferences_modal .common_modal__body::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .cookie_preferences_modal .common_modal__body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .cookie_preferences_modal .common_modal__body::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: #888;
+  }
+
+  .cookie_preferences_modal__list {
+    margin-top: 20px;
+  }
+
+  .cookie_preferences_modal__item + .cookie_preferences_modal__item {
+    margin-top: 20px;
+  }
+
+  .cookie_preferences_modal__check {
+    gap: 10px;
+  }
+
+  .cookie_preferences_modal__item-tit {
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  .cookie_preferences_modal__item-desc {
+    margin: 6px 0 0;
+    font-size: 15px;
+    line-height: 23px;
+  }
+
+  .cookie_preferences_modal__actions {
+    display: none;
+  }
+}
+
 /* privacy_policy_modal — Figma 5565:128525 · shell: common_modal */
 .privacy_policy_modal .common_modal__body {
   max-height: 445px;
