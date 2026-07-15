@@ -34,16 +34,20 @@ export type MarketsFaqCode =
 export async function fetchMarketsFaqItems(
   marketsCode: MarketsFaqCode,
 ): Promise<FaqItem[]> {
-  const res = await fetchApi<PageDataResponse>(
-    `/api/v1/fo/page-data/faq-data?eq_mainCategory=002&eq_isVisible=001&eq_markets=${marketsCode}&sort=id,asc&size=100`,
-  );
+  try {
+    const res = await fetchApi<PageDataResponse>(
+      `/api/v1/fo/page-data/faq-data?eq_mainCategory=002&eq_isVisible=001&eq_markets=${marketsCode}&sort=id,asc&size=100`,
+    );
 
-  return (res.content ?? []).map((item) => {
-    // flattenPageDataItem: faqForm 섹션 필드(title/answer/...)를 root 로 flat 병합
-    const row = flattenPageDataItem(item as PageDataItem);
-    return {
-      question: (row.title as string) ?? "",
-      answer: (row.answer as string) ?? "",
-    };
-  });
+    return (res.content ?? []).map((item) => {
+      // flattenPageDataItem: faqForm 섹션 필드(title/answer/...)를 root 로 flat 병합
+      const row = flattenPageDataItem(item as PageDataItem);
+      return {
+        question: (row.title as string) ?? "",
+        answer: (row.answer as string) ?? "",
+      };
+    });
+  } catch {
+    return [];
+  }
 }
