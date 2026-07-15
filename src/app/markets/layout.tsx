@@ -1,4 +1,4 @@
-import SubHeader from "@/components/layout/markets/SubHeader";
+import MarketsGroupHeader from "@/components/layout/markets/MarketsGroupHeader";
 import SubFooter from "@/components/layout/markets/SubFooter";
 import { fetchGnbMenuData } from "@/data/gnb";
 
@@ -12,7 +12,7 @@ export default async function MarketsLayout({
 
   return (
     <>
-      <SubHeader gnbMenuData={gnbMenuData} />
+      <MarketsGroupHeader gnbMenuData={gnbMenuData} />
       {children}
       <SubFooter />
     </>

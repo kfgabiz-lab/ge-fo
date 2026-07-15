@@ -2674,7 +2674,7 @@ margin-top: 40px;
     position: absolute;
     inset: 0;
     background:
-      url("/pub/img/company/america/shaping-bg.png") left top / cover no-repeat,
+      url("/img/company/america/shaping-bg.png") left top / cover no-repeat,
       #0c1625;
     pointer-events: none;
   }
@@ -3502,7 +3502,7 @@ margin-top: 40px;
     position: absolute;
     inset: 0;
     background:
-      url("/pub/img/company/america/shaping-bg.png") left top / cover no-repeat,
+      url("/img/company/america/shaping-bg.png") left top / cover no-repeat,
       #0c1625;
     pointer-events: none;
   }
