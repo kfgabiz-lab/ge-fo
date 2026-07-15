@@ -1,0 +1,446 @@
+/* Common — 404 Not found (Figma 7334:130743 · P-FO-COMMON-010000P) */
+
+.common-page--404 {
+  background: #fff;
+}
+
+@media (min-width: 781px) {
+  section.common_404_title {
+    padding: 75px 0 0;
+  }
+
+  section.common_404_title .common_404_title__heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 70px;
+    font-weight: 800;
+    line-height: 80px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.common_404_title .common_404_title__desc {
+    margin: 11px 0 0;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    color: #666;
+  }
+
+  section.common_404_search {
+    padding: 75px 0 0;
+  }
+
+  section.common_404_search .common_404_search__form {
+    width: 100%;
+  }
+
+  section.common_404_search .common_404_search__field,
+  section.common_404_search .common_404_search__field.guide_field {
+    width: 100%;
+    max-width: none;
+  }
+
+  section.common_404_search .common_404_search__field .MuiOutlinedInput-root {
+    height: 80px;
+    min-height: 80px;
+    max-height: 80px;
+    padding: 0 30px;
+    gap: 24px;
+    border-radius: 4px;
+    background: #f5f5f5;
+  }
+
+  section.common_404_search .common_404_search__field .MuiOutlinedInput-root fieldset {
+    border: none;
+  }
+
+  section.common_404_search .common_404_search__field .MuiOutlinedInput-input {
+    height: 80px;
+    padding: 0;
+    font-size: 24px;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.common_404_search
+    .common_404_search__field
+    .MuiOutlinedInput-input::placeholder {
+    font-size: 24px;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #888;
+    opacity: 1;
+  }
+
+  section.common_404_search .common_404_search__adorn {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+  }
+
+  section.common_404_search .common_404_search__clear {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  section.common_404_search .common_404_search__clear-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+  }
+
+  section.common_404_search .common_404_search__clear-icon img {
+    display: block;
+    width: 12px;
+    height: 12px;
+  }
+
+  section.common_404_search
+    .common_404_search__field
+    .guide_field__search-icon-button {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  section.common_404_search
+    .common_404_search__field
+    .guide_field__search-icon-button
+    img {
+    display: block;
+    width: 26px;
+    height: 26px;
+  }
+
+  section.common_404_search .common_404_search__popular {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 14px;
+    margin-top: 24px;
+  }
+
+  section.common_404_search .common_404_search__popular-label {
+    flex-shrink: 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 23px;
+    color: #888;
+  }
+
+  section.common_404_search .common_404_search__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.common_404_search .common_404_search__tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 6px 16px;
+    border: 1px solid rgb(15 31 69 / 80%);
+    border-radius: 4px;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #0f1f45;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  section.common_404_search .common_404_search__tag:hover {
+    border-color: #0f1f45;
+    background: #0f1f45;
+    color: #fff;
+  }
+
+  section.common_404_links {
+    padding: 120px 0 180px;
+  }
+
+  section.common_404_links .common_404_links__tit {
+    margin: 0 0 40px;
+  }
+
+  section.common_404_links .common_404_links__list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.common_404_links .common_404_links__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 164px;
+    padding: 24px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    text-decoration: none;
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease;
+  }
+
+  section.common_404_links .common_404_links__card:hover {
+    border-color: #0f1f45;
+  }
+
+  section.common_404_links .common_404_links__icon {
+    display: flex;
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+  }
+
+  section.common_404_links .common_404_links__icon img {
+    display: block;
+    width: 80px;
+    height: 80px;
+  }
+
+  section.common_404_links .common_404_links__label {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 26px;
+    color: #0f1f45;
+    text-align: center;
+  }
+}
+
+@media (max-width: 780px) {
+  section.common_404_title {
+    padding: 40px 0 0;
+  }
+
+  section.common_404_title .common_404_title__heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 40px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.common_404_title .common_404_title__desc {
+    margin: 12px 0 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #666;
+  }
+
+  section.common_404_search {
+    padding: 40px 0 0;
+  }
+
+  section.common_404_search .common_404_search__field .MuiOutlinedInput-root {
+    height: 60px;
+    min-height: 60px;
+    max-height: 60px;
+    padding: 0 20px;
+    gap: 14px;
+    border-radius: 4px;
+    background: #f5f5f5;
+  }
+
+  section.common_404_search .common_404_search__field .MuiOutlinedInput-root fieldset {
+    border: none;
+  }
+
+  section.common_404_search .common_404_search__field .MuiOutlinedInput-input {
+    height: 60px;
+    padding: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.common_404_search
+    .common_404_search__field
+    .MuiOutlinedInput-input::placeholder {
+    font-size: 16px;
+    line-height: 24px;
+    color: #888;
+    opacity: 1;
+  }
+
+  section.common_404_search .common_404_search__adorn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0;
+  }
+
+  section.common_404_search .common_404_search__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  section.common_404_search .common_404_search__clear-icon,
+  section.common_404_search .common_404_search__clear-icon img {
+    width: 8px;
+    height: 8px;
+  }
+
+  section.common_404_search
+    .common_404_search__field
+    .guide_field__search-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  section.common_404_search
+    .common_404_search__field
+    .guide_field__search-icon-button
+    img {
+    width: 20px;
+    height: 20px;
+  }
+
+  section.common_404_search .common_404_search__popular {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  section.common_404_search .common_404_search__popular-label {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #888;
+  }
+
+  section.common_404_search .common_404_search__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.common_404_search .common_404_search__tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 31px;
+    padding: 6px 16px;
+    border: 1px solid rgb(15 31 69 / 80%);
+    border-radius: 4px;
+    background: #fff;
+    font-size: 13px;
+    line-height: 19px;
+    color: #0f1f45;
+    cursor: pointer;
+  }
+
+  section.common_404_links {
+    padding: 60px 0 80px;
+  }
+
+  section.common_404_links .common_404_links__tit {
+    margin: 0 0 24px;
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  section.common_404_links .common_404_links__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.common_404_links .common_404_links__card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    box-sizing: border-box;
+    min-height: 88px;
+    padding: 16px 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    text-decoration: none;
+  }
+
+  section.common_404_links .common_404_links__icon {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+  }
+
+  section.common_404_links .common_404_links__icon img {
+    display: block;
+    width: 56px;
+    height: 56px;
+  }
+
+  section.common_404_links .common_404_links__label {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 23px;
+    color: #0f1f45;
+    text-align: left;
+  }
+}

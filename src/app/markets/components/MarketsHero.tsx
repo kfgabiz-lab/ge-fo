@@ -30,79 +30,50 @@ export default function MarketsHero({
   variant = "default",
   secondaryCta,
 }: MarketsHeroProps) {
-  // key-visual 변형 — Power Grid 등 스티키 히어로
-  if (variant === "key-visual") {
-    const titleEl = (
-      <h1 className="markets_hero__tit">
-        {titleLines ? (
-          titleLines.map((line, index) => (
-            <Fragment key={line}>
-              {index > 0 ? <br /> : null}
-              {line}
-            </Fragment>
-          ))
-        ) : (
-          title
-        )}
-      </h1>
-    );
+  const isKeyVisual = variant === "key-visual";
+  const sectionClassName = [
+    "markets_hero",
+    isKeyVisual && "markets_hero--key-visual",
+    heroImage && !isKeyVisual && "markets_hero--has-img",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    return (
-      <div className="markets_hero__sticky-wrap" data-lenis-prevent-wheel>
-        <section className="markets_hero markets_hero--key-visual">
-          <div
-            className="hero_img"
-            style={
-              heroImage ? { backgroundImage: `url("${heroImage}")` } : undefined
-            }
-            aria-hidden="true"
-          />
-          <div className="markets_hero__content">
-            {titleEl}
-            <p className="markets_hero__sub">{subtitle}</p>
-            <div className="markets_hero__btns">
-              <Link
-                href="/support/contact-us"
-                className="btn-base btn-lv01 btn-lv01--solid"
-              >
-                Contact Us
-              </Link>
-              <Link
-                href={secondaryCta?.href ?? ""}
-                className="btn-base btn-lv01 btn-lv01--line"
-              >
-                {secondaryCta?.label ?? "Get the Whitepaper"}
-                <span
-                  className={
-                    secondaryCta?.icon === "link" ? "icon_link" : "icon_download"
-                  }
-                  aria-hidden="true"
-                />
-              </Link>
-            </div>
-          </div>
-          <MarketsHeroScrollDown />
-        </section>
-      </div>
-    );
-  }
+  const titleEl = (
+    <h1 className="markets_hero__tit">
+      {titleLines ? (
+        titleLines.map((line, index) => (
+          <Fragment key={line}>
+            {index > 0 ? <br /> : null}
+            {line}
+          </Fragment>
+        ))
+      ) : (
+        title
+      )}
+    </h1>
+  );
+  const subtitleEl = <p className="markets_hero__sub">{subtitle}</p>;
+  const buttonsEl = (
+    <div className="markets_hero__btns">
+      <Link href="/support/contact-us" className="btn-base btn-lv01 btn-lv01--solid">
+        Contact Us
+      </Link>
+      <Link
+        href={secondaryCta?.href ?? ""}
+        className="btn-base btn-lv01 btn-lv01--line"
+      >
+        {secondaryCta?.label ?? "Get the Whitepaper"}
+        <span
+          className={secondaryCta?.icon === "link" ? "icon_link" : "icon_download"}
+          aria-hidden="true"
+        />
+      </Link>
+    </div>
+  );
 
-  // default 변형 — 현재 마켓 페이지군은 전부 key-visual 사용, 이 분기는 미사용
-  return (
-    <section className="markets_hero">
-      <div className="markets_hero__content">
-        <p className="markets_hero__sub">{subtitle}</p>
-        <h1 className="markets_hero__tit">{title}</h1>
-        <div className="markets_hero__btns">
-          <Link href="" className="btn-base btn-lv01 btn-lv01--solid">
-            Contact Us
-          </Link>
-          <Link href="" className="btn-base btn-lv01 btn-lv01--line">
-            Get the Whitepaper
-            <span className="icon_download" aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
+  const heroSection = (
+    <section className={sectionClassName}>
       <div
         className="hero_img"
         style={
@@ -110,6 +81,31 @@ export default function MarketsHero({
         }
         aria-hidden="true"
       />
+      <div className="markets_hero__content">
+        {isKeyVisual ? (
+          <>
+            {titleEl}
+            {subtitleEl}
+          </>
+        ) : (
+          <>
+            {subtitleEl}
+            {titleEl}
+          </>
+        )}
+        {buttonsEl}
+      </div>
+      {isKeyVisual ? <MarketsHeroScrollDown /> : null}
     </section>
   );
+
+  if (isKeyVisual) {
+    return (
+      <div className="markets_hero__sticky-wrap" data-lenis-prevent-wheel>
+        {heroSection}
+      </div>
+    );
+  }
+
+  return heroSection;
 }

@@ -4,8 +4,9 @@
 > - `fo/src/app/markets/components/MarketsFaq.tsx` (래퍼, 자체 DOM 없음 — `items` prop만 `CommonFaq`에 전달)
 > - `fo/src/components/faq/CommonFaq.tsx` (`.common_faq__list`에 태깅)
 > - `fo/src/components/ui/FaqItem.tsx` (`.faq_item`, `question`/`answer` 필드 태깅)
+> - `fo/src/app/markets/data/marketsFaqData.ts` (실제 fetch·매핑 헬퍼 — `flattenPageDataItem` 기반)
 > - 실제 fetch 지점(STEP6 대상): markets 하위 6개 `page.tsx` — `data-center`, `power-grid`, `oil-gas-mining`, `public-infrastructure`, `industrial`, `commercial-residential`
-> 상태: 개발완료 (STEP1~7 전체 완료, 실 데이터는 BO에서 추후 입력 예정, 2026-07-13)
+> 상태: 개발완료 (STEP1~7 완료 후, 2026-07-15 `flattenPageDataItem` 기반으로 재작업 — 하단 STEP 이력 "재작업" 참고)
 
 ## 1. data-slug
 - 값: `faq-data`
@@ -46,30 +47,27 @@
 
 - **신규 API 필요 여부: 불필요.** 기존 `FoPageDataController`(`GET /api/v1/fo/page-data/{slug}`, `bo-api/.../controller/FoPageDataController.java`)를 그대로 재사용한다. 이 컨트롤러는 `PageDataService.search()`(동적 JSONB 검색 + 페이지네이션)를 위임하는 얇은 래퍼이며, `SecurityConfig.java:54`에서 `/api/v1/fo/**` permitAll(비로그인 허용)이 이미 걸려 있다.
 - **`faq-data` slug 등록: 확인 완료.** `slug_registry` id=108, `is_active=t`, type=PAGE_DATA (developer DB 라이브 + `db_backup_public_20260710.sql:12507` 양쪽 일치).
-- **필드명/코드값 체계 = 스펙과 일치(현행 스키마 기준).** developer DB `slug_entity_field`의 FAQ 엔티티 현행 필드 정의가 스펙과 정확히 일치: `main_category`(select, code_group=MAINCATEGORY), `markets`(select, code_group=MARKETS), `is_visible`(radio, code_group=VISIBILITY), `question`(input), `answer`(textarea). 코드 라벨도 직접 조회로 확정:
-  - MAINCATEGORY: `001=Products & Systems`, `002=Markets` → 스펙 `main_category=002`(Markets) 정확.
-  - VISIBILITY: `001=공개`, `002=비공개` → 스펙 `is_visible=001`(공개) 정확.
-  - MARKETS: `001=데이터센터(Data Center)`, `002=Public Infrastructure`, `003=Oil & Gas, Mining Industries`, `004=전력망(Power Grid)`, `005=산업(Industrial)`, `006=상업 및 주거(Commercial & Residential)` → 문서 4번의 6개 페이지 매핑 전부 일치. **STEP2에서 "매핑 추정"으로 남겼던 4개(public-infrastructure=002 / oil-gas-mining=003 / industrial=005 / commercial-residential=006) 모두 코드그룹 라벨과 일치함을 직접 확인 → 확정.**
+- **필드명/코드값 체계.** FAQ 콘텐츠는 스키마 세대가 섞여 있어(아래 참고), 실제 구현은 **콘텐츠 키 이름에 의존하지 않는 공통 유틸 `flattenPageDataItem`**(`fo/src/lib/pageData.ts`)로 dataJson을 flat row로 변환한 뒤, root 필드 `title`(질문 텍스트)/`answer`(답변 텍스트)를 `question`/`answer`로 매핑해 사용한다(`fo/src/app/markets/data/marketsFaqData.ts`). where 조건에 쓰는 필드명은 camelCase `mainCategory`/`isVisible`/`markets`다.
+  - 코드 라벨(developer DB 직접 조회로 확정):
+  - MAINCATEGORY: `001=Products & Systems`, `002=Markets` → `mainCategory=002`(Markets) 사용.
+  - VISIBILITY: `001=공개`, `002=비공개` → `isVisible=001`(공개) 사용.
+  - MARKETS: `001=데이터센터(Data Center)`, `002=Public Infrastructure`, `003=Oil & Gas, Mining Industries`, `004=전력망(Power Grid)`, `005=산업(Industrial)`, `006=상업 및 주거(Commercial & Residential)` → 문서 4번의 6개 페이지 매핑과 일치.
 
 ### 재사용 엔드포인트 및 호출 방식
 - 엔드포인트: `GET /api/v1/fo/page-data/faq-data`
-- 페이지별 호출 (Query Params):
-  - `eq_main_category=002` (공통) + `eq_is_visible=001` (공통) + `eq_markets={001~006}` (페이지별) + `sort=id,asc` + `size=100`
-  - 예) Data Center: `GET /api/v1/fo/page-data/faq-data?eq_main_category=002&eq_is_visible=001&eq_markets=001&sort=id,asc&size=100`
-- **동작 근거**: `PageDataService.appendWhereConditions()`의 `eq_` 단순키 분기(약 line 1042~1052)가 최상위 + 1~2단계 중첩 object를 `jsonb_each ... EXISTS`로 함께 탐색한다. 현행 FAQ 데이터는 `data_json.faq.{필드}`(1단계 중첩) 구조이므로 `eq_main_category`/`eq_is_visible`/`eq_markets`가 중첩 EXISTS로 정상 매칭된다(dot notation `faq.main_category=002`로 명시 지정도 가능하나, 스키마 세대가 섞여 있어 `eq_` 단순키가 더 견고).
-- **응답**: `PageDataListResponse { content: [{ id, dataJson:{faq:{question, answer, ...}}, ... }], totalElements, ... }`. FO는 `dataJson.faq.question` / `dataJson.faq.answer`만 사용. STEP6 FE flatten이 단일 중첩키(`faq.question`→`question`)를 root로 올리는 기존 규칙과 일치.
+- 페이지별 호출 (Query Params, 전부 camelCase 단순키):
+  - `eq_mainCategory=002` (공통) + `eq_isVisible=001` (공통) + `eq_markets={001~006}` (페이지별) + `sort=id,asc` + `size=100`
+  - 예) Data Center: `GET /api/v1/fo/page-data/faq-data?eq_mainCategory=002&eq_isVisible=001&eq_markets=001&sort=id,asc&size=100`
+- **동작 근거**: `PageDataService.appendWhereConditions()`의 `eq_` 단순키 분기가 최상위 + 1단계 중첩 object를 `jsonb_each ... EXISTS`로 함께 탐색한다. 아래 스키마 세대 중 필드명이 camelCase(`mainCategory`/`isVisible`/`markets`)로 저장된 레코드만 이 where로 매칭된다.
+- **응답 → FE 매핑**: `flattenPageDataItem(item)`으로 dataJson을 flat row로 변환(콘텐츠 키 이름 무관) → `row.title` → `question`, `row.answer` → `answer`로 매핑. 절대 `dataJson.{콘텐츠키}.question`처럼 특정 콘텐츠 키·필드명을 하드코딩해서 직접 언랩하지 않는다(`fo/docs/fo-data-binding-가이드.md`의 공통 규칙 그대로 적용).
 
-### ⚠️ STEP4에서 실데이터 직접 확인 중 발견한 스키마/데이터 이슈 (prdGrp-data 유형 재발 — 반드시 인지)
-- **스키마 3세대 혼재.** developer DB `faq-data` 21건은 세 가지 스키마가 섞여 있다:
-  1. **현행(정본, content key `faq`)** — `faq.{main_category, markets, is_visible, question, answer}` — **스펙과 일치. 단 2건뿐(id 1580, 1581).**
-  2. 중간세대(content key `faqForm`) — `faqForm.{faqMainCategory, faqTitle, isVisible, markets}` — 약 13건.
-  3. 레거시(content key `faqForm`) — `faqForm.{mainCategory, title, isVisible, markets}`(+ 오타 `Markets` 1건) — 약 6건.
-  → 2·3세대(구 19건)는 `main_category`/`question` 키 자체가 없어 스펙 where로 **매칭되지 않는다**(구 데이터는 자동 제외됨). 이는 정상 동작이며 BE 문제가 아니다.
-- **현재 FO 노출 데이터 = 사실상 0건.** 스펙 where(`main_category=002 AND is_visible=001 AND markets=00X`)를 만족하는 레코드가 현재 라이브에 **없다**:
-  - id 1581(사용자가 STEP2에서 확인한 그 레코드): `main_category=002, markets=002(Public Infra)`이나 `is_visible=002`(비공개) → 공개 필터에서 제외.
-  - id 1580: `is_visible=001`이나 `main_category=001`(Products & Systems, Markets 아님) + markets 없음 → 제외.
-  - markets 값 실분포도 `001×3, 003×1`뿐이라 002/004/005/006 페이지는 데이터 자체가 없음(그나마 있는 것도 구 스키마).
-  → **6개 markets 페이지 모두 현재는 빈 목록.** BO 관리자가 현행 FAQ 등록폼(정본 `faq` 스키마 생성)으로 "Markets 대분류 + 공개 + 해당 markets" FAQ를 실제 입력해야 FO에 노출된다. 이는 BO 콘텐츠 입력 과제이지 BE/FE 개발 블로커가 아니다(prdGrp-data의 info.image 미입력과 동일 성격). STEP6는 API 연동·바인딩까지만 하고, 실제 노출은 데이터 입력 후 확인.
+### ⚠️ 스키마 세대 혼재 — 실제 구현이 대상으로 삼는 세대
+developer DB `faq-data` 콘텐츠는 세 가지 스키마 세대가 섞여 있다:
+1. content key `faq` — `faq.{main_category, markets, is_visible, question, answer}` (snake_case + `question` 필드명)
+2. content key `faqForm` — `faqForm.{faqMainCategory, faqTitle, isVisible, markets}` (필드명 자체가 다름)
+3. content key `faqForm` — `faqForm.{mainCategory, title, isVisible, markets, answer}` (camelCase, 질문 텍스트 필드명이 `title`)
+
+**현재 구현(`eq_mainCategory`/`eq_isVisible`/`eq_markets` + `row.title`→`question`)은 3번 세대만 매칭 대상으로 삼는다.** 1·2번 세대는 필드명이 달라(`main_category`/`question` 또는 `faqMainCategory`/`faqTitle`) 이 where·매핑으로 잡히지 않는다 — 콘텐츠 등록 시 반드시 3번 세대 필드명(`mainCategory`/`title`/`isVisible`/`markets`/`answer`)으로 입력해야 FO에 노출된다. 1·2번 세대로 입력된 레코드가 있다면 BO에서 3번 세대 필드명으로 재저장이 필요하다(코드가 아닌 데이터 정리 과제).
 
 ### 참고 (재사용 시 무해한 부가동작)
 - `slug_relation` id=9 (master_slug=`faq-data`, FETCH, masterKey=`product`, slave=`product-data`, fetch_fields=`product-data-form.productNm`)가 있어, faq 레코드에 `product` 값이 있으면 `search()`의 `applyFetch`가 제품명을 `_fetchedRel{9}` 키로 덧붙인다. question/answer 바인딩과 무관하며 FO는 무시하면 되는 부가 필드다(성능 영향 미미).
@@ -103,7 +101,7 @@
 
 ## 5. 샘플 응답 데이터
 
-> 아래 값은 실제 bo dataJson 스키마·데이터를 확인한 것이 아닌 **추정** 데이터다(FaqItem.tsx의 question/answer 필드 구조만 코드로 확인됨). markets/main_category 필드명·코드값 체계도 사용자가 목표설정 대화에서 알려준 값이며 실제 dataJson에 그대로 존재하는지는 STEP4에서 재확인이 필요하다.
+> 아래는 실제 구현이 매칭 대상으로 삼는 스키마 세대(3번, `faqForm` content key + camelCase 필드명)를 기준으로 한 예시다. `flattenPageDataItem`을 거치면 `mainCategory`/`title`/`isVisible`/`markets`/`answer`가 root로 flat 병합되어 `row.title`/`row.answer`로 접근 가능하다.
 
 ```json
 {
@@ -111,21 +109,27 @@
     {
       "id": 201,
       "dataJson": {
-        "main_category": "002",
-        "markets": "001",
-        "is_visible": "001",
-        "question": "Data Center 시장 관련 FAQ 질문 예시",
-        "answer": "Data Center 시장 관련 FAQ 답변 예시"
+        "id": 201,
+        "faqForm": {
+          "mainCategory": "002",
+          "markets": "001",
+          "isVisible": "001",
+          "title": "Data Center 시장 관련 FAQ 질문 예시",
+          "answer": "Data Center 시장 관련 FAQ 답변 예시"
+        }
       }
     },
     {
       "id": 202,
       "dataJson": {
-        "main_category": "002",
-        "markets": "004",
-        "is_visible": "001",
-        "question": "Power Grid 시장 관련 FAQ 질문 예시",
-        "answer": "Power Grid 시장 관련 FAQ 답변 예시"
+        "id": 202,
+        "faqForm": {
+          "mainCategory": "002",
+          "markets": "004",
+          "isVisible": "001",
+          "title": "Power Grid 시장 관련 FAQ 질문 예시",
+          "answer": "Power Grid 시장 관련 FAQ 답변 예시"
+        }
       }
     }
   ]
@@ -135,7 +139,7 @@
 ## 6. 비고
 1. `public-infrastructure`/`oil-gas-mining`/`industrial`/`commercial-residential` 4개 페이지의 markets 값 — STEP4에서 developer DB 코드그룹 라벨 직접 조회로 확정 완료(더 이상 추정 아님).
 2. `faq-data` slug의 SlugRegistry 등록 여부 — **확인 완료**(STEP4). `slug_registry` id=108, is_active=true.
-3. `main_category`/`markets`/`is_visible` 필드명·코드값 체계가 실제 `faq-data` PageData의 dataJson 스키마와 일치하는지 — **확인 완료**(STEP4). 단, 실데이터는 스키마 3세대가 혼재하며(정본 `faq` 키 2건, 구세대 `faqForm` 키 19건) 스펙 where를 만족하는 라이브 레코드가 현재 0건임 — 3번 API 확인 섹션 참고.
+3. `mainCategory`/`markets`/`isVisible`/`title`/`answer`(camelCase, `faqForm` content key) 필드명 체계로 조회하도록 구현 확정 — 3번 API 확인 섹션 참고. 스키마 3세대 중 이 세대만 매칭되며, 다른 세대(snake_case `faq` 키, 또는 `faqMainCategory`/`faqTitle` 필드명)로 입력된 레코드는 노출되지 않는다.
 4. 아키텍처 결정(6개 `page.tsx`가 각자 fetch, `MarketsFaq`는 prop 전달 통로 유지)은 목표설정 대화에서 "가장 합리적이고 공통을 유지"하는 방향으로 판단을 위임받아 확정한 사항이며, 기존 코드에 이미 존재하는 `items?: FaqItem[]` prop 패턴(data-center만 명시적 prop, 나머지 5개는 기본값)을 그대로 재사용한 것이다.
 5. STEP5(BE 개발)는 **불필요** — 기존 `FoPageDataController`(`GET /api/v1/fo/page-data/{slug}`)를 쿼리 파라미터만 바꿔 재사용하므로 신규 코드가 없다. STEP6(FE 연동)로 바로 진행한다.
 6. 데이터 미입력 상태 — 스펙 where를 만족하는 라이브 레코드가 0건이라, STEP6 연동 완료 후에도 6개 markets 페이지 FAQ는 BO에서 정본 스키마로 신규 등록하기 전까지 빈 목록으로 보인다(prdGrp-data의 info.image 미입력과 동일 성격, BE/FE 개발 블로커 아님).
@@ -152,3 +156,4 @@
 | STEP6 | fo-fe-builder | 2026-07-13 | `fo/src/app/markets/data/marketsFaqData.ts` 신규 생성(fetchApi 경유 공통 헬퍼), 6개 markets page.tsx 전부 수정(페이지별 markets 코드로 fetch → `items` prop 전달). `tsc --noEmit` 통과, curl로 BE(8080)·FO 프록시(3002) 양쪽 200 확인 |
 | STEP7 | fo-qa-validator | 2026-07-13 | 6개 페이지 전체 PASS. SSR HTML+프록시 API 응답 기준 검증(브라우저 자동화 도구 미보유 환경). API 200/빈 배열 정상 수신, 마크업·flatten·페이지별 markets 코드 전달 설계대로 확인, FAQ 외 회귀 없음. 데이터 0건은 설계상 정상(BO 미입력) |
 | 완료 | - | 2026-07-13 | STEP1~7 전체 완료. 실 데이터는 사용자가 추후 BO에서 직접 입력 예정(정본 `faq` 스키마로 Markets 대분류+공개+해당 markets) |
+| 재작업 | fo-orchestrator | 2026-07-15 | `/markets/data-center` FAQ 미노출 확인 → 원인은 하드코딩된 콘텐츠 키/필드명(`dataJson.faq.question` 등) 직접 언랩 방식이 공통 규칙(`flattenPageDataItem` 사용) 위반. `marketsFaqData.ts`를 `flattenPageDataItem` 기반으로 전면 교체, where 파라미터도 camelCase(`eq_mainCategory`/`eq_isVisible`/`eq_markets`)로 변경, `row.title`→`question` 매핑 확정. 이 변경으로 실제 구현은 스키마 3세대(camelCase `faqForm.mainCategory/title/isVisible/markets`)만 매칭 대상이 됨(3번 API 확인 섹션 갱신) |

@@ -1796,7 +1796,7 @@ section.devices_explore .guide_field .MuiSelect-icon.MuiSelect-iconOpen {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #bbb;
+    background: #666;
   }
 }
 @media (max-width: 780px) {

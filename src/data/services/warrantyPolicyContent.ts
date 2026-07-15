@@ -146,6 +146,7 @@ export const warrantyPolicyPage = {
     ctaLabel: "Contact Us",
     ctaHref: "/support/contact-us",
     backgroundImage: `${IMG}/banner-bg.jpg`,
+    backgroundImageMobile: `${IMG}/banner-bg-mo.jpg`,
   },
   extension: {
     title: "Warranty Extension Overview",
