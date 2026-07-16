@@ -17,6 +17,10 @@ type BootstrapMaps = {
 // 부트스트랩 로더가 이미 설치되었는지(중복 설치 방지) 및 core 로딩 결과 캐시
 let bootstrapInstalled = false;
 let loadPromise: Promise<typeof google.maps> | null = null;
+// geocoding 라이브러리 로딩 결과 캐시(core 와 별개로 1회만 importLibrary)
+let geocodingPromise: Promise<typeof google.maps> | null = null;
+// places 라이브러리 로딩 결과 캐시(core 와 별개로 1회만 importLibrary)
+let placesPromise: Promise<typeof google.maps> | null = null;
 
 export function getGoogleMapsApiKey(): string | undefined {
   return process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -104,4 +108,78 @@ export function loadGoogleMaps(apiKey: string): Promise<typeof google.maps> {
   });
 
   return loadPromise;
+}
+
+// Geocoding 라이브러리까지 로드된 window.google.maps 를 resolve 한다.
+// - 기존 loadGoogleMaps(부트스트랩 + core) 를 먼저 보장한 뒤 geocoding 라이브러리를 추가 import 한다.
+// - 기존 loadGoogleMaps 시그니처는 그대로 두고 신규 export 로만 추가(공존).
+export function loadGoogleMapsGeocoding(
+  apiKey: string,
+): Promise<typeof google.maps> {
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("Google Maps can only load in the browser."));
+  }
+
+  // Geocoder 가 이미 사용 가능하면 즉시 재사용 (리렌더/재검색 대비)
+  const currentMaps = window.google?.maps as
+    | (BootstrapMaps & { Geocoder?: unknown })
+    | undefined;
+  if (currentMaps?.Geocoder) {
+    return Promise.resolve(window.google!.maps);
+  }
+
+  if (geocodingPromise) {
+    return geocodingPromise;
+  }
+
+  geocodingPromise = (async () => {
+    // 부트스트랩/core 로딩을 먼저 보장(기존 로더 재사용)
+    await loadGoogleMaps(apiKey);
+    // geocoding 라이브러리 로딩이 끝나야 window.google.maps.Geocoder 사용 가능
+    await window.google!.maps.importLibrary("geocoding");
+    return window.google!.maps;
+  })().catch((error) => {
+    // 실패 시 다음 시도를 위해 캐시 초기화
+    geocodingPromise = null;
+    throw error;
+  });
+
+  return geocodingPromise;
+}
+
+// Places 라이브러리까지 로드된 window.google.maps 를 resolve 한다.
+// - 기존 loadGoogleMaps(부트스트랩 + core) 를 먼저 보장한 뒤 places 라이브러리를 추가 import 한다.
+// - loadGoogleMapsGeocoding 과 동일 패턴. 기존 export 시그니처는 그대로 두고 신규 export 만 추가(공존).
+export function loadGoogleMapsPlaces(
+  apiKey: string,
+): Promise<typeof google.maps> {
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("Google Maps can only load in the browser."));
+  }
+
+  // places 네임스페이스가 이미 사용 가능하면 즉시 재사용 (리렌더/재입력 대비)
+  const currentMaps = window.google?.maps as
+    | (BootstrapMaps & { places?: unknown })
+    | undefined;
+  if (currentMaps?.places) {
+    return Promise.resolve(window.google!.maps);
+  }
+
+  if (placesPromise) {
+    return placesPromise;
+  }
+
+  placesPromise = (async () => {
+    // 부트스트랩/core 로딩을 먼저 보장(기존 로더 재사용)
+    await loadGoogleMaps(apiKey);
+    // places 라이브러리 로딩이 끝나야 window.google.maps.places 사용 가능
+    await window.google!.maps.importLibrary("places");
+    return window.google!.maps;
+  })().catch((error) => {
+    // 실패 시 다음 시도를 위해 캐시 초기화
+    placesPromise = null;
+    throw error;
+  });
+
+  return placesPromise;
 }

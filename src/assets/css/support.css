@@ -6647,3 +6647,53 @@ section.support_contact_modals_hub .support_contact_modals_hub__btn {
     line-height: 23px;
   }
 }
+/* Where to Buy — 주소 자동완성 드롭다운 (Google Places predictions 커스텀 UI) */
+section.support_where_to_buy_search .support_where_to_buy_search__field-wrap,
+section.support_where_to_buy_contents
+  .support_where_to_buy_search__field-wrap {
+  position: relative;
+}
+
+.support_where_to_buy_search__suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  box-shadow: 0 12px 24px rgb(0 0 0 / 10%);
+}
+
+.support_where_to_buy_search__suggestion {
+  margin: 0;
+  padding: 0;
+}
+
+.support_where_to_buy_search__suggestion-button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 15px;
+  line-height: 22px;
+  color: #222;
+  cursor: pointer;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.support_where_to_buy_search__suggestion-button:hover,
+.support_where_to_buy_search__suggestion-button:focus-visible {
+  background: #f4f6fa;
+  color: #0f1f45;
+  outline: none;
+}

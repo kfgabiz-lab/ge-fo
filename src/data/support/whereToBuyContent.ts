@@ -1,4 +1,7 @@
 import { emptyStateIconSrc } from "@/data/commonAssets";
+import { fetchApi } from "@/lib/api";
+import { haversineMiles, type GeoCoord } from "@/lib/geo/distance";
+import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
 
 /** Figma 5752:47179 — Where to Buy */
 export const whereToBuyPage = {
@@ -44,50 +47,132 @@ export type WhereToBuyLocation = {
   brandPin?: boolean;
 };
 
-export const whereToBuyLocations: WhereToBuyLocation[] = [
-  {
-    id: "marshall-wolf",
-    badges: ["Distributor"],
-    name: "MARSHALL WOLF AUTOMATION",
-    address: "923 South Main Street 60102 Algonquin US",
-    phone: "847-641-2324",
-    website: "https://www.wolfautomation.com",
-    websiteLabel: "https://www.wolfautomation.com",
-    directionsHref: "https://maps.google.com/?q=923+South+Main+Street+Algonquin+US",
-    phoneHref: "tel:+18476412324",
-    lat: 42.1657,
-    lng: -88.2947,
-    brandPin: true,
-  },
-  {
-    id: "goding-electric",
-    badges: ["Rep"],
-    name: "GODING ELECTRIC COMPANY",
-    address: "686 E Fullerton Ave 60139 Glendale Heights US",
-    phone: "630-858-7700",
-    website: "http://www.goding.com",
-    websiteLabel: "http://www.goding.com",
-    directionsHref: "https://maps.google.com/?q=686+E+Fullerton+Ave+Glendale+Heights+US",
-    phoneHref: "tel:+16308587700",
-    lat: 41.9178,
-    lng: -88.0767,
-  },
-  {
-    id: "x-tronics",
-    badges: ["Distributor", "Sales"],
-    name: "X Tronics Inc.",
-    address: "400 Creditstone Rd. Unit #3 L4K 3Z3 Concord",
-    phone: "(905) 660-0555",
-    website: "https://xtronics.ca/contact-us/",
-    websiteLabel: "https://xtronics.ca/contact-us/",
-    directionsHref: "https://maps.google.com/?q=400+Creditstone+Rd+Concord",
-    phoneHref: "tel:+19056600555",
-    lat: 43.8054,
-    lng: -79.506,
-  },
-];
+// ---------------- PageData(slug: wheretobuy-agency-data) 실데이터 연동 ----------------
+// 설계: STEP4 확정(신규 API 없음). 기존 FoPageDataController + PageDataService.search() 재사용
+// 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
+// press-data와 동일 패턴(fetchApi + flattenPageDataItem으로 dataJson.agencyForm 언랩)
 
-export const whereToBuyDefaultActiveId = "marshall-wolf";
+// 조회 엔드포인트: 공개(is_visible=001)만, size=100, 정렬은 서버 기본값(created_at DESC) 사용
+export const WHERE_TO_BUY_ENDPOINT =
+  "/api/v1/fo/page-data/wheretobuy-agency-data?eq_agencyForm.is_visible=001&size=100";
+
+// Spring Data Page 공통 형태 — content[] 안에 PageData 원본 item
+interface WhereToBuyPageResponse {
+  content: PageDataItem[];
+  totalElements?: number;
+  totalPages?: number;
+}
+
+// office_number → tel: 링크. 숫자만 남기고 앞에 + 를 붙인 형식(목데이터 형식 "tel:+18476412324" 참고)
+function toPhoneHref(phone: string): string {
+  const digits = phone.replace(/[^\d]/g, "");
+  return digits ? `tel:+${digits}` : "";
+}
+
+// 지도 렌더 전용 좌표 유효성 가드(STEP4 지적) — 0/빈값/NaN 좌표는 지도 마커·bounds 생성에서 제외
+// (카드 목록에는 좌표 없어도 표시하므로 이 가드는 지도에서만 사용)
+export function hasValidCoords(location: WhereToBuyLocation): boolean {
+  return (
+    Number.isFinite(location.lat) &&
+    Number.isFinite(location.lng) &&
+    location.lat !== 0 &&
+    location.lng !== 0
+  );
+}
+
+// API 원본 1건 → 화면 바인딩용 WhereToBuyLocation 가공
+// agencyForm 단일 섹션이라 flattenPageDataItem 후 필드가 root로 병합됨(agency_name/address/...)
+export function toWhereToBuyLocation(item: PageDataItem): WhereToBuyLocation {
+  const row = flattenPageDataItem(item);
+  const address = (row.address as string) ?? "";
+  const phone = (row.office_number as string) ?? "";
+  const homepage = (row.homepage as string) ?? "";
+  return {
+    id: String(item.id),
+    // badges/brandPin은 소스에 없는 필드 — 신규 추가 금지. 빈 배열 고정(CSS display:none이라 화면 영향 없음)
+    badges: [],
+    name: (row.agency_name as string) ?? "",
+    address,
+    phone,
+    website: homepage,
+    websiteLabel: homepage,
+    // 소스에 방향안내 URL 없음 — 주소 기반으로 FE 생성(기존 목데이터 패턴 유지)
+    directionsHref: address
+      ? `https://maps.google.com/?q=${encodeURIComponent(address)}`
+      : "",
+    phoneHref: toPhoneHref(phone),
+    lat: Number(row.address_lat),
+    lng: Number(row.address_lng),
+  };
+}
+
+// 공개 대리점 목록 조회(정렬은 서버 기본값 그대로, 클라이언트 정렬 추가하지 않음)
+export async function fetchWhereToBuyLocations(): Promise<WhereToBuyLocation[]> {
+  const res = await fetchApi<WhereToBuyPageResponse>(WHERE_TO_BUY_ENDPOINT);
+  return (res.content ?? []).map(toWhereToBuyLocation);
+}
+
+// ---------------- 반경필터(거리계산 + 자동확장) ----------------
+// 기존 export 시그니처는 유지하고, 여기부터 신규 export 만 추가한다.
+
+// "500mi" → 500. 숫자 파싱 실패 시 0.
+export function parseDistanceMiles(value: string): number {
+  const parsed = parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+// 자동확장 사다리(오름차순 mile) — 선택 반경에 결과가 없으면 다음(더 큰) 단계로 확장
+const DISTANCE_LADDER_MILES = whereToBuyDistanceOptions
+  .map((option) => parseDistanceMiles(option.value))
+  .sort((a, b) => a - b);
+
+/** 반경필터 결과: 필터된 지점 목록 + 실제 적용된 반경(mile) */
+export type WhereToBuyRadiusResult = {
+  locations: WhereToBuyLocation[];
+  appliedMiles: number;
+};
+
+/**
+ * 원점(검색좌표/내위치) 기준으로 선택 반경 내 지점만 필터링.
+ * - 유효 좌표(hasValidCoords) 지점만 거리 계산 대상
+ * - 결과는 가까운 순 정렬(store locator 관례)
+ * - 선택 반경 내 결과가 0건이면 사다리상 더 큰 반경으로 자동확장(최대 옵션까지)
+ */
+export function filterLocationsByRadius(
+  locations: WhereToBuyLocation[],
+  origin: GeoCoord,
+  selectedMiles: number,
+): WhereToBuyRadiusResult {
+  // 유효 좌표 지점에 원점까지 거리를 부여
+  const withDistance = locations
+    .filter(hasValidCoords)
+    .map((location) => ({
+      location,
+      distance: haversineMiles(origin, {
+        lat: location.lat,
+        lng: location.lng,
+      }),
+    }));
+
+  // 선택 반경 이상 후보들(오름차순). 후보가 없으면 선택값 자체를 사용
+  const candidates = DISTANCE_LADDER_MILES.filter((mi) => mi >= selectedMiles);
+  const ladder = candidates.length > 0 ? candidates : [selectedMiles];
+
+  for (const miles of ladder) {
+    const within = withDistance
+      .filter((entry) => entry.distance <= miles)
+      .sort((a, b) => a.distance - b.distance);
+    if (within.length > 0) {
+      return {
+        locations: within.map((entry) => entry.location),
+        appliedMiles: miles,
+      };
+    }
+  }
+
+  // 최대 반경까지도 결과가 없으면 빈 목록(적용 반경은 사다리 최댓값)
+  return { locations: [], appliedMiles: ladder[ladder.length - 1] };
+}
 
 /** Figma 3670:30719 (PC) · 6561:75390 (mobile View List) */
 export const whereToBuyEmptyContent = {

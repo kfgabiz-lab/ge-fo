@@ -13,6 +13,7 @@ export default function WhereToBuyLocationCard({
 }: WhereToBuyLocationCardProps) {
   return (
     <article
+      data-slug-item
       className={
         isActive
           ? "support_where_to_buy_card support_where_to_buy_card--active"
@@ -33,20 +34,27 @@ export default function WhereToBuyLocationCard({
               </span>
             ))}
           </div>
-          <h2 className="support_where_to_buy_card__name">{location.name}</h2>
+          <h2
+            className="support_where_to_buy_card__name"
+            data-slugkey="agency_name"
+          >
+            {location.name}
+          </h2>
         </div>
 
         <div className="support_where_to_buy_card__meta">
-          <p>{location.address}</p>
-          <p>{location.phone}</p>
+          <p data-slugkey="address">{location.address}</p>
+          <p data-slugkey="office_number">{location.phone}</p>
           <a
             href={location.website}
             className="support_where_to_buy_card__website"
             target="_blank"
             rel="noopener noreferrer"
             onClick={(event) => event.stopPropagation()}
+            data-slugkey="homepage"
+            data-slugkey-attr="href"
           >
-            {location.websiteLabel}
+            <span data-slugkey="homepage">{location.websiteLabel}</span>
           </a>
         </div>
       </button>
@@ -73,6 +81,8 @@ export default function WhereToBuyLocationCard({
         <a
           href={location.phoneHref}
           className="support_where_to_buy_card__action"
+          data-slugkey="office_number"
+          data-slugkey-attr="href"
         >
           <span className="support_where_to_buy_card__action-label">
             Call Now

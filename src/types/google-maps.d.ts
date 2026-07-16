@@ -9,6 +9,12 @@ declare namespace google.maps {
     setMapTypeId(mapTypeId: string): void;
     panTo(latLng: LatLngLiteral): void;
     fitBounds(bounds: LatLngBounds): void;
+    addListener(event: string, handler: () => void): MapsEventListener;
+  }
+
+  // addListener 반환값 — 리스너 해제용
+  interface MapsEventListener {
+    remove(): void;
   }
 
   class Marker {
@@ -25,8 +31,103 @@ declare namespace google.maps {
     constructor(width: number, height: number);
   }
 
+  // ---- OverlayView (importLibrary("maps") 로 로드) — 마커 화면 픽셀좌표 계산용 ----
+  class OverlayView {
+    setMap(map: Map | null): void;
+    getProjection(): MapCanvasProjection | null;
+    onAdd?: () => void;
+    draw?: () => void;
+    onRemove?: () => void;
+  }
+
+  // OverlayView.getProjection() 이 제공하는 좌표 변환기
+  interface MapCanvasProjection {
+    // 지도 컨테이너(map div) 좌상단 기준 픽셀 좌표
+    fromLatLngToContainerPixel(latLng: LatLng): Point | null;
+    // 지도 내부 오버레이 div 기준 픽셀 좌표
+    fromLatLngToDivPixel(latLng: LatLng): Point | null;
+  }
+
+  // ---- Geocoding (importLibrary("geocoding") 로 로드) ----
+  class Geocoder {
+    geocode(
+      request: GeocoderRequest,
+      callback: (
+        results: GeocoderResult[] | null,
+        status: GeocoderStatus,
+      ) => void,
+    ): void;
+  }
+
+  class LatLng {
+    constructor(lat: number, lng: number);
+    lat(): number;
+    lng(): number;
+  }
+
+  // Geocoding 응답 상태 코드
+  type GeocoderStatus =
+    | "OK"
+    | "ZERO_RESULTS"
+    | "OVER_QUERY_LIMIT"
+    | "REQUEST_DENIED"
+    | "INVALID_REQUEST"
+    | "UNKNOWN_ERROR"
+    | "ERROR";
+
+  interface GeocoderRequest {
+    address?: string;
+    // placeId 로 지오코딩(Places 자동완성 후보 → 좌표 확정용)
+    placeId?: string;
+  }
+
+  interface GeocoderGeometry {
+    location: LatLng;
+  }
+
+  interface GeocoderResult {
+    geometry: GeocoderGeometry;
+    formatted_address?: string;
+  }
+
   class Point {
     constructor(x: number, y: number);
+    x: number;
+    y: number;
+  }
+
+  // ---- Places (importLibrary("places") 로 로드) — 주소 자동완성 ----
+  namespace places {
+    // 신규 웹컴포넌트가 아닌 클래식 자동완성 서비스(직접 드롭다운 UI 구성용)
+    class AutocompleteService {
+      getPlacePredictions(
+        request: AutocompletionRequest,
+        callback: (
+          predictions: AutocompletePrediction[] | null,
+          status: PlacesServiceStatus,
+        ) => void,
+      ): void;
+    }
+
+    interface AutocompletionRequest {
+      input: string;
+      types?: string[];
+      componentRestrictions?: { country: string | string[] };
+    }
+
+    interface AutocompletePrediction {
+      place_id: string;
+      description: string;
+    }
+
+    type PlacesServiceStatus =
+      | "OK"
+      | "ZERO_RESULTS"
+      | "OVER_QUERY_LIMIT"
+      | "REQUEST_DENIED"
+      | "INVALID_REQUEST"
+      | "NOT_FOUND"
+      | "UNKNOWN_ERROR";
   }
 
   interface LatLngLiteral {
