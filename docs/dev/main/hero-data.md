@@ -2,6 +2,7 @@
 
 > 대상 파일: `fo/src/app/main/components/VideoSwiper.tsx`
 > 상태: 개발완료(텍스트/링크 + 미디어(이미지) 실데이터 연동) — 영상/유튜브 미디어는 범위 밖(비고 6-6 참고)
+> ⚠️ 2026-07-16: bo 빌더의 Hero 데이터 스키마 key 리네이밍으로 현재 코드가 구 key를 참조 중 → 리네이밍 재작업 **설계(승인 대기)**. 상세는 아래 `2.5` 참고.
 
 ## 1. data-slug
 - 값: `hero-data`
@@ -28,9 +29,32 @@
 | btnUrl | btnUrl | string(url) | 속성(`a[href]`) | 버튼 링크 |
 | btnText | btnText | string | 텍스트(`a` 내부 `span`) | 버튼 라벨 |
 
+## 2.5 스키마 리네이밍 재작업 (2026-07-16 — 승인 대기)
+
+> 배경: bo 빌더에서 Hero 데이터 템플릿(`hero-detail`)의 contentKey(래퍼)와 fieldKey가 리네이밍됐다. 현재 `page_data`(hero-data) 실데이터는 신 key로 저장돼 있으나, FE(`mainVisualData.ts`)와 위 2절 매핑표는 아직 구 key를 참조한다. 아래는 2026-07-16 DB 실측(page_data id=1812, page_template `hero-detail`의 contentKey/fieldKey)으로 확정한 구→신 매핑이다. **조회 조건(where/orderBy/limit)의 의미·값은 그대로이며 필드명만 바뀐다(조회조건 재설계 아님).**
+
+| 구분 | 구 key (현재 소스/2절 표) | 신 key (2026-07-16 DB 실측) |
+|---|---|---|
+| 콘텐츠 래퍼(contentKey) | `heroForm` | `hero` |
+| 서브타이틀(`sub`) | `sub` | `sub_title` |
+| 타이틀(`titleText`) | `titleText` | `hero_title` |
+| 버튼 링크(`btnUrl`) | `btnUrl` | `button_url` |
+| 버튼 라벨(`btnText`) | `btnText` | `button_text` |
+| 정렬값(`orderNo`) | `orderNo` | `sort_order` |
+| 노출기간 | `postDate_from` / `postDate_to` | `post_period_from` / `post_period_to` |
+| 대표 미디어 | `content` | `content` (불변, 미디어ID 배열) |
+| 관리 라벨 | `title` | `title` (불변, 화면 미표시) |
+
+- 신 조회 엔드포인트: `GET /api/v1/fo/page-data/hero-data?drs_post_period=in_range&sort=hero.sort_order,asc&size=100`
+  - `drs_` 날짜범위 연산자는 rangeKey에 `_from`/`_to`를 붙여 탐색한다(`PageDataService.appendWhereConditions`). rangeKey를 `postDate`→`post_period`로 바꾸면 `post_period_from`/`post_period_to`를 조회한다. `in_range` 연산자·`size=100`·정렬 방향(ASC) 불변.
+  - 래퍼 리네이밍(`heroForm`→`hero`)은 `flattenPageDataItem`이 콘텐츠 키 이름에 무관하게 단일 섹션을 root로 평탄화하므로 추가 작업 불필요. flatten 후 root 필드는 `sub_title`/`hero_title`/`button_url`/`button_text`/`sort_order`/`content`.
+- 수정 위치: **FE 전용** — `fo/src/app/main/components/mainVisualData.ts`의 `row.sub`/`row.titleText`/`row.btnUrl`/`row.btnText`/`row.orderNo` 참조부 + 쿼리 파라미터(`drs_postDate`/`sort=heroForm.orderNo`). 범용 `PageDataService`는 JSONB 동적검색이라 BE 변경 불필요. 신·구 데이터 혼재 대비로 `pickField(row, "hero_title", "titleText")` 공통 헬퍼(`fo/src/lib/pageData.ts`) 재사용 권장.
+- 마크업(`VideoSwiper.tsx`의 `data-slug`/`data-slugKey` 태깅)은 이번 재확인 범위에서 건드리지 않음 — annotation 정렬은 STEP5(FE 개발) 시 반영.
+
 ## 3. API 확인 (최종 체크 — 반드시 작성, 단정 금지)
 - 신규 API 필요 여부: **기존 활용 가능** (STEP4 확정, 2026-07-09)
-- 참고 엔드포인트: `GET /api/v1/fo/page-data/hero-data?drs_postDate=in_range&sort=heroForm.orderNo,asc&size=100` (`FoPageDataController` → `PageDataService.search()` 재사용, BE 신규 코드 없음)
+- 참고 엔드포인트(구 스키마): `GET /api/v1/fo/page-data/hero-data?drs_postDate=in_range&sort=heroForm.orderNo,asc&size=100` (`FoPageDataController` → `PageDataService.search()` 재사용, BE 신규 코드 없음)
+- 리네이밍 후 엔드포인트(2026-07-16, 2.5 참고): `GET /api/v1/fo/page-data/hero-data?drs_post_period=in_range&sort=hero.sort_order,asc&size=100` — 엔드포인트/재사용 구조 동일, 파라미터 필드명만 신 스키마로 교체
 - 정렬 정밀도 제약: orderNo가 문자열 정렬이라 "10"<"2" 오정렬·빈값 처리를 BE가 못 함 → FE(`fetchHeroItems`)에서 orderNo 숫자 캐스팅 후 빈값/비숫자는 맨 뒤로 정렬, id ASC tie-break 후처리로 보완(STEP5 반영 완료)
 
 ## 4. 조회 조건 (아래 4개 필수 — orderBy 없이 다건 매칭 시 결과가 불확정됨)
@@ -117,3 +141,5 @@ flatten 후(예상 — 래퍼 `heroForm` 처리 방식은 6.비고 참고):
 | STEP5 | fo-fe-builder | 2026-07-09 | fetchApi 공통함수(src/lib/api.ts) 신규 생성. MainVisual(서버 컴포넌트)에서 hero-data 조회→heroForm 언랩→FE 정렬(orderNo 숫자ASC·빈값 뒤·id ASC tie-break)→VideoSwiper에 props 전달. sub/titleText/btnUrl/btnText 실데이터 바인딩. 미디어(content)는 목업 유지+TODO. tsc 통과, SSR HTML 검증(타이틀1/2/3 순서·btnUrl 반영) 완료 |
 | STEP5(추가) | fo-fe-builder | 2026-07-09 | 미디어(이미지) 실연동. `HeroItem.mediaId`(content[0]) 추가, mediaId 있으면 슬라이드를 이미지 타입으로 강제하고 src=`/api/v1/fo/page-files/{mediaId}`(프록시). 영상/유튜브는 미처리(비고 6-6). tsc 통과, SSR HTML에 `_next/image?url=...page-files/234,236,237,238` 반영 확인, 미디어 응답 200 image/png 확인 |
 | STEP6(리팩터) | 호출자 | 2026-07-14 | `fetchHeroItems`가 `heroForm`을 직접 언랩하던 수동 코드를 `fo/src/lib/pageData.ts`의 `flattenPageDataItem`(bo와 동일 accessor 규칙) 사용으로 교체. tsc 통과, SSR HTML에서 titleText="타이틀1/2/3" 회귀 없음 재확인 |
+| STEP1(리네이밍 재확인) | fo-slug-analyzer | 2026-07-16 | bo `hero-detail` contentKey/fieldKey + page_data(id=1812) 실측으로 구→신 key 확정(2.5 표): 래퍼 `heroForm`→`hero`, `sub`→`sub_title`, `titleText`→`hero_title`, `btnUrl`→`button_url`, `btnText`→`button_text`, `orderNo`→`sort_order`, `postDate_from/to`→`post_period_from/to`. where/orderBy/limit 값·의미 불변(필드명만). 마크업 미변경 |
+| STEP2(문서 갱신) | fo-dev-doc-writer | 2026-07-16 | `2.5` 리네이밍 재작업 매핑표·신 엔드포인트(`drs_post_period`, `sort=hero.sort_order`) 반영. **승인 대기 — 사용자 승인 후 STEP3(BE 분석) 이후 진행. 이 문서 상태: 리네이밍 설계중** |

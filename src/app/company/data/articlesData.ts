@@ -3,7 +3,7 @@
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
 // - pressData.ts와 완전히 동일 패턴(articles-data엔 press와 마찬가지로 category/hashtag 필드가 없음)
 import { fetchApi } from "@/lib/api";
-import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
+import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 
 // 목록 페이지당 개수(설계 4절: size=10 페이지네이션)
 export const ARTICLES_LIST_SIZE = 10;
@@ -34,7 +34,7 @@ interface ArticlesPageResponse {
 export interface ArticlesCardItem {
   id: number;
   title: string;
-  description: string; // seo.metaDescription 재사용(설계 2-2)
+  description: string; // seo.meta_description(신)/seo.metaDescription(구) 재사용(설계 2-2)
   date: string; // publishDttm(YYYY-MM-DD) 원본
   imageSrc: string | null; // 미디어 없으면 null → 호출부에서 정적 폴백
 }
@@ -43,7 +43,7 @@ export interface ArticlesCardItem {
 
 // 원본 행 → 카드 항목
 export function toArticlesCard(item: ArticlesRow): ArticlesCardItem {
-  // flattenPageDataItem: articlesForm/seo 섹션 간 키 충돌 없음 → title/publishDttm/image/metaDescription 전부 root로 flat 병합됨
+  // flattenPageDataItem: articlesForm/seo 섹션 간 키 충돌 없음 → title/publish_dttm/image/meta_description 전부 root로 flat 병합됨
   const row = flattenPageDataItem(item);
   const imageArr = row.image;
   const mediaId =
@@ -51,8 +51,10 @@ export function toArticlesCard(item: ArticlesRow): ArticlesCardItem {
   return {
     id: item.id,
     title: (row.title as string) ?? "",
-    description: (row.metaDescription as string) ?? "",
-    date: (row.publishDttm as string) ?? "",
+    // 신규(meta_description)/구(metaDescription) seo 스키마 모두 지원 — 신규 우선
+    description: (pickField(row, "meta_description", "metaDescription") as string) ?? "",
+    // 신규(publish_dttm)/구(publishDttm) 스키마 모두 지원 — 신규 우선
+    date: (pickField(row, "publish_dttm", "publishDttm") as string) ?? "",
     imageSrc: mediaId != null ? articlesImageSrc(mediaId) : null,
   };
 }
@@ -78,11 +80,12 @@ export async function fetchArticlesList(params: {
   sp.set("page", String(params.page));
   sp.set("size", String(ARTICLES_LIST_SIZE));
   // 공개 + 게시일 도래(BO 게시상태 판정식과 동일, press-data.md 9-A와 동일 조건)
-  sp.set("condexpr_status", "isVisible=001,publishDttm<=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "is_visible=001,publish_dttm<=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
   if (params.search) sp.set("title|content", params.search);
-  if (params.month) sp.set("month_publishDttm", params.month);
-  if (params.year) sp.set("year_publishDttm", params.year);
+  // 필드명이 publishDttm→publish_dttm(snake)로 변경됨. month_/year_는 필드키만(래퍼키 무관, 최상위+중첩 자동탐색)
+  if (params.month) sp.set("month_publish_dttm", params.month);
+  if (params.year) sp.set("year_publish_dttm", params.year);
   // markets 코드가 넘어온 경우에만 필터 추가(옵션이라 기존 호출부는 그대로 전체 조회)
   if (params.market) sp.set("has_markets_markets", params.market);
   if (params.sort === "oldest") sp.set("sort", "createdAt,asc");
@@ -103,7 +106,7 @@ export async function fetchArticlesDetail(
 ): Promise<ArticlesRow | null> {
   const sp = new URLSearchParams();
   sp.set("eq_id", String(id));
-  sp.set("condexpr_status", "isVisible=001,publishDttm<=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "is_visible=001,publish_dttm<=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
   const res = await fetchApi<ArticlesPageResponse>(
     `/api/v1/fo/page-data/articles-data?${sp.toString()}`,

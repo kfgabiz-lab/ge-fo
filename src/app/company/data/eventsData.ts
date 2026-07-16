@@ -3,7 +3,7 @@
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
 // - press/blog/articles와 달리 category 대신 location/period_from/period_to(행사기간) 필드를 씀
 import { fetchApi } from "@/lib/api";
-import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
+import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 import type {
   EventsCalendarEntry,
   EventsCalendarMonth,
@@ -30,7 +30,7 @@ interface EventsPageResponse {
 
 // 게시상태(A조건) — 공개 + 게시일 도래. Upcoming(Featured/Calendar)에만 적용(events-data.md 3절)
 function applyPublishedCondition(sp: URLSearchParams) {
-  sp.set("condexpr_status", "isVisible=001,publishDttm<=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "is_visible=001,publish_dttm<=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
 }
 
@@ -38,7 +38,8 @@ function applyPublishedCondition(sp: URLSearchParams) {
 // (사용자 확정: 지난 이벤트는 publishDttm이 과거여도 보여야 함 — publishDttm은 "노출 유지 기한" 성격이라
 //  이미 끝난 행사의 기록성 노출과는 무관)
 function applyVisibleOnlyCondition(sp: URLSearchParams) {
-  sp.set("eq_isVisible", "001");
+  // 필드명이 isVisible→is_visible(snake)로 변경됨(page_template events-basicInfo 확인). 33행 condexpr_status와 동일 필드명으로 정합성 유지
+  sp.set("eq_is_visible", "001");
 }
 
 // 예정/지난 분류(events 전용) — period_to 기준(events-data.md 확정사항 3)
@@ -68,8 +69,9 @@ function toEventsCommon(item: EventsRow) {
   const imageArr = row.image;
   const mediaId =
     Array.isArray(imageArr) && imageArr.length > 0 ? (imageArr[0] as number) : null;
-  const periodFrom = (row.period_from as string) ?? "";
-  const periodTo = (row.period_to as string) ?? "";
+  // 신규(period_from/period_to)/구(periodFrom/periodTo) 스키마 모두 지원 — 신규 우선
+  const periodFrom = (pickField(row, "period_from", "periodFrom") as string) ?? "";
+  const periodTo = (pickField(row, "period_to", "periodTo") as string) ?? "";
   return {
     id: item.id,
     title: (row.title as string) ?? "",
@@ -96,7 +98,8 @@ export async function fetchEventsFeatured(
   applyPublishedCondition(sp);
   sp.set("period_from_gte", from);
   sp.set("period_from_lte", to);
-  sp.set("sort", "eventsForm.period_from,asc");
+  // sort는 단순키에 중첩 fallback이 없어 래퍼키 포함 dot-notation 필수. contentKey eventsForm→events로 변경됨
+  sp.set("sort", "events.period_from,asc");
 
   const res = await fetchApi<EventsPageResponse>(
     `/api/v1/fo/page-data/events-data?${sp.toString()}`,
@@ -121,7 +124,8 @@ export async function fetchEventsCalendar(): Promise<EventsCalendarMonth[]> {
   sp.set("size", "100");
   applyPublishedCondition(sp);
   applyUpcomingCondition(sp, true);
-  sp.set("sort", "eventsForm.period_from,asc");
+  // sort는 단순키에 중첩 fallback이 없어 래퍼키 포함 dot-notation 필수. contentKey eventsForm→events로 변경됨
+  sp.set("sort", "events.period_from,asc");
 
   const res = await fetchApi<EventsPageResponse>(
     `/api/v1/fo/page-data/events-data?${sp.toString()}`,
@@ -176,7 +180,8 @@ export async function fetchEventsPast(params: {
   if (params.search) sp.set("title|content|location", params.search);
   if (params.month) sp.set("month_period_from", params.month);
   if (params.year) sp.set("year_period_from", params.year);
-  sp.set("sort", `eventsForm.period_from,${params.sort === "oldest" ? "asc" : "desc"}`);
+  // sort는 단순키에 중첩 fallback이 없어 래퍼키 포함 dot-notation 필수. contentKey eventsForm→events로 변경됨
+  sp.set("sort", `events.period_from,${params.sort === "oldest" ? "asc" : "desc"}`);
 
   const res = await fetchApi<EventsPageResponse>(
     `/api/v1/fo/page-data/events-data?${sp.toString()}`,
