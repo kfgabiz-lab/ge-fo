@@ -7,15 +7,15 @@
 - 값: `hero-data`
 - 다건 여부: 다건(배열) — 히어로 슬라이드 전체
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 ```html
 <Swiper data-slug="hero-data" data-slug-repeat="true">
   <SwiperSlide data-slug-item>
-    <h2 className="sl_subtit" data-slugKey="sub"></h2>
-    <h2 className="sl_tit" data-slugKey="titleText"></h2>
-    <a data-slugKey="btnUrl" data-slugKey-attr="href">
-      <span data-slugKey="btnText"></span>
+    <h2 className="sl_subtit" data-slugkey="sub"></h2>
+    <h2 className="sl_tit" data-slugkey="titleText"></h2>
+    <a data-slugkey="btnUrl" data-slugkey-attr="href">
+      <span data-slugkey="btnText"></span>
     </a>
   </SwiperSlide>
 </Swiper>
@@ -109,7 +109,7 @@ flatten 후(예상 — 래퍼 `heroForm` 처리 방식은 6.비고 참고):
 ## 7. STEP별 진행 이력
 | STEP | 담당 에이전트 | 날짜 | 결과 요약 |
 |---|---|---|---|
-| STEP1 | fo-slug-analyzer | 2026-07-08 | VideoSwiper.tsx에 data-slug="hero-data", data-slug-repeat, data-slug-item, data-slugKey(sub/titleText/btnUrl/btnText) 태깅 완료 |
+| STEP1 | fo-slug-analyzer | 2026-07-08 | VideoSwiper.tsx에 data-slug="hero-data", data-slug-repeat, data-slug-item, data-slugkey(sub/titleText/btnUrl/btnText) 태깅 완료 |
 | STEP2 | fo-slug-analyzer | 2026-07-08 | where(노출기간 postDate_from/postDate_to), orderBy(orderNo ASC, tie-breaker id ASC), row limit(다건 전체) 확정 |
 | STEP3 | fo-dev-doc-writer | 2026-07-08 | 작업 단위 문서 작성 (상태: 설계중), API 확인 결과 "확인 필요"로 명시 |
 | 승인 | 사용자 | 2026-07-09 | titleText 매핑 실데이터로 확정 후 문서 승인 (상태: 승인됨) |

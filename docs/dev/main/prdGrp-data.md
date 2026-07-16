@@ -7,12 +7,12 @@
 - 값: `prdGrp-data` (bo SlugRegistry 기등록 PAGE_DATA — `slug_registry` 테이블 직접 확인 완료: id=18, is_active=true)
 - 다건 여부: 다건(배열) + 동적(그룹 개수 고정 아님) + 중첩(그룹 안에 제품 다건이 다시 있음, 중첩 슬러그명 `ms`)
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 ```html
 <!-- 그룹(prdGrp-data) 다건 — tab_area(라벨)와 products_panels(정본) 두 곳에 동일 배열 이중 배치, 1회 fetch 공유 -->
 <div className="tab_area" data-slug="prdGrp-data" data-slug-repeat="true">
-  <TabButton data-slug-item data-slugKey="prdGrpNm" ... />
+  <TabButton data-slug-item data-slugkey="prdGrpNm" ... />
 </div>
 
 <div className="products_panels" data-slug="prdGrp-data" data-slug-repeat="true">
@@ -20,10 +20,10 @@
     <!-- 그룹 1건 내부에 제품(ms) 다건이 중첩 반복됨 -->
     <Swiper data-slug="ms" data-slug-repeat="true">
       <SwiperSlide data-slug-item>
-        <Link data-slugKey="seo.slug" data-slugKey-attr="href">
-          <img data-slugKey="info.image" data-slugKey-attr="src" />
-          <h3 data-slugKey="productDataForm.productNm"></h3>
-          <p data-slugKey="productDataForm.prdSubDesc"></p>
+        <Link data-slugkey="seo.slug" data-slugkey-attr="href">
+          <img data-slugkey="info.image" data-slugkey-attr="src" />
+          <h3 data-slugkey="productDataForm.productNm"></h3>
+          <p data-slugkey="productDataForm.prdSubDesc"></p>
           <!-- productDataForm.awards 값 존재 시 ProductAwardBadge 조건부 노출 -->
         </Link>
       </SwiperSlide>
@@ -182,12 +182,12 @@
 4. 조회 조건(4번)의 그룹 `prdGrpForm1.isVisible=001` where와 제품 `ms` where 없음은 모두 목표설정 대화에서 사용자가 확정한 값이며, 현재 MainProducts.tsx 코드 자체에는 해당 필터 로직이 없다는 점을 다시 한 번 명시한다.
 5. `product-data` 68건 중 `info.image` 0건, `seo.slug` 1건만 데이터가 입력돼 있음(STEP4 확인). STEP5는 API·필드 매핑 구현까지만 하고, 실제 이미지/SEO 슬러그 값 입력은 BO 화면에서 별도로 진행하는 것으로 사용자 확정함 — 데이터 미입력 상태에서는 화면에 이미지/링크가 비어 보일 수 있음.
 6. **실제 라이브 데이터 기준 현황(STEP7 QA 확인)**: 현재 공개(`isVisible=001`) 그룹은 "New Arrivals"(id 1339)와 "Best Product - test"(id 1507) 2개뿐이며, "Best Sellers"라는 이름의 공개 그룹은 없음. New Arrivals가 참조하는 제품(id 1333)은 product-data에 존재하지 않는 dangling 참조라 New Arrivals 탭은 현재 빈 화면으로 보임(로직상 정상 — BO에서 그룹명/제품 구성 정리 필요). QA 스크린샷: `fo-qa-validator` 세션 스크래치패드 참고.
-7. STEP6에서 `data-slugKey`/`data-slugKey-attr` 속성 사용 시 React 개발모드 콘솔 경고(커스텀 data-* 속성 casing 관련) 2건 발생 — DOM 속성 자체는 정상 부착되고 프로덕션 빌드에는 노출 안 됨. 이 표기 규칙(`data-slugKey` 카멜케이스)은 이번 건뿐 아니라 기존 가이드 예시 문서 전체가 동일하게 쓰고 있는 컨벤션이라, 고칠지 여부는 이 작업 범위를 넘는 별도 논의 사항으로 남겨둠.
+7. STEP6에서 `data-slugkey`/`data-slugkey-attr` 속성 사용 시 React 개발모드 콘솔 경고(커스텀 data-* 속성 casing 관련) 2건 발생 — DOM 속성 자체는 정상 부착되고 프로덕션 빌드에는 노출 안 됨. 이 표기 규칙(`data-slugkey` 카멜케이스)은 이번 건뿐 아니라 기존 가이드 예시 문서 전체가 동일하게 쓰고 있는 컨벤션이라, 고칠지 여부는 이 작업 범위를 넘는 별도 논의 사항으로 남겨둠.
 
 ## 7. STEP별 진행 이력
 | STEP | 담당 에이전트 | 날짜 | 결과 요약 |
 |---|---|---|---|
-| STEP1 | fo-slug-analyzer | 2026-07-13 | MainProducts.tsx에 `data-slug="prdGrp-data"`(tab_area/products_panels 이중 배치), `data-slug-repeat`, `data-slug-item`, `data-slugKey`(prdGrpNm) 태깅 및 그룹 내부 중첩 `data-slug="ms"` 반복(제품 다건: productDataForm.productNm/prdSubDesc/awards, info.image, seo.slug) 태깅 완료 |
+| STEP1 | fo-slug-analyzer | 2026-07-13 | MainProducts.tsx에 `data-slug="prdGrp-data"`(tab_area/products_panels 이중 배치), `data-slug-repeat`, `data-slug-item`, `data-slugkey`(prdGrpNm) 태깅 및 그룹 내부 중첩 `data-slug="ms"` 반복(제품 다건: productDataForm.productNm/prdSubDesc/awards, info.image, seo.slug) 태깅 완료 |
 | STEP2 | fo-slug-analyzer | 2026-07-13 | 그룹 where(isVisible=001), orderBy(prdGrpOrd ASC, tie-breaker id ASC), row limit(전체) / 제품(ms) where(없음), orderBy(extraFields.sortOrder ASC, tie-breaker id ASC), row limit(그룹당 전체) 확정 |
 | STEP3 | fo-dev-doc-writer | 2026-07-13 | 작업 단위 문서 작성 (상태: 설계중), API 확인 결과 "확인 필요"로 명시 |
 | 승인 | 사용자 | 2026-07-13 | `#승인` — 문서 승인 완료 (SlugRegistry 등록 확인 정정 반영 후 승인). `fo-data-binding.md` data slug 컬럼 반영, STEP4 착수 |

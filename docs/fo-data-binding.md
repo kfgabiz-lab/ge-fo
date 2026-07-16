@@ -101,7 +101,7 @@
 | Company Feed List Toolbar | `src/app/company/components/CompanyFeedListToolbar.tsx` | Press/Articles 공통 리스트 툴바 — Month/Year GuideSelect·검색·정렬 GuideSelect, variant별 aria-label | TODO |
 | Company Feed List Section | `src/app/company/components/CompanyFeedListSection.tsx` | Press/Articles 공통 리스트 섹션 — 툴바 + 그리드/Empty + PageNumbering 조립 | TODO |
 
-> Company 하위 서브메뉴 중 `careers`는 아직 fo에 마이그레이션되지 않았습니다 — GNB에는 `GnbCareersMegaPanel`이 있으나 `src/app/company/careers` 라우트는 현재 코드에 없습니다. Blog/Press/Articles/Events(구 articles feed)는 이번 마이그레이션으로 모두 이관되었습니다.
+> Company 하위 서브메뉴 중 `careers`는 2026-07-15 별도 세션에서 ls-publish 원본 그대로 정적 이관 완료됨(`src/app/company/careers/page.tsx`, `CompanyCareersPage.tsx`, `careersContent.ts`) — data slug 바인딩 대상 아님(정적 콘텐츠). Blog/Press/Articles/Events(구 articles feed)는 이번 마이그레이션으로 모두 이관되었습니다.
 > `src/app/company/articleDetailClass.ts`와 `src/app/company/data/*.ts`는 tsx가 아니므로(BEM 헬퍼·데이터 파일) 본 표에서 제외했습니다.
 
 ### 1-5. services
@@ -131,7 +131,7 @@
 search, support(contact-us·where-to-buy만 이관), guide — 아직 fo에 마이그레이션되지 않았습니다(company/services는 이관 완료, 나머지 하위 메뉴는 미이관). 필요 시 fo-orchestrator의 STEP 0-0(페이지 분석)부터 시작합니다.
 
 ### products-systems (이관 완료, 바인딩 미착수)
-1depth 5개(`lv-automation`/`motor-control`/`software`/`variable-frequency-drive`/`explore-all`) + 2depth 상세 7개(motor-control 하위 `h100_plus`/`metasol-ms`/`susol-ul-smart-mccb`, software 하위 `micro-grid`/`scada`/`smart-factory`/`xems`) 전체가 `src/app/()/products-systems`로 이관 완료됐습니다. `data-slug`/`data-slugKey` 마크업은 아직 없는 정적 상태 — 데이터바인딩이 필요하면 `#FO데이터바인딩`으로 STEP1(`fo-slug-analyzer`)부터 시작합니다.
+1depth 5개(`lv-automation`/`motor-control`/`software`/`variable-frequency-drive`/`explore-all`) + 2depth 상세 7개(motor-control 하위 `h100_plus`/`metasol-ms`/`susol-ul-smart-mccb`, software 하위 `micro-grid`/`scada`/`smart-factory`/`xems`) 전체가 `src/app/()/products-systems`로 이관 완료됐습니다. `data-slug`/`data-slugkey` 마크업은 아직 없는 정적 상태 — 데이터바인딩이 필요하면 `#FO데이터바인딩`으로 STEP1(`fo-slug-analyzer`)부터 시작합니다.
 
 ---
 

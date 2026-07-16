@@ -7,18 +7,18 @@
 - 값: `banner-data` (기존 확정값 재사용 — HERO 배너와 동일 slug, where 조건으로 INFORMATION 위치만 구분)
 - 다건 여부: 단건 — 조건 매칭 다건을 orderBy+limit=1로 좁혀 최신 1건만 노출
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 ```html
 <a href="" className="item"
    data-slug="banner-data"
-   data-slugKey="url" data-slugKey-attr="href">
+   data-slugkey="url" data-slugkey-attr="href">
   <div className="tit_area">
     <p className="tit">
       <img src="/ico/ico_bell_20.svg" alt="" aria-hidden="true" />
-      <span data-slugKey="prefix">Exhibition</span>
+      <span data-slugkey="prefix">Exhibition</span>
     </p>
-    <p className="txt" data-slugKey="bottomText">Triple iF Design 2026 ...</p>
+    <p className="txt" data-slugkey="bottomText">Triple iF Design 2026 ...</p>
   </div>
   <div className="btn_area"> ...(More 버튼, 고정 UI)... </div>
 </a>
@@ -93,7 +93,7 @@ flatten 후(예상 — 래퍼 `bannerForm` 처리 방식은 6.비고 참고):
 ## 7. STEP별 진행 이력
 | STEP | 담당 에이전트 | 날짜 | 결과 요약 |
 |---|---|---|---|
-| STEP1 | fo-slug-analyzer | 2026-07-09 | MainVisual.tsx main_notic 블록에 data-slug="banner-data", data-slugKey(url[href]/prefix/bottomText) 태깅 완료 |
+| STEP1 | fo-slug-analyzer | 2026-07-09 | MainVisual.tsx main_notic 블록에 data-slug="banner-data", data-slugkey(url[href]/prefix/bottomText) 태깅 완료 |
 | STEP2 | fo-slug-analyzer | 2026-07-09 | where(bannerPosition=INFORMATION, isVisible=001), orderBy(updatedAt DESC, tie-breaker id DESC), row limit(단건 1) 확정 |
 | STEP3 | fo-dev-doc-writer | 2026-07-09 | 작업 단위 문서 작성 (상태: 설계중), API 확인 "확인 필요" 명시 |
 | 승인 | 사용자 | 2026-07-09 | 문서 승인 (상태: 승인됨) |

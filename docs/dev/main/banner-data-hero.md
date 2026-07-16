@@ -7,15 +7,15 @@
 - 값: `banner-data`
 - 다건 여부: 다건(배열) — 메인 히어로 옆 사이드 배너
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 ```html
 <Swiper data-slug="banner-data" data-slug-repeat="true">
   <SwiperSlide data-slug-item>
-    <Link data-slugKey="url" data-slugKey-attr="href">
-      <Image data-slugKey="image" data-slugKey-attr="src" />
-      <p className="tit" data-slugKey="mainTitle"></p>
-      <p className="txt" data-slugKey="subTitle"></p>
+    <Link data-slugkey="url" data-slugkey-attr="href">
+      <Image data-slugkey="image" data-slugkey-attr="src" />
+      <p className="tit" data-slugkey="mainTitle"></p>
+      <p className="txt" data-slugkey="subTitle"></p>
     </Link>
   </SwiperSlide>
 </Swiper>
@@ -112,7 +112,7 @@ flatten 후(예상 — 래퍼 `bannerForm` 처리 방식은 6.비고 참고):
 ## 7. STEP별 진행 이력
 | STEP | 담당 에이전트 | 날짜 | 결과 요약 |
 |---|---|---|---|
-| STEP1 | fo-slug-analyzer | 2026-07-08 | BannerSwiper.tsx에 data-slug="banner-data", data-slug-repeat, data-slug-item, data-slugKey(url/image/mainTitle/subTitle) 태깅 완료 |
+| STEP1 | fo-slug-analyzer | 2026-07-08 | BannerSwiper.tsx에 data-slug="banner-data", data-slug-repeat, data-slug-item, data-slugkey(url/image/mainTitle/subTitle) 태깅 완료 |
 | STEP2 | fo-slug-analyzer | 2026-07-08 | where(bannerPosition=HERO, isVisible=001), orderBy(sortOrder ASC, tie-breaker id ASC), row limit(다건 전체) 확정 |
 | STEP3 | fo-dev-doc-writer | 2026-07-08 | 작업 단위 문서 작성 (상태: 설계중), API 확인 결과 "확인 필요"로 명시 |
 | 승인 | 사용자 | 2026-07-09 | subTitle 필드 실데이터로 확정 후 문서 승인 (상태: 승인됨) |

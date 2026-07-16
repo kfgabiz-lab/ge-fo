@@ -90,12 +90,12 @@ export default async function CompanyBlogDetailPage({
         {/* content: 에디터 리치텍스트 HTML 단일 필드(blogForm.content) */}
         <div
           className={articleDetailClass("body")}
-          data-slugKey="content"
+          data-slugkey="content"
           dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
 
         {/* tags: 해시태그 배열 필드(hashtag split) */}
-        <div className={articleDetailClass("tags")} data-slugKey="tags">
+        <div className={articleDetailClass("tags")} data-slugkey="tags">
           <div className="company-blog__tags">
             {tags.map((tag, tagIndex) => (
               <div key={`${tag}-${tagIndex}`} className="company-blog__tag">

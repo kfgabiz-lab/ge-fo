@@ -1,4 +1,4 @@
-// data-* 속성 전달을 위한 타입 (data-slug-item, data-slugKey 등 마크업 태깅용)
+// data-* 속성 전달을 위한 타입 (data-slug-item, data-slugkey 등 마크업 태깅용)
 type DataAttributes = {
   [key: `data-${string}`]: string | boolean | undefined;
 };

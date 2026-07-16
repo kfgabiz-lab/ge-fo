@@ -167,32 +167,32 @@ export default function CompanyBlogPage({
               href={blogDetailHref(featured.id)}
               className="company-blog-featured__card"
               data-slug="blog-data"
-              data-slugKey="id"
-              data-slugKey-attr="href"
+              data-slugkey="id"
+              data-slugkey-attr="href"
             >
               <div className="company-blog-featured__image">
                 <img
                   src={featured.imageSrc ?? blogHeroMainImage}
                   alt={featured.title}
-                  data-slugKey="image"
-                  data-slugKey-attr="src"
+                  data-slugkey="image"
+                  data-slugkey-attr="src"
                 />
               </div>
               <div className="company-blog-featured__content">
-                <p className="company-blog-featured__category" data-slugKey="category">
+                <p className="company-blog-featured__category" data-slugkey="category">
                   {featured.categoryLabel}
                 </p>
-                <h2 className="company-blog-featured__title" data-slugKey="title">
+                <h2 className="company-blog-featured__title" data-slugkey="title">
                   {featured.title}
                 </h2>
-                <p className="company-blog-featured__desc" data-slugKey="description">
+                <p className="company-blog-featured__desc" data-slugkey="description">
                   {featured.description}
                 </p>
-                <p className="company-blog-featured__date" data-slugKey="date">
+                <p className="company-blog-featured__date" data-slugkey="date">
                   {featured.date}
                 </p>
                 {/* tags: 해시태그 배열 필드 */}
-                <div className="company-blog-featured__tags" data-slugKey="tags">
+                <div className="company-blog-featured__tags" data-slugkey="tags">
                   {featured.tags.map((tag, tagIndex) => (
                     <div
                       key={`${tag}-${tagIndex}`}
@@ -247,38 +247,38 @@ export default function CompanyBlogPage({
                             <Link
                               href={blogDetailHref(item.id)}
                               aria-label={item.title}
-                              data-slugKey="id"
-                              data-slugKey-attr="href"
+                              data-slugkey="id"
+                              data-slugkey-attr="href"
                             >
                               <img
                                 src={item.imageSrc ?? LIST_FALLBACK_IMAGE}
                                 alt={item.title}
-                                data-slugKey="image"
-                                data-slugKey-attr="src"
+                                data-slugkey="image"
+                                data-slugkey-attr="src"
                               />
                             </Link>
                           </div>
                           <Link
                             href={blogDetailHref(item.id)}
                             className="company-blog-list__content"
-                            data-slugKey="id"
-                            data-slugKey-attr="href"
+                            data-slugkey="id"
+                            data-slugkey-attr="href"
                           >
-                            <p className="company-blog__category" data-slugKey="category">
+                            <p className="company-blog__category" data-slugkey="category">
                               {item.categoryLabel}
                             </p>
-                            <h3 className="company-blog-list__title" data-slugKey="title">
+                            <h3 className="company-blog-list__title" data-slugkey="title">
                               {item.title}
                             </h3>
-                            <p className="company-blog-list__desc" data-slugKey="description">
+                            <p className="company-blog-list__desc" data-slugkey="description">
                               {item.description}
                             </p>
-                            <p className="company-blog__date" data-slugKey="date">
+                            <p className="company-blog__date" data-slugkey="date">
                               {item.date}
                             </p>
                             <div className="company-blog-list__tags-row">
                               {/* tags: 해시태그 배열 필드 */}
-                              <div className="company-blog__tags" data-slugKey="tags">
+                              <div className="company-blog__tags" data-slugkey="tags">
                                 {item.tags.map((tag, tagIndex) => (
                                   <BlogTag
                                     key={`${item.id}-${tag}-${tagIndex}`}

@@ -127,8 +127,8 @@ export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
               <Link
                 href={slide.href}
                 className="link"
-                data-slugKey="url"
-                data-slugKey-attr="href"
+                data-slugkey="url"
+                data-slugkey-attr="href"
               >
                 <div className="img_area">
                   <Image
@@ -138,14 +138,14 @@ export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
                     fill
                     sizes="120px"
                     priority={index === 0}
-                    data-slugKey="image"
-                    data-slugKey-attr="src"
+                    data-slugkey="image"
+                    data-slugkey-attr="src"
                   />
                 </div>
                 <div className="txt_area">
                   <div className="txt_area__copy">
-                    <p className="tit" data-slugKey="mainTitle">{slide.tit}</p>
-                    <p className="txt" data-slugKey="subTitle">{slide.txt}</p>
+                    <p className="tit" data-slugkey="mainTitle">{slide.tit}</p>
+                    <p className="txt" data-slugkey="subTitle">{slide.txt}</p>
                   </div>
                   <span className="txt_area__arrow" aria-hidden="true" />
                 </div>

@@ -7,14 +7,14 @@
 - 값: `banner-data` (`fo-data-binding.md`의 "Banner Swiper" 행에 이미 지정되어 있음)
 - 다건 여부: 다건(배열) — 배너 슬라이드 여러 장
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 ```html
 <div data-slug="banner-data" data-slug-repeat="true">
   <div data-slug-item>
-    <img data-slugKey="image" />
-    <div data-slugKey="title"></div>
-    <a data-slugKey="linkUrl"></a>
+    <img data-slugkey="image" />
+    <div data-slugkey="title"></div>
+    <a data-slugkey="linkUrl"></a>
   </div>
 </div>
 ```

@@ -13,7 +13,7 @@
 - 값: `articles-data` (BO에 이미 등록된 slug, 목록 Featured / 목록 리스트 / 상세 전부 동일 slug 재사용)
 - 다건 여부: 혼합 — Featured **단건**(정렬된 목록의 1번째 글) / 리스트 **다건(배열)** / 상세 **단건**(id 기반 조회)
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 > ⚠️ press-data와 동일하게 **category 필드 자체가 없다**(`articlesForm`에 category 키 없음, 실제 API 응답으로 확인). description도 별도 필드 없이 `seo.metaDescription` 재사용(press/blog와 공통 결론, blog-data.md 6-10 참고).
 

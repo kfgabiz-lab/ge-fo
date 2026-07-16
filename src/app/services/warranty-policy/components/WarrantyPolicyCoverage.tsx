@@ -59,11 +59,11 @@ export default async function WarrantyPolicyCoverage() {
                     bo 실데이터는 warranty_period 단일 텍스트라 warrantyLines 분기 미사용(설계 문서 3번). */}
                 {coverageRows.map((row) => (
                   <tr key={row.id} data-slug-item>
-                    <th scope="row" data-slugKey="product">
+                    <th scope="row" data-slugkey="product">
                       {row.product}
                     </th>
-                    <td data-slugKey="category">{row.category}</td>
-                    <td data-slugKey="warranty">{row.warranty}</td>
+                    <td data-slugkey="category">{row.category}</td>
+                    <td data-slugkey="warranty">{row.warranty}</td>
                   </tr>
                 ))}
               </tbody>

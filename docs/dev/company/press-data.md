@@ -3,7 +3,7 @@
 > 대상 파일:
 > - `fo/src/app/company/press/page.tsx` (목록 — 현재 `<CompanyFeedPage variant="press" />` 한 줄뿐. Press/Articles 완전 공용 컴포넌트라 반복/필드 렌더 지점 자체가 없어 마크업 태깅 불가)
 > - `fo/src/app/company/components/CompanyFeedPage.tsx` / `CompanyFeedFeatured.tsx` / `CompanyFeedListSection.tsx` / `CompanyFeedListGrid.tsx` (공용 컴포넌트 — press/articles와 공유, 직접 태깅 대상 아님. Featured·리스트 필드는 STEP6에서 fetchApi 결과를 props로 직접 주입)
-> - `fo/src/app/company/press/detail/page.tsx` (상세 — `data-slug="press-data"` + `data-slugKey="content"` 태깅 완료, STEP1)
+> - `fo/src/app/company/press/detail/page.tsx` (상세 — `data-slug="press-data"` + `data-slugkey="content"` 태깅 완료, STEP1)
 > - `fo/src/app/company/components/CompanyArticleDetail.tsx` (공용 컴포넌트 — blog/press/events/articles가 공유, 직접 태깅 대상 아님)
 > - 참고(정적 폴백 데이터, 실연동 전): `fo/src/app/company/data/pressListContent.ts`, `fo/src/app/company/data/pressDetailContent.ts`
 > 상태: 구현 완료 (QA 검증 완료, 비차단 이슈는 blog-data와 동일 — 8절 참고) / **필터·검색·정렬·월/연도 확장 구현+API 검증 완료(2026-07-14, 브라우저 UI 검증은 미완 — 9절 참고)**
@@ -12,7 +12,7 @@
 - 값: `press-data` (목록 Featured / 목록 리스트 / 상세 전부 동일 slug 재사용 — 별도 분리 없음)
 - 다건 여부: 혼합 — Featured **단건**(정렬된 목록의 1번째 글) / 리스트 **다건(배열)** / 상세 **단건**(id 기반 조회)
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 > ⚠️ press-data는 blog-data와 달리 **category 필드 자체가 없다**(`press/page.tsx` 및 `CompanyArticleDetail`의 `CompanyArticleDetailPressProps` 타입 확인 결과 press variant는 `category?: never` — 코드 레벨에서 category를 아예 받지 않도록 막혀 있음). 아래 매핑에도 category는 등장하지 않는다.
 
@@ -21,7 +21,7 @@
 ```html
 <!-- data-slug: press-data (목록·상세 통합 slug). 상세 본문은 리치텍스트 HTML 단일 필드 content로 태깅 -->
 <div className={articleDetailClass("body")} data-slug="press-data">
-  <div data-slugKey="content">
+  <div data-slugkey="content">
     <!-- 문단/영상(iframe 포함) 전체를 하나로 묶은 리치텍스트 HTML -->
   </div>
 </div>
@@ -33,7 +33,7 @@
 
 ### 2-2. 마크업 태깅 불가 — STEP6(FE 개발)에서 fetchApi로 props 직접 교체 처리 대상
 
-아래 필드는 전부 공용 컴포넌트(`CompanyFeedFeatured`/`CompanyFeedListGrid`/`CompanyArticleDetail`) 내부에서 렌더되며, 호출부(`press/page.tsx`, `press/detail/page.tsx`)의 DOM에는 노출되지 않아 `data-slug`/`data-slugKey` 마크업 태깅이 불가능하다(STEP1에서 확인). STEP6에서 `fetchApi`로 조회한 값을 각 공용 컴포넌트의 props로 직접 전달하는 방식으로 처리한다.
+아래 필드는 전부 공용 컴포넌트(`CompanyFeedFeatured`/`CompanyFeedListGrid`/`CompanyArticleDetail`) 내부에서 렌더되며, 호출부(`press/page.tsx`, `press/detail/page.tsx`)의 DOM에는 노출되지 않아 `data-slug`/`data-slugkey` 마크업 태깅이 불가능하다(STEP1에서 확인). STEP6에서 `fetchApi`로 조회한 값을 각 공용 컴포넌트의 props로 직접 전달하는 방식으로 처리한다.
 
 | 영역 | 필드 | 현재 전달 방식 | dataJson 필드(추정 accessor) | 비고 |
 |---|---|---|---|---|
@@ -117,7 +117,7 @@ FE 바인딩 시 참조 경로: `content[i].id` / `content[i].dataJson.pressForm
 ## 7. STEP별 진행 이력
 | STEP | 담당 에이전트 | 날짜 | 결과 요약 |
 |---|---|---|---|
-| STEP1 | fo-slug-analyzer | 2026-07-14 | `press/detail/page.tsx`에 `data-slug="press-data"` + `data-slugKey="content"` 태깅 완료(리치텍스트 HTML 단일 필드, 영상 iframe 통합 포함 결정). `press/page.tsx`는 `CompanyFeedPage` 공용 컴포넌트 한 줄뿐이라 마크업 태깅 지점 자체가 없음을 확인 — Featured/리스트(id/image/title/description/date)와 상세 title/date/heroImage/pager는 태깅 불가로 STEP6 props 주입 대상 확정 |
+| STEP1 | fo-slug-analyzer | 2026-07-14 | `press/detail/page.tsx`에 `data-slug="press-data"` + `data-slugkey="content"` 태깅 완료(리치텍스트 HTML 단일 필드, 영상 iframe 통합 포함 결정). `press/page.tsx`는 `CompanyFeedPage` 공용 컴포넌트 한 줄뿐이라 마크업 태깅 지점 자체가 없음을 확인 — Featured/리스트(id/image/title/description/date)와 상세 title/date/heroImage/pager는 태깅 불가로 STEP6 props 주입 대상 확정 |
 | STEP2 | fo-slug-analyzer | 2026-07-14 | where(`isVisible=001` 고정, category 필터 없음 확인 — press-data엔 category 필드 자체 없음), orderBy(생성일 DESC 기본값), row limit(Featured=정렬목록 1번째 / 리스트=다건 페이지네이션, 정확한 개수는 STEP4 확인 필요 / 상세=id 단건) 확정. 실데이터 14건 중 최신 스키마 일치 2건, 레거시 필드명 변형 12건 발견 — FE 레거시 호환 코드 미추가 결정(사용자 승인) |
 | STEP3 | fo-dev-doc-writer | 2026-07-14 | 작업 단위 문서 작성(상태: 설계중). API 확인 결과 "확인 필요"로 명시, 샘플 응답 데이터는 "추정"으로 명시, heroImage 소스/row limit/tie-breaker 등 미해결 항목 6번 비고에 기록 |
 | STEP4 | fo-be-analyzer | 2026-07-14 | 신규 BE 불필요 확인(기존 FO API 3종 재사용). 실제 API 호출로 재검증(공개 8건, isVisible 필터·id 단건조회·created_at DESC 정렬 전부 실증). heroImage=image[0] 재사용 확정, tie-breaker 불필요 확정, row limit 10 확정. 로컬 이미지 404는 환경 이슈(코드 아님)로 확인 |

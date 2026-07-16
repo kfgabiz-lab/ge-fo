@@ -11,7 +11,7 @@
 - 다건 여부: 다건(목록) — `page_data` 9레코드(제품별 보증기간 목록), `template_slug`=`warrantyPolicy-detail`. 각 레코드 1행.
 - 태깅 위치: `WarrantyPolicyCoverage.tsx`의 `<tbody data-slug="warrantyPolicy-data" data-slug-repeat="true">`, 각 `<tr data-slug-item>` (기 적용 완료, STEP1-2 재조정).
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 | slugKey | bo dataJson 필드(2세대 fallback) | 타입 | 바인딩 대상 | 설명 |
 |---|---|---|---|---|
@@ -89,4 +89,4 @@ slugKey는 FO 표 의미론 이름(`product`/`category`/`warranty`)을 사용한
 | STEP4 | fo-be-analyzer | 2026-07-14 | developer DB 직접조회로 결정적 충돌 2건 발견: ①slug 오타(warrancy→warranty, 실등록은 warrantyPolicy-data id=40, 9건) ②모델 불일치(실제는 제품보증목록 4필드, 리치 단건 아님). 사용자 결정→slug 철자 t 교정 + 범위 축소(tableRows만). FoPageDataController 재사용(신규 불필요) 확정. 코드→라벨/공개필터/정렬 스펙 확정 |
 | STEP1-2(재조정) | fo-slug-analyzer | 2026-07-14 | 태깅 축소: coverage 보증표 tbody 한 곳만 data-slug="warrantyPolicy-data" + product/category/warranty. 나머지 5파일 정적 복원. tsc 통과(오케스트레이터 확인) |
 | STEP3(재작성) | fo-dev-doc-writer | 2026-07-14 | 철자 교정 + 표 중심 축소 재작성 |
-| STEP7(QA) | fo-qa-validator | 2026-07-14 | BE developer 프로필 기동(8080, developer DB) 후 실데이터 검증 6/6 통과. 프록시(3002→8080) 200, page-data 9건 응답. 공개 4행(769/929/1558/1572) id ASC 렌더·비공개 5건(930/1213/1275/1571/1634) 제외·코드→라벨(003→Automation/002→Power Orders/001→Power Production) 정상. 정적 섹션(타이틀/카드/노트/배너/extension/apply mailto) 전부 유지, 회귀 없음. 치명 콘솔·네트워크 에러 0(단 data-slugKey casing dev 경고만 존재-무해). Playwright 라이브 렌더 스크린샷 확보 |
+| STEP7(QA) | fo-qa-validator | 2026-07-14 | BE developer 프로필 기동(8080, developer DB) 후 실데이터 검증 6/6 통과. 프록시(3002→8080) 200, page-data 9건 응답. 공개 4행(769/929/1558/1572) id ASC 렌더·비공개 5건(930/1213/1275/1571/1634) 제외·코드→라벨(003→Automation/002→Power Orders/001→Power Production) 정상. 정적 섹션(타이틀/카드/노트/배너/extension/apply mailto) 전부 유지, 회귀 없음. 치명 콘솔·네트워크 에러 0(단 data-slugkey casing dev 경고만 존재-무해). Playwright 라이브 렌더 스크린샷 확보 |

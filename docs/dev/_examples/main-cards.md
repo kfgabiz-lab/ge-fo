@@ -7,15 +7,15 @@
 - 값: `main-industries` (신규 지정 — 기존 등록된 slug 없음)
 - 다건 여부: 다건(배열) — 산업분야 카드 6개 (Data Center / Power Grid / Oil & Gas / Public Infrastructure / Industrial / Commercial-Residential)
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 ```html
 <div data-slug="main-industries" data-slug-repeat="true">
   <div data-slug-item>
-    <img data-slugKey="icon" />
-    <div data-slugKey="title"></div>
-    <div data-slugKey="description"></div>
-    <a data-slugKey="linkUrl"></a>
+    <img data-slugkey="icon" />
+    <div data-slugkey="title"></div>
+    <div data-slugkey="description"></div>
+    <a data-slugkey="linkUrl"></a>
   </div>
 </div>
 ```

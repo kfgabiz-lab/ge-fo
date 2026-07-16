@@ -79,7 +79,7 @@ export default async function CompanyArticlesDetailPage({
       {/* title/date/heroImage/pager 는 CompanyArticleDetail props 로 전달(공용 컴포넌트 내부 렌더). */}
       <div className={articleDetailClass("body")} data-slug="articles-data">
         <div
-          data-slugKey="content"
+          data-slugkey="content"
           dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
       </div>

@@ -237,8 +237,8 @@ function ProductsSwiperPer4({ products }: ProductsSwiperPer4Props) {
                 <Link
                   href={product.href}
                   className={product.hasBadge ? "sl type2" : "sl"}
-                  data-slugKey="seo.slug"
-                  data-slugKey-attr="href"
+                  data-slugkey="seo.slug"
+                  data-slugkey-attr="href"
                   aria-disabled={!isLinkable}
                   tabIndex={isLinkable ? undefined : -1}
                   onClick={isLinkable ? undefined : (e) => e.preventDefault()}
@@ -251,18 +251,18 @@ function ProductsSwiperPer4({ products }: ProductsSwiperPer4Props) {
                       decoding="async"
                       src={product.image}
                       alt={product.imageAlt}
-                      data-slugKey="info.image"
-                      data-slugKey-attr="src"
+                      data-slugkey="info.image"
+                      data-slugkey-attr="src"
                     />
                   </div>
                   <div className="txt_area">
                     <h3
                       className="tit_product"
-                      data-slugKey="productDataForm.productNm"
+                      data-slugkey="productDataForm.productNm"
                     >
                       {product.title}
                     </h3>
-                    <p className="txt" data-slugKey="productDataForm.prdSubDesc">
+                    <p className="txt" data-slugkey="productDataForm.prdSubDesc">
                       {product.description}
                     </p>
                   </div>
@@ -316,7 +316,7 @@ export default function MainProductsClient({ groups }: MainProductsClientProps) 
           data-slug-repeat="true"
         >
           {groups.map((group) => (
-            // data-slug-item: 그룹 1건, data-slugKey="prdGrpNm": 라벨 텍스트=그룹명
+            // data-slug-item: 그룹 1건, data-slugkey="prdGrpNm": 라벨 텍스트=그룹명
             <TabButton
               key={group.id}
               id={`main-products-tab-${group.id}`}
@@ -325,7 +325,7 @@ export default function MainProductsClient({ groups }: MainProductsClientProps) 
               controls={`main-products-panel-${group.id}`}
               onSelect={() => setActiveGroupId(group.id)}
               data-slug-item
-              data-slugKey="prdGrpNm"
+              data-slugkey="prdGrpNm"
             />
           ))}
         </div>

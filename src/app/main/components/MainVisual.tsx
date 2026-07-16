@@ -29,8 +29,8 @@ export default async function MainVisual() {
             href={noticeItem ? noticeItem.url : ""}
             className="item"
             data-slug="banner-data"
-            data-slugKey="url"
-            data-slugKey-attr="href"
+            data-slugkey="url"
+            data-slugkey-attr="href"
           >
             <div className="tit_area">
               <p className="tit">
@@ -41,11 +41,11 @@ export default async function MainVisual() {
                   alt=""
                   aria-hidden="true"
                 />
-                <span data-slugKey="prefix">
+                <span data-slugkey="prefix">
                   {noticeItem ? noticeItem.prefixLabel : "Exhibition"}
                 </span>
               </p>
-              <p className="txt" data-slugKey="bottomText">
+              <p className="txt" data-slugkey="bottomText">
                 {noticeItem
                   ? noticeItem.bottomText
                   : "Triple iF Design 2026 3 Wins in Smart Device & Energy Platform Design"}

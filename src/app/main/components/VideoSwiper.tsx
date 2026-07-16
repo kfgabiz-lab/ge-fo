@@ -890,8 +890,8 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
               )}
               <div className="sl_dim" aria-hidden="true" />
               <div className="sl_content">
-                <h2 className="sl_subtit" data-slugKey="sub">{slide.subtit}</h2>
-                <h2 className="sl_tit" data-slugKey="titleText">
+                <h2 className="sl_subtit" data-slugkey="sub">{slide.subtit}</h2>
+                <h2 className="sl_tit" data-slugkey="titleText">
                   {slide.titLines.map((line, lineIndex) => (
                     <span key={line}>
                       {lineIndex > 0 && <br />}
@@ -902,10 +902,10 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
                 <a
                   href={slide.link.href}
                   className="btn-base btn-lv01 btn-lv01--line-solid"
-                  data-slugKey="btnUrl"
-                  data-slugKey-attr="href"
+                  data-slugkey="btnUrl"
+                  data-slugkey-attr="href"
                 >
-                  <span data-slugKey="btnText">{slide.link.label}</span>
+                  <span data-slugkey="btnText">{slide.link.label}</span>
                 </a>
               </div>
             </div>

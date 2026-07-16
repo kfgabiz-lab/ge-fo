@@ -72,7 +72,7 @@ export default async function CompanyEventsDetailPage({
       {/* venue/dates 는 CompanyArticleDetail의 eventsMeta prop 으로 전달(공용 컴포넌트 내부 렌더). */}
       <div className={articleDetailClass("body")} data-slug="events-data">
         <div
-          data-slugKey="content"
+          data-slugkey="content"
           dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
       </div>

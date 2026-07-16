@@ -15,15 +15,19 @@
 src/app/
 ├── layout.tsx                  # [Root Layout] 전역 CSS·메타데이터 마운트
 │                                # ※ src/app/page.tsx(루트 페이지)는 존재하지 않음
+├── not-found.tsx                # 전역 404 — MarketsGroupHeader+NotFoundPage+SubFooter 조합(2026-07-15 신규, app/() 라우트 그룹엔 layout.tsx가 없어 루트에만 배치)
 │
 ├── main/                       # 홈(메인)
-│   ├── layout.tsx               # MainHeader + {children} + MainFooter
+│   ├── layout.tsx               # 서버 컴포넌트 — fetchGnbMenuData()로 GNB 조회 후 MainHeader/MainFooter를 MainLayoutShell에 props로 전달
+│   ├── MainLayoutShell.tsx      # 클라이언트 셸 — header/footer를 ReactNode props로 받아 렌더, /main/cookie-setting 경로에서만 헤더/푸터 숨김(2026-07-15 신규, pub의 클라이언트 전용 래퍼를 fo 서버 GNB 조회 구조에 맞게 재구성)
 │   ├── page.tsx                 # 메인 페이지 — 섹션 컴포넌트 조립
 │   ├── components/              # 메인 페이지 전용 섹션 9개 + 데이터 (VideoSwiper/BannerSwiper는 MainVisual 내부에 캡슐화)
 │   │   ├── MainVisual.tsx(+mainVisualData.ts, 내부에서 VideoSwiper+BannerSwiper 조립), MainInfo.tsx, WhatWeDoSwiper.tsx
 │   │   ├── MainCards.tsx
 │   │   ├── MainProducts.tsx, MainProductsClient.tsx(+mainProductsData.ts)
-│   │   └── IconCards.tsx
+│   │   ├── IconCards.tsx
+│   │   └── CookieSettingPageClient.tsx  # 쿠키 동의 설정 페이지 클라이언트 컴포넌트(2026-07-15 신규)
+│   ├── cookie-setting/           # 쿠키 동의 설정 페이지 + preferences/ 하위 라우트(2026-07-15 신규)
 │   └── data/                    # ⚠ 존재하지만 파일 0개(빈 디렉토리) — main 데이터는 실제로 components/ 하위에 colocate됨
 │
 ├── markets/                    # 산업분야별 솔루션 (route group 괄호 없음) — 6개 페이지
@@ -150,7 +154,8 @@ fo/
 │   │   │   └── shared/                # GnbGlobalMenu/Trigger, GnbMegaPanel, GnbMenu, GnbMobileBack,
 │   │   │       │                       # GnbMobileDepth1~4Menu, GnbMobileGlobalSelect/MenuPanel, GnbSearchPanel, HeaderBreadcrumb, useHeaderScroll
 │   │   │       └── gnb-mega/           # GnbCareers/Company/Devices/Markets/Services/SupportMegaPanel + GnbMegaItemLink/CloseButton
-│   │   ├── modals/                   # PrivacyPolicyModal
+│   │   ├── common/                   # CommonModal(공용 모달 셸, 2026-07-15 신규) + not-found/(NotFoundPage, NotFoundTitle, NotFoundSearch, NotFoundHelpfulLinks)
+│   │   ├── modals/                   # PrivacyPolicyModal(CommonModal 셸 사용으로 리팩터), CookieSettingsModal, CookiePreferencesModal(2026-07-15 신규)
 │   │   ├── pagination/               # PageNumbering
 │   │   ├── product/                  # ProductAwardBadge
 │   │   ├── swiper/                   # BannerNavButtons, SwiperBar/DotPagination, SwiperNavButtons, swiperControls.classes.ts
@@ -167,7 +172,8 @@ fo/
 │   │   ├── createThrottledScrollHandler.ts
 │   │   ├── lenisScroll.ts / lenisOptions.ts / gnbScrollState.ts   # Lenis 부드러운 스크롤 연동
 │   │   ├── youtubeEmbed.ts, productBadge.ts, statNumber.ts
-│   │   └── useModalFocusTrap.ts
+│   │   ├── useModalFocusTrap.ts
+│   │   └── useModalDismiss.ts        # ESC 닫기 + 배경 스크롤 잠금 공통 훅(2026-07-15 신규, CommonModal 계열 모달 3종이 공용)
 │   │
 │   ├── data/                        # 전역 정적 데이터 (route 전용 데이터는 각 app/{route}/data/ 참고)
 │   │   ├── gnb/                       # GNB 메뉴 구조 + 메가메뉴 데이터(mega/)
@@ -175,6 +181,7 @@ fo/
 │   │   ├── services/                  # 엔지니어링 트레이닝 상세 + 서비스센터 콘텐츠
 │   │   ├── search/                    # 통합검색 콘텐츠 (대응 라우트 없음)
 │   │   ├── support/                   # Connect Portal/Contact Us/Where to Buy/Download Center 콘텐츠
+│   │   ├── common/                    # cookieSettingsContent.ts, notFoundContent.ts(2026-07-15 신규)
 │   │   └── breadcrumbConfig.ts, commonAssets.ts, footerAffiliateOptions.ts, privacyPolicyContent.ts, gnbExploreAllProducts.ts
 │   │
 │   ├── types/                       # 전역 TypeScript 타입 (highlightNews.ts, google-maps.d.ts)
@@ -182,6 +189,7 @@ fo/
 │   └── assets/css/                  # 전역 스타일시트
 │       ├── reset.css / fonts.css / globals.css   # 초기화·폰트·디자인 토큰
 │       ├── main.css / markets.css / company.css / company-feed.css / services.css / support.css / devices-systems.css
+│       ├── common-404.css             # 전역 404 페이지 전용 스타일(2026-07-15 신규)
 │       └── components/                # gnb.css, MainFooter.css, product-award-badge.css
 │
 ├── next.config.ts                   # 이미지 remotePatterns + rewrites(/api/v1/fo/:path* → BE 프록시, 7절 참고)

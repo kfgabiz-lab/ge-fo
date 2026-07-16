@@ -12,7 +12,7 @@
 - 값: `blog-data` (목록 Featured / 목록 리스트 / 상세 전부 동일 slug 재사용 — 별도 분리 없음)
 - 다건 여부: 혼합 — Featured **단건**(정렬된 목록의 1번째 글) / 리스트 **다건(배열)** / 상세 **단건**(id 기반 조회)
 
-## 2. data-slugKey 매핑
+## 2. data-slugkey 매핑
 
 > ✅ **2026-07-14 갱신**: 아래 표의 "실제 accessor" 열은 STEP4 시점(수동 언랩)에 확인한 원본 중첩 경로를 기록한 것이다. 이후 `fo/src/lib/pageData.ts`에 bo `flattenPageDataItem`을 포팅해 `blogData.ts`/상세 페이지가 전부 이걸 거치도록 리팩터링했다(8절 참고). `blogForm`/`seo`/`_rel` 섹션 간 키 충돌이 없어 `flattenPageDataItem(item)` 결과에서는 아래 표의 slugKey 이름을 접두어 없이 그대로 flat 접근할 수 있다(예: `row.title`, `row.category`, `row.hashtag`). "실제 accessor" 열은 원본 저장 위치 참고용으로 남겨둔다.
 
@@ -23,18 +23,18 @@
   href="/company/blog/detail"
   className="company-blog-featured__card"
   data-slug="blog-data"
-  data-slugKey="id"
-  data-slugKey-attr="href"
+  data-slugkey="id"
+  data-slugkey-attr="href"
 >
   <div className="company-blog-featured__image">
-    <img data-slugKey="image" data-slugKey-attr="src" />
+    <img data-slugkey="image" data-slugkey-attr="src" />
   </div>
   <div className="company-blog-featured__content">
-    <p className="company-blog-featured__category" data-slugKey="category"></p>
-    <h2 className="company-blog-featured__title" data-slugKey="title"></h2>
-    <p className="company-blog-featured__desc" data-slugKey="description"></p>
-    <p className="company-blog-featured__date" data-slugKey="date"></p>
-    <div className="company-blog-featured__tags" data-slugKey="tags">
+    <p className="company-blog-featured__category" data-slugkey="category"></p>
+    <h2 className="company-blog-featured__title" data-slugkey="title"></h2>
+    <p className="company-blog-featured__desc" data-slugkey="description"></p>
+    <p className="company-blog-featured__date" data-slugkey="date"></p>
+    <div className="company-blog-featured__tags" data-slugkey="tags">
       <!-- tags.map(tag => ...) -->
     </div>
   </div>
@@ -58,15 +58,15 @@
 ```html
 <ul data-slug="blog-data" data-slug-repeat="true">
   <li data-slug-item>
-    <Link data-slugKey="id" data-slugKey-attr="href">
-      <img data-slugKey="image" data-slugKey-attr="src" />
+    <Link data-slugkey="id" data-slugkey-attr="href">
+      <img data-slugkey="image" data-slugkey-attr="src" />
     </Link>
-    <Link data-slugKey="id" data-slugKey-attr="href">
-      <p data-slugKey="category"></p>
-      <h3 data-slugKey="title"></h3>
-      <p data-slugKey="description"></p>
-      <p data-slugKey="date"></p>
-      <div data-slugKey="tags">
+    <Link data-slugkey="id" data-slugkey-attr="href">
+      <p data-slugkey="category"></p>
+      <h3 data-slugkey="title"></h3>
+      <p data-slugkey="description"></p>
+      <p data-slugkey="date"></p>
+      <div data-slugkey="tags">
         <!-- tags.map(tag => ...) -->
       </div>
     </Link>
@@ -88,10 +88,10 @@
 
 ```html
 <div data-slug="blog-data">
-  <div data-slugKey="content">
+  <div data-slugkey="content">
     <!-- 문단/불릿/본문이미지/후속문단을 하나로 묶은 리치텍스트 HTML -->
   </div>
-  <div data-slugKey="tags">
+  <div data-slugkey="tags">
     <!-- tags.map(tag => ...) -->
   </div>
 </div>
@@ -104,7 +104,7 @@
 
 ### 2-4. 마크업 태깅 불가 — STEP6(FE 개발)에서 fetchApi로 props 직접 교체 처리 대상
 
-아래 필드는 `CompanyArticleDetail`(press/articles/events와 공유하는 공용 컴포넌트) 내부에서 렌더되어 상세 페이지 호출부의 DOM에 노출되지 않으므로 `data-slug`/`data-slugKey` 마크업 태깅이 불가능하다. STEP6에서 `fetchApi`로 조회한 값을 `CompanyArticleDetail`의 props로 직접 전달하는 방식으로 처리한다.
+아래 필드는 `CompanyArticleDetail`(press/articles/events와 공유하는 공용 컴포넌트) 내부에서 렌더되어 상세 페이지 호출부의 DOM에 노출되지 않으므로 `data-slug`/`data-slugkey` 마크업 태깅이 불가능하다. STEP6에서 `fetchApi`로 조회한 값을 `CompanyArticleDetail`의 props로 직접 전달하는 방식으로 처리한다.
 
 | 필드 | 현재 전달 방식 | 비고 |
 |---|---|---|
