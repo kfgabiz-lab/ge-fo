@@ -13,20 +13,29 @@ import {
   susolUlSmartMccbFaqItems,
   susolUlSmartMccbNavItems,
 } from "../../data/productDetailContent";
+import { buildHwProductDetail } from "../../data/hwProductDetail";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
-export default function SusolUlSmartMccbProductPage() {
+// route 폴더명 susol-ul-smart-mccb → seo.slug susol-ul-smart-mccb
+const PRODUCT_SLUG = "susol-ul-smart-mccb";
+
+export default async function SusolUlSmartMccbProductPage() {
+  const detail = await buildHwProductDetail(
+    PRODUCT_SLUG,
+    susolUlSmartMccbDetail,
+  );
+
   return (
     <main
       className="devices-page devices-page--product"
       id="Page_devices_susol_ul_smart_mccb"
     >
-      <DevicesProductHero product={susolUlSmartMccbDetail} />
+      <DevicesProductHero product={detail} />
       <DevicesProductNavScope navItems={susolUlSmartMccbNavItems}>
         <DevicesProductFeaturesSection
           title="Key Features"
-          items={susolUlSmartMccbDetail.keyFeatures}
+          items={detail.keyFeatures}
         />
         <CommonBanner02
           variant="expert"

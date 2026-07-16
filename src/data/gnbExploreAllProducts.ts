@@ -157,6 +157,17 @@ export const gnbExploreAllProducts: GnbExploreProduct[] = [
   "XGT",
 ].map((label) => product(label));
 
+// 제품명(label) → 상세 정적 라우팅 href. product-data 로 목록을 대체할 때 각 제품의 href 를 파생하는 데 사용.
+// 매핑에 없으면 devices-systems 진입 라우트로 폴백(데이터 필드 아님, 정적 라우팅).
+export function resolveExploreHref(label: string): string {
+  const normalized = label.replace(/\n/g, " ");
+  return (
+    productHrefMap[normalized] ??
+    productHrefMap[label] ??
+    "/products-systems/motor-control"
+  );
+}
+
 export const exploreAllLv1Categories = devicesMegaMenu.categories.map(
   (category) => ({
     id: category.id,

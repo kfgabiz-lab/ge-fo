@@ -12,6 +12,8 @@ import { getProductBadgeType } from "@/lib/productBadge";
 import type { ProductOtherItem } from "../../data/productDetailContent";
 import "swiper/css";
 
+// 관련제품(Other Products): product-data 의 _fetchedRel5/6 관계 shape 미확정 →
+// 이번 범위에서는 정적 유지. 관계필드 확정 후 product-data 연동 예정.
 type DevicesProductOtherProductsProps = {
   items: ProductOtherItem[];
   title?: string;
@@ -158,7 +160,10 @@ export default function DevicesProductOtherProducts({
       <div className="inner">
         <h2 className="section_tit">{title}</h2>
         <div className="devices_product_other__body">
-          <div className="devices_product_other__swiper-wrap">
+          {/* data-slug: product-data (다건 — 관련제품). 현재 제품 row의 관계필드 _fetchedRel5 / _fetchedRel6(관련제품명 문자열)로 연결.
+              ⚠️ 관계 확장 shape 미확정: 각 아이템의 title/image가 관련 제품 row의 product.product_name / product_info.image로
+              펼쳐지는지, rel5·rel6 중 어느 슬롯을 목록 소스로 쓰는지는 BE/FE(관계 조회) 단계에서 확정 필요 */}
+          <div className="devices_product_other__swiper-wrap" data-slug="product-data" data-slug-repeat="true">
             <Swiper
               key={`devices-other-${loopEnabled ? "loop" : "slide"}-${isDesktop ? "desktop" : "mobile"}`}
               className="devices_product_other__swiper"
@@ -189,7 +194,8 @@ export default function DevicesProductOtherProducts({
                 const badgeType = getProductBadgeType(item);
 
                 return (
-                  <SwiperSlide key={item.id} className="devices_product_other__slide">
+                  <SwiperSlide key={item.id} className="devices_product_other__slide" data-slug-item>
+                    {/* href = 관련 제품 상세 라우트로 이동하는 정적 라우팅 → 데이터 필드 아님(정적 유지) */}
                     <Link
                       href={item.href}
                       className={
@@ -201,13 +207,16 @@ export default function DevicesProductOtherProducts({
                       <div className="devices_product_other__img-wrap">
                         {badgeType ? <ProductAwardBadge /> : null}
                         <div className="devices_product_other__img-area">
-                          <img loading="lazy" decoding="async" src={item.image} alt={item.title} />
+                          {/* 관계 확장 시 관련 제품 row의 product_info.image(파일ID 배열 → 프록시) 로 연결 예상 — 확정 필요 */}
+                          <img loading="lazy" decoding="async" src={item.image} alt={item.title} data-slugKey="product_info.image" data-slugKey-attr="src" />
                         </div>
                       </div>
                       <div className="devices_product_other__text">
-                        <h3 className="devices_product_other__tit">
+                        {/* 관계 확장 시 관련 제품 row의 product.product_name 으로 연결 예상 — 확정 필요 */}
+                        <h3 className="devices_product_other__tit" data-slugKey="product.product_name">
                           {item.title}
                         </h3>
+                        {/* subtitle = 관련제품 관계필드(문자열)에 대응 없음 → 정적 유지, 태그 없음 */}
                         {item.subtitle ? (
                           <p className="devices_product_other__sub">
                             {item.subtitle}

@@ -14,17 +14,23 @@ import {
   metasolMsFaqItems,
   metasolMsNavItems,
 } from "../../data/productDetailContent";
+import { buildHwProductDetail } from "../../data/hwProductDetail";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
-export default function MetasolMsProductPage() {
+// route 폴더명 metasol-ms → seo.slug metasol-ms
+const PRODUCT_SLUG = "metasol-ms";
+
+export default async function MetasolMsProductPage() {
+  const detail = await buildHwProductDetail(PRODUCT_SLUG, metasolMsDetail);
+
   return (
     <main className="devices-page devices-page--product" id="Page_devices_metasol_ms">
-      <DevicesProductHero product={metasolMsDetail} />
+      <DevicesProductHero product={detail} />
       <DevicesProductNavScope navItems={metasolMsNavItems}>
         <DevicesProductFeaturesSection
           title="Key Features"
-          items={metasolMsDetail.keyFeatures}
+          items={detail.keyFeatures}
         />
         <CommonBanner02
           variant="expert"

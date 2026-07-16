@@ -14,17 +14,23 @@ import {
   h100PlusFaqItems,
   h100PlusNavItems,
 } from "../../data/productDetailContent";
+import { buildHwProductDetail } from "../../data/hwProductDetail";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
-export default function H100PlusProductPage() {
+// route 폴더명 h100_plus → seo.slug h100-plus 정규화(_→-)
+const PRODUCT_SLUG = "h100-plus";
+
+export default async function H100PlusProductPage() {
+  const detail = await buildHwProductDetail(PRODUCT_SLUG, h100PlusDetail);
+
   return (
     <main className="devices-page devices-page--product" id="Page_devices_h100_plus">
-      <DevicesProductHero product={h100PlusDetail} />
+      <DevicesProductHero product={detail} />
       <DevicesProductNavScope navItems={h100PlusNavItems}>
         <DevicesProductFeaturesSection
           title="Key Features"
-          items={h100PlusDetail.keyFeatures}
+          items={detail.keyFeatures}
         />
         <CommonBanner02
           variant="expert"

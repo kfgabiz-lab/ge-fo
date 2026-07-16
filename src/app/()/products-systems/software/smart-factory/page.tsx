@@ -20,18 +20,33 @@ import {
   smartFactoryOtherProductsTitle,
   smartFactoryWhySection,
 } from "../../data/smartFactoryContent";
+import {
+  fetchProductDetailBySlug,
+  mapSwProductData,
+} from "../../data/productsSystemsData";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
-export default function SmartFactoryProductPage() {
+const PRODUCT_SLUG = "smart-factory";
+
+export default async function SmartFactoryProductPage() {
+  const row = await fetchProductDetailBySlug(PRODUCT_SLUG);
+  const sw = row ? mapSwProductData(row) : null;
+
   return (
     <main
       className="devices-page devices-page--product devices-page--smart-factory"
       id="P-FO-PROD-040000P"
     >
-      <DevicesSmartFactoryHero />
+      <DevicesSmartFactoryHero
+        title={sw?.name || undefined}
+        description={sw?.description || undefined}
+      />
       <DevicesProductNavScope navItems={smartFactoryNavItems}>
-        <DevicesSmartFactoryOverview />
+        <DevicesSmartFactoryOverview
+          description={sw?.infoDescription || undefined}
+          image={sw?.image ?? undefined}
+        />
         <DevicesProductFeaturesSection
           variant="list"
           sectionId="product-benefits"

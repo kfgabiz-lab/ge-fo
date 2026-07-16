@@ -19,18 +19,33 @@ import {
   xemsOtherProductsTitle,
   xemsWhySection,
 } from "../../data/xemsContent";
+import {
+  fetchProductDetailBySlug,
+  mapSwProductData,
+} from "../../data/productsSystemsData";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
-export default function XemsProductPage() {
+const PRODUCT_SLUG = "xems";
+
+export default async function XemsProductPage() {
+  const row = await fetchProductDetailBySlug(PRODUCT_SLUG);
+  const sw = row ? mapSwProductData(row) : null;
+
   return (
     <main
       className="devices-page devices-page--product devices-page--xems"
       id="P-FO-PROD-040000P"
     >
-      <DevicesXemsHero />
+      <DevicesXemsHero
+        title={sw?.name || undefined}
+        description={sw?.description || undefined}
+      />
       <DevicesProductNavScope navItems={xemsNavItems}>
-        <DevicesXemsOverview />
+        <DevicesXemsOverview
+          description={sw?.infoDescription || undefined}
+          image={sw?.image ?? undefined}
+        />
         <DevicesProductFeaturesSection
           variant="desc"
           sectionId="product-benefits"

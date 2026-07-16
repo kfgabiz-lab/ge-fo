@@ -24,15 +24,17 @@ function CategoryProductCard({
   loading?: "eager" | "lazy";
 }) {
   return (
-    <article className="devices_category__item">
+    <article className="devices_category__item" data-slug-item>
       <div className="devices_category__item-img">
-        <img loading={loading} decoding="async" src={item.image} alt={item.title} />
+        {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환 */}
+        <img loading={loading} decoding="async" src={item.image} alt={item.title} data-slugKey="product_info.image" data-slugKey-attr="src" />
       </div>
       <div className="devices_category__item-body">
         <div className="devices_category__item-text">
-          <h2 className="devices_category__item-tit">{item.title}</h2>
-          <p className="devices_category__item-desc">{item.description}</p>
+          <h2 className="devices_category__item-tit" data-slugKey="product.product_name">{item.title}</h2>
+          <p className="devices_category__item-desc" data-slugKey="product_info.info_description">{item.description}</p>
         </div>
+        {/* href는 하위 카테고리/제품 상세 라우트로 이동하는 정적 라우팅 → 데이터 필드 아님(정적 유지) */}
         <Link href={item.href} className="btn-base btn-lv03 btn-lv03--solid">
           View Detail
         </Link>
@@ -57,14 +59,16 @@ function CategoryProductCardStacked({
   loading?: "eager" | "lazy";
 }) {
   return (
-    <Link href={item.href} className="devices_category__item">
+    // href는 하위 카테고리/제품 상세 라우트로 이동하는 정적 라우팅 → 데이터 필드 아님(정적 유지)
+    <Link href={item.href} className="devices_category__item" data-slug-item>
       <div className="devices_category__item-img">
-        <img loading={loading} decoding="async" src={item.image} alt={item.title} />
+        {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환 */}
+        <img loading={loading} decoding="async" src={item.image} alt={item.title} data-slugKey="product_info.image" data-slugKey-attr="src" />
       </div>
       <div className="devices_category__item-body">
         <div className="devices_category__item-text">
-          <h2 className="devices_category__item-tit">{item.title}</h2>
-          <p className="devices_category__item-desc">{item.description}</p>
+          <h2 className="devices_category__item-tit" data-slugKey="product.product_name">{item.title}</h2>
+          <p className="devices_category__item-desc" data-slugKey="product_info.info_description">{item.description}</p>
         </div>
         <span className="btn-base btn-lv03 btn-lv03--solid">View Detail</span>
       </div>
@@ -80,19 +84,24 @@ export default function DevicesCategoryList({
   if (layout === "stacked") {
     return (
       <section className="devices_category devices_category--stacked">
-        <div className="inner devices_category__header">
+        {/* data-slug: category-data (단건 — 카테고리 인트로, depth1 레코드)
+            where=category.depth=1 AND 해당 페이지 카테고리 코드 · orderBy 없음(단건) */}
+        <div className="inner devices_category__header" data-slug="category-data">
           {intro.parentHref ? (
+            // parentLabel/parentHref = 상위(부모 메뉴/route) 브레드크럼 → category-data 대응 필드 없음(정적 유지)
             <Link href={intro.parentHref} className="devices_category__parent">
               {intro.parentLabel}
             </Link>
           ) : (
             <p className="devices_category__parent">{intro.parentLabel}</p>
           )}
-          <h1 className="devices_category__tit">{intro.title}</h1>
-          <p className="devices_category__desc">{intro.description}</p>
+          <h1 className="devices_category__tit" data-slugKey="category.title">{intro.title}</h1>
+          <p className="devices_category__desc" data-slugKey="category.description">{intro.description}</p>
         </div>
         <div className="devices_category__grid-wrap">
-          <div className="inner devices_category__grid">
+          {/* STEP4 정정: 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
+              data-slug: product-data (다건 — VFD 제품 카드). where=product.is_visible=001 후 product_code 접두사(L01-15-) 클라이언트 필터, product_code ASC 정렬 */}
+          <div className="inner devices_category__grid" data-slug="product-data" data-slug-repeat="true">
             {chunkProducts(products, 2).map((row, rowIndex) => (
               <div key={row.map((item) => item.id).join("-")} className="devices_category__grid-row">
                 {row.map((item, colIndex) => (
@@ -119,20 +128,25 @@ export default function DevicesCategoryList({
       <div className="devices_category__layout">
         <div className="devices_category__intro">
           <div className="devices_category__intro-bg" aria-hidden="true" />
-          <div className="inner devices_category__intro-inner">
+          {/* data-slug: category-data (단건 — 카테고리 인트로, depth1 레코드)
+              where=category.depth=1 AND 해당 페이지 카테고리 코드 · orderBy 없음(단건) */}
+          <div className="inner devices_category__intro-inner" data-slug="category-data">
             {intro.parentHref ? (
+              // parentLabel/parentHref = 상위(부모 메뉴/route) 브레드크럼 → category-data 대응 필드 없음(정적 유지)
               <Link href={intro.parentHref} className="devices_category__parent">
                 {intro.parentLabel}
               </Link>
             ) : (
               <p className="devices_category__parent">{intro.parentLabel}</p>
             )}
-            <h1 className="devices_category__tit">{intro.title}</h1>
-            <p className="devices_category__desc">{intro.description}</p>
+            <h1 className="devices_category__tit" data-slugKey="category.title">{intro.title}</h1>
+            <p className="devices_category__desc" data-slugKey="category.description">{intro.description}</p>
           </div>
         </div>
         <div className="devices_category__list">
-          <div className="devices_category__list-inner">
+          {/* STEP4 정정: 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
+              data-slug: product-data (다건 — VFD 제품 카드). where=product.is_visible=001 후 product_code 접두사(L01-15-) 클라이언트 필터, product_code ASC 정렬 */}
+          <div className="devices_category__list-inner" data-slug="product-data" data-slug-repeat="true">
             {products.map((item, index) => (
               <CategoryProductCard
                 key={item.id}

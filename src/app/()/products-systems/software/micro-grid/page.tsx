@@ -19,18 +19,33 @@ import {
   microGridOtherProducts,
   microGridOtherProductsTitle,
 } from "../../data/microGridContent";
+import {
+  fetchProductDetailBySlug,
+  mapSwProductData,
+} from "../../data/productsSystemsData";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
-export default function MicroGridProductPage() {
+const PRODUCT_SLUG = "micro-grid";
+
+export default async function MicroGridProductPage() {
+  const row = await fetchProductDetailBySlug(PRODUCT_SLUG);
+  const sw = row ? mapSwProductData(row) : null;
+
   return (
     <main
       className="devices-page devices-page--product devices-page--micro-grid"
       id="P-FO-PROD-040000P"
     >
-      <DevicesMicroGridHero />
+      <DevicesMicroGridHero
+        title={sw?.name || undefined}
+        description={sw?.description || undefined}
+      />
       <DevicesProductNavScope navItems={microGridNavItems}>
-        <DevicesMicroGridOverview />
+        <DevicesMicroGridOverview
+          description={sw?.infoDescription || undefined}
+          image={sw?.image ?? undefined}
+        />
         <DevicesProductFeaturesSection
           variant="list"
           sectionId="product-benefits"

@@ -20,18 +20,34 @@ import {
   hvdcOtherProductsTitle,
   hvdcWhySection,
 } from "../../data/hvdcContent";
+import {
+  fetchProductDetailBySlug,
+  mapSwProductData,
+} from "../../data/productsSystemsData";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
-export default function HvdcProductPage() {
+// hvdc→scada 리네이밍 금지: 컴포넌트/변수는 hvdc 유지, seo.slug 만 scada 사용
+const PRODUCT_SLUG = "scada";
+
+export default async function HvdcProductPage() {
+  const row = await fetchProductDetailBySlug(PRODUCT_SLUG);
+  const sw = row ? mapSwProductData(row) : null;
+
   return (
     <main
       className="devices-page devices-page--product devices-page--hvdc"
       id="Page_devices_hvdc"
     >
-      <DevicesHvdcHero />
+      <DevicesHvdcHero
+        title={sw?.name || undefined}
+        description={sw?.description || undefined}
+      />
       <DevicesProductNavScope navItems={hvdcNavItems}>
-        <DevicesHvdcOverview />
+        <DevicesHvdcOverview
+          description={sw?.infoDescription || undefined}
+          image={sw?.image ?? undefined}
+        />
         <DevicesProductFeaturesSection
           variant="list"
           sectionId="product-benefits"
