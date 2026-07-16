@@ -2,7 +2,7 @@
 // - 서버 컴포넌트(MainVisual)에서 호출하여 결과를 각 클라이언트 컴포넌트에 props 로 전달
 // - 설계 문서: fo/docs/dev/main/video-swiper.md, fo/docs/dev/main/banner-swiper.md
 import { fetchApi } from "@/lib/api";
-import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
+import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 
 // bo-api page-data 응답(Spring Data Page) 공통 형태
 interface PageDataResponse {
@@ -32,25 +32,27 @@ function orderNoValue(orderNo: string): number {
 
 export async function fetchHeroItems(): Promise<HeroItem[]> {
   const res = await fetchApi<PageDataResponse>(
-    "/api/v1/fo/page-data/hero-data?drs_postDate=in_range&sort=heroForm.orderNo,asc&size=100",
+    "/api/v1/fo/page-data/hero-data?drs_post_period=in_range&sort=hero.sort_order,asc&size=100",
   );
 
   const items: HeroItem[] = (res.content ?? []).map((item) => {
-    // flattenPageDataItem: heroForm 섹션 1개(중복 없음) → sub/titleText/btnUrl/btnText/orderNo/content가 root로 flat 병합됨
+    // flattenPageDataItem: hero 섹션 1개(중복 없음) → 콘텐츠키가 root로 flat 병합됨(래퍼명 hero/구heroForm 무관)
     const row = flattenPageDataItem(item);
+    // content(미디어ID 배열) key는 신/구 스키마 공통이라 불변
     const contentArr = row.content;
     // content 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
     const mediaId =
       Array.isArray(contentArr) && contentArr.length > 0
         ? (contentArr[0] as number)
         : null;
+    // pickField: 신 스키마(snake) 우선, 없으면 구 스키마(camel) 폴백 → 구·신 데이터 혼재에도 안전
     return {
       id: item.id,
-      sub: (row.sub as string) ?? "",
-      titleText: (row.titleText as string) ?? "",
-      btnUrl: (row.btnUrl as string) ?? "",
-      btnText: (row.btnText as string) ?? "",
-      orderNo: (row.orderNo as string) ?? "",
+      sub: (pickField(row, "sub_title", "sub") as string) ?? "",
+      titleText: (pickField(row, "hero_title", "titleText") as string) ?? "",
+      btnUrl: (pickField(row, "button_url", "btnUrl") as string) ?? "",
+      btnText: (pickField(row, "button_text", "btnText") as string) ?? "",
+      orderNo: (pickField(row, "sort_order", "orderNo") as string) ?? "",
       mediaId,
     };
   });
@@ -89,24 +91,26 @@ function sortOrderValue(sortOrder: string): number {
 
 export async function fetchBannerItems(): Promise<BannerItem[]> {
   const res = await fetchApi<PageDataResponse>(
-    "/api/v1/fo/page-data/banner-data?eq_bannerPosition=HERO&eq_isVisible=001&sort=bannerForm.sortOrder,asc&size=100",
+    "/api/v1/fo/page-data/banner-data?eq_banner_position=HERO&eq_is_visible=001&sort=banner.sort_order,asc&size=100",
   );
 
   const items: BannerItem[] = (res.content ?? []).map((item) => {
-    // flattenPageDataItem: bannerForm 섹션 1개(중복 없음) → url/mainTitle/subTitle/sortOrder/image가 root로 flat 병합됨
+    // flattenPageDataItem: banner 섹션 1개(중복 없음) → 콘텐츠키가 root로 flat 병합됨(래퍼명 banner/구bannerForm 무관)
     const row = flattenPageDataItem(item);
+    // image(미디어ID 배열) key는 신/구 스키마 공통이라 불변
     const imageArr = row.image;
     // image 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
     const mediaId =
       Array.isArray(imageArr) && imageArr.length > 0
         ? (imageArr[0] as number)
         : null;
+    // pickField: 신 스키마(snake) 우선, 없으면 구 스키마(camel) 폴백. url은 신/구 공통 key라 단일 인자
     return {
       id: item.id,
-      url: (row.url as string) ?? "",
-      mainTitle: (row.mainTitle as string) ?? "",
-      subTitle: (row.subTitle as string) ?? "",
-      sortOrder: (row.sortOrder as string) ?? "",
+      url: (pickField(row, "url") as string) ?? "",
+      mainTitle: (pickField(row, "banner_title", "mainTitle") as string) ?? "",
+      subTitle: (pickField(row, "sub_title", "subTitle") as string) ?? "",
+      sortOrder: (pickField(row, "sort_order", "sortOrder") as string) ?? "",
       mediaId,
     };
   });
@@ -146,7 +150,7 @@ export async function fetchNoticeItem(): Promise<NoticeItem | null> {
   // 공지 배너(최신 1건) + prefix 코드목록을 병렬 조회
   const [bannerRes, codes] = await Promise.all([
     fetchApi<PageDataResponse>(
-      "/api/v1/fo/page-data/banner-data?eq_bannerPosition=INFORMATION&eq_isVisible=001&sort=updatedAt,desc&size=1",
+      "/api/v1/fo/page-data/banner-data?eq_banner_position=INFORMATION&eq_is_visible=001&sort=updatedAt,desc&size=1",
     ),
     fetchApi<CodeItem[]>("/api/v1/fo/codes/BANNER_PREFIX"),
   ]);
@@ -155,9 +159,10 @@ export async function fetchNoticeItem(): Promise<NoticeItem | null> {
   const item = bannerRes.content?.[0];
   if (!item) return null;
 
-  // flattenPageDataItem: bannerForm 섹션 1개(중복 없음) → url/prefix/bottomText가 root로 flat 병합됨
+  // flattenPageDataItem: banner 섹션 1개(중복 없음) → 콘텐츠키가 root로 flat 병합됨(래퍼명 banner/구bannerForm 무관)
   const row = flattenPageDataItem(item);
-  const prefixCode = (row.prefix as string) ?? "";
+  // prefix key는 신/구 스키마 공통이라 불변
+  const prefixCode = (pickField(row, "prefix") as string) ?? "";
 
   // 코드→라벨 맵 구성(code → name)
   const codeMap = new Map<string, string>(
@@ -167,9 +172,10 @@ export async function fetchNoticeItem(): Promise<NoticeItem | null> {
   //  → 설계 문서 6.비고 2)의 "prefix가 '1'로 저장돼 '001'과 불일치" 케이스가 해당.
   const prefixLabel = codeMap.get(prefixCode) ?? prefixCode;
 
+  // pickField: bottomText는 신 스키마(banner_text) 우선, url은 신/구 공통 key라 단일 인자
   return {
     prefixLabel,
-    bottomText: (row.bottomText as string) ?? "",
-    url: (row.url as string) ?? "",
+    bottomText: (pickField(row, "banner_text", "bottomText") as string) ?? "",
+    url: (pickField(row, "url") as string) ?? "",
   };
 }

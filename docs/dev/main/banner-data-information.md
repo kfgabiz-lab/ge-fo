@@ -2,6 +2,7 @@
 
 > 대상 파일: `fo/src/app/main/components/MainVisual.tsx` (`<section className="main_notic">` 블록)
 > 상태: 개발완료 — 단, prefix 라벨 표시는 테스트데이터 재저장 필요(6.비고 2 참고, 코드 문제 아님)
+> ⚠️ 2026-07-16: bo 빌더의 배너 데이터 스키마 key 리네이밍으로 현재 코드가 구 key를 참조 중 → 리네이밍 재작업 **설계(승인 대기)**. 상세는 아래 `2.5` 참고.
 
 ## 1. data-slug
 - 값: `banner-data` (기존 확정값 재사용 — HERO 배너와 동일 slug, where 조건으로 INFORMATION 위치만 구분)
@@ -32,10 +33,31 @@
 
 (벨 아이콘 `ico_bell_20.svg`, More 라벨/화살표는 고정 UI로 미태깅)
 
+## 2.5 스키마 리네이밍 재작업 (2026-07-16 — 승인 대기)
+
+> 배경: HERO 배너와 동일 slug(`banner-data`)를 where로 구분해 쓰는 공지(INFORMATION) 바인딩도 같은 스키마 리네이밍 영향을 받는다. 2026-07-16 DB 실측(INFORMATION 배너 id=1823, page_template `banner-detail`의 fieldKey)으로 확정한 구→신 매핑이다. **where(INFORMATION·공개) 값·의미와 orderBy(updatedAt DESC)·limit(1)은 그대로이며 필드명만 바뀐다.**
+
+| 구분 | 구 key (현재 소스/2절 표) | 신 key (2026-07-16 DB 실측) |
+|---|---|---|
+| 콘텐츠 래퍼(contentKey) | `bannerForm` | `banner` |
+| 공지 링크(`url`) | `url` | `url` (불변) |
+| 카테고리 코드(`prefix`) | `prefix` | `prefix` (불변, 코드값 저장) |
+| 공지 본문(`bottomText`) | `bottomText` | `banner_text` |
+| 공개여부(where) | `isVisible` | `is_visible` |
+| 배너위치(where) | `bannerPosition` | `banner_position` |
+
+- `bottomText`→`banner_text` 확정 근거: INFORMATION 실데이터(id=1823)의 `banner_text` 값이 `"Triple iF Design 2026 3 Wins in Smart Device & Energy Platfotm Design"`으로, 2절 예시의 공지 본문 텍스트와 의미·위치가 정확히 일치함을 실값 비교로 확인(추정 아님).
+- 참고: INFORMATION 레코드(id=1823)에는 `banner_title`/`sub_title`/`sort_order`/`image` 필드가 없다. 공지 바인딩은 `url`/`prefix`/`banner_text`만 사용하므로 영향 없음.
+- 신 공지 조회 엔드포인트: `GET /api/v1/fo/page-data/banner-data?eq_banner_position=INFORMATION&eq_is_visible=001&sort=updatedAt,desc&size=1`
+  - where 값(`INFORMATION`/`001`)·`size=1`·`sort=updatedAt,desc` 불변. `updatedAt`은 dataJson 경로가 아니라 PageData 테이블 실컬럼(`updated_at`) 정렬이므로 리네이밍 영향 없음. `eq_` 파라미터 키명만 신 스키마로 교체.
+- 수정 위치: **FE 전용** — `fetchNoticeItem`의 `row.bottomText` 참조부 + `eq_` 파라미터. `pickField(row, "banner_text", "bottomText")` 공통 헬퍼 재사용 권장. BE 변경 불필요(신규 `GET /api/v1/fo/codes/{groupCode}` 코드 라벨 변환 API는 그대로 재사용).
+- 마크업(`MainVisual.tsx` main_notic 블록의 `data-slugKey`) annotation 정렬은 STEP5(FE) 시 반영.
+
 ## 3. API 확인 (최종 체크 — 반드시 작성, 단정 금지)
 - 신규 API 필요 여부: **기존 활용 가능 + 신규 1건(코드 라벨 변환)** (STEP4 확정, 2026-07-09)
-- 공지 조회 엔드포인트: `GET /api/v1/fo/page-data/banner-data?eq_bannerPosition=INFORMATION&eq_isVisible=001&sort=updatedAt,desc&size=1` (HERO 배너와 동일 엔드포인트 재사용, where/sort 파라미터만 상이. `updatedAt`은 dataJson 경로가 아니라 PageData 테이블 실컬럼(`updated_at`)으로 정렬됨을 코드로 확인함. tie-breaker(id DESC)는 `PageDataService`가 단일 정렬만 지원해 BE 미지원 — 동시각 중복 확률이 극히 낮아 updatedAt 단일 정렬로 진행 확정, 신규 BE 보류)
-- prefix 코드→라벨 변환 엔드포인트(신규): `GET /api/v1/fo/codes/{groupCode}` (`FoCodeController`, `BANNER_PREFIX` 호출 시 `[{code:"001",name:"뉴스레터"},{code:"002",name:"Power"}]` 반환 확인). 기존 `CodeDetail`/`CodeGroup` 엔티티·리포지토리 재사용, 신규는 공개 컨트롤러 1개 + 리포지토리 메서드 1개뿐. 이후 다른 select 필드 코드 변환에도 재사용 가능.
+- 공지 조회 엔드포인트(구 스키마): `GET /api/v1/fo/page-data/banner-data?eq_bannerPosition=INFORMATION&eq_isVisible=001&sort=updatedAt,desc&size=1` (HERO 배너와 동일 엔드포인트 재사용, where/sort 파라미터만 상이. `updatedAt`은 dataJson 경로가 아니라 PageData 테이블 실컬럼(`updated_at`)으로 정렬됨을 코드로 확인함. tie-breaker(id DESC)는 `PageDataService`가 단일 정렬만 지원해 BE 미지원 — 동시각 중복 확률이 극히 낮아 updatedAt 단일 정렬로 진행 확정, 신규 BE 보류)
+- 리네이밍 후 공지 조회 엔드포인트(2026-07-16, 2.5 참고): `GET /api/v1/fo/page-data/banner-data?eq_banner_position=INFORMATION&eq_is_visible=001&sort=updatedAt,desc&size=1` — 엔드포인트/재사용 구조 동일, `eq_` 파라미터 필드명만 신 스키마로 교체
+- prefix 코드→라벨 변환 엔드포인트(신규): `GET /api/v1/fo/codes/{groupCode}` (`FoCodeController`, `BANNER_PREFIX` 호출 시 `[{code:"001",name:"뉴스레터"},{code:"002",name:"Power"}]` 반환 확인). 기존 `CodeDetail`/`CodeGroup` 엔티티·리포지토리 재사용, 신규는 공개 컨트롤러 1개 + 리포지토리 메서드 1개뿐. 이후 다른 select 필드 코드 변환에도 재사용 가능. (리네이밍 무관, 그대로 재사용)
 
 ## 4. 조회 조건 (아래 4개 필수 — orderBy 없이 다건 매칭 시 결과가 불확정됨)
 - where(필터 조건식, evalConditionExpr 문법): `bannerPosition=INFORMATION,isVisible=001` — 배너 위치가 INFORMATION이고 공개(001)인 항목만 조회 (comma-AND). 사용자 확정값
@@ -102,3 +124,5 @@ flatten 후(예상 — 래퍼 `bannerForm` 처리 방식은 6.비고 참고):
 | STEP6 | fo-fe-builder | 2026-07-09 | FE 연동 완료. `mainVisualData.ts`에 `fetchNoticeItem()` 추가(공지 배너 최신1건 + `BANNER_PREFIX` 코드목록 `Promise.all` 병렬 조회, 코드→라벨 변환). `MainVisual.tsx` main_notic 섹션을 실데이터/정적 목업 폴백 분기로 변경. `npx tsc --noEmit` 통과. SSR 확인: 실데이터 매칭됨(bottomText="dsfsdfsdfsdf", url="https://www.lselectricamerica.com/"). **단, prefix 저장값이 "1"이라 `BANNER_PREFIX`(001/002)와 불일치 → 코드→라벨 변환 폴백으로 원본값 "1" 표시**(6.비고 2) 케이스 실제 재현). 라벨 정상 표시하려면 데이터 재저장(prefix="001" 등) 필요 |
 | STEP7 | fo-qa-validator(대체: SSR 검증) | 2026-07-10 | Playwright 미가용으로 SSR HTML 검증으로 대체(핵심 원칙 3에 따라 사전 고지). HTTP 200, 에러 마커 0건, url/bottomText 실데이터 반영, 섹션 순서(main_visual→main_notic→main_info→main_cards→main_products) 정상·인접 섹션 침범 없음 확인. prefix 라벨 이슈는 알려진 데이터 문제로 확정, 사용자 확인하에 컴포넌트 작업 완료 처리 |
 | STEP8(리팩터) | 호출자 | 2026-07-14 | `fetchNoticeItem`이 `bannerForm`을 직접 언랩하던 수동 코드를 `fo/src/lib/pageData.ts`의 `flattenPageDataItem` 사용으로 교체. tsc 통과, SSR HTML에서 url/bottomText 값 회귀 없음 재확인 |
+| STEP1(리네이밍 재확인) | fo-slug-analyzer | 2026-07-16 | INFORMATION 실데이터(id=1823) 실측으로 구→신 key 확정(2.5 표): 래퍼 `bannerForm`→`banner`, `bottomText`→`banner_text`(실값 일치 확인), where `isVisible`→`is_visible`·`bannerPosition`→`banner_position`. `url`/`prefix` 불변. orderBy(updatedAt DESC)·limit(1) 불변. 마크업 미변경 |
+| STEP2(문서 갱신) | fo-dev-doc-writer | 2026-07-16 | `2.5` 리네이밍 재작업 매핑표·신 엔드포인트(`eq_banner_position`/`eq_is_visible`) 반영. **승인 대기 — 승인 후 STEP3 이후 진행. 이 문서 상태: 리네이밍 설계중** |

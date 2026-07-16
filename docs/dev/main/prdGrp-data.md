@@ -2,6 +2,7 @@
 
 > 대상 파일: `fo/src/app/main/components/MainProducts.tsx`
 > 상태: 개발완료 (STEP7 QA 통과)
+> ⚠️ 2026-07-16: bo 빌더의 제품그룹/제품 데이터 스키마 key 리네이밍으로 BE 조회 서비스가 구 key로 DB를 읽는 중 → 리네이밍 재작업 **설계(승인 대기)**. 상세는 아래 `2.5` 참고.
 
 ## 1. data-slug
 - 값: `prdGrp-data` (bo SlugRegistry 기등록 PAGE_DATA — `slug_registry` 테이블 직접 확인 완료: id=18, is_active=true)
@@ -42,6 +43,34 @@
 | productDataForm.awards | (중첩 `ms` 배열 내부) productDataForm.awards | string(코드값, 예: "iF Design Awards 2026:01") | 조건부 배지 | 값 있으면 `ProductAwardBadge` 노출 |
 
 마크업 구조: `prdGrp-data`(그룹 다건, `tab_area`=라벨/`products_panels`=정본 이중 배치, 동일 배열 1회 fetch 후 공유) 안에 중첩으로 `ms`(제품 다건, `prdGrp-data.dataJson.ms` — bo 멀티셀렉트 contentKey) 반복.
+
+## 2.5 스키마 리네이밍 재작업 (2026-07-16 — 승인 대기)
+
+> 배경: bo 빌더에서 제품그룹 템플릿(`prdGrp-detail`)과 제품 템플릿(`product-detail`)의 contentKey(래퍼)·fieldKey가 리네이밍됐다. 이 컴포넌트는 범용 page-data 엔드포인트가 아니라 **전용 BE 서비스**(`bo-api/.../service/FoProductGroupService.java`)가 DB를 직접 쿼리·매핑해 `/api/v1/fo/product-groups`로 응답한다. 그 서비스가 여전히 구 key(`prdGrpForm1`/`productDataForm`)로 DB를 읽어 현재 매칭 0건이 된다. 2026-07-16 DB 실측(prdGrp-data id=1818·1819, product-data id=1664~, page_template `prdGrp-detail`/`product-detail`의 contentKey/fieldKey)으로 확정한 구→신 매핑이다. **where(공개 001)·정렬 값·의미는 그대로이며 필드 경로명만 바뀐다.**
+
+### 제품그룹(prdGrp-data)
+| 구분 | 구 key (현재 BE/2절 표) | 신 key (2026-07-16 DB 실측) |
+|---|---|---|
+| 그룹 래퍼(contentKey) | `prdGrpForm1` | `product_group` |
+| 그룹명(`prdGrpNm`) | `prdGrpNm` | `group_name` |
+| 그룹 정렬(`prdGrpOrd`) | `prdGrpOrd` | `group_order` |
+| 공개여부(`isVisible`) | `isVisible` | `is_visible` |
+| 제품 배열 | `ms` | `ms` (불변) |
+| 제품 요소 정렬 | `ms[].sortOrder` | `ms[].sort_order` |
+
+### 제품(product-data, ms가 참조하는 개별 제품)
+| 구분 | 구 key (현재 BE/2절 표) | 신 key (2026-07-16 DB 실측) |
+|---|---|---|
+| 제품 래퍼(contentKey) | `productDataForm` | `product` |
+| 제품명(`productNm`) | `productDataForm.productNm` | `product.product_name` |
+| 제품 설명(`prdSubDesc`) | `productDataForm.prdSubDesc` | `product.product_description` |
+| 수상(`awards`) | `productDataForm.awards` | `product.awards` |
+| SEO 슬러그(`seo.slug`) | `seo.slug` | `seo.slug` (불변) |
+| 대표이미지(`info.image`) | `info.image` | ⚠️ **부재 — 확인 필요(아래)** |
+
+- ⚠️ **대표이미지 소스 미확정(STEP3에서 결정 필요)**: 실측 product-data(id=1664~1666)의 `product`/`seo` 래퍼 어디에도 image 필드가 없다. hero/banner는 미디어를 `content`/`image` ID배열로 갖는데 product-data는 그런 필드도 없다(구 문서 비고5의 "info.image 0건"이 신 스키마에선 필드 자체 부재로 바뀐 상태). 대표이미지를 어디서 가져올지는 단순 리네이밍으로 풀 수 없어 STEP3(fo-be-analyzer)에서 소스를 확정해야 한다 — 이번 STEP1/2 리네이밍 범위 밖.
+- 수정 위치: **BE 전용** — `FoProductGroupService.java`의 DB-read key 문자열(`data_json->'prdGrpForm1'->>'isVisible'`/`'prdGrpOrd'`, `dataJson.get("prdGrpForm1")`, `form1.get("prdGrpNm"/"prdGrpOrd")`, `dataJson.get("productDataForm")` 등)을 신 경로로 교체. **출력 DTO(`FoProductGroupResponse`의 `prdGrpNm`/`productNm` 등)와 엔드포인트(`/api/v1/fo/product-groups`)는 불변** → FE(`mainProductsData.ts`)·마크업(`MainProductsClient.tsx`) 무변경. where(그룹 공개=001) 값 불변, 경로만 `product_group.is_visible`·정렬 `product_group.group_order`.
+- 마크업 annotation(`data-slugKey="productDataForm.productNm"` 등)은 실런타임 바인딩이 아니라 문서용 표기이며, 이번 범위에서 건드리지 않음(필요 시 STEP5에서 doc 정합성만 정렬).
 
 ## 3. API 확인 (최종 체크 — 반드시 작성, 단정 금지)
 - 신규 API 필요 여부: **신규 필요 (확정)**
@@ -195,3 +224,5 @@
 | STEP5 | fo-be-builder | 2026-07-13 | `FoProductGroupController`/`FoProductGroupService`/`FoProductGroupResponse` 신규 구현(2쿼리 배치, N+1 방지, dangling 제거, tie-breaker 반영). 컴파일 성공, 실데이터 기반 로직 검증 완료 |
 | STEP6 | fo-fe-builder | 2026-07-13 | `MainProducts.tsx`(서버 컴포넌트) + `MainProductsClient.tsx` + `mainProductsData.ts` 신규/교체. 하드코딩 제거, `fetchApi`로 동적 그룹/제품 연동. FE 타입(`prdGrpOrd`/`sortOrder`)이 BE(String)와 불일치했던 버그를 세션 내 정정 완료 |
 | STEP7 | fo-qa-validator | 2026-07-13 | BE(developer 프로필) 재기동 후 실브라우저 검증. 7개 검증항목 전부 통과. 실데이터 기준 New Arrivals 빈 화면·이미지 플레이스홀더·링크 비활성·배지 미노출 전부 정상 확인 |
+| STEP1(리네이밍 재확인) | fo-slug-analyzer | 2026-07-16 | prdGrp-data(id=1818·1819)·product-data(id=1664~) + page_template `prdGrp-detail`/`product-detail` 실측으로 구→신 key 확정(2.5 표): 그룹 래퍼 `prdGrpForm1`→`product_group`, `prdGrpNm`→`group_name`, `prdGrpOrd`→`group_order`, `isVisible`→`is_visible`, `ms[].sortOrder`→`ms[].sort_order`; 제품 래퍼 `productDataForm`→`product`, `productNm`→`product_name`, `prdSubDesc`→`product_description`. `seo.slug` 불변. **대표이미지(info.image)는 신 스키마에 필드 부재 → STEP3 확정 필요로 별도 표시**. where(001)·orderBy 값 불변 |
+| STEP2(문서 갱신) | fo-dev-doc-writer | 2026-07-16 | `2.5` 리네이밍 재작업 매핑표 반영. 수정 위치=BE 전용(`FoProductGroupService` DB-read key), 출력 DTO·엔드포인트·FE·마크업 불변 명시. 이미지 소스 미확정 사항 별도 표기. **승인 대기 — 승인 후 STEP3(BE 분석) 이후 진행. 이 문서 상태: 리네이밍 설계중** |
