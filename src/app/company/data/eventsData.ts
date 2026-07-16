@@ -30,7 +30,7 @@ interface EventsPageResponse {
 
 // 게시상태(A조건) — 공개 + 게시일 도래. Upcoming(Featured/Calendar)에만 적용(events-data.md 3절)
 function applyPublishedCondition(sp: URLSearchParams) {
-  sp.set("condexpr_status", "is_visible=001,publish_dttm>=today()?'게시':'미게시'");
+  sp.set("condexpr_status", "is_visible=001,publish_dttm<=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
 }
 
