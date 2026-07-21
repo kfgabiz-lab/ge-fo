@@ -39,8 +39,8 @@ type WhereToBuyMapProps = {
   isFiltered?: boolean;
   /**
    * "이 지역에서 검색" 영역필터 모드 여부.
-   * - true 이면 목록 갱신으로 지도가 재생성될 때 fitBounds/자동팬을 하지 않고,
-   *   사용자가 마지막으로 보던 카메라(중심/줌)를 그대로 복원한다(사용자가 보던 화면 유지).
+   * - true 이면 목록이 영역검색으로 갈아끼워질 때 fitBounds/자동팬을 하지 않고,
+   *   사용자가 보던 카메라(중심/줌)를 그대로 둔다(사용자가 보던 화면 유지).
    */
   boundsMode?: boolean;
   /**
@@ -84,12 +84,10 @@ export default function WhereToBuyMap({
   // 프로그램적 카메라 이동(fitBounds/panTo/setZoom/초기뷰)으로 발생한 zoom_changed 를
   // 사용자 조작으로 오인하지 않도록 잠그는 플래그. 이동 시작 전 true, idle 에서 해제.
   const suppressUserMoveRef = useRef(false);
-  // 마지막 사용자 뷰(중심/줌) — boundsMode 재생성 시 이 값으로 카메라를 복원(뷰 유지)
-  const lastCameraRef = useRef<{ lat: number; lng: number; zoom: number } | null>(
-    null,
-  );
-  // boundsMode 로 지도가 막 재생성됐을 때, 직후 1회의 활성마커 자동팬을 건너뛰기 위한 플래그
-  const skipNextAutoPanRef = useRef(false);
+  // 카메라/마커 갱신 effect 가 "목록이 실제로 바뀐 렌더"를 판별하기 위한 직전 locations 참조.
+  // - 카드 클릭(activeLocation 만 변경)은 locations 참조가 그대로이므로 fitBounds/버튼숨김을 건너뛰고,
+  //   영역검색 진입(locations 교체 + boundsMode)은 이 값이 달라지는 것으로 감지해 자동팬을 1회 건너뛴다.
+  const prevLocationsRef = useRef<WhereToBuyLocation[] | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const [mapError, setMapError] = useState(false);
 
@@ -140,8 +138,8 @@ export default function WhereToBuyMap({
   };
 
   // 마커 렌더 함수(렌더마다 최신 locations/activeLocation/onLocationSelect 캡처).
-  // - 항상 "현재 mapRef.current" 에 마커를 붙인다. 호출 시점에 mapRef 가 새 지도를
-  //   가리키고 있어야 하므로, 지도 생성 콜백(.then) 내부와 mapReady 기반 effect 에서만 호출한다.
+  // - 항상 "현재 mapRef.current" 에 마커를 붙인다. 지도 인스턴스는 최초 1회만 생성되므로
+  //   이 함수는 언제 호출돼도 동일한 하나의 지도 위에 마커를 다시 그린다.
   const drawMarkersRef = useRef<() => void>(() => {});
   drawMarkersRef.current = () => {
     const map = mapRef.current;
@@ -182,6 +180,11 @@ export default function WhereToBuyMap({
     });
   };
 
+  // ── Effect A. 지도 인스턴스 생성(마운트 시 1회) ─────────────────────────────
+  // 의존성: [apiKey, usePlaceholder]. locations/activeLocation/isFiltered/boundsMode 변경으로는
+  // 절대 재실행되지 않는다 → 컴포넌트 수명주기 동안 new maps.Map() 은 정확히 1번만 호출된다.
+  // (모바일 플레이스홀더 전환으로 usePlaceholder 가 바뀌면 컨테이너 div 자체가 언마운트/재마운트되므로
+  //  DOM 누적 없이 지도가 사라졌다 다시 생긴다.)
   useEffect(() => {
     if (usePlaceholder || !apiKey || !mapCanvasRef.current) {
       // 모바일 플레이스홀더 등 지도 미생성 상태에서는 데스크톱 팝업 좌표를 해제
@@ -190,14 +193,8 @@ export default function WhereToBuyMap({
     }
 
     let cancelled = false;
-    // 지도 이동 리스너 핸들(정리 시 해제)
+    // 지도 수명주기에 묶인 리스너 핸들(정리 시 해제)
     let listeners: google.maps.MapsEventListener[] = [];
-
-    // 지도가 재생성될 때마다 이전 상태의 "이 지역에서 검색" 버튼을 숨긴다
-    // (새 검색/새 영역검색이 반영된 직후엔 버튼이 떠 있으면 안 됨).
-    setShowAreaButton(false);
-    // 이번 재생성이 boundsMode 이면 직후 1회 활성마커 자동팬을 건너뛴다(사용자 뷰 유지).
-    skipNextAutoPanRef.current = boundsMode;
 
     loadGoogleMaps(apiKey)
       .then((maps) => {
@@ -205,26 +202,14 @@ export default function WhereToBuyMap({
           return;
         }
 
-        // 좌표 가드: 0/빈값/NaN 좌표 레코드는 bounds 계산에서 제외(지도가 (0,0)으로 튀지 않도록)
-        const mappable = locations.filter(hasValidCoords);
-        const bounds = new maps.LatLngBounds();
-        mappable.forEach((location) => {
-          bounds.extend({ lat: location.lat, lng: location.lng });
-        });
-
-        // boundsMode(영역검색) 재생성이면 사용자가 마지막으로 보던 카메라로 복원,
-        // 그 외에는 퍼블리싱된 기본 중심/줌으로 시작한다.
-        const restore =
-          boundsMode && lastCameraRef.current ? lastCameraRef.current : null;
-
         // 초기 카메라 세팅(constructor)으로 인한 zoom_changed 를 사용자 조작으로 오인하지 않도록 잠근다.
         suppressUserMoveRef.current = true;
 
+        // 항상 퍼블리싱된 기본 중심/줌으로 시작한다. 이후 검색(isFiltered)·활성위치 변경 등
+        // 카메라 이동은 별도 effect 가 이 인스턴스에 대해 명령형으로 처리한다.
         const map = new maps.Map(mapCanvasRef.current, {
-          center: restore
-            ? { lat: restore.lat, lng: restore.lng }
-            : whereToBuyPage.mapDefaultCenter,
-          zoom: restore ? restore.zoom : whereToBuyPage.mapDefaultZoom,
+          center: whereToBuyPage.mapDefaultCenter,
+          zoom: whereToBuyPage.mapDefaultZoom,
           disableDefaultUI: true,
           mapTypeControl: false,
           fullscreenControl: false,
@@ -232,12 +217,6 @@ export default function WhereToBuyMap({
           streetViewControl: false,
           gestureHandling: "greedy",
         });
-
-        // 실제 검색/필터가 적용된 상태에서만 결과 범위로 fitBounds. 초기/미필터/영역검색 상태에서는
-        // fitBounds 하지 않는다(영역검색은 위에서 사용자 뷰를 복원하므로 카메라를 다시 움직이면 안 됨).
-        if (isFiltered && mappable.length > 1) {
-          map.fitBounds(bounds);
-        }
 
         mapRef.current = map;
 
@@ -259,19 +238,10 @@ export default function WhereToBuyMap({
           map.addListener(eventName, () => updatePopupPositionRef.current()),
         );
 
-        // idle: 이동이 멈춘 시점 — 프로그램적 이동 잠금 해제 + 현재 카메라를 저장(뷰 복원 소스).
+        // idle: 이동이 멈춘 시점 — 프로그램적 이동 잠금 해제.
         listeners.push(
           map.addListener("idle", () => {
             suppressUserMoveRef.current = false;
-            const center = map.getCenter();
-            const zoom = map.getZoom();
-            if (center && typeof zoom === "number") {
-              lastCameraRef.current = {
-                lat: center.lat(),
-                lng: center.lng(),
-                zoom,
-              };
-            }
           }),
         );
 
@@ -290,29 +260,8 @@ export default function WhereToBuyMap({
           }),
         );
 
-        // ⚠️ 레이스 컨디션 방지 핵심:
-        // 방금 만든 새 지도(mapRef.current) 에 곧바로 마커를 그린다. 마커 생성 시점의
-        // mapRef 가 항상 "화면에 실제로 붙는 새 지도"임을 이 콜백이 보장한다.
-        drawMarkersRef.current();
-
-        // 재생성 직후 활성마커 자동팬. boundsMode 재생성 직후 1회는 건너뛴다("이 지역에서 검색"
-        // 카메라 고정). skipNextAutoPanRef 의 유일한 소비 지점을 이 콜백으로 고정해,
-        // 두 번째 effect(옛 지도에 대해 먼저 실행될 수 있음)가 플래그를 먼저 소비해 새 지도가
-        // 튀는 문제를 원천 차단한다.
-        if (skipNextAutoPanRef.current) {
-          skipNextAutoPanRef.current = false;
-        } else {
-          const active = activeLocationRef.current;
-          if (active && hasValidCoords(active)) {
-            suppressUserMoveRef.current = true;
-            map.panTo({ lat: active.lat, lng: active.lng });
-            map.setZoom(whereToBuyPage.mapActiveZoom);
-          }
-        }
-
-        // 새 지도/마커 기준 팝업 픽셀좌표 재계산
-        updatePopupPositionRef.current();
-
+        // 지도가 준비됐음을 알린다. 마커 그리기/카메라 이동은 mapReady 를 가드로 하는
+        // 아래 effect 들이 이 상태 변화에 반응해 수행한다.
         setMapReady(true);
       })
       .catch(() => {
@@ -322,50 +271,95 @@ export default function WhereToBuyMap({
       });
 
     return () => {
+      // 언마운트(또는 usePlaceholder 전환) 시에만 정리. 지도 인스턴스 자체는 컨테이너 DOM 이
+      // 사라지면서 함께 제거되므로 별도 destroy 없이 리스너/overlay/마커만 해제한다.
       cancelled = true;
       listeners.forEach((listener) => listener.remove());
       listeners = [];
       overlayRef.current?.setMap(null);
       overlayRef.current = null;
-      // 옛 지도의 마커를 반드시 제거(메모리 누수/유령 마커 방지). 새 지도의 마커는
-      // 위 .then() 의 drawMarkersRef 호출로 다시 생성된다.
       markersRef.current.forEach((marker) => marker.setMap(null));
       markersRef.current = [];
+      mapRef.current = null;
+      prevLocationsRef.current = null;
+      setMapReady(false);
     };
-  }, [apiKey, locations, usePlaceholder, isFiltered, boundsMode]);
+  }, [apiKey, usePlaceholder]);
 
-  // 활성 위치 변경(및 최초 지도 준비) 전담 effect.
-  // - 마커의 최초 생성/locations 변경 반영은 지도 생성 .then() 콜백이 담당한다.
-  // - 이 effect 는 "지도가 이미 준비된 상태에서 activeLocation 이 바뀐 경우"의 마커 재그림
-  //   (활성 zIndex 갱신) + 활성마커 자동팬 + 팝업 좌표 갱신만 담당한다.
+  // ── Effect B. 마커 재그림 ───────────────────────────────────────────────
+  // 의존성: [locations, activeLocation, mapReady, usePlaceholder].
+  // 지도가 준비된 뒤 목록/활성위치가 바뀔 때마다 "기존 지도 인스턴스"에 마커를 다시 그리고,
+  // 활성 마커 픽셀좌표를 재계산한다. 지도가 아직 없으면(가드) 아무것도 하지 않는다.
   useEffect(() => {
     if (usePlaceholder) {
       return;
     }
+    if (!mapReady || !mapRef.current || !window.google?.maps) {
+      return;
+    }
+    drawMarkersRef.current();
+    updatePopupPositionRef.current();
+  }, [locations, activeLocation, mapReady, usePlaceholder]);
 
+  // ── Effect C. 카메라 이동(fitBounds / 활성마커 자동팬) ─────────────────────
+  // 의존성: [locations, activeLocation, isFiltered, boundsMode, mapReady, usePlaceholder].
+  // 원본 지도-재생성 직후 카메라 로직을 "기존 인스턴스에 대한 명령형 갱신"으로 옮긴 것.
+  // 규칙:
+  //  - locationsChanged(목록 교체 = 새 검색/영역검색/데이터 도착) 인 렌더에서만 fitBounds 를 시도한다.
+  //    카드 클릭처럼 locations 참조가 그대로면 fitBounds/버튼숨김을 건너뛴다.
+  //  - isFiltered && 결과 2건 이상일 때만 fitBounds(검색 전엔 mapDefaultCenter/mapDefaultZoom 유지).
+  //  - 이어서 활성마커로 자동 panTo. 단, "영역검색으로 목록이 막 교체된 렌더"(boundsMode && locationsChanged)
+  //    에서는 자동팬을 1회 건너뛰어 사용자가 보던 카메라를 그대로 둔다.
+  //  - fitBounds 뒤에 panTo 가 이어지므로, 활성위치가 있으면 최종 카메라는 활성마커 중심(mapActiveZoom)이 된다
+  //    (원본과 동일한 우선순위).
+  useEffect(() => {
+    if (usePlaceholder) {
+      return;
+    }
     const map = mapRef.current;
     if (!mapReady || !map || !window.google?.maps) {
-      // 지도가 아직 없거나 재생성 중이면 아무것도 하지 않는다(옛 지도 조작 방지).
       return;
     }
 
-    // 활성 위치 변경에 따른 마커 재그림(활성 zIndex 반영)
-    drawMarkersRef.current();
+    const maps = window.google.maps;
+    const locationsChanged = prevLocationsRef.current !== locations;
+    prevLocationsRef.current = locations;
 
-    // 활성 위치가 유효 좌표일 때만 지도 이동(좌표 없는 카드 선택 시 (0,0) 이동 방지).
-    // ⚠️ skipNextAutoPanRef 는 여기서 "소비하지 않고 확인만" 한다. 실제 소비/해제는
-    //    지도 생성 .then() 콜백이 전담한다 — 이 effect 가 옛 지도에 대해 먼저 실행돼
-    //    플래그를 소비해버리면 새 지도가 튀는 회귀가 생기므로 소비 지점을 한 곳으로 고정.
-    if (!skipNextAutoPanRef.current && activeLocation && hasValidCoords(activeLocation)) {
-      // 이 panTo/setZoom 은 프로그램적 이동 → 발생하는 zoom_changed 를 사용자 조작으로 오인하지 않도록 잠근다.
+    // 목록이 실제로 교체된 렌더에서는 이전 상태의 "이 지역에서 검색" 버튼을 숨긴다
+    // (새 검색/영역검색이 반영된 직후엔 버튼이 떠 있으면 안 됨). 카드 클릭은 여기 해당 없음.
+    if (locationsChanged) {
+      setShowAreaButton(false);
+    }
+
+    const mappable = locations.filter(hasValidCoords);
+
+    // 실제 검색/필터가 적용된 새 결과에 대해서만 fitBounds. 초기/미필터/영역검색 상태에서는
+    // 카메라를 자동으로 움직이지 않는다.
+    if (isFiltered && mappable.length > 1 && locationsChanged) {
+      suppressUserMoveRef.current = true;
+      const bounds = new maps.LatLngBounds();
+      mappable.forEach((location) => {
+        bounds.extend({ lat: location.lat, lng: location.lng });
+      });
+      map.fitBounds(bounds);
+    }
+
+    // 영역검색으로 목록이 막 교체된 렌더면 자동팬을 건너뛴다(사용자 뷰 유지).
+    // 그 외(카드 클릭·일반 검색·데이터 도착)에는 활성마커로 자동 panTo.
+    const skipAutoPan = boundsMode && locationsChanged;
+    if (!skipAutoPan && activeLocation && hasValidCoords(activeLocation)) {
       suppressUserMoveRef.current = true;
       map.panTo({ lat: activeLocation.lat, lng: activeLocation.lng });
       map.setZoom(whereToBuyPage.mapActiveZoom);
     }
-
-    // 활성 위치 변경 즉시 팝업 픽셀좌표 재계산(지도 이동이 없더라도 갱신)
-    updatePopupPositionRef.current();
-  }, [activeLocation, mapReady, usePlaceholder]);
+  }, [
+    locations,
+    activeLocation,
+    isFiltered,
+    boundsMode,
+    mapReady,
+    usePlaceholder,
+  ]);
 
   if (usePlaceholder) {
     return (
