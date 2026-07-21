@@ -31,6 +31,21 @@ const MONTH_OPTIONS = [
   { value: "12", label: "December" },
 ];
 
+// 정렬 옵션(최신/오래된순 + 제목 A-Z/Z-A). value는 데이터 헬퍼 sort 파라미터와 동일
+const SORT_OPTIONS = [
+  { value: "latest", label: "Latest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "az", label: "A-Z" },
+  { value: "za", label: "Z-A" },
+] as const;
+
+type SortValue = (typeof SORT_OPTIONS)[number]["value"];
+
+// Select value(unknown) → 허용된 정렬값으로 좁히기(미허용 시 latest 폴백)
+function toSortValue(raw: unknown): SortValue {
+  return SORT_OPTIONS.some((o) => o.value === raw) ? (raw as SortValue) : "latest";
+}
+
 type CompanyBlogListToolbarProps = {
   categories?: ToolbarCategory[];
   selectedCategory?: string; // 선택된 코드값("" = 전체)
@@ -41,8 +56,8 @@ type CompanyBlogListToolbarProps = {
   onYearChange?: (value: string) => void;
   searchValue?: string;
   onSearchSubmit?: (value: string) => void;
-  sortValue?: "latest" | "oldest";
-  onSortChange?: (value: "latest" | "oldest") => void;
+  sortValue?: SortValue;
+  onSortChange?: (value: SortValue) => void;
 };
 
 export default function CompanyBlogListToolbar({
@@ -191,10 +206,11 @@ export default function CompanyBlogListToolbar({
           IconComponent={GuideSelectIcon}
           inputProps={{ "aria-label": "Blog sort order" }}
           onChange={(event: SelectChangeEvent<unknown>) =>
-            onSortChange?.(event.target.value === "oldest" ? "oldest" : "latest")
+            onSortChange?.(toSortValue(event.target.value))
           }
           renderValue={(value) => {
-            const text = value === "oldest" ? "Oldest" : "Latest";
+            const text =
+              SORT_OPTIONS.find((o) => o.value === value)?.label ?? "Latest";
             return (
               <span className="guide_field__select-value" title={text}>
                 {text}
@@ -202,8 +218,11 @@ export default function CompanyBlogListToolbar({
             );
           }}
         >
-          <MenuItem value="latest">Latest</MenuItem>
-          <MenuItem value="oldest">Oldest</MenuItem>
+          {SORT_OPTIONS.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
         </GuideSelect>
       </FormControl>
     </div>

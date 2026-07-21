@@ -167,7 +167,7 @@ export interface EventsPastResult {
 export async function fetchEventsPast(params: {
   page: number; // 0-based
   search?: string;
-  sort?: "latest" | "oldest";
+  sort?: "latest" | "oldest" | "az" | "za"; // latest/oldest는 행사기간, az/za는 제목 정렬
   month?: string; // "01"~"12"
   year?: string; // "YYYY"
   fallbackImage: string;
@@ -181,7 +181,10 @@ export async function fetchEventsPast(params: {
   if (params.month) sp.set("month_period_from", params.month);
   if (params.year) sp.set("year_period_from", params.year);
   // sort는 단순키에 중첩 fallback이 없어 래퍼키 포함 dot-notation 필수. contentKey eventsForm→events로 변경됨
-  sp.set("sort", `events.period_from,${params.sort === "oldest" ? "asc" : "desc"}`);
+  // 정렬 분기: latest/oldest는 행사기간(period_from), az/za는 제목(title) 기준
+  if (params.sort === "az") sp.set("sort", "events.title,asc"); // 제목 A-Z(오름차순)
+  else if (params.sort === "za") sp.set("sort", "events.title,desc"); // 제목 Z-A(내림차순)
+  else sp.set("sort", `events.period_from,${params.sort === "oldest" ? "asc" : "desc"}`); // latest=최신순(desc, 기본)/oldest=오래된순(asc)
 
   const res = await fetchApi<EventsPageResponse>(
     `/api/v1/fo/page-data/events-data?${sp.toString()}`,
@@ -203,14 +206,61 @@ export async function fetchEventsPast(params: {
   };
 }
 
-// 상세 단건 조회(top-level id 정확일치 + 공개 여부만) — Past 이벤트 상세도 접근 가능해야 하므로
-// Featured/Calendar(Upcoming)처럼 publishDttm 게이트를 걸지 않음(Past와 동일 원칙)
+// 상세 단건 조회 — 신규 상세 엔드포인트 GET /{slug}/{id} 사용(목록 search 재활용 방식 폐기)
+// - 상세 게이트는 공개 여부만(eq_is_visible=001, 게시일 조건 제외) — Past 이벤트 상세도 접근 가능해야 하므로
+//   Featured/Calendar(Upcoming)처럼 publishDttm 게이트를 걸지 않음(Past와 동일 원칙)
+// - 응답은 기존 목록 content[0]과 동일한 PageDataResponse(EventsRow) 단건 형태 → flatten 후처리 그대로 유지
+// - 못 찾거나 게이트 탈락 시 BE가 HTTP 404 → catch→null(page.tsx에서 notFound())
 export async function fetchEventsDetail(id: string | number): Promise<EventsRow | null> {
   const sp = new URLSearchParams();
-  sp.set("eq_id", String(id));
   applyVisibleOnlyCondition(sp);
-  const res = await fetchApi<EventsPageResponse>(
-    `/api/v1/fo/page-data/events-data?${sp.toString()}`,
-  );
-  return res.content?.[0] ?? null;
+  try {
+    return await fetchApi<EventsRow>(
+      `/api/v1/fo/page-data/events-data/${id}?${sp.toString()}`,
+    );
+  } catch (e) {
+    // 404(미존재/게이트 탈락)만 null 반환, 그 외 오류는 전파
+    if (e instanceof Error && e.message.includes("실패: 404")) return null;
+    throw e;
+  }
+}
+
+// ---------------- 인접글(이전/다음) ----------------
+
+// 인접 이웃 1건(신규 adjacent 엔드포인트 응답)
+export interface EventsAdjacentNeighbor {
+  id: number;
+  title: string;
+}
+
+// adjacent 엔드포인트 응답 {prev, next}
+export interface EventsAdjacentResult {
+  prev: EventsAdjacentNeighbor | null;
+  next: EventsAdjacentNeighbor | null;
+}
+
+// 인접 이벤트 조회 — 신규 엔드포인트 GET /{slug}/{id}/adjacent 사용(FE Past 목록 index 계산 방식 폐기)
+// - 상세와 스코프 게이트가 다름에 주의: 인접은 Past 목록(fetchEventsPast)과 동일하게
+//   공개(eq_is_visible=001) + 과거 이벤트(condexpr_upcoming=past)만 이웃 후보로 한정
+// - sortField=events.period_from(행사기간 기준), titleField=events.title
+export async function fetchEventsAdjacent(
+  id: string | number,
+): Promise<EventsAdjacentResult> {
+  const sp = new URLSearchParams();
+  sp.set("sortField", "events.period_from");
+  sp.set("titleField", "events.title");
+  // 인접 스코프 게이트: Past 목록과 동일(공개 + 과거 이벤트만)
+  applyVisibleOnlyCondition(sp);
+  applyUpcomingCondition(sp, false);
+  try {
+    return await fetchApi<EventsAdjacentResult>(
+      `/api/v1/fo/page-data/events-data/${id}/adjacent?${sp.toString()}`,
+    );
+  } catch (e) {
+    // 404(미존재/게이트 탈락) 시 pager 미표시(상세 본문 렌더는 유지), 그 외 오류는 전파
+    if (e instanceof Error && e.message.includes("실패: 404")) {
+      return { prev: null, next: null };
+    }
+    throw e;
+  }
 }

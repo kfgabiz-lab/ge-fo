@@ -3,8 +3,9 @@ import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { eventsDetailHero } from "@/app/company/data/eventsDetailContent";
 import {
+  fetchEventsAdjacent,
   fetchEventsDetail,
-  fetchEventsPast,
+  eventsDetailHref,
   eventsImageSrc,
 } from "@/app/company/data/eventsData";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
@@ -19,10 +20,12 @@ export default async function CompanyEventsDetailPage({
 }: CompanyEventsDetailPageProps) {
   const { id } = await params;
 
-  // 상세 단건 + pager 계산용 지난(Past) 목록 병렬 조회(정렬된 목록에서 인접 id 계산, press와 동일 패턴)
-  const [detail, pastResult] = await Promise.all([
+  // 상세 단건 + 인접 이벤트(이전/다음) 병렬 조회(wall-clock 1 round-trip)
+  // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE Past 목록 index 계산 폐기)
+  // - 상세 게이트(공개만)와 인접 스코프 게이트(공개+과거)가 다름은 eventsData.ts 각 함수에서 처리
+  const [detail, adjacent] = await Promise.all([
     fetchEventsDetail(id),
-    fetchEventsPast({ page: 0, sort: "latest", fallbackImage: eventsDetailHero.src }),
+    fetchEventsAdjacent(id),
   ]);
 
   // 존재하지 않거나 비공개/미게시 이벤트면 404
@@ -46,13 +49,13 @@ export default async function CompanyEventsDetailPage({
       ? { src: eventsImageSrc(mediaId), alt: (row.title as string) ?? "" }
       : eventsDetailHero;
 
-  // pager: Past 목록에서 현재 id 의 index 로 prev(index-1)/next(index+1) 계산(press와 동일 패턴)
-  const rows = pastResult.items;
-  const idx = rows.findIndex((r) => r.id === String(detail.id));
-  const prevItem = idx > 0 ? rows[idx - 1] : null;
-  const nextItem = idx >= 0 && idx < rows.length - 1 ? rows[idx + 1] : null;
-  const prev = prevItem ? { href: prevItem.href, title: prevItem.title } : undefined;
-  const next = nextItem ? { href: nextItem.href, title: nextItem.title } : undefined;
+  // pager: adjacent 엔드포인트 응답 {prev, next}(id/title)를 그대로 매핑, id→상세 href 변환만 수행
+  const prev = adjacent.prev
+    ? { href: eventsDetailHref(adjacent.prev.id), title: adjacent.prev.title }
+    : undefined;
+  const next = adjacent.next
+    ? { href: eventsDetailHref(adjacent.next.id), title: adjacent.next.title }
+    : undefined;
 
   return (
     <CompanyArticleDetail

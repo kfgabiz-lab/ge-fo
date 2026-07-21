@@ -58,6 +58,8 @@ export default function CompanyEventsCalendar({ months }: CompanyEventsCalendarP
 
                       aria-label={`${event.title}, Venue ${event.venue}, ${event.dates}`}
 
+                      prefetch={false}
+
                     >
 
                       <p className="company-events-calendar__title">{event.title}</p>

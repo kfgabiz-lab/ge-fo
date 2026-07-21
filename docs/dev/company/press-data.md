@@ -6,7 +6,7 @@
 > - `fo/src/app/company/press/detail/page.tsx` (상세 — `data-slug="press-data"` + `data-slugkey="content"` 태깅 완료, STEP1)
 > - `fo/src/app/company/components/CompanyArticleDetail.tsx` (공용 컴포넌트 — blog/press/events/articles가 공유, 직접 태깅 대상 아님)
 > - 참고(정적 폴백 데이터, 실연동 전): `fo/src/app/company/data/pressListContent.ts`, `fo/src/app/company/data/pressDetailContent.ts`
-> 상태: 구현 완료 (QA 검증 완료, 비차단 이슈는 blog-data와 동일 — 8절 참고) / **필터·검색·정렬·월/연도 확장 구현+API 검증 완료(2026-07-14, 브라우저 UI 검증은 미완 — 9절 참고)**
+> 상태: 구현 완료 (QA 검증 완료, 비차단 이슈는 blog-data와 동일 — 8절 참고) / **필터·검색·정렬·월/연도 확장 구현+API 검증 완료(2026-07-14, 브라우저 UI 검증은 미완 — 9절 참고)** / **정렬 A-Z/Z-A 확장 설계중(2026-07-21, 승인 대기 — 9절 C-2 참고)** / **상세조회·pager(이전글/다음글) 성능개선 설계중(2026-07-21, 승인 대기 — 10절 참고)**
 
 ## 1. data-slug
 - 값: `press-data` (목록 Featured / 목록 리스트 / 상세 전부 동일 slug 재사용 — 별도 분리 없음)
@@ -49,12 +49,12 @@
 | 상세 | title | `CompanyArticleDetail`의 `title` prop | `pressForm.title` | |
 | 상세 | date | `CompanyArticleDetail`의 `date` prop | `pressForm.publishDttm` | press variant는 `date` 단독 표기(blog/articles의 category+date 헤더와 다름, `detailMeta`(venue/dates)는 타입상 옵션이지만 현재 미사용) |
 | 상세 | heroImage | `CompanyArticleDetail`의 `heroImage` prop | `pressForm.image[0]` | ✅ 별도 heroImage 필드 없음(14건 전부 확인) — 리스트/Featured와 동일 필드 재사용 확정 |
-| 상세 | pager(prev/next: id·title) | `CompanyArticleDetail`의 `prev`/`next` prop | (관계형, 별도 필드 아님) | 공용 컴포넌트 내부의 `<nav>`이며 slug 래퍼(`<div data-slug>`) 바깥의 형제 요소라 wrapper 태깅도 불가. "현재 글 자체의 필드"가 아니라 "정렬 순서상 인접 레코드로의 링크"인 관계형 데이터임(blog-data.md와 동일 사유) |
+| 상세 | pager(prev/next: id·title) | `CompanyArticleDetail`의 `prev`/`next` prop | (관계형, 별도 필드 아님) | 공용 컴포넌트 내부의 `<nav>`이며 slug 래퍼(`<div data-slug>`) 바깥의 형제 요소라 wrapper 태깅도 불가. "현재 글 자체의 필드"가 아니라 "정렬 순서상 인접 레코드로의 링크"인 관계형 데이터임(blog-data.md와 동일 사유). **(2026-07-21 갱신)** prev/next 값의 조회 방식이 신규 인접글 전용 엔드포인트(10절)로 변경됨 — 기존 FE index 계산 방식(Option A)은 폐기 |
 
 ## 3. API 확인 (최종 체크 — STEP4 완료, 실제 API 호출로 재검증됨)
 - 신규 API 필요 여부: **불필요** — blog-data와 동일하게 기존 FO 공개 API로 전부 처리 가능
 - 목록: `GET /api/v1/fo/page-data/press-data?page=0&size=10&eq_pressForm.isVisible=001` (`FoPageDataController` → `PageDataService.search()` 재사용) — 실제 호출로 8건 반환 확인(전체 14건 중 공개 8건)
-- 상세(단건): `GET /api/v1/fo/page-data/press-data?eq_id={id}&eq_pressForm.isVisible=001` — `eq_id=1541` 호출로 1건 정확 반환 확인
+- 상세(단건): `GET /api/v1/fo/page-data/press-data?eq_id={id}&eq_pressForm.isVisible=001` — `eq_id=1541` 호출로 1건 정확 반환 확인. **⚠️ 2026-07-21 갱신**: 상세 전용 성능개선 엔드포인트(신규, 10절)로 대체 예정 — 상세 설계는 10절 참고
 - 이미지: `GET /api/v1/fo/page-files/{fileId}` (`FoPageFileController` 재사용, blog-data와 동일)
 - `flattenPageDataItem`(`fo/src/lib/pageData.ts`) 그대로 재사용 — `pressForm`/`seo` 섹션 간 키 충돌 없어 flat 병합 정상 확인
 
@@ -123,6 +123,7 @@ FE 바인딩 시 참조 경로: `content[i].id` / `content[i].dataJson.pressForm
 | STEP4 | fo-be-analyzer | 2026-07-14 | 신규 BE 불필요 확인(기존 FO API 3종 재사용). 실제 API 호출로 재검증(공개 8건, isVisible 필터·id 단건조회·created_at DESC 정렬 전부 실증). heroImage=image[0] 재사용 확정, tie-breaker 불필요 확정, row limit 10 확정. 로컬 이미지 404는 환경 이슈(코드 아님)로 확인 |
 | STEP6 | fo-fe-builder | 2026-07-14 | 실데이터 연동 완료. `pressData.ts` 신설(blogData.ts 이식, category/hashtag 로직 제외), `press/page.tsx`(공용 CompanyFeedFeatured/ListSection에 실데이터 props 주입) + 신규 `press/detail/[id]/page.tsx` 작성. `pressDetailYoutube`/`DevicesProductVideoPlayer`/`afterHero` 제거(영상은 content HTML 내 iframe으로 통합). `CompanyArticleDetail`의 미사용 `afterHero` prop 제거, `CompanyFeedListItem.href?`/`CompanyFeedListSection.onPageChange?` optional 필드 추가(articles 하위호환 유지, articles 코드는 미변경). `tsc --noEmit` 통과 |
 | QA | 호출자(Playwright 직접 검증) | 2026-07-14 | pub↔fo 목록/상세 스크린샷 비교 + accessibility snapshot 확인. Featured+리스트 7건 렌더(신규 스키마 3건 정상, 레거시 5건은 알려진 데이터 이슈로 텍스트 공백+폴백 이미지), 상세 title/date/content/pager(최신글이라 PREV 없음, NEXT만 정상) 전부 설계대로 동작 확인. Featured 이미지 미노출은 blog와 동일한 로컬 `page-files` 404(환경 이슈) |
+| STEP3.5(성능개선) | fo-dev-doc-writer | 2026-07-21 | 상세 페이지 진입 3~4초 지연 문제 해결을 위해 상세조회/pager를 Option B(신규 BE 엔드포인트 2개)로 재설계 — 상세 단건 `GET /api/v1/fo/page-data/press-data/{id}`, 인접글 `GET /api/v1/fo/page-data/press-data/{id}/adjacent`. 기존 Option A(FE index 계산) 폐기 결정 문서화(상태: 설계중, 승인 대기, 10절 참고) |
 
 ## 9. 필터·검색·정렬 확장 (2026-07-14 신규 스코프, 설계 확정·승인 완료·개발 대기)
 
@@ -145,6 +146,17 @@ FE 바인딩 시 참조 경로: `content[i].id` / `content[i].dataJson.pressForm
 - `PageDataService`의 기존 `sort` 파라미터(감사 컬럼 매핑) 재사용 — **BE 변경 없음**
 - FE 대상: `CompanyFeedListToolbar.tsx`의 정렬 `GuideSelect`(현재 `defaultValue="Latest"`만 있고 `onChange` 없음) — press variant 연동
 
+### C-2. 정렬 확장 — A-Z / Z-A (2026-07-21 신규 스코프, 설계중·승인 대기)
+- 정렬 옵션: 기존 Latest/Oldest(2종) → **Latest/Oldest/A-Z/Z-A(4종)**로 확장
+  - Latest: 기존 유지(파라미터 생략) / Oldest: 기존 유지(`sort=createdAt,asc`)
+  - A-Z: `sort=press.title,asc` / Z-A: `sort=press.title,desc`
+- title 정렬 경로: `press.title` — `PageDataService`의 `sort` dot-notation 규칙(`<래퍼키>.title` → `ORDER BY data_json->'<래퍼키>'->>'title'`)에 따라 확정. dev DB 실측(bare 래퍼 + title 구조)으로 확인됨(STEP1)
+- ⚠️ 참고: 위 2~9절에는 press 필드 accessor가 `pressForm.xxx`(폼 래퍼)로 기록돼 있다. blog-data.md에서는 실제 FE 코드(`blogData.ts`)가 이미 `blogForm` 대신 `blog`(bare 래퍼)로 카테고리 필터를 호출 중임을 코드로 확인했다 — press-data.ts에는 아직 title/래퍼 기반 필터·정렬 코드가 없어 동일한 대조 확인은 못 했으나, title 정렬 경로가 `press.title`이라는 이 STEP1 사실과 `pressForm.title` 표기가 병존하는 점은 **STEP3에서 함께 정리 필요**
+- Featured 처리: 정렬된 목록의 1번째 글을 상단 Featured로 올리고 리스트에서 제외하는 기존 로직은 변경 없이 유지 — A-Z 정렬 시 알파벳상 가장 앞선 글이 Featured가 되는 것을 허용하며 별도 고정/예외 처리는 두지 않음
+- FE sort 상태 타입: `"latest" | "oldest"` → `"latest" | "oldest" | "az" | "za"`로 확장 필요
+- FE 대상: `CompanyFeedListToolbar.tsx`의 정렬 `GuideSelect` MenuItem에 A-Z/Z-A 옵션 추가(라벨 "A-Z"/"Z-A"). 이 컴포넌트는 press/articles가 공유하므로 이번 변경은 두 slug(press-data/articles-data) 모두에 동시 반영됨(articles-data.md 해당 절 참고)
+- API 확인: **기존 활용 가능(잠정) — 확인 필요/검증 예정.** `PageDataService`의 `sort` 파라미터가 dot-notation 중첩 JSON 정렬(`buildJsonPath`, SQL Injection 검증 포함)을 이미 범용 지원하므로 title 정렬(`press.title,asc|desc`)도 기존 엔드포인트(`GET /api/v1/fo/page-data/press-data`)로 처리 가능할 것으로 판단되나, 코드/실호출 기반 최종 검증(및 위 `press` vs `pressForm` 표기 정리)은 **STEP3(fo-be-analyzer)에서 확인 예정** — 신규 BE 개발 필요 여부는 그 결과에 따라 확정
+
 ### D. 게시월 필터 (신규 BE 로직 — 연도 무관, 월만 비교)
 - 파라미터: `month_publishDttm=07` 형식(월 2자리, `01`~`12`) — **점(dot) 없는 단순 키**. B(검색)의 `title|content`와 동일한 이유로, `pressForm.publishDttm`처럼 점 표기를 쓰면 별도의 "dot notation 직접 경로" 코드 경로(최상위+중첩 자동탐색 없음)를 타게 되어 재사용이 안 됨. 단순 키로 보내야 최상위/1단계 중첩(`pressForm`) 양쪽에서 `publishDttm` 키를 자동 탐색하는 기존 패턴을 그대로 재사용할 수 있음
 - **BE 신규 추가 필요**: `appendWhereConditions()`에 `month_` 접두사 분기 신설. 기존 `_from`/`_to`/`drs_`가 쓰는 `regexp_replace(값, '[^0-9]', '', 'g')`로 숫자만 추출한 뒤(`YYYYMMDD`), 5~6번째 자리(월 2자리)만 `substring`으로 잘라 비교. 최상위 + 1단계 중첩(`pressForm`) 동시 탐색은 기존 `_from`/`_to` 패턴과 동일하게 OR EXISTS로 구현
@@ -163,4 +175,50 @@ FE 바인딩 시 참조 경로: `content[i].id` / `content[i].dataJson.pressForm
 | 2026-07-14 | A+B+C+D(월만) 스코프로 사용자 승인 완료(`#승인`). 개발(STEP6 FE 연동 + BE `month_` 추가) 착수 대기 |
 | 2026-07-14 | `#개발` 승인 → BE(`month_` 분기)+FE(툴바 연동) 구현 완료. `bo-api` 재기동 후 A/B/C/D 전부 API 직접 호출로 검증 완료 |
 | 2026-07-14 | 사용자가 Year 필터도 추가 요청 → D-2(연도 필터) 신규 승인, BE `year_` 분기 구현+검증 완료 |
+| 2026-07-21 | 정렬 A-Z/Z-A 확장(C-2) STEP1~2 설계 확정, fo-dev-doc-writer가 문서화(상태: 설계중, 승인 대기). articles-data.md와 동일 공용 컴포넌트(`CompanyFeedListToolbar`) 변경이라 두 문서에 동시 반영. API 확인은 "기존 활용 가능(잠정)"이나 최종 검증은 STEP3(fo-be-analyzer) 예정 — `#개발` 승인 전까지 개발 착수 없음 |
 
+## 10. 상세 조회 성능 개선 — pager Option B 채택 (2026-07-21, STEP3 확정·승인 대기)
+
+### 배경
+BLOG/PRESS/ARTICLE/EVENT 공통으로 상세 페이지 진입 시 3~4초 지연이 발생하는 문제가 확인됐다(blog-data.md 10절과 동일 배경). press도 상세 페이지(`fo/src/app/company/press/detail/[id]/page.tsx`)가 `fetchPressDetail(id)`와 `fetchPressList({page:0})`(pager 계산용 목록 최대 10건 재조회)를 병렬 호출한 뒤, 목록 배열에서 현재 id의 index를 찾아 앞/뒤 요소를 prev/next로 쓰는 방식(Option A)을 그대로 쓰고 있다. 상세 진입마다 목록 전체 조회 비용이 추가로 들고, 현재 글이 최신 10건(page:0) 목록 밖에 있으면 prev/next가 항상 비는 버그도 동일하게 갖고 있다.
+
+### 채택 설계 — 상세/인접 분리 신규 엔드포인트 2개
+blog-data.md 10절과 동일한 설계(Option B)를 press-data slug에도 동일하게 적용한다.
+
+**1) 상세 단건**: `GET /api/v1/fo/page-data/{slug}/{id}` (+ 상태 게이트 파라미터는 query, `X-Site-Id` 헤더는 optional)
+- PK 실컬럼 `id=:id`(인덱스 사용) + 화면별 게시 상태 WHERE를 함께 걸어 1행만 조회. COUNT/FETCH관계/사용자명조회 생략(경량).
+- 게시 게이트를 상세에도 반드시 함께 걸어, 비공개/예약글 URL 직접접근 시 노출되는 회귀를 차단한다.
+- 응답은 기존 `search()` 응답의 `content[0]`과 동일한 `PageDataResponse` 1건 형태 — FE `flattenPageDataItem`은 무변경.
+- 못 찾거나 게이트 탈락 시 404 → FE `notFound()`.
+
+**2) 인접글(prev/next, 제네릭)**: `GET /api/v1/fo/page-data/{slug}/{id}/adjacent?sortField=...&titleField=...` (+ 상태/스코프 게이트 파라미터, `X-Site-Id` 헤더 optional)
+- 현재 레코드의 정렬키 값을 서브쿼리로 조회한 뒤 (정렬키, id) 튜플 비교로 prev/next 각각 `LIMIT 1` 조회.
+  - prev = 정렬키가 현재보다 큰 것 중 최근접(`ORDER BY 정렬키 ASC, id ASC LIMIT 1`)
+  - next = 정렬키가 현재보다 작은 것 중 최근접(`ORDER BY 정렬키 DESC, id DESC LIMIT 1`)
+- 응답: `{ prev: {id, title} | null, next: {id, title} | null }`
+- 기존 "최신 10건(page:0) 재조회 후 FE index 계산" 방식을 완전히 대체 — 목록 10건 밖 과거글 pager 누락 버그도 이 방식으로 함께 해결된다.
+
+### 화면(press-data) 파라미터
+| 항목 | 값 |
+|---|---|
+| slug | `press-data` |
+| 상세 게이트(where) | `condexpr_status=isVisible=001,publishDttm<=today()?'게시':'미게시'&condval_status=게시` (9-A와 동일 조건식) |
+| 인접 sortField | `createdAt` |
+| 인접 titleField | `press.title` (dot-notation bare 래퍼 — 9-C-2에서 이미 실코드로 확인된 표기와 동일) |
+| 인접 스코프 게이트 | `condexpr_status=isVisible=001,publishDttm<=today()?'게시':'미게시'&condval_status=게시` (상세와 동일) |
+
+### 재사용되는 기존 BE 로직
+`PageDataService`의 `appendWhereConditions` / `bindSearchParams` / `buildJsonPath` / `isValidSegments` / `toAuditColumn` / `mapRowToResponse`를 그대로 재사용. 신규로 추가되는 코드는 `FoPageDataController`의 상세·인접 GET 엔드포인트 2개와 `PageDataService`의 `findPublicDetail` / `findAdjacent` 메서드 2개뿐이며, blog/articles/events와 공용 구현(slug 무관 제네릭)이다. `SecurityConfig`의 `/api/v1/fo/**` permitAll 설정이 신규 엔드포인트도 자동으로 커버한다.
+
+### API 확인 (최종 체크)
+- 신규 API 필요 여부: **신규 필요** — 상세 단건 GET 1개 + 인접글 GET 1개, 총 2개(blog-data와 공용 구현이라 slug별 추가 개발은 아님)
+- 제안 엔드포인트: `GET /api/v1/fo/page-data/press-data/{id}`, `GET /api/v1/fo/page-data/press-data/{id}/adjacent?sortField=createdAt&titleField=press.title`
+- bo `SlugRegistry`/`PageData` 상의 실제 라우팅 등록 여부는 이번 STEP에서 직접 검증하지 않음 — **확인 필요**(bo 관리자 화면에서 확인 요청)
+
+### FE 반영 범위 (참고, 개발 착수는 `#개발` 승인 이후)
+`fo/src/app/company/press/detail/[id]/page.tsx`의 `fetchPressList({page:0})` 호출을 제거하고 신규 인접글 엔드포인트 호출로 교체 필요(STEP6 범위). 이번 STEP3.5에서는 설계 확정·문서화까지만 진행한다.
+
+### 승인 이력
+| 일자 | 내용 |
+|---|---|
+| 2026-07-21 | 상세 페이지 진입 지연 문제 해결을 위해 pager Option B(신규 엔드포인트 2개) STEP1~3 설계 확정, fo-dev-doc-writer가 문서화(상태: 설계중, 승인 대기). blog-data.md와 동일 공용 구현이라 두 문서에 동시 반영. API 확인 "신규 필요"로 확정 — `#개발` 승인 전까지 개발 착수 없음 |

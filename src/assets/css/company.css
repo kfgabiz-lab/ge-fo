@@ -7466,6 +7466,16 @@ section.company-ls-electric-rnd .company-about__head{
     top: 0;
   }
 
+  /* 채용 설명(description) — textarea 원본을 불릿 없이 줄바꿈만 유지(pre-line)해 렌더 */
+  section.company-careers-jobs .company-careers-jobs__card-desc {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+    white-space: pre-line;
+    word-break: break-word;
+  }
+
   section.company-careers-linkedin {
     padding: 0 0 120px;
   }
@@ -7702,6 +7712,16 @@ section.company-ls-electric-rnd .company-about__head{
     height: 1px;
     margin-top: 11px;
     background: #666;
+  }
+
+  /* 모바일 채용 설명(description) — 불릿 없이 줄바꿈만 유지(pre-line) */
+  section.company-careers-jobs .company-careers-jobs__card-desc {
+    margin: 0;
+    font-size: 15px;
+    line-height: 23px;
+    color: #222;
+    white-space: pre-line;
+    word-break: break-word;
   }
 
   section.company-careers-linkedin {

@@ -34,6 +34,21 @@ const MONTH_OPTIONS = [
   { value: "12", label: "December" },
 ];
 
+// 정렬 옵션(최신/오래된순 + 제목 A-Z/Z-A). value는 데이터 헬퍼 sort 파라미터와 동일
+const SORT_OPTIONS = [
+  { value: "latest", label: "Latest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "az", label: "A-Z" },
+  { value: "za", label: "Z-A" },
+] as const;
+
+type SortValue = (typeof SORT_OPTIONS)[number]["value"];
+
+// Select value(unknown) → 허용된 정렬값으로 좁히기(미허용 시 latest 폴백)
+function toSortValue(raw: unknown): SortValue {
+  return SORT_OPTIONS.some((o) => o.value === raw) ? (raw as SortValue) : "latest";
+}
+
 // 공통 피드 리스트 툴바 (Press/Articles). Month/Year/Search/Sort 필터 동일 구조
 // - month/year/search/sort는 전부 optional(값+핸들러 짝) — 안 넘기면 기존처럼 비연동 장식 UI로 동작(articles 하위호환)
 // - Year 옵션 목록(2026/2025)은 기존 하드코딩 그대로 유지, 필터링 기능만 연동(설계문서 9-D 확장)
@@ -45,8 +60,8 @@ type CompanyFeedListToolbarProps = {
   onYearChange?: (value: string) => void;
   searchValue?: string;
   onSearchSubmit?: (value: string) => void;
-  sortValue?: "latest" | "oldest";
-  onSortChange?: (value: "latest" | "oldest") => void;
+  sortValue?: SortValue;
+  onSortChange?: (value: SortValue) => void;
 };
 
 export default function CompanyFeedListToolbar({
@@ -164,10 +179,11 @@ export default function CompanyFeedListToolbar({
           IconComponent={GuideSelectIcon}
           inputProps={{ "aria-label": `${label.capital} sort order` }}
           onChange={(event: SelectChangeEvent<unknown>) =>
-            onSortChange?.(event.target.value === "oldest" ? "oldest" : "latest")
+            onSortChange?.(toSortValue(event.target.value))
           }
           renderValue={(value) => {
-            const text = value === "oldest" ? "Oldest" : "Latest";
+            const text =
+              SORT_OPTIONS.find((o) => o.value === value)?.label ?? "Latest";
             return (
               <span className="guide_field__select-value" title={text}>
                 {text}
@@ -175,8 +191,11 @@ export default function CompanyFeedListToolbar({
             );
           }}
         >
-          <MenuItem value="latest">Latest</MenuItem>
-          <MenuItem value="oldest">Oldest</MenuItem>
+          {SORT_OPTIONS.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
         </GuideSelect>
       </FormControl>
     </div>

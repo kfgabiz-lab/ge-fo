@@ -50,7 +50,7 @@ export default function CompanyBlogPage({
   const [featuredRow, setFeaturedRow] = useState<BlogRow | null>(null);
   // 툴바(검색/정렬/월/연도) 상태 — 설계문서 9절 B/C/D
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<"latest" | "oldest">("latest");
+  const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
@@ -125,7 +125,7 @@ export default function CompanyBlogPage({
     setSearch(value);
     setPageIndex(0);
   };
-  const handleSortChange = (value: "latest" | "oldest") => {
+  const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {
     setSort(value);
     setPageIndex(0);
   };
@@ -169,6 +169,7 @@ export default function CompanyBlogPage({
               data-slug="blog-data"
               data-slugkey="id"
               data-slugkey-attr="href"
+              prefetch={false}
             >
               <div className="company-blog-featured__image">
                 <img
@@ -249,6 +250,7 @@ export default function CompanyBlogPage({
                               aria-label={item.title}
                               data-slugkey="id"
                               data-slugkey-attr="href"
+                              prefetch={false}
                             >
                               <img
                                 src={item.imageSrc ?? LIST_FALLBACK_IMAGE}
@@ -263,6 +265,7 @@ export default function CompanyBlogPage({
                             className="company-blog-list__content"
                             data-slugkey="id"
                             data-slugkey-attr="href"
+                            prefetch={false}
                           >
                             <p className="company-blog__category" data-slugkey="category">
                               {item.categoryLabel}

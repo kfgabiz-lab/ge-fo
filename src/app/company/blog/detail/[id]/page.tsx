@@ -5,9 +5,9 @@ import { blogDetailHero } from "@/app/company/data/blogDetailContent";
 import {
   blogDetailHref,
   blogImageSrc,
+  fetchBlogAdjacent,
   fetchBlogCategories,
   fetchBlogDetail,
-  fetchBlogList,
   splitHashtag,
   toCategoryMap,
 } from "@/app/company/data/blogData";
@@ -23,11 +23,12 @@ export default async function CompanyBlogDetailPage({
 }: CompanyBlogDetailPageProps) {
   const { id } = await params;
 
-  // 상세 단건 + 카테고리 라벨 + pager 계산용 전체 목록 병렬 조회
-  const [detail, categories, listResult] = await Promise.all([
+  // 상세 단건 + 카테고리 라벨 + 인접글(이전/다음) 병렬 조회(wall-clock 1 round-trip)
+  // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE 목록 index 계산 폐기)
+  const [detail, categories, adjacent] = await Promise.all([
     fetchBlogDetail(id),
     fetchBlogCategories(),
-    fetchBlogList({ page: 0 }),
+    fetchBlogAdjacent(id),
   ]);
 
   // 존재하지 않거나 비공개(isVisible!=001) 글이면 404
@@ -52,23 +53,12 @@ export default async function CompanyBlogDetailPage({
       ? { src: blogImageSrc(mediaId), alt: (row.title as string) ?? "" }
       : blogDetailHero;
 
-  // pager: 정렬된 전체 목록에서 현재 id 의 index 로 prev(index-1)/next(index+1) 계산
-  const rows = listResult.rows;
-  const idx = rows.findIndex((r) => r.id === detail.id);
-  const prevItem = idx > 0 ? rows[idx - 1] : null;
-  const nextItem =
-    idx >= 0 && idx < rows.length - 1 ? rows[idx + 1] : null;
-  const prev = prevItem
-    ? {
-        href: blogDetailHref(prevItem.id),
-        title: (flattenPageDataItem(prevItem).title as string) ?? "",
-      }
+  // pager: adjacent 엔드포인트 응답 {prev, next}(id/title)를 그대로 매핑, id→상세 href 변환만 수행
+  const prev = adjacent.prev
+    ? { href: blogDetailHref(adjacent.prev.id), title: adjacent.prev.title }
     : undefined;
-  const next = nextItem
-    ? {
-        href: blogDetailHref(nextItem.id),
-        title: (flattenPageDataItem(nextItem).title as string) ?? "",
-      }
+  const next = adjacent.next
+    ? { href: blogDetailHref(adjacent.next.id), title: adjacent.next.title }
     : undefined;
 
   return (

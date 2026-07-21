@@ -147,6 +147,7 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
             <Link
               href={prev.href}
               className={`${articleDetailClass("pager-item")} ${articleDetailClass("pager-item", "prev")}`}
+              prefetch={false}
             >
               <span className={articleDetailClass("pager-dir")}>
                 <span className={articleDetailClass("pager-leading")}>
@@ -166,7 +167,7 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
             </Link>
           ) : null}
           {next ? (
-            <Link href={next.href} className={articleDetailClass("pager-item")}>
+            <Link href={next.href} className={articleDetailClass("pager-item")} prefetch={false}>
               <span className={articleDetailClass("pager-dir")}>
                 <span className={articleDetailClass("pager-leading")}>
                   <span className={articleDetailClass("pager-label")}>NEXT</span>

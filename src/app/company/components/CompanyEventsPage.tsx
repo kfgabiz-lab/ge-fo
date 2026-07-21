@@ -36,7 +36,7 @@ export default function CompanyEventsPage({
   const [pastPageIndex, setPastPageIndex] = useState(0);
   const [pastTotalPages, setPastTotalPages] = useState(1);
   const [pastSearch, setPastSearch] = useState("");
-  const [pastSort, setPastSort] = useState<"latest" | "oldest">("latest");
+  const [pastSort, setPastSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [pastMonth, setPastMonth] = useState("");
   const [pastYear, setPastYear] = useState("");
 
@@ -93,7 +93,7 @@ export default function CompanyEventsPage({
     setPastSearch(value);
     setPastPageIndex(0);
   };
-  const handlePastSortChange = (value: "latest" | "oldest") => {
+  const handlePastSortChange = (value: "latest" | "oldest" | "az" | "za") => {
     setPastSort(value);
     setPastPageIndex(0);
   };

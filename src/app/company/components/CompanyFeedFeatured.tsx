@@ -24,7 +24,7 @@ export default function CompanyFeedFeatured({
   return (
     <section className={prefix}>
       <div className="inner">
-        <Link href={href} className={`${prefix}__card`}>
+        <Link href={href} className={`${prefix}__card`} prefetch={false}>
           <div className={`${prefix}__image`}>
             <img src={image} alt={title} />
           </div>
