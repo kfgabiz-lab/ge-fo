@@ -59,10 +59,13 @@ function ExploreLetterColumn({ group }: { group: GnbExploreLetterGroup }) {
 type DevicesExploreAllProps = {
   /** product-data 전제품(A~Z). 미지정 시 정적 gnbExploreAllProducts 폴백 */
   products?: GnbExploreProduct[];
+  /** category-data depth1 목록(Lv1 Category 필터 옵션, 서버에서 조회해 주입) */
+  lv1Categories?: { id: string; label: string }[];
 };
 
 export default function DevicesExploreAll({
   products: productsData,
+  lv1Categories = [],
 }: DevicesExploreAllProps = {}) {
   const [showDiscontinued, setShowDiscontinued] = useState(true);
   const source = productsData ?? gnbExploreAllProducts;
@@ -79,6 +82,7 @@ export default function DevicesExploreAll({
       <DevicesExploreAllToolbar
         showDiscontinued={showDiscontinued}
         onToggle={() => setShowDiscontinued((prev) => !prev)}
+        lv1Categories={lv1Categories}
       />
       <div className="devices_explore__grid">
         {letterRows.map((row, rowIndex) => (

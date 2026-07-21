@@ -2,7 +2,8 @@ export type GnbMegaProduct = {
   id: string;
   title: string;
   subtitle: string;
-  image: string;
+  /** 실이미지 없으면 null — 렌더 쪽에서 이미지 영역 자체를 생략한다(플레이스홀더 미사용) */
+  image: string | null;
   href: string;
 };
 

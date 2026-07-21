@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import GnbMenu from "@/components/layout/shared/GnbMenu";
 import HeaderBreadcrumb from "@/components/layout/shared/HeaderBreadcrumb";
 import { useHeaderScroll } from "@/components/layout/shared/useHeaderScroll";
-import type { FoGnbMenuApiNode } from "@/data/gnb";
+import type { FoGnbMenuApiNode, GnbDevicesMegaMenu } from "@/data/gnb";
 
 const MAIN_TOP_THRESHOLD = 80;
 
@@ -12,11 +12,14 @@ type MainHeaderProps = {
   showBreadcrumbNav?: boolean;
   /** 서버 레이아웃에서 조회한 GNB 트리 데이터 */
   gnbMenuData?: FoGnbMenuApiNode[];
+  /** 서버 레이아웃에서 조회한 Products & Systems 메가메뉴(category-data 기반) */
+  devicesMegaMenu?: GnbDevicesMegaMenu | null;
 };
 
 export default function MainHeader({
   showBreadcrumbNav = false,
   gnbMenuData,
+  devicesMegaMenu,
 }: MainHeaderProps) {
   const [isMegaOpen, setIsMegaOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -74,6 +77,7 @@ export default function MainHeader({
         variant="main"
         logoHref="/main"
         gnbMenuData={gnbMenuData}
+        devicesMegaMenu={devicesMegaMenu}
         showBreadcrumbNav={showBreadcrumbNav}
         isAtTop={resolvedIsAtTop}
         isHeaderHidden={isGnbHidden}

@@ -26,12 +26,12 @@ import GnbMobileGlobalSelect from "@/components/layout/shared/GnbMobileGlobalSel
 import GnbSearchPanel from "@/components/layout/shared/GnbSearchPanel";
 import GnbMobileMenuPanel from "@/components/layout/shared/GnbMobileMenuPanel";
 import {
-  gnbNavItems,
   isDevicesMegaMenu,
   resolveGnbNavItems,
   type FoGnbMenuApiNode,
+  type GnbDevicesMegaMenu,
+  type GnbNavItem,
 } from "@/data/gnb";
-import { resolveDevicesMegaStateFromPath } from "@/data/gnb/mega/devices";
 
 import "@/assets/css/components/gnb.css";
 
@@ -45,6 +45,8 @@ type GnbMenuProps = {
   logoHref?: string;
   /** 서버 레이아웃에서 GET /api/v1/fo/menus/gnb 로 조회한 GNB 트리(markets/services/support/company override용) */
   gnbMenuData?: FoGnbMenuApiNode[];
+  /** 서버 레이아웃에서 fetchDevicesMegaMenu()로 조회한 Products & Systems 메가메뉴(category-data/product-data 기반) */
+  devicesMegaMenu?: GnbDevicesMegaMenu | null;
   /** SubHeader / MainHeader에서 스크롤 상태를 넘기면 내부 scroll 리스너 비활성 */
   isAtTop?: boolean;
   isHeaderHidden?: boolean;
@@ -59,14 +61,23 @@ type GnbMenuProps = {
   onSearchOpenChange?: (open: boolean) => void;
 };
 
-function getDefaultMegaState(navId: string, pathname: string) {
-  const nav = gnbNavItems.find((item) => item.id === navId);
+function getDefaultMegaState(
+  navItems: GnbNavItem[],
+  navId: string,
+  pathname: string,
+) {
+  const nav = navItems.find((item) => item.id === navId);
   const menu = nav?.megaMenu;
 
   if (menu && isDevicesMegaMenu(menu)) {
-    const fromPath = resolveDevicesMegaStateFromPath(pathname);
-    if (fromPath) {
-      return fromPath;
+    // 현재 경로와 일치하는 depth3(있으면) → 그 카테고리를 기본 열림 상태로 사용(하드코딩 매핑 없이 실데이터 href로 직접 탐색)
+    for (const category of menu.categories) {
+      const matchedDepth3 = category.children.find(
+        (depth3) => depth3.href && pathname.startsWith(depth3.href),
+      );
+      if (matchedDepth3) {
+        return { categoryId: category.id, depth3Id: matchedDepth3.id };
+      }
     }
 
     const firstCategory = menu.categories[0];
@@ -172,6 +183,7 @@ export default function GnbMenu({
   variant = "markets",
   logoHref = "/main",
   gnbMenuData,
+  devicesMegaMenu,
   isAtTop: isAtTopProp,
   isHeaderHidden: isHeaderHiddenProp,
   isHeaderRevealed: isHeaderRevealedProp,
@@ -183,10 +195,10 @@ export default function GnbMenu({
   onSearchOpenChange,
 }: GnbMenuProps) {
   const pathname = usePathname();
-  // devices는 정적 유지, markets/services/support/company만 API 데이터로 megaMenu override
+  // devices는 category-data 기반 devicesMegaMenu로, markets/services/support/company는 API 데이터로 override
   const navItems = useMemo(
-    () => resolveGnbNavItems(gnbMenuData),
-    [gnbMenuData],
+    () => resolveGnbNavItems(gnbMenuData, devicesMegaMenu),
+    [gnbMenuData, devicesMegaMenu],
   );
   const isMain = variant === "main";
   const hasBreadcrumb = Boolean(breadcrumb);
@@ -296,7 +308,7 @@ export default function GnbMenu({
       onMegaOpenChange?.(true);
       ignoreMegaScrollCloseUntilRef.current = Date.now() + 400;
 
-      const defaults = getDefaultMegaState(navId, pathname);
+      const defaults = getDefaultMegaState(navItems, navId, pathname);
       setIsMegaActive(true);
       setActiveNavId(navId);
       setActiveCategoryId(defaults.categoryId);
@@ -955,6 +967,7 @@ export default function GnbMenu({
         {activeNavId === "devices" ? <GnbMegaCloseButton onClose={closeMega} /> : null}
         {isDevicesMegaMenu(megaMenu) ? (
           <PanelComponent
+            categories={megaMenu.categories}
             activeCategoryId={activeCategoryId}
             activeDepth3Id={activeDepth3Id}
             onCategoryChange={setActiveCategoryId}

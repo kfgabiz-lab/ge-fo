@@ -2,6 +2,7 @@ import { fetchApi } from "@/lib/api";
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
 import { gnbNavItems } from "@/data/gnb/navItems";
 import type {
+  GnbDevicesMegaMenu,
   GnbNavItem,
   GnbSimpleMegaItem,
   GnbSimpleMegaMenu,
@@ -26,7 +27,8 @@ export type FoGnbMenuApiNode = {
 
 /**
  * API로 연동할 최상위 nav id ↔ API 루트 노드 name 매핑.
- * devices(Products & Systems)는 정적 유지 대상이라 여기 포함하지 않음.
+ * devices(Products & Systems)는 bo Menu API가 아니라 category-data/product-data로 별도 동적 조립되므로
+ * (fetchDevicesMegaMenu, fromCategoryData.ts) 여기 포함하지 않음.
  * key: 정규화(trim+소문자)한 API name, value: gnbNavItems의 nav id.
  */
 const API_NAME_TO_NAV_ID: Record<string, string> = {
@@ -114,7 +116,8 @@ function buildSimpleMegaMenu(
 
 /**
  * API 응답(FoGnbMenuApiNode[])을 gnbNavItems에 반영해 최종 nav 목록을 만든다.
- * - devices: 항상 정적 유지(변경 없음)
+ * - devices: category-data 기반으로 서버에서 미리 조립한 devicesMegaMenu(있고 categories가 비어있지 않으면)로 override,
+ *   없거나 비어있으면(조회 실패 등) 기존 정적 최소 폴백 그대로 사용
  * - markets/services/support/company: 이름이 정확히(trim, 대소문자 무시) "Markets"/"Services"/"Support"/"Company"인
  *   API 루트 노드를 찾아 megaMenu를 API 기반으로 override
  * - 매칭 실패 또는 children 비어있음(운영 초기 DB 미입력 등): 기존 정적 megaMenu 그대로 폴백
@@ -122,6 +125,7 @@ function buildSimpleMegaMenu(
  */
 export function resolveGnbNavItems(
   apiNodes: FoGnbMenuApiNode[] | null | undefined,
+  devicesMegaMenu?: GnbDevicesMegaMenu | null,
 ): GnbNavItem[] {
   // 정규화한 name → API 노드 인덱싱 (매칭 안 되는 노드는 자연스럽게 사용되지 않고 무시됨)
   const nodeByNavId = new Map<string, FoGnbMenuApiNode>();
@@ -133,8 +137,10 @@ export function resolveGnbNavItems(
   }
 
   return gnbNavItems.map((item) => {
-    // devices는 정적 유지
     if (item.id === "devices") {
+      if (devicesMegaMenu && devicesMegaMenu.categories.length > 0) {
+        return { ...item, megaMenu: devicesMegaMenu };
+      }
       return item;
     }
 

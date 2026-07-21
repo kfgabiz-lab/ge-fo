@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import MainHeader from "@/components/layout/main/MainHeader";
 import SubHeader from "@/components/layout/markets/SubHeader";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import type { FoGnbMenuApiNode } from "@/data/gnb";
+import type { FoGnbMenuApiNode, GnbDevicesMegaMenu } from "@/data/gnb";
 
 const MARKETS_MOBILE_MQ = "(max-width: 780px)";
 
@@ -33,10 +33,13 @@ function matchesPath(pathname: string, path: string) {
 type MarketsGroupHeaderProps = {
   /** 서버 레이아웃에서 조회한 GNB 트리 데이터 */
   gnbMenuData?: FoGnbMenuApiNode[];
+  /** 서버 레이아웃에서 조회한 Products & Systems 메가메뉴(category-data 기반) */
+  devicesMegaMenu?: GnbDevicesMegaMenu | null;
 };
 
 export default function MarketsGroupHeader({
   gnbMenuData,
+  devicesMegaMenu,
 }: MarketsGroupHeaderProps) {
   const pathname = usePathname();
   const isMobile = useMediaQuery(MARKETS_MOBILE_MQ);
@@ -55,8 +58,9 @@ export default function MarketsGroupHeader({
     <MainHeader
       showBreadcrumbNav={showBreadcrumbNav}
       gnbMenuData={gnbMenuData}
+      devicesMegaMenu={devicesMegaMenu}
     />
   ) : (
-    <SubHeader gnbMenuData={gnbMenuData} />
+    <SubHeader gnbMenuData={gnbMenuData} devicesMegaMenu={devicesMegaMenu} />
   );
 }

@@ -69,7 +69,7 @@ export default function GnbMobileDepth4Menu({
                   <img
                     loading="lazy"
                     decoding="async"
-                    src={product.image}
+                    src={product.image ?? undefined}
                     alt=""
                   />
                 </div>

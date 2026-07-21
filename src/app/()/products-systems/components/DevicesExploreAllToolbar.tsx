@@ -3,16 +3,18 @@
 import { FormControl, MenuItem } from "@mui/material";
 import GuideSelect from "@/components/form/GuideSelect";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
-import { exploreAllLv1Categories } from "@/data/gnbExploreAllProducts";
 
 type DevicesExploreAllToolbarProps = {
   showDiscontinued: boolean;
   onToggle: () => void;
+  /** category-data depth1 목록(서버에서 조회해 상위에서 주입, 정적 import 없음) */
+  lv1Categories: { id: string; label: string }[];
 };
 
 export default function DevicesExploreAllToolbar({
   showDiscontinued,
   onToggle,
+  lv1Categories,
 }: DevicesExploreAllToolbarProps) {
   return (
     <div className="devices_explore__filters">
@@ -31,7 +33,7 @@ export default function DevicesExploreAllToolbar({
             )}
           >
             <MenuItem value="">Lv1 Category</MenuItem>
-            {exploreAllLv1Categories.map((category) => (
+            {lv1Categories.map((category) => (
               <MenuItem key={category.id} value={category.id}>
                 {category.label}
               </MenuItem>

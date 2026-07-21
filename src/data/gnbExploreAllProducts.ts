@@ -1,7 +1,4 @@
-import {
-  devicesMegaMenu,
-  softwareProductHrefs,
-} from "@/data/gnb/mega/devices";
+import { softwareProductHrefs } from "@/data/gnb/mega/devices";
 
 export const EXPLORE_ALL_PRODUCTS_PATH = "/products-systems/explore-all";
 
@@ -167,13 +164,6 @@ export function resolveExploreHref(label: string): string {
     "/products-category/lv-products-and-systems"
   );
 }
-
-export const exploreAllLv1Categories = devicesMegaMenu.categories.map(
-  (category) => ({
-    id: category.id,
-    label: category.label,
-  }),
-);
 
 function getFirstLetter(label: string): string {
   const match = label.replace(/^\s+/, "").match(/[A-Za-z]/);

@@ -109,12 +109,13 @@ export async function fetchCategoryBySlug(
 
 export interface CategoryChild {
   id: number;
+  code: string;
   title: string;
   image: string | null;
   slug: string;
 }
 
-// depth2 하위 카테고리 카드 목록(motor-control 그리드).
+// depth2 하위 카테고리 카드 목록(motor-control 그리드) — GNB devices 메가메뉴 depth2에도 재사용.
 // TEXT 정렬이 깨지므로 서버 sort 대신 FE 에서 Number(sortOrder) 오름차순, 동률은 id 오름차순으로 정렬한다.
 // sortOrder는 category 섹션 밖의 최상위 필드(dataJson: { category: {...}, sortOrder: N, ... })라 flatten 후 접두사 없이 접근한다(DB 실측 확인).
 export async function fetchCategoryChildren(
@@ -127,8 +128,38 @@ export async function fetchCategoryChildren(
     );
     const mapped = rows.map((row) => ({
       id: Number(row._id),
+      code: String(row["category.code"] ?? ""),
       title: (row["category.title"] as string) ?? "",
       image: resolveFirstImageUrl(row["device_systems.image"]),
+      slug: (row["seo.slug"] as string) ?? "",
+      sortOrder: Number(row["sortOrder"] ?? 0),
+    }));
+    mapped.sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
+    return mapped.map(({ sortOrder: _sortOrder, ...rest }) => rest);
+  } catch {
+    return [];
+  }
+}
+
+export interface TopCategory {
+  id: number;
+  code: string;
+  title: string;
+  slug: string;
+}
+
+// depth1 전체(대분류 목록) — GNB devices 메가메뉴 depth1 조립에 사용.
+// depth2(fetchCategoryChildren)와 동일하게 FE에서 sortOrder ASC(동률 id ASC) 정렬한다(서버 sort 파라미터로는 TEXT/숫자 정렬이 깨짐).
+export async function fetchTopCategories(): Promise<TopCategory[]> {
+  try {
+    const rows = await searchPageData(
+      "category-data",
+      `eq_category.depth=1&unpaged=true`,
+    );
+    const mapped = rows.map((row) => ({
+      id: Number(row._id),
+      code: String(row["category.code"] ?? ""),
+      title: (row["category.title"] as string) ?? "",
       slug: (row["seo.slug"] as string) ?? "",
       sortOrder: Number(row["sortOrder"] ?? 0),
     }));

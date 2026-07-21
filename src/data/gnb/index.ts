@@ -10,11 +10,7 @@ export {
   resolveGnbNavItems,
   type FoGnbMenuApiNode,
 } from "@/data/gnb/fromApi";
-export {
-  devicesMegaDefaultCategoryId,
-  devicesMegaDefaultDepth3Id,
-  devicesMegaMenu,
-} from "@/data/gnb/mega/devices";
+export { fetchDevicesMegaMenu } from "@/data/gnb/fromCategoryData";
 export { marketsMegaMenu } from "@/data/gnb/mega/markets";
 export { servicesMegaMenu } from "@/data/gnb/mega/services";
 export { supportMegaMenu } from "@/data/gnb/mega/support";

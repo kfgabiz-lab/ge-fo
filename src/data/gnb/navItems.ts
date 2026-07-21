@@ -1,5 +1,5 @@
 import { companyMegaMenu } from "@/data/gnb/mega/company";
-import { devicesMegaMenu } from "@/data/gnb/mega/devices";
+import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
 import { marketsMegaMenu } from "@/data/gnb/mega/markets";
 import { servicesMegaMenu } from "@/data/gnb/mega/services";
 import { supportMegaMenu } from "@/data/gnb/mega/support";
@@ -10,7 +10,9 @@ export const gnbNavItems: GnbNavItem[] = [
     id: "devices",
     label: "Products & Systems",
     href: "/products-category/lv-products-and-systems",
-    megaMenu: devicesMegaMenu,
+    // 실데이터는 fetchDevicesMegaMenu()(category-data 기반, 서버에서 조회)로 override됨.
+    // 조회 실패/0건일 때만 쓰이는 최소 폴백 — categories 비어있으면 메가패널 자체가 안 열림.
+    megaMenu: { type: "devices", panelId: GNB_MEGA_PANEL_ID.devices, categories: [] },
   },
   {
     id: "markets",

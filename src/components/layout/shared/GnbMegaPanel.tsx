@@ -61,7 +61,7 @@ function ProductCard({
         <p className="gnb_mega__product-sub">{product.subtitle}</p>
       </div>
       <div className="gnb_mega__product-img">
-        <img loading="lazy" decoding="async" src={product.image} alt="" />
+        <img loading="lazy" decoding="async" src={product.image ?? undefined} alt="" />
       </div>
     </Link>
   );
