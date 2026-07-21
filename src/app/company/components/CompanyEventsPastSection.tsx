@@ -30,6 +30,21 @@ const MONTH_OPTIONS = [
   { value: "12", label: "December" },
 ];
 
+// 정렬 옵션(최신/오래된순 + 제목 A-Z/Z-A). value는 데이터 헬퍼 sort 파라미터와 동일
+const SORT_OPTIONS = [
+  { value: "latest", label: "Latest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "az", label: "A-Z" },
+  { value: "za", label: "Z-A" },
+] as const;
+
+type SortValue = (typeof SORT_OPTIONS)[number]["value"];
+
+// Select value(unknown) → 허용된 정렬값으로 좁히기(미허용 시 latest 폴백)
+function toSortValue(raw: unknown): SortValue {
+  return SORT_OPTIONS.some((o) => o.value === raw) ? (raw as SortValue) : "latest";
+}
+
 type CompanyEventsPastSectionProps = {
   items: EventsPastItem[];
   currentPage?: number;
@@ -38,8 +53,8 @@ type CompanyEventsPastSectionProps = {
   // 검색/정렬/월/연도 — 전부 optional(값+핸들러 짝). 미지정 시 비연동 장식 UI 유지(press/blog 툴바와 동일 원칙)
   searchValue?: string;
   onSearchSubmit?: (value: string) => void;
-  sortValue?: "latest" | "oldest";
-  onSortChange?: (value: "latest" | "oldest") => void;
+  sortValue?: SortValue;
+  onSortChange?: (value: SortValue) => void;
   monthValue?: string;
   onMonthChange?: (value: string) => void;
   yearValue?: string;
@@ -167,10 +182,11 @@ export default function CompanyEventsPastSection({
                 IconComponent={GuideSelectIcon}
                 inputProps={{ "aria-label": "Past events sort order" }}
                 onChange={(event: SelectChangeEvent<unknown>) =>
-                  onSortChange?.(event.target.value === "oldest" ? "oldest" : "latest")
+                  onSortChange?.(toSortValue(event.target.value))
                 }
                 renderValue={(value) => {
-                  const text = value === "oldest" ? "Oldest" : "Latest";
+                  const text =
+                    SORT_OPTIONS.find((o) => o.value === value)?.label ?? "Latest";
                   return (
                     <span className="guide_field__select-value" title={text}>
                       {text}
@@ -178,8 +194,11 @@ export default function CompanyEventsPastSection({
                   );
                 }}
               >
-                <MenuItem value="latest">Latest</MenuItem>
-                <MenuItem value="oldest">Oldest</MenuItem>
+                {SORT_OPTIONS.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
               </GuideSelect>
             </FormControl>
           </div>
@@ -191,6 +210,7 @@ export default function CompanyEventsPastSection({
                   href={item.href || "#"}
                   className="company-events-past__card"
                   aria-label={`${item.title}, ${item.dateRange}`}
+                  prefetch={false}
                 >
                   <div className="company-events-past__image">
                     <img src={item.image} alt="" />

@@ -101,7 +101,7 @@ function FeaturedCard({ item }: { item: EventsFeaturedItem }) {
 
     return (
 
-      <Link href={item.href} className="company-events-featured__card">
+      <Link href={item.href} className="company-events-featured__card" prefetch={false}>
 
         {content}
 

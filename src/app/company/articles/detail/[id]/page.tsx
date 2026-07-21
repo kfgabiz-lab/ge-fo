@@ -3,8 +3,8 @@ import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { mediaArticleDetailHero } from "@/app/company/data/mediaArticleDetailContent";
 import {
+  fetchArticlesAdjacent,
   fetchArticlesDetail,
-  fetchArticlesList,
   articlesDetailHref,
   articlesImageSrc,
 } from "@/app/company/data/articlesData";
@@ -21,10 +21,11 @@ export default async function CompanyArticlesDetailPage({
 }: CompanyArticlesDetailPageProps) {
   const { id } = await params;
 
-  // 상세 단건 + pager 계산용 전체 목록 병렬 조회(articles엔 category 라벨 조회 불필요, press와 동일)
-  const [detail, listResult] = await Promise.all([
+  // 상세 단건 + 인접글(이전/다음) 병렬 조회(articles엔 category 라벨 조회 불필요, press와 동일 패턴)
+  // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE 목록 index 계산 폐기)
+  const [detail, adjacent] = await Promise.all([
     fetchArticlesDetail(id),
-    fetchArticlesList({ page: 0 }),
+    fetchArticlesAdjacent(id),
   ]);
 
   // 존재하지 않거나 비공개/미게시 글이면 404
@@ -45,22 +46,12 @@ export default async function CompanyArticlesDetailPage({
       ? { src: articlesImageSrc(mediaId), alt: (row.title as string) ?? "" }
       : mediaArticleDetailHero;
 
-  // pager: 정렬된 전체 목록에서 현재 id 의 index 로 prev(index-1)/next(index+1) 계산
-  const rows = listResult.rows;
-  const idx = rows.findIndex((r) => r.id === detail.id);
-  const prevItem = idx > 0 ? rows[idx - 1] : null;
-  const nextItem = idx >= 0 && idx < rows.length - 1 ? rows[idx + 1] : null;
-  const prev = prevItem
-    ? {
-        href: articlesDetailHref(prevItem.id),
-        title: (flattenPageDataItem(prevItem).title as string) ?? "",
-      }
+  // pager: adjacent 엔드포인트 응답 {prev, next}(id/title)를 그대로 매핑, id→상세 href 변환만 수행
+  const prev = adjacent.prev
+    ? { href: articlesDetailHref(adjacent.prev.id), title: adjacent.prev.title }
     : undefined;
-  const next = nextItem
-    ? {
-        href: articlesDetailHref(nextItem.id),
-        title: (flattenPageDataItem(nextItem).title as string) ?? "",
-      }
+  const next = adjacent.next
+    ? { href: articlesDetailHref(adjacent.next.id), title: adjacent.next.title }
     : undefined;
 
   return (

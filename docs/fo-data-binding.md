@@ -101,7 +101,7 @@
 | Company Feed List Toolbar | `src/app/company/components/CompanyFeedListToolbar.tsx` | Press/Articles 공통 리스트 툴바 — Month/Year GuideSelect·검색·정렬 GuideSelect, variant별 aria-label | TODO |
 | Company Feed List Section | `src/app/company/components/CompanyFeedListSection.tsx` | Press/Articles 공통 리스트 섹션 — 툴바 + 그리드/Empty + PageNumbering 조립 | TODO |
 
-> Company 하위 서브메뉴 중 `careers`는 2026-07-15 별도 세션에서 ls-publish 원본 그대로 정적 이관 완료됨(`src/app/company/careers/page.tsx`, `CompanyCareersPage.tsx`, `careersContent.ts`) — data slug 바인딩 대상 아님(정적 콘텐츠). Blog/Press/Articles/Events(구 articles feed)는 이번 마이그레이션으로 모두 이관되었습니다.
+> Company 하위 서브메뉴 중 `careers`는 2026-07-15 별도 세션에서 ls-publish 원본 그대로 정적 이관됐으나, 이후 2026-07-21 세션에서 채용공고 카드 목록(`company-careers-jobs__grid`)이 BO `careers-data` slug(PAGE_DATA)로 데이터바인딩 전환됨(상세: `fo/docs/dev/company/careers-data.md`). 상단 타이틀(`CareersTitleSection`)과 LinkedIn 배너(`CareersLinkedInSection`)는 여전히 정적 콘텐츠로 유지. Blog/Press/Articles/Events(구 articles feed)는 이번 마이그레이션으로 모두 이관되었습니다.
 > `src/app/company/articleDetailClass.ts`와 `src/app/company/data/*.ts`는 tsx가 아니므로(BEM 헬퍼·데이터 파일) 본 표에서 제외했습니다.
 
 ### 1-5. services

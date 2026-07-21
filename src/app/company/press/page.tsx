@@ -32,7 +32,7 @@ export default function CompanyPressListPage() {
   const [featuredRow, setFeaturedRow] = useState<PressRow | null>(null);
   // 툴바(검색/정렬/월/연도) 상태 — 설계문서 9절 B/C/D
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<"latest" | "oldest">("latest");
+  const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
@@ -121,7 +121,7 @@ export default function CompanyPressListPage() {
     setSearch(value);
     setPageIndex(0);
   };
-  const handleSortChange = (value: "latest" | "oldest") => {
+  const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {
     setSort(value);
     setPageIndex(0);
   };

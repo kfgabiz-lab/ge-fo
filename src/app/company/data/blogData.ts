@@ -111,7 +111,7 @@ export async function fetchBlogList(params: {
   page: number; // 0-based
   category?: string; // 코드값, 없으면 전체
   search?: string; // 제목+본문 검색어(설계문서 9-B)
-  sort?: "latest" | "oldest"; // 기본 latest(설계문서 9-C)
+  sort?: "latest" | "oldest" | "az" | "za"; // 기본 latest(설계문서 9-C), az/za는 제목 정렬
   market?: string; // markets 필터(3자리 코드) — dataJson.markets CSV 토큰 포함 항목만(BE has_markets_markets)
 }): Promise<BlogListResult> {
   const sp = new URLSearchParams();
@@ -125,7 +125,10 @@ export async function fetchBlogList(params: {
   if (params.search) sp.set("title|content", params.search);
   // markets 코드가 넘어온 경우에만 필터 추가(옵션이라 기존 호출부는 그대로 전체 조회)
   if (params.market) sp.set("has_markets_markets", params.market);
-  if (params.sort === "oldest") sp.set("sort", "createdAt,asc");
+  // 정렬 분기(latest=미지정은 sort 생략하여 BE 기본 created_at DESC 유지)
+  if (params.sort === "oldest") sp.set("sort", "createdAt,asc"); // 오래된순(등록일 오름차순)
+  else if (params.sort === "az") sp.set("sort", "blog.title,asc"); // 제목 A-Z(오름차순)
+  else if (params.sort === "za") sp.set("sort", "blog.title,desc"); // 제목 Z-A(내림차순)
 
   const res = await fetchApi<BlogPageResponse>(
     `/api/v1/fo/page-data/blog-data?${sp.toString()}`,
@@ -137,16 +140,60 @@ export async function fetchBlogList(params: {
   };
 }
 
-// 상세 단건 조회(top-level id 정확일치 + 공개·게시 상태, 설계문서 9-A와 동일 조건 적용)
+// 상세 단건 조회 — 신규 상세 엔드포인트 GET /{slug}/{id} 사용(목록 search 재활용 방식 폐기)
+// - 응답은 기존 목록 content[0]과 동일한 PageDataResponse(BlogRow) 단건 형태 → flatten 후처리 그대로 유지
+// - 상태게이트(공개+게시일 도래)를 query로 전달, 못 찾거나 게이트 탈락 시 BE가 HTTP 404 → catch→null(page.tsx에서 notFound())
 export async function fetchBlogDetail(
   id: string | number,
 ): Promise<BlogRow | null> {
   const sp = new URLSearchParams();
-  sp.set("eq_id", String(id));
   sp.set("condexpr_status", "is_visible=001,publish_dttm<=today()?'게시':'미게시'");
   sp.set("condval_status", "게시");
-  const res = await fetchApi<BlogPageResponse>(
-    `/api/v1/fo/page-data/blog-data?${sp.toString()}`,
-  );
-  return res.content?.[0] ?? null;
+  try {
+    return await fetchApi<BlogRow>(
+      `/api/v1/fo/page-data/blog-data/${id}?${sp.toString()}`,
+    );
+  } catch (e) {
+    // 404(미존재/게이트 탈락)만 null 반환, 그 외 오류는 전파
+    if (e instanceof Error && e.message.includes("실패: 404")) return null;
+    throw e;
+  }
+}
+
+// ---------------- 인접글(이전/다음) ----------------
+
+// 인접 이웃 1건(신규 adjacent 엔드포인트 응답)
+export interface BlogAdjacentNeighbor {
+  id: number;
+  title: string;
+}
+
+// adjacent 엔드포인트 응답 {prev, next}
+export interface BlogAdjacentResult {
+  prev: BlogAdjacentNeighbor | null;
+  next: BlogAdjacentNeighbor | null;
+}
+
+// 인접글 조회 — 신규 엔드포인트 GET /{slug}/{id}/adjacent 사용(FE 목록 index 계산 방식 폐기)
+// - sortField=createdAt, titleField=blog.title, 스코프게이트=목록과 동일(공개+게시일 도래)
+export async function fetchBlogAdjacent(
+  id: string | number,
+): Promise<BlogAdjacentResult> {
+  const sp = new URLSearchParams();
+  sp.set("sortField", "createdAt");
+  sp.set("titleField", "blog.title");
+  // 인접 스코프 게이트: 목록(fetchBlogList)과 동일 게시상태 조건으로 이웃 후보를 한정
+  sp.set("condexpr_status", "is_visible=001,publish_dttm<=today()?'게시':'미게시'");
+  sp.set("condval_status", "게시");
+  try {
+    return await fetchApi<BlogAdjacentResult>(
+      `/api/v1/fo/page-data/blog-data/${id}/adjacent?${sp.toString()}`,
+    );
+  } catch (e) {
+    // 404(미존재/게이트 탈락) 시 pager 미표시(상세 본문 렌더는 유지), 그 외 오류는 전파
+    if (e instanceof Error && e.message.includes("실패: 404")) {
+      return { prev: null, next: null };
+    }
+    throw e;
+  }
 }

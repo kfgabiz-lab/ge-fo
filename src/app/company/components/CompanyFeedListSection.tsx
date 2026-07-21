@@ -35,8 +35,8 @@ type CompanyFeedListSectionProps = {
   yearOptions?: string[];
   searchValue?: string;
   onSearchSubmit?: (value: string) => void;
-  sortValue?: "latest" | "oldest";
-  onSortChange?: (value: "latest" | "oldest") => void;
+  sortValue?: "latest" | "oldest" | "az" | "za";
+  onSortChange?: (value: "latest" | "oldest" | "az" | "za") => void;
 };
 
 export default function CompanyFeedListSection({
