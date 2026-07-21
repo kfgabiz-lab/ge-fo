@@ -46,10 +46,11 @@ function formatNewsDate(raw: string): string {
   return `${MONTH_ABBR[monthIdx]} ${m[3]}, ${m[1]}`;
 }
 
-// 정렬 키(원본 date, YYYY-MM-DD)를 별도 보관해 사전식 내림차순 = 최신순 정렬
-type HighlightEntry = { item: HighlightNewsItem; sortKey: string };
+// 정렬 키 — sortKey: publish_dttm 원본("YYYY-MM-DD", 사전식 비교로도 정확한 최신순 정렬 보장).
+// sortId: press/blog/articles가 공유하는 page_data 원본 id(카테고리 무관 비교 가능) — sortKey 동률 시 내림차순 2차 정렬.
+type HighlightEntry = { item: HighlightNewsItem; sortKey: string; sortId: number };
 
-// press/blog/articles 원본 행들을 카드로 변환 → publishDttm 내림차순 병합 → 상위 3건.
+// press/blog/articles 원본 행들을 카드로 변환 → publishDttm 내림차순(동률 시 id 내림차순) 병합 → 상위 3건.
 // main/markets 두 진입점이 100% 동일 로직을 쓰므로 여기로 추출(중복 제거).
 function mergeAndPickTopNews(
   pressRows: PressRow[],
@@ -61,7 +62,8 @@ function mergeAndPickTopNews(
   for (const row of pressRows) {
     const card = toPressCard(row);
     entries.push({
-      sortKey: card.date,
+      sortKey: card.rawDate,
+      sortId: card.id,
       item: {
         // slug 간 id 접두로 충돌 방지(press/blog/articles 동일 id 가능)
         id: `press-${card.id}`,
@@ -81,7 +83,8 @@ function mergeAndPickTopNews(
   for (const row of blogRows) {
     const card = toBlogCard(row, emptyCategoryMap);
     entries.push({
-      sortKey: card.date,
+      sortKey: card.rawDate,
+      sortId: card.id,
       item: {
         id: `blog-${card.id}`,
         href: blogDetailHref(card.id),
@@ -97,7 +100,8 @@ function mergeAndPickTopNews(
   for (const row of articlesRows) {
     const card = toArticlesCard(row);
     entries.push({
-      sortKey: card.date,
+      sortKey: card.rawDate,
+      sortId: card.id,
       item: {
         id: `articles-${card.id}`,
         href: articlesDetailHref(card.id),
@@ -111,7 +115,7 @@ function mergeAndPickTopNews(
   }
 
   return entries
-    .sort((a, b) => b.sortKey.localeCompare(a.sortKey))
+    .sort((a, b) => b.sortKey.localeCompare(a.sortKey) || b.sortId - a.sortId)
     .slice(0, HIGHLIGHT_LIMIT)
     .map((entry) => entry.item);
 }
