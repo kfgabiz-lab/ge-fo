@@ -6,7 +6,7 @@
 > - `fo/src/app/support/where-to-buy/components/WhereToBuyMapPopup.tsx` (지도 팝업 — 활성 1건 상세, 단건)
 > - `fo/src/app/support/where-to-buy/components/WhereToBuyMap.tsx` (지도 마커 — lat/lng를 JS 좌표 계산에만 사용, DOM 텍스트 노드 없어 마크업 태깅 불가. 문서 매핑만)
 > - 대상 아님(정적/UI 컨트롤): `WhereToBuyTitle`, `WhereToBuyBanner`, `WhereToBuyControls`, `WhereToBuyEmpty`
-> 상태: 승인됨 — 단, 5절 좌표 품질 이슈 · 6절 BE 프로필 항목은 "확인 필요"로 남아있음
+> 상태: 승인됨 — 단, 6절 BE 프로필 항목은 "확인 필요"로 남아있음
 
 ## 1. data-slug
 - 값: `wheretobuy-agency-data` (bo `slug_registry` id=181, type=PAGE_DATA, entity_id=29 — developer DB 실조회로 실존 확인됨)
@@ -71,71 +71,77 @@
 
 ## 4. 조회 조건
 - where(필터 조건식): `eq_agencyForm.is_visible=001` (공개만)
-- row limit: 다건 — `size=100` (실 공개 4건 소량, 방어적 상한값)
+- row limit: 다건 — `size=100` (실 공개 3건 소량, 방어적 상한값)
 - orderBy: 기본값 `created_at DESC` (명시적 정렬 요구 없음, 실건수 소량이라 파라미터 미부여)
-- 2차 정렬(tie-breaker): **확인 필요** — STEP4 단계에서 명시적으로 확정되지 않음. 실건수가 4건 소량이라 실질 영향은 낮으나, tie-breaker 기준(예: `id`)을 명시할지 여부는 별도 확인 필요
-- 제외 확정: 거리필터(500/250/100/50mi)·검색어 조건은 이번 범위 제외(FE 목코드 미구현, 과설계 회피). 향후 필요 시 API 응답 전체 배열을 클라이언트 사이드에서 필터링하는 방식으로 확장 가능
+- 2차 정렬(tie-breaker): **확인 필요** — STEP4 단계에서 명시적으로 확정되지 않음. 실건수가 소량이라 실질 영향은 낮으나, tie-breaker 기준(예: `id`)을 명시할지 여부는 별도 확인 필요
+- 거리필터(500/250/100/50mi)·주소검색·"이 지역에서 검색"(영역필터)·내위치(geolocation)는 서버 where 파라미터가 아니라, 위 단일 fetch로 받은 전체 배열을 **FE(`fo/src/data/support/whereToBuyContent.ts`)에서 클라이언트 사이드로 필터링**하는 방식으로 구현되어 있다(`filterLocationsByRadius`/`filterLocationsByBounds`, haversine 거리 계산). BE 재조회 없이 이미 받은 배열만으로 동작하므로 신규 API 불필요.
 
 ## 5. 샘플 응답 데이터
 
-> STEP4 developer DB(10.153.11.120) 실조회 기반 요약. **agency_name/address 등 실제 문자열 값 자체는 이번에 전달받지 못해 여기 JSON에 채우지 않음** — 구조·id·좌표 이슈만 실확인된 사실이다. 임의 문자열을 채워 넣지 않는다.
+> 로컬 bo-api(`GET /api/v1/fo/page-data/wheretobuy-agency-data?eq_agencyForm.is_visible=001&size=100`) 실호출 결과(실측, 2026-07-21). STEP4 당시(developer DB) 값과 데이터가 달라졌으므로 이 버전이 현재 기준이다.
 
 ```json
 {
   "content": [
     {
+      "id": 1841,
+      "dataJson": {
+        "agencyForm": {
+          "agency_name": "MARSHALL WOLF AUTOMATION",
+          "address": "923 S Main St, Algonquin, IL 60102, USA",
+          "office_number": "847-641-2324",
+          "homepage": "https://www.wolfautomation.com",
+          "address_lat": 42.1595811,
+          "address_lng": -88.2969481,
+          "is_visible": "001"
+        }
+      }
+    },
+    {
       "id": 1837,
       "dataJson": {
         "agencyForm": {
-          "agency_name": "(실값 미전달 — bo 관리자 화면에서 확인)",
-          "address": "(실값 미전달)",
-          "office_number": "(실값 미전달)",
-          "homepage": "(실값 미전달)",
-          "address_lat": "(정상값으로 추정 — 미검증)",
-          "address_lng": "(정상값으로 추정 — 미검증)",
+          "agency_name": "le electric america",
+          "address": "625 Heathrow Dr, Lincolnshire, IL 60069, USA",
+          "office_number": "01-1234-1111",
+          "homepage": "https://www.lselectricamerica.com/",
+          "address_lat": 42.1880235,
+          "address_lng": -87.9439671,
           "is_visible": "001"
         }
       }
     },
     {
       "id": 1836,
-      "dataJson": { "agencyForm": { "is_visible": "001", "...": "동일 구조" } }
-    },
-    {
-      "id": 1646,
       "dataJson": {
         "agencyForm": {
-          "is_visible": "001",
-          "address_lat": 0,
-          "address_lng": 0
-        }
-      }
-    },
-    {
-      "id": 1632,
-      "dataJson": {
-        "agencyForm": {
-          "is_visible": "001",
-          "address_lat": "",
-          "address_lng": ""
+          "agency_name": "ls electric",
+          "address": "Chicago, IL, USA",
+          "office_number": "10-1234-1234",
+          "homepage": "https://www.ls-electric.com/",
+          "address_lat": 41.88325,
+          "address_lng": -87.6323879,
+          "is_visible": "001"
         }
       }
     }
-  ]
+  ],
+  "totalElements": 3
 }
 ```
 
-- `data_slug='wheretobuy-agency-data'` 전체 6건 중 `is_visible='001'`(공개) 4건: id 1837/1836/1646/1632
-- 나머지 2건은 `is_visible` 값 없고 `agency_name` 빈 레거시 데이터 → 공개 필터(`eq_agencyForm.is_visible=001`)로 자연 제외됨
+- 공개(`is_visible='001'`) 3건: id 1841/1837/1836. 전부 유효 좌표(0/빈값 아님), 전부 일리노이/시카고 인근이라 지도 기본중심(`mapDefaultCenter`, 4절 참고)에서 가까운 거리
+- STEP4 문서화 당시 존재했던 좌표 이상값(0 또는 빈 문자열) 레코드(id 1646/1632)는 현재 조회 결과에 없음 — 데이터가 그 사이 정리된 것으로 보이며, 6절의 좌표 품질 이슈는 현재 기준으로는 해당 없음(단, 방어 가드 코드 자체는 유지)
 
 ## 6. 비고
 
-1. **좌표 품질 이슈 (확인 필요)**: 공개 4건 중 `id=1646`은 `address_lat`/`address_lng`가 `0`, `id=1632`는 두 값 모두 빈 문자열임이 developer DB 실조회로 확인됨. 이 값 그대로 지도 마커/`LatLngBounds` 생성에 쓰면 지도가 (0,0) 좌표로 튀거나 범위 계산이 깨질 수 있음 → STEP6 FE에서 `Number.isFinite(lat) && lat !== 0 && Number.isFinite(lng) && lng !== 0` 가드로 걸러 마커 렌더에서 제외하는 처리를 권장. **BE where 조건으로 강제 필터링하지 않음**(bo 데이터 정합성 문제이지 FO 조회조건 문제가 아님 — 정리는 bo 관리자 화면에서 해당 레코드를 수정하는 것이 근본 해결).
+1. **좌표 품질 가드**: STEP4 문서화 당시 공개 레코드 중 좌표가 `0`/빈 문자열인 것이 있었으나(5절 참고), 현재 데이터에는 해당 레코드가 없다. 다만 향후 유사 불량 데이터가 다시 들어올 수 있으므로, `fo/src/data/support/whereToBuyContent.ts`의 `hasValidCoords()`(`Number.isFinite && !== 0` 가드)로 지도 마커/`LatLngBounds` 생성에서 걸러내는 처리는 그대로 유지한다. **BE where 조건으로 강제 필터링하지 않는다**(bo 데이터 정합성 문제이지 FO 조회조건 문제가 아님 — 근본 정리는 bo 관리자 화면에서 해당 레코드를 수정하는 것).
 2. **BE 검증 프로필 (확인 필요)**: 이번 STEP4 실조회는 local DB 접속 실패로 developer DB(10.153.11.120)를 통해 수행함. STEP7 QA 단계에서 bo-api를 어떤 프로필(local/developer)로 기동해 최종 검증할지는 아직 결정되지 않음 — QA 진입 전 확인 필요.
 3. `WhereToBuyMap.tsx`는 lat/lng를 지도 마커 생성 JS 로직에만 사용하고 이를 표시하는 DOM 텍스트 노드가 없어 `data-slugKey` 마크업 태깅이 불가능하다(2-3 참고). STEP6에서 fetchApi 응답을 지도 컴포넌트 prop으로 직접 전달해야 한다.
 4. `badges`/`brandPin`/`directionsHref`/`temp1~4`는 bo 폼 필드 부재 또는 FE 전용 가공값이라 이번 스코프에서 제외 확정. 신규 필드를 bo에 추가하는 것도 이번 범위에 포함되지 않는다.
-5. 거리필터(500/250/100/50mi)·검색어 조건은 FE 목코드가 아직 구현돼 있지 않아 이번 범위에서 제외. 과설계를 피하기 위해 신규 where 파라미터를 미리 설계하지 않았다 — 필요 시 클라이언트 사이드 필터로 확장 가능(전체 배열은 이미 응답에 포함되어 있으므로 BE 재작업 불필요).
+5. 거리필터(500/250/100/50mi)·주소검색·"이 지역에서 검색"(영역필터)·내위치(geolocation)는 이후 후속 작업(0-8 FO화면개발수정)에서 구현 완료됨 — `fo/src/data/support/whereToBuyContent.ts`의 `filterLocationsByRadius`/`filterLocationsByBounds`가 이 문서 3절의 단일 fetch 결과를 클라이언트 사이드에서 필터링한다. 신규 where 파라미터·BE 재작업 없음(4절 참고).
 6. `homepage` 필드는 href 속성과 텍스트 라벨에 동일 값이 이중으로 쓰인다(anchor 태그 안에 span으로 같은 문자열 재노출) — 별도 라벨 필드가 없으므로 오타/불일치 아님.
+7. **마커 아이콘 자산은 반드시 실제 `.svg` 파일로, 확장자도 `.svg`로 저장해야 한다**: `whereToBuyPage.mapPinImage`/`mapBrandPinImage`(`whereToBuyContent.ts`)가 가리키는 `fo/public/img/support/where-to-buy/pin.svg`/`pin-brand.svg`는 과거 `.png` 확장자로 저장돼 있었는데 실제 내용은 SVG XML이라(ls-publish 레거시 원본부터 동일 오류), 브라우저가 PNG로 디코딩을 시도하다 실패해 `google.maps.Marker`의 `icon.url` 이미지 로드가 깨지고 지도 핀이 전혀 안 보이는 문제가 있었다(2026-07-21 수정). 이 폴더에 새 핀 이미지를 추가/교체할 때는 파일 실제 포맷과 확장자가 일치하는지(`file` 명령 등으로) 반드시 확인한다.
 
 ## 7. STEP별 진행 이력
 | STEP | 담당 에이전트 | 날짜 | 결과 요약 |
