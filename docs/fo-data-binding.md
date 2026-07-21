@@ -157,7 +157,7 @@ search, support(contact-us·where-to-buy만 이관), guide — 아직 fo에 마�
 
 | 패널명 | tsx 파일 경로 | 설명 | data slug |
 |---|---|---|---|
-| Highlight News Section | `src/components/content/HighlightNewsSection.tsx` | 뉴스 하이라이트 섹션 (`variant`로 main/markets 스타일 분기) | TODO |
+| Highlight News Section | `src/components/content/HighlightNewsSection.tsx` | 뉴스 하이라이트 섹션 (`variant`로 main/markets 스타일 분기) | highlight-news (완료 — `fo/docs/dev/main/highlight-news.md` 참고) |
 
 ### 2-3. faq
 

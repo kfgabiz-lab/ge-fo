@@ -8,6 +8,7 @@ import {
   eventsDetailHref,
   eventsImageSrc,
 } from "@/app/company/data/eventsData";
+import { formatDisplayDateRange } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import "@/assets/css/company.css";
 
@@ -64,7 +65,7 @@ export default async function CompanyEventsDetailPage({
       title={(row.title as string) ?? ""}
       eventsMeta={{
         venue: (row.location as string) ?? "",
-        dates: periodFrom && periodTo ? `${periodFrom}~ ${periodTo}` : periodFrom || periodTo,
+        dates: formatDisplayDateRange(periodFrom, periodTo),
       }}
       heroImage={heroImage}
       pagerAriaLabel="Events post navigation"

@@ -7,7 +7,7 @@
 > - `fo/src/app/main/page.tsx` — `<HighlightNewsSection variant="main" title="Catch up on the latest news" sectionId="main-news" />`
 > - `fo/src/app/markets/{data-center,power-grid,oil-gas-mining,public-infrastructure,industrial,commercial-residential}/page.tsx` — 6개 페이지 전부 `<HighlightNewsSection variant="markets" title="Highlights" sectionId="markets-highlights" />`
 > - 데이터 원본: `press-data`/`blog-data`/`articles-data` (각각 `fo/docs/dev/company/{press,blog,articles}-data.md`에 개별 문서화되어 있음 — 이 문서는 그 세 slug를 **통합·재가공**하는 로직만 다룸)
-> 상태: 개발완료 (2026-07-15, API 직접 호출 검증 완료 / 브라우저 UI 검증은 press 게시 데이터 1건 기준으로만 확인)
+> 상태: 개발완료 (2026-07-21 재작업 — 동률 tie-break 버그 수정, SSR HTML 실데이터 기준 검증 완료)
 
 ## 1. 개요
 
@@ -27,7 +27,8 @@
 function mergeAndPickTopNews(pressRows, blogRows, articlesRows): HighlightNewsItem[]
 // press/blog/articles 각 rows → toXCard 변환 → tag 리터럴 부여(Press/Blog/Articles)
 // → id 접두(`press-{id}` 등, 카테고리 간 id 충돌 방지)
-// → publishDttm 내림차순 정렬 → 상위 3건 slice
+// → publish_dttm(원본 "YYYY-MM-DD", card.rawDate) 내림차순, 동률 시 card.id(page_data 원본 id, 카테고리 공통) 내림차순 정렬
+// → 상위 3건 slice
 // → date를 "Mon DD, YYYY" 포맷으로 변환(formatNewsDate)
 // → image 없으면 각 카테고리 기존 LIST_FALLBACK_IMAGE로 폴백
 
@@ -40,8 +41,9 @@ export const fetchMarketHighlightNews = (marketCode) => fetchHighlightNews(marke
 ```
 
 - `fetchPressList`/`fetchBlogList`/`fetchArticlesList`(각 `fo/src/app/company/data/{press,blog,articles}Data.ts`)는 기존 시그니처를 유지한 채 **옵션 `market?: string` 파라미터만 추가**됐다. 넘기면 `has_markets_markets={market}` 쿼리 파라미터가 붙는다(3번 참고).
-- 게시 상태 조건(`condexpr_status=isVisible=001,publishDttm>=today()?'게시':'미게시'`)은 세 함수 안에 이미 있던 기존 로직 그대로 — 이번 작업에서 건드리지 않았다.
+- 게시 상태 조건(`condexpr_status=is_visible=001,publish_dttm<=today()?'게시':'미게시'`)은 세 함수 안에 이미 있던 기존 로직 그대로 — 이번 작업에서 건드리지 않았다. (2026-07-21: 이전 버전 문서에 `publishDttm>=today()`로 잘못 기재돼 있었음 — 실제 코드는 항상 `publish_dttm<=today()`였다. 단순 오기 수정.)
 - size는 각 함수 기본값(10) 그대로 사용 — market 필터가 BE(SQL) 레벨에서 먼저 걸리므로, "최근 10건 중 필터링"이 아니라 "필터링된 결과 중 최근 10건"이라 오버페치/누락 문제가 없다.
+- **동률 tie-break(2026-07-21 수정)**: 각 `toXCard`(`pressData.ts`/`blogData.ts`/`articlesData.ts`)가 화면표시 포맷("Mon D, YYYY") 변환 전의 원본 `publish_dttm` 값을 `rawDate` 필드로 함께 반환하도록 확장했다. `mergeAndPickTopNews`는 이 `rawDate`를 1차 정렬키로, `card.id`(= page_data 테이블 원본 id, press/blog/articles가 같은 테이블을 쓰므로 카테고리 무관 비교 가능)를 동률 시 2차 정렬키(내림차순)로 사용한다. 이전 버전은 화면표시 포맷 문자열을 정렬키로 써서(일자 0패딩 없음·월 약어 알파벳순≠달력순) 이론상 오정렬 가능성이 있었고, 동률 시 id 비교가 전혀 없어 카테고리 삽입 순서(press→blog→articles)+백엔드 기본정렬(`created_at DESC`)에 우연히 의존했다.
 
 ## 3. Market 코드 필터링 — 신규 BE prefix `has_markets_{필드키}`
 
@@ -91,3 +93,4 @@ blog  has_markets_markets=004 → 0건
 | 2026-07-14 | markets 6페이지도 동일한 정적 하드코딩(`highlightNews/markets.ts`) 발견 → pub 디자인 원본이 6페이지 전부 동일 내용임을 확인하고 1차로 `fetchMainHighlightNews()` 그대로 재사용(market 무관)으로 구현 |
 | 2026-07-15 | 사용자 확인: "market은 수정되야해 ... 각자 market 페이지에 최신순으로" → market코드별 필터링이 맞다고 정정. BE `has_markets_{필드키}` prefix 신규 추가(3번) + FE `fetchMarketHighlightNews`로 6페이지 교체, `mergeAndPickTopNews` 공통 헬퍼로 리팩토링(중복 제거) |
 | 2026-07-15 | BE/FE 전부 커밋·푸시 완료 (`bo-api` `18f5c3f`, `fo` `07c1f4b`) |
+| 2026-07-21 | 재작업(정밀 분석 중 발견) — "동일 게시일시 시 id 내림차순" 요구사항이 원래 구현에 없었음. 실데이터로 실증(market=001에서 2026-07-16에 4건 동시 게시 발견 — press#1863/articles#1854·1848·1845). `toXCard`에 `rawDate` 필드 추가 + `mergeAndPickTopNews`에 id 내림차순 2차 정렬 추가. SSR HTML 직접 확인 결과 1863→1854→1848 노출(1845 탈락)로 요구사항과 일치 확인 |

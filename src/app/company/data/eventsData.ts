@@ -3,6 +3,7 @@
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
 // - press/blog/articles와 달리 category 대신 location/period_from/period_to(행사기간) 필드를 씀
 import { fetchApi } from "@/lib/api";
+import { formatDisplayDateRange } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 import type {
   EventsCalendarEntry,
@@ -78,8 +79,9 @@ function toEventsCommon(item: EventsRow) {
     venue: (row.location as string) ?? "",
     periodFrom,
     periodTo,
-    dateRange: periodFrom && periodTo ? `${periodFrom} - ${periodTo}` : periodFrom || periodTo,
-    dates: periodFrom && periodTo ? `${periodFrom}~ ${periodTo}` : periodFrom || periodTo,
+    // 표시용 "Mon D, YYYY - Mon D, YYYY" 포맷 변환(양쪽 다 전체 표기)
+    dateRange: formatDisplayDateRange(periodFrom, periodTo),
+    dates: formatDisplayDateRange(periodFrom, periodTo),
     imageSrc: mediaId != null ? eventsImageSrc(mediaId) : null,
   };
 }

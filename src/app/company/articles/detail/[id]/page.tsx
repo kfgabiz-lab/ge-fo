@@ -8,6 +8,7 @@ import {
   articlesDetailHref,
   articlesImageSrc,
 } from "@/app/company/data/articlesData";
+import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import "@/assets/css/company.css";
 
@@ -58,7 +59,7 @@ export default async function CompanyArticlesDetailPage({
       variant="articles"
       pageId="Page_company_articles_detail"
       title={(row.title as string) ?? ""}
-      date={(pickField(row, "publish_dttm", "publishDttm") as string) ?? ""}
+      date={formatDisplayDate((pickField(row, "publish_dttm", "publishDttm") as string) ?? "")}
       heroImage={heroImage}
       pagerAriaLabel="Articles post navigation"
       prev={prev}

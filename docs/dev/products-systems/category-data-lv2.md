@@ -1,109 +1,79 @@
-# Devices Category List (LV2 카테고리 리스트) 데이터 바인딩 설계
+# Devices Category List (LV2 카테고리 랜딩 — 카테고리 인트로 + 제품 카드) 데이터 바인딩 설계
 
 > 대상 파일:
-> - `fo/src/app/()/products-systems/components/DevicesCategoryList.tsx` (`layout="stacked"`/`layout="split"` 공용 — 인트로 단건 + 하위 카테고리 카드 목록 다건)
-> - 사용 페이지: `fo/src/app/()/products-systems/lv-automation/page.tsx`(`layout="stacked"`), `fo/src/app/()/products-systems/variable-frequency-drive/page.tsx`(`layout="split"`, 기본값)
-> 상태: 설계중
+> - `fo/src/app/()/products-systems/components/DevicesCategoryList.tsx` (`layout="stacked"`/`layout="split"` 공용 — 인트로 단건 + 하위 제품 카드 목록 다건)
+> - 사용 페이지: `fo/src/app/()/product-range/[slug]/page.tsx` — 2026-07-21 라우팅 개편(`route-restructure.md`)으로 기존 `lv-automation/page.tsx`(stacked)·`variable-frequency-drive/page.tsx`(split)에서 이관, seo.slug 기반 동적 라우트로 전환. **신규 라우트는 `layout="split"`만 호출**한다(`layout="stacked"` 분기는 컴포넌트 내부에는 남아있으나 현재 호출부 없음 — 데드 코드)
+> 상태: 개발완료 (2026-07-21 전면 재작성 — 카드 목록 데이터 소스 정정, category.code → seo.slug 전환 반영)
 
 ## 1. data-slug
-- 값: `category-data` (`category-data-lv1.md`와 동일 slug, 동일 필드 구조 — where의 depth1 코드 값만 페이지별로 다름)
-- 다건 여부: 혼합 — 인트로(단건, depth1) + 하위 카테고리 카드 목록(다건, depth2). `layout` prop(stacked/split)은 순수 레이아웃(UI 배치)만 다르고 데이터 구조는 동일.
+
+인트로(단건)와 카드 목록(다건)이 **서로 다른 slug**를 쓴다. 최초 설계(2026-07-16, STEP1~3)는 카드 목록도 `category-data`(depth2)로 추정했으나, STEP4 실제 구현 단계에서 카드가 하위 *카테고리*가 아니라 해당 카테고리에 속한 *제품*임이 확인되어 `product-data`로 정정됐다(소스 주석에 "STEP4 정정"으로 명시돼 있음, `DevicesCategoryList.tsx:102,147`).
+
+- 인트로: `category-data` (단건, depth1 레코드)
+- 카드 목록: `product-data` (다건, 해당 카테고리 소속 제품)
 
 ## 2. data-slugKey 매핑
 
 ```html
 <!-- 인트로(단건, depth1) — stacked: .devices_category__header / split: .devices_category__intro-inner -->
 <div className="devices_category__header" data-slug="category-data">
-  <h1 className="devices_category__tit" data-slugKey="category.title">{intro.title}</h1>
-  <p className="devices_category__desc" data-slugKey="category.description">{intro.description}</p>
+  <h1 className="devices_category__tit" data-slugkey="category.title">{intro.title}</h1>
+  <p className="devices_category__desc" data-slugkey="category.description">{intro.description}</p>
 </div>
 
-<!-- 카드 목록(다건, depth2) — stacked: .devices_category__grid / split: .devices_category__list-inner -->
-<div className="devices_category__grid" data-slug="category-data" data-slug-repeat="true">
+<!-- 카드 목록(다건, product-data) — stacked: .devices_category__grid / split: .devices_category__list-inner -->
+<div className="devices_category__grid" data-slug="product-data" data-slug-repeat="true">
   <div data-slug-item> <!-- stacked: CategoryProductCardStacked / split: CategoryProductCard -->
-    <img data-slugKey="device_systems.image" data-slugKey-attr="src" />
-    <h2 data-slugKey="category.title">...</h2>
-    <p data-slugKey="category.description">...</p> <!-- CategoryList만 카드에 description 있음(lv1 카드에는 없음) -->
+    <img data-slugkey="product_info.image" data-slugkey-attr="src" />
+    <h2 data-slugkey="product.product_name">...</h2>
+    <p data-slugkey="product_info.info_description">...</p>
   </div>
 </div>
 ```
 
-| slugKey | dataJson 필드(flatten 기준) | 타입 | 바인딩 대상(텍스트 / 속성명) | 설명 |
+| slugKey | dataJson 필드(flatten 기준) | 타입 | 바인딩 대상 | 설명 |
 |---|---|---|---|---|
-| category.title (인트로, 단건) | category.title | string | 텍스트(`h1`, stacked `.devices_category__tit` / split `.devices_category__tit`) | LV2 상위 카테고리명 (depth1 레코드) |
-| category.description (인트로, 단건) | category.description | string | 텍스트(`p.devices_category__desc`) | LV2 상위 카테고리 설명 (depth1 레코드) |
-| device_systems.image (카드, 다건) | device_systems.image | array(파일ID) → string(url) | 속성(`img.src`) | 하위 카테고리 카드 썸네일. 파일ID 배열 → `/api/v1/fo/page-files/{id}` 프록시 변환. 실측 0건 입력(정상) |
-| category.title (카드, 다건) | category.title | string | 텍스트(`h2.devices_category__item-tit`) | 하위 카테고리명 (depth2 레코드) |
-| category.description (카드, 다건) | category.description | string | 텍스트(`p.devices_category__item-desc`) | 하위 카테고리 설명 (depth2 레코드) — lv1의 카드(`DevicesProducts.tsx`)에는 없는 필드로, `DevicesCategoryList` 카드에만 존재 |
+| category.title (인트로, 단건) | category.title | string | 텍스트(`h1`) | LV2 상위 카테고리명 (depth1 레코드) |
+| category.description (인트로, 단건) | category.description | string | 텍스트(`p`) | LV2 상위 카테고리 설명 (depth1 레코드) |
+| product_info.image (카드, 다건) | product_info.image | array(파일ID) → string(url) | 속성(`img.src`) | 제품 카드 썸네일. `/api/v1/fo/page-files/{id}` 프록시 변환 |
+| product.product_name (카드, 다건) | product.product_name | string | 텍스트(`h2`) | 제품명 |
+| product_info.info_description (카드, 다건) | product_info.info_description | string | 텍스트(`p`) | 제품 설명 — lv1(`DevicesProducts.tsx`) 카드에는 없는 필드로, `DevicesCategoryList` 카드에만 존재 |
 
-> `intro.parentLabel`/`intro.parentHref`(브레드크럼)와 카드의 `href`(View Detail 링크)는 정적 라우팅/네비게이션 값이며 category-data 대응 필드 없음(정적 유지, 태그 없음).
+> `intro.parentLabel`/`intro.parentHref`(브레드크럼)와 카드의 `href`(제품상세 라우트)는 정적 라우팅/네비게이션 값이며 대응 필드 없음(정적 유지, 태그 없음).
 
-## 3. API 확인 (최종 체크 — 반드시 작성, 단정 금지)
-- 신규 API 필요 여부: **확인 필요** (STEP4 `fo-be-analyzer`에서 최종 판단, `category-data-lv1.md`와 동일 slug이므로 결론도 동일할 가능성이 높으나 별도 확인)
-- (기존 활용 가능 시) 참고 엔드포인트: `GET /api/v1/fo/page-data/category-data` — `category-data-lv1.md`와 동일 엔드포인트 재사용 예상, where 값(부모 코드)만 페이지별로 다름
-- (신규 필요 시) 제안 엔드포인트: -
+## 3. API 확인
 
-## 4. 조회 조건 (아래 4개 필수 — orderBy 없이 다건 매칭 시 결과가 불확정됨)
+신규 API 불필요 — `GET /api/v1/fo/page-data/category-data`(인트로), `GET /api/v1/fo/page-data/product-data`(카드) 둘 다 기존 `FoPageDataController`(`PageDataService.search()`) 재사용. `productsSystemsData.ts`의 `fetchCategoryBySlug`(인트로)·`fetchProductsByCodePrefix`(카드) 함수로 구현.
+
+## 4. 조회 조건
 
 ### 인트로 (단건, depth1)
-- where: `category.depth=1 AND category.code={페이지 카테고리코드}` — **lv-automation/variable-frequency-drive 페이지가 어느 category.code에 매핑되는지는 확인 필요**(motor-control=`L01`만 실측 확정, 이 두 페이지는 미확정)
-- row limit: 단건(1건)
+- where: `eq_seo.slug={slug}` + `eq_category.depth=1` (`fetchCategoryBySlug(slug, {depth:1})`) — 최초 설계는 `category.code` 매핑을 썼으나, 신규 라우트는 URL 세그먼트를 그대로 `seo.slug`로 조회하므로 `category.code` 매핑 자체가 불필요해졌다(최초 설계의 미해결 항목 "lv-automation/variable-frequency-drive가 어느 category.code에 매핑되는지"는 질문 자체가 폐기됨)
+- row limit: 단건(`size=1`)
 - orderBy: 없음
-- 2차 정렬(tie-breaker): 불필요
 
-### 카드 목록 (다건, depth2)
-- where: `category.parentId={상위 depth1 rowId}` 또는 `category.code LIKE '{부모코드}-%' AND category.depth=2` — 부모코드가 확인 필요 상태이므로 카드 where도 함께 미확정
-- row limit: 다건(페이지별 하위 카테고리 개수, 상한 없이 조회)
-- orderBy: `sortOrder ASC`
-- 2차 정렬(tie-breaker): `id ASC`
+### 카드 목록 (다건, product-data)
+- where: `eq_product.is_visible=001` 후 FE에서 `product.product_code` 접두사(예: `L01-15-`) 클라이언트 필터(`fetchProductsByCodePrefix`, `eq_`는 LIKE 미지원이라 서버 필터 불가)
+- row limit: `unpaged=true`(BE 신규 파라미터, 2026-07-21) — 공개 제품 전체(67건, 2026-07-21 실측) 중 접두사 매칭분
+- orderBy: `product.product_code` 오름차순(FE `localeCompare`)
+- 2차 정렬(tie-breaker): 불필요(product_code가 유일값)
 
-## 5. 샘플 응답 데이터
+## 5. layout 사용 현황
 
-> 부모 category.code가 미확정이라 아래는 구조만 보여주는 **추정** 예시(실제 code 값 아님).
-
-```json
-{
-  "content": [
-    {
-      "id": 900,
-      "dataJson": {
-        "category": {
-          "depth": 1,
-          "code": "TODO-확인필요",
-          "title": "LV Automation",
-          "description": "인트로 설명 예시"
-        }
-      }
-    },
-    {
-      "id": 901,
-      "dataJson": {
-        "category": {
-          "depth": 2,
-          "code": "TODO-확인필요-01",
-          "parentId": 900,
-          "title": "하위 카테고리명 예시",
-          "description": "하위 카테고리 설명 예시",
-          "sortOrder": 1
-        },
-        "device_systems": {
-          "image": []
-        }
-      }
-    }
-  ]
-}
-```
+`DevicesCategoryList` 컴포넌트 자체는 `layout="stacked"`/`layout="split"` 두 분기를 여전히 갖고 있지만, 신규 라우트(`/product-range/[slug]/page.tsx:51`)는 `layout="split"`을 하드코딩해서 호출하며 저장소 전체에 `layout="stacked"` 호출부가 없다(2026-07-21 grep 확인). 과거에는 `lv-automation/page.tsx`가 stacked, `variable-frequency-drive/page.tsx`가 split을 썼으나, 두 페이지가 동일한 동적 라우트로 통합되며 stacked 분기가 데드 코드로 남았다. 삭제 여부는 이번 스코프 밖(UI 요구사항 변경 없이는 컴포넌트 삭제 보류).
 
 ## 6. 비고
-1. **미해결 확인 필요** — lv-automation / variable-frequency-drive 페이지가 어느 `category.code`에 매핑되는지 미확정(motor-control=`L01`만 실측 확정). bo 카테고리 관리 화면 또는 DB 직접 조회로 확인 필요. 확인 전까지 이 문서의 where 값은 채울 수 없음.
-2. `category-data` slug의 bo SlugRegistry 등록 여부 — **확인 필요**(`category-data-lv1.md`와 공통 항목, 중복 확인 불필요 — 한 번만 확인하면 됨).
-3. `device_systems.image` 현재 실측 미입력(0건) — 정상, 개발 블로커 아님.
-4. `layout="stacked"`(lv-automation) / `layout="split"`(variable-frequency-drive, 기본값)는 UI 배치 차이일 뿐 데이터 구조(slugKey)는 완전히 동일함을 확인함.
+
+1. `category-data`/`product-data` slug 둘 다 bo `slug_registry`에 `type=PAGE_DATA`, `is_active=true`로 등록 확인됨(2026-07-21 DB 직접 조회, `category-data` id=30/entity_id=7, `product-data` id=29/entity_id=10). `page_template.config_json` 방식이 아니라 Entity Builder(`slug_entity`/`slug_entity_field`) 방식으로 관리된다.
+2. `product_info.image` 미입력 건은 화면 플레이스홀더로 폴백(정상, 개발 블로커 아님).
 
 ## 7. STEP별 진행 이력
-| STEP | 담당 에이전트 | 날짜 | 결과 요약 |
+
+| STEP | 담당 | 날짜 | 결과 요약 |
 |---|---|---|---|
-| STEP1 | fo-slug-analyzer | 2026-07-16 | `DevicesCategoryList.tsx`의 stacked/split 두 레이아웃 모두에 인트로(`.devices_category__header`/`.devices_category__intro-inner`) 단건 태깅(`category.title`/`category.description`), 카드 목록(`.devices_category__grid`/`.devices_category__list-inner`) 다건 태깅(`device_systems.image` attr src, `category.title`, `category.description`) 완료 |
-| STEP2 | fo-slug-analyzer | 2026-07-16 | where 구조(인트로 depth1+code, 카드 parentId/code LIKE+depth2), orderBy `sortOrder ASC`, tie `id ASC` 확정. 단, lv-automation/variable-frequency-drive의 실제 category.code 값은 미확인 상태로 "확인 필요" 표시 |
-| STEP3 | fo-dev-doc-writer | 2026-07-16 | 작업 단위 문서 작성 (상태: 설계중). API 확인 "확인 필요", category.code 매핑 미해결 항목 명시 |
+| STEP1 | fo-slug-analyzer | 2026-07-16 | `DevicesCategoryList.tsx` stacked/split 두 레이아웃에 인트로 단건 태깅 완료. 카드 목록은 이 시점엔 category-data로 태깅(추후 STEP4에서 product-data로 정정) |
+| STEP2 | fo-slug-analyzer | 2026-07-16 | where 구조 초안 확정. lv-automation/variable-frequency-drive의 category.code 값은 "확인 필요"로 보류 |
+| STEP3 | fo-dev-doc-writer | 2026-07-16 | 작업 단위 문서 최초 작성 (상태: 설계중) |
+| STEP4(정정) | (미기록, 소스 주석만 존재) | 2026-07-16~21 사이 | 카드 목록이 실제로는 product-data(제품)임을 확인, 코드 재작업(`DevicesCategoryList.tsx` 주석 "STEP4 정정") — 문서는 갱신 안 됨(누락) |
+| 라우팅 개편 | (route-restructure.md 참고) | 2026-07-21 | `/product-range/[slug]` 동적 라우트로 통합, `category.code`→`seo.slug` 전환, stacked 호출부 소멸 |
+| 재검증·문서 전면 재작성 | (심층분석) | 2026-07-21 | 소스 직접 대조로 문서-코드 완전 불일치 확인 후 본 문서 재작성(카드 slug/필드 정정, layout 현황 반영, slug_registry 확인 결과 반영) |

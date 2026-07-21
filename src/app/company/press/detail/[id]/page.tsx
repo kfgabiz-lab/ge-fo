@@ -8,6 +8,7 @@ import {
   pressDetailHref,
   pressImageSrc,
 } from "@/app/company/data/pressData";
+import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import "@/assets/css/company.css";
 
@@ -58,7 +59,7 @@ export default async function CompanyPressDetailPage({
       variant="press"
       pageId="Page_company_press_detail"
       title={(row.title as string) ?? ""}
-      date={(pickField(row, "publish_dttm", "publishDttm") as string) ?? ""}
+      date={formatDisplayDate((pickField(row, "publish_dttm", "publishDttm") as string) ?? "")}
       heroImage={heroImage}
       pagerAriaLabel="Press post navigation"
       prev={prev}

@@ -2,10 +2,11 @@
 // - 각 markets 페이지(서버 컴포넌트)에서 자기 페이지의 markets 코드로 호출 → 결과를 MarketsFaq 의 items prop 으로 전달
 // - 설계 문서: fo/docs/dev/markets/faq-data.md
 // - 재사용 엔드포인트(신규 BE 없음): GET /api/v1/fo/page-data/faq-data
-//   where: eq_mainCategory=002(Markets 대분류) + eq_isVisible=001(공개) + eq_markets={페이지별 코드}
+//   where: eq_main_category=002(Markets 대분류) + eq_is_visible=001(공개) + eq_markets={페이지별 코드}
+//   (필드명은 bo faq-detail/faq-list 빌더 템플릿 config_json 기준 snake_case로 확정 — 2026-07-21 재확인)
 //   정렬: id ASC, size=100 (다건 전체)
 // - 응답 매핑: fo/src/lib/pageData.ts 의 flattenPageDataItem 으로 dataJson 을 flat row 로 변환 후
-//   root 필드 title(질문 텍스트) → question, answer(답변 텍스트) → answer 로 매핑
+//   root 필드 question(질문 텍스트) → question, answer(답변 텍스트) → answer 로 매핑
 import { fetchApi } from "@/lib/api";
 import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
 import type { FaqItem } from "./marketsContent";
@@ -36,14 +37,14 @@ export async function fetchMarketsFaqItems(
 ): Promise<FaqItem[]> {
   try {
     const res = await fetchApi<PageDataResponse>(
-      `/api/v1/fo/page-data/faq-data?eq_mainCategory=002&eq_isVisible=001&eq_markets=${marketsCode}&sort=id,asc&size=100`,
+      `/api/v1/fo/page-data/faq-data?eq_main_category=002&eq_is_visible=001&eq_markets=${marketsCode}&sort=id,asc&size=100`,
     );
 
     return (res.content ?? []).map((item) => {
-      // flattenPageDataItem: faqForm 섹션 필드(title/answer/...)를 root 로 flat 병합
+      // flattenPageDataItem: faq 섹션 필드(question/answer/...)를 root 로 flat 병합
       const row = flattenPageDataItem(item as PageDataItem);
       return {
-        question: (row.title as string) ?? "",
+        question: (row.question as string) ?? "",
         answer: (row.answer as string) ?? "",
       };
     });

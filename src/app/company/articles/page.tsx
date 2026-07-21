@@ -34,6 +34,13 @@ export default function CompanyArticlesListPage() {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
+  // 연도 필터 옵션: 2025 ~ 올해(내림차순) — "use client"라 런타임 계산 안전
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from(
+    { length: currentYear - 2025 + 1 },
+    (_, i) => String(currentYear - i),
+  );
+
   // 목록 조회: 페이지/검색/정렬/월/연도 변경 시
   useEffect(() => {
     let alive = true;
@@ -142,6 +149,7 @@ export default function CompanyArticlesListPage() {
         onMonthChange={handleMonthChange}
         yearValue={year}
         onYearChange={handleYearChange}
+        yearOptions={yearOptions}
       />
     </main>
   );

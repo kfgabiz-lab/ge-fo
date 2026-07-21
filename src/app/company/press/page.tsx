@@ -6,6 +6,7 @@ import CompanyFeedListSection from "@/app/company/components/CompanyFeedListSect
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
 import type { CompanyFeedListItem } from "@/app/company/data/companyFeedContent";
 import {
+  fetchPressFeatured,
   fetchPressList,
   pressDetailHref,
   toPressCard,
@@ -18,7 +19,8 @@ const FEATURED_FALLBACK_IMAGE = "/img/company/press/hero.png";
 const LIST_FALLBACK_IMAGE = "/img/company/press/list_01.png";
 
 // Press 목록: press-data slug 실데이터 연동(공용 CompanyFeed 컴포넌트 재사용)
-// - Featured = 정렬된 목록의 1번째 글, 리스트는 featured 제외(blog와 동일 패턴)
+// - Featured = 전역 최신 게시글 1건(fetchPressFeatured, 검색/필터 무관 고정)
+// - 리스트는 BE ne_id로 Featured 항목을 제외(클라이언트 수동 필터 제거)
 // - 카테고리 필터 없음(press-data엔 category 필드 자체가 없음)
 export default function CompanyPressListPage() {
   // 현재 페이지(0-based, API)
@@ -26,7 +28,7 @@ export default function CompanyPressListPage() {
   const [totalPages, setTotalPages] = useState(1);
   // 현재 페이지 목록 원본
   const [rows, setRows] = useState<PressRow[]>([]);
-  // Featured(목록 1번째 글) — page 0 조회 때만 갱신하여 페이지 이동 시 고정
+  // Featured(전역 최신 게시글) — 마운트 시 1회 조회하여 페이지 이동/필터 변경과 무관하게 고정
   const [featuredRow, setFeaturedRow] = useState<PressRow | null>(null);
   // 툴바(검색/정렬/월/연도) 상태 — 설계문서 9절 B/C/D
   const [search, setSearch] = useState("");
@@ -34,7 +36,29 @@ export default function CompanyPressListPage() {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
-  // 목록 조회: 페이지/검색/정렬/월/연도 변경 시
+  // 연도 필터 옵션: 2018 ~ 올해(내림차순) — "use client"라 런타임 계산 안전
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from(
+    { length: currentYear - 2017 + 1 },
+    (_, i) => String(currentYear - i),
+  );
+
+  // Featured 조회: 마운트 시 1회(전역 최신 게시글 1건 고정)
+  useEffect(() => {
+    let alive = true;
+    fetchPressFeatured()
+      .then((row) => {
+        if (alive) setFeaturedRow(row);
+      })
+      .catch(() => {
+        if (alive) setFeaturedRow(null);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // 목록 조회: 페이지/검색/정렬/월/연도/Featured id 변경 시(Featured 로딩 후 재조회하여 제외 반영)
   useEffect(() => {
     let alive = true;
     fetchPressList({
@@ -43,15 +67,12 @@ export default function CompanyPressListPage() {
       sort,
       month: month || undefined,
       year: year || undefined,
+      excludeId: featuredRow?.id,
     })
       .then((res) => {
         if (!alive) return;
         setRows(res.rows);
         setTotalPages(res.totalPages || 1);
-        // Featured 는 정렬된 목록의 1번째 글(page 0 조회 때만 갱신)
-        if (pageIndex === 0) {
-          setFeaturedRow(res.rows[0] ?? null);
-        }
       })
       .catch(() => {
         if (alive) setRows([]);
@@ -59,7 +80,7 @@ export default function CompanyPressListPage() {
     return () => {
       alive = false;
     };
-  }, [pageIndex, search, sort, month, year]);
+  }, [pageIndex, search, sort, month, year, featuredRow?.id]);
 
   // Featured 카드(단건) → CompanyFeedFeatured props 형태로 가공
   const featured = useMemo(() => {
@@ -74,22 +95,20 @@ export default function CompanyPressListPage() {
     };
   }, [featuredRow]);
 
-  // 리스트 카드(다건) → CompanyFeedListItem 형태로 가공(featured 로 쓴 항목 제외)
+  // 리스트 카드(다건) → CompanyFeedListItem 형태로 가공(Featured 제외는 BE ne_id가 처리)
   const listItems = useMemo<CompanyFeedListItem[]>(
     () =>
-      rows
-        .filter((row) => row.id !== featuredRow?.id)
-        .map((row) => {
-          const card = toPressCard(row);
-          return {
-            id: String(card.id),
-            title: card.title,
-            date: card.date,
-            image: card.imageSrc ?? LIST_FALLBACK_IMAGE,
-            href: pressDetailHref(card.id),
-          };
-        }),
-    [rows, featuredRow],
+      rows.map((row) => {
+        const card = toPressCard(row);
+        return {
+          id: String(card.id),
+          title: card.title,
+          date: card.date,
+          image: card.imageSrc ?? LIST_FALLBACK_IMAGE,
+          href: pressDetailHref(card.id),
+        };
+      }),
+    [rows],
   );
 
   // PageNumbering(1-based) → API(0-based)
@@ -142,6 +161,7 @@ export default function CompanyPressListPage() {
         onMonthChange={handleMonthChange}
         yearValue={year}
         onYearChange={handleYearChange}
+        yearOptions={yearOptions}
       />
     </main>
   );

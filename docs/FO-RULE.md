@@ -71,6 +71,7 @@ bo 홈페이지관리에서 콘텐츠 입력
 5. **data-slug 값은 에이전트가 짓지 않는다** — slug 값은 사용자(또는 bo Slug 레지스트리에 이미 등록된 값)가 지정하는 것이며, 어떤 에이전트도 임의로 slug명을 짓거나 후보를 확정처럼 제시하지 않는다. 값이 없으면 TODO로 비워둔다.
 6. **STEP4(bo 실데이터 확인)를 앞당겨라** — slug 값이 이미 정해져 있다면, STEP1~3(마크업 태깅·문서화)에 들어가기 전에 STEP4에서 하는 확인(bo Slug 레지스트리에 그 slug가 실제 등록돼 있는지, 실제 dataJson 필드 구조가 무엇인지)을 먼저 스팟체크한다. 이 확인을 STEP4까지 미루면, STEP1~3에서 만든 마크업·문서가 실제 bo 데이터 모델과 달라 통째로 재작업될 수 있다(예: slug 철자가 등록값과 다르거나, 설계한 리치 콘텐츠 구조와 실제 bo 데이터가 단순 목록형이라 안 맞는 경우).
 7. **FO 공개 API엔 단건조회(getById)가 없다** — `FoPageDataController`는 목록검색(search)만 제공한다. 글 1건 조회나 인접 레코드(이전/다음)가 필요할 때 `eq_id`로 목록 API를 재사용하지 말 것(PK 인덱스 미사용, 게시 상태 게이트 별도 처리 필요). 전용 단건/인접 엔드포인트를 신설한다 — 구현 예시: `PageDataService.findPublicDetail/findAdjacent`, `FoPageDataController`의 `GET /page-data/{slug}/{id}`, `GET /page-data/{slug}/{id}/adjacent` (company/blog 등 참고).
+8. **필드명은 bo 빌더 템플릿으로 최종 확정한다** — where/응답매핑에 쓸 필드명(예: `mainCategory` vs `main_category`)은 dev 문서의 이전 기록이나 샘플 응답만 보고 확정하지 않는다. 반드시 해당 slug를 저장하는 bo `page_template.config_json`의 실제 `fieldKey`를 조회해 최종 확정한다(등록화면·목록화면 등 여러 템플릿이 있으면 전부 교차 확인). dev 문서에 이미 필드명이 적혀 있어도, 오래됐거나 실제 저장 스키마와 어긋났을 수 있으니 재사용 전 이 확인을 생략하지 않는다.
 
 ---
 

@@ -31,6 +31,8 @@ type CompanyFeedListSectionProps = {
   onMonthChange?: (value: string) => void;
   yearValue?: string;
   onYearChange?: (value: string) => void;
+  monthOptions?: { value: string; label: string }[];
+  yearOptions?: string[];
   searchValue?: string;
   onSearchSubmit?: (value: string) => void;
   sortValue?: "latest" | "oldest" | "az" | "za";
@@ -50,6 +52,8 @@ export default function CompanyFeedListSection({
   onMonthChange,
   yearValue,
   onYearChange,
+  monthOptions,
+  yearOptions,
   searchValue,
   onSearchSubmit,
   sortValue,
@@ -67,6 +71,8 @@ export default function CompanyFeedListSection({
           onMonthChange={onMonthChange}
           yearValue={yearValue}
           onYearChange={onYearChange}
+          monthOptions={monthOptions}
+          yearOptions={yearOptions}
           searchValue={searchValue}
           onSearchSubmit={onSearchSubmit}
           sortValue={sortValue}
