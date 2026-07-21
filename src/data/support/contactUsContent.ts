@@ -68,12 +68,9 @@ export const contactUsModalsHub = {
 export type ContactUsModalsHubModalId =
   (typeof contactUsModalsHub.buttons)[number]["id"];
 
-export const contactUsInquiryTypes = [
-  { id: "product-information", label: "Product Information" },
-  { id: "quotation-request", label: "Quotation Request" },
-  { id: "purchase", label: "Purchase" },
-  { id: "others", label: "Others" },
-] as const;
+// 문의유형(INQUIRY_TYPE)/국가(COUNTRY) 옵션은 하드코딩을 제거하고
+// 공통코드 API(GET /api/v1/fo/codes/{groupCode})로 로딩한다.
+// 조회/제출 헬퍼: fo/src/app/support/contact-us/data/contactUsData.ts
 
 export const contactUsTechnicalInquiry = {
   label: "Technical Inquiry",
@@ -84,12 +81,6 @@ export const contactUsCategoryLevels = [
   { id: "lv1", label: "Lv1 Category", ariaLabel: "Product category level 1" },
   { id: "lv2", label: "Lv2 Category", ariaLabel: "Product category level 2" },
   { id: "lv3", label: "Lv3 Category", ariaLabel: "Product category level 3" },
-] as const;
-
-export const contactUsCountryOptions = [
-  { value: "us", label: "United States" },
-  { value: "ca", label: "Canada" },
-  { value: "kr", label: "Korea" },
 ] as const;
 
 export const contactUsConsentItems = [
@@ -131,4 +122,8 @@ export const contactUsFormCopy = {
   confirmPasswordPlaceholder: "Enter Password Confirm",
   sendLabel: "Send",
   sendLabelMobile: "LIST",
+  sendingLabel: "Sending...",
+  submitSuccess: "Your inquiry has been submitted successfully.",
+  submitError:
+    "Failed to submit your inquiry. Please check your input and try again.",
 } as const;

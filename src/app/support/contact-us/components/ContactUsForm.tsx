@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import Link from "next/link";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import {
   GuideCheckboxIcon,
   GuideSelectIcon,
@@ -19,12 +19,21 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   contactUsCategoryLevels,
   contactUsConsentItems,
-  contactUsCountryOptions,
   contactUsFormCopy,
-  contactUsInquiryTypes,
   contactUsTechnicalInquiry,
 } from "@/data/support/contactUsContent";
+import {
+  type CodeItem,
+  type ContactUsInquiryRequest,
+  fetchCountries,
+  fetchInquiryTypes,
+  submitContactUs,
+} from "../data/contactUsData";
 import ContactUsTermsModal from "./ContactUsTermsModal";
+
+// 동의 항목 id(데이터 파일 contactUsConsentItems 기준) → 제출 플래그 매핑용 상수
+const CONSENT_PRIVACY_ID = "personal-info"; // 개인정보 수집·이용 동의(필수) → privacyConsentFlag
+const CONSENT_MARKETING_ID = "newsletter"; // 마케팅 수신 동의 → marketingOptInFlag
 
 function renderSelectValue(label: string) {
   return (
@@ -85,6 +94,7 @@ function PasswordField({
         className="guide_field support_contact_form__input"
         type={visible ? "text" : "password"}
         placeholder={placeholder}
+        required
         value={value}
         onChange={(event) => onChange(event.target.value)}
         slotProps={{
@@ -126,20 +136,104 @@ export default function ContactUsForm() {
   const sendLabel = isMobile
     ? contactUsFormCopy.sendLabelMobile
     : contactUsFormCopy.sendLabel;
-  const [inquiryType, setInquiryType] = useState<
-    (typeof contactUsInquiryTypes)[number]["id"]
-  >(contactUsInquiryTypes[0].id);
+  // 공통코드 API(GET /api/v1/fo/codes/{groupCode})로 로딩하는 옵션 목록
+  const [inquiryTypes, setInquiryTypes] = useState<CodeItem[]>([]);
+  const [countries, setCountries] = useState<CodeItem[]>([]);
+
+  // 폼 입력 상태 (제출 시 값을 모으기 위해 전부 제어 컴포넌트로 관리)
+  const [inquiryType, setInquiryType] = useState(""); // 선택된 문의유형 code(대문자)
+  const [categoryValues, setCategoryValues] = useState<Record<string, string>>(
+    {},
+  ); // 제품 카테고리 lv1/lv2/lv3 선택값(선택)
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [country, setCountry] = useState(""); // 선택된 국가 code(대문자, 예: US)
+  const [description, setDescription] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  // 동의 체크 상태 — 데이터 파일 기본값(defaultChecked)으로 초기화
+  const [consent, setConsent] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(
+      contactUsConsentItems.map((item) => [item.id, item.defaultChecked]),
+    ),
+  );
   const [termsModalOpen, setTermsModalOpen] = useState(false);
+
+  // 제출 진행/결과 상태
+  const [submitting, setSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState<{
+    ok: boolean;
+    message: string;
+  } | null>(null);
+
+  // 마운트 시 문의유형/국가 옵션을 공통코드 API로 조회 (warranty-policy의 alive 가드 패턴)
+  useEffect(() => {
+    let alive = true;
+    fetchInquiryTypes()
+      .then((codes) => {
+        if (!alive) return;
+        setInquiryTypes(codes);
+        // 원래 UX(첫 라디오 선택) 유지 — 첫 코드로 초기 선택
+        if (codes.length > 0) setInquiryType((prev) => prev || codes[0].code);
+      })
+      .catch(() => {
+        if (alive) setInquiryTypes([]);
+      });
+    fetchCountries()
+      .then((codes) => {
+        if (alive) setCountries(codes);
+      })
+      .catch(() => {
+        if (alive) setCountries([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // 제출 처리 — 폼 상태를 ContactUsInquiryRequest로 조립해 POST
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submitting) return;
+    setSubmitResult(null);
+    setSubmitting(true);
+
+    // 필수 필드 + 선택 카테고리를 스펙에 맞게 조립 (교차검증/코드검증은 BE에 위임)
+    const payload: ContactUsInquiryRequest = {
+      type: inquiryType,
+      email,
+      firstName,
+      lastName,
+      companyName,
+      country,
+      description,
+      password,
+      confirmPassword,
+      marketingOptInFlag: Boolean(consent[CONSENT_MARKETING_ID]),
+      privacyConsentFlag: Boolean(consent[CONSENT_PRIVACY_ID]),
+    };
+    // 제품 카테고리는 선택 항목 — 값이 있을 때만 전송
+    if (categoryValues.lv1) payload.productCategoryLv1 = categoryValues.lv1;
+    if (categoryValues.lv2) payload.productCategoryLv2 = categoryValues.lv2;
+    if (categoryValues.lv3) payload.productCategoryLv3 = categoryValues.lv3;
+
+    try {
+      await submitContactUs(payload);
+      setSubmitResult({ ok: true, message: contactUsFormCopy.submitSuccess });
+    } catch {
+      // fetchApi는 비정상 응답(400 등) 시 Error를 throw — 상세 사유는 BE가 재검증
+      setSubmitResult({ ok: false, message: contactUsFormCopy.submitError });
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <section className="support_contact_form" id="support-contact-form">
       <div className="inner">
-        <form
-          className="support_contact_form__panel"
-          onSubmit={(event) => event.preventDefault()}
-        >
+        <form className="support_contact_form__panel" onSubmit={handleSubmit}>
           <div className="support_contact_form__body">
             <fieldset className="support_contact_form__group support_contact_form__group--inquiry">
               <legend className="ir">{contactUsFormCopy.inquiryType}</legend>
@@ -152,11 +246,11 @@ export default function ContactUsForm() {
                   role="radiogroup"
                   aria-label={contactUsFormCopy.inquiryType}
                 >
-                  {contactUsInquiryTypes.map((option) => {
-                    const inputId = `${formId}-${option.id}`;
+                  {inquiryTypes.map((option) => {
+                    const inputId = `${formId}-${option.code}`;
                     return (
                       <label
-                        key={option.id}
+                        key={option.code}
                         className="support_contact_form__radio-label"
                         htmlFor={inputId}
                       >
@@ -165,11 +259,11 @@ export default function ContactUsForm() {
                           className="support_contact_form__radio"
                           type="radio"
                           name={`${formId}-inquiry-type`}
-                          value={option.id}
-                          checked={inquiryType === option.id}
-                          onChange={() => setInquiryType(option.id)}
+                          value={option.code}
+                          checked={inquiryType === option.code}
+                          onChange={() => setInquiryType(option.code)}
                         />
-                        <span>{option.label}</span>
+                        <span>{option.name}</span>
                       </label>
                     );
                   })}
@@ -195,7 +289,15 @@ export default function ContactUsForm() {
                 </ContactUsFieldLabel>
                 <FormControl className="guide_field">
                   <GuideSelect
-                    defaultValue=""
+                    value={categoryValues[contactUsCategoryLevels[0].id] ?? ""}
+                    onChange={(event) =>
+                      setCategoryValues((prev) => ({
+                        ...prev,
+                        [contactUsCategoryLevels[0].id]: String(
+                          event.target.value,
+                        ),
+                      }))
+                    }
                     displayEmpty
                     IconComponent={GuideSelectIcon}
                     inputProps={{
@@ -223,7 +325,13 @@ export default function ContactUsForm() {
                   className="guide_field support_contact_form__category-select"
                 >
                   <GuideSelect
-                    defaultValue=""
+                    value={categoryValues[level.id] ?? ""}
+                    onChange={(event) =>
+                      setCategoryValues((prev) => ({
+                        ...prev,
+                        [level.id]: String(event.target.value),
+                      }))
+                    }
                     displayEmpty
                     IconComponent={GuideSelectIcon}
                     inputProps={{ "aria-label": level.ariaLabel }}
@@ -243,9 +351,27 @@ export default function ContactUsForm() {
 
             <div className="support_contact_form__row support_contact_form__row--3 support_contact_form__row--contact">
               {[
-                { id: "email", label: contactUsFormCopy.email },
-                { id: "first-name", label: contactUsFormCopy.firstName },
-                { id: "last-name", label: contactUsFormCopy.lastName },
+                {
+                  id: "email",
+                  label: contactUsFormCopy.email,
+                  type: "email",
+                  value: email,
+                  onChange: setEmail,
+                },
+                {
+                  id: "first-name",
+                  label: contactUsFormCopy.firstName,
+                  type: "text",
+                  value: firstName,
+                  onChange: setFirstName,
+                },
+                {
+                  id: "last-name",
+                  label: contactUsFormCopy.lastName,
+                  type: "text",
+                  value: lastName,
+                  onChange: setLastName,
+                },
               ].map((field) => (
                 <div
                   key={field.id}
@@ -260,6 +386,10 @@ export default function ContactUsForm() {
                   <TextField
                     id={`${formId}-${field.id}`}
                     className="guide_field support_contact_form__input"
+                    type={field.type}
+                    required
+                    value={field.value}
+                    onChange={(event) => field.onChange(event.target.value)}
                   />
                 </div>
               ))}
@@ -276,6 +406,9 @@ export default function ContactUsForm() {
                 <TextField
                   id={`${formId}-company`}
                   className="guide_field support_contact_form__input"
+                  required
+                  value={companyName}
+                  onChange={(event) => setCompanyName(event.target.value)}
                 />
               </div>
               <div className="support_contact_form__field support_contact_form__field--half support_contact_form__field--country">
@@ -284,15 +417,15 @@ export default function ContactUsForm() {
                 </ContactUsFieldLabel>
                 <FormControl className="guide_field">
                   <GuideSelect
-                    defaultValue=""
+                    value={country}
+                    onChange={(event) => setCountry(String(event.target.value))}
                     displayEmpty
                     IconComponent={GuideSelectIcon}
                     inputProps={{ "aria-label": contactUsFormCopy.country }}
                     renderValue={(value) => {
                       const label = value
-                        ? (contactUsCountryOptions.find(
-                            (item) => item.value === value,
-                          )?.label ?? String(value))
+                        ? (countries.find((item) => item.code === value)?.name ??
+                          String(value))
                         : countryPlaceholder;
                       return (
                         <span
@@ -319,9 +452,9 @@ export default function ContactUsForm() {
                         {" "}
                       </MenuItem>
                     )}
-                    {contactUsCountryOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
+                    {countries.map((option) => (
+                      <MenuItem key={option.code} value={option.code}>
+                        {option.name}
                       </MenuItem>
                     ))}
                   </GuideSelect>
@@ -342,6 +475,9 @@ export default function ContactUsForm() {
                 placeholder={contactUsFormCopy.inquiryDetailsPlaceholder}
                 multiline
                 minRows={5}
+                required
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
               />
             </div>
 
@@ -377,7 +513,13 @@ export default function ContactUsForm() {
                     >
                       <Checkbox
                         className="guide_checkbox"
-                        defaultChecked={item.defaultChecked}
+                        checked={Boolean(consent[item.id])}
+                        onChange={(event) =>
+                          setConsent((prev) => ({
+                            ...prev,
+                            [item.id]: event.target.checked,
+                          }))
+                        }
                         disableRipple
                         icon={
                           <GuideCheckboxIcon
@@ -431,11 +573,24 @@ export default function ContactUsForm() {
           </div>
 
           <div className="support_contact_form__submit-wrap">
+            {submitResult ? (
+              <p
+                className={`support_contact_form__message ${
+                  submitResult.ok
+                    ? "support_contact_form__message--success"
+                    : "support_contact_form__message--error"
+                }`}
+                role={submitResult.ok ? "status" : "alert"}
+              >
+                {submitResult.message}
+              </p>
+            ) : null}
             <button
               type="submit"
               className="btn-base btn-lv01 btn-lv01--solid support_contact_form__submit"
+              disabled={submitting}
             >
-              {sendLabel}
+              {submitting ? contactUsFormCopy.sendingLabel : sendLabel}
             </button>
           </div>
         </form>

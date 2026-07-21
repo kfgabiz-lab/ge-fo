@@ -3,11 +3,12 @@ import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { eventsDetailHero } from "@/app/company/data/eventsDetailContent";
 import {
-  fetchEventsAdjacent,
-  fetchEventsDetail,
+  eventsAdjacentQuery,
   eventsDetailHref,
+  eventsDetailQuery,
   eventsImageSrc,
 } from "@/app/company/data/eventsData";
+import { fetchData } from "@/lib/pageDataApi";
 import { formatDisplayDateRange } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import "@/assets/css/company.css";
@@ -25,8 +26,8 @@ export default async function CompanyEventsDetailPage({
   // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE Past 목록 index 계산 폐기)
   // - 상세 게이트(공개만)와 인접 스코프 게이트(공개+과거)가 다름은 eventsData.ts 각 함수에서 처리
   const [detail, adjacent] = await Promise.all([
-    fetchEventsDetail(id),
-    fetchEventsAdjacent(id),
+    fetchData(eventsDetailQuery(id)),
+    fetchData(eventsAdjacentQuery(id)),
   ]);
 
   // 존재하지 않거나 비공개/미게시 이벤트면 404

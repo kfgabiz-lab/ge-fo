@@ -6,12 +6,13 @@ import CompanyFeedListSection from "@/app/company/components/CompanyFeedListSect
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
 import type { CompanyFeedListItem } from "@/app/company/data/companyFeedContent";
 import {
-  fetchPressFeatured,
-  fetchPressList,
+  PRESS_LIST_SIZE,
+  PRESS_STATUS_WHERE,
   pressDetailHref,
   toPressCard,
   type PressRow,
 } from "@/app/company/data/pressData";
+import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
 
 // 미디어 미등록 시 폴백 이미지(퍼블리싱 정적 이미지 재사용)
@@ -19,7 +20,7 @@ const FEATURED_FALLBACK_IMAGE = "/img/company/press/hero.png";
 const LIST_FALLBACK_IMAGE = "/img/company/press/list_01.png";
 
 // Press 목록: press-data slug 실데이터 연동(공용 CompanyFeed 컴포넌트 재사용)
-// - Featured = 전역 최신 게시글 1건(fetchPressFeatured, 검색/필터 무관 고정)
+// - Featured = 전역 최신 게시글 1건(목록 브랜치 size=1 재사용, 검색/필터 무관 고정)
 // - 리스트는 BE ne_id로 Featured 항목을 제외(클라이언트 수동 필터 제거)
 // - 카테고리 필터 없음(press-data엔 category 필드 자체가 없음)
 export default function CompanyPressListPage() {
@@ -43,12 +44,19 @@ export default function CompanyPressListPage() {
     (_, i) => String(currentYear - i),
   );
 
-  // Featured 조회: 마운트 시 1회(전역 최신 게시글 1건 고정)
+  // Featured 조회: 마운트 시 1회(전역 최신 게시글 1건 고정) — 목록 브랜치 재사용(size=1, publish 최신순)
   useEffect(() => {
     let alive = true;
-    fetchPressFeatured()
-      .then((row) => {
-        if (alive) setFeaturedRow(row);
+    fetchData({
+      slug: "press-data",
+      size: 1,
+      sort: "press.publish_dttm,desc",
+      // 목록 카드는 content(본문) slugkey 미사용 → 대용량 content 필드를 응답에서 제외(성능 최적화, 상세는 미적용)
+      where: { ...PRESS_STATUS_WHERE, exclude: "content" },
+      리턴함수: (rows) => rows,
+    })
+      .then((res) => {
+        if (alive) setFeaturedRow(res.content[0] ?? null);
       })
       .catch(() => {
         if (alive) setFeaturedRow(null);
@@ -61,17 +69,34 @@ export default function CompanyPressListPage() {
   // 목록 조회: 페이지/검색/정렬/월/연도/Featured id 변경 시(Featured 로딩 후 재조회하여 제외 반영)
   useEffect(() => {
     let alive = true;
-    fetchPressList({
+    fetchData({
+      slug: "press-data",
       page: pageIndex,
-      search: search || undefined,
-      sort,
-      month: month || undefined,
-      year: year || undefined,
-      excludeId: featuredRow?.id,
+      size: PRESS_LIST_SIZE,
+      where: {
+        ...PRESS_STATUS_WHERE,
+        // 목록 카드는 content(본문) slugkey 미사용 → 대용량 content 필드를 응답에서 제외(성능 최적화, 상세는 미적용)
+        exclude: "content",
+        ...(search ? { "title|content": search } : {}),
+        ...(month ? { month_publish_dttm: month } : {}),
+        ...(year ? { year_publish_dttm: year } : {}),
+        // Featured 항목 제외(넘어온 경우에만) — BE ne_id 부정일치
+        ...(featuredRow?.id != null ? { ne_id: String(featuredRow.id) } : {}),
+      },
+      // 정렬 분기(latest=미지정은 sort 생략하여 BE 기본 created_at DESC 유지)
+      sort:
+        sort === "oldest"
+          ? "createdAt,asc"
+          : sort === "az"
+            ? "press.title,asc"
+            : sort === "za"
+              ? "press.title,desc"
+              : undefined,
+      리턴함수: (rows) => rows,
     })
       .then((res) => {
         if (!alive) return;
-        setRows(res.rows);
+        setRows(res.content);
         setTotalPages(res.totalPages || 1);
       })
       .catch(() => {

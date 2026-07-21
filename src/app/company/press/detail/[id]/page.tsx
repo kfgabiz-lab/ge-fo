@@ -3,11 +3,11 @@ import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { pressDetailHero } from "@/app/company/data/pressDetailContent";
 import {
-  fetchPressAdjacent,
-  fetchPressDetail,
+  PRESS_STATUS_WHERE,
   pressDetailHref,
   pressImageSrc,
 } from "@/app/company/data/pressData";
+import { fetchData } from "@/lib/pageDataApi";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import "@/assets/css/company.css";
@@ -24,8 +24,20 @@ export default async function CompanyPressDetailPage({
   // 상세 단건 + 인접글(이전/다음) 병렬 조회(press엔 category 라벨 조회 불필요, wall-clock 1 round-trip)
   // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE 목록 index 계산 폐기)
   const [detail, adjacent] = await Promise.all([
-    fetchPressDetail(id),
-    fetchPressAdjacent(id),
+    fetchData({
+      slug: "press-data",
+      id,
+      where: { ...PRESS_STATUS_WHERE },
+      리턴함수: (x) => x,
+    }),
+    fetchData({
+      slug: "press-data",
+      id,
+      adjacent: true,
+      sortField: "createdAt",
+      titleField: "press.title",
+      where: { ...PRESS_STATUS_WHERE },
+    }),
   ]);
 
   // 존재하지 않거나 비공개(isVisible!=001) 글이면 404

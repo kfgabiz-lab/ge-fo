@@ -9,14 +9,16 @@ import {
   blogHeroMainImage,
 } from "@/app/company/data/blogListContent";
 import {
+  BLOG_LIST_SIZE,
+  BLOG_STATUS_WHERE,
   blogDetailHref,
   fetchBlogCategories,
-  fetchBlogList,
   toBlogCard,
   toCategoryMap,
   type BlogRow,
   type CodeItem,
 } from "@/app/company/data/blogData";
+import { fetchData } from "@/lib/pageDataApi";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import "@/assets/css/company.css";
 
@@ -70,21 +72,39 @@ export default function CompanyBlogPage({
   }, []);
 
   // 목록 조회: 카테고리/검색/정렬/페이지 변경 시
+  // - 리턴함수=identity로 raw BlogRow[]를 그대로 받아 categoryMap 비동기 로드 반응성을 보존(toBlogCard useMemo가 처리)
   useEffect(() => {
     let alive = true;
-    fetchBlogList({
+    fetchData({
+      slug: "blog-data",
       page: pageIndex,
-      category: categoryCode || undefined,
-      search: search || undefined,
-      sort,
+      size: BLOG_LIST_SIZE,
+      where: {
+        ...BLOG_STATUS_WHERE,
+        // 목록 카드는 content(본문) slugkey 미사용 → base64 인라인 이미지가 박힌 대용량 content 필드를 응답에서 제외(성능 최적화, 상세는 미적용)
+        exclude: "content",
+        // contentKey blogForm→blog. dot-notation eq_는 래퍼키 정확일치 필요
+        ...(categoryCode ? { "eq_blog.category": categoryCode } : {}),
+        ...(search ? { "title|content": search } : {}),
+      },
+      // 정렬 분기(latest=미지정은 sort 생략하여 BE 기본 created_at DESC 유지)
+      sort:
+        sort === "oldest"
+          ? "createdAt,asc"
+          : sort === "az"
+            ? "blog.title,asc"
+            : sort === "za"
+              ? "blog.title,desc"
+              : undefined,
+      리턴함수: (rows) => rows,
     })
       .then((res) => {
         if (!alive) return;
-        setRows(res.rows);
+        setRows(res.content);
         setTotalPages(res.totalPages || 1);
         // Featured 는 정렬된 목록의 1번째 글(page 0 조회 때만 갱신)
         if (pageIndex === 0) {
-          setFeaturedRow(res.rows[0] ?? null);
+          setFeaturedRow(res.content[0] ?? null);
         }
       })
       .catch(() => {

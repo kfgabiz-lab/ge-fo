@@ -104,6 +104,22 @@ export function flattenPageDataItem(item: PageDataItem): Record<string, unknown>
 }
 
 /**
+ * API 응답 단일 item → flatten row 변환(flattenPageDataItem 공용 별칭).
+ * fetchData(단건 상세 브랜치)의 기본 후처리로 사용한다 — 네트워크 호출 없이 로컬 변환.
+ */
+export function commonData(item: PageDataItem): Record<string, unknown> {
+  return flattenPageDataItem(item);
+}
+
+/**
+ * API 응답 content 배열 → flatten row 배열(네트워크 호출 없이 로컬 map).
+ * fetchData(목록 브랜치)의 기본 후처리로 사용한다.
+ */
+export function commonEachData(items: PageDataItem[]): Record<string, unknown>[] {
+  return (items ?? []).map(commonData);
+}
+
+/**
  * flatten된 row에서 camelCase/snake_case 어느 스키마든 허용하며 값을 읽는 accessor.
  * BO page_template 스키마가 camelCase(publishDttm)→snake_case(publish_dttm)로 바뀌면서
  * 신규 레코드(snake)와 구 레코드(camel)가 DB에 혼재하는 상황에 대응하기 위한 읽기 전용 헬퍼.

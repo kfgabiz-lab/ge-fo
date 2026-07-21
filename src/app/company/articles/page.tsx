@@ -6,11 +6,13 @@ import CompanyFeedListSection from "@/app/company/components/CompanyFeedListSect
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
 import type { CompanyFeedListItem } from "@/app/company/data/companyFeedContent";
 import {
-  fetchArticlesList,
+  ARTICLES_LIST_SIZE,
+  ARTICLES_STATUS_WHERE,
   articlesDetailHref,
   toArticlesCard,
   type ArticlesRow,
 } from "@/app/company/data/articlesData";
+import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
 
 // 미디어 미등록 시 폴백 이미지(퍼블리싱 정적 이미지 재사용)
@@ -44,20 +46,36 @@ export default function CompanyArticlesListPage() {
   // 목록 조회: 페이지/검색/정렬/월/연도 변경 시
   useEffect(() => {
     let alive = true;
-    fetchArticlesList({
+    fetchData({
+      slug: "articles-data",
       page: pageIndex,
-      search: search || undefined,
-      sort,
-      month: month || undefined,
-      year: year || undefined,
+      size: ARTICLES_LIST_SIZE,
+      where: {
+        ...ARTICLES_STATUS_WHERE,
+        // 목록 카드는 content(본문) slugkey 미사용 → 대용량 content 필드를 응답에서 제외(성능 최적화, 상세는 미적용)
+        exclude: "content",
+        ...(search ? { "title|content": search } : {}),
+        ...(month ? { month_publish_dttm: month } : {}),
+        ...(year ? { year_publish_dttm: year } : {}),
+      },
+      // 정렬 분기(latest=미지정은 sort 생략하여 BE 기본 created_at DESC 유지)
+      sort:
+        sort === "oldest"
+          ? "createdAt,asc"
+          : sort === "az"
+            ? "articles.title,asc"
+            : sort === "za"
+              ? "articles.title,desc"
+              : undefined,
+      리턴함수: (rows) => rows,
     })
       .then((res) => {
         if (!alive) return;
-        setRows(res.rows);
+        setRows(res.content);
         setTotalPages(res.totalPages || 1);
         // Featured 는 정렬된 목록의 1번째 글(page 0 조회 때만 갱신)
         if (pageIndex === 0) {
-          setFeaturedRow(res.rows[0] ?? null);
+          setFeaturedRow(res.content[0] ?? null);
         }
       })
       .catch(() => {

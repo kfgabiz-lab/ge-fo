@@ -6,10 +6,11 @@ import CompanyEventsFeatured from "@/app/company/components/CompanyEventsFeature
 import CompanyEventsPastSection from "@/app/company/components/CompanyEventsPastSection";
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
 import {
-  fetchEventsCalendar,
-  fetchEventsFeatured,
-  fetchEventsPast,
+  eventsCalendarQuery,
+  eventsFeaturedQuery,
+  eventsPastQuery,
 } from "@/app/company/data/eventsData";
+import { fetchData } from "@/lib/pageDataApi";
 import type {
   EventsCalendarMonth,
   EventsFeaturedItem,
@@ -43,16 +44,16 @@ export default function CompanyEventsPage({
   // Featured/Calendar는 필터 없이 최초 1회 조회
   useEffect(() => {
     let alive = true;
-    fetchEventsFeatured(FEATURED_FALLBACK_IMAGE)
-      .then((items) => {
-        if (alive) setFeaturedItems(items);
+    fetchData(eventsFeaturedQuery(FEATURED_FALLBACK_IMAGE))
+      .then((res) => {
+        if (alive) setFeaturedItems(res.content);
       })
       .catch(() => {
         if (alive) setFeaturedItems([]);
       });
-    fetchEventsCalendar()
-      .then((months) => {
-        if (alive) setCalendarMonths(months);
+    fetchData(eventsCalendarQuery())
+      .then((res) => {
+        if (alive) setCalendarMonths(res.content);
       })
       .catch(() => {
         if (alive) setCalendarMonths([]);
@@ -65,17 +66,19 @@ export default function CompanyEventsPage({
   // Past: 페이지/검색/정렬/월/연도 변경 시 재조회
   useEffect(() => {
     let alive = true;
-    fetchEventsPast({
-      page: pastPageIndex,
-      search: pastSearch || undefined,
-      sort: pastSort,
-      month: pastMonth || undefined,
-      year: pastYear || undefined,
-      fallbackImage: PAST_FALLBACK_IMAGE,
-    })
+    fetchData(
+      eventsPastQuery({
+        page: pastPageIndex,
+        search: pastSearch || undefined,
+        sort: pastSort,
+        month: pastMonth || undefined,
+        year: pastYear || undefined,
+        fallbackImage: PAST_FALLBACK_IMAGE,
+      }),
+    )
       .then((res) => {
         if (!alive) return;
-        setPastItems(res.items);
+        setPastItems(res.content);
         setPastTotalPages(res.totalPages || 1);
       })
       .catch(() => {

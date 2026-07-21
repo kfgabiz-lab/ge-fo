@@ -3,14 +3,14 @@ import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { blogDetailHero } from "@/app/company/data/blogDetailContent";
 import {
+  BLOG_STATUS_WHERE,
   blogDetailHref,
   blogImageSrc,
-  fetchBlogAdjacent,
   fetchBlogCategories,
-  fetchBlogDetail,
   splitHashtag,
   toCategoryMap,
 } from "@/app/company/data/blogData";
+import { fetchData } from "@/lib/pageDataApi";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import "@/assets/css/company.css";
@@ -27,9 +27,21 @@ export default async function CompanyBlogDetailPage({
   // 상세 단건 + 카테고리 라벨 + 인접글(이전/다음) 병렬 조회(wall-clock 1 round-trip)
   // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE 목록 index 계산 폐기)
   const [detail, categories, adjacent] = await Promise.all([
-    fetchBlogDetail(id),
+    fetchData({
+      slug: "blog-data",
+      id,
+      where: { ...BLOG_STATUS_WHERE },
+      리턴함수: (x) => x,
+    }),
     fetchBlogCategories(),
-    fetchBlogAdjacent(id),
+    fetchData({
+      slug: "blog-data",
+      id,
+      adjacent: true,
+      sortField: "createdAt",
+      titleField: "blog.title",
+      where: { ...BLOG_STATUS_WHERE },
+    }),
   ]);
 
   // 존재하지 않거나 비공개(isVisible!=001) 글이면 404

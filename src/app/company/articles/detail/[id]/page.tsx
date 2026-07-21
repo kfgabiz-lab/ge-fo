@@ -3,11 +3,11 @@ import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { mediaArticleDetailHero } from "@/app/company/data/mediaArticleDetailContent";
 import {
-  fetchArticlesAdjacent,
-  fetchArticlesDetail,
+  ARTICLES_STATUS_WHERE,
   articlesDetailHref,
   articlesImageSrc,
 } from "@/app/company/data/articlesData";
+import { fetchData } from "@/lib/pageDataApi";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import "@/assets/css/company.css";
@@ -24,8 +24,20 @@ export default async function CompanyArticlesDetailPage({
   // 상세 단건 + 인접글(이전/다음) 병렬 조회(articles엔 category 라벨 조회 불필요, press와 동일 패턴)
   // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE 목록 index 계산 폐기)
   const [detail, adjacent] = await Promise.all([
-    fetchArticlesDetail(id),
-    fetchArticlesAdjacent(id),
+    fetchData({
+      slug: "articles-data",
+      id,
+      where: { ...ARTICLES_STATUS_WHERE },
+      리턴함수: (x) => x,
+    }),
+    fetchData({
+      slug: "articles-data",
+      id,
+      adjacent: true,
+      sortField: "createdAt",
+      titleField: "articles.title",
+      where: { ...ARTICLES_STATUS_WHERE },
+    }),
   ]);
 
   // 존재하지 않거나 비공개/미게시 글이면 404

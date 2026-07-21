@@ -187,3 +187,26 @@ STEP 7. QA 검증 (fo-qa-validator)
 > ⚠️ 아래 2개는 템플릿 사용법을 보여주기 위한 **예시(가짜 데이터)**이며, 실제 Banner Swiper·Main Cards 설계 시 그대로 재사용하면 안 된다. 실제 작업 시 이 파일들은 진짜 분석 결과로 덮어써야 한다.
 - 기존 API 활용 가능 케이스: `fo/docs/dev/_examples/banner-swiper.md`
 - 신규 API 필요 + 다건(배열) 케이스: `fo/docs/dev/_examples/main-cards.md`
+
+---
+
+## 4. 공통 조회+매핑 계층 — 화면별 fetch 함수 신규 개발 금지
+
+`fo/src/lib/pageDataApi.ts`의 `fetchData(json)`와 `fo/src/lib/pageData.ts`의 `commonData`/`commonEachData`가
+slug 기반 조회+매핑의 공통 계층이다. 새 화면을 만들거나 필드를 추가할 때 화면 전용
+`fetchXxxList`/`fetchXxxDetail`/`fetchXxxAdjacent`를 새로 만들지 않는다.
+
+```
+fetchData({ slug, id?, adjacent?, page?, size?, where?, sort?, 리턴함수? })
+  id 있음        → 단건 전용 PK 엔드포인트(/page-data/{slug}/{id})
+  id+adjacent    → 인접(이전/다음) 엔드포인트(/page-data/{slug}/{id}/adjacent)
+  id 없음        → 목록 엔드포인트(/page-data/{slug})
+  리턴함수 없으면 commonData(단건)/commonEachData(목록)가 자동 값 매핑
+```
+
+`data-slugkey` 이름이 flatten 후 실제 필드명과 같으면 코드 없이 자동 매핑된다. 코드값→라벨,
+파일id→URL, 문자열→배열, 날짜포맷 같은 값 가공과 반복 마크업 구조는 여전히 화면별로 필요하며,
+가공은 `fetchData`의 `리턴함수` 콜백으로 주입한다.
+
+목록에서 무거운 필드(리치텍스트 본문 등)를 빼려면 `where: { exclude: "필드명" }`(콤마로 여러 개).
+안 주면 기존과 동일하게 전체 필드가 내려온다. 상세 조회에는 적용하지 않는다.

@@ -5,21 +5,25 @@
 //   (병합/정렬/포맷/폴백 로직은 완전히 동일 → 내부 헬퍼로 추출해 두 함수가 공유)
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유한 각 목록 헬퍼 재사용)
 import type { HighlightNewsItem } from "@/types/highlightNews";
+import { fetchData } from "@/lib/pageDataApi";
 import {
-  fetchPressList,
+  PRESS_LIST_SIZE,
+  PRESS_STATUS_WHERE,
   pressDetailHref,
   toPressCard,
   type PressRow,
 } from "@/app/company/data/pressData";
 import {
+  BLOG_LIST_SIZE,
+  BLOG_STATUS_WHERE,
   blogDetailHref,
-  fetchBlogList,
   toBlogCard,
   type BlogRow,
 } from "@/app/company/data/blogData";
 import {
+  ARTICLES_LIST_SIZE,
+  ARTICLES_STATUS_WHERE,
   articlesDetailHref,
-  fetchArticlesList,
   toArticlesCard,
   type ArticlesRow,
 } from "@/app/company/data/articlesData";
@@ -127,12 +131,35 @@ async function fetchHighlightNews(
   market?: string,
 ): Promise<HighlightNewsItem[]> {
   try {
+    // 각 목록 List 브랜치 호출(page:0, size는 각 LIST_SIZE, market 있으면 has_markets_markets, sort 생략=BE 기본)
+    // 리턴함수=identity로 raw rows를 받아 mergeAndPickTopNews에 그대로 전달
+    const marketWhere: Record<string, string> = market
+      ? { has_markets_markets: market }
+      : {};
     const [pressRes, blogRes, articlesRes] = await Promise.all([
-      fetchPressList({ page: 0, market }),
-      fetchBlogList({ page: 0, market }),
-      fetchArticlesList({ page: 0, market }),
+      fetchData({
+        slug: "press-data",
+        page: 0,
+        size: PRESS_LIST_SIZE,
+        where: { ...PRESS_STATUS_WHERE, ...marketWhere },
+        리턴함수: (rows) => rows,
+      }),
+      fetchData({
+        slug: "blog-data",
+        page: 0,
+        size: BLOG_LIST_SIZE,
+        where: { ...BLOG_STATUS_WHERE, ...marketWhere },
+        리턴함수: (rows) => rows,
+      }),
+      fetchData({
+        slug: "articles-data",
+        page: 0,
+        size: ARTICLES_LIST_SIZE,
+        where: { ...ARTICLES_STATUS_WHERE, ...marketWhere },
+        리턴함수: (rows) => rows,
+      }),
     ]);
-    return mergeAndPickTopNews(pressRes.rows, blogRes.rows, articlesRes.rows);
+    return mergeAndPickTopNews(pressRes.content, blogRes.content, articlesRes.content);
   } catch {
     return [];
   }
