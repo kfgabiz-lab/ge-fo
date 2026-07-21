@@ -167,6 +167,7 @@ fo/
 │   ├── lib/                         # 순수 유틸리티 함수
 │   │   ├── api.ts                    # API fetch 공통 유틸 (X-Site-Id 헤더 주입 포함)
 │   │   ├── pageData.ts               # PageData 조회 공통 유틸
+│   │   ├── formatDate.ts             # 날짜 표시 포맷 공통 함수(formatDisplayDate/formatDisplayDateRange) — "YYYY-MM-DD" → "Mon D, YYYY"
 │   │   ├── googleMaps/loadGoogleMaps.ts   # Google Maps JS API 부트스트랩 로더 (where-to-buy 전용, 신규)
 │   │   ├── navigation/                # crossSectionNav, gnbCloseEvent, historyNavigation
 │   │   ├── createThrottledScrollHandler.ts

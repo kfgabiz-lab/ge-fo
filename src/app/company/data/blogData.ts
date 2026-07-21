@@ -2,6 +2,7 @@
 // - 설계 문서: fo/docs/dev/company/blog-data.md
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
 import { fetchApi } from "@/lib/api";
+import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 
 // 목록 페이지당 개수(설계 4절: size=10 페이지네이션)
@@ -42,7 +43,8 @@ export interface BlogCardItem {
   categoryLabel: string; // BLOGCATEGORY 코드→라벨 변환 결과
   title: string;
   description: string; // seo.meta_description(신)/seo.metaDescription(구) 재사용(설계 6-10)
-  date: string; // publishDttm(YYYY-MM-DD) 원본
+  date: string; // publishDttm → formatDisplayDate로 변환된 표시용 값("Mon D, YYYY")
+  rawDate: string; // publish_dttm 원본 값("YYYY-MM-DD") — 정렬 전용(하이라이트 병합 등), 화면 표시엔 date 사용
   imageSrc: string | null; // 미디어 없으면 null → 호출부에서 정적 폴백
   tags: string[]; // hashtag split 결과
 }
@@ -74,6 +76,7 @@ export function toBlogCard(
   const mediaId =
     Array.isArray(imageArr) && imageArr.length > 0 ? (imageArr[0] as number) : null;
   const code = (row.category as string) ?? "";
+  const publishDttm = (pickField(row, "publish_dttm", "publishDttm") as string) ?? "";
   return {
     id: item.id,
     categoryCode: code,
@@ -82,8 +85,9 @@ export function toBlogCard(
     title: (row.title as string) ?? "",
     // 신규(meta_description)/구(metaDescription) seo 스키마 모두 지원 — 신규 우선
     description: (pickField(row, "meta_description", "metaDescription") as string) ?? "",
-    // 신규(publish_dttm)/구(publishDttm) 스키마 모두 지원 — 신규 우선
-    date: (pickField(row, "publish_dttm", "publishDttm") as string) ?? "",
+    // 신규(publish_dttm)/구(publishDttm) 스키마 모두 지원 — 신규 우선. 표시용 "Mon D, YYYY" 포맷 변환
+    date: formatDisplayDate(publishDttm),
+    rawDate: publishDttm,
     imageSrc: mediaId != null ? blogImageSrc(mediaId) : null,
     tags: splitHashtag(row.hashtag as string | undefined),
   };
@@ -102,14 +106,12 @@ export interface BlogListResult {
   page: number; // 0-based
 }
 
-// 목록 조회(게시 상태 고정 + 카테고리/검색/정렬/월/연도 필터, 기본 정렬 created_at DESC)
+// 목록 조회(게시 상태 고정 + 카테고리/검색/정렬 필터, 기본 정렬 created_at DESC)
 export async function fetchBlogList(params: {
   page: number; // 0-based
   category?: string; // 코드값, 없으면 전체
   search?: string; // 제목+본문 검색어(설계문서 9-B)
   sort?: "latest" | "oldest"; // 기본 latest(설계문서 9-C)
-  month?: string; // 게시월 "01"~"12", 연도 무관(설계문서 9-D)
-  year?: string; // 게시연도 "YYYY"(설계문서 9-D 확장)
   market?: string; // markets 필터(3자리 코드) — dataJson.markets CSV 토큰 포함 항목만(BE has_markets_markets)
 }): Promise<BlogListResult> {
   const sp = new URLSearchParams();
@@ -121,9 +123,6 @@ export async function fetchBlogList(params: {
   // page_template(blog-basicInfo) contentKey가 blogForm→blog로 변경됨. dot-notation eq_는 래퍼키 정확일치 필요(BE PageDataService.appendWhereConditions eq_ dot 경로)
   if (params.category) sp.set("eq_blog.category", params.category);
   if (params.search) sp.set("title|content", params.search);
-  // month_/year_는 필드키만(래퍼키 무관, 최상위+중첩 자동탐색). 필드명이 publishDttm→publish_dttm(snake)로 변경됨
-  if (params.month) sp.set("month_publish_dttm", params.month);
-  if (params.year) sp.set("year_publish_dttm", params.year);
   // markets 코드가 넘어온 경우에만 필터 추가(옵션이라 기존 호출부는 그대로 전체 조회)
   if (params.market) sp.set("has_markets_markets", params.market);
   if (params.sort === "oldest") sp.set("sort", "createdAt,asc");

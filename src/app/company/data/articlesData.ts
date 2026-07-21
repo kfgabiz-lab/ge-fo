@@ -3,6 +3,7 @@
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
 // - pressData.ts와 완전히 동일 패턴(articles-data엔 press와 마찬가지로 category/hashtag 필드가 없음)
 import { fetchApi } from "@/lib/api";
+import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 
 // 목록 페이지당 개수(설계 4절: size=10 페이지네이션)
@@ -35,7 +36,8 @@ export interface ArticlesCardItem {
   id: number;
   title: string;
   description: string; // seo.meta_description(신)/seo.metaDescription(구) 재사용(설계 2-2)
-  date: string; // publishDttm(YYYY-MM-DD) 원본
+  date: string; // publishDttm → formatDisplayDate로 변환된 표시용 값("Mon D, YYYY")
+  rawDate: string; // publish_dttm 원본 값("YYYY-MM-DD") — 정렬 전용(하이라이트 병합 등), 화면 표시엔 date 사용
   imageSrc: string | null; // 미디어 없으면 null → 호출부에서 정적 폴백
 }
 
@@ -48,13 +50,15 @@ export function toArticlesCard(item: ArticlesRow): ArticlesCardItem {
   const imageArr = row.image;
   const mediaId =
     Array.isArray(imageArr) && imageArr.length > 0 ? (imageArr[0] as number) : null;
+  const publishDttm = (pickField(row, "publish_dttm", "publishDttm") as string) ?? "";
   return {
     id: item.id,
     title: (row.title as string) ?? "",
     // 신규(meta_description)/구(metaDescription) seo 스키마 모두 지원 — 신규 우선
     description: (pickField(row, "meta_description", "metaDescription") as string) ?? "",
-    // 신규(publish_dttm)/구(publishDttm) 스키마 모두 지원 — 신규 우선
-    date: (pickField(row, "publish_dttm", "publishDttm") as string) ?? "",
+    // 신규(publish_dttm)/구(publishDttm) 스키마 모두 지원 — 신규 우선. 표시용 "Mon D, YYYY" 포맷 변환
+    date: formatDisplayDate(publishDttm),
+    rawDate: publishDttm,
     imageSrc: mediaId != null ? articlesImageSrc(mediaId) : null,
   };
 }

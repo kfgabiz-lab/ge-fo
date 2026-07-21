@@ -48,11 +48,9 @@ export default function CompanyBlogPage({
   const [rows, setRows] = useState<BlogRow[]>([]);
   // Featured(목록 1번째 글) — page 0 조회 때만 갱신하여 페이지 이동 시 고정
   const [featuredRow, setFeaturedRow] = useState<BlogRow | null>(null);
-  // 툴바(검색/정렬/월/연도) 상태 — 설계문서 9절 B/C/D
+  // 툴바(검색/정렬) 상태 — 설계문서 9절 B/C
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"latest" | "oldest">("latest");
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
 
   // 카테고리 코드그룹 최초 1회 조회
   useEffect(() => {
@@ -71,7 +69,7 @@ export default function CompanyBlogPage({
     };
   }, []);
 
-  // 목록 조회: 카테고리/검색/정렬/월/연도/페이지 변경 시
+  // 목록 조회: 카테고리/검색/정렬/페이지 변경 시
   useEffect(() => {
     let alive = true;
     fetchBlogList({
@@ -79,8 +77,6 @@ export default function CompanyBlogPage({
       category: categoryCode || undefined,
       search: search || undefined,
       sort,
-      month: month || undefined,
-      year: year || undefined,
     })
       .then((res) => {
         if (!alive) return;
@@ -97,7 +93,7 @@ export default function CompanyBlogPage({
     return () => {
       alive = false;
     };
-  }, [categoryCode, search, sort, month, year, pageIndex]);
+  }, [categoryCode, search, sort, pageIndex]);
 
   // Featured 카드(단건)
   const featured = useMemo(
@@ -120,21 +116,13 @@ export default function CompanyBlogPage({
     setPageIndex(0);
   };
 
-  // 검색/정렬/월 변경 시 첫 페이지로 이동 후 재조회(카테고리와 동일 패턴)
+  // 검색/정렬 변경 시 첫 페이지로 이동 후 재조회(카테고리와 동일 패턴)
   const handleSearchSubmit = (value: string) => {
     setSearch(value);
     setPageIndex(0);
   };
   const handleSortChange = (value: "latest" | "oldest") => {
     setSort(value);
-    setPageIndex(0);
-  };
-  const handleMonthChange = (value: string) => {
-    setMonth(value);
-    setPageIndex(0);
-  };
-  const handleYearChange = (value: string) => {
-    setYear(value);
     setPageIndex(0);
   };
 
@@ -214,10 +202,6 @@ export default function CompanyBlogPage({
             categories={categories}
             selectedCategory={categoryCode}
             onCategoryChange={handleCategoryChange}
-            monthValue={month}
-            onMonthChange={handleMonthChange}
-            yearValue={year}
-            onYearChange={handleYearChange}
             searchValue={search}
             onSearchSubmit={handleSearchSubmit}
             sortValue={sort}

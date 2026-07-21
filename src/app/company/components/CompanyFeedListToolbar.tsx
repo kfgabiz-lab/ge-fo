@@ -18,8 +18,8 @@ const toolbarLabels: Record<CompanyFeedVariant, { capital: string; lower: string
   articles: { capital: "Articles", lower: "articles" },
 };
 
-// 게시월 옵션(1~12월, 값은 BE month_ 파라미터 형식인 "01"~"12") — 기존 Jan/Feb/Mar 3개뿐이던 하드코딩을 전체 확장
-const MONTH_OPTIONS = [
+// 게시월 옵션(1~12월, 값은 BE month_ 파라미터 형식인 "01"~"12") — 전체 12개월 원본
+const ALL_MONTH_OPTIONS = [
   { value: "01", label: "January" },
   { value: "02", label: "February" },
   { value: "03", label: "March" },
@@ -34,15 +34,25 @@ const MONTH_OPTIONS = [
   { value: "12", label: "December" },
 ];
 
+// month 옵션 미전달 시 기본값: Jun~Oct(06~10) 5개월
+const DEFAULT_MONTH_OPTIONS = ALL_MONTH_OPTIONS.filter(
+  (m) => m.value >= "06" && m.value <= "10",
+);
+
+// year 옵션 미전달 시 방어용 fallback: 현재 연도 1개(실제로는 press/articles 페이지에서 항상 전달)
+const DEFAULT_YEAR_OPTIONS = [String(new Date().getFullYear())];
+
 // 공통 피드 리스트 툴바 (Press/Articles). Month/Year/Search/Sort 필터 동일 구조
 // - month/year/search/sort는 전부 optional(값+핸들러 짝) — 안 넘기면 기존처럼 비연동 장식 UI로 동작(articles 하위호환)
-// - Year 옵션 목록(2026/2025)은 기존 하드코딩 그대로 유지, 필터링 기능만 연동(설계문서 9-D 확장)
+// - monthOptions/yearOptions 미전달 시 기본값(month: Jun~Oct, year: 현재연도) 사용
 type CompanyFeedListToolbarProps = {
   variant: CompanyFeedVariant;
   monthValue?: string; // "" | "01"~"12"
   onMonthChange?: (value: string) => void;
-  yearValue?: string; // "" | "2026" | "2025"
+  yearValue?: string; // "" | "YYYY"
   onYearChange?: (value: string) => void;
+  monthOptions?: { value: string; label: string }[];
+  yearOptions?: string[];
   searchValue?: string;
   onSearchSubmit?: (value: string) => void;
   sortValue?: "latest" | "oldest";
@@ -55,6 +65,8 @@ export default function CompanyFeedListToolbar({
   onMonthChange,
   yearValue = "",
   onYearChange,
+  monthOptions = DEFAULT_MONTH_OPTIONS,
+  yearOptions = DEFAULT_YEAR_OPTIONS,
   searchValue = "",
   onSearchSubmit,
   sortValue = "latest",
@@ -83,7 +95,7 @@ export default function CompanyFeedListToolbar({
           renderValue={(value) => {
             const code = value ? String(value) : "";
             const text = code
-              ? (MONTH_OPTIONS.find((m) => m.value === code)?.label ?? code)
+              ? (monthOptions.find((m) => m.value === code)?.label ?? code)
               : "Month";
             return (
               <span className="guide_field__select-value" title={text}>
@@ -93,7 +105,7 @@ export default function CompanyFeedListToolbar({
           }}
         >
           <MenuItem value="">Month</MenuItem>
-          {MONTH_OPTIONS.map((month) => (
+          {monthOptions.map((month) => (
             <MenuItem key={month.value} value={month.value}>
               {month.label}
             </MenuItem>
@@ -120,8 +132,11 @@ export default function CompanyFeedListToolbar({
           }}
         >
           <MenuItem value="">Year</MenuItem>
-          <MenuItem value="2026">2026</MenuItem>
-          <MenuItem value="2025">2025</MenuItem>
+          {yearOptions.map((yr) => (
+            <MenuItem key={yr} value={yr}>
+              {yr}
+            </MenuItem>
+          ))}
         </GuideSelect>
       </FormControl>
 
