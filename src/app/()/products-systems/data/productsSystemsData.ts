@@ -116,22 +116,21 @@ export interface CategoryChild {
 
 // depth2 하위 카테고리 카드 목록(motor-control 그리드).
 // TEXT 정렬이 깨지므로 서버 sort 대신 FE 에서 Number(sortOrder) 오름차순, 동률은 id 오름차순으로 정렬한다.
+// sortOrder는 category 섹션 밖의 최상위 필드(dataJson: { category: {...}, sortOrder: N, ... })라 flatten 후 접두사 없이 접근한다(DB 실측 확인).
 export async function fetchCategoryChildren(
   parentId: number,
 ): Promise<CategoryChild[]> {
   try {
     const rows = await searchPageData(
       "category-data",
-      `eq_category.parentId=${parentId}&size=100`,
+      `eq_category.parentId=${parentId}&unpaged=true`,
     );
     const mapped = rows.map((row) => ({
       id: Number(row._id),
       title: (row["category.title"] as string) ?? "",
       image: resolveFirstImageUrl(row["device_systems.image"]),
       slug: (row["seo.slug"] as string) ?? "",
-      sortOrder: Number(
-        row["category.sortOrder"] ?? row["category.sort_order"] ?? 0,
-      ),
+      sortOrder: Number(row["sortOrder"] ?? 0),
     }));
     mapped.sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
     return mapped.map(({ sortOrder: _sortOrder, ...rest }) => rest);
@@ -158,7 +157,7 @@ export async function fetchProductsByCodePrefix(
   try {
     const rows = await searchPageData(
       "product-data",
-      `eq_product.is_visible=001&size=100`,
+      `eq_product.is_visible=001&unpaged=true`,
     );
     const filtered = rows
       .filter((row) =>
@@ -236,24 +235,6 @@ export function mapHwProductData(row: Record<string, unknown>): HwProductData {
   };
 }
 
-export interface SwProductData {
-  name: string; // product.product_name (히어로 title)
-  description: string; // product.product_description (히어로 desc)
-  infoDescription: string; // product_info.info_description (오버뷰 desc)
-  image: string | null; // product_info.image (오버뷰 이미지)
-}
-
-// SW 제품상세 row → 히어로/오버뷰 바인딩용 구조로 가공.
-export function mapSwProductData(row: Record<string, unknown>): SwProductData {
-  const str = (key: string) => (row[key] as string) ?? "";
-  return {
-    name: str("product.product_name"),
-    description: str("product.product_description"),
-    infoDescription: str("product_info.info_description"),
-    image: resolveFirstImageUrl(row["product_info.image"]),
-  };
-}
-
 // ---------------- ⑤ product-data 전체(explore-all A~Z) ----------------
 
 export interface ProductNameItem {
@@ -266,7 +247,7 @@ export async function fetchAllProductNames(): Promise<ProductNameItem[]> {
   try {
     const rows = await searchPageData(
       "product-data",
-      `eq_product.is_visible=001&sort=product.product_name,asc&size=100`,
+      `eq_product.is_visible=001&sort=product.product_name,asc&unpaged=true`,
     );
     return rows
       .map((row) => ({

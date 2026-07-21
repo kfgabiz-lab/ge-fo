@@ -3,8 +3,8 @@
 > 대상 파일:
 > - `fo/src/app/()/products-systems/components/DevicesHero.tsx` (히어로 인트로, 단건 — `.devices_hero__inner`)
 > - `fo/src/app/()/products-systems/components/DevicesProducts.tsx` (하위 카테고리 카드 그리드, 다건 — `.devices_products__grid`, `DevicesHero`가 `withProducts` prop으로 embedded 렌더도 겸함)
-> - 사용 페이지: `fo/src/app/()/products-systems/motor-control/page.tsx` (`<DevicesHero withProducts />`)
-> 상태: 설계중
+> - 사용 페이지: `fo/src/app/()/products-category/[slug]/page.tsx` (`<DevicesHero withProducts />`) — 2026-07-21 라우팅 개편(`route-restructure.md`)으로 기존 `motor-control/page.tsx`에서 이관, seo.slug 기반 동적 라우트로 전환
+> 상태: 개발완료 (2026-07-21 재검증 — 정렬 필드 버그 수정, unpaged 전환)
 
 ## 1. data-slug
 - 값: `category-data`
@@ -50,9 +50,11 @@
 
 ### 카드 목록 (다건, depth2)
 - where: `category.parentId={상위 depth1 rowId}` (motor-control=568) 또는 `category.code LIKE '{부모코드}-%' AND category.depth=2`
-- row limit: 다건 — motor-control 실측 14건(상한 없이 조회)
+- row limit: 다건 — `unpaged=true`(2026-07-21부터, BE `PageDataService` 신규 파라미터)로 전체 조회. 이전에는 `size=100`을 썼으나 BE `size` 미지정 기본값이 20이라 제거 시 오히려 더 작게 잘리는 문제가 있어, LIMIT/OFFSET 자체를 생략하는 `unpaged` 분기를 BE에 신규 추가했다(FO/BO 공유 `PageDataService.search()`, 기존 페이징 호출부는 영향 없음)
 - orderBy: `sortOrder ASC`
 - 2차 정렬(tie-breaker): `id ASC`
+
+**⚠️ 정렬 필드 접근 버그(2026-07-21 수정)**: `sortOrder`는 `category` 섹션 **밖**의 최상위 필드다(`dataJson: { category: {...}, sortOrder: N, device_systems: {...} }`, DB 실측 확인). `fetchCategoryChildren`(`productsSystemsData.ts`)이 과거 `row["category.sortOrder"] ?? row["category.sort_order"]`로 읽고 있었는데, `flattenPageDataItem`(`fo/src/lib/pageData.ts`)의 병합 규칙상 이 두 키는 항상 `undefined`가 되어 모든 카드의 sortOrder가 0으로 처리되고 있었다(사실상 id 순 정렬로만 동작). `row["sortOrder"]`(접두사 없음)로 수정했다.
 
 ## 5. 샘플 응답 데이터
 

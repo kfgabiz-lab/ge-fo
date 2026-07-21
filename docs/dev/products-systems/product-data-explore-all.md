@@ -2,7 +2,7 @@
 
 > 대상 파일: `fo/src/app/()/products-systems/components/DevicesExploreAll.tsx` (`.devices_explore__list`, A~Z 레터 컬럼별 다건 목록)
 > 사용 페이지: `fo/src/app/()/products-systems/explore-all/page.tsx`
-> 상태: 설계중
+> 상태: 개발완료 (2026-07-21 재검증 — API 연동은 이미 완료돼 있었음을 확인, row limit을 unpaged로 전환)
 
 ## 1. data-slug
 - 값: `product-data` (`product-data-detail.md`와 동일 slug — 단건 상세가 아니라 전체 제품을 다건으로 조회하는 케이스)
@@ -24,16 +24,16 @@
 
 > `item.href`(제품 상세 라우트)는 정적 라우팅 값, product-data 대응 필드 없음(정적 유지, 태그 없음). `discontinued`(단종 표기 도트)는 `product.is_visible` 파생 가능성이 있으나 이번 STEP1~2 범위에서 확정하지 못함(6번 비고 참고).
 
-## 3. API 확인 (최종 체크 — 반드시 작성, 단정 금지)
-- 신규 API 필요 여부: **확인 필요** (STEP4 `fo-be-analyzer`에서 최종 판단, `product-data-detail.md`와 동일 slug이므로 결론도 동일할 가능성 높음)
-- (기존 활용 가능 시) 참고 엔드포인트: `GET /api/v1/fo/page-data/product-data` — `product-data-detail.md`와 동일 엔드포인트를 where만 바꿔 재사용 예상(단건 `seo.slug` 대신 `is_visible` 조건으로 전체 조회)
-- (신규 필요 시) 제안 엔드포인트: -
+## 3. API 확인
 
-## 4. 조회 조건 (아래 4개 필수 — orderBy 없이 다건 매칭 시 결과가 불확정됨)
-- where: `product.is_visible=001`
-- row limit: 다건 — 전체 제품(상한 없이 조회, A~Z 전 레터 커버 필요)
+신규 API 불필요 — `GET /api/v1/fo/page-data/product-data` 기존 엔드포인트를 `unpaged=true`로 호출(`fetchAllProductNames()`, `productsSystemsData.ts`). `product-data-detail.md`와 동일 slug, 2026-07-21 확인 결과 이미 구현·배포된 상태였음(이 절의 "확인 필요" 표기가 뒤처져 있었음).
+
+## 4. 조회 조건
+
+- where: `eq_product.is_visible=001`
+- row limit: `unpaged=true`(2026-07-21부터) — 이전에는 `size=100`을 썼다. 공개 제품이 67건(2026-07-21 실측, 100 미만)이라 당장 잘리진 않았지만, BE `size` 기본값이 20이라 단순 제거는 오히려 더 작게 잘리는 문제가 있어 LIMIT/OFFSET을 아예 생략하는 `unpaged` 파라미터를 BE(`PageDataService`)에 신규 추가해 전환했다(기존 페이징 호출부는 영향 없음)
 - orderBy: `product.product_name ASC`
-- 2차 정렬(tie-breaker): `id ASC`
+- 2차 정렬(tie-breaker): **의도적으로 미적용**(2026-07-21 사용자 확인) — 제품명 동률 시 정렬이 이론상 불확정이지만, A~Z 목록 특성상 실사용 영향이 낮다고 판단해 `id ASC` tie-break를 넣지 않기로 결정. 추후 재검토 필요 시 이 결정을 먼저 뒤집어야 한다(원칙3 예외로 기록).
 
 ## 5. 샘플 응답 데이터
 
