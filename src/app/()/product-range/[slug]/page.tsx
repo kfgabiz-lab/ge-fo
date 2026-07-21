@@ -48,7 +48,7 @@ export default async function ProductRangeRoutePage({
     return (
       <main className="devices-page" id="Page_product_range">
         <DevicesCategoryList
-          layout="split"
+          layout="stacked"
           intro={intro}
           products={productCards}
         />
