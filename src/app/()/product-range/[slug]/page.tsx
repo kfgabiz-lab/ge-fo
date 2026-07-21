@@ -9,7 +9,6 @@ import {
   fetchCategoryBySlug,
   fetchProductsByCodePrefix,
   fetchProductBySlug,
-  PRODUCTS_SYSTEMS_PLACEHOLDER,
 } from "@/app/()/products-systems/data/productsSystemsData";
 import "@/assets/css/devices-systems.css";
 
@@ -36,7 +35,7 @@ export default async function ProductRangeRoutePage({
     const productCards: DevicesCategoryProduct[] = products.map((p) => ({
       id: String(p.id),
       href: p.slug ? `/product/${p.slug}` : "",
-      image: p.image ?? PRODUCTS_SYSTEMS_PLACEHOLDER,
+      image: p.image,
       title: p.title,
       description: p.description,
     }));

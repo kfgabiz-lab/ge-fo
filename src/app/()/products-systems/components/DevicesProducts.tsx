@@ -52,11 +52,11 @@ export default function DevicesProducts({
               >
                 <div className="img_area">
                   {badgeType ? <ProductAwardBadge /> : null}
-                  {/* device_systems.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환 */}
+                  {/* device_systems.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환. 없으면 src 빈값으로 브라우저 기본 깨진 이미지 표시(레이아웃 유지) */}
                   <img
                     loading={embedded ? "eager" : "lazy"}
                     decoding="async"
-                    src={item.image}
+                    src={item.image ?? undefined}
                     alt={item.title}
                     data-slugkey="device_systems.image"
                     data-slugkey-attr="src"

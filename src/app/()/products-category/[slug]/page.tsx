@@ -7,7 +7,6 @@ import type { DevicesProductItem } from "@/app/()/products-systems/data/motorCon
 import {
   fetchCategoryBySlug,
   fetchCategoryChildren,
-  PRODUCTS_SYSTEMS_PLACEHOLDER,
 } from "@/app/()/products-systems/data/productsSystemsData";
 import "@/assets/css/devices-systems.css";
 
@@ -34,7 +33,7 @@ export default async function ProductsCategoryRoutePage({
       ? children.map((child) => ({
           id: String(child.id),
           href: child.slug ? `/product-range/${child.slug}` : "",
-          image: child.image ?? PRODUCTS_SYSTEMS_PLACEHOLDER,
+          image: child.image,
           title: child.title,
         }))
       : undefined;

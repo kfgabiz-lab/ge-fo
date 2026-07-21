@@ -12,11 +12,11 @@ export default function DevicesProductHero({ product }: DevicesProductHeroProps)
     <section className="devices_product_hero" id="product-top" data-slug="product-data">
       <div className="inner devices_product_hero__inner">
         <div className="devices_product_hero__visual">
-          {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환 */}
+          {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환. 없으면 src 빈값으로 브라우저 기본 깨진 이미지 표시(레이아웃 유지) */}
           <img
             loading="eager"
             decoding="async"
-            src={product.image}
+            src={product.image ?? undefined}
             alt={product.series}
             className="devices_product_hero__img"
             data-slugkey="product_info.image"

@@ -26,8 +26,8 @@ function CategoryProductCard({
   return (
     <article className="devices_category__item" data-slug-item>
       <div className="devices_category__item-img">
-        {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환 */}
-        <img loading={loading} decoding="async" src={item.image} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
+        {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환. 없으면 src 빈값으로 브라우저 기본 깨진 이미지 표시(레이아웃 유지) */}
+        <img loading={loading} decoding="async" src={item.image ?? undefined} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>
       <div className="devices_category__item-body">
         <div className="devices_category__item-text">
@@ -62,8 +62,8 @@ function CategoryProductCardStacked({
     // href는 하위 카테고리/제품 상세 라우트로 이동하는 정적 라우팅 → 데이터 필드 아님(정적 유지)
     <Link href={item.href} className="devices_category__item" data-slug-item>
       <div className="devices_category__item-img">
-        {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환 */}
-        <img loading={loading} decoding="async" src={item.image} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
+        {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환. 없으면 src 빈값으로 브라우저 기본 깨진 이미지 표시(레이아웃 유지) */}
+        <img loading={loading} decoding="async" src={item.image ?? undefined} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>
       <div className="devices_category__item-body">
         <div className="devices_category__item-text">

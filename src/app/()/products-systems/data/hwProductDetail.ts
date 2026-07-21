@@ -18,7 +18,7 @@ export async function buildHwProductDetail(
     // 히어로 메인 제목 슬롯(series) = product.product_name
     series: data.name || base.series,
     description: data.description || base.description,
-    image: data.image ?? base.image,
+    image: data.image,
     specs:
       data.specs.length > 0
         ? data.specs.map((s) => ({ label: s.title, value: s.content }))
