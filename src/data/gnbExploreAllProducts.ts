@@ -19,20 +19,20 @@ export type GnbExploreLetterGroup = {
 };
 
 const productHrefMap: Record<string, string> = {
-  DMPi: "/products-systems/motor-control/metasol-ms",
-  GMP: "/products-systems/motor-control/metasol-ms",
+  DMPi: "/product/metasol-ms",
+  GMP: "/product/metasol-ms",
   HVDC: softwareProductHrefs.scada,
-  "H100 Plus": "/products-systems/motor-control/h100_plus",
-  IMP: "/products-systems/motor-control/metasol-ms",
-  "Metasol MS": "/products-systems/motor-control/metasol-ms",
-  MMP: "/products-systems/motor-control/metasol-ms",
+  "H100 Plus": "/product/h100-plus",
+  IMP: "/product/metasol-ms",
+  "Metasol MS": "/product/metasol-ms",
+  MMP: "/product/metasol-ms",
   SCADA: softwareProductHrefs.scada,
   "Diagnosis System": softwareProductHrefs.smartFactory,
   "Micro Grid": softwareProductHrefs.microGrid,
   "Smart Factory": softwareProductHrefs.smartFactory,
   xEMS: softwareProductHrefs.xems,
-  "Susol UL ACB": "/products-systems/motor-control/metasol-ms",
-  "Susol UL MCCB": "/products-systems/motor-control/susol-ul-smart-mccb",
+  "Susol UL ACB": "/product/metasol-ms",
+  "Susol UL MCCB": "/product/susol-ul-smart-mccb",
 };
 
 const lv1IdMap: Record<string, string> = {
@@ -79,7 +79,7 @@ function product(label: string, href?: string): GnbExploreProduct {
   return {
     id: slugify(label),
     label,
-    href: href ?? productHrefMap[normalized] ?? productHrefMap[label] ?? "/products-systems/motor-control",
+    href: href ?? productHrefMap[normalized] ?? productHrefMap[label] ?? "/products-category/lv-products-and-systems",
     discontinued: discontinuedLabels.has(label),
     lv1Id,
   };
@@ -164,7 +164,7 @@ export function resolveExploreHref(label: string): string {
   return (
     productHrefMap[normalized] ??
     productHrefMap[label] ??
-    "/products-systems/motor-control"
+    "/products-category/lv-products-and-systems"
   );
 }
 

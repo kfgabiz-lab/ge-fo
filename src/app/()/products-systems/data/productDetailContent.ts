@@ -330,7 +330,7 @@ const metasolMsKeyFeatures: ProductKeyFeature[] = [
 /** Figma 6788:8339 — Metasol MS product detail */
 export const metasolMsDetail: ProductDetail = {
   slug: "metasol-ms",
-  parentHref: "/products-systems/motor-control",
+  parentHref: "/products-category/lv-products-and-systems",
   parentLabel: "Magnetic Contactor",
   category: "Magnetic Contactor",
   series: "Metasol MS",
@@ -376,7 +376,7 @@ export const metasolMsFaqItems = [
 /** Figma 6843:64936 — H100 Plus product detail */
 export const h100PlusDetail: ProductDetail = {
   slug: "h100_plus",
-  parentHref: "/products-systems/lv-automation",
+  parentHref: "/product-range/variable-frequency-drive",
   parentLabel: "Variable Frequency Drive",
   category: "Variable Frequency Drive",
   series: "H100 Plus",
@@ -412,7 +412,7 @@ export const productTemplateDetail: ProductDetail = {
   series: "Product Template",
   category: "Product Category",
   parentLabel: "Product Category",
-  parentHref: "/products-systems/motor-control",
+  parentHref: "/products-category/lv-products-and-systems",
   description:
     "Product detail page template based on the H100 Plus layout. Replace hero copy, specs, key features, lineup, downloads, video, and other products for each new product page.",
   otherProducts: [
@@ -547,7 +547,7 @@ export const susolUlSmartMccbInterruptingLineup: ProductLineupRow[] = [
 /** Figma 6788:7460 — Susol UL ACB product detail (route: susol-ul-smart-mccb) */
 export const susolUlSmartMccbDetail: ProductDetail = {
   slug: "susol-ul-smart-mccb",
-  parentHref: "/products-systems/motor-control",
+  parentHref: "/products-category/lv-products-and-systems",
   parentLabel: "Air Circuit Breaker / Power Circuit Breaker",
   category: "Air Circuit Breaker / Power Circuit Breaker",
   series: "Susol UL ACB",

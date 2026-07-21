@@ -115,7 +115,7 @@ export const marketsSolutionZones: SolutionZone[] = [
         "c-mcsg",
         "Metal Clad Swtichgear",
         productImg.mcsg,
-        "/products-systems/motor-control/metasol-ms",
+        "/product/metasol-ms",
       ),
       solutionProduct(
         "c-metal-enclosed",

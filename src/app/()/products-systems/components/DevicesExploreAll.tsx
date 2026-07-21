@@ -39,13 +39,13 @@ function ExploreLetterColumn({ group }: { group: GnbExploreLetterGroup }) {
                 prefetch={false}
                 className="devices_explore__link devices_explore__link--discontinued"
               >
-                <span className="devices_explore__link-text" data-slugKey="product.product_name">
+                <span className="devices_explore__link-text" data-slugkey="product.product_name">
                   {renderProductLabel(item.label, item.id)}
                 </span>
                 <span className="devices_explore__status" aria-hidden />
               </Link>
             ) : (
-              <Link href={item.href} prefetch={false} className="devices_explore__link" data-slugKey="product.product_name">
+              <Link href={item.href} prefetch={false} className="devices_explore__link" data-slugkey="product.product_name">
                 {renderProductLabel(item.label, item.id)}
               </Link>
             )}

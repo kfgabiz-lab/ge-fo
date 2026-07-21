@@ -28,7 +28,7 @@ export default function DevicesSmartFactoryOverview({
           style={{ backgroundImage: `url(${image})` }}
           role="img"
           aria-label={smartFactoryOverview.imageAlt}
-          data-slugKey="product_info.image"
+          data-slugkey="product_info.image"
         />
         <div className="devices_software_overview__body">
           {/* overview 제목 = product-data 대응 필드 없음(실측) → 정적 유지, 태그 없음 */}
@@ -40,7 +40,7 @@ export default function DevicesSmartFactoryOverview({
               </span>
             ))}
           </h2>
-          <p className="devices_software_overview__desc" data-slugKey="product_info.info_description">
+          <p className="devices_software_overview__desc" data-slugkey="product_info.info_description">
             {descriptionLines.map((line, index) => (
               <span key={line}>
                 {line}

@@ -27,12 +27,12 @@ function CategoryProductCard({
     <article className="devices_category__item" data-slug-item>
       <div className="devices_category__item-img">
         {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환 */}
-        <img loading={loading} decoding="async" src={item.image} alt={item.title} data-slugKey="product_info.image" data-slugKey-attr="src" />
+        <img loading={loading} decoding="async" src={item.image} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>
       <div className="devices_category__item-body">
         <div className="devices_category__item-text">
-          <h2 className="devices_category__item-tit" data-slugKey="product.product_name">{item.title}</h2>
-          <p className="devices_category__item-desc" data-slugKey="product_info.info_description">{item.description}</p>
+          <h2 className="devices_category__item-tit" data-slugkey="product.product_name">{item.title}</h2>
+          <p className="devices_category__item-desc" data-slugkey="product_info.info_description">{item.description}</p>
         </div>
         {/* href는 하위 카테고리/제품 상세 라우트로 이동하는 정적 라우팅 → 데이터 필드 아님(정적 유지) */}
         <Link href={item.href} className="btn-base btn-lv03 btn-lv03--solid">
@@ -63,12 +63,12 @@ function CategoryProductCardStacked({
     <Link href={item.href} className="devices_category__item" data-slug-item>
       <div className="devices_category__item-img">
         {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환 */}
-        <img loading={loading} decoding="async" src={item.image} alt={item.title} data-slugKey="product_info.image" data-slugKey-attr="src" />
+        <img loading={loading} decoding="async" src={item.image} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>
       <div className="devices_category__item-body">
         <div className="devices_category__item-text">
-          <h2 className="devices_category__item-tit" data-slugKey="product.product_name">{item.title}</h2>
-          <p className="devices_category__item-desc" data-slugKey="product_info.info_description">{item.description}</p>
+          <h2 className="devices_category__item-tit" data-slugkey="product.product_name">{item.title}</h2>
+          <p className="devices_category__item-desc" data-slugkey="product_info.info_description">{item.description}</p>
         </div>
         <span className="btn-base btn-lv03 btn-lv03--solid">View Detail</span>
       </div>
@@ -95,8 +95,8 @@ export default function DevicesCategoryList({
           ) : (
             <p className="devices_category__parent">{intro.parentLabel}</p>
           )}
-          <h1 className="devices_category__tit" data-slugKey="category.title">{intro.title}</h1>
-          <p className="devices_category__desc" data-slugKey="category.description">{intro.description}</p>
+          <h1 className="devices_category__tit" data-slugkey="category.title">{intro.title}</h1>
+          <p className="devices_category__desc" data-slugkey="category.description">{intro.description}</p>
         </div>
         <div className="devices_category__grid-wrap">
           {/* STEP4 정정: 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
@@ -139,8 +139,8 @@ export default function DevicesCategoryList({
             ) : (
               <p className="devices_category__parent">{intro.parentLabel}</p>
             )}
-            <h1 className="devices_category__tit" data-slugKey="category.title">{intro.title}</h1>
-            <p className="devices_category__desc" data-slugKey="category.description">{intro.description}</p>
+            <h1 className="devices_category__tit" data-slugkey="category.title">{intro.title}</h1>
+            <p className="devices_category__desc" data-slugkey="category.description">{intro.description}</p>
           </div>
         </div>
         <div className="devices_category__list">

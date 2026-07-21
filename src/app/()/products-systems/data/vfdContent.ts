@@ -8,7 +8,7 @@ export type DevicesCategoryProduct = {
 
 export const vfdIntro = {
   parentLabel: "LV Automation",
-  parentHref: "/products-systems/lv-automation",
+  parentHref: "/product-range/variable-frequency-drive",
   title: "Variable Frequency Drive",
   description:
     "EMPR is an electronic motor protection relay used to protect low voltage motors by replacing thermal overload relays, also known a electronic overcurrent relays. EMPR is highly reliable by its accuracy and real-time data processing. LEDs on EMPR indicate status of a system, and there are models which provide display of load current, saving cause of failure, and communication functions.",
@@ -20,7 +20,7 @@ const productDescription =
 export const vfdProducts: DevicesCategoryProduct[] = [
   {
     id: "vfd-1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/main/product_01.jpg",
     title: "H100 Plus",
     description: productDescription,

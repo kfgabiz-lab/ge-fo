@@ -166,14 +166,14 @@ export const microGridOtherProductsTitle = "Relavant Products";
 export const microGridOtherProducts: ProductOtherItem[] = [
   {
     id: "micro-grid-op-1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
     title: "Metasol MS",
     subtitle: MICRO_GRID_OTHER_PRODUCT_SUBTITLE,
   },
   {
     id: "micro-grid-op-2",
-    href: "/products-systems/motor-control/susol-ul-smart-mccb",
+    href: "/product/susol-ul-smart-mccb",
     image: "/img/devices-systems/products/other/product_other_mcb.png",
     title: "Miniature circuit breaker",
     subtitle: MICRO_GRID_OTHER_PRODUCT_SUBTITLE,
@@ -188,7 +188,7 @@ export const microGridOtherProducts: ProductOtherItem[] = [
   },
   {
     id: "micro-grid-op-4",
-    href: "/products-systems/motor-control/susol-ul-smart-mccb",
+    href: "/product/susol-ul-smart-mccb",
     image: "/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
     title: "Susol UL MCCB",
     subtitle: MICRO_GRID_OTHER_PRODUCT_SUBTITLE,

@@ -58,11 +58,11 @@ export default function DevicesProducts({
                     decoding="async"
                     src={item.image}
                     alt={item.title}
-                    data-slugKey="device_systems.image"
-                    data-slugKey-attr="src"
+                    data-slugkey="device_systems.image"
+                    data-slugkey-attr="src"
                   />
                 </div>
-                <h3 className="tit" data-slugKey="category.title">
+                <h3 className="tit" data-slugkey="category.title">
                   {item.title.split("\n").map((line, index) => (
                     <span key={`${item.id}-line-${index}`}>
                       {index > 0 ? <br /> : null}

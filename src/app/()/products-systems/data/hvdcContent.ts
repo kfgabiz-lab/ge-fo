@@ -204,14 +204,14 @@ export const hvdcOtherProductsTitle = "Relavant Products";
 export const hvdcOtherProducts: ProductOtherItem[] = [
   {
     id: "hvdc-op-1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
     title: "Metasol MS",
     subtitle: HVDC_OTHER_PRODUCT_SUBTITLE,
   },
   {
     id: "hvdc-op-2",
-    href: "/products-systems/motor-control/susol-ul-smart-mccb",
+    href: "/product/susol-ul-smart-mccb",
     image: "/img/devices-systems/products/other/product_other_mcb.png",
     title: "Miniature circuit breaker",
     subtitle: HVDC_OTHER_PRODUCT_SUBTITLE,
@@ -226,7 +226,7 @@ export const hvdcOtherProducts: ProductOtherItem[] = [
   },
   {
     id: "hvdc-op-4",
-    href: "/products-systems/motor-control/susol-ul-smart-mccb",
+    href: "/product/susol-ul-smart-mccb",
     image: "/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
     title: "Susol UL MCCB",
     subtitle: HVDC_OTHER_PRODUCT_SUBTITLE,
@@ -278,7 +278,7 @@ export const hvdcNavItems: readonly ProductNavItem[] = [
 
 export const hvSystemIntro = {
   parentLabel: "Products & Systems",
-  parentHref: "/products-systems/motor-control",
+  parentHref: "/products-category/lv-products-and-systems",
   title: "Software",
   description: hvdcHero.description,
 };
@@ -286,7 +286,7 @@ export const hvSystemIntro = {
 export const hvSystemProducts = [
   {
     id: "hv-1",
-    href: "/products-systems/software/scada",
+    href: "/product-range/scada",
     image: hvdcImg("overview_hero.jpg"),
     title: "SCADA",
     description: hvdcHero.description,

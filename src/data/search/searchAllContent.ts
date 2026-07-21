@@ -97,7 +97,7 @@ export const searchAllAiSummary = [
 export const searchAllProducts: SearchProductItem[] = [
   {
     id: "sp-1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/devices-systems/product/product_metasol_ms.png",
     category: "DC Device",
     highlight: "DC Miniature Circuit Breaker",
@@ -106,7 +106,7 @@ export const searchAllProducts: SearchProductItem[] = [
   },
   {
     id: "sp-2",
-    href: "/products-systems/motor-control/susol-ul-smart-mccb",
+    href: "/product/susol-ul-smart-mccb",
     image: "/img/devices-systems/products/product_mccb.png",
     category: "DC Device",
     highlight: "DC Miniature Circuit Breaker",
@@ -115,7 +115,7 @@ export const searchAllProducts: SearchProductItem[] = [
   },
   {
     id: "sp-3",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/devices-systems/product/product_metasol_ms.png",
     category: "DC Device",
     highlight: "DC Miniature Circuit Breaker",
@@ -124,7 +124,7 @@ export const searchAllProducts: SearchProductItem[] = [
   },
   {
     id: "sp-4",
-    href: "/products-systems/motor-control",
+    href: "/products-category/lv-products-and-systems",
     image: "/img/devices-systems/products/product_magnetic_contactor.png",
     category: "DC Device",
     highlight: "DC Miniature Circuit Breaker",

@@ -174,6 +174,37 @@ export function filterLocationsByRadius(
   return { locations: [], appliedMiles: ladder[ladder.length - 1] };
 }
 
+// ---------------- 영역(bounds)필터 — "이 지역에서 검색" 전용 ----------------
+// 기존 반경필터(filterLocationsByRadius)와 상호배타적으로 쓰이는 신규 필터.
+// Google Maps 타입에 직접 의존하지 않도록 bounds 를 단순 객체로 받는다.
+
+/** 지도 뷰포트 사각영역(위경도 경계). Google Maps LatLngBounds → 이 형태로 변환해 전달 */
+export type WhereToBuyBoundsLiteral = {
+  north: number;
+  south: number;
+  east: number;
+  west: number;
+};
+
+/**
+ * 지도 영역(bounds) 안에 좌표가 들어오는 지점만 필터링(단순 범위 비교, haversine 불필요).
+ * - 유효 좌표(hasValidCoords) 지점만 대상
+ * - 미국 본토 도메인 기준이라 경도 역전(antimeridian 교차)은 고려하지 않는다(east > west 가정)
+ */
+export function filterLocationsByBounds(
+  locations: WhereToBuyLocation[],
+  bounds: WhereToBuyBoundsLiteral,
+): WhereToBuyLocation[] {
+  return locations.filter(
+    (location) =>
+      hasValidCoords(location) &&
+      location.lat <= bounds.north &&
+      location.lat >= bounds.south &&
+      location.lng <= bounds.east &&
+      location.lng >= bounds.west,
+  );
+}
+
 /** Figma 3670:30719 (PC) · 6561:75390 (mobile View List) */
 export const whereToBuyEmptyContent = {
   title: "There are no results",

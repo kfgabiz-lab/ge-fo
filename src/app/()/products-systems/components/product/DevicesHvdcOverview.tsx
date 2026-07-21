@@ -23,7 +23,7 @@ export default function DevicesHvdcOverview({
       <div className="inner">
         <div className="devices_software_overview__visual">
           {/* scada 오버뷰 이미지는 <img src> 렌더. product_info.image = 파일ID 배열 → /api/v1/fo/page-files/{id} 프록시 변환 */}
-          <img loading="lazy" decoding="async" src={image} alt={hvdcOverview.imageAlt} data-slugKey="product_info.image" data-slugKey-attr="src" />
+          <img loading="lazy" decoding="async" src={image} alt={hvdcOverview.imageAlt} data-slugkey="product_info.image" data-slugkey-attr="src" />
         </div>
         <div className="devices_software_overview__body">
           {/* overview 제목 = product-data 대응 필드 없음(실측) → 정적 유지, 태그 없음 */}
@@ -35,7 +35,7 @@ export default function DevicesHvdcOverview({
               </span>
             ))}
           </h2>
-          <p className="devices_software_overview__desc" data-slugKey="product_info.info_description">
+          <p className="devices_software_overview__desc" data-slugkey="product_info.info_description">
             {descriptionLines.map((line, index) => (
               <span key={line}>
                 {line}

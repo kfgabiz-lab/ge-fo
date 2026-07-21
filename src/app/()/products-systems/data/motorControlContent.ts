@@ -39,7 +39,7 @@ export type DevicesHelpCard = {
 const productImg = (file: string) =>
   `/img/devices-systems/products/${file}`;
 
-const LV_AUTOMATION_HREF = "/products-systems/lv-automation";
+const LV_AUTOMATION_HREF = "/product-range/variable-frequency-drive";
 
 /** Figma 4288:42677 — LV Products and Systems product grid (14 items) */
 export const motorControlProducts: DevicesProductItem[] = [

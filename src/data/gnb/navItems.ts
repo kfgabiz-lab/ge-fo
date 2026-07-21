@@ -9,7 +9,7 @@ export const gnbNavItems: GnbNavItem[] = [
   {
     id: "devices",
     label: "Products & Systems",
-    href: "/products-systems/motor-control",
+    href: "/products-category/lv-products-and-systems",
     megaMenu: devicesMegaMenu,
   },
   {

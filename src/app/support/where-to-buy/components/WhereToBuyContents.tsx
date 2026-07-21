@@ -11,10 +11,12 @@ import WhereToBuyViewToggle, {
 } from "./WhereToBuyViewToggle";
 import {
   fetchWhereToBuyLocations,
+  filterLocationsByBounds,
   filterLocationsByRadius,
   parseDistanceMiles,
   whereToBuyDistanceOptions,
   whereToBuyPage,
+  type WhereToBuyBoundsLiteral,
   type WhereToBuyLocation,
 } from "@/data/support/whereToBuyContent";
 import type { GeoCoord } from "@/lib/geo/distance";
@@ -36,6 +38,11 @@ export default function WhereToBuyContents({
   // 선택 반경 값("500mi" 등). 기본은 최대 옵션(첫 항목)
   const [radiusValue, setRadiusValue] = useState<string>(
     whereToBuyDistanceOptions[0].value,
+  );
+  // "이 지역에서 검색" 영역필터. null 이면 일반(검색/반경) 모드, 값이 있으면 영역검색 모드.
+  // 검색/반경 모드와 상호배타 — 셋 중 하나만 결과에 영향을 준다.
+  const [boundsFilter, setBoundsFilter] = useState<WhereToBuyBoundsLiteral | null>(
+    null,
   );
   const [activeId, setActiveId] = useState<string>("");
   // 활성 마커의 화면 픽셀 좌표(데스크톱 지도 위 팝업 anchor inline style 용). null 이면 CSS 폴백
@@ -60,19 +67,44 @@ export default function WhereToBuyContents({
     };
   }, []);
 
+  // 영역검색 모드(boundsFilter)면 지도 영역 안의 지점만 노출, 아니면 기존 반경필터.
   // 레퍼런스(lselectricamerica) 동작: 주소 검색이 없어도 고정 기본 중심좌표(mapDefaultCenter)를
   // 원점으로 항상 반경 필터를 실행한다(반경만 바꿔도 즉시 필터링). 검색좌표가 있으면 그것을 원점으로 사용.
   const filtered = useMemo(() => {
+    if (boundsFilter) {
+      return filterLocationsByBounds(locations, boundsFilter);
+    }
     const origin = searchCoord ?? whereToBuyPage.mapDefaultCenter;
     return filterLocationsByRadius(
       locations,
       origin,
       parseDistanceMiles(radiusValue),
     ).locations;
-  }, [locations, searchCoord, radiusValue]);
+  }, [locations, searchCoord, radiusValue, boundsFilter]);
+
+  // 주소 검색/내위치 확정 — 영역검색 모드를 해제하고 일반 검색모드로 전환(상호배타)
+  const handleLocate = (coord: GeoCoord | null) => {
+    setBoundsFilter(null);
+    setSearchCoord(coord);
+  };
+
+  // 반경 변경 — 영역검색 모드를 해제하고 일반 반경모드로 전환(상호배타)
+  const handleRadiusChange = (value: string) => {
+    setBoundsFilter(null);
+    setRadiusValue(value);
+  };
+
+  // "이 지역에서 검색" 클릭 — 그 시점 지도 영역으로 목록을 완전히 대체.
+  // 동시에 검색좌표/반경을 기본값으로 리셋해 기존 검색·반경 필터가 더는 영향을 주지 않게 한다.
+  const handleSearchArea = (bounds: WhereToBuyBoundsLiteral) => {
+    setBoundsFilter(bounds);
+    setSearchCoord(null);
+    setRadiusValue(whereToBuyDistanceOptions[0].value);
+  };
 
   // "실제로 검색/필터가 적용된 상태" 판단: 검색좌표가 있거나, 반경이 기본값(첫 옵션)이 아닐 때.
   // 지도는 이 값이 false(사실상 초기 상태)면 원래 퍼블리싱된 mapDefaultCenter/mapDefaultZoom 뷰를 유지한다.
+  // 영역검색 모드에서는 searchCoord=null·반경=기본값으로 리셋되므로 자연히 false(→ fitBounds 없이 사용자 뷰 유지).
   const isFiltered =
     searchCoord !== null || radiusValue !== whereToBuyDistanceOptions[0].value;
 
@@ -100,8 +132,8 @@ export default function WhereToBuyContents({
         <div className="support_where_to_buy_contents__list-col">
           <WhereToBuyControls
             radiusValue={radiusValue}
-            onRadiusChange={setRadiusValue}
-            onLocate={setSearchCoord}
+            onRadiusChange={handleRadiusChange}
+            onLocate={handleLocate}
           />
 
           {hasResults ? (
@@ -169,6 +201,8 @@ export default function WhereToBuyContents({
             onLocationSelect={setActiveId}
             onPopupPositionChange={setPopupPos}
             isFiltered={isFiltered}
+            boundsMode={boundsFilter !== null}
+            onSearchArea={handleSearchArea}
           />
           {activeLocation ? (
             <div

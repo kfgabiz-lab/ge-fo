@@ -42,9 +42,9 @@ const configs: Record<string, BreadcrumbConfig> = {
     crumbs: [{ label: "Markets", href: "/markets/commercial-residential" }],
     current: "Industrial",
   },
-  "/products-systems/motor-control": {
+  "/products-category/lv-products-and-systems": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
     ],
     current: "LV Products and Systems",
   },
@@ -58,98 +58,90 @@ const configs: Record<string, BreadcrumbConfig> = {
     current: "",
     homeOnly: true,
   },
-  "/products-systems/lv-automation": {
+  // 카테고리 L01-15(LV)·L05-04(Automation) 둘 다 seo.slug가 "variable-frequency-drive"로
+  // 중복 등록돼 있어(첫 건 렌더링 정책) 신규 URL 키 하나로 통합.
+  "/product-range/variable-frequency-drive": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
       {
         label: "LV Products and Systems",
-        href: "/products-systems/motor-control",
+        href: "/products-category/lv-products-and-systems",
       },
     ],
     current: "Variable Frequency Drive",
   },
-  "/products-systems/variable-frequency-drive": {
+  "/product/metasol-ms": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
       {
         label: "LV Products and Systems",
-        href: "/products-systems/motor-control",
-      },
-    ],
-    current: "Variable Frequency Drive",
-  },
-  "/products-systems/motor-control/metasol-ms": {
-    crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
-      {
-        label: "LV Products and Systems",
-        href: "/products-systems/motor-control",
+        href: "/products-category/lv-products-and-systems",
       },
       {
         label: "Variable Frequency Drive",
-        href: "/products-systems/lv-automation",
+        href: "/product-range/variable-frequency-drive",
       },
     ],
     current: "H100 Plus",
   },
-  "/products-systems/motor-control/h100_plus": {
+  "/product/h100-plus": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
       {
         label: "LV Products and Systems",
-        href: "/products-systems/motor-control",
+        href: "/products-category/lv-products-and-systems",
       },
       {
         label: "Variable Frequency Drive",
-        href: "/products-systems/lv-automation",
+        href: "/product-range/variable-frequency-drive",
       },
     ],
     current: "H100 Plus",
   },
-  "/products-systems/motor-control/susol-ul-smart-mccb": {
+  "/product/susol-ul-smart-mccb": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
       {
         label: "LV Products and Systems",
-        href: "/products-systems/motor-control",
+        href: "/products-category/lv-products-and-systems",
       },
       {
         label: "Molded Case Circuit Breaker",
-        href: "/products-systems/motor-control",
+        href: "/products-category/lv-products-and-systems",
       },
     ],
     current: "Susol UL Smart MCCB",
   },
-  "/products-systems/software": {
+  "/products-category/software": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
     ],
     current: "Software",
   },
   [softwareProductHrefs.scada]: {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
       { label: "Software", href: SOFTWARE_HREF },
     ],
     current: "SCADA",
   },
   [softwareProductHrefs.xems]: {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
       { label: "Software", href: SOFTWARE_HREF },
     ],
     current: "xEMS",
   },
   [softwareProductHrefs.microGrid]: {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
       { label: "Software", href: SOFTWARE_HREF },
     ],
     current: "Micro Grid",
   },
   [softwareProductHrefs.smartFactory]: {
     crumbs: [
-      { label: "Products & Systems", href: "/products-systems/motor-control" },
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
       { label: "Software", href: SOFTWARE_HREF },
     ],
     current: "Smart Factory",

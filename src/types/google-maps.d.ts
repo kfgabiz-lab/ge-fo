@@ -10,6 +10,10 @@ declare namespace google.maps {
     panTo(latLng: LatLngLiteral): void;
     fitBounds(bounds: LatLngBounds): void;
     addListener(event: string, handler: () => void): MapsEventListener;
+    // 현재 지도 뷰포트/카메라 조회("이 지역에서 검색" 영역필터 + 뷰 복원용)
+    getBounds(): LatLngBounds | undefined;
+    getCenter(): LatLng | undefined;
+    getZoom(): number | undefined;
   }
 
   // addListener 반환값 — 리스너 해제용
@@ -25,6 +29,10 @@ declare namespace google.maps {
 
   class LatLngBounds {
     extend(latLng: LatLngLiteral): void;
+    // 영역(bounds) 조회 — 북동/남서 모서리 및 포함여부 판정
+    getNorthEast(): LatLng;
+    getSouthWest(): LatLng;
+    contains(latLng: LatLngLiteral): boolean;
   }
 
   class Size {

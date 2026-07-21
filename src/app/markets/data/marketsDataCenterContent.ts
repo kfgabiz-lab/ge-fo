@@ -245,7 +245,7 @@ export const dataCenterFaqItems: FaqItem[] = [
 export const dataCenterProducts: ProductItem[] = [
   {
     id: "dc-p1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/markets/solutions/product_mcsg.png",
     title: "MCSG (Metal Clad Switchgear)",
     category: "Switchgear",

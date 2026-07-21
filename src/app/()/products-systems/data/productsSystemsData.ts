@@ -72,10 +72,46 @@ export async function fetchCategoryByCode(
   }
 }
 
+// 카테고리 단건(seo.slug 기준) 조회. 신규 라우트(/products-category, /product-range)에서 slug → 카테고리 레코드 해석에 사용.
+// depth 지정 시 eq_category.depth 필터 추가. id/code 를 함께 반환해 하위 조회(children/제품 접두사)에 활용한다.
+export interface CategoryRow {
+  id: number;
+  code: string;
+  title: string;
+  description: string;
+  slug: string;
+}
+
+export async function fetchCategoryBySlug(
+  slug: string,
+  opts?: { depth?: number },
+): Promise<CategoryRow | null> {
+  try {
+    const depthQuery =
+      opts?.depth !== undefined ? `eq_category.depth=${opts.depth}&` : "";
+    const rows = await searchPageData(
+      "category-data",
+      `${depthQuery}eq_seo.slug=${encodeURIComponent(slug)}&size=1`,
+    );
+    const row = rows[0];
+    if (!row) return null;
+    return {
+      id: Number(row._id),
+      code: String(row["category.code"] ?? ""),
+      title: (row["category.title"] as string) ?? "",
+      description: (row["category.description"] as string) ?? "",
+      slug: (row["seo.slug"] as string) ?? slug,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export interface CategoryChild {
   id: number;
   title: string;
   image: string | null;
+  slug: string;
 }
 
 // depth2 하위 카테고리 카드 목록(motor-control 그리드).
@@ -92,6 +128,7 @@ export async function fetchCategoryChildren(
       id: Number(row._id),
       title: (row["category.title"] as string) ?? "",
       image: resolveFirstImageUrl(row["device_systems.image"]),
+      slug: (row["seo.slug"] as string) ?? "",
       sortOrder: Number(
         row["category.sortOrder"] ?? row["category.sort_order"] ?? 0,
       ),
@@ -157,6 +194,14 @@ export async function fetchProductDetailBySlug(
   } catch {
     return null;
   }
+}
+
+// 신규 라우트(/product, /product-range software 분기)에서 slug 존재 검증/조회에 쓰는 시맨틱 별칭.
+// 중복 slug(VFD 6종)는 size=1 로 첫 건만 반환한다(설계 2-1).
+export async function fetchProductBySlug(
+  slug: string,
+): Promise<Record<string, unknown> | null> {
+  return fetchProductDetailBySlug(slug);
 }
 
 export interface HwProductData {

@@ -290,7 +290,7 @@ export const powerGridWhyItems: WhyItem[] = [
 export const powerGridProducts: ProductItem[] = [
   {
     id: "pg-p1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/markets/power-grid/products/product_01.jpg",
     title: "Metasol MS",
     category: "Metasol Contactor & Overload Relay",

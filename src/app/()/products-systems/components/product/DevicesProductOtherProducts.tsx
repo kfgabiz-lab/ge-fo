@@ -208,12 +208,12 @@ export default function DevicesProductOtherProducts({
                         {badgeType ? <ProductAwardBadge /> : null}
                         <div className="devices_product_other__img-area">
                           {/* 관계 확장 시 관련 제품 row의 product_info.image(파일ID 배열 → 프록시) 로 연결 예상 — 확정 필요 */}
-                          <img loading="lazy" decoding="async" src={item.image} alt={item.title} data-slugKey="product_info.image" data-slugKey-attr="src" />
+                          <img loading="lazy" decoding="async" src={item.image} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
                         </div>
                       </div>
                       <div className="devices_product_other__text">
                         {/* 관계 확장 시 관련 제품 row의 product.product_name 으로 연결 예상 — 확정 필요 */}
-                        <h3 className="devices_product_other__tit" data-slugKey="product.product_name">
+                        <h3 className="devices_product_other__tit" data-slugkey="product.product_name">
                           {item.title}
                         </h3>
                         {/* subtitle = 관련제품 관계필드(문자열)에 대응 없음 → 정적 유지, 태그 없음 */}

@@ -176,7 +176,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
 export const commercialResidentialProducts: ProductItem[] = [
   {
     id: "cr-p1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/markets/commercial-residential/products/product_01.jpg",
     title: "Metasol MS",
     category: "Metasol Contactor & Overload Relay",

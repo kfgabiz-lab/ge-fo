@@ -210,14 +210,14 @@ export const xemsOtherProductsTitle = "Relavant Products";
 export const xemsOtherProducts: ProductOtherItem[] = [
   {
     id: "xems-op-1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
     title: "Metasol MS",
     subtitle: XEMS_OTHER_PRODUCT_SUBTITLE,
   },
   {
     id: "xems-op-2",
-    href: "/products-systems/motor-control/susol-ul-smart-mccb",
+    href: "/product/susol-ul-smart-mccb",
     image: "/img/devices-systems/products/other/product_other_mcb.png",
     title: "Miniature circuit breaker",
     subtitle: XEMS_OTHER_PRODUCT_SUBTITLE,
@@ -232,7 +232,7 @@ export const xemsOtherProducts: ProductOtherItem[] = [
   },
   {
     id: "xems-op-4",
-    href: "/products-systems/motor-control/susol-ul-smart-mccb",
+    href: "/product/susol-ul-smart-mccb",
     image: "/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
     title: "Susol UL MCCB",
     subtitle: XEMS_OTHER_PRODUCT_SUBTITLE,

@@ -19,8 +19,8 @@ export default function DevicesProductHero({ product }: DevicesProductHeroProps)
             src={product.image}
             alt={product.series}
             className="devices_product_hero__img"
-            data-slugKey="product_info.image"
-            data-slugKey-attr="src"
+            data-slugkey="product_info.image"
+            data-slugkey-attr="src"
           />
         </div>
         <div className="devices_product_hero__content">
@@ -29,21 +29,21 @@ export default function DevicesProductHero({ product }: DevicesProductHeroProps)
           </div> */}
           <div className="devices_product_hero__head">
             {/* 히어로 메인 제목(series 슬롯) = 제품명 → product.product_name */}
-            <h1 className="devices_product_hero__series" data-slugKey="product.product_name">{product.series}</h1>
+            <h1 className="devices_product_hero__series" data-slugkey="product.product_name">{product.series}</h1>
             {/* subtitle = product-data 대응 필드 없음(실측) → 정적 유지, 태그 없음 */}
             {product.subtitle ? (
               <p className="devices_product_hero__subtitle">{product.subtitle}</p>
             ) : null}
           </div>
-          <p className="devices_product_hero__desc" data-slugKey="product.product_description">{product.description}</p>
+          <p className="devices_product_hero__desc" data-slugkey="product.product_description">{product.description}</p>
           <hr className="devices_product_hero__line" />
           {/* specs는 배열이 아니라 product_spec의 고정 3필드(spec1~3_title/_content)를 목록 렌더 → data-slug-repeat 아님.
               각 행을 인덱스로 product_spec.spec{N}_title/_content에 매핑(최대 3) */}
           <dl className="devices_product_hero__specs">
             {product.specs.map((spec, index) => (
               <div key={spec.label} className="devices_product_hero__spec-row">
-                <dt data-slugKey={`product_spec.spec${index + 1}_title`}>{spec.label}</dt>
-                <dd data-slugKey={`product_spec.spec${index + 1}_content`}>{spec.value}</dd>
+                <dt data-slugkey={`product_spec.spec${index + 1}_title`}>{spec.label}</dt>
+                <dd data-slugkey={`product_spec.spec${index + 1}_content`}>{spec.value}</dd>
               </div>
             ))}
           </dl>

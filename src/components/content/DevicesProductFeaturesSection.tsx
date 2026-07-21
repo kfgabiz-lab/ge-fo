@@ -75,7 +75,7 @@ export default function DevicesProductFeaturesSection(props: DevicesProductFeatu
               </p>
               <h3
                 className="devices_product_features__tit"
-                data-slugKey={
+                data-slugkey={
                   isKeyFeatures ? `key_feature${index + 1}.key${index + 1}_title` : undefined
                 }
               >
@@ -90,7 +90,7 @@ export default function DevicesProductFeaturesSection(props: DevicesProductFeatu
               ) : (
                 <p
                   className="devices_product_features__desc"
-                  data-slugKey={
+                  data-slugkey={
                     isKeyFeatures ? `key_feature${index + 1}.key${index + 1}_content` : undefined
                   }
                 >

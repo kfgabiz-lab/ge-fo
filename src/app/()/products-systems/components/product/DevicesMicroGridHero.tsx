@@ -20,8 +20,8 @@ export default function DevicesMicroGridHero({
     <section className="devices_software_hero" id="product-top">
       {/* data-slug: product-data (단건 — SW 제품상세 코어). where=제품 unique key(seo.slug 또는 product.product_code) */}
       <div className="inner devices_software_hero__inner" data-slug="product-data">
-        <h1 className="devices_software_hero__title" data-slugKey="product.product_name">{title}</h1>
-        <p className="devices_software_hero__desc" data-slugKey="product.product_description">
+        <h1 className="devices_software_hero__title" data-slugkey="product.product_name">{title}</h1>
+        <p className="devices_software_hero__desc" data-slugkey="product.product_description">
           {descriptionLines.map((line, index) => (
             <span key={line}>
               {line}

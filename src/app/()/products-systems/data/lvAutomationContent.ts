@@ -3,7 +3,7 @@ import type { DevicesCategoryProduct } from "./vfdContent";
 /** Figma 4288:42524 — LV Automation (Variable Frequency Drive) hero */
 export const lvAutomationIntro = {
   parentLabel: "LV Products and Systems",
-  parentHref: "/products-systems/motor-control",
+  parentHref: "/products-category/lv-products-and-systems",
   title: "Variable Frequency Drive",
   description:
     "LS ELECTRIC is the first company in Korea to introduce variable frequency drives, widely used in a variety of applications such as cranes, elevators, steel manufacturing, automobiles, air conditioning, and water treatment plants. LS ELECTRIC VFDs meets hard and strict quality, marine, environment, and many other international regulations, and thrives to expand its market share beyond Korea by continuously adopting new technologies and hidden needs of our potential customers.",
@@ -16,7 +16,7 @@ const productImg = (file: string) =>
 export const lvAutomationProducts: DevicesCategoryProduct[] = [
   {
     id: "lv-1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: productImg("product_h100_plus.png"),
     title: "H100 Plus",
     description:

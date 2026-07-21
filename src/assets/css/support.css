@@ -4270,6 +4270,42 @@ body section.support_where_to_buy_search .guide_field--search .guide_field__sear
     display: block;
   }
 
+  /* "Search this area" — 지도 상단 중앙 오버레이 버튼(사용자가 지도를 이동/줌한 뒤에만 노출) */
+  section.support_where_to_buy_contents .support_where_to_buy_map__area-search {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 22px;
+    border: 1px solid #d5d5d5;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    color: #0b3d91;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  section.support_where_to_buy_contents
+    .support_where_to_buy_map__area-search:hover {
+    background: #f5f7fb;
+  }
+
+  section.support_where_to_buy_contents .support_where_to_buy_map__area-search-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url("/ico/ico_search_24.svg") no-repeat center / contain;
+  }
+
   section.support_where_to_buy_contents .support_where_to_buy_map__popup-anchor {
     position: absolute;
     z-index: 2;

@@ -214,7 +214,7 @@ export const oilGasMiningWhyItems: WhyItem[] = [
 export const oilGasMiningProducts: ProductItem[] = [
   {
     id: "ogm-p1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/markets/oil-gas-mining/products/product_01.jpg",
     title: "Metasol MS",
     category: "Metasol Contactor & Overload Relay",

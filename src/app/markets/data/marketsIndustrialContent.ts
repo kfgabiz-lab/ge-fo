@@ -249,7 +249,7 @@ export const industrialWhyItems: WhyItem[] = [
 export const industrialProducts: ProductItem[] = [
   {
     id: "ind-p1",
-    href: "/products-systems/motor-control/metasol-ms",
+    href: "/product/metasol-ms",
     image: "/img/markets/industrial/products/product_01.jpg",
     title: "Metasol MS",
     category: "Metasol Contactor & Overload Relay",
