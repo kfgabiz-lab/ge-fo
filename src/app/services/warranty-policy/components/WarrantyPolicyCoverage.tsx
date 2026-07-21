@@ -1,7 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import WarrantyFeatureCards from "./WarrantyFeatureCards";
 import WarrantyTableScroll from "./WarrantyTableScroll";
 import { warrantyPolicyPage } from "@/data/services/warrantyPolicyContent";
-import { fetchWarrantyCoverageRows } from "../data/warrantyPolicyData";
+import {
+  fetchWarrantyCoverageRows,
+  type WarrantyCoverageRow,
+} from "../data/warrantyPolicyData";
 
 // coverage.notes 전용 순수 string[] 렌더러
 function BulletList({ items }: { items: string[] }) {
@@ -24,10 +30,26 @@ function BulletList({ items }: { items: string[] }) {
   );
 }
 
-export default async function WarrantyPolicyCoverage() {
+export default function WarrantyPolicyCoverage() {
   const { coverage } = warrantyPolicyPage;
-  // 제품 보증표 행만 bo page-data(warrantyPolicy-data)로 조회 — 그 외 섹션은 정적 유지
-  const coverageRows = await fetchWarrantyCoverageRows();
+  // 제품 보증표 행만 bo page-data(warrantyPolicy-data)로 클라이언트에서 1회 조회
+  // (서버 컴포넌트에서 미리 fetch하면 결과가 정적 HTML에 그대로 구워져 CDN 캐시(s-maxage)에
+  //  고정되는 문제가 있어, careers/blog와 동일한 클라이언트 사이드 fetch 패턴으로 전환)
+  const [coverageRows, setCoverageRows] = useState<WarrantyCoverageRow[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    fetchWarrantyCoverageRows()
+      .then((rows) => {
+        if (alive) setCoverageRows(rows);
+      })
+      .catch(() => {
+        if (alive) setCoverageRows([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   return (
     <section className="support_service_warranty_coverage" id="warranty-coverage">
