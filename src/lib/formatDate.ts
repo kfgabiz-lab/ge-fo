@@ -36,7 +36,24 @@ export function formatDisplayDate(dateStr: string): string {
     return "";
   }
   if (month < 1 || month > 12 || day < 1 || day > 31) return "";
-  return `${MONTH_ABBR[month]} ${day}, ${year}`;
+  // day는 항상 2자리 zero-pad("Apr 02, 2026") — 1~9일 표기 통일
+  return `${MONTH_ABBR[month]} ${String(day).padStart(2, "0")}, ${year}`;
+}
+
+// "2026-02" → "Feb, 2026"
+// 월/년 헤더 라벨용(월 축약 영문 3자 + 콤마 + 공백 + 4자리 연도)
+// 빈 문자열/undefined/형식 불일치 시 빈 문자열 반환
+export function formatMonthLabel(monthKey: string): string {
+  if (!monthKey || typeof monthKey !== "string") return "";
+  // "2026-02" 또는 "2026-02-17" 형태 모두 앞 7자리만 사용
+  const parts = monthKey.trim().slice(0, 7).split("-");
+  if (parts.length !== 2) return "";
+  const year = Number(parts[0]);
+  const month = Number(parts[1]);
+  // 숫자 파싱 실패 또는 범위 이탈 시 빈 문자열
+  if (!Number.isInteger(year) || !Number.isInteger(month)) return "";
+  if (month < 1 || month > 12) return "";
+  return `${MONTH_ABBR[month]}, ${year}`;
 }
 
 // "2026-04-17", "2026-04-19" → "Apr 17, 2026 - Apr 19, 2026"

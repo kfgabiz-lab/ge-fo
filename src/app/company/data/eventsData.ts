@@ -3,7 +3,7 @@
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
 // - press/blog/articles와 달리 category 대신 location/period_from/period_to(행사기간) 필드를 씀
 import { fetchApi } from "@/lib/api";
-import { formatDisplayDateRange } from "@/lib/formatDate";
+import { formatDisplayDateRange, formatMonthLabel } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 import type {
   EventsCalendarEntry,
@@ -29,17 +29,10 @@ interface EventsPageResponse {
   size: number;
 }
 
-// 게시상태(A조건) — 공개 + 게시일 도래. Upcoming(Featured/Calendar)에만 적용(events-data.md 3절)
-function applyPublishedCondition(sp: URLSearchParams) {
-  sp.set("condexpr_status", "is_visible=001,publish_dttm<=today()?'게시':'미게시'");
-  sp.set("condval_status", "게시");
-}
-
-// 공개 여부만(게시일 조건 제외) — Past/상세는 publishDttm 무시하고 isVisible만 확인
-// (사용자 확정: 지난 이벤트는 publishDttm이 과거여도 보여야 함 — publishDttm은 "노출 유지 기한" 성격이라
-//  이미 끝난 행사의 기록성 노출과는 무관)
+// 공개 여부만(게시일 조건 제외) — 모든 섹션(Featured/Calendar/Past/상세)이 isVisible만 확인
+// (사용자 확정: publishDttm 게이트는 전 섹션에서 미사용 — events-data.md 3-1/3-2/3-3/3-4)
 function applyVisibleOnlyCondition(sp: URLSearchParams) {
-  // 필드명이 isVisible→is_visible(snake)로 변경됨(page_template events-basicInfo 확인). 33행 condexpr_status와 동일 필드명으로 정합성 유지
+  // 필드명은 is_visible(snake) — page_template events-basicInfo 확인
   sp.set("eq_is_visible", "001");
 }
 
@@ -57,10 +50,13 @@ function toDateStr(d: Date) {
   return `${y}-${m}-${day}`;
 }
 
-// 이전달 1일 ~ 이번달 마지막날 범위(events-data.md 3-1, Featured="이번달+이전달 전체")
-function thisAndLastMonthRange(now: Date) {
-  const from = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-  const to = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+// Featured 조회 범위(events-data.md 3-1, "이번달~다음달 + 미시작만")
+// 문서 스펙: period_from_gte=이번달1일 & period_from_lte=다음달말일 & period_from>=today()(미시작만)
+// 하한 max(이번달1일, today)는 today가 항상 이번달1일 이후이므로 언제나 today와 같다.
+// 따라서 period_from_gte를 today로 직접 잡으면 별도 조건식(condexpr) 없이 "미시작만"까지 동시에 만족한다.
+function thisAndNextMonthRange(now: Date) {
+  const from = now; // 미시작만: 하한을 today로(= max(이번달1일, today))
+  const to = new Date(now.getFullYear(), now.getMonth() + 2, 0); // 다음달 마지막날
   return { from: toDateStr(from), to: toDateStr(to) };
 }
 
@@ -88,16 +84,17 @@ function toEventsCommon(item: EventsRow) {
 
 // ---------------- 조회 함수 ----------------
 
-// Featured(상단) — 이번달+이전달 전체(개수 제한 없음), events-data.md 3-1
+// Featured(상단) — 이번달~다음달, 미시작만(period_from>=today), events-data.md 3-1
 export async function fetchEventsFeatured(
   fallbackImage: string,
   now: Date = new Date(),
 ): Promise<EventsFeaturedItem[]> {
-  const { from, to } = thisAndLastMonthRange(now);
+  const { from, to } = thisAndNextMonthRange(now);
   const sp = new URLSearchParams();
   sp.set("page", "0");
   sp.set("size", "100");
-  applyPublishedCondition(sp);
+  applyVisibleOnlyCondition(sp);
+  // from은 today(미시작만), to는 다음달 말일 — thisAndNextMonthRange 주석 참고
   sp.set("period_from_gte", from);
   sp.set("period_from_lte", to);
   // sort는 단순키에 중첩 fallback이 없어 래퍼키 포함 dot-notation 필수. contentKey eventsForm→events로 변경됨
@@ -119,13 +116,13 @@ export async function fetchEventsFeatured(
   });
 }
 
-// Calendar — Upcoming(period_to>=today)을 period_from 월별로 그룹핑, events-data.md 3-2
+// Calendar — 전체조회(unpaged) 후 FE에서 지난 이벤트 개별 제외, period_from 월별 그룹핑, events-data.md 3-2
 export async function fetchEventsCalendar(): Promise<EventsCalendarMonth[]> {
   const sp = new URLSearchParams();
   sp.set("page", "0");
-  sp.set("size", "100");
-  applyPublishedCondition(sp);
-  applyUpcomingCondition(sp, true);
+  sp.set("unpaged", "true"); // 개수 제한 없이 전체 조회(기존 size=100 캡 제거)
+  applyVisibleOnlyCondition(sp);
+  // BE upcoming(미종료) 조건 제거 — 지난 이벤트 제외는 아래 FE 필터에서 처리
   // sort는 단순키에 중첩 fallback이 없어 래퍼키 포함 dot-notation 필수. contentKey eventsForm→events로 변경됨
   sp.set("sort", "events.period_from,asc");
 
@@ -133,10 +130,13 @@ export async function fetchEventsCalendar(): Promise<EventsCalendarMonth[]> {
     `/api/v1/fo/page-data/events-data?${sp.toString()}`,
   );
 
+  const todayStr = toDateStr(new Date()); // 로컬 타임존 "YYYY-MM-DD"
   const monthMap = new Map<string, EventsCalendarEntry[]>();
   for (const item of res.content ?? []) {
     const c = toEventsCommon(item);
     if (!c.periodFrom) continue;
+    // 지난 이벤트(종료일이 오늘 이전)는 캘린더에서 개별 제외 — "YYYY-MM-DD" 문자열 비교
+    if (c.periodTo && c.periodTo < todayStr) continue;
     const monthKey = c.periodFrom.slice(0, 7); // "YYYY-MM"
     const entry: EventsCalendarEntry = {
       id: String(c.id),
@@ -154,7 +154,7 @@ export async function fetchEventsCalendar(): Promise<EventsCalendarMonth[]> {
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([monthKey, events]) => ({
       id: monthKey,
-      label: monthKey,
+      label: formatMonthLabel(monthKey), // "2026-02" → "Feb, 2026"
       events,
     }));
 }

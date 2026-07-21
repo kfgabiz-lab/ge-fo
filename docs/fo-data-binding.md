@@ -73,8 +73,8 @@
 | Company Press 상세 페이지 | `src/app/company/press/detail/page.tsx` | CompanyArticleDetail(variant="press")에 pressDetailContent와 DevicesProductVideoPlayer(유튜브 영상)를 넘겨 보도자료 상세를 조립하는 클라이언트 페이지 | press-data (승인됨 — `fo/docs/dev/company/press-data.md` 참고) |
 | Company Articles 목록 페이지 | `src/app/company/articles/page.tsx` | 공통 CompanyFeedPage(variant="articles")를 렌더하는 미디어 아티클 목록 라우트 진입점 | TODO |
 | Company Articles 상세 페이지 | `src/app/company/articles/detail/page.tsx` | CompanyArticleDetail(variant="articles")에 mediaArticleDetailContent 데이터를 넘겨 미디어 아티클 상세를 조립하는 클라이언트 페이지 | TODO |
-| Company Events 목록 페이지 | `src/app/company/events/page.tsx` | CompanyEventsPage를 렌더하는 이벤트 목록 라우트 진입점 | TODO |
-| Company Events 상세 페이지 | `src/app/company/events/detail/page.tsx` | CompanyArticleDetail(variant="events")에 eventsDetailContent(개최지/일정 메타·히어로·불릿·이전/다음)를 넘겨 이벤트 상세를 조립하는 클라이언트 페이지 | TODO |
+| Company Events 목록 페이지 | `src/app/company/events/page.tsx` | CompanyEventsPage를 렌더하는 이벤트 목록 라우트 진입점 | events-data (승인됨 — `fo/docs/dev/company/events-data.md` 참고) |
+| Company Events 상세 페이지 | `src/app/company/events/detail/page.tsx` | CompanyArticleDetail(variant="events")에 eventsDetailContent(개최지/일정 메타·히어로·불릿·이전/다음)를 넘겨 이벤트 상세를 조립하는 클라이언트 페이지 | events-data (승인됨 — `fo/docs/dev/company/events-data.md` 참고) |
 | Company LS ELECTRIC Page | `src/app/company/components/CompanyLsElectricPage.tsx` | About Us > LS ELECTRIC 페이지 본문 — Title/Intro/Highlights(카운트업)/Business/Global(지도+카운트업)/PTT/R&D/History 타임라인/Mission 섹션 조립. `previewSection` prop으로 개별 섹션 단독 렌더 지원 | TODO |
 | Company America Page | `src/app/company/components/CompanyAmericaPage.tsx` | About Us > LS ELECTRIC America 페이지 본문 — Title/Intro(+통계)/Shaping/Business/Careers 배너(CommonBanner04)/Operate(지점 지도·연락처 카드)/Leaders/Mission/Follow 섹션 조립. `previewSection` 단독 렌더 지원 | TODO |
 | Company Affiliate America Page | `src/app/company/components/CompanyAffiliateAmericaPage.tsx` | About Us > Affiliate in America 페이지 본문 — Title/Intro/Affiliate 리스트(로고·설립연도·웹사이트·사업영역·주소) 조립. `previewSection` 단독 렌더 지원 | TODO |
@@ -89,10 +89,10 @@
 | Company Article Detail | `src/app/company/components/CompanyArticleDetail.tsx` | Blog/Press/Articles/Events 상세 공통 레이아웃 — variant별 카테고리·날짜·이벤트 메타·히어로 이미지·영상(afterHero)·본문(children)·이전/다음 페이저·LIST 버튼을 렌더(embedded 모드 지원) | TODO |
 | Company Blog Page | `src/app/company/components/CompanyBlogPage.tsx` | Blog 목록 페이지 본문 — 타이틀·Featured 카드·툴바(CompanyBlogListToolbar)·리스트+PageNumbering, empty 시 CompanyFeedEmpty 표시 | blog-data (승인됨 — `fo/docs/dev/company/blog-data.md` 참고) |
 | Company Blog List Toolbar | `src/app/company/components/CompanyBlogListToolbar.tsx` | Blog 목록 필터 툴바 — 카테고리 GuideSelect·검색 입력·정렬 GuideSelect(MUI 기반) | TODO |
-| Company Events Page | `src/app/company/components/CompanyEventsPage.tsx` | Events 목록 페이지 본문 — CompanyFeedTitle(variant="press")·Featured 슬라이더·Events Calendar·Past Events 조립 | TODO |
-| Company Events Calendar | `src/app/company/components/CompanyEventsCalendar.tsx` | Events Calendar 섹션 — 월별 이벤트 목록(제목·Venue·Dates 링크)을 표시 | TODO |
-| Company Events Featured | `src/app/company/components/CompanyEventsFeatured.tsx` | Featured 이벤트 Swiper 슬라이더 — 반응형(데스크톱 2장/모바일 1장) + SwiperBarControls 페이지네이션 | TODO |
-| Company Events Past Section | `src/app/company/components/CompanyEventsPastSection.tsx` | Past Events 섹션 — 정렬 GuideSelect 툴바·이벤트 카드 그리드·PageNumbering | TODO |
+| Company Events Page | `src/app/company/components/CompanyEventsPage.tsx` | Events 목록 페이지 본문 — CompanyFeedTitle(variant="press")·Featured 슬라이더·Events Calendar·Past Events 조립 | events-data (승인됨 — `fo/docs/dev/company/events-data.md` 참고) |
+| Company Events Calendar | `src/app/company/components/CompanyEventsCalendar.tsx` | Events Calendar 섹션 — 월별 이벤트 목록(제목·Venue·Dates 링크)을 표시 | events-data (승인됨 — `fo/docs/dev/company/events-data.md` 참고) |
+| Company Events Featured | `src/app/company/components/CompanyEventsFeatured.tsx` | Featured 이벤트 Swiper 슬라이더 — 반응형(데스크톱 2장/모바일 1장) + SwiperBarControls 페이지네이션 | events-data (승인됨 — `fo/docs/dev/company/events-data.md` 참고) |
+| Company Events Past Section | `src/app/company/components/CompanyEventsPastSection.tsx` | Past Events 섹션 — 정렬 GuideSelect 툴바·이벤트 카드 그리드·PageNumbering | events-data (승인됨 — `fo/docs/dev/company/events-data.md` 참고) |
 | Company Feed Page | `src/app/company/components/CompanyFeedPage.tsx` | Press/Articles 공통 피드 목록 페이지 — variant로 companyFeedContent를 선택해 Title/Featured/ListSection 조립 | TODO |
 | Company Feed Title | `src/app/company/components/CompanyFeedTitle.tsx` | Press/Articles 공통 피드 타이틀 섹션 — variant별 기본 heading/description(override 가능)과 class 접두어 분기 | TODO |
 | Company Feed Featured | `src/app/company/components/CompanyFeedFeatured.tsx` | Press/Articles 공통 Featured 카드 섹션 — 이미지·제목·설명·날짜·Explore 링크, class 접두어만 variant 분기 | TODO |
