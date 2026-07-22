@@ -98,6 +98,9 @@ function PasswordField({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         slotProps={{
+          htmlInput: {
+            autoComplete: "off",
+          },
           input: {
             endAdornment: (
               <InputAdornment position="end">
