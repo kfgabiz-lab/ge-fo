@@ -1,6 +1,6 @@
 import { emptyStateIconSrc } from "@/data/commonAssets";
-import { fetchApi } from "@/lib/api";
 import { haversineMiles, type GeoCoord } from "@/lib/geo/distance";
+import { fetchData } from "@/lib/pageDataApi";
 import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
 
 /** Figma 5752:47179 — Where to Buy */
@@ -50,18 +50,9 @@ export type WhereToBuyLocation = {
 // ---------------- PageData(slug: wheretobuy-agency-data) 실데이터 연동 ----------------
 // 설계: STEP4 확정(신규 API 없음). 기존 FoPageDataController + PageDataService.search() 재사용
 // 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
-// press-data와 동일 패턴(fetchApi + flattenPageDataItem으로 dataJson.agencyForm 언랩)
-
-// 조회 엔드포인트: 공개(is_visible=001)만, size=100, 정렬은 서버 기본값(created_at DESC) 사용
-export const WHERE_TO_BUY_ENDPOINT =
-  "/api/v1/fo/page-data/wheretobuy-agency-data?eq_agencyForm.is_visible=001&size=100";
-
-// Spring Data Page 공통 형태 — content[] 안에 PageData 원본 item
-interface WhereToBuyPageResponse {
-  content: PageDataItem[];
-  totalElements?: number;
-  totalPages?: number;
-}
+// 조회는 공통계층 fetchData(@/lib/pageDataApi)의 목록 브랜치를 사용한다.
+// - slug/where/size만 넘기면 URL 직렬화·fetchApi 경유·Page 응답 파싱을 공통계층이 처리
+// - flatten/화면가공은 리턴함수(rows→toWhereToBuyLocation.map)로 위임(company 섹션과 동일 패턴)
 
 // office_number → tel: 링크. 숫자만 남기고 앞에 + 를 붙인 형식(목데이터 형식 "tel:+18476412324" 참고)
 function toPhoneHref(phone: string): string {
@@ -107,9 +98,15 @@ export function toWhereToBuyLocation(item: PageDataItem): WhereToBuyLocation {
 }
 
 // 공개 대리점 목록 조회(정렬은 서버 기본값 그대로, 클라이언트 정렬 추가하지 않음)
+// 공개(is_visible=001)만, size=100. 공통계층 fetchData 목록 브랜치로 조회.
 export async function fetchWhereToBuyLocations(): Promise<WhereToBuyLocation[]> {
-  const res = await fetchApi<WhereToBuyPageResponse>(WHERE_TO_BUY_ENDPOINT);
-  return (res.content ?? []).map(toWhereToBuyLocation);
+  const res = await fetchData<WhereToBuyLocation>({
+    slug: "wheretobuy-agency-data",
+    size: 100,
+    where: { "eq_agencyForm.is_visible": "001" },
+    리턴함수: (rows) => rows.map(toWhereToBuyLocation),
+  });
+  return res.content;
 }
 
 // ---------------- 반경필터(거리계산 + 자동확장) ----------------
