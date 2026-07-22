@@ -3,7 +3,7 @@
 > 대상 파일:
 > - `fo/src/app/company/press/page.tsx` (목록 — 현재 `<CompanyFeedPage variant="press" />` 한 줄뿐. Press/Articles 완전 공용 컴포넌트라 반복/필드 렌더 지점 자체가 없어 마크업 태깅 불가)
 > - `fo/src/app/company/components/CompanyFeedPage.tsx` / `CompanyFeedFeatured.tsx` / `CompanyFeedListSection.tsx` / `CompanyFeedListGrid.tsx` (공용 컴포넌트 — press/articles와 공유, 직접 태깅 대상 아님. Featured·리스트 필드는 STEP6에서 fetchApi 결과를 props로 직접 주입)
-> - `fo/src/app/company/press/detail/page.tsx` (상세 — `data-slug="press-data"` + `data-slugkey="content"` 태깅 완료, STEP1)
+> - `fo/src/app/company/press/detail/[id]/page.tsx` (상세 — id 기반 동적 라우트, 실데이터 연동 완료. 고정 경로 `press/detail/page.tsx`는 삭제됨)
 > - `fo/src/app/company/components/CompanyArticleDetail.tsx` (공용 컴포넌트 — blog/press/events/articles가 공유, 직접 태깅 대상 아님)
 > - 참고(정적 폴백 데이터, 실연동 전): `fo/src/app/company/data/pressListContent.ts`, `fo/src/app/company/data/pressDetailContent.ts`
 > 상태: 구현 완료 (QA 검증 완료, 비차단 이슈는 blog-data와 동일 — 8절 참고) / 필터·검색·정렬·월/연도 확장 구현+API 검증 완료(2026-07-14, 브라우저 UI 검증은 미완 — 9절 참고) / **정렬 A-Z/Z-A 확장 설계중(2026-07-21, 승인 대기 — 9절 C-2 참고)** / **Featured 독립조회+목록 제외조건+Month·Year 옵션 조정: 구현·검증 완료(2026-07-21, 브라우저 실검증 완료 — 10절 참고)** / **상세조회·pager(이전글/다음글) 성능개선 설계중(2026-07-21, 승인 대기 — 11절 참고)**
