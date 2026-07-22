@@ -1,6 +1,7 @@
 export type EngineeringTrainingSession = {
   id: string;
   date: string;
+  title: string;
   closesLabel: string;
   trainingType: string;
   duration: string;
@@ -64,6 +65,7 @@ export const engineeringTrainingDetails: Record<string, EngineeringTrainingDetai
         {
           id: "jan-10-2026",
           date: "Jan 10, 2026",
+          title: SESSION_TITLE,
           closesLabel: "Closes in 2 days",
           trainingType: "Training Type: Virtual",
           duration: SESSION_DURATION,
@@ -72,6 +74,7 @@ export const engineeringTrainingDetails: Record<string, EngineeringTrainingDetai
         {
           id: "mar-12-2026",
           date: "Mar 12, 2026",
+          title: SESSION_TITLE,
           closesLabel: "Closes in 132 days",
           trainingType: "Training Type: In-Person",
           duration: SESSION_DURATION,
@@ -81,6 +84,7 @@ export const engineeringTrainingDetails: Record<string, EngineeringTrainingDetai
         {
           id: "jul-14-2026",
           date: "Jul 14, 2026",
+          title: SESSION_TITLE,
           closesLabel: "Closes in 196 days",
           trainingType: "Training Type: Virtual",
           duration: SESSION_DURATION,
@@ -89,6 +93,7 @@ export const engineeringTrainingDetails: Record<string, EngineeringTrainingDetai
         {
           id: "dec-8-2026",
           date: "Dec 8, 2026",
+          title: SESSION_TITLE,
           closesLabel: "Closes in 343 days",
           trainingType: "Training Type: Virtual",
           duration: SESSION_DURATION,

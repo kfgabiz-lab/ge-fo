@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
+import { useTableSwipeHint } from "@/hooks/useTableSwipeHint";
 
 type WarrantyTableScrollProps = {
   children: ReactNode;
@@ -15,74 +16,8 @@ export default function WarrantyTableScroll({
   withSwipe = false,
   stickyFirstCol = false,
 }: WarrantyTableScrollProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
-  const [swipeHidden, setSwipeHidden] = useState(!withSwipe);
-
-  const hideSwipe = useCallback(() => {
-    setSwipeHidden(true);
-  }, []);
-
-  useEffect(() => {
-    if (!withSwipe) return;
-
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const syncOverflow = () => {
-      if (el.scrollWidth <= el.clientWidth + 1) {
-        hideSwipe();
-      }
-    };
-
-    const onScroll = () => {
-      if (el.scrollLeft > 0) {
-        hideSwipe();
-      }
-    };
-
-    const onTouchStart = (event: TouchEvent) => {
-      const touch = event.touches[0];
-      if (!touch) return;
-      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-    };
-
-    const onTouchMove = (event: TouchEvent) => {
-      const start = touchStartRef.current;
-      const touch = event.touches[0];
-      if (!start || !touch) return;
-
-      const dx = Math.abs(touch.clientX - start.x);
-      const dy = Math.abs(touch.clientY - start.y);
-
-      /* horizontal swipe intent */
-      if (dx > 8 && dx >= dy) {
-        hideSwipe();
-        touchStartRef.current = null;
-      }
-    };
-
-    const onWheel = (event: WheelEvent) => {
-      if (Math.abs(event.deltaX) > 0 || el.scrollLeft > 0) {
-        hideSwipe();
-      }
-    };
-
-    syncOverflow();
-    el.addEventListener("scroll", onScroll, { passive: true });
-    el.addEventListener("touchstart", onTouchStart, { passive: true });
-    el.addEventListener("touchmove", onTouchMove, { passive: true });
-    el.addEventListener("wheel", onWheel, { passive: true });
-    window.addEventListener("resize", syncOverflow);
-
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchmove", onTouchMove);
-      el.removeEventListener("wheel", onWheel);
-      window.removeEventListener("resize", syncOverflow);
-    };
-  }, [hideSwipe, withSwipe]);
+  // 스크롤/스와이프 감지 로직은 공통 훅으로 승격, withSwipe=false면 힌트 미표시
+  const { scrollRef, swipeHidden } = useTableSwipeHint(withSwipe);
 
   return (
     <div

@@ -33,6 +33,7 @@ export type EngineeringTrainingSessionDetail = {
       email: string;
     };
     productsCovered: string;
+    trainingType: string;
     registerLabel: string;
   };
 };
@@ -145,6 +146,7 @@ export const engineeringTrainingSessionDetails: Record<
       classSize: "1-20",
       location: SHARED_SIDEBAR_LOCATION,
       productsCovered: SHARED_PRODUCTS,
+      trainingType: "In-Person",
       registerLabel: "REGISTER",
     },
   },
@@ -169,6 +171,7 @@ export const engineeringTrainingSessionDetails: Record<
       classSize: "1-20",
       location: SHARED_SIDEBAR_LOCATION,
       productsCovered: SHARED_PRODUCTS,
+      trainingType: "In-Person",
       registerLabel: "REGISTER",
     },
   },
@@ -193,6 +196,7 @@ export const engineeringTrainingSessionDetails: Record<
       classSize: "1-20",
       location: SHARED_SIDEBAR_LOCATION,
       productsCovered: SHARED_PRODUCTS,
+      trainingType: "In-Person",
       registerLabel: "REGISTER",
     },
   },
@@ -217,6 +221,7 @@ export const engineeringTrainingSessionDetails: Record<
       classSize: "1-20",
       location: SHARED_SIDEBAR_LOCATION,
       productsCovered: SHARED_PRODUCTS,
+      trainingType: "In-Person",
       registerLabel: "REGISTER",
     },
   },
@@ -235,6 +240,7 @@ export const engineeringTrainingSessionCountdownDisplay = {
 export const engineeringTrainingSessionAssets = {
   countdownBg: `${IMG}/session-countdown-bg.jpg`,
   recaptcha: `${IMG}/session-recaptcha.png`,
+  registerScrollIcon: `${ICO}/ico_scrto_18.svg`,
   calendarIcons: {
     google: `${ICO}/ico_google_18.svg`,
     ical: `${ICO}/ico_calendar_18.svg`,
@@ -242,6 +248,7 @@ export const engineeringTrainingSessionAssets = {
   metaIcons: {
     date: `${ICO}/ico_training_date_18.svg`,
     duration: `${ICO}/ico_training_duration_18.svg`,
+    trainingType: `${ICO}/ico_training_type_20.svg`,
     classSize: `${ICO}/ico_training_class_size_18.svg`,
     location: `${ICO}/ico_training_location_18.svg`,
     products: `${ICO}/ico_training_products_18.svg`,
@@ -301,3 +308,8 @@ export function getEngineeringTrainingSessionDetail(
 export const engineeringTrainingSessionParams = Object.values(
   engineeringTrainingSessionDetails,
 ).map(({ courseId, sessionId }) => ({ courseId, sessionId }));
+
+// 등록 폼 제출 버튼 카피 (ls-publish 상세 마크업 이관분)
+export const engineeringTrainingSessionFormCopy = {
+  submitLabel: "Get the Whitepaper",
+} as const;
