@@ -13,8 +13,10 @@ import type {
 import {
   TRAINING_LIST_SIZE,
   TRAINING_SLUG,
+  fetchTrainingByCategoryIds,
   fetchTrainingCategories,
   fetchTrainingCategoryNodes,
+  resolveCategoryIds,
   toCategoryMap,
   toCategoryOptions,
   toLvCategoryOptions,
@@ -56,9 +58,11 @@ function renderFilterPlaceholder(label: string) {
 }
 
 // Training 커리큘럼: 필터 3종 + 검색 + 카드 목록(다건, slug=currMgmt-data) + 페이지네이션.
-// - Category 필터(All/Power/Automation)와 검색(title|description)은 실제 where에 연동해 재조회한다.
-// - Lv/Sub Category 옵션은 category-data(depth3 노드)에서 파생. 단, 목록 재조회에는 관여하지 않음
-//   (ARRAY_CONTAINS 미지원 제약 — 목록 조회 useEffect 의존성 배열은 category/검색/페이지만 유지).
+// - Category 필터(All/Power/Automation)와 검색(title|description)은 currMgmt-data where에 연동해 재조회한다.
+// - Lv/Sub Category 옵션은 category-data(depth3 노드)에서 파생. Lv/Sub가 선택되면
+//   해당 그룹의 category-data PK 목록(resolveCategoryIds)을 신규 엔드포인트
+//   (/training/curriculum-by-category, categoryIds 복수)로 넘겨 목록을 재조회한다.
+//   (검색어는 신규 엔드포인트 미지원 — Lv/Sub 선택 중에는 검색이 API에 실리지 않음)
 export default function TrainingCurriculum({
   curriculum,
   variant,
@@ -79,7 +83,7 @@ export default function TrainingCurriculum({
   const [categoryOptions, setCategoryOptions] = useState<
     { value: string; label: string }[]
   >([{ value: "", label: "All" }]);
-  // Lv Category/Sub Category 선택값(미선택="") — 목록 재조회에는 관여하지 않고 옵션 파생/연쇄에만 사용
+  // Lv Category/Sub Category 선택값(미선택="") — 옵션 파생/연쇄 + 선택 시 categoryIds 기반 목록 재조회
   const [lvCategoryValue, setLvCategoryValue] = useState(lvCategory.defaultValue);
   const [subCategoryValue, setSubCategoryValue] = useState(
     subCategory.defaultValue,
@@ -145,9 +149,46 @@ export default function TrainingCurriculum({
   const lvDisabled = categoryValue === "";
   const subDisabled = categoryValue === "" || lvCategoryValue === "";
 
-  // 목록 조회: variant/카테고리/검색/페이지 변경 시
+  // 목록 조회: variant/카테고리/Lv·Sub/검색/페이지 변경 시
   useEffect(() => {
     let alive = true;
+
+    // Lv/Sub Category가 선택돼 있으면 → categoryIds(복수 PK) 기반 신규 엔드포인트로 조회
+    if (lvCategoryValue !== "" || subCategoryValue !== "") {
+      const ids = resolveCategoryIds(
+        categoryNodes,
+        categoryValue,
+        lvCategoryValue,
+        subCategoryValue,
+      );
+      // 방어적: 매칭 id 없으면(이론상 없어야 함) 빈 목록 처리, 불필요한 호출 회피
+      if (ids.length === 0) {
+        setRows([]);
+        setTotalPages(1);
+        return () => {
+          alive = false;
+        };
+      }
+      fetchTrainingByCategoryIds({
+        categoryIds: ids,
+        variant,
+        page: pageIndex,
+        size: TRAINING_LIST_SIZE,
+      })
+        .then((res) => {
+          if (!alive) return;
+          setRows(res.content);
+          setTotalPages(res.totalPages || 1);
+        })
+        .catch(() => {
+          if (alive) setRows([]);
+        });
+      return () => {
+        alive = false;
+      };
+    }
+
+    // Lv/Sub 미선택 → 기존 currMgmt-data where 기반 조회
     // categoryValue = product_category 코드값(P/A) 직접 사용. "" = 전체 → 조건 미포함
     fetchData<TrainingRow>({
       slug: TRAINING_SLUG,
@@ -176,7 +217,15 @@ export default function TrainingCurriculum({
     return () => {
       alive = false;
     };
-  }, [variant, categoryValue, searchTerm, pageIndex]);
+  }, [
+    variant,
+    categoryValue,
+    lvCategoryValue,
+    subCategoryValue,
+    searchTerm,
+    pageIndex,
+    categoryNodes,
+  ]);
 
   // 카드(다건)
   const listItems = useMemo(
@@ -192,10 +241,17 @@ export default function TrainingCurriculum({
     setPageIndex(0);
   };
 
-  // Lv Category 변경 시 Sub Category 선택값 리셋(Sub은 이때부터 활성화됨)
+  // Lv Category 변경 시 Sub Category 선택값 리셋(Sub은 이때부터 활성화됨) + 첫 페이지로
   const handleLvCategoryChange = (value: string) => {
     setLvCategoryValue(value);
     setSubCategoryValue(subCategory.defaultValue);
+    setPageIndex(0);
+  };
+
+  // Sub Category 변경 시 첫 페이지로 이동 후 재조회
+  const handleSubCategoryChange = (value: string) => {
+    setSubCategoryValue(value);
+    setPageIndex(0);
   };
 
   // 검색 적용(버튼 클릭/Enter) — 첫 페이지로 이동 후 재조회
@@ -270,7 +326,7 @@ export default function TrainingCurriculum({
               displayEmpty
               disabled={subDisabled}
               onChange={(event) =>
-                setSubCategoryValue(String(event.target.value))
+                handleSubCategoryChange(String(event.target.value))
               }
               IconComponent={GuideSelectIcon}
               inputProps={{ "aria-label": subCategory.label }}

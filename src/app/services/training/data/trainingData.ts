@@ -110,6 +110,7 @@ export function toTrainingCard(
 // - dataJson 최상위에 예외 없이 채워지는 _fetchedRel{17,19,20,21} + product 섹션 사용.
 // - flattenPageDataItem 적용 시 _fetchedRel*는 최상위 문자열이라 그대로, product_name은 dot-notation 섹션키로 접근.
 export interface TrainingCategoryNode {
+  id: number; // category-data 행 PK(page_data.id) — categoryIds(복수) 필터 호출 시 사용
   hasTraining: string; // _fetchedRel17: "001"=공개(training 노출)/"002"=비공개
   depth1Title: string; // _fetchedRel20: depth1 카테고리 타이틀
   depth2Title: string; // _fetchedRel19: depth2 카테고리 타이틀
@@ -117,10 +118,13 @@ export interface TrainingCategoryNode {
   productName: string; // product.product_name: depth3 제품명
 }
 
-// flatten row → 정규화 노드
+// flatten row → 정규화 노드 (flattenPageDataItem이 PK를 _id로 병합함)
+// - _fetchedRel17은 관계설정상 product-data 전체 객체로 내려오므로(스칼라 아님),
+//   dot-notation 단축키 "_fetchedRel17.has_training"로 접근한다(product.product_name과 동일 패턴).
 function toCategoryNode(row: Record<string, unknown>): TrainingCategoryNode {
   return {
-    hasTraining: String(row._fetchedRel17 ?? ""),
+    id: Number(row._id ?? 0),
+    hasTraining: String(row["_fetchedRel17.has_training"] ?? ""),
     depth1Title: String(row._fetchedRel20 ?? ""),
     depth2Title: String(row._fetchedRel19 ?? ""),
     productType: String(row._fetchedRel21 ?? ""),
@@ -191,6 +195,34 @@ export function toSubCategoryOptions(
   return [];
 }
 
+// Lv/Sub Category 선택값(표시용 타이틀 문자열) → 해당 그룹에 속한 노드들의 PK(id) 목록.
+// - 신규 엔드포인트(/training/curriculum-by-category)는 category-data PK를 categoryIds(복수)로 받는다.
+// - Lv/Sub 옵션의 value는 타이틀/제품명 문자열이라, 실제 호출 시점에 이 함수로 PK 배열로 변환한다.
+// - Power(P): Lv=depth1 타이틀 / Sub=depth2 타이틀
+// - Automation(A): Lv=depth2 타이틀 / Sub=제품명(product_name)
+// - Sub 선택 시: Lv+Sub 모두 매칭되는 노드의 id. Sub 미선택+Lv만 선택 시: Lv 매칭 노드 전부의 id.
+// - 게이트(공개+product_type 일치) 통과 노드만 대상. 중복 id 제거.
+export function resolveCategoryIds(
+  nodes: TrainingCategoryNode[],
+  category: string,
+  lvValue: string,
+  subValue: string,
+): number[] {
+  if (category !== "P" && category !== "A") return [];
+  const gated = gateNodes(nodes, category);
+  const matched = gated.filter((n) => {
+    if (category === "P") {
+      if (lvValue && n.depth1Title !== lvValue) return false;
+      if (subValue && n.depth2Title !== subValue) return false;
+    } else {
+      if (lvValue && n.depth2Title !== lvValue) return false;
+      if (subValue && n.productName !== subValue) return false;
+    }
+    return true;
+  });
+  return Array.from(new Set(matched.map((n) => n.id).filter((id) => id > 0)));
+}
+
 // ---------------- 조회 함수 ----------------
 
 // 카테고리 라벨용 코드그룹 조회(page-data 조회가 아닌 codes API라 fetchData 대상 아님)
@@ -212,4 +244,36 @@ export async function fetchTrainingCategoryNodes(): Promise<
     리턴함수: (rows) => rows.map((r) => toCategoryNode(flattenPageDataItem(r))),
   });
   return res.content;
+}
+
+// 신규 엔드포인트(/training/curriculum-by-category) 응답 — PageDataListResponse(기존 목록과 동일 구조)
+export interface TrainingByCategoryResponse {
+  content: TrainingRow[];
+  totalElements: number;
+  totalPages: number;
+  page: number;
+  size: number;
+}
+
+// categoryIds(복수 PK) 기반 커리큘럼 목록 조회(신규 BE 엔드포인트).
+// - 단일/묶음 카테고리 선택을 category-data PK 목록으로 표현(콤마 구분).
+// - page-data/{slug} 경로가 아니라 전용 경로라 fetchData가 아닌 fetchApi를 직접 사용.
+// - 응답 구조가 currMgmt-data 목록과 동일 → 호출부에서 toTrainingCard 매핑 그대로 재사용.
+export async function fetchTrainingByCategoryIds(params: {
+  categoryIds: number[];
+  variant: TrainingVariant;
+  page: number;
+  size: number;
+}): Promise<{ content: TrainingRow[]; totalPages: number }> {
+  const { categoryIds, variant, page, size } = params;
+  const sp = new URLSearchParams();
+  sp.set("categoryIds", categoryIds.join(","));
+  sp.set("trainingCourse", TRAINING_COURSE_CODE[variant]);
+  sp.set("page", String(page));
+  sp.set("size", String(size));
+  sp.set("sort", "createdAt,desc");
+  const res = await fetchApi<TrainingByCategoryResponse>(
+    `/api/v1/fo/training/curriculum-by-category?${sp.toString()}`,
+  );
+  return { content: res.content ?? [], totalPages: res.totalPages || 1 };
 }
