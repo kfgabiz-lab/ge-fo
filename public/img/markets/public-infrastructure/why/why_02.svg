@@ -1,0 +1,26 @@
+<svg width="110" height="111" viewBox="0 0 110 111" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.7">
+<path d="M109 62V3C109 1.89543 108.105 1 107 1L3 1C1.89543 1 1 1.89543 1 3V74C1 75.1046 1.89543 76 3 76H9.30769H50" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M30 92H80" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M32 21C44.709 21 54.9998 31.2292 55 43.833V50H9V43.833C9.00018 31.2292 19.291 21 32 21Z" stroke="white" stroke-width="2"/>
+<path d="M40.1111 49.1102C40.1111 44.9374 36.7284 41.5547 32.5556 41.5547C28.3827 41.5547 25 44.9374 25 49.1102" stroke="white" stroke-width="2"/>
+<path d="M32 22V28" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M16.9991 28.0009L21.2426 32.2426" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M47.2431 28.0009L42.9995 32.2426" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M42 39.002L33.0009 45.9502" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M15 43H9" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M55 43H49" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M65 22H99" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M65 48H99" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M92 32V38" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M71 19V25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M78 45V51" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M65 35H99" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</g>
+<circle cx="83" cy="84" r="27" fill="#E60040"/>
+<path opacity="0.2" d="M67.1445 62.1406C63.909 66.5928 62 72.0713 62 77.9961C62 92.9078 74.0883 104.996 89 104.996C94.9247 104.996 100.402 103.086 104.854 99.8506C99.9467 106.604 91.987 110.996 83 110.996C68.0883 110.996 56 98.9078 56 83.9961C56 75.0092 60.3912 67.0484 67.1445 62.1406Z" fill="black"/>
+<path d="M84 100C93.3888 100 101 92.2572 101 82.7059C101 78.6633 99.6365 74.9447 97.3519 72" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M85 97L82 100L85 103" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M82 68C72.6112 68 65 75.7447 65 85.2983C65 89.3388 66.3614 93.0557 68.6429 96" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M81 71L84 68L81 65" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

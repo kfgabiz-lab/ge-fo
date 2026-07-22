@@ -19,11 +19,17 @@ import {
   productTemplateFaqItems,
 } from "../../data/productDetailContent";
 import { buildHwProductDetail } from "../../data/hwProductDetail";
+import { fetchProductFaqItems } from "../../data/productsSystemsData";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
 export default async function GenericProductDetail({ slug }: { slug: string }) {
-  const detail = await buildHwProductDetail(slug, productTemplateDetail);
+  const { detail, productId } = await buildHwProductDetail(
+    slug,
+    productTemplateDetail,
+  );
+  // 제품 FAQ 동적 조회(productId 있을 때만). 결과 0건이면 정적 템플릿 FAQ로 폴백.
+  const faqItems = productId ? await fetchProductFaqItems(productId) : [];
 
   return (
     <main className="devices-page devices-page--product" id="Page_devices_product">
@@ -45,7 +51,7 @@ export default async function GenericProductDetail({ slug }: { slug: string }) {
           configuratorHref={detail.configuratorHref}
           configuratorExternal={detail.configuratorExternal}
         />
-        <DevicesProductDownloads items={detail.downloads} />
+        <DevicesProductDownloads items={[]} />
         <CommonBanner03 />
         {detail.youtubeVideoId ? (
           <DevicesProductVideo youtubeVideoId={detail.youtubeVideoId} />
@@ -55,7 +61,9 @@ export default async function GenericProductDetail({ slug }: { slug: string }) {
         </div>
         <DevicesHelp variant="overlay" sectionId="product-help" />
       </DevicesProductNavScope>
-      <DevicesPageFooter faqItems={productTemplateFaqItems} />
+      <DevicesPageFooter
+        faqItems={faqItems.length > 0 ? faqItems : productTemplateFaqItems}
+      />
     </main>
   );
 }

@@ -15,10 +15,8 @@ section.markets_stats .section_tit {
 /* Card link hover — title underline only */
 section.markets_references .item:hover .tit,
 section.markets_products .item:hover .tit,
-section.markets_solutions .markets_solutions__product:hover
-  .markets_solutions__product-text strong,
-section.markets_solutions .markets_solutions__product:focus-visible
-  .markets_solutions__product-text strong {
+section.markets_solutions .markets_solutions__product:hover .markets_solutions__product-text strong,
+section.markets_solutions .markets_solutions__product:focus-visible .markets_solutions__product-text strong {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -53,20 +51,55 @@ section.markets_references .txt {
   }
 }
 
+@keyframes markets-solutions-hotspot-ripple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.6);
+  }
+
+  25% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.3);
+  }
+
+  70%,
+  100% {
+    box-shadow: 0 0 0 12px rgba(255, 255, 255, 0);
+  }
+}
+
+section.markets_solutions .markets_solutions__hotspot::before,
+section.markets_solutions .markets_solutions__hotspot::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-sizing: border-box;
+  pointer-events: none;
+  content: "";
+  animation: markets-solutions-hotspot-ripple 2s ease-out infinite;
+ 
+}
+
+section.markets_solutions .markets_solutions__hotspot::after {
+  animation-delay: 1s;
+}
+
+section.markets_solutions .markets_solutions__hotspot:hover::before,
+section.markets_solutions .markets_solutions__hotspot:hover::after,
+section.markets_solutions .markets_solutions__hotspot.is-active::before,
+section.markets_solutions .markets_solutions__hotspot.is-active::after {
+  animation: none;
+  box-shadow: none;
+}
+
 section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   animation: markets-hero-scroll-down-bounce 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
   will-change: transform, opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  section.markets_solutions .markets_solutions__hotspot::before,
+  section.markets_solutions .markets_solutions__hotspot::after,
   section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     animation: none;
-  }
-
-  /* 데이터센터 솔루션 맵/패널 슬라이드 전환 비활성화 */
-  section.markets_solutions .markets_solutions__map,
-  section.markets_solutions .markets_solutions__panel {
-    transition: none;
   }
 }
 
@@ -80,14 +113,17 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 80px 40px 92px;
+    padding: 75px 40px 92px;
     text-align: center;
   }
-  section.markets_hero .hero_img{
+  section.markets_hero .hero_img {
     background: url(/img/markets/bg_market.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     height: 531px;
     background-attachment: fixed;
-}
+  }
   section.markets_hero .markets_hero__sub {
     margin-bottom: 16px;
     font-size: 24px;
@@ -164,844 +200,6 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     object-position: center bottom;
   }
 
-  section.markets_stats {
-    /* margin-bottom: 150px; */
-    background: #fff;
-  }
-
-  section.markets_stats .markets_stats__panel {
-    padding: 70px 340px 70px 80px;
-    background: #f5f7fa;
-    border-radius: 4px;
-    width: calc(100% + 340px);
-  }
-
-  section.markets_stats .markets_stats__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-  }
-
-  section.markets_stats .markets_stats__col {
-    padding: 0 40px;
-    border-left: 1px solid #ddd;
-  }
-
-  section.markets_stats .markets_stats__col:first-child {
-    padding-left: 0;
-    border-left: none;
-  }
-
-  section.markets_stats .markets_stats__label {
-    margin: 0 0 4px;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    color: #e60040;
-  }
-
-  section.markets_stats .markets_stats__headline {
-    margin-bottom: 14px;
-  }
-
-  section.markets_stats .markets_stats__value {
-    margin: 0;
-    font-family: jaka, Arial, Helvetica, sans-serif;
-    font-size: 42px;
-    font-weight: 700;
-    line-height: 52px;
-    letter-spacing: -0.02em;
-    color: #222;
-  }
-
-  section.markets_stats .markets_stats__value-unit {
-    font-family: var(--font-body);
-    font-size: 34px;
-    font-weight: 800;
-    line-height: 44px;
-    letter-spacing: -0.01em;
-  }
-
-  section.markets_stats .markets_stats__value-suffix {
-    font-family: jaka, Arial, Helvetica, sans-serif;
-    font-size: 42px;
-    font-weight: 700;
-    line-height: 52px;
-  }
-
-  section.markets_stats .markets_stats__sublabel {
-    margin: 2px 0 0;
-    font-size: 16px;
-    line-height: 24px;
-    color: #888;
-  }
-
-  section.markets_stats .markets_stats__desc {
-    margin: 0;
-    font-size: 16px;
-    line-height: 26px;
-    color: #222;
-  }
-
-  section.markets_intro {
-    margin: 120px 0 120px;
-    background: #fff;
-  }
-
-  section.markets_intro .inner {
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    align-items: flex-start;
-  }
-
-  section.markets_intro .markets_intro__tit {
-    font-family: jaka;
-    font-size: 60px;
-    font-weight: 700;
-    line-height: 80px;
-    letter-spacing: -0.02em;
-    color: #222;
-    justify-content: flex-start;
-    display: flex;
-    margin-bottom: 80px;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  section.markets_intro .markets_intro__txt {
-    font-size: 20px;
-    line-height: 30px;
-    color: #222;
-    max-width: 708px;
-    align-self: flex-end;
-    display: flex;
-    flex-direction: column;
-  }
-
-  section.markets_intro .markets_intro__txt strong {
-    color: #e60040;
-    font-weight: 400;
-  }
-
-  section.markets_explore {
-    padding-bottom: 120px;
-    background: #fff;
-    position: relative;
-  }
-
-  section.markets_explore .markets_explore__head {
-    margin-bottom: 40px;
-  }
-
-  section.markets_explore.markets_explore--wide-tabs .markets_explore__tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  section.markets_explore.markets_explore--wide-tabs .markets_explore__tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  section.markets_explore.markets_explore--wide-tabs .markets_explore__tab {
-    flex-shrink: 0;
-    text-align: center;
-    white-space: normal;
-  }
-
-  section.markets_explore .markets_explore__tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    margin-bottom: 0;
-  }
-
-  section.markets_explore .markets_explore__tab {
-    position: relative;
-    padding: 0 0 14px;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 30px;
-    color: #222;
-    background: none;
-    border: none;
-    cursor: pointer;
-    opacity: 0.25;
-  }
-
-  section.markets_explore .markets_explore__tab.is-active {
-    opacity: 1;
-  }
-
-  section.markets_explore .markets_explore__tab.is-active::after {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 8px;
-    height: 8px;
-    background: #e60040;
-    border-radius: 50%;
-    content: "";
-    transform: translateX(-50%);
-  }
-
-  section.markets_explore .markets_explore__panel {
-    margin-top: 60px;
-    background: #f5f7fa;
-    padding: 70px 0 0 0;
-    min-height: 570px;
-  }
-
-  section.markets_explore .markets_explore__panel_inner {
-    height: 100%;
-    display: flex;
-    align-items: flex-start;
-    position: relative;
-  }
-  section.markets_explore .markets_explore__panel_inner .markets_explore__txt{
-    max-width: 708px;
-    margin-top: 70px;
-}
-  section.markets_explore .markets_explore__panel_tit {
-    margin-bottom: 16px;
-    font-size: 34px;
-    font-weight: 600;
-    line-height: 44px;
-    letter-spacing: -0.01em;
-    color: #222;
-  }
-
-  section.markets_explore .markets_explore__panel_desc {
-    font-size: 16px;
-    line-height: 24px;
-    color: #666;
-  }
-
-  section.markets_explore .markets_explore__img {
-    aspect-ratio: 586 / 640;
-    overflow: hidden;
-    background: #e8e8e8;
-    position: absolute;
-    right: 0px;
-    width: 586px;
-    top: 0;
-  }
-
-  section.markets_explore .markets_explore__img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  section.markets_references {
-    padding: 120px 0 0;
-    background: #fff;
-    margin-bottom: 150px;
-  }
-
-  section.markets_references .markets_references__head {
-    margin-bottom: 40px;
-  }
-
-  section.markets_references .markets_references__list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  section.markets_references .item {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-  }
-
-  section.markets_references .img_area {
-    aspect-ratio: 464 / 500;
-    margin-bottom: 20px;
-    overflow: hidden;
-    background: #f0f0f0;
-    position: relative;
-  }
-
-  section.markets_references .img_area img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-    section.markets_references .item .img_area:before{
-       display:block;
-      content:'';
-      width: 90px;
-      height: 90px;
-      background-image: url(/ico/ico_modal_plus.svg);
-      position: absolute;
-      z-index: 100;
-      background-size: contain;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%,-50%);
-      opacity: 0;
-    }
-  section.markets_references .item:hover .img_area:before{
-      opacity: .7;
-    transition:.3s;
-    }
-  section.markets_references .txt_area{
-    text-align: left;
-}
-  section.markets_references .tit {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 32px;
-    color: #222;
-  }
-
-  section.markets_references .txt {
-    margin: 12px 0 0;
-    font-size: 16px;
-    line-height: 24px;
-    color: #222;
-    font-weight: 400;
-  }
-
-  section.markets_references .location {
-    margin: 16px 0 0;
-    font-size: 15px;
-    line-height: 23px;
-    color: #0F1F45;
-    display: flex;
-    gap: 6px;
-  }
-  section.markets_references .location .location_sep{
-    color: #ddd;
-    font-size: 12px;
-}
-  section.markets_benefits {
-    padding: 150px 0 150px;
-    background: #fff;
-  }
-
-  section.markets_benefits .markets_benefits__head {
-    margin-bottom: 40px;
-  }
-
-  section.markets_benefits .markets_benefits__list {
-    display: flex;
-    flex-direction: column;
-    gap: 50px;
-  }
-
-  section.markets_benefits .markets_benefits__item {
-    display: flex;
-    gap: 60px;
-    align-items: stretch;
-    padding-bottom: 0;
-    border-bottom: 1px solid #ddd;
-  }
-
-  section.markets_benefits .markets_benefits__item.is-reverse {
-    grid-template-columns: minmax(0, 428px) minmax(0, 952px);
-  }
-
-  section.markets_benefits .markets_benefits__item.is-reverse .img_area {
-    order: 2;
-  }
-
-  section.markets_benefits .markets_benefits__item.is-reverse .txt_area {
-    order: 1;
-  }
-
-  section.markets_benefits .markets_benefits__item .img_area {
-    width: auto;
-    overflow: hidden;
-    background: #f0f0f0;
-    flex: 1;
-    height: 400px;
-  }
-
-  section.markets_benefits .markets_benefits__item .img_area img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  section.markets_benefits .markets_benefits__item .txt_area {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 30px 0 0px;
-    width: 428px;
-    position: relative;
-    margin-bottom: 40px;
-  }
-
-  section.markets_benefits .markets_benefits__item .tit {
-    font-size: 34px;
-    font-weight: 600;
-    line-height: 44px;
-    letter-spacing: -0.01em;
-    color: #222;
-  }
-
-  section.markets_benefits .markets_benefits__item .txt {
-    margin-top: 16px;
-    font-size: 16px;
-    line-height: 24px;
-    color: #222;
-  }
-section.markets_benefits .markets_benefits__item  .capabilities{
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    position: absolute;
-    bottom: 0;
-}
-  section.markets_benefits .markets_benefits__item .capabilities_label {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1;
-    color: #0f1f45;
-  }
-
-  section.markets_benefits .markets_benefits__item .capabilities_txt {
-    margin-top: 12px;
-    font-size: 14px;
-    line-height: 20px;
-    color: #666;
-  }
-
-  section.markets_solutions .markets_solutions__map-bg--mo {
-    display: none;
-  }
-
-  section.markets_solutions .markets_solutions__hotspot-pin {
-    display: none;
-  }
-
-  section.markets_solutions .markets_solutions__accordion {
-    display: none;
-  }
-
-  /* End-to-End Data Center Solutions — Figma 2483:66367 */
-  section.markets_solutions {
-    /* padding: 120px 0 0; */
-    background: #fff;
-  }
-
-  section.markets_solutions .markets_solutions__head {
-    margin-bottom: 40px;
-  }
-
-  section.markets_solutions .markets_solutions__head .section_tit {
-    max-width: 1178px;
-    font-size: 50px;
-    line-height: 62px;
-    letter-spacing: -0.02em;
-  }
-
-  section.markets_solutions .markets_solutions__stage {
-    position: relative;
-    width: 100%;
-    background: #e9ecf2;
-    overflow: hidden;
-  }
-
-  section.markets_solutions .markets_solutions__map {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1920 / 780;
-    min-height: 510px;
-    background: #ebebee;
-    overflow: hidden;
-    max-width: 1920px;
-    margin: 0 auto;
-    left: 250px;
-    transition: left 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  section.markets_solutions .markets_solutions__stage--open .markets_solutions__map {
-    left: 0;
-  }
-
-  section.markets_solutions .markets_solutions__map-bg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  section.markets_solutions .markets_solutions__hotspots {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  section.markets_solutions .markets_solutions__hotspot {
-    position: absolute;
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 20px;
-    border: none;
-    border-radius: 100px;
-    background: #fff;
-    cursor: pointer;
-    pointer-events: auto;
-    transform: translate(-50%, -50%);
-    transition:
-      background 0.2s ease,
-      box-shadow 0.2s ease,
-      color 0.2s ease;
-  }
-
-  section.markets_solutions .markets_solutions__hotspot.is-active {
-    background: var(--color-accent);
-    box-shadow: 0 4px 5px rgb(0 0 0 / 40%);
-    z-index: 2;
-  }
-
-  section.markets_solutions .markets_solutions__hotspot:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-  }
-
-  section.markets_solutions .markets_solutions__hotspot-label {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 26px;
-    color: #222;
-    white-space: nowrap;
-    transition: color 0.2s ease;
-  }
-
-  section.markets_solutions .markets_solutions__hotspot.is-active .markets_solutions__hotspot-label {
-    color: #fff;
-  }
-
-  section.markets_solutions .markets_solutions__panel {
-    position: absolute;
-    top: 60px;
-    right: max(20px, calc((100% - 1440px) / 2));
-    z-index: 3;
-    width: 400px;
-    max-width: calc(100% - 40px);
-    bottom: 60px;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition:
-      opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      visibility 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  section.markets_solutions .markets_solutions__stage--open .markets_solutions__panel {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transition:
-      opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.12s,
-      visibility 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.12s;
-  }
-
-  section.markets_solutions .markets_solutions__panel-card {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    align-items: flex-start;
-    box-sizing: border-box;
-    width: 100%;
-    max-height: 100%;
-    padding: 0px 30px 30px;
-    background: #fff;
-    box-shadow: 0 20px 15px rgb(0 0 0 / 8%);
-    scrollbar-width: thin;
-    scrollbar-color: #ddd transparent;
-    overflow: auto;
-  }
-
-  section.markets_solutions .markets_solutions__panel-card::-webkit-scrollbar {
-    width: 3px;
-  }
-
-  section.markets_solutions .markets_solutions__panel-card::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    background: #ddd;
-  }
-
-  section.markets_solutions .markets_solutions__panel-intro {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-    max-width: 340px;
-    word-break: break-word;
-    position: sticky;
-    top: 0;
-    background: #fff;
-    padding: 30px 0 0;
-  }
-
-  section.markets_solutions .markets_solutions__panel-tit {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 32px;
-    letter-spacing: -0.22px;
-    color: #222;
-  }
-
-  section.markets_solutions .markets_solutions__panel-desc {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 24px;
-    color: #222;
-  }
-
-  section.markets_solutions .markets_solutions__products {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    max-width: 340px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  section.markets_solutions .markets_solutions__products-item {
-    margin: 0;
-  }
-
-  section.markets_solutions .markets_solutions__products-sep {
-    flex-shrink: 0;
-    width: 100%;
-    height: 1px;
-    margin: 0;
-    padding: 0;
-    background: #e8e8e8;
-  }
-
-  section.markets_solutions .markets_solutions__product {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  section.markets_solutions .markets_solutions__product-img {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 80px;
-    overflow: hidden;
-    background: #ddd;
-  }
-
-  section.markets_solutions .markets_solutions__product-img img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  section.markets_solutions .markets_solutions__product-text {
-    flex: 1;
-    min-width: 0;
-    max-width: 240px;
-  }
-
-  section.markets_solutions .markets_solutions__product-text strong {
-    display: block;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 28px;
-    color: #222;
-    word-break: break-word;
-  }
-
-  section.markets_solutions .markets_solutions__product-text p {
-    margin: 0;
-    font-size: 16px;
-    line-height: 24px;
-    color: #666;
-  }
-
-  section.markets_why {
-    position: relative;
-    padding: 120px 0;
-    overflow: hidden;
-    color: #fff;
-  }
-
-  section.markets_why .markets_why__bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-  }
-
-  section.markets_why .markets_why__bg .img_area {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-
-  section.markets_why .markets_why__bg .img_area::after {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      90deg,
-      rgb(0 0 0 / 55%) 0%,
-      rgb(0 0 0 / 25%) 55%,
-      rgb(0 0 0 / 10%) 100%
-    );
-    content: "";
-    pointer-events: none;
-  }
-
-  section.markets_why .markets_why__bg .img_area img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-  }
-
-  section.markets_why .markets_why__bg .glow_area {
-    position: absolute;
-    z-index: 1;
-    left: 50%;
-    top: -1076px;
-    width: 1600px;
-    height: 1600px;
-    transform: translateX(-50%);
-    pointer-events: none;
-  }
-
-  section.markets_why .markets_why__bg .glow_area img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  section.markets_why .inner {
-    position: relative;
-    z-index: 1;
-  }
-
-  section.markets_why .markets_why__head {
-    margin-bottom: 80px;
-  }
-
-  section.markets_why .markets_why__head .section_tit,
-  section.markets_why .markets_why__head .section_desc {
-    color: #fff;
-  }
-
-  section.markets_why .markets_why__head .section_desc {
-    opacity: 0.8;
-  }
-
-  section.markets_why .markets_why__list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  section.markets_why .markets_why__item {
-    display: block;
-  }
-
-  section.markets_why .markets_why__item .icon_area {
-    width: 110px;
-    height: 110px;
-    margin-bottom: 30px;
-  }
-
-  section.markets_why .markets_why__item .icon_area img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  section.markets_why .markets_why__item .tit {
-    margin-bottom: 10px;
-    font-size: 28px;
-    font-weight: 600;
-    line-height: 38px;
-    letter-spacing: -0.01em;
-  }
-
-  section.markets_why .markets_why__item .txt {
-    font-size: 16px;
-    line-height: 24px;
-    opacity: 0.8;
-  }
-
-  section.markets_products {
-    padding: 120px 0;
-    background: #fff;
-  }
-
-  section.markets_products .section_tit {
-    margin-bottom: 40px;
-  }
-
-  section.markets_products .markets_products__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-
-  section.markets_products .item {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-  }
-
-  section.markets_products .img_area {
-    position: relative;
-    aspect-ratio: 342 / 280;
-    margin-bottom: 20px;
-    overflow: hidden;
-    background: #f5f7fa;
-  }
-
-  section.markets_products .img_area img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  section.markets_products .category {
-    font-size: 15px;
-    line-height: 23px;
-    color: #888;
-  }
-
-  section.markets_products .tit {
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 34px;
-    color: #222;
-    margin-bottom: 2px;
-    transition: .3s;
-  }
-
-  section.markets_products .markets_products__more {
-    display: flex;
-    justify-content: center;
-    margin-top: 60px;
-  }
-
-
   /* Markets key visual hero — Figma 4552:161686, 4552:156311 */
   section.markets_hero.markets_hero--key-visual {
     position: relative;
@@ -1024,17 +222,13 @@ section.markets_benefits .markets_benefits__item  .capabilities{
   }
 
   section.markets_hero.markets_hero--key-visual .hero_img::after {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgb(3 5 17 / 50%) 17.79%, rgb(21 35 119 / 0%) 100%);
-    pointer-events: none;
-    content: "";
+    display: none;
   }
 
   section.markets_hero.markets_hero--key-visual .markets_hero__content {
     position: relative;
     z-index: 1;
-    padding: 0 40px 120px;
+    padding: 0 40px ;
     color: #fff;
   }
 
@@ -1196,6 +390,244 @@ section.markets_benefits .markets_benefits__item  .capabilities{
   section.markets_intro +section.markets_explore {
     padding-top: 0;
 }
+  section.markets_stats {
+    /* margin-bottom: 150px; */
+    background: #fff;
+  }
+
+  section.markets_stats .markets_stats__panel {
+    padding: 70px 340px 70px 80px;
+    background: #f5f7fa;
+    border-radius: 4px;
+    width: calc(100% + 340px);
+  }
+
+  section.markets_stats .markets_stats__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  section.markets_stats .markets_stats__col {
+    padding: 0 40px;
+    border-left: 1px solid #ddd;
+  }
+
+  section.markets_stats .markets_stats__col:first-child {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  section.markets_stats .markets_stats__label {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #e60040;
+  }
+
+  section.markets_stats .markets_stats__headline {
+    margin-bottom: 14px;
+  }
+
+  section.markets_stats .markets_stats__value {
+    margin: 0;
+    font-family: jaka, Arial, Helvetica, sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 52px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.markets_stats .markets_stats__value-unit {
+    font-family: var(--font-body);
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 44px;
+    letter-spacing: -0.01em;
+  }
+
+  section.markets_stats .markets_stats__value-suffix {
+    font-family: jaka, Arial, Helvetica, sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 52px;
+  }
+
+  section.markets_stats .markets_stats__sublabel {
+    margin: 2px 0 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #888;
+  }
+
+  section.markets_stats .markets_stats__desc {
+    margin: 0;
+    font-size: 16px;
+    line-height: 26px;
+    color: #222;
+  }
+
+  section.markets_intro {
+    margin: 150px 0 0;
+    background: #fff;
+  }
+
+  section.markets_intro .inner {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  section.markets_intro .markets_intro__tit {
+    font-family: jaka;
+    font-size: 60px;
+    font-weight: 700;
+    line-height: 80px;
+    letter-spacing: -0.02em;
+    color: #222;
+    justify-content: flex-start;
+    display: flex;
+    margin-bottom: 80px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  section.markets_intro .markets_intro__txt {
+    font-size: 20px;
+    line-height: 30px;
+    color: #222;
+    max-width: 950px;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 150px;
+  }
+
+  section.markets_intro .markets_intro__txt p + p {
+    margin-top: 8px;
+  }
+
+  section.markets_intro .markets_intro__txt strong {
+    /* color: #e60040; */
+    font-weight: 400;
+  }
+
+  section.markets_explore {
+    margin: 150px 0;
+    background: #fff;
+    position: relative;
+    padding-bottom: 150px;
+  }
+
+  section.markets_explore .markets_explore__head {
+    margin-bottom: 40px;
+  }
+
+  section.markets_explore .markets_explore__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 0;
+  }
+
+  section.markets_explore .markets_explore__tab {
+    position: relative;
+    padding: 0 0 14px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 30px;
+    color: #222;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.25;
+  }
+
+  section.markets_explore .markets_explore__tab.is-active {
+    opacity: 1;
+  }
+
+  section.markets_explore .markets_explore__tab.is-active::after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: #e60040;
+    border-radius: 50%;
+    content: "";
+    transform: translateX(-50%);
+  }
+
+  section.markets_explore .markets_explore__panel {
+    margin-top: 30px;
+    background: #f5f7fa;
+    padding: 70px 0 0 0;
+    min-height: 570px;
+  }
+
+  section.markets_explore .markets_explore__panel_inner {
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+  }
+  section.markets_explore .markets_explore__panel_inner .markets_explore__txt {
+    max-width: 708px;
+    margin-top: 70px;
+  }
+  section.markets_explore .markets_explore__panel_tit {
+    margin-bottom: 16px;
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 44px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.markets_explore .markets_explore__panel_desc {
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+    white-space: pre-line;
+  }
+
+  section.markets_explore .markets_explore__img {
+    aspect-ratio: 586 / 640;
+    overflow: hidden;
+    background: #e8e8e8;
+    position: absolute;
+    right: 0px;
+    width: 586px;
+    top: 0;
+  }
+
+  section.markets_explore .markets_explore__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  section.markets_explore.markets_explore--wide-tabs .markets_explore__tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  section.markets_explore.markets_explore--wide-tabs .markets_explore__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  section.markets_explore.markets_explore--wide-tabs .markets_explore__tab {
+    flex-shrink: 0;
+    text-align: center;
+    white-space: normal;
+  }
 
   .markets-page--power-grid > section.markets_sustainability {
     margin: 0;
@@ -1360,7 +792,6 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     aspect-ratio: 1320 / 560;
   }
 
-  /* Markets Solutions Panel (grouped/stacked 공통 — oil-gas-mining 등에서 사용) */
   section.markets_solutions_panel {
     padding: 0 0 150px;
     background: #fff;
@@ -1414,16 +845,17 @@ section.markets_benefits .markets_benefits__item  .capabilities{
   section.markets_solutions_panel--grouped .markets_solutions_panel__block {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
   }
 
   section.markets_solutions_panel--stacked .markets_solutions_panel__block {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 0;
   }
 
   section.markets_solutions_panel .markets_solutions_panel__block-title {
+    margin: 0;
     color: #222;
     font-size: 34px;
     font-weight: 600;
@@ -1436,6 +868,16 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     flex-direction: column;
   }
 
+  section.markets_solutions_panel .markets_solutions_panel__block-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  section.markets_solutions_panel--stacked .markets_solutions_panel__block-copy {
+    gap: 20px;
+  }
+
   section.markets_solutions_panel .markets_solutions_panel__block-body:has(.markets_solutions_panel__block-key) {
     gap: 14px;
   }
@@ -1445,12 +887,14 @@ section.markets_benefits .markets_benefits__item  .capabilities{
   }
 
   section.markets_solutions_panel .markets_solutions_panel__block-text {
+    margin: 0;
     color: #222;
     font-size: 16px;
     line-height: 24px;
   }
 
   section.markets_solutions_panel .markets_solutions_panel__block-key {
+    margin: 0;
     color: #0f1f45;
     font-size: 15px;
     line-height: 23px;
@@ -1503,6 +947,8 @@ section.markets_benefits .markets_benefits__item  .capabilities{
 
   section.markets_solutions_panel--grouped .markets_solutions_panel__diagram {
     margin: 0;
+    padding: 60px;
+    background: #fff;
   }
 
   section.markets_solutions_panel--stacked .markets_solutions_panel__diagram {
@@ -1520,6 +966,708 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     width: 100%;
     height: auto;
   }
+
+  section.markets_solutions_panel .markets_solutions_panel__diagram-img--mo {
+    display: none;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__categories {
+    display: none;
+  }
+
+  /* Industrial — chart image + HTML category cards (Figma 7603:189143) */
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__diagram {
+    margin: 0;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__categories {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category-tit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 10px;
+    border-radius: 4px;
+    background: #0f1f45;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 4px 0 0;
+    padding: 24px;
+    list-style: none;
+    min-height: 180px;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid rgba(15, 31, 69, 0.3);
+    border-radius: 4px;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #222;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category-item::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 4px;
+    height: 4px;
+    margin-top: 10px;
+    background: #888;
+  }
+
+  section.markets_references {
+    margin: 150px 0 ;
+    background: #fff;
+  }
+  section.markets_references .markets_references__head {
+    margin-bottom: 40px;
+  }
+
+  section.markets_references .markets_references__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  section.markets_references .item {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    color: inherit;
+    text-align: left;
+    text-decoration: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  section.markets_references .img_area {
+    aspect-ratio: 464 / 500;
+    margin-bottom: 20px;
+    overflow: hidden;
+    background: #f0f0f0;
+    position: relative;
+  }
+
+  section.markets_references .img_area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  section.markets_references .item .img_area::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    display: block;
+    width: 90px;
+    height: 90px;
+    background: url("/ico/ico_modal_plus.svg") center / contain no-repeat;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+    content: "";
+    pointer-events: none;
+  }
+
+  section.markets_references .txt_area {
+    text-align: left;
+  }
+  section.markets_references .tit {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 32px;
+    color: #222;
+  }
+
+  section.markets_references .txt {
+    margin: 8px 0 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+    font-weight: 400;
+  }
+
+  section.markets_references .location {
+    margin: 16px 0 0;
+    font-size: 15px;
+    line-height: 23px;
+    color: #0f1f45;
+    display: flex;
+    gap: 6px;
+  }
+  section.markets_references .location .location_sep {
+    color: #ddd;
+    font-size: 12px;
+  }
+  section.markets_benefits {
+    margin: 150px 0;
+    background: #fff;
+  }
+
+  section.markets_benefits .markets_benefits__head {
+    margin-bottom: 40px;
+  }
+
+  section.markets_benefits .markets_benefits__list {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  section.markets_benefits .markets_benefits__item {
+    display: flex;
+    gap: 60px;
+    align-items: stretch;
+    padding-bottom: 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  section.markets_benefits .markets_benefits__item.is-reverse {
+    grid-template-columns: minmax(0, 428px) minmax(0, 952px);
+  }
+
+  section.markets_benefits .markets_benefits__item.is-reverse .img_area {
+    order: 2;
+  }
+
+  section.markets_benefits .markets_benefits__item.is-reverse .txt_area {
+    order: 1;
+  }
+
+  section.markets_benefits .markets_benefits__item .img_area {
+    width: auto;
+    overflow: hidden;
+    background: #f0f0f0;
+    flex: 1;
+    height: 400px;
+  }
+
+  section.markets_benefits .markets_benefits__item .img_area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  section.markets_benefits .markets_benefits__item .txt_area {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 30px 0 0px;
+    width: 428px;
+    position: relative;
+    margin-bottom: 40px;
+  }
+
+  section.markets_benefits .markets_benefits__item .tit {
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 44px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.markets_benefits .markets_benefits__item .txt {
+    margin-top: 16px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+  }
+  section.markets_benefits .markets_benefits__item .capabilities {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    position: absolute;
+    bottom: 0;
+  }
+  section.markets_benefits .markets_benefits__item .capabilities_label {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+    color: #0f1f45;
+  }
+
+  section.markets_benefits .markets_benefits__item .capabilities_txt {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #666;
+  }
+
+  section.markets_solutions .markets_solutions__map-bg--mo {
+    display: none;
+  }
+
+  section.markets_solutions .markets_solutions__hotspot-pin {
+    display: none;
+  }
+
+  section.markets_solutions .markets_solutions__accordion {
+    display: none;
+  }
+
+  /* End-to-End Data Center Solutions — Figma 2483:66367 */
+  section.markets_solutions {
+    /* padding: 120px 0 0; */
+    background: #fff;
+  }
+
+  section.markets_solutions .markets_solutions__head {
+    margin-bottom: 40px;
+  }
+
+  section.markets_solutions .markets_solutions__head .section_tit {
+    max-width: 1178px;
+    font-size: 50px;
+    line-height: 62px;
+    letter-spacing: -0.02em;
+  }
+
+  section.markets_solutions .markets_solutions__stage {
+    position: relative;
+    width: 100%;
+    background: #e9ecf2;
+    overflow: hidden;
+  }
+
+  section.markets_solutions .markets_solutions__map {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1920 / 780;
+    min-height: 510px;
+    background: #ebebee;
+    overflow: hidden;
+    max-width: 1920px;
+    margin: 0 auto;
+    left: 250px;
+    transition: left 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  section.markets_solutions .markets_solutions__stage--open .markets_solutions__map {
+    left: 0;
+  }
+
+  section.markets_solutions .markets_solutions__map-bg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  section.markets_solutions .markets_solutions__hotspots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  section.markets_solutions .markets_solutions__hotspot {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 100px;
+    background: #fff;
+    cursor: pointer;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+    transition:
+      background 0.2s ease,
+      box-shadow 0.2s ease,
+      color 0.2s ease;
+  }
+
+  section.markets_solutions .markets_solutions__hotspot:hover,
+  section.markets_solutions .markets_solutions__hotspot.is-active {
+    background: var(--color-accent);
+    box-shadow: 0 4px 5px rgb(0 0 0 / 40%);
+    z-index: 2;
+  }
+
+  section.markets_solutions .markets_solutions__hotspot:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  section.markets_solutions .markets_solutions__hotspot-label {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 26px;
+    color: #222;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  section.markets_solutions .markets_solutions__hotspot:hover .markets_solutions__hotspot-label,
+  section.markets_solutions .markets_solutions__hotspot.is-active .markets_solutions__hotspot-label {
+    color: #fff;
+  }
+
+  section.markets_solutions .markets_solutions__panel {
+    position: absolute;
+    top: 60px;
+    right: max(20px, calc((100% - 1440px) / 2));
+    z-index: 3;
+    width: 400px;
+    max-width: calc(100% - 40px);
+    bottom: 60px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  section.markets_solutions .markets_solutions__stage--open .markets_solutions__panel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.12s,
+      visibility 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.12s;
+  }
+
+  section.markets_solutions .markets_solutions__panel-card {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: flex-start;
+    box-sizing: border-box;
+    width: 100%;
+    max-height: 100%;
+    padding: 0px 30px 30px;
+    background: #fff;
+    box-shadow: 0 20px 15px rgb(0 0 0 / 8%);
+    scrollbar-width: thin;
+    scrollbar-color: #ddd transparent;
+    overflow: auto;
+  }
+
+  section.markets_solutions .markets_solutions__panel-card::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  section.markets_solutions .markets_solutions__panel-card::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: #ddd;
+  }
+
+  section.markets_solutions .markets_solutions__panel-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 340px;
+    word-break: break-word;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 30px 0 0;
+  }
+
+  section.markets_solutions .markets_solutions__panel-tit {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 32px;
+    letter-spacing: -0.22px;
+    color: #222;
+  }
+
+  section.markets_solutions .markets_solutions__panel-desc {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.markets_solutions .markets_solutions__products {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 340px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.markets_solutions .markets_solutions__products-item {
+    margin: 0;
+  }
+
+  section.markets_solutions .markets_solutions__products-sep {
+    flex-shrink: 0;
+    width: 100%;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    background: #e8e8e8;
+  }
+
+  section.markets_solutions .markets_solutions__product {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  section.markets_solutions .markets_solutions__product-img {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    /* background: #ddd; */
+  }
+
+  section.markets_solutions .markets_solutions__product-img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  section.markets_solutions .markets_solutions__product-text {
+    flex: 1;
+    min-width: 0;
+    max-width: 240px;
+  }
+
+  section.markets_solutions .markets_solutions__product-text strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+    color: #222;
+    word-break: break-word;
+  }
+
+  section.markets_solutions .markets_solutions__product-text p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+
+  section.markets_why {
+    position: relative;
+    padding: 120px 0;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  section.markets_why .markets_why__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  section.markets_why .markets_why__bg .img_area {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  section.markets_why .markets_why__bg .img_area::after {
+    position: absolute;
+    /* inset: 0;
+    background: linear-gradient(90deg, rgb(0 0 0 / 55%) 0%, rgb(0 0 0 / 25%) 55%, rgb(0 0 0 / 10%) 100%);
+    content: ""; */
+    pointer-events: none;
+  }
+
+  section.markets_why .markets_why__bg .img_area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    pointer-events: none;
+  }
+
+  section.markets_why .markets_why__bg .glow_area {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: -1076px;
+    width: 1600px;
+    height: 1600px;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  section.markets_why .markets_why__bg .glow_area img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  section.markets_why .inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.markets_why .markets_why__head {
+    margin-bottom: 80px;
+  }
+
+  section.markets_why .markets_why__head .section_tit,
+  section.markets_why .markets_why__head .section_desc {
+    color: #fff;
+  }
+
+  section.markets_why .markets_why__head .section_desc {
+    opacity: 0.8;
+  }
+
+  section.markets_why .markets_why__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  section.markets_why .markets_why__item {
+    display: block;
+  }
+
+  section.markets_why .markets_why__item .icon_area {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 30px;
+  }
+
+  section.markets_why .markets_why__item .icon_area img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  section.markets_why .markets_why__item .tit {
+    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: -0.01em;
+  }
+
+  section.markets_why .markets_why__item .txt {
+    font-size: 16px;
+    line-height: 24px;
+    opacity: 0.8;
+    max-width: 394px;
+  }
+
+  section.markets_products {
+    padding: 120px 0;
+    background: #fff;
+  }
+
+  section.markets_products .section_tit {
+    margin-bottom: 40px;
+  }
+
+  section.markets_products .markets_products__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  section.markets_products .item {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.markets_products .img_area {
+    position: relative;
+    aspect-ratio: 342 / 342;
+    margin-bottom: 20px;
+    overflow: hidden;
+    background: #f5f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  section.markets_products .img_area img {
+    display: block;
+    width: 282px;
+    aspect-ratio: 282 / 282;
+    object-fit: contain;
+  }
+
+  section.markets_products .category {
+    font-size: 15px;
+    line-height: 23px;
+    color: #888;
+  }
+
+  section.markets_products .tit {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    color: #222;
+    margin-bottom: 2px;
+    transition: 0.3s;
+  }
+
+  section.markets_products .markets_products__more {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+  }
+
 }
 
 @media (max-width: 780px) {
@@ -1532,7 +1680,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
   }
 
   .markets-page section [class$="__head"] {
-    margin-bottom: 24px;
+    margin-bottom: 30px;
   }
 
   /* Hero */
@@ -1620,7 +1768,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     background-position: center top;
     background-size: cover;
     background: url(/img/markets/bg_market.png);
-    background-attachment: fixed;
+    /* background-attachment: fixed; */
   }
 
   section.markets_hero.markets_hero--has-img .hero_img {
@@ -1628,13 +1776,86 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     background-attachment: scroll;
   }
 
-  /* Stats */
+  section.markets_hero.markets_hero--key-visual {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 560px;
+    gap: 0;
+    overflow: hidden;
+    background: #030511;
+  }
+
+  section.markets_hero.markets_hero--key-visual .hero_img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+  }
+
+  section.markets_hero.markets_hero--key-visual .hero_img::after {
+    display: none;
+  }
+
+  section.markets_hero.markets_hero--key-visual .markets_hero__content {
+    position: relative;
+    z-index: 1;
+    margin-top: 0;
+    padding: 120px 20px 80px;
+    color: #fff;
+  }
+
+  section.markets_hero.markets_hero--key-visual .markets_hero__tit {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+
+  section.markets_hero.markets_hero--key-visual .markets_hero__sub {
+    font-size: 16px;
+    line-height: 24px;
+    color: #fff;
+  }
+
+  section.markets_hero.markets_hero--key-visual .btn-lv01--solid {
+    color: #0c1625;
+    background: #fff;
+    border: 1px solid #fff;
+  }
+
+  section.markets_hero.markets_hero--key-visual .btn-lv01--line {
+    color: #fff;
+    border-color: rgb(255 255 255 / 30%);
+  }
+
+  section.markets_hero.markets_hero--key-visual .icon_download {
+    filter: brightness(0) invert(1);
+  }
+
+  section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down {
+    bottom: 24px;
+  }
+
+  /* Stats — key-visual Markets MO (data-center baseline) */
   section.markets_stats {
-    margin-bottom: 80px;
+    margin: 0 0 70px;
+  }
+
+  section.markets_stats .inner {
+    padding: 0;
   }
 
   section.markets_stats .markets_stats__panel {
-    padding: 40px 24px;
+    width: calc(100% - 20px);
+    margin-right: 0;
+    margin-left: 20px;
+    padding: 30px 0 30px 30px;
+    border-radius: 0;
+    background: #f5f7fa;
   }
 
   section.markets_stats .markets_stats__grid {
@@ -1644,9 +1865,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
 
   section.markets_stats .markets_stats__col {
     padding: 0;
-    border-left: none;
-    border-top: 1px solid #ddd;
-    padding-top: 32px;
+    border: none;
   }
 
   section.markets_stats .markets_stats__col:first-child {
@@ -1654,25 +1873,48 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     border-top: none;
   }
 
+  section.markets_stats .markets_stats__label {
+    margin-bottom: 2px;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #e60040;
+  }
+
+  section.markets_stats .markets_stats__headline {
+    margin-bottom: 12px;
+  }
+
   section.markets_stats .markets_stats__value {
-    font-size: 32px;
-    line-height: 40px;
+    font-size: 28px;
+    line-height: 36px;
+    letter-spacing: -0.02em;
   }
 
-  section.markets_stats .markets_stats__value-unit {
-    font-size: 26px;
-    line-height: 34px;
-  }
-
+  section.markets_stats .markets_stats__value-unit,
   section.markets_stats .markets_stats__value-suffix {
-    font-size: 32px;
-    line-height: 40px;
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  section.markets_stats .markets_stats__sublabel {
+    margin-top: 2px;
+    font-size: 15px;
+    line-height: 23px;
+    color: #888;
+  }
+
+  section.markets_stats .markets_stats__desc {
+    font-size: 15px;
+    line-height: 23px;
+    color: #222;
+    padding-right: 20px;
   }
 
   /* Intro */
   section.markets_intro {
     margin: 0;
-    padding: 60px 0 80px;
+    padding: 60px 0 40px;
   }
 
   section.markets_intro .inner {
@@ -1686,7 +1928,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     font-size: 30px;
     line-height: 40px;
     font-weight: 700;
-    font-family: 'jaka';
+    font-family: "jaka";
     letter-spacing: -0.02em;
   }
 
@@ -1696,7 +1938,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     line-height: 24px;
   }
   section.markets_intro .markets_intro__txt strong {
-    color: #e60040;
+    /* color: #e60040; */
     font-weight: 400;
   }
   /* Explore */
@@ -1717,7 +1959,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     scrollbar-width: none;
   }
 
-   section.markets_explore .markets_explore__tabs {
+  section.markets_explore .markets_explore__tabs {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -1738,6 +1980,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     border: none;
     cursor: pointer;
     opacity: 0.25;
+    text-align: center;
     white-space: nowrap;
   }
 
@@ -1764,8 +2007,8 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     position: relative;
   }
   section.markets_explore .markets_explore__panel_inner:before {
-    display:block;
-    content:'';
+    display: block;
+    content: "";
     position: absolute;
     background: #f5f7fa;
     width: 100%;
@@ -1782,11 +2025,11 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     gap: 0;
     flex-direction: column;
   }
-  section.markets_explore .markets_explore__panel_inner .markets_explore__txt{
+  section.markets_explore .markets_explore__panel_inner .markets_explore__txt {
     max-width: 708px;
     margin-top: 40px;
     position: relative;
-}
+  }
   section.markets_explore .markets_explore__panel_tit {
     margin-bottom: 10px;
     font-size: 24px;
@@ -1800,6 +2043,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     font-size: 15px;
     line-height: 23px;
     color: #666;
+    white-space: pre-line;
   }
 
   section.markets_explore .markets_explore__img {
@@ -1813,12 +2057,13 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center bottom;
   }
 
-  /* References */
+  /* References — key-visual Markets MO (data-center baseline) */
   section.markets_references {
-    margin-bottom: 0;
-    margin: 80px 0;
+    margin: 0;
+    padding: 0 0 70px;
   }
 
   section.markets_references .markets_references__list {
@@ -1828,31 +2073,31 @@ section.markets_benefits .markets_benefits__item  .capabilities{
 
   section.markets_references .item {
     display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
     color: inherit;
+    text-align: left;
     text-decoration: none;
+    background: none;
+    cursor: pointer;
   }
-    section.markets_references .img_area:before{
-      display:block;
-      content:'';
-      width: 40px;
-      height: 40px;
-      background-image: url(/ico/ico_modal_plus.svg);
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      z-index: 100;
-    }
-  section.markets_references .item + .item{
+
+  section.markets_references .img_area::before {
+    display: none;
+  }
+
+  section.markets_references .item + .item {
     margin-top: 40px;
-}
+  }
 
   section.markets_references .img_area {
-    aspect-ratio: 464 / 500;
+    height: 347px;
+    width: 100%;
     margin-bottom: 20px;
     overflow: hidden;
     background: #f0f0f0;
-    height: 347px;
-    width: 100%;
+    aspect-ratio: auto;
     position: relative;
   }
 
@@ -1864,55 +2109,37 @@ section.markets_benefits .markets_benefits__item  .capabilities{
 
   section.markets_references .tit {
     margin: 0;
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 32px;
-    color: #222;
-  }
-
-  section.markets_references .txt {
-    margin: 12px 0 0;
-    font-size: 16px;
-    line-height: 24px;
-    color: #222;
-    font-weight: 400;
-  }
-
-  section.markets_references .location {
-    margin: 16px 0 0;
-    font-size: 15px;
-    line-height: 23px;
-    color: #0F1F45;
-  }
-
-  section.markets_references .tit {
     font-size: 20px;
+    font-weight: 600;
     line-height: 30px;
+    letter-spacing: -0.01em;
+    color: #222;
     text-align: left;
   }
 
   section.markets_references .txt {
+    margin: 6px 0 0;
     font-size: 15px;
     line-height: 21px;
+    color: #222;
+    font-weight: 400;
     text-align: left;
+    display: flex;
   }
 
   section.markets_references .location {
-    font-size: 14px;
-    line-height: 1;
-    margin-top: 14px;
-    color: #0F1F45;
-    gap: 6px;
-    display: flex;
+    display: none;
   }
-  section.markets_references .location .location_sep{
-    color: #ddd;
-    font-size: 12px;
-}
-  /* Benefits */
+
+  /* Benefits — key-visual Markets MO (data-center baseline) */
   section.markets_benefits {
-    margin: 80px 0;
+    margin: 0;
+    padding: 0;
     overflow: hidden;
+  }
+
+  section.markets_benefits .markets_benefits__head .section_desc {
+    margin-top: 8px;
   }
 
   section.markets_benefits .markets_benefits__list {
@@ -1923,23 +2150,24 @@ section.markets_benefits .markets_benefits__item  .capabilities{
   section.markets_benefits .markets_benefits__item.is-reverse {
     display: flex;
     flex-direction: column;
-    gap: 0px;
+    gap: 0;
     position: relative;
     border-bottom: none;
   }
- section.markets_benefits .markets_benefits__item:before{
-   display:block;
-   content:'';
-   width: calc(100% + 20px);
-   height: 1px;
-   border-bottom: 1px solid #ddd;
-   position: absolute;
-   bottom: 0px;
-   left: -20px;
- }
+
+  section.markets_benefits .markets_benefits__item::before {
+    display: block;
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -20px;
+    width: calc(100% + 20px);
+    height: 1px;
+    border-bottom: 1px solid #ddd;
+  }
 
   section.markets_benefits .markets_benefits__item + .markets_benefits__item {
-    padding-top: 30px;
+    padding-top: 40px;
   }
 
   section.markets_benefits .markets_benefits__item .img_area,
@@ -1951,17 +2179,20 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     height: 150px;
     margin-bottom: 20px;
   }
-  section.markets_benefits .markets_benefits__item .img_area img{
+
+  section.markets_benefits .markets_benefits__item .img_area img {
     height: 100%;
     object-fit: cover;
     width: 100%;
-}
+  }
+
   section.markets_benefits .markets_benefits__item .txt_area,
   section.markets_benefits .markets_benefits__item.is-reverse .txt_area {
     order: 0;
     position: static;
     width: 100%;
     margin-bottom: 0;
+    padding: 0;
   }
 
   section.markets_benefits .markets_benefits__item .tit {
@@ -1984,6 +2215,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
 
   section.markets_benefits .markets_benefits__item .capabilities_label {
     font-size: 14px;
+    line-height: 14px;
   }
 
   section.markets_benefits .markets_benefits__item .capabilities_txt {
@@ -1991,6 +2223,1022 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     font-size: 14px;
     line-height: 20px;
     padding-bottom: 30px;
+  }
+
+  /* Sustainability (power-grid) */
+  .markets-page--power-grid > section.markets_sustainability {
+    margin: 0;
+    padding: 75px 0;
+  }
+
+  section.markets_sustainability .section_tit {
+    margin-bottom: 24px;
+  }
+
+  section.markets_sustainability .markets_sustainability__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  section.markets_sustainability .markets_sustainability__body {
+    margin-top: 16px;
+  }
+
+  section.markets_sustainability .markets_sustainability__tit {
+    margin-bottom: 8px;
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  section.markets_sustainability .markets_sustainability__list li {
+    font-size: 15px;
+    line-height: 23px;
+  }
+
+  /* Smart Grid (power-grid) — Figma 7465:145850 */
+  .markets-page--power-grid > section.markets_smart_grid {
+    margin: 0;
+    padding: 0 0 40px;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__head .section_tit {
+    width: 100%;
+    overflow-wrap: break-word;
+    font-feature-settings: "liga" 0;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__head .section_desc {
+    width: 100%;
+    margin-top: 0;
+    overflow-wrap: break-word;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__head .section_desc br,
+  section.markets_smart_grid .markets_smart_grid__block:first-of-type
+    .markets_smart_grid__block_tit
+    br {
+    display: none;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__body {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    padding: 30px 0;
+    background: #f5f7fa;
+    box-sizing: border-box;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__body > .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+    padding: 0 24px;
+    box-sizing: border-box;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__block_tit {
+    width: 100%;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #222;
+    overflow-wrap: break-word;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 24px;
+    background: #fff;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__card--text-only {
+    align-items: flex-start;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__card_body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__card_tit {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: -0.01em;
+    color: #222;
+    overflow-wrap: break-word;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__card_desc {
+    width: 100%;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #222;
+    overflow-wrap: break-word;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__diagram {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 287 / 160;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  section.markets_smart_grid .markets_smart_grid__diagram-img {
+    position: absolute;
+    top: 8.11%;
+    left: -4.82%;
+    width: 109.64%;
+    max-width: none;
+    height: 83.45%;
+    object-fit: fill;
+  }
+
+  section.markets_solutions_panel {
+    padding: 70px 0;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 30px;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__head .section_tit {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-feature-settings: "liga" 0;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__head .section_desc {
+    margin: 0;
+    color: #666;
+    font-size: 16px;
+    line-height: 24px;
+    word-break: break-word;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px 24px;
+  }
+
+  /* Grouped panel — Figma 7603:181474 */
+  section.markets_solutions_panel--grouped .markets_solutions_panel__panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    padding: 30px 24px;
+    background: #f5f7fa;
+    box-sizing: border-box;
+  }
+
+  section.markets_solutions_panel--stacked .markets_solutions_panel__panel {
+    gap: 14px;
+    padding: 0;
+    background: transparent;
+  }
+
+  section.markets_solutions_panel--grouped .markets_solutions_panel__group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+  }
+
+  section.markets_solutions_panel--grouped .markets_solutions_panel__block {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+  }
+
+  section.markets_solutions_panel--grouped .markets_solutions_panel__blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+
+  section.markets_solutions_panel--stacked .markets_solutions_panel__group,
+  section.markets_solutions_panel--stacked .markets_solutions_panel__blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  section.markets_solutions_panel--stacked .markets_solutions_panel__block {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 30px 24px;
+    background: #f5f7fa;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__block-body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__block-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    word-break: break-word;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__block-body:has(.markets_solutions_panel__block-key) {
+    gap: 10px;
+  }
+
+  section.markets_solutions_panel--stacked
+    .markets_solutions_panel__block-body:has(.markets_solutions_panel__capabilities) {
+    gap: 12px;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__block-title {
+    margin: 0;
+    color: #222;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__block-text {
+    margin: 0;
+    color: #222;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__block-key {
+    margin: 0;
+    color: #0f1f45;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    word-break: break-word;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__block-key-label {
+    font-weight: 400;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__capabilities {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: none;
+  }
+
+  section.markets_solutions_panel--stacked .markets_solutions_panel__capabilities-label {
+    color: #0f1f45;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+  }
+
+  section.markets_solutions_panel--stacked .markets_solutions_panel__capabilities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Figma 7603:182707 — bullet 4px · gap 8px · 15/23 */
+  section.markets_solutions_panel--stacked .markets_solutions_panel__capabilities-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding-left: 0;
+    color: #222;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    word-break: break-word;
+  }
+
+  section.markets_solutions_panel--stacked .markets_solutions_panel__capabilities-item::before {
+    content: "";
+    position: static;
+    flex: 0 0 auto;
+    width: 4px;
+    height: 4px;
+    margin-top: 10px;
+    background: #666;
+  }
+
+  section.markets_solutions_panel--grouped .markets_solutions_panel__diagram {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__diagram-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  section.markets_solutions_panel .markets_solutions_panel__diagram-img--pc {
+    display: none;
+  }
+
+  section.markets_solutions_panel--grouped .markets_solutions_panel__diagram-img--mo {
+    display: block;
+    width: 100%;
+    aspect-ratio: 287 / 154;
+    height: auto;
+    object-fit: cover;
+  }
+
+  /* Power diagram — white 287×154 frame · 10px inset (Figma 7603:181474) */
+  .markets-page--public-infrastructure
+    section#markets-public-infrastructure-solutions
+    .markets_solutions_panel__group:first-child
+    .markets_solutions_panel__diagram {
+    box-sizing: border-box;
+    aspect-ratio: 287 / 154;
+    padding: 10px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .markets-page--public-infrastructure
+    section#markets-public-infrastructure-solutions
+    .markets_solutions_panel__group:first-child
+    .markets_solutions_panel__diagram-img--mo {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    object-fit: contain;
+  }
+
+  /* Automation diagram — full-bleed 287×154 */
+  .markets-page--public-infrastructure
+    section#markets-public-infrastructure-solutions
+    .markets_solutions_panel__group:last-child
+    .markets_solutions_panel__diagram-img--mo {
+    object-fit: fill;
+  }
+
+  section.markets_solutions_panel--stacked .markets_solutions_panel__diagram {
+    margin-top: 24px;
+  }
+
+  .markets-page--oil-gas-mining section.markets_solutions_panel--stacked .markets_solutions_panel__diagram {
+    width: 100%;
+    height: 400px;
+    margin: 30px 0 0;
+    overflow: hidden;
+  }
+
+  .markets-page--oil-gas-mining
+    section.markets_solutions_panel--stacked
+    .markets_solutions_panel__diagram-img--mo {
+    position: relative;
+    left: -73.33%;
+    width: 229.39%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Industrial solutions mobile — Figma 7465:147605 */
+  .markets-page--industrial section.markets_solutions_panel--categories .markets_solutions_panel__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 30px 24px;
+    background: #f5f7fa;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__diagram {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    aspect-ratio: 287 / 166;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__diagram-img--mo {
+    position: static;
+    left: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: top center;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__categories {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 6px;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category-tit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 10px;
+    border-radius: 4px;
+    background: #0f1f45;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: center;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 20px;
+    list-style: none;
+    background: #fff;
+    border-radius: 4px;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    color: #222;
+    font-size: 15px;
+    line-height: 23px;
+  }
+
+  .markets-page--industrial
+    section.markets_solutions_panel--categories
+    .markets_solutions_panel__category-item::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 3px;
+    height: 3px;
+    margin-top: 10px;
+    background: #888;
+  }
+
+  /* Why */
+  section.markets_why {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  section.markets_why .markets_why__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  section.markets_why .markets_why__bg .img_area {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #0b0e14;
+    background-image: url(/img/main/bg_section_main_info_mo.png);
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+  }
+
+  section.markets_why .markets_why__bg .img_area::after {
+    display: none;
+  }
+
+  section.markets_why .markets_why__bg .img_area img {
+    display: none;
+  }
+
+  section.markets_why .markets_why__bg .glow_area {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: -1076px;
+    width: 1600px;
+    height: 1600px;
+    transform: translateX(-50%);
+    pointer-events: none;
+    display: none;
+  }
+
+  section.markets_why .markets_why__bg .glow_area img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  section.markets_why .inner {
+    position: relative;
+    z-index: 1;
+    padding: 70px 20px;
+  }
+
+  section.markets_why .markets_why__head {
+    margin-bottom: 30px;
+  }
+
+  section.markets_why .markets_why__head .section_tit,
+  section.markets_why .markets_why__head .section_desc {
+    color: #fff;
+  }
+
+  section.markets_why .markets_why__head .section_tit {
+    font-size: 30px;
+    line-height: 40px;
+    letter-spacing: -0.02em;
+  }
+
+  section.markets_why .markets_why__head .section_desc {
+    margin-top: 8px;
+    opacity: 0.8;
+  }
+
+  section.markets_why .markets_why__list {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 10px;
+    color: #fff;
+  }
+
+  section.markets_why .markets_why__item {
+    display: block;
+    padding: 20px 0;
+  }
+
+  section.markets_why .markets_why__item .icon_area {
+    width: 90px;
+    height: 80px;
+    margin-bottom: 18px;
+  }
+
+  section.markets_why .markets_why__item .icon_area img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  section.markets_why .markets_why__item .tit {
+    margin-bottom: 2px;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    letter-spacing: -0.01em;
+  }
+
+  section.markets_why .markets_why__item .txt {
+    margin-top: 2px;
+    font-size: 15px;
+    line-height: 23px;
+    opacity: 0.8;
+  }
+
+  /* Products — key-visual Markets MO (data-center baseline) */
+  section.markets_products {
+    margin: 0;
+    padding: 70px 0;
+  }
+
+  section.markets_products .section_tit {
+    margin-bottom: 30px;
+    letter-spacing: -0.02em;
+  }
+
+  section.markets_products .markets_products__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px 15px;
+  }
+
+  section.markets_products .item {
+    color: inherit;
+    text-decoration: none;
+    width: auto;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: stretch;
+  }
+
+  section.markets_products .img_area {
+    position: relative;
+    height: 160px;
+    margin-bottom: 14px;
+    padding: 10px;
+    overflow: hidden;
+    background: #f5f7fa;
+    aspect-ratio: auto;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  section.markets_products .img_area img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  section.markets_products .category {
+    margin-top: 4px;
+    font-size: 13px;
+    line-height: 19px;
+    color: #888;
+    display: flex;
+    align-items: stretch;
+  }
+
+  section.markets_products .tit {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #222;
+    margin-bottom: 0;
+    display: flex;
+    align-items: stretch;
+  }
+
+  section.markets_products .markets_products__more {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  /* Key-visual Markets MO hero — Figma 7603:186125 (commercial = data-center 동일) */
+  .markets-page--data-center > .markets_hero__sticky-wrap,
+  .markets-page--industrial > .markets_hero__sticky-wrap,
+  .markets-page--public-infrastructure > .markets_hero__sticky-wrap,
+  .markets-page--oil-gas-mining > .markets_hero__sticky-wrap,
+  .markets-page--power-grid > .markets_hero__sticky-wrap {
+    position: relative;
+    top: auto;
+    z-index: auto;
+    height: auto;
+    min-height: 0;
+    transform: none;
+    backface-visibility: visible;
+  }
+
+  .markets-page--data-center > .markets_hero__sticky-wrap > section.markets_hero--key-visual,
+  .markets-page--industrial > .markets_hero__sticky-wrap > section.markets_hero--key-visual,
+  .markets-page--public-infrastructure > .markets_hero__sticky-wrap > section.markets_hero--key-visual,
+  .markets-page--oil-gas-mining > .markets_hero__sticky-wrap > section.markets_hero--key-visual,
+  .markets-page--power-grid > .markets_hero__sticky-wrap > section.markets_hero--key-visual {
+    height: 812px;
+    min-height: 812px;
+    max-height: none;
+  }
+
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    min-height: 812px;
+    height: 812px;
+    overflow: hidden;
+    background: #030511;
+  }
+
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .hero_img,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .hero_img,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .hero_img,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .hero_img,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .hero_img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__content,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__content,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__content,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__content,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 250px 20px 58px;
+    text-align: center;
+  }
+
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__tit,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__tit,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__tit,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__tit,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__tit {
+    margin: 0 0 14px;
+    font-family: jaka, "Plus Jakarta Sans", Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 50px;
+    letter-spacing: -0.8px;
+    color: #fff;
+  }
+
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__sub,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__sub,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__sub,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__sub,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__sub {
+    margin: 0 0 40px;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 26px;
+    color: #fff;
+    min-height: 52px;
+  }
+
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__btns,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__btns,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__btns,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__btns,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__btns {
+    flex-direction: column;
+    gap: 14px;
+    width: 225px;
+    margin-top: 0;
+  }
+
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .btn-lv01--line,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .btn-lv01--line,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .btn-lv01--line,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .btn-lv01--line,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .btn-lv01--line {
+    width: 225px;
+    min-width: 225px;
+    min-height: 50px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .icon_download,
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .icon_link,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .icon_download,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .icon_link,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .icon_download,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .icon_link,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .icon_download,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .icon_link,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .icon_download,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .icon_link {
+    filter: brightness(0) invert(1);
+  }
+
+  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down,
+  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down,
+  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down,
+  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down,
+  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down {
+    position: absolute;
+    bottom: 30px;
+  }
+
+  /* Commercial & Residential — fo 커스텀 MO 히어로 유지 (통합 key-visual 미적용) */
+  /* Commercial & Residential — Figma 2366:40233 MO (고유 히어로 레이아웃 + stats/solutions 숨김) */
+  .markets-page--commercial-residential > .markets_hero__sticky-wrap {
+    position: relative;
+    top: auto;
+    z-index: auto;
+    height: auto;
+    min-height: 0;
+    transform: none;
+    backface-visibility: visible;
+  }
+
+  .markets-page--commercial-residential
+    > .markets_hero__sticky-wrap
+    > section.markets_hero--key-visual {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+    min-height: 0;
+    overflow: visible;
+    background: #fff;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .hero_img {
+    position: relative;
+    inset: auto;
+    order: 2;
+    flex-shrink: 0;
+    width: 100%;
+    height: 310px;
+    background-position: center;
+    background-size: cover;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .hero_img::after {
+    display: none;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__content {
+    position: relative;
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    margin: 0;
+    padding: 60px 20px 0;
+    color: #222;
+    text-align: center;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__sub {
+    order: 1;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 24px;
+    color: #666;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__tit {
+    order: 2;
+    margin: 0;
+    font-family: jaka, "Plus Jakarta Sans", Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 50px;
+    letter-spacing: -0.8px;
+    color: #222;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__btns {
+    order: 3;
+    margin: 0;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .btn-lv01--solid {
+    color: #fff;
+    background: #0f1f45;
+    border: 1px solid #0f1f45;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .btn-lv01--line {
+    color: #0f1f45;
+    border-color: rgb(15 31 69 / 30%);
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .icon_download,
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .icon_link {
+    filter: none;
+  }
+
+  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down {
+    display: none;
+  }
+
+  .markets-page--commercial-residential section.markets_stats,
+  .markets-page--commercial-residential section.markets_solutions_panel {
+    display: none;
+  }
+
+  .markets-page--commercial-residential section.markets_references .location {
+    display: none;
+  }
+
+  .markets-page--commercial-residential section.markets_intro {
+    padding: 60px 0 80px;
+  }
+
+  .markets-page--commercial-residential section.markets_explore {
+    padding-top: 0;
+    padding-bottom: 80px;
+  }
+
+  .markets-page--commercial-residential section.markets_products .img_area {
+    aspect-ratio: 1 / 1;
+    height: auto;
+  }
+
+  .markets-page--commercial-residential section.markets_products .type2 .product_award_badge__icon {
+    width: 24px;
+    height: 24px;
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
   }
 
   /* Data Center — markets_solutions map MO (data-center 전용 컴포넌트 · 가이드 포함) */
@@ -2051,7 +3299,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
 
   section.markets_solutions .markets_solutions__hotspot {
     padding: 0;
-    border-radius: 0;
+    border-radius: 50%;
     background: transparent;
     box-shadow: none;
     width: 18px;
@@ -2062,6 +3310,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     position: absolute;
   }
 
+  section.markets_solutions .markets_solutions__hotspot:hover,
   section.markets_solutions .markets_solutions__hotspot.is-active {
     background: transparent;
     box-shadow: none;
@@ -2078,6 +3327,7 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     background: url("/img/markets/solutions/pin_default.svg") center / contain no-repeat;
   }
 
+  section.markets_solutions .markets_solutions__hotspot:hover .markets_solutions__hotspot-pin,
   section.markets_solutions .markets_solutions__hotspot.is-active .markets_solutions__hotspot-pin {
     background-image: url("/img/markets/solutions/pin_active.svg");
   }
@@ -2235,649 +3485,8 @@ section.markets_benefits .markets_benefits__item  .capabilities{
     display: none;
   }
 
-    section.markets_why{
-      position:relative;
-    }
-  section.markets_why .markets_why__bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-  }
-
-  section.markets_why .markets_why__bg .img_area {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-
-  section.markets_why .markets_why__bg .img_area::after {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      90deg,
-      rgb(0 0 0 / 55%) 0%,
-      rgb(0 0 0 / 25%) 55%,
-      rgb(0 0 0 / 10%) 100%
-    );
-    content: "";
-    pointer-events: none;
-  }
-
-  section.markets_why .markets_why__bg .img_area img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-  }
-
-  section.markets_why .markets_why__bg .glow_area {
-    position: absolute;
-    z-index: 1;
-    left: 50%;
-    top: -1076px;
-    width: 1600px;
-    height: 1600px;
-    transform: translateX(-50%);
-    pointer-events: none;
-    display: none;
-  }
-
-  section.markets_why .markets_why__bg .glow_area img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  section.markets_why .inner {
-    position: relative;
-    z-index: 1;
-    padding: 80px 20px;
-  }
-
-  section.markets_why .markets_why__head {
-    margin-bottom: 24px;
-  }
-
-  section.markets_why .markets_why__head .section_tit,
-  section.markets_why .markets_why__head .section_desc {
-    color: #fff;
-  }
-
-  section.markets_why .markets_why__head .section_desc {
-    opacity: 0.8;
-  }
-
-  section.markets_why .markets_why__list {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 10px;
-    color: #fff;
-  }
-
-  section.markets_why .markets_why__item {
-    display: block;
-    padding: 20px 0;
-  }
-
-  section.markets_why .markets_why__item .icon_area {
-    width: 90px;
-    height: 80px;
-    margin-bottom: 18px;
-  }
-
-  section.markets_why .markets_why__item .icon_area img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  section.markets_why .markets_why__item .tit {
-    margin-bottom: 2px;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 30px;
-    letter-spacing: -0.01em;
-  }
-
-  section.markets_why .markets_why__item .txt {
-    font-size: 15px;
-    line-height: 23px;
-    opacity: 0.8;
-  }
-
-  /* Products */
-  section.markets_products {
-    margin: 80px 0;
-  }
-
-  section.markets_products .section_tit {
-    margin-bottom: 24px;
-  }
-
-  section.markets_products .markets_products__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px 15px;
-  }
-
-  section.markets_products .item {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-    width: calc(50vw - 28px);
-  }
-
-  section.markets_products .img_area {
-    position: relative;
-    aspect-ratio: 342 / 280;
-    margin-bottom: 14px;
-    overflow: hidden;
-    background: #f5f7fa;
-    height: 160px;
-    width: 100%;
-    object-fit: cover;
-  }
-section.markets_products .item:before {
-  display:block;
-  content:'';
-  width: 40px;
-  height: 40px;
-  background: url(/ico/);
+  /* Commercial & Residential MO — Figma 7603:186125 (hero = data-center key-visual) */
 }
-  section.markets_products .img_area img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  section.markets_products .category {
-    font-size: 13px;
-    line-height: 19px;
-    color: #888;
-  }
-
-  section.markets_products .tit {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 20px;
-    color: #222;
-    margin-bottom: 6px;
-  }
-
-  section.markets_products .markets_products__more {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
-  }
-
-  section.markets_hero.markets_hero--key-visual {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 560px;
-    gap: 0;
-    overflow: hidden;
-    background: #030511;
-  }
-
-  section.markets_hero.markets_hero--key-visual .hero_img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-  }
-
-  section.markets_hero.markets_hero--key-visual .hero_img::after {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgb(3 5 17 / 50%) 17.79%, rgb(21 35 119 / 0%) 100%);
-    pointer-events: none;
-    content: "";
-  }
-
-  section.markets_hero.markets_hero--key-visual .markets_hero__content {
-    position: relative;
-    z-index: 1;
-    margin-top: 0;
-    padding: 120px 20px 80px;
-    color: #fff;
-  }
-
-  section.markets_hero.markets_hero--key-visual .markets_hero__tit {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #fff;
-  }
-
-  section.markets_hero.markets_hero--key-visual .markets_hero__sub {
-    font-size: 16px;
-    line-height: 24px;
-    color: #fff;
-  }
-
-  section.markets_hero.markets_hero--key-visual .btn-lv01--solid {
-    color: #0c1625;
-    background: #fff;
-    border: 1px solid #fff;
-  }
-
-  section.markets_hero.markets_hero--key-visual .btn-lv01--line {
-    color: #fff;
-    border-color: rgb(255 255 255 / 30%);
-  }
-
-  section.markets_hero.markets_hero--key-visual .icon_download {
-    filter: brightness(0) invert(1);
-  }
-
-  section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down {
-    bottom: 24px;
-  }
-
-  /* Sustainability (power-grid) */
-  .markets-page--power-grid > section.markets_sustainability {
-    margin: 0;
-    padding: 75px 0;
-  }
-
-  section.markets_sustainability .section_tit {
-    margin-bottom: 24px;
-  }
-
-  section.markets_sustainability .markets_sustainability__grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  section.markets_sustainability .markets_sustainability__body {
-    margin-top: 16px;
-  }
-
-  section.markets_sustainability .markets_sustainability__tit {
-    margin-bottom: 8px;
-    font-size: 22px;
-    line-height: 30px;
-  }
-
-  section.markets_sustainability .markets_sustainability__list li {
-    font-size: 15px;
-    line-height: 23px;
-  }
-
-  /* Smart Grid (power-grid) */
-  .markets-page--power-grid > section.markets_smart_grid {
-    margin: 0;
-    padding: 0 0 80px;
-  }
-
-  section.markets_smart_grid .markets_smart_grid__head {
-    margin-bottom: 24px;
-  }
-
-  section.markets_smart_grid .markets_smart_grid__body {
-    padding: 40px 0 0;
-  }
-
-  section.markets_smart_grid .markets_smart_grid__block {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-bottom: 40px;
-  }
-
-  section.markets_smart_grid .markets_smart_grid__block_tit {
-    font-size: 22px;
-    line-height: 30px;
-  }
-
-  section.markets_smart_grid .markets_smart_grid__card {
-    padding: 24px 20px;
-  }
-
-  section.markets_smart_grid .markets_smart_grid__card--text-only {
-    align-items: flex-start;
-  }
-
-  section.markets_smart_grid .markets_smart_grid__card_tit {
-    font-size: 18px;
-    line-height: 26px;
-  }
-
-  section.markets_smart_grid .markets_smart_grid__card_desc {
-    font-size: 15px;
-    line-height: 23px;
-  }
-
-  section.markets_smart_grid .markets_smart_grid__diagram {
-    margin-top: 40px;
-    padding-top: 24px;
-  }
-
-  /* Markets Solutions Panel — MO 반응형 */
-  section.markets_solutions_panel {
-    padding: 60px 0;
-  }
-
-  section.markets_solutions_panel .markets_solutions_panel__head {
-    margin-bottom: 32px;
-  }
-
-  section.markets_solutions_panel .markets_solutions_panel__panel {
-    padding: 32px 20px;
-  }
-
-  section.markets_solutions_panel--grouped .markets_solutions_panel__panel {
-    gap: 40px;
-  }
-
-  section.markets_solutions_panel--stacked .markets_solutions_panel__panel {
-    gap: 32px;
-  }
-
-  section.markets_solutions_panel .markets_solutions_panel__block-title {
-    font-size: 24px;
-    line-height: 34px;
-  }
-
-  section.markets_solutions_panel .markets_solutions_panel__capabilities {
-    max-width: none;
-  }
-
-  section.markets_solutions_panel--stacked .markets_solutions_panel__diagram {
-    margin-top: 24px;
-  }
-
-  /* Key-visual Markets MO hero — Figma 5966:63555 (commercial-residential 별도) */
-  .markets-page--data-center > .markets_hero__sticky-wrap,
-  .markets-page--industrial > .markets_hero__sticky-wrap,
-  .markets-page--public-infrastructure > .markets_hero__sticky-wrap,
-  .markets-page--oil-gas-mining > .markets_hero__sticky-wrap,
-  .markets-page--power-grid > .markets_hero__sticky-wrap {
-    position: relative;
-    top: auto;
-    z-index: auto;
-    height: auto;
-    min-height: 0;
-    transform: none;
-    backface-visibility: visible;
-  }
-
-  .markets-page--data-center > .markets_hero__sticky-wrap > section.markets_hero--key-visual,
-  .markets-page--industrial > .markets_hero__sticky-wrap > section.markets_hero--key-visual,
-  .markets-page--public-infrastructure > .markets_hero__sticky-wrap > section.markets_hero--key-visual,
-  .markets-page--oil-gas-mining > .markets_hero__sticky-wrap > section.markets_hero--key-visual,
-  .markets-page--power-grid > .markets_hero__sticky-wrap > section.markets_hero--key-visual {
-    height: 812px;
-    min-height: 812px;
-    max-height: none;
-  }
-
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0;
-    min-height: 812px;
-    height: 812px;
-    overflow: hidden;
-    background: #030511;
-  }
-
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .hero_img,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .hero_img,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .hero_img,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .hero_img,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .hero_img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-  }
-
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__content,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__content,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__content,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__content,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 250px 20px 58px;
-    text-align: center;
-  }
-
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__tit,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__tit,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__tit,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__tit,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__tit {
-    margin: 0 0 14px;
-    font-family: jaka, "Plus Jakarta Sans", Arial, Helvetica, sans-serif;
-    font-size: 40px;
-    font-weight: 800;
-    line-height: 50px;
-    letter-spacing: -0.8px;
-    color: #fff;
-  }
-
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__sub,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__sub,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__sub,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__sub,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__sub {
-    margin: 0 0 40px;
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 26px;
-    color: #fff;
-    min-height: 52px;
-  }
-
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__btns,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__btns,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__btns,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__btns,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__btns {
-    flex-direction: column;
-    gap: 14px;
-    width: 225px;
-    margin-top: 0;
-  }
-
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .btn-lv01--line,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .btn-lv01--line,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .btn-lv01--line,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .btn-lv01--line,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .btn-lv01--solid,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .btn-lv01--line {
-    width: 225px;
-    min-width: 225px;
-    min-height: 50px;
-    font-size: 15px;
-    font-weight: 600;
-  }
-
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .icon_download,
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .icon_link,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .icon_download,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .icon_link,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .icon_download,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .icon_link,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .icon_download,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .icon_link,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .icon_download,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .icon_link {
-    filter: brightness(0) invert(1);
-  }
-
-  .markets-page--data-center section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down,
-  .markets-page--industrial section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down,
-  .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down,
-  .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down,
-  .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down {
-    position: absolute;
-    bottom: 30px;
-  }
-
-  /* Commercial & Residential — Figma 2366:40233 MO (고유 히어로 레이아웃 + stats/solutions 숨김) */
-  .markets-page--commercial-residential > .markets_hero__sticky-wrap {
-    position: relative;
-    top: auto;
-    z-index: auto;
-    height: auto;
-    min-height: 0;
-    transform: none;
-    backface-visibility: visible;
-  }
-
-  .markets-page--commercial-residential
-    > .markets_hero__sticky-wrap
-    > section.markets_hero--key-visual {
-    height: auto;
-    min-height: 0;
-    max-height: none;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 60px;
-    min-height: 0;
-    overflow: visible;
-    background: #fff;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .hero_img {
-    position: relative;
-    inset: auto;
-    order: 2;
-    flex-shrink: 0;
-    width: 100%;
-    height: 310px;
-    background-position: center;
-    background-size: cover;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .hero_img::after {
-    display: none;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__content {
-    position: relative;
-    order: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-    width: 100%;
-    margin: 0;
-    padding: 60px 20px 0;
-    color: #222;
-    text-align: center;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__sub {
-    order: 1;
-    margin: 0;
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 24px;
-    color: #666;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__tit {
-    order: 2;
-    margin: 0;
-    font-family: jaka, "Plus Jakarta Sans", Arial, Helvetica, sans-serif;
-    font-size: 40px;
-    font-weight: 800;
-    line-height: 50px;
-    letter-spacing: -0.8px;
-    color: #222;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__btns {
-    order: 3;
-    margin: 0;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .btn-lv01--solid {
-    color: #fff;
-    background: #0f1f45;
-    border: 1px solid #0f1f45;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .btn-lv01--line {
-    color: #0f1f45;
-    border-color: rgb(15 31 69 / 30%);
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .icon_download,
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .icon_link {
-    filter: none;
-  }
-
-  .markets-page--commercial-residential section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down {
-    display: none;
-  }
-
-  .markets-page--commercial-residential section.markets_stats,
-  .markets-page--commercial-residential section.markets_solutions_panel {
-    display: none;
-  }
-
-  .markets-page--commercial-residential section.markets_references .location {
-    display: none;
-  }
-
-  .markets-page--commercial-residential section.markets_intro {
-    padding: 60px 0 80px;
-  }
-
-  .markets-page--commercial-residential section.markets_explore {
-    padding-top: 0;
-    padding-bottom: 80px;
-  }
-
-  .markets-page--commercial-residential section.markets_products .img_area {
-    aspect-ratio: 1 / 1;
-    height: auto;
-  }
-
-  .markets-page--commercial-residential section.markets_products .type2 .product_award_badge__icon {
-    width: 24px;
-    height: 24px;
-    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
-  }
-
-
-}
-
 
 /* References modal — Figma 3955:48576 · shell: common_modal in globals.css */
 @keyframes markets-references-modal-fade-in {
@@ -3122,6 +3731,57 @@ section.markets_products .item:before {
   margin: 0;
 }
 
+.markets_references_modal__reference-nav {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.markets_references_modal__reference-nav-btn {
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  border: 1px solid rgb(255 255 255 / 35%);
+  border-radius: 999px;
+  background: transparent;
+  transform: translateY(-50%);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.markets_references_modal__reference-nav-btn--prev {
+  left: calc(50% - 690px);
+}
+
+.markets_references_modal__reference-nav-btn--next {
+  right: calc(50% - 690px);
+}
+
+.markets_references_modal__reference-nav-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 0 auto;
+  background: url("/ico/ico_arrow_righ_24_white.svg") center / contain no-repeat;
+}
+
+.markets_references_modal__reference-nav-btn--prev
+  .markets_references_modal__reference-nav-icon {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 1440px) {
+  .markets_references_modal__reference-nav-btn--prev {
+    left: 10px;
+  }
+
+  .markets_references_modal__reference-nav-btn--next {
+    right: 10px;
+  }
+}
+
 /* Desktop (781px+) — full shell + layout override (globals common_modal 미적용) */
 @media (min-width: 781px) {
   .markets_references_modal.common_modal {
@@ -3263,6 +3923,10 @@ section.markets_products .item:before {
     padding: 0 20px 32px;
   }
 
+  .markets_references_modal__reference-nav {
+    display: none;
+  }
+
   .markets_references_modal__body {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -3384,7 +4048,6 @@ section.markets_products .item:before {
   }
 }
 
-/* References modal — multi-reference tabs (Figma 5970:71483) */
 .markets_references_modal__head-row {
   align-items: flex-start;
   gap: 16px;
@@ -3467,6 +4130,9 @@ section.markets_products .item:before {
   }
 }
 
+@media (max-width: 780px) {
+}
+
 /* Section guide — embedded preview */
 .markets_references_modal.common_modal--embedded {
   padding: 40px 0;
@@ -3477,68 +4143,14 @@ section.markets_products .item:before {
   animation: none;
 }
 
-/* 레퍼런스 전환(이전/다음) 네비게이션 버튼 */
-.markets_references_modal__reference-nav {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 100;
-}
-
-.markets_references_modal__reference-nav-btn {
-  position: absolute;
-  top: 50%;
-  width: 50px;
-  height: 50px;
-  border: 1px solid rgb(255 255 255 / 35%);
-  border-radius: 999px;
-  background: transparent;
-  transform: translateY(-50%);
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.markets_references_modal__reference-nav-btn--prev {
-  left: calc(50% - 690px);
-}
-
-.markets_references_modal__reference-nav-btn--next {
-  right: calc(50% - 690px);
-}
-
-.markets_references_modal__reference-nav-icon {
-  display: block;
-  width: 18px;
-  height: 18px;
-  margin: 0 auto;
-  background: url("/ico/ico_arrow_righ_24_white.svg") center / contain no-repeat;
-}
-
-.markets_references_modal__reference-nav-btn--prev
-  .markets_references_modal__reference-nav-icon {
-  transform: rotate(180deg);
-}
-
-@media (max-width: 1440px) {
-  .markets_references_modal__reference-nav-btn--prev {
-    left: 10px;
-  }
-
-  .markets_references_modal__reference-nav-btn--next {
-    right: 10px;
-  }
-}
-
-@media (max-width: 780px) {
-  .markets_references_modal__reference-nav {
-    display: none;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
+  section.markets_solutions .markets_solutions__map,
+  section.markets_solutions .markets_solutions__panel {
+    transition: none;
+  }
+
   .markets_references_modal.common_modal .common_modal__dim,
   .markets_references_modal.common_modal .common_modal__panel {
     animation: none;
   }
 }
-

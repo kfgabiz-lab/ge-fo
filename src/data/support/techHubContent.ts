@@ -7,8 +7,8 @@ import { emptyStateIconSrc } from "@/data/commonAssets";
 export { type DownloadCategoryOption, type DownloadFilterOption };
 
 export const techHubPage = {
-  title: "LS ELECTRIC Tech Hub",
-  titleLines: ["LS ELECTRIC", "Tech Hub"] as const,
+  /** Figma 6858:158687 PC one line · 6858:160491 MO wraps via max-width */
+  title: "Tech Hub",
   description: "Access Manuals, Tutorials, and Support Resources",
   searchPlaceholder: "Find products, solutions, or resources for your business",
   searchPlaceholderMobile: "Find products, solutions, or...",

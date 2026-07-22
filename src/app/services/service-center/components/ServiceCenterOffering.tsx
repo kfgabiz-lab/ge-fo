@@ -14,8 +14,43 @@ const SLIDE_COUNT = offering.slides.length;
 const PREVIEW_SLIDES_PER_VIEW = 2;
 const PREVIEW_SPACE_BETWEEN = 24;
 const OFFERING_SLIDE_SPEED = 400;
+const CAN_LOOP_PREVIEW = SLIDE_COUNT > PREVIEW_SLIDES_PER_VIEW;
+
+/** Preview images are offset +1 from main; swiper indexes stay in sync. */
+const previewSlides = offering.slides.map(
+  (_, index) => offering.slides[(index + 1) % SLIDE_COUNT],
+);
 
 type SyncSource = "main" | "preview" | null;
+
+function modIndex(index: number) {
+  return ((index % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT;
+}
+
+/** Move preview exactly one step, or snap instantly — never scroll through multiple slides. */
+function movePreviewOneShot(
+  preview: SwiperType,
+  targetIndex: number,
+  speed = OFFERING_SLIDE_SPEED,
+) {
+  const current = preview.realIndex;
+  const target = modIndex(targetIndex);
+  if (current === target) return;
+
+  const forward = modIndex(target - current);
+  const backward = modIndex(current - target);
+
+  if (forward === 1) {
+    preview.slideNext(speed);
+    return;
+  }
+  if (backward === 1) {
+    preview.slidePrev(speed);
+    return;
+  }
+
+  preview.slideToLoop(target, 0);
+}
 
 export default function ServiceCenterOffering() {
   const mainSwiperRef = useRef<SwiperType | null>(null);
@@ -29,7 +64,7 @@ export default function ServiceCenterOffering() {
     if (!preview) return;
 
     syncSourceRef.current = "main";
-    preview.slideToLoop((mainIndex + 1) % SLIDE_COUNT, OFFERING_SLIDE_SPEED);
+    movePreviewOneShot(preview, mainIndex);
   }, []);
 
   const handlePreviewTransitionEnd = useCallback(() => {
@@ -52,7 +87,7 @@ export default function ServiceCenterOffering() {
     if (!main || !preview) return;
 
     syncSourceRef.current = "main";
-    preview.slideToLoop((main.realIndex + 1) % SLIDE_COUNT, 0);
+    preview.slideToLoop(main.realIndex, 0);
   }, []);
 
   const scheduleInitialPreviewSync = useCallback(() => {
@@ -112,7 +147,32 @@ export default function ServiceCenterOffering() {
   );
 
   const handleSelect = useCallback((index: number) => {
-    mainSwiperRef.current?.slideToLoop(index);
+    const main = mainSwiperRef.current;
+    const preview = previewSwiperRef.current;
+    if (!main) return;
+
+    const current = main.realIndex;
+    if (current === index) return;
+
+    const forward = modIndex(index - current);
+    const backward = modIndex(current - index);
+
+    if (forward === 1) {
+      main.slideNext();
+      return;
+    }
+    if (backward === 1) {
+      main.slidePrev();
+      return;
+    }
+
+    // Multi-step pagination: snap both together (no multi-slide scroll)
+    syncSourceRef.current = "preview";
+    main.slideToLoop(index, 0);
+    if (preview) {
+      syncSourceRef.current = "main";
+      preview.slideToLoop(index, 0);
+    }
   }, []);
 
   const handlePrev = useCallback(() => {
@@ -206,17 +266,19 @@ export default function ServiceCenterOffering() {
               className="support_service_offering__preview-swiper"
               modules={[A11y]}
               slidesPerView="auto"
+              slidesPerGroup={1}
               spaceBetween={PREVIEW_SPACE_BETWEEN}
               speed={OFFERING_SLIDE_SPEED}
-              loop={SLIDE_COUNT > PREVIEW_SLIDES_PER_VIEW}
+              loop={CAN_LOOP_PREVIEW}
               watchSlidesProgress
               slideToClickedSlide
               allowTouchMove={false}
+              resistanceRatio={0}
               onSwiper={handlePreviewSwiper}
               onSlideChange={handlePreviewSlideChange}
               onSlideChangeTransitionEnd={handlePreviewTransitionEnd}
             >
-              {offering.slides.map((slide) => (
+              {previewSlides.map((slide) => (
                 <SwiperSlide key={`${slide.id}-preview`}>
                   <div className="support_service_offering__preview-slide">
                     <img

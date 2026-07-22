@@ -19,6 +19,7 @@ import {
   commercialResidentialProducts,
   commercialResidentialReferences,
   commercialResidentialStats,
+  commercialResidentialWhyItems,
 } from "../data/marketsCommercialResidentialContent";
 import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
@@ -36,20 +37,22 @@ export default async function MarketsCommercialResidentialPage() {
         variant="key-visual"
         subtitle={commercialResidentialHero.subtitle}
         title={commercialResidentialHero.title}
-        titleLines={commercialResidentialHero.titleLines}
         heroImage={commercialResidentialHero.heroImage}
         secondaryCta={commercialResidentialHero.secondaryCta}
       />
-      <MarketsIntro titleLines={commercialResidentialIntro.titleLines} />
+      <MarketsIntro
+        titleLines={commercialResidentialIntro.titleLines}
+        text={commercialResidentialIntro.text}
+      />
       <MarketsStats items={commercialResidentialStats} />
       <MarketsExplore
-        defaultTabId="commercial"
+        defaultTabId="hotels"
         sectionDesc="Tailored electrical infrastructure solutions for every architectural requirement."
       />
       <MarketsReferences items={commercialResidentialReferences} />
       <MarketsBenefits items={commercialResidentialBenefits} />
       <MarketsSolutionsPanel {...commercialSolutionsPanel} />
-      <MarketsWhy />
+      <MarketsWhy items={commercialResidentialWhyItems} />
       <MarketsProducts items={commercialResidentialProducts} badgesType2Only />
       <CommonBanner01 />
       <HighlightNewsSection

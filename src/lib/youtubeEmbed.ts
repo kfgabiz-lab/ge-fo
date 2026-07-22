@@ -30,6 +30,23 @@ export function getYoutubePosterSrc(videoId: string) {
   return `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 }
 
+// YouTube URL 문자열에서 videoId만 추출한다(watch?v= / youtu.be/ / /embed/ 3형식 지원).
+// getYoutubeEmbedSrc가 bare id를 받으므로, product_etc.video 같은 전체 URL은 이 함수로 id를 먼저 뽑는다.
+// 형식에 맞지 않으면 빈 문자열 반환(호출부 폴백 유도).
+export function getYoutubeIdFromUrl(url: string): string {
+  if (!url) return "";
+  // https://www.youtube.com/watch?v=VIDEOID (&기타 파라미터 허용)
+  const watchMatch = url.match(/[?&]v=([^&]+)/);
+  if (watchMatch) return watchMatch[1];
+  // https://youtu.be/VIDEOID
+  const shortMatch = url.match(/youtu\.be\/([^?&/]+)/);
+  if (shortMatch) return shortMatch[1];
+  // https://www.youtube.com/embed/VIDEOID
+  const embedMatch = url.match(/\/embed\/([^?&/]+)/);
+  if (embedMatch) return embedMatch[1];
+  return "";
+}
+
 function canUseYoutubeIframe(iframe: HTMLIFrameElement | null): iframe is HTMLIFrameElement {
   if (!iframe?.contentWindow) return false;
 

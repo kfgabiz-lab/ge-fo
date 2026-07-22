@@ -45,7 +45,7 @@ export const blogItems: BlogListItem[] = [
     description:
       "Electrical accidents remain a serious concern in industrial and commercial settings. According to the U.S. Bureau of Labor Statistics, more than 5,000 workers suffer fatal electrical injuries annually in the U.S. alone, many of which occur during maintenance or equipment servicing without proper isolation protocols in place.",
     date: "Apr 20, 2026",
-    image: "/img/company/blog/list_01.jpg",
+    image: "/img/company/blog/list_01.png",
     tags: ["#MCCB", "#Switches", "#Air Circuit Breakers", "#Compact Switch", "#Hashtag", "#Hashtag"],
   },
   {

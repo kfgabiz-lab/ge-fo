@@ -173,6 +173,7 @@ function LsElectricIntroSection() {
   return (
     <CompanyAboutIntroSection
       heroImage={lsElectricIntro.heroImage}
+      heroImageMobile={lsElectricIntro.heroImageMobile}
       headlineLines={lsElectricIntro.headlineLines}
       paragraphs={lsElectricIntro.paragraphs}
     />

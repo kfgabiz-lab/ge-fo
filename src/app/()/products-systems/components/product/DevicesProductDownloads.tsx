@@ -12,7 +12,6 @@ import DevicesProductDownloadsMobileControls from "./DevicesProductDownloadsMobi
 import type { ProductDownloadItem } from "../../data/productDetailContent";
 
 const DOWNLOADS_PAGE_SIZE = 5;
-const DOWNLOADS_TOTAL_RESULTS = 2658;
 
 type DevicesProductDownloadsProps = {
   items: ProductDownloadItem[];
@@ -23,26 +22,21 @@ export default function DevicesProductDownloads({
 }: DevicesProductDownloadsProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
+  // 실제 items 기준 페이지 수(최소 1). 무한복제 없이 실목록만 페이징한다.
   const totalPages = Math.max(
     1,
-    Math.ceil(DOWNLOADS_TOTAL_RESULTS / DOWNLOADS_PAGE_SIZE),
+    Math.ceil(items.length / DOWNLOADS_PAGE_SIZE),
   );
 
   const pageItems = useMemo(() => {
-    if (items.length === 0) return [];
-
     const start = (currentPage - 1) * DOWNLOADS_PAGE_SIZE;
-    const pool: ProductDownloadItem[] = [];
-
-    while (pool.length < start + DOWNLOADS_PAGE_SIZE) {
-      pool.push(...items);
-    }
-
-    return pool.slice(start, start + DOWNLOADS_PAGE_SIZE);
+    return items.slice(start, start + DOWNLOADS_PAGE_SIZE);
   }, [currentPage, items]);
 
-  const showingStart = (currentPage - 1) * DOWNLOADS_PAGE_SIZE + 1;
-  const showingEnd = Math.min(currentPage * DOWNLOADS_PAGE_SIZE, DOWNLOADS_TOTAL_RESULTS);
+  // 0건이면 "0-0", 아니면 실제 표시 범위. total은 items.length 기준.
+  const showingStart =
+    items.length === 0 ? 0 : (currentPage - 1) * DOWNLOADS_PAGE_SIZE + 1;
+  const showingEnd = Math.min(currentPage * DOWNLOADS_PAGE_SIZE, items.length);
 
   return (
     <DevicesProductDownloadsFilterBoundary>
@@ -60,7 +54,7 @@ export default function DevicesProductDownloads({
             <div className="devices_product_downloads__toolbar">
               <p className="devices_product_downloads__count">
                 Showing {showingStart}-{showingEnd} of{" "}
-                <strong>{DOWNLOADS_TOTAL_RESULTS.toLocaleString()}</strong> results
+                <strong>{items.length.toLocaleString()}</strong> results
               </p>
               <div className="devices_product_downloads__search-row devices_product_downloads__search-row--pc">
                 <FormControl className="guide_field guide_field--w200">

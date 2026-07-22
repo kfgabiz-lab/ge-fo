@@ -1,10 +1,8 @@
 /** Figma 7334:130871 / 7334:130893 — Cookie Settings banner */
 export const cookieSettingsModal = {
   title: "Cookie Settings",
-  descriptionLines: [
-    "We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits.",
-    'By clicking “Accept”, you consent to the use of all the cookies.',
-  ],
+  description:
+    'We use cookies on our website to give you the most relevant experience by remembering your preferences and repeat visits. By clicking “Accept”, you consent to the use of all the cookies.',
   settingsLabel: "Settings",
   rejectLabel: "Reject All",
   acceptLabel: "Accept All",

@@ -47,7 +47,7 @@ export const serviceCenterPage = {
       },
       {
         id: "training",
-        title: "Request for Training",
+        title: "Training Request",
         description:
           "Enhance your product knowledge with instructor-led training programs.",
         icon: "/img/services/service-center/icon-training.svg",

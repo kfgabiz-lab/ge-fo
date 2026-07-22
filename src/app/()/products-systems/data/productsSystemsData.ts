@@ -4,7 +4,9 @@
 // - press-data/where-to-buy와 동일 패턴(fetchApi + flattenPageDataItem으로 dataJson 중첩 언랩)
 // - 각 page.tsx가 자기 where로 여기 함수를 호출해 데이터를 가져오고, 공용 컴포넌트에 prop 으로 전달한다.
 import { fetchApi } from "@/lib/api";
+import { fetchData } from "@/lib/pageDataApi";
 import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
+import type { CommonFaqEntry } from "@/components/faq/CommonFaq";
 
 // 데이터 0건 / 이미지 미입력(파일ID 배열 비어있음) 시 화면이 깨지지 않도록 쓰는 공용 플레이스홀더.
 // 별도 자산이 없어 기존 정적 제품 이미지를 재사용한다.
@@ -180,33 +182,54 @@ export interface CategoryProductCard {
   slug: string;
 }
 
-// 공개 제품(is_visible=001) 중 product_code 접두사로 클라이언트 필터(eq_ 는 LIKE 미지원).
-// product_code 오름차순 정렬.
-export async function fetchProductsByCodePrefix(
-  prefix: string,
-): Promise<CategoryProductCard[]> {
+interface CategoryProductCardWithCode extends CategoryProductCard {
+  code: string;
+}
+
+// 공개 제품(is_visible=001) 전체 1회 조회(product_code 접두사 필터 없음, DB 왕복 최소화용).
+// GNB 메가메뉴처럼 여러 prefix로 반복 필터링해야 하는 호출부는 이 함수를 1번만 불러서
+// filterProductsByCodePrefix로 메모리에서 나눠 써야 한다(반복 fetch 금지).
+export async function fetchAllVisibleProducts(): Promise<
+  CategoryProductCardWithCode[]
+> {
   try {
     const rows = await searchPageData(
       "product-data",
       `eq_product.is_visible=001&unpaged=true`,
     );
-    const filtered = rows
-      .filter((row) =>
-        String(row["product.product_code"] ?? "").startsWith(prefix),
-      )
-      .map((row) => ({
-        id: Number(row._id),
-        code: String(row["product.product_code"] ?? ""),
-        title: (row["product.product_name"] as string) ?? "",
-        description: (row["product_info.info_description"] as string) ?? "",
-        image: resolveFirstImageUrl(row["product_info.image"]),
-        slug: (row["seo.slug"] as string) ?? "",
-      }));
-    filtered.sort((a, b) => a.code.localeCompare(b.code));
-    return filtered.map(({ code: _code, ...rest }) => rest);
+    const products = rows.map((row) => ({
+      id: Number(row._id),
+      code: String(row["product.product_code"] ?? ""),
+      title: (row["product.product_name"] as string) ?? "",
+      description: (row["product_info.info_description"] as string) ?? "",
+      image: resolveFirstImageUrl(row["product_info.image"]),
+      slug: (row["seo.slug"] as string) ?? "",
+    }));
+    products.sort((a, b) => a.code.localeCompare(b.code));
+    return products;
   } catch {
     return [];
   }
+}
+
+// 이미 조회된 제품 목록(fetchAllVisibleProducts 결과)을 product_code 접두사로 메모리 필터(eq_ 는 LIKE 미지원).
+export function filterProductsByCodePrefix(
+  products: CategoryProductCardWithCode[],
+  prefix: string,
+): CategoryProductCard[] {
+  return products
+    .filter((p) => p.code.startsWith(prefix))
+    .map(({ code: _code, ...rest }) => rest);
+}
+
+// 단일 prefix만 필요한 호출부용 — 내부적으로 fetchAllVisibleProducts 1회 + 메모리 필터.
+// 여러 prefix를 반복 조회해야 하면(예: GNB 메가메뉴) 이 함수 대신 fetchAllVisibleProducts를
+// 1번만 불러서 filterProductsByCodePrefix로 나눠 쓸 것 — 반복 호출 시 그때마다 전체 재조회됨.
+export async function fetchProductsByCodePrefix(
+  prefix: string,
+): Promise<CategoryProductCard[]> {
+  const all = await fetchAllVisibleProducts();
+  return filterProductsByCodePrefix(all, prefix);
 }
 
 // ---------------- ③④ product-data 단건(제품상세) ----------------
@@ -240,6 +263,8 @@ export interface HwProductData {
   image: string | null; // product_info.image
   specs: { title: string; content: string }[]; // product_spec.spec{1..3}_title/_content
   keyFeatures: { title: string; content: string }[]; // key_feature{1..4}.key{N}_title/_content
+  video: string; // product_etc.video (YouTube URL) — 상세 병합 시 id로 변환
+  connectPortal: string; // product_etc.connect_portal (Configurator 링크)
 }
 
 // HW 제품상세 row → 히어로/Key Features 바인딩용 구조로 가공.
@@ -263,7 +288,43 @@ export function mapHwProductData(row: Record<string, unknown>): HwProductData {
     image: resolveFirstImageUrl(row["product_info.image"]),
     specs,
     keyFeatures,
+    video: str("product_etc.video"),
+    connectPortal: str("product_etc.connect_portal"),
   };
+}
+
+// ---------------- ⑥ faq-data (제품상세 FAQ) ----------------
+
+// 제품상세 FAQ 목록 조회. main_category=001(제품) + product={productId} + is_visible=001(공개).
+// 신규 BE 없음 — 공통 fetchData(목록 브랜치) 재사용. markets faq 매핑 패턴과 동일.
+// 조회 실패/빈 응답 시 빈 배열 → 호출부(GenericProductDetail)에서 정적 템플릿 FAQ로 폴백.
+export async function fetchProductFaqItems(
+  productId: number,
+): Promise<CommonFaqEntry[]> {
+  try {
+    const res = await fetchData<CommonFaqEntry>({
+      slug: "faq-data",
+      where: {
+        eq_main_category: "001",
+        eq_product: String(productId),
+        eq_is_visible: "001",
+      },
+      sort: "id,asc",
+      size: 100,
+      // fetchData 목록 브랜치는 raw PageDataItem[]을 넘기므로 flatten 후 root 필드 접근(markets 패턴 동일)
+      리턴함수: (rows) =>
+        rows.map((item) => {
+          const row = flattenPageDataItem(item);
+          return {
+            question: (row.question as string) ?? "",
+            answer: (row.answer as string) ?? "",
+          };
+        }),
+    });
+    return res.content;
+  } catch {
+    return [];
+  }
 }
 
 // ---------------- ⑤ product-data 전체(explore-all A~Z) ----------------

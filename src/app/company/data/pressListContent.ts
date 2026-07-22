@@ -67,7 +67,7 @@ export const pressItems: PressListItem[] = [
     id: "press-09",
     title: "LS ELECTRIC Surpasses 60 Billion KRW in Japanese ESS Market Orders",
     date: "Apr 20, 2026",
-    image: "/img/company/press/list_01.png",
+    image: "/img/company/press/list_09.png",
   },
 ];
 

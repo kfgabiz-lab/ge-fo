@@ -5,17 +5,10 @@
 //   where: eq_main_category=002(Markets 대분류) + eq_is_visible=001(공개) + eq_markets={페이지별 코드}
 //   (필드명은 bo faq-detail/faq-list 빌더 템플릿 config_json 기준 snake_case로 확정 — 2026-07-21 재확인)
 //   정렬: id ASC, size=100 (다건 전체)
-// - 응답 매핑: fo/src/lib/pageData.ts 의 flattenPageDataItem 으로 dataJson 을 flat row 로 변환 후
+// - 응답 매핑: fetchData(목록 브랜치)가 content 를 이미 flatten(flattenPageDataItem) 한 row 배열로 내려줌 →
 //   root 필드 question(질문 텍스트) → question, answer(답변 텍스트) → answer 로 매핑
-import { fetchApi } from "@/lib/api";
-import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
+import { fetchData } from "@/lib/pageDataApi";
 import type { FaqItem } from "./marketsContent";
-
-// bo-api page-data 응답(Spring Data Page) 공통 형태 (content 배열만 사용)
-// 각 item 은 flattenPageDataItem 에 그대로 넘길 수 있는 PageDataItem 구조.
-interface PageDataResponse {
-  content: PageDataItem[];
-}
 
 // 페이지별 markets 코드값 (설계 문서 4번 "페이지별 where(markets 값)" 표)
 export const MARKETS_FAQ_CODE = {
@@ -36,18 +29,23 @@ export async function fetchMarketsFaqItems(
   marketsCode: MarketsFaqCode,
 ): Promise<FaqItem[]> {
   try {
-    const res = await fetchApi<PageDataResponse>(
-      `/api/v1/fo/page-data/faq-data?eq_main_category=002&eq_is_visible=001&eq_markets=${marketsCode}&sort=id,asc&size=100`,
-    );
-
-    return (res.content ?? []).map((item) => {
-      // flattenPageDataItem: faq 섹션 필드(question/answer/...)를 root 로 flat 병합
-      const row = flattenPageDataItem(item as PageDataItem);
-      return {
-        question: (row.question as string) ?? "",
-        answer: (row.answer as string) ?? "",
-      };
+    // 공통 조회+매핑 계층(fetchData) 경유 — where 키는 BE 인식 키 그대로.
+    // content 는 이미 flatten 된 row 배열(faq 섹션 필드가 root 로 병합됨).
+    const res = await fetchData({
+      slug: "faq-data",
+      where: {
+        eq_main_category: "002",
+        eq_is_visible: "001",
+        eq_markets: marketsCode,
+      },
+      sort: "id,asc",
+      size: 100,
     });
+
+    return (res.content ?? []).map((row) => ({
+      question: (row.question as string) ?? "",
+      answer: (row.answer as string) ?? "",
+    }));
   } catch {
     return [];
   }

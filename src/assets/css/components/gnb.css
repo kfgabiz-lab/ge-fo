@@ -632,6 +632,10 @@ color: #fff;
   overflow: visible;
 }
 
+.is-invert.is-gnb-revealed .main_header__gnb-row {
+  border-color: rgb(34 34 34 / 10%);
+}
+
 .main_header.is-gnb-hidden:not(.is-mega-open):not(.is-search-open) .main_header__gnb-row {
   height: 0;
   overflow: hidden;
@@ -1614,6 +1618,10 @@ html.is-mega-open-scroll-lock body {
   word-break: break-word;
 }
 
+#gnb-mega-panel-markets .gnb_mega__item-desc {
+  min-height: 40px;
+}
+
 #gnb-mega-panel-markets .gnb_mega__item-external,
 #gnb-mega-panel-services .gnb_mega__item-external,
 #gnb-mega-panel-support .gnb_mega__item-external,
@@ -2004,6 +2012,7 @@ html.is-mega-open-scroll-lock body {
   border-left: 3px solid #0F1F45;
 }
 
+
 .gnb_mega__explore {
   display: inline-flex;
   align-items: center;
@@ -2119,6 +2128,19 @@ html.is-mega-open-scroll-lock body {
   min-width: 0;
   padding: 30px 0 40px 0;
   box-sizing: border-box;
+  overflow: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd transparent;
+}
+
+.gnb_mega__col--depth4::-webkit-scrollbar {
+  width: 3px;
+}
+
+.gnb_mega__col--depth4::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: #ddd;
 }
 
 .gnb_mega__depth4-intro {

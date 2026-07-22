@@ -26,7 +26,6 @@ export default function SupportPageTitle({
   variant,
   children,
 }: SupportPageTitleProps) {
-  const titleLines = typeof title === "string" ? [title] : title;
   const classNames = [
     "support_page_title",
     rootClass,
@@ -42,11 +41,13 @@ export default function SupportPageTitle({
     <section className={classNames} id={id}>
       <div className="inner">
         <h1 className="support_page_title__heading">
-          {titleLines.map((line) => (
-            <span key={line} className="support_page_title__heading-line">
-              {line}
-            </span>
-          ))}
+          {typeof title === "string"
+            ? title
+            : title.map((line) => (
+                <span key={line} className="support_page_title__heading-line">
+                  {line}
+                </span>
+              ))}
         </h1>
         <p className="support_page_title__desc">{description}</p>
         {children}

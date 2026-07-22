@@ -65,7 +65,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center bottom;
+    /* object-position: center bottom; */
   }
 
   section.company-press-featured .company-press-featured__content,
@@ -95,6 +95,11 @@
     letter-spacing: -0.01em;
     color: #fff;
     margin-bottom: 10px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.company-press-featured .company-press-featured__desc,
@@ -195,6 +200,13 @@
     color: #222;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .company-page--articles section.company-articles-list .company-articles-list__title {
+    min-height: 96px;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   section.company-press-list .company-press-list__date,
@@ -514,6 +526,11 @@
     font-weight: 600;
     line-height: 34px;
     color: #fff;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.company-press-featured .company-press-featured__desc,
@@ -889,16 +906,13 @@
     gap: 6px;
   }
 
-  .company-page--press section.company-press-list .company-press-list__title,
-  .company-page--articles section.company-articles-list .company-articles-list__title {
+  .company-page--press section.company-press-list .company-press-list__title {
     display: -webkit-box;
     overflow: hidden;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     letter-spacing: -0.01em;
-  }
-
-  .company-page--press section.company-press-list .company-press-list__title {
     font-size: 18px;
     font-weight: 600;
     line-height: 26px;
@@ -906,6 +920,11 @@
   }
 
   .company-page--articles section.company-articles-list .company-articles-list__title {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
     font-size: 18px;
     font-weight: 600;
     line-height: 26px;
@@ -1140,4 +1159,13 @@ section.company-press-list .company-press-list__card:hover .company-press-list__
 section.company-articles-list .company-articles-list__card:hover .company-articles-list__title {
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+
+@media (min-width: 600px) and (max-width: 780px) {
+  .company-page--press section.company-press-list .company-press-list__grid,
+  .company-page--articles section.company-articles-list .company-articles-list__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 20px;
+  }
 }

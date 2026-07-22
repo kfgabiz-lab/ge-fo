@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import Link from "next/link";
 import type { DevicesCategoryProduct } from "../data/vfdContent";
 
@@ -104,17 +103,20 @@ export default function DevicesCategoryList({
           <div className="inner devices_category__grid" data-slug="product-data" data-slug-repeat="true">
             {chunkProducts(products, 2).map((row, rowIndex) => (
               <div key={row.map((item) => item.id).join("-")} className="devices_category__grid-row">
-                {row.map((item, colIndex) => (
-                  <Fragment key={item.id}>
-                    {colIndex === 1 ? (
-                      <div className="devices_category__grid-divider" aria-hidden="true" />
-                    ) : null}
+                <CategoryProductCardStacked
+                  item={row[0]}
+                  loading={rowIndex === 0 ? "eager" : "lazy"}
+                />
+                {/* 2026-07-22: 홀수 개(행에 item 1개)일 때 grid-divider 미렌더 */}
+                {row[1] ? (
+                  <>
+                    <div className="devices_category__grid-divider" aria-hidden="true" />
                     <CategoryProductCardStacked
-                      item={item}
-                      loading={rowIndex === 0 && colIndex < 2 ? "eager" : "lazy"}
+                      item={row[1]}
+                      loading={rowIndex === 0 ? "eager" : "lazy"}
                     />
-                  </Fragment>
-                ))}
+                  </>
+                ) : null}
               </div>
             ))}
           </div>

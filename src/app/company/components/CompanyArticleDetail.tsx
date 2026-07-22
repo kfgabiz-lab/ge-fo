@@ -142,7 +142,7 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
           ) : null}
         </header>
 
-        <article className={articleDetailClass("article")}>
+        <article className="company-article-detail__article tiptap ProseMirror">
           {heroImage ? (
             <img
               src={heroImage.src}

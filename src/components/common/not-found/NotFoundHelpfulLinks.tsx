@@ -13,7 +13,14 @@ export default function NotFoundHelpfulLinks() {
             const content = (
               <>
                 <span className="common_404_links__icon" aria-hidden>
-                  <img src={item.iconSrc} alt="" width={80} height={80} />
+                  <img
+                    src={item.iconSrc}
+                    alt=""
+                    width={80}
+                    height={80}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </span>
                 <span className="common_404_links__label">{item.label}</span>
               </>

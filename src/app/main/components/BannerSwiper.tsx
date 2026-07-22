@@ -137,7 +137,6 @@ export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
                     className="sl_img"
                     fill
                     sizes="120px"
-                    priority={index === 0}
                     data-slugkey="image"
                     data-slugkey-attr="src"
                   />

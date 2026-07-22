@@ -46,7 +46,7 @@ export default async function MarketsPowerGridPage() {
       />
       <MarketsIntro
         titleLines={powerGridIntro.titleLines}
-        paragraphs={powerGridIntro.paragraphs}
+        text={powerGridIntro.text}
       />
       <MarketsExplore tabs={powerGridIndustryTabs} layout="wide-tabs" />
       <MarketsReferences items={powerGridReferences} />

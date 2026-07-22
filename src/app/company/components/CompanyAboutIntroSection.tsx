@@ -7,6 +7,8 @@ type CompanyAboutIntroCta = {
 
 type CompanyAboutIntroSectionProps = {
   heroImage: string;
+  /** 있으면 PC/MO 이미지 분리 (`--pc` / `--mo`) */
+  heroImageMobile?: string;
   headlineLines: string[];
   paragraphs: string[];
   /** Figma hero object-position — Affiliate 등 */
@@ -24,6 +26,7 @@ type CompanyAboutIntroSectionProps = {
 
 export default function CompanyAboutIntroSection({
   heroImage,
+  heroImageMobile,
   headlineLines,
   paragraphs,
   heroImagePosition,
@@ -47,7 +50,26 @@ export default function CompanyAboutIntroSection({
     <section className={sectionClass}>
       <div className="inner">
         <div className="company-about-intro__hero">
-          <img loading="lazy" decoding="async" src={heroImage} alt="" />
+          {heroImageMobile ? (
+            <>
+              <img
+                loading="lazy"
+                decoding="async"
+                src={heroImage}
+                alt=""
+                className="company-about-intro__hero-img company-about-intro__hero-img--pc"
+              />
+              <img
+                loading="lazy"
+                decoding="async"
+                src={heroImageMobile}
+                alt=""
+                className="company-about-intro__hero-img company-about-intro__hero-img--mo"
+              />
+            </>
+          ) : (
+            <img loading="lazy" decoding="async" src={heroImage} alt="" />
+          )}
         </div>
         <div className="company-about-intro__text">
           <h2 className="company-about-intro__headline">

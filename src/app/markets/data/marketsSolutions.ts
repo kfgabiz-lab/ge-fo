@@ -35,19 +35,32 @@ export const marketsSolutionMobileOrder = [
 ] as const;
 
 const productImg = {
-  mcsg: "/img/markets/solutions/product_mcsg.png",
+  powerTransformer:
+    "/img/devices-systems/products/power-transformer.webp",
+  ul67Panelboard: "/img/devices-systems/products/ul67-panelboard.webp",
+  metalClad: "/img/devices-systems/products/metal-clad-switchgear.webp",
+  metalEnclosed:
+    "/img/devices-systems/products/metal-enclosed-load-interrupter-switchgear.webp",
+  ul1558: "/img/devices-systems/products/ul1558-switchgear.webp",
+  padmount: "/img/devices-systems/products/padmount-transformer.webp",
+  castResin: "/img/devices-systems/products/cast-resin-transformer.webp",
+  loadInterrupter:
+    "/img/devices-systems/products/load-interrupter-switch.webp",
+  susolVcb: "/img/devices-systems/products/susol-ul-vcb.webp",
+  susolMccb: "/img/devices-systems/products/susol-ul-mccb.webp",
+  dcProducts:
+    "/img/devices-systems/products/iec-dc-acb-and-switch-disconnector.webp",
+  eHouse: "/img/devices-systems/products/e-house.webp",
+  /** SCADA — 더미 유지 */
   scada: "/img/markets/solutions/product_scada.png",
-  ulLv: "/img/markets/solutions/product_ul_lv_swgr.png",
-  metalEnclosed: "/img/markets/solutions/product_metal_enclosed_swgr.png",
-  ul1558: "/img/markets/solutions/product_ul1558_swgr.png",
   fallback: "/img/main/product_01.jpg",
 } as const;
 
 const productSamples = [
-  productImg.mcsg,
+  productImg.metalClad,
   productImg.metalEnclosed,
   productImg.ul1558,
-  productImg.ulLv,
+  productImg.ul67Panelboard,
   productImg.fallback,
 ] as const;
 
@@ -98,7 +111,7 @@ export const marketsSolutionZones: SolutionZone[] = [
     // products: [
     //   solutionProduct("b-diesel-gen", "Diesel Generator Set"),
     //   solutionProduct("b-ats", "Automatic Transfer Switch"),
-    //   solutionProduct("b-paralleling", "Paralleling Switchgear", productImg.mcsg),
+    //   solutionProduct("b-paralleling", "Paralleling Switchgear"),
     // ],
   },
   {
@@ -113,8 +126,8 @@ export const marketsSolutionZones: SolutionZone[] = [
     products: [
       solutionProduct(
         "c-mcsg",
-        "Metal Clad Swtichgear",
-        productImg.mcsg,
+        "Metal Clad Switchgear",
+        productImg.metalClad,
         "/product/metasol-ms",
       ),
       solutionProduct(
@@ -123,14 +136,22 @@ export const marketsSolutionZones: SolutionZone[] = [
         productImg.metalEnclosed,
       ),
       solutionProduct("c-ul1558", "UL1558 Switchgear", productImg.ul1558),
-      solutionProduct("c-ul67", "UL67 Panelboard", null),
-      solutionProduct("c-padmount", "Padmount Transformer", null),
-      solutionProduct("c-cast-resin", "Cast Resin Transformer", null),
-      solutionProduct("c-lis", "Load Interrupter Switch", null),
-      solutionProduct("c-vcb", "Susol UL VCB", null),
-      solutionProduct("c-acb", "Susol UL ACB", null),
-      solutionProduct("c-mccb", "Susol UL MCCB", null),
-      solutionProduct("c-dc", "DC Products", null),
+      solutionProduct("c-ul67", "UL67 Panelboard", productImg.ul67Panelboard),
+      solutionProduct("c-padmount", "Padmount Transformer", productImg.padmount),
+      solutionProduct(
+        "c-cast-resin",
+        "Cast Resin Transformer",
+        productImg.castResin,
+      ),
+      solutionProduct(
+        "c-lis",
+        "Load Interrupter Switch",
+        productImg.loadInterrupter,
+      ),
+      solutionProduct("c-vcb", "Susol UL VCB", productImg.susolVcb),
+      // solutionProduct("c-acb", "Susol UL ACB"),
+      solutionProduct("c-mccb", "Susol UL MCCB", productImg.susolMccb),
+      solutionProduct("c-dc", "DC Products", productImg.dcProducts),
     ],
   },
   {
@@ -143,7 +164,7 @@ export const marketsSolutionZones: SolutionZone[] = [
     description:
       "A scalable, pre-fabricated power solution. Our integrated E-House delivers fast deployment and space efficiency.",
     products: [
-      solutionProduct("d-ehouse", "E-House", null),
+      solutionProduct("d-ehouse", "E-House", productImg.eHouse),
       // solutionProduct("d-skid", "Modular Power Skid"),
     ],
   },
@@ -157,7 +178,7 @@ export const marketsSolutionZones: SolutionZone[] = [
     description:
       "The mission-critical white space. Our highly reliable UL67 Panelboards ensure uninterrupted power to server racks.",
     products: [
-      solutionProduct("f-ul67", "UL67 Panelboard", null),
+      solutionProduct("f-ul67", "UL67 Panelboard", productImg.ul67Panelboard),
       // solutionProduct("f-busway", "Busway Distribution"),
     ],
   },
@@ -171,7 +192,13 @@ export const marketsSolutionZones: SolutionZone[] = [
     mobileMapY: 66.4,
     description:
       "Steps down high-voltage grid power for the site. Equipped with our robust Power Transformer for grid reliability.",
-    products: [solutionProduct("g-power-transformer", "Power Transformer", null)],
+    products: [
+      solutionProduct(
+        "g-power-transformer",
+        "Power Transformer",
+        productImg.powerTransformer,
+      ),
+    ],
   },
   {
     id: "H",
@@ -186,7 +213,7 @@ export const marketsSolutionZones: SolutionZone[] = [
     //   solutionProduct("h-ups", "UPS Module"),
     //   solutionProduct("h-battery", "Battery Cabinet"),
     //   solutionProduct("h-static-switch", "Static Transfer Switch"),
-    //   solutionProduct("h-pdu", "PDU", productImg.ulLv),
+    //   solutionProduct("h-pdu", "PDU"),
     // ],
   },
   {
@@ -201,7 +228,7 @@ export const marketsSolutionZones: SolutionZone[] = [
     // products: [
     //   solutionProduct("i-battery-rack", "Battery Rack"),
     //   solutionProduct("i-pcs", "Power Conversion System"),
-    //   solutionProduct("i-ems", "Energy Management System", productImg.ul1558),
+    //   solutionProduct("i-ems", "Energy Management System"),
     // ],
   },
   {
@@ -219,7 +246,7 @@ export const marketsSolutionZones: SolutionZone[] = [
     //   solutionProduct("j-crah", "CRAH"),
     //   solutionProduct("j-cooling-tower", "Cooling Tower"),
     //   solutionProduct("j-pump", "Pump Skid"),
-    //   solutionProduct("j-controls", "HVAC Controls", productImg.ul1558),
+    //   solutionProduct("j-controls", "HVAC Controls"),
     // ],
   },
 ];
