@@ -11,7 +11,7 @@
 
 | 실행명령어 | 대상 | 상세 STEP 근거 문서 |
 |---|---|---|
-| `#FO소스머지` | PUB(ls-publish) → FO 소스 이관. 공통컴포넌트/공통함수/공통로직 적극 사용(억지 공통화 금지, 서브에이전트들의 합리적인 합의로 도출) | `fo/docs/fo-data-binding-가이드.md` STEP 0-0(fo-page-analyzer)→0-1(fo-page-migrator)→0-2(fo-common-refactor) |
+| `#FO소스머지` | PUB(ls-publish) → FO 소스 이관. 공통컴포넌트/공통함수/공통로직 적극 사용(억지 공통화 금지, 서브에이전트들의 합리적인 합의로 도출). 신규 페이지 이관은 STEP 0-0~0-2, 이미 이관된 페이지에 ls-publish 후속 변경분을 재동기화하는 경우는 STEP 0-3 | `fo/docs/fo-data-binding-가이드.md` STEP 0-0(fo-page-analyzer)→0-1(fo-page-migrator)→0-2(fo-common-refactor)→0-3(재동기화) |
 | `#FO데이터바인딩` | data-slug/data-slugkey를 사용한 PageData 데이터 바인딩. 아래 "대상: slug 기반 화면 개발" 절 참고 | 본 문서 STEP1~6 |
 | `#FO화면개발수정` | slug 아닌 개념(GNB 메뉴 등 일반 API) FO 화면 개발/수정 | `docs/ge_guide/fo/fo-api연동가이드.md` 5장 STEP1~3 |
 

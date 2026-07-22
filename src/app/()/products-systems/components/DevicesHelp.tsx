@@ -27,7 +27,13 @@ export default function DevicesHelp({
       >
         <div className="inner">
           <div className="devices_help__head">
-            <h2 className="section_tit">Everything You Need to Power Your Success</h2>
+            <h2 className="section_tit">
+              <span>
+                Everything You Need to Power, Automate,
+                <br />
+                and Grow Your Business
+              </span>
+            </h2>
             <p className="section_desc">
               Connect with our experts, configure your ideal system, and find the
               nearest partners—all in one place.

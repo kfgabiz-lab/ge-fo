@@ -14,6 +14,8 @@ export type AmericaShapingHighlight = {
 export type AmericaShapingBlock = {
   id: string;
   image: string;
+  /** 있으면 img 대신 자동재생 영상 */
+  video?: string;
   titleLines: string[];
   location: string;
   highlights: AmericaShapingHighlight[];
@@ -50,9 +52,12 @@ export type AmericaLocationGroup = {
 export type AmericaLeaderItem = {
   id: string;
   image: string;
+  /** 모바일 전용 초상 (없으면 image 사용) */
+  imageMobile?: string;
   role: string;
   name: string;
-  gradientStop?: "65.122" | "63.372";
+  /** 피처드 카드 서명 이미지 */
+  signature?: string;
 };
 
 export type AmericaSocialLink = {
@@ -102,6 +107,7 @@ export const americaShaping = {
     {
       id: "bastrop",
       image: `${IMG}/shaping-bastrop.jpg`,
+      video: `${IMG}/bastrop.webm`,
       titleLines: [
         "Built in Texas. Ready for",
         "Expanding Power Infrastructure",
@@ -126,6 +132,7 @@ export const americaShaping = {
     {
       id: "utah",
       image: `${IMG}/shaping-utah.jpg`,
+      video: `${IMG}/utah.webm`,
       titleLines: ["Expanding Our", "U.S. Production Footprint"],
       location: "LS ELECTRIC Utah Inc.",
       highlights: [
@@ -319,40 +326,63 @@ export const americaLeaders = {
   title: "Meet Our Leaders",
   description:
     "Connecting accomplished executives and business leaders who shape industries and create lasting value.",
-  letterTitle:
-    "Letter from COO: Our Commitment to MCM Engineering II Customers and the Power Distribution Industry",
-  letterBody: [
-    "At MCM Engineering II, our core values distinguish us in the manufacturing landscape, permeating every facet of our operations,",
-    "providing our customers a distinct competitive edge. Our commitment to our customers and the industry we serve embodies these values:",
-  ],
+  /** Figma — 상단 우측 피처드 (2열 폭) */
+  featured: {
+    id: "charlie-lee",
+    image: `${IMG}/leader-featured.png`,
+    imageMobile: `${IMG}/leader-featured-mo.png`,
+    signature: `${IMG}/leader-signature.svg`,
+    name: "ChungHee (Charlie) Lee",
+    role: "CEO & President of LS Electric America and\nLS Electric Utah",
+  } satisfies AmericaLeaderItem,
   items: [
     {
-      id: "ceo",
-      image: `${IMG}/leader-01.jpg`,
-      role: "President/CEO",
-      name: "Chung Hee “Charlie” Lee",
-      gradientStop: "65.122",
+      id: "youn-seob-lim",
+      image: `${IMG}/leader-01.png`,
+      name: "Youn Seob Lim",
+      role: "Head of Grid Business Division & President of LS Energy Solutions",
     },
     {
-      id: "coo",
-      image: `${IMG}/leader-02.jpg`,
-      role: "COO",
-      name: "Byron Black",
-      gradientStop: "63.372",
+      id: "jaekyun-kim",
+      image: `${IMG}/leader-02.png`,
+      name: "JaeKyun (J.K.) Kim",
+      role: "Head of Power System Division",
     },
     {
-      id: "sales",
-      image: `${IMG}/leader-03.jpg`,
-      role: "Sales Director",
-      name: "Clarke Arnold",
-      gradientStop: "63.372",
+      id: "sean-cho",
+      image: `${IMG}/leader-03.png`,
+      name: "Sean Seungheon Cho",
+      role: "Head of Business Support Division",
     },
     {
-      id: "operations",
-      image: `${IMG}/leader-04.jpg`,
-      role: "Director of Operation",
-      name: "Richard Dawson",
-      gradientStop: "63.372",
+      id: "edward-lee",
+      image: `${IMG}/leader-04.png`,
+      name: "Edward Lee",
+      role: "Head of Solution Business Department",
+    },
+    {
+      id: "steve-lee",
+      image: `${IMG}/leader-05.png`,
+      name: "Steve Lee",
+      role: "Head of Engineering & Technology Center",
+    },
+    {
+      id: "yongmo-jeong",
+      image: `${IMG}/leader-06.png`,
+      name: "Yongmo Jeong",
+      role: "Head of Operation Center, Bastrop Campus TX",
+    },
+    {
+      id: "andrew-urda",
+      image: `${IMG}/leader-07.png`,
+      name: "Andrew Urda",
+      role: "Head of Marketing",
+    },
+    {
+      id: "mike-ellisor",
+      image: `${IMG}/leader-08.png`,
+      name: "Mike Ellisor",
+      role: "Head of Power Solution Sales Team",
     },
   ] satisfies AmericaLeaderItem[],
 };

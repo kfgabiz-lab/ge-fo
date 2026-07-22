@@ -88,7 +88,7 @@ export default function WhatWeDoSwiper() {
           effect="fade"
           fadeEffect={{ crossFade: true }}
           slidesPerView={1}
-          speed={300}
+          speed={0}
           loop
           observer
           observeParents

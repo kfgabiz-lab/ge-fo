@@ -66,6 +66,8 @@
     flex-direction: column;
     gap: 0;
     width: 660px;
+    max-width: 100%;
+    min-width: 0;
     padding-top: 10px;
   }
 
@@ -106,6 +108,11 @@
     color: #fff;
     font-weight: 700;
     margin-bottom: 10px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.company-blog-top .company-blog-featured__desc {
@@ -115,6 +122,11 @@
     opacity: 0.7;
     max-width: 100%;
     margin-bottom: 14px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   section.company-blog-top .company-blog-featured__date {
@@ -192,6 +204,8 @@
     flex-direction: column;
     gap: 0;
     justify-content: flex-start;
+    min-width: 0;
+    overflow: hidden;
     color: inherit;
     text-decoration: none;
   }
@@ -210,6 +224,11 @@
     color: #222;
     font-weight: 600;
     margin-top: 10px;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   section.company-blog-list .company-blog-list__desc {
@@ -219,6 +238,11 @@
     margin-top: 6px;
     margin-bottom: 12px;
     min-height: 72px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   section.company-blog-list .company-blog__date {
@@ -232,6 +256,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+    height: 25px;
+    overflow: hidden;
   }
 
   section.company-blog-list .company-blog-list__tags-row {
@@ -337,6 +363,9 @@
     flex-direction: column;
     gap: 0;
     order: 2;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   section.company-blog-top .company-blog-featured__image {
@@ -375,6 +404,11 @@
     letter-spacing: -0.02em;
     color: #fff;
     font-weight: 700;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.company-blog-top .company-blog-featured__desc {
@@ -383,6 +417,11 @@
     font-size: 16px;
     line-height: 24px;
     opacity: 0.7;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   section.company-blog-top .company-blog-featured__date {
@@ -480,7 +519,7 @@
     flex-direction: column;
     gap: 80px;
     padding-bottom: 40px;
-    border-bottom: 1px solid #E8E8E8;
+    border-bottom: 1px solid #e8e8e8;
   }
 
   section.company-blog-list .company-blog-list__item {
@@ -540,6 +579,8 @@
     display: flex;
     flex-direction: column;
     gap: 0;
+    min-width: 0;
+    overflow: hidden;
     color: inherit;
     text-decoration: none;
   }
@@ -557,6 +598,11 @@
     letter-spacing: -0.01em;
     color: #222;
     font-weight: 600;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   section.company-blog-list .company-blog-list__desc {
@@ -564,6 +610,11 @@
     color: #666;
     font-size: 16px;
     line-height: 24px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   section.company-blog-list .company-blog__date {
@@ -577,6 +628,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px 4px;
+    height: 25px;
+    overflow: hidden;
   }
 
   section.company-blog-list .company-blog-list__tags-row {
@@ -757,7 +810,6 @@ section.company-blog-list .company-blog-list__content:hover .company-blog-list__
     display: block;
   }
 
-
   section.company-article-detail .company-article-detail__meta {
     display: flex;
     flex-wrap: wrap;
@@ -808,6 +860,11 @@ section.company-blog-list .company-blog-list__content:hover .company-blog-list__
     margin: 0 auto;
   }
 
+  /* Press article — Figma 7575:82740 */
+  section.company-article-detail.company-article-detail--press .company-article-detail__article {
+    gap: 40px;
+  }
+
   /* devices_product_video__player — article detail (Figma 3525:39831) */
   section.company-article-detail .company-article-detail__article .devices_product_video__player {
     position: relative;
@@ -834,8 +891,9 @@ section.company-blog-list .company-blog-list__content:hover .company-blog-list__
   section.company-article-detail .company-article-detail__hero-img {
     width: 100%;
     display: block;
-    aspect-ratio: 1440 / 900;
-    object-fit: cover;
+    /* aspect-ratio: 1440 / 900; */
+    /* object-fit: cover; */
+    margin: 0 0 30px;
   }
 
   section.company-article-detail .company-article-detail__content-img {
@@ -922,13 +980,13 @@ section.company-blog-list .company-blog-list__content:hover .company-blog-list__
 
   section.company-article-detail.company-article-detail--press .company-article-detail__body {
     margin: 0;
-    font-size: 18px;
-    line-height: 28px;
+    font-size: 16px;
+    line-height: 24px;
   }
 
   section.company-article-detail.company-article-detail--press .company-article-detail__body p + p,
   section.company-article-detail.company-article-detail--press .company-article-detail__body ul + p {
-    margin-top: 8px;
+    margin-top: 24px;
   }
 
   section.company-article-detail .company-article-detail__body-title {
@@ -944,9 +1002,20 @@ section.company-blog-list .company-blog-list__content:hover .company-blog-list__
   }
 
   section.company-article-detail.company-article-detail--press .company-article-detail__list {
-    margin-bottom: 8px;
-    padding-left: 27px;
+    margin: 0;
+    padding-left: 24px;
     list-style: disc;
+  }
+
+  section.company-article-detail.company-article-detail--press .company-article-detail__list li + li {
+    margin-top: 0;
+  }
+
+  section.company-article-detail.company-article-detail--press .company-article-detail__hero-img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 940 / 588;
+    object-fit: cover;
   }
 
   section.company-article-detail.company-article-detail--events .company-article-detail__body {
@@ -972,7 +1041,7 @@ section.company-blog-list .company-blog-list__content:hover .company-blog-list__
   }
 
   section.company-article-detail.company-article-detail--blog .company-article-detail__tags {
-margin-top: 40px;
+    margin-top: 40px;
   }
 
   section.company-article-detail.company-article-detail--blog .company-article-detail__tags .company-blog__tags {
@@ -1044,7 +1113,10 @@ margin-top: 40px;
     line-height: 24px;
   }
 
-  .company-page--articles-detail section.company-article-detail .company-article-detail__tail-text + .company-article-detail__tail-text {
+  .company-page--articles-detail
+    section.company-article-detail
+    .company-article-detail__tail-text
+    + .company-article-detail__tail-text {
     margin-top: 16px;
   }
 
@@ -1244,7 +1316,6 @@ margin-top: 40px;
   }
 
   section.company-article-detail .company-article-detail__article {
-    
   }
 
   section.company-article-detail .company-article-detail__article .devices_product_video__player {
@@ -1311,14 +1382,14 @@ margin-top: 40px;
   }
 
   section.company-article-detail.company-article-detail--press .company-article-detail__body {
-    margin: 24px 0 0;
+    margin: 0;
     font-size: 16px;
     line-height: 24px;
   }
 
   section.company-article-detail.company-article-detail--press .company-article-detail__body p + p,
   section.company-article-detail.company-article-detail--press .company-article-detail__body ul + p {
-    margin-top: 8px;
+    margin-top: 24px;
   }
 
   section.company-article-detail .company-article-detail__body-title {
@@ -1334,8 +1405,8 @@ margin-top: 40px;
   }
 
   section.company-article-detail.company-article-detail--press .company-article-detail__list {
-    margin-bottom: 8px;
-    padding-left: 22px;
+    margin: 0;
+    padding-left: 24px;
     list-style: disc;
   }
 
@@ -1547,7 +1618,7 @@ margin-top: 40px;
   .company-page--press-detail section.company-article-detail .company-article-detail__article {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 40px;
   }
 
   .company-page--events-detail section.company-article-detail .company-article-detail__article {
@@ -1556,7 +1627,10 @@ margin-top: 40px;
     gap: 20px;
   }
 
-  .company-page--press-detail section.company-article-detail .company-article-detail__article .devices_product_video__player {
+  .company-page--press-detail
+    section.company-article-detail
+    .company-article-detail__article
+    .devices_product_video__player {
     display: none;
   }
 
@@ -1569,7 +1643,7 @@ margin-top: 40px;
   }
 
   .company-page--press-detail section.company-article-detail .company-article-detail__hero-img {
-    aspect-ratio: 1440 / 900;
+    aspect-ratio: 940 / 588;
     object-fit: cover;
     border: none;
   }
@@ -1775,8 +1849,16 @@ margin-top: 40px;
     line-height: 23px;
   }
 
-  .company-page--blog-detail section.company-article-detail.company-article-detail--blog .company-article-detail__body p + p,
-  .company-page--blog-detail section.company-article-detail.company-article-detail--blog .company-article-detail__body ul + p {
+  .company-page--blog-detail
+    section.company-article-detail.company-article-detail--blog
+    .company-article-detail__body
+    p
+    + p,
+  .company-page--blog-detail
+    section.company-article-detail.company-article-detail--blog
+    .company-article-detail__body
+    ul
+    + p {
     margin-top: 12px;
   }
 
@@ -1802,7 +1884,10 @@ margin-top: 40px;
     line-height: 23px;
   }
 
-  .company-page--blog-detail section.company-article-detail .company-article-detail__tail-text + .company-article-detail__tail-text {
+  .company-page--blog-detail
+    section.company-article-detail
+    .company-article-detail__tail-text
+    + .company-article-detail__tail-text {
     margin-top: 12px;
   }
 
@@ -1810,14 +1895,20 @@ margin-top: 40px;
     margin-top: 20px;
   }
 
-  .company-page--blog-detail section.company-article-detail.company-article-detail--blog .company-article-detail__tags .company-blog__tags {
+  .company-page--blog-detail
+    section.company-article-detail.company-article-detail--blog
+    .company-article-detail__tags
+    .company-blog__tags {
     display: flex;
     flex-wrap: wrap;
     align-content: center;
     gap: 6px 4px;
   }
 
-  .company-page--blog-detail section.company-article-detail.company-article-detail--blog .company-article-detail__tags .company-blog__tag {
+  .company-page--blog-detail
+    section.company-article-detail.company-article-detail--blog
+    .company-article-detail__tags
+    .company-blog__tag {
     display: inline-flex;
     align-items: center;
     border: 1px solid rgb(15 31 69 / 60%);
@@ -1830,29 +1921,47 @@ margin-top: 40px;
     background: #fff;
   }
 
-  .company-page--press-detail section.company-article-detail.company-article-detail--press .company-article-detail__body {
+  .company-page--press-detail
+    section.company-article-detail.company-article-detail--press
+    .company-article-detail__body {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .company-page--press-detail
+    section.company-article-detail.company-article-detail--press
+    .company-article-detail__body
+    p
+    + p,
+  .company-page--press-detail
+    section.company-article-detail.company-article-detail--press
+    .company-article-detail__body
+    ul
+    + p {
+    margin-top: 24px;
+  }
+
+  .company-page--events-detail
+    section.company-article-detail.company-article-detail--events
+    .company-article-detail__body {
     margin: 0;
     font-size: 15px;
     line-height: 23px;
   }
 
-  .company-page--press-detail section.company-article-detail.company-article-detail--press .company-article-detail__body p + p,
-  .company-page--press-detail section.company-article-detail.company-article-detail--press .company-article-detail__body ul + p {
-    margin-top: 12px;
-  }
-
-  .company-page--events-detail section.company-article-detail.company-article-detail--events .company-article-detail__body {
-    margin: 0;
-    font-size: 15px;
-    line-height: 23px;
-  }
-
-  .company-page--events-detail section.company-article-detail.company-article-detail--events .company-article-detail__list {
+  .company-page--events-detail
+    section.company-article-detail.company-article-detail--events
+    .company-article-detail__list {
     padding-left: 22.5px;
     list-style: disc;
   }
 
-  .company-page--events-detail section.company-article-detail.company-article-detail--events .company-article-detail__list li + li {
+  .company-page--events-detail
+    section.company-article-detail.company-article-detail--events
+    .company-article-detail__list
+    li
+    + li {
     margin-top: 12px;
   }
 
@@ -1904,11 +2013,13 @@ margin-top: 40px;
     line-height: 23px;
   }
 
-  .company-page--articles-detail section.company-article-detail .company-article-detail__tail-text + .company-article-detail__tail-text {
+  .company-page--articles-detail
+    section.company-article-detail
+    .company-article-detail__tail-text
+    + .company-article-detail__tail-text {
     margin-top: 12px;
   }
 }
-
 
 /* === Company Events (Figma 3525:39276) === */
 @media (min-width: 781px) {
@@ -1962,6 +2073,7 @@ margin-top: 40px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 0;
     min-height: 183px;
     padding: 34px 40px;
     background: #0c1625;
@@ -1976,6 +2088,11 @@ margin-top: 40px;
 
   section.company-events-featured .company-events-featured__title {
     margin-top: 4px;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
@@ -2177,7 +2294,7 @@ margin-top: 40px;
 
   section.company-events-past .company-events-past__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 60px 24px;
     margin: 24px 0 40px;
     padding: 0 0 60px;
@@ -2185,11 +2302,18 @@ margin-top: 40px;
     border-bottom: 1px solid #e8e8e8;
   }
 
+  section.company-events-past .company-events-past__item {
+    min-width: 0;
+  }
+
   section.company-events-past a.company-events-past__card {
     display: flex;
     flex-direction: column;
     gap: 24px;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
     text-decoration: none;
     color: inherit;
   }
@@ -2210,19 +2334,25 @@ margin-top: 40px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
   }
 
   section.company-events-past .company-events-past__title {
-    display: -webkit-box;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     min-height: unset;
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
     letter-spacing: -0.01em;
     color: #222;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
   }
 
   section.company-events-past .company-events-past__date {
@@ -2296,7 +2426,7 @@ margin-top: 40px;
   section.company-events-featured .company-events-featured__swiper-area {
     gap: 30px;
   }
-  section.company-events-featured .company-events-featured__swiper-area .swiper_type_01_controls{
+  section.company-events-featured .company-events-featured__swiper-area .swiper_type_01_controls {
     margin-top: 30px;
   }
   section.company-events-featured .company-events-featured__image {
@@ -2312,9 +2442,10 @@ margin-top: 40px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    min-width: 0;
     min-height: 0;
     padding: 30px 24px 40px;
-    background: #0C1625;
+    background: #0c1625;
     color: #fff;
   }
 
@@ -2322,6 +2453,7 @@ margin-top: 40px;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
   }
 
   section.company-events-featured .company-events-featured__date {
@@ -2332,6 +2464,11 @@ margin-top: 40px;
 
   section.company-events-featured .company-events-featured__title {
     margin-top: 0;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
@@ -2515,10 +2652,19 @@ margin-top: 40px;
     border-bottom: 1px solid #e8e8e8;
   }
 
+  section.company-events-past .company-events-past__item {
+    min-width: 0;
+    width: 100%;
+  }
+
   section.company-events-past a.company-events-past__card {
     gap: 20px;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
   }
 
   section.company-events-past .company-events-past__image {
@@ -2534,10 +2680,20 @@ margin-top: 40px;
     gap: 6px;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
   }
 
   section.company-events-past .company-events-past__title {
+    display: block;
+    width: 100%;
     min-height: 0;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-size: 18px;
     font-weight: 600;
     line-height: 26px;
@@ -2710,7 +2866,8 @@ margin-top: 40px;
     overflow: hidden;
   }
 
-  section.company-america-shaping .company-america-shaping__img img {
+  section.company-america-shaping .company-america-shaping__img img,
+  section.company-america-shaping .company-america-shaping__img video {
     display: block;
     width: 100%;
     height: 100%;
@@ -2720,11 +2877,7 @@ margin-top: 40px;
   section.company-america-shaping .company-america-shaping__img-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgb(0 0 0 / 0%) 68.16%,
-      rgb(0 0 0 / 40%) 100%
-    );
+    background: linear-gradient(180deg, rgb(0 0 0 / 0%) 68.16%, rgb(0 0 0 / 40%) 100%);
     pointer-events: none;
   }
 
@@ -2740,9 +2893,7 @@ margin-top: 40px;
     justify-content: space-between;
   }
 
-  section.company-america-shaping
-    .company-america-shaping__block:last-child
-    .company-america-shaping__panel-inner {
+  section.company-america-shaping .company-america-shaping__block:last-child .company-america-shaping__panel-inner {
     gap: 0;
     justify-content: space-between;
   }
@@ -2942,7 +3093,7 @@ margin-top: 40px;
     font-size: 15px;
     font-weight: 400;
     line-height: 23px;
-    color: #E60040;
+    color: #e60040;
   }
 
   section.company-america-operate .company-america-operate__name {
@@ -3022,6 +3173,19 @@ margin-top: 40px;
     padding: 0 0 150px;
   }
 
+  section.company-america-leaders .company-america-leaders__top {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  section.company-america-leaders .company-about__head {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+    padding-top: 8px;
+  }
+
   section.company-america-leaders .company-about__head .section_tit {
     font-family: jaka;
     font-size: 50px;
@@ -3030,46 +3194,95 @@ margin-top: 40px;
     letter-spacing: -0.02em;
   }
 
-  section.company-america-leaders .company-america-leaders__letter {
-    max-width: 1139px;
-    margin-top: 40px;
-    padding-top: 20px;
+  section.company-america-leaders .company-about__head .section_desc {
+    margin-top: 10px;
+    max-width: 560px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
   }
 
-  section.company-america-leaders .company-america-leaders__letter-tit {
-    margin: 0 0 10px;
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 32px;
-    letter-spacing: -0.01em;
-    color: #222;
-  }
-
-  section.company-america-leaders .company-america-leaders__letter p {
-    margin: 0;
-    font-size: 16px;
-    line-height: 24px;
-    color: #222;
-  }
-
-  section.company-america-leaders .company-america-leaders__grid {
-    display: flex;
-    gap: 24px;
-    align-items: center;
-    margin-top: 40px;
-  }
-
-  section.company-america-leaders .company-america-leaders__card {
+  /* Figma — 피처드 2열 폭 · 좌 사진(Portrait BG SVG) / 우 서명·텍스트 */
+  section.company-america-leaders .company-america-leaders__card--featured {
     position: relative;
-    flex: 1 0 0;
+    display: flex;
+    flex: 0 0 calc((100% - 72px) / 4 * 2 + 24px);
+    width: calc((100% - 72px) / 4 * 2 + 24px);
     min-width: 0;
     overflow: hidden;
+    aspect-ratio: 708 / 435;
+    /* background: #0d142e url(/pub/img/company/america/leader-card-bg.svg)
+      left center / 50% 100% no-repeat; */
+  }
+
+  section.company-america-leaders .company-america-leaders__card--featured .company-america-leaders__img {
+    flex: 0 0 50%;
+    width: 50%;
+    height: 100%;
+    aspect-ratio: auto;
+    background: transparent;
+  }
+
+  section.company-america-leaders .company-america-leaders__panel {
+    position: relative;
+    display: flex;
+    flex: 0 0 50%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 50%;
+    padding: 40px 30px 26px;
+    box-sizing: border-box;
+    background: url(/pub/img/company/america/leader-featured_02.svg);
+  }
+
+  section.company-america-leaders .company-america-leaders__card--featured .company-america-leaders__meta {
+    position: static;
+    right: auto;
+    left: auto;
+    bottom: auto;
+    align-items: flex-start;
+    text-align: left;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  section.company-america-leaders .company-america-leaders__signature {
+    display: block;
+    width: 140px;
+    max-width: 100%;
+    height: auto;
+    margin-left: auto;
+    pointer-events: none;
+  }
+
+  /* Figma — 하단 4×2 · 342×435 · gap 24 */
+  section.company-america-leaders .company-america-leaders__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    align-items: stretch;
+    margin-top: 24px;
+  }
+
+  /* Figma 7575:83282 — Portrait BG SVG · 342×435 */
+  section.company-america-leaders .company-america-leaders__card {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    background: #0d142e url(/pub/img/company/america/leader-card-bg.svg) center / cover no-repeat;
+  }
+
+  section.company-america-leaders .company-america-leaders__card.company-america-leaders__card--featured {
+    background: #0d142e url(/pub/img/company/america/leader-card-bg.svg) / 50% 100% no-repeat;
   }
 
   section.company-america-leaders .company-america-leaders__img {
     position: relative;
-    height: 430px;
+    aspect-ratio: 342 / 435;
     overflow: hidden;
+    background: transparent;
   }
 
   section.company-america-leaders .company-america-leaders__img img {
@@ -3077,49 +3290,31 @@ margin-top: 40px;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center top;
+  }
+
+  section.company-america-leaders .company-america-leaders__img img.company-america-leaders__img-el--mo {
+    display: none;
   }
 
   section.company-america-leaders .company-america-leaders__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgb(12 22 37 / 0%) 63.372%,
-      #0c1625 100%
-    );
+    background: linear-gradient(180deg, rgb(13 20 46 / 0%) 50%, #0d142e 100%);
     pointer-events: none;
-  }
-
-  section.company-america-leaders
-    .company-america-leaders__card--gradient-65
-    .company-america-leaders__overlay {
-    background: linear-gradient(
-      180deg,
-      rgb(12 22 37 / 0%) 65.122%,
-      #0c1625 100%
-    );
   }
 
   section.company-america-leaders .company-america-leaders__meta {
     position: absolute;
     z-index: 1;
     right: auto;
-    bottom: 28px;
+    bottom: 26px;
     left: 30px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
     max-width: calc(100% - 60px);
     color: #fff;
-  }
-
-  section.company-america-leaders .company-america-leaders__role {
-    margin: 0;
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 23px;
-    opacity: 0.7;
   }
 
   section.company-america-leaders .company-america-leaders__name {
@@ -3128,6 +3323,16 @@ margin-top: 40px;
     font-weight: 600;
     line-height: 32px;
     letter-spacing: -0.01em;
+  }
+
+  section.company-america-leaders .company-america-leaders__role {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.02em;
+    opacity: 0.7;
+    white-space: pre-line;
   }
 
   section.company-mission {
@@ -3540,7 +3745,8 @@ margin-top: 40px;
     overflow: hidden;
   }
 
-  section.company-america-shaping .company-america-shaping__img img {
+  section.company-america-shaping .company-america-shaping__img img,
+  section.company-america-shaping .company-america-shaping__img video {
     display: block;
     width: 100%;
     height: 100%;
@@ -3550,11 +3756,7 @@ margin-top: 40px;
   section.company-america-shaping .company-america-shaping__img-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgb(0 0 0 / 0%) 68.16%,
-      rgb(0 0 0 / 40%) 100%
-    );
+    background: linear-gradient(180deg, rgb(0 0 0 / 0%) 68.16%, rgb(0 0 0 / 40%) 100%);
     pointer-events: none;
   }
 
@@ -3583,8 +3785,8 @@ margin-top: 40px;
     line-height: 34px;
     letter-spacing: -0.01em;
   }
-  section.company-america-shaping .company-america-shaping__tit span{
-    display:block
+  section.company-america-shaping .company-america-shaping__tit span {
+    display: block;
   }
   section.company-america-shaping .company-america-shaping__location {
     display: flex;
@@ -3890,6 +4092,12 @@ margin-top: 40px;
     padding-bottom: 0;
   }
 
+  section.company-america-leaders .company-america-leaders__top {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
   section.company-america-leaders .company-about__head .section_tit {
     font-family: jaka;
     font-size: 30px;
@@ -3902,28 +4110,65 @@ margin-top: 40px;
     margin-top: 8px;
   }
 
-  section.company-america-leaders .company-america-leaders__letter {
-    margin-top: 30px;
-    padding-top: 0;
+  /* Figma 7577:151726 — 피처드 세로 풀 카드 · Portrait BG SVG · 서명 오버레이 */
+  section.company-america-leaders .company-america-leaders__card--featured {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 335 / 503;
+    background: #0d142e url(/pub/img/company/america/leader-card-bg-featured-mo.svg) center / cover no-repeat;
   }
 
-  section.company-america-leaders .company-america-leaders__letter-tit {
+  section.company-america-leaders .company-america-leaders__card--featured .company-america-leaders__img {
+    position: absolute;
+    inset: 0;
+    flex: none;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    background: transparent;
+  }
+
+  section.company-america-leaders .company-america-leaders__card--featured .company-america-leaders__img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(13 20 46 / 0%) 55%, #0d142e 100%);
+    pointer-events: none;
+  }
+
+  section.company-america-leaders .company-america-leaders__panel {
+    position: absolute;
+    inset: 0;
+    display: block;
+    flex: none;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+  }
+
+  section.company-america-leaders .company-america-leaders__card--featured .company-america-leaders__meta {
+    position: absolute;
+    right: auto;
+    bottom: 26px;
+    left: 24px;
+    align-items: flex-start;
+    text-align: left;
+    max-width: calc(100% - 48px);
+  }
+
+  section.company-america-leaders .company-america-leaders__signature {
+    position: absolute;
+    top: 65.2%;
+    right: 24px;
+    left: auto;
+    display: block;
+    width: 177px;
+    max-width: 52%;
+    height: auto;
     margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 26px;
-    letter-spacing: -0.01em;
-    color: #222;
-  }
-
-  section.company-america-leaders .company-america-leaders__letter p {
-    margin: 8px 0 0;
-    font-size: 15px;
-    line-height: 23px;
-    color: #222;
-  }
-  section.company-america-leaders .company-america-leaders__letter p + p{
-    margin-top: 0;
+    pointer-events: none;
   }
 
   section.company-america-leaders .company-america-leaders__grid {
@@ -3931,7 +4176,7 @@ margin-top: 40px;
     flex-direction: column;
     gap: 14px;
     align-items: stretch;
-    margin-top: 24px;
+    margin-top: 14px;
   }
 
   section.company-america-leaders .company-america-leaders__card {
@@ -3939,13 +4184,20 @@ margin-top: 40px;
     flex: none;
     width: 100%;
     overflow: hidden;
+    /* Figma Portrait BG — SVG */
+    background: #0d142e url(/pub/img/company/america/leader-card-bg.svg) center / cover no-repeat;
+  }
+
+  section.company-america-leaders .company-america-leaders__card.company-america-leaders__card--featured {
+    background: #0d142e url(/pub/img/company/america/leader-card-bg_02.svg) center / cover no-repeat;
   }
 
   section.company-america-leaders .company-america-leaders__img {
     position: relative;
-    aspect-ratio: 335 / 421;
+    aspect-ratio: 335 / 426;
     height: auto;
     overflow: hidden;
+    background: transparent;
   }
 
   section.company-america-leaders .company-america-leaders__img img {
@@ -3953,25 +4205,19 @@ margin-top: 40px;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center top;
+  }
+
+  section.company-america-leaders .company-america-leaders__img img.company-america-leaders__img-el--pc {
+    display: none;
+  }
+
+  section.company-america-leaders .company-america-leaders__img img.company-america-leaders__img-el--mo {
+    display: block;
   }
 
   section.company-america-leaders .company-america-leaders__overlay {
-    background: linear-gradient(
-      180deg,
-      rgb(12 22 37 / 0%) 50.119%,
-      #0c1625 100%
-    );
-  }
-
-  section.company-america-leaders
-    .company-america-leaders__card--gradient-65
-    .company-america-leaders__overlay {
-    background: linear-gradient(
-      180deg,
-      rgb(12 22 37 / 0%) 50.119%,
-      #0c1625 100%
-    );
+    background: linear-gradient(180deg, rgb(13 20 46 / 0%) 50.119%, #0d142e 100%);
   }
 
   section.company-america-leaders .company-america-leaders__meta {
@@ -3986,19 +4232,22 @@ margin-top: 40px;
     color: #fff;
   }
 
-  section.company-america-leaders .company-america-leaders__role {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
-    opacity: 0.7;
+  section.company-america-leaders .company-america-leaders__name {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 30px;
+    letter-spacing: 0;
   }
 
-  section.company-america-leaders .company-america-leaders__name {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 28px;
-    letter-spacing: 0;
-    margin-top: 2px;
+  section.company-america-leaders .company-america-leaders__role {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.02em;
+    opacity: 0.7;
+    white-space: pre-line;
   }
 
   section.company-mission {
@@ -4422,6 +4671,33 @@ margin-top: 40px;
   }
 }
 
+/* LS ELECTRIC America — tablet 2-col */
+@media (min-width: 600px) and (max-width: 780px) {
+  section.company-america-business .company-america-business__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 20px;
+  }
+
+  section.company-america-leaders .company-america-leaders__top {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  section.company-america-leaders .company-america-leaders__card--featured {
+    display: block;
+    flex: none;
+    width: 100%;
+    aspect-ratio: 335 / 503;
+  }
+
+  section.company-america-leaders .company-america-leaders__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   section.company-mission .company-mission__arrow {
     animation: none;
@@ -4467,6 +4743,10 @@ margin-top: 40px;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  section.company-about-intro .company-about-intro__hero img.company-about-intro__hero-img--mo {
+    display: none;
   }
 
   section.company-about-intro .company-about-intro__text {
@@ -4688,7 +4968,9 @@ margin-top: 40px;
     align-items: stretch;
     /* justify-content: center; */
   }
-section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wrap:first-child{gap: 0;}
+  section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wrap:first-child {
+    gap: 0;
+  }
   section.company-ls-electric-highlights .company-ls-electric-highlights__stat {
     display: flex;
     flex-direction: column;
@@ -4751,8 +5033,7 @@ section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wra
     color: #fff;
   }
 
-  section.company-ls-electric-highlights
-    .company-ls-electric-highlights__stat-suffix--medium {
+  section.company-ls-electric-highlights .company-ls-electric-highlights__stat-suffix--medium {
     padding-bottom: 8px;
     font-family: jaka;
     font-size: 28px;
@@ -4997,9 +5278,9 @@ section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wra
     padding: 150px 0;
     overflow: hidden;
   }
-  section.company-ls-electric-ptt .company-about__head{
+  section.company-ls-electric-ptt .company-about__head {
     max-width: unset;
-}
+  }
   section.company-ls-electric-ptt .company-ls-electric-ptt__bg {
     position: absolute;
     right: 0;
@@ -5037,7 +5318,6 @@ section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wra
     flex-direction: column;
     justify-content: stretch;
   }
-
 
   section.company-ls-electric-ptt .company-ls-electric-ptt__card-img {
     aspect-ratio: 464 / 200;
@@ -5083,10 +5363,10 @@ section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wra
   section.company-ls-electric-rnd {
     padding: 150px 0 0;
   }
-section.company-ls-electric-rnd .company-about__head{
+  section.company-ls-electric-rnd .company-about__head {
     margin-top: 40px;
     max-width: 680px;
-}
+  }
   section.company-ls-electric-rnd .company-ls-electric-rnd__top {
     display: grid;
     grid-template-columns: minmax(0, 680px) minmax(0, 680px);
@@ -5102,9 +5382,9 @@ section.company-ls-electric-rnd .company-about__head{
     line-height: 62px;
     letter-spacing: -0.02em;
   }
-   section.company-ls-electric-rnd .company-about__head .section_desc{
+  section.company-ls-electric-rnd .company-about__head .section_desc {
     margin-top: 20px;
-}
+  }
   section.company-ls-electric-rnd .company-ls-electric-rnd__hero {
     aspect-ratio: 680 / 430;
     overflow: hidden;
@@ -5124,9 +5404,9 @@ section.company-ls-electric-rnd .company-about__head{
     gap: 16px;
     margin-top: 60px;
   }
-  section.company-ls-electric-rnd .company-ls-electric-rnd__item-text{
+  section.company-ls-electric-rnd .company-ls-electric-rnd__item-text {
     max-width: 1024px;
-}
+  }
   section.company-ls-electric-rnd .company-ls-electric-rnd__item {
     display: flex;
     gap: 24px;
@@ -5241,21 +5521,30 @@ section.company-ls-electric-rnd .company-about__head{
     position: relative;
     width: 524px;
     max-width: calc(50% - 166px);
+    min-width: 0;
   }
 
-  section.company-ls-electric-history .company-ls-electric-history__era:nth-child(1) .company-ls-electric-history__era-body {
+  section.company-ls-electric-history
+    .company-ls-electric-history__era:nth-child(1)
+    .company-ls-electric-history__era-body {
     z-index: 1;
   }
 
-  section.company-ls-electric-history .company-ls-electric-history__era:nth-child(2) .company-ls-electric-history__era-body {
+  section.company-ls-electric-history
+    .company-ls-electric-history__era:nth-child(2)
+    .company-ls-electric-history__era-body {
     z-index: 2;
   }
 
-  section.company-ls-electric-history .company-ls-electric-history__era:nth-child(3) .company-ls-electric-history__era-body {
+  section.company-ls-electric-history
+    .company-ls-electric-history__era:nth-child(3)
+    .company-ls-electric-history__era-body {
     z-index: 3;
   }
 
-  section.company-ls-electric-history .company-ls-electric-history__era:nth-child(4) .company-ls-electric-history__era-body {
+  section.company-ls-electric-history
+    .company-ls-electric-history__era:nth-child(4)
+    .company-ls-electric-history__era-body {
     z-index: 4;
   }
 
@@ -5272,7 +5561,7 @@ section.company-ls-electric-rnd .company-about__head{
     position: absolute;
     top: 10px;
     left: 50%;
-    z-index: 2;
+    z-index: 6;
     width: 26px;
     height: 26px;
     margin-left: -13px;
@@ -5280,38 +5569,36 @@ section.company-ls-electric-rnd .company-about__head{
     pointer-events: none;
   }
 
+  /*
+   * Dashed connector to center pin.
+   * 2px below 1280 (main zoom makes 1px vanish); 1px from 1280 up.
+   */
   section.company-ls-electric-history .company-ls-electric-history__era::after {
     content: "";
     position: absolute;
     top: 22px;
-    z-index: 1;
-    width: calc(166px - 5px);
-    height: 1px;
+    left: 50%;
+    z-index: 5;
+    width: 161px;
+    height: 0;
+    border-top: 2px dashed #b9bdc9;
     pointer-events: none;
   }
 
+  @media (min-width: 1280px) {
+    section.company-ls-electric-history .company-ls-electric-history__era::after {
+      border-top-width: 1px;
+    }
+  }
+
   section.company-ls-electric-history .company-ls-electric-history__era--left::after {
-    right: calc(50% + 5px);
-    left: auto;
-    background: repeating-linear-gradient(
-      to left,
-      #b9bdc9 0,
-      #b9bdc9 3px,
-      transparent 3px,
-      transparent 6px
-    );
+    /* from (center - 5px) extending left */
+    transform: translateX(calc(-100% - 5px));
   }
 
   section.company-ls-electric-history .company-ls-electric-history__era--right::after {
-    left: calc(50% + 5px);
-    right: auto;
-    background: repeating-linear-gradient(
-      to right,
-      #b9bdc9 0,
-      #b9bdc9 3px,
-      transparent 3px,
-      transparent 6px
-    );
+    /* from (center + 5px) extending right */
+    transform: translateX(5px);
   }
 
   section.company-ls-electric-history .company-ls-electric-history__era--left .company-ls-electric-history__era-head {
@@ -5874,6 +6161,14 @@ section.company-ls-electric-rnd .company-about__head{
     object-fit: cover;
   }
 
+  section.company-about-intro .company-about-intro__hero img.company-about-intro__hero-img--pc {
+    display: none;
+  }
+
+  section.company-about-intro .company-about-intro__hero img.company-about-intro__hero-img--mo {
+    display: block;
+  }
+
   section.company-about-intro .company-about-intro__text {
     min-height: 0;
     margin-top: 60px;
@@ -6072,8 +6367,7 @@ section.company-ls-electric-rnd .company-about__head{
     gap: 0;
   }
 
-  section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wrap:last-child
-   {
+  section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wrap:last-child {
     margin-bottom: 0;
   }
 
@@ -6148,8 +6442,7 @@ section.company-ls-electric-rnd .company-about__head{
     color: #fff;
   }
 
-  section.company-ls-electric-highlights
-    .company-ls-electric-highlights__stat-suffix--medium {
+  section.company-ls-electric-highlights .company-ls-electric-highlights__stat-suffix--medium {
     padding-bottom: 4px;
     font-family: jaka;
     font-size: 24px;
@@ -6332,12 +6625,7 @@ section.company-ls-electric-rnd .company-about__head{
     z-index: 1;
     width: 1600px;
     height: 1600px;
-    background: radial-gradient(
-      circle at 42% 48%,
-      rgb(120 48 72 / 28%) 0%,
-      rgb(120 48 72 / 8%) 32%,
-      transparent 58%
-    );
+    background: radial-gradient(circle at 42% 48%, rgb(120 48 72 / 28%) 0%, rgb(120 48 72 / 8%) 32%, transparent 58%);
     pointer-events: none;
   }
 
@@ -6463,7 +6751,7 @@ section.company-ls-electric-rnd .company-about__head{
 
   section.company-ls-electric-ptt {
     padding: 70px 0;
-    background: #F5F7FA;
+    background: #f5f7fa;
   }
 
   section.company-ls-electric-ptt .company-ls-electric-ptt__bg {
@@ -6490,22 +6778,21 @@ section.company-ls-electric-rnd .company-about__head{
     margin-top: 30px;
     display: grid;
   }
-  section.company-ls-electric-ptt  article.company-ls-electric-ptt__card{
+  section.company-ls-electric-ptt article.company-ls-electric-ptt__card {
     background: #fff;
   }
   section.company-ls-electric-ptt .company-ls-electric-ptt__card-img {
     flex-shrink: 0;
-    aspect-ratio: auto;
-    height: 144px;
+    aspect-ratio: 335/144;
+    height: fit-content;
     object-fit: cover;
     width: 100%;
   }
- section.company-ls-electric-ptt .company-ls-electric-ptt__card-img img{
-   object-fit:cover;
-   width:100%;
-   height:100%;
-   
- }
+  section.company-ls-electric-ptt .company-ls-electric-ptt__card-img img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
   section.company-ls-electric-ptt .company-ls-electric-ptt__card-body {
     min-height: 0;
     padding: 30px 24px;
@@ -6655,6 +6942,7 @@ section.company-ls-electric-rnd .company-about__head{
     gap: 60px;
     min-height: 0;
     margin-top: 30px;
+    max-width: 390px;
   }
 
   section.company-ls-electric-history .company-ls-electric-history__timeline::before,
@@ -7513,12 +7801,12 @@ section.company-ls-electric-rnd .company-about__head{
     display: none;
   }
 
-  section.company-careers-linkedin .company-careers-linkedin__dim {
+  /* section.company-careers-linkedin .company-careers-linkedin__dim {
     position: absolute;
     inset: 0;
     background: rgb(12 22 37 / 70%);
     pointer-events: none;
-  }
+  } */
 
   section.company-careers-linkedin .company-careers-linkedin__content {
     position: absolute;
@@ -7575,14 +7863,15 @@ section.company-ls-electric-rnd .company-about__head{
     filter: brightness(0) invert(1);
   }
 
-  section.company-careers-linkedin .company-careers-linkedin__panel:hover
-    .company-careers-linkedin__cta {
+  section.company-careers-linkedin .company-careers-linkedin__panel:hover .company-careers-linkedin__cta {
     /* text-decoration: underline; */
     /* text-underline-offset: 2px; */
   }
 
-  section.company-careers-linkedin .company-careers-linkedin__panel:hover
-    .company-careers-linkedin__cta .btn-text-30__icon {
+  section.company-careers-linkedin
+    .company-careers-linkedin__panel:hover
+    .company-careers-linkedin__cta
+    .btn-text-30__icon {
     background: var(--color-accent);
   }
 }
@@ -7856,9 +8145,210 @@ section.company-ls-electric-rnd .company-about__head{
     filter: brightness(0) invert(1);
   }
 
-  section.company-careers-linkedin .company-careers-linkedin__panel:hover
-    .company-careers-linkedin__cta .btn-text-30__icon {
+  section.company-careers-linkedin
+    .company-careers-linkedin__panel:hover
+    .company-careers-linkedin__cta
+    .btn-text-30__icon {
     background: transparent;
   }
 }
 
+/* LS ELECTRIC — card grids tablet 2-col */
+@media (min-width: 600px) and (max-width: 780px) {
+  section.company-ls-electric-business .company-ls-electric-business__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  section.company-ls-electric-ptt .company-ls-electric-ptt__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  section.company-affiliate-list .company-affiliate-list__items {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 20px;
+  }
+
+  section.company-blog-list .company-blog-list__items {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 80px 20px;
+  }
+
+  section.company-blog-list .company-blog-list__item:nth-child(2)::before {
+    display: none;
+  }
+
+  section.company-events-past .company-events-past__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 20px;
+  }
+}
+
+/* TipTap / ProseMirror — article detail content (from global.css) */
+body article.ProseMirror {
+  position: relative;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: break-spaces;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0;
+}
+body article.ProseMirror pre {
+  white-space: pre-wrap;
+}
+body article.ProseMirror li {
+  position: relative;
+}
+body article.ProseMirror-hideselection *::selection {
+  background: transparent;
+}
+body article.ProseMirror-hideselection *::-moz-selection {
+  background: transparent;
+}
+body article.ProseMirror-hideselection {
+  caret-color: transparent;
+}
+body article.ProseMirror-selectednode {
+  outline: 2px solid #8cf;
+}
+body article.ProseMirror li.ProseMirror-selectednode {
+  outline: none;
+}
+body article.ProseMirror li.ProseMirror-selectednode:after {
+  content: "";
+  position: absolute;
+  left: -32px;
+  right: -2px;
+  top: -2px;
+  bottom: -2px;
+  border: 2px solid #8cf;
+  pointer-events: none;
+}
+body article.ProseMirror img.ProseMirror-separator {
+  display: inline !important;
+  border: none !important;
+  margin: 0 !important;
+}
+body article.ProseMirror img {
+  margin: 30px 0;
+}
+body article.ProseMirror:focus {
+  outline: none;
+}
+body article.ProseMirror .placeholder {
+  color: #999;
+}
+body article.ProseMirror h1 {
+  font-size: 2em;
+  font-weight: 700;
+  margin: 0.67em 0;
+}
+body article.ProseMirror h2 {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin: 0.75em 0;
+}
+body article.ProseMirror h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin: 0.83em 0;
+}
+body article.ProseMirror h4 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 1em 0;
+}
+body article.ProseMirror h5 {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 1.2em 0;
+}
+body article.ProseMirror h6 {
+  font-size: 0.9em;
+  font-weight: 600;
+  margin: 1.5em 0;
+}
+body article.ProseMirror ul {
+  list-style: disc;
+  padding-left: 1.5em;
+}
+body article.ProseMirror ol {
+  list-style: decimal;
+  padding-left: 1.5em;
+}
+body article.ProseMirror li {
+  margin: 0.25em 0;
+}
+body article.ProseMirror blockquote {
+  border-left: 3px solid #cbd5e1;
+  padding-left: 1em;
+  color: #64748b;
+  margin: 0.5em 0;
+}
+body article.ProseMirror .tableWrapper {
+  overflow-x: auto;
+}
+body article.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0.5em 0;
+  overflow: hidden;
+}
+body article.ProseMirror td,
+body article.ProseMirror th {
+  border: 1px solid #cbd5e1;
+  padding: 6px 8px;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+  min-width: 100px;
+}
+body article.ProseMirror th {
+  background: #f1f5f9;
+  font-weight: 600;
+  text-align: left;
+}
+body article.ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  z-index: 20;
+  background-color: #93c5fd;
+  pointer-events: none;
+}
+body article.ProseMirror.resize-cursor {
+  cursor: col-resize;
+}
+body article.ProseMirror .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  inset: 0;
+  background: rgba(147, 197, 253, 0.35);
+  pointer-events: none;
+}
+body article.ProseMirror a {
+  color: #2563eb;
+  text-decoration: underline;
+  cursor: pointer;
+}
+body article.ProseMirror p {
+  margin: 15px 0;
+}
+body article.ProseMirror div[data-youtube-video] {
+  max-width: 100%;
+}
+body article.ProseMirror div[data-youtube-video] iframe {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border: 0;
+  border-radius: 4px;
+}

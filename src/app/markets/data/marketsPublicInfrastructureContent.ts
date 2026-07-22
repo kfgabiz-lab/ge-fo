@@ -16,7 +16,7 @@ export const publicInfrastructureHero = {
 
 export const publicInfrastructureIntro = {
   titleLines: ["Reliable Power for", "Critical Infrastructure"],
-  text: "Public infrastructure is the vital foundation of modern society, requiring uncompromising power reliability, intelligent automation, and resilient operational systems. As cities continue to modernize, infrastructure operators face increasing pressure to improve energy efficiency, ensure operational continuity, and embrace digital transformation.\nLS ELECTRIC provides a comprehensive portfolio of low- and medium-voltage power distribution systems, including our industry-leading Susol series circuit breakers, advanced Power Transformers (up to 550kV/800MVA), and the GridSol CARE digital management platform. From government facilities and global transportation hubs to critical water treatment plants and mission-critical healthcare institutions, our integrated solutions are engineered to enhance operational stability and optimize energy usage. By converging advanced electrical technologies with smart ICT-based automation, LS ELECTRIC empowers operators to build safer, smarter, and more sustainable environments for the communities they serve.",
+  text: "Public infrastructure is the vital foundation of modern society, requiring uncompromising power reliability, intelligent automation, and resilient operational systems. As cities continue to modernize, infrastructure operators face increasing pressure to improve energy efficiency, ensure operational continuity, and embrace digital transformation. LS ELECTRIC provides a comprehensive portfolio of low- and medium-voltage power distribution systems, including our industry-leading Susol series circuit breakers, advanced Power Transformers (up to 550kV/800MVA), and the GridSol CARE digital management platform. From government facilities and global transportation hubs to critical water treatment plants and mission-critical healthcare institutions, our integrated solutions are engineered to enhance operational stability and optimize energy usage. By converging advanced electrical technologies with smart ICT-based automation, LS ELECTRIC empowers operators to build safer, smarter, and more sustainable environments for the communities they serve.",
 };
 
 export const publicInfrastructureIndustryTabs: IndustryTab[] = [
@@ -195,26 +195,26 @@ export const publicInfrastructureWhyItems: WhyItem[] = [
   {
     id: "pi-why-1",
     href: "",
-    title: "Technological Innovation",
+    title: "Critical Service Reliability",
     description:
-      "Low-voltage protection devices, power distribution systems, smart electrical rooms, BEMS, and renewable energy solutions",
-    icon: "/img/markets/img_why_01.svg",
+      "LS ELECTRIC delivers resilient power systems that support the uninterrupted operation of essential facilities such as airports, hospitals, water treatment plants, and government buildings.",
+    icon: "/img/markets/public-infrastructure/why/why_01.svg",
   },
   {
     id: "pi-why-2",
     href: "",
-    title: "Operational Optimization",
+    title: "Smart Facility Management",
     description:
-      "Optimized power consumption, reduced operating costs, and improved energy efficiency across building facilities",
-    icon: "/img/markets/img_why_02.svg",
+      "Integrated monitoring and control technologies help public organizations optimize operations, enhance asset performance, and lower lifecycle costs.",
+    icon: "/img/markets/public-infrastructure/why/why_02.svg",
   },
   {
     id: "pi-why-3",
     href: "",
-    title: "Proven Reliability",
+    title: "Sustainable Infrastructure",
     description:
-      "Highly reliable and safe power infrastructure tailored to the demanding requirements of commercial buildings",
-    icon: "/img/markets/img_why_03.svg",
+      "Energy-efficient power solutions, renewable integration, and storage technologies help communities meet sustainability goals while preparing for future growth.",
+    icon: "/img/markets/public-infrastructure/why/why_03.svg",
   },
 ];
 

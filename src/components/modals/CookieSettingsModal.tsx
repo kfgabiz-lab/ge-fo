@@ -79,9 +79,7 @@ export default function CookieSettingsModal({
             {cookieSettingsModal.title}
           </h2>
           <div className="cookie_settings_modal__desc">
-            {cookieSettingsModal.descriptionLines.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
+            <p>{cookieSettingsModal.description}</p>
           </div>
         </div>
         <div className="cookie_settings_modal__actions">

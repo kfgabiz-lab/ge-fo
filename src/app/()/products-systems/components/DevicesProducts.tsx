@@ -57,18 +57,13 @@ export default function DevicesProducts({
                     loading={embedded ? "eager" : "lazy"}
                     decoding="async"
                     src={item.image ?? undefined}
-                    alt={item.title}
+                    alt={item.title.replace(/\n/g, " ")}
                     data-slugkey="device_systems.image"
                     data-slugkey-attr="src"
                   />
                 </div>
                 <h3 className="tit" data-slugkey="category.title">
-                  {item.title.split("\n").map((line, index) => (
-                    <span key={`${item.id}-line-${index}`}>
-                      {index > 0 ? <br /> : null}
-                      {line}
-                    </span>
-                  ))}
+                  <span>{item.title.replace(/\n/g, " ")}</span>
                 </h3>
               </Link>
             );

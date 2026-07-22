@@ -82,7 +82,7 @@ export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelPro
                       >
                         <span className="gnb_search__clear-icon" aria-hidden>
                           <img
-                            src="/ico/ico_clear_12.svg"
+                            src="/ico/ico_clear_12_black.svg"
                             alt=""
                             width={12}
                             height={12}

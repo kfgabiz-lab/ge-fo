@@ -91,6 +91,15 @@ STEP 0-1. 페이지 이관 (fo-page-migrator) — ls-publish 소스를 그대로
 STEP 0-2. 공통화 (fo-common-refactor) — 반복 UI/로직을 공통 컴포넌트·함수로 추출
          → 마무리 시점에 ls-publish와 fo를 브라우저로 나란히 열어 시각 비교한다. fo 단독 렌더 확인(SSR 200, 콘솔 에러 없음)만으로는 통과하지만, 헤더/푸터 같은 기존 공용 컴포넌트에 이미 있던 CSS 드리프트(예: 고정폭 값 하나가 달라 텍스트가 줄바꿈되는 것)는 나란히 비교해야 드러난다
 
+STEP 0-3. 기존 이관 페이지 재동기화 — ls-publish가 STEP 0-1 이후에 추가로 갱신된 경우
+         → 트리거: `ls-publish`가 `git subtree pull`로 갱신된 후, 이미 STEP 0-1/0-2를 마친 페이지에 반영할 변경분이 있는지 확인할 때
+         → 1) 변경 범위 파악: `git show <squash-commit> --stat`으로 이번 pull에서 바뀐 ls-publish 파일 목록 확보
+         → 2) fo 대응 파일 분류: A) 이미 이관+공통화됨 → diff 병합 대상 / B) 아직 이관 안 됨 → STEP 0-0·0-1로 별도 진행 / C) fo가 이미 BE(PageData/slug) 연동으로 전환해 정적 콘텐츠가 무의미해진 파일 → 반영 불필요(바인딩 안 된 fallback/mock만 예외적으로 반영 검토)
+         → 3) 3-way 병합: base=이전 pull 시점 ls-publish(`git show <squash>^:<path>`), other=이번 pull 결과(`git show <squash>:<path>`), ours=fo 현재 파일. ⚠️ fo 파일은 CRLF, `git show` 출력은 LF라서 그대로 병합하면 줄바꿈 차이로 파일 전체가 가짜 충돌 처리된다 — 반드시 LF로 통일해서 병합 판단(`tr -d '\r'`)하고, 최종 결과만 CRLF로 되돌려(`sed 's/$/\r/'`) 저장한다. `git merge-file --stdout <ours> <base> <other>`로 드라이런해서 충돌 유무부터 파일별로 구분
+         → 4) 충돌 처리: 충돌이 "fo가 같은 줄에 data-slugkey 등 속성을 추가해서 줄정렬만 어긋난 것"인지 먼저 확인(콘텐츠 값 자체는 안 겹침 → fo 속성은 유지하며 값만 반영). 파일이 구조적으로 크게 갈라진 경우(예: 페이지별 커스터마이징이 오래 누적된 CSS 파일)는 개별 충돌 단위로 좌우 선택하면 엉뚱한 위치에 값이 붙는 오귀속 위험이 크다 — 이땐 "ls-publish 신버전 전체를 베이스로 채택하고 그 위에 fo만의 예외(라우팅 차이, 커스텀 레이아웃 등)를 다시 얹는" 방식이 더 안전하고 빠르다. 자산(이미지 등) 경로가 바뀌면 `ls-publish/public/...`에 실제 파일이 있는지 확인 후 `fo/public/...`로 복사
+         → 5) 다른 세션이 같은 파일에 미커밋 변경을 갖고 있으면 그 파일은 건드리지 말고 스킵한 뒤 사용자에게 보고(자동으로 충돌 해결 시도 금지)
+         → 6) 반영 후에는 항상 충돌마커(`<<<<<<<`/`=======`/`>>>>>>>`) 잔존 여부와 중괄호(`{`/`}`) 개수 균형을 재확인한다
+
 [slug 개념 — 데이터 바인딩. 본 가이드가 다루는 범위]
 STEP 1. 마크업 태깅 (fo-slug-analyzer)
         → 대상 tsx 파일을 분석해서 실제 JSX에 data-slug-repeat/data-slug-item/data-slugkey(+data-slugkey-attr) "구조"를 직접 추가

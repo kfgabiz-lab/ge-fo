@@ -1,5 +1,5 @@
 "use client";
-
+import { fetchApi } from "@/lib/api";
 import {
   Checkbox,
   ClickAwayListener,
@@ -12,6 +12,8 @@ import { useCallback, useEffect, useState } from "react";
 import PrivacyPolicyModal from "@/components/modals/PrivacyPolicyModal";
 import { footerAffiliateOptions } from "@/data/footerAffiliateOptions";
 import "@/assets/css/components/MainFooter.css";
+import CookiePreferencesModal from "@/components/modals/CookiePreferencesModal";
+import CookieSettingsModal from "@/components/modals/CookieSettingsModal";
 
 const interestOptions = [
   { value: "LV & MV Power Solutions", defaultChecked: false },
@@ -23,7 +25,7 @@ const legalLinks = [
   { label: "Privacy Policy", opensPrivacyModal: true },
   { label: "Terms of Use", href: "" },
   { label: "Cookie Policy", href: "" },
-  { label: "Change Your Cookie Setting", href: "" },
+  { label: "Change Your Cookie Setting", opensCookieSettingsModal: true },
 ] as const;
 
 const snsLinks = [
@@ -90,6 +92,8 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
   );
   const [affiliateOpen, setAffiliateOpen] = useState(false);
   const [privacyPolicyOpen, setPrivacyPolicyOpen] = useState(false);
+  const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
+  const [cookiePreferencesOpen, setCookiePreferencesOpen] = useState(false);
 
   const closeAffiliateMenu = useCallback(() => {
     setAffiliateOpen(false);
@@ -121,8 +125,22 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
     );
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const payload = {
+      email,
+      areasOfInterest: interests.join(", "),
+      userTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    };
+
+    await fetchApi("/api/v1/fo/newsletter/insights", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
   };
 
   const handleAffiliateSelect = (value: string) => {
@@ -131,6 +149,11 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       window.open(option.href, "_blank", "noopener,noreferrer");
     }
     closeAffiliateMenu();
+  };
+
+  const handleCookiePreferencesOpen = () => {
+    setCookieSettingsOpen(false);
+    setCookiePreferencesOpen(true);
   };
 
   return (
@@ -276,19 +299,27 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
             >
               {legalLinks.map((item, index) => (
                 <span key={item.label} className="main_footer_02__legal-item">
-                  {"href" in item ? (
-                    <Link href={item.href} className="main_footer_02__legal-link">
-                      {item.label}
-                    </Link>
-                  ) : (
-                    <button
-                      type="button"
-                      className="main_footer_02__legal-link"
-                      onClick={() => setPrivacyPolicyOpen(true)}
-                    >
-                      {item.label}
-                    </button>
-                  )}
+                {"opensPrivacyModal" in item ? (
+                  <button
+                    type="button"
+                    className="main_footer_02__legal-link"
+                    onClick={() => setPrivacyPolicyOpen(true)}
+                  >
+                    {item.label}
+                  </button>
+                ) : "opensCookieSettingsModal" in item ? (
+                  <button
+                    type="button"
+                    className="main_footer_02__legal-link"
+                    onClick={() => setCookieSettingsOpen(true)}
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <Link href={item.href} className="main_footer_02__legal-link">
+                    {item.label}
+                  </Link>
+                )}
                   {index < legalLinks.length - 1 ? (
                     <span
                       className="main_footer_02__legal-sep"
@@ -321,6 +352,15 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       <PrivacyPolicyModal
         open={privacyPolicyOpen}
         onClose={() => setPrivacyPolicyOpen(false)}
+      />
+      <CookieSettingsModal
+        open={cookieSettingsOpen}
+        onClose={() => setCookieSettingsOpen(false)}
+        onSettings={handleCookiePreferencesOpen}
+      />
+      <CookiePreferencesModal
+        open={cookiePreferencesOpen}
+        onClose={() => setCookiePreferencesOpen(false)}
       />
     </footer>
   );

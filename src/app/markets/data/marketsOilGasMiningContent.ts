@@ -188,26 +188,26 @@ export const oilGasMiningWhyItems: WhyItem[] = [
   {
     id: "ogm-why-1",
     href: "",
-    title: "Technological Innovation",
+    title: "Heavy-Duty Reliability",
     description:
-      "Low-voltage protection devices, power distribution systems, smart electrical rooms, BEMS, and renewable energy solutions",
-    icon: "/img/markets/img_why_01.svg",
+      "LS ELECTRIC's rugged electrical infrastructure solutions are engineered to withstand harsh operating conditions while maintaining safe and dependable performance.",
+    icon: "/img/markets/oil-gas-mining/why/why_01.svg",
   },
   {
     id: "ogm-why-2",
     href: "",
-    title: "Operational Optimization",
+    title: "Energy-Efficient Process Control",
     description:
-      "Optimized power consumption, reduced operating costs, and improved energy efficiency across building facilities",
-    icon: "/img/markets/img_why_02.svg",
+      "Intelligent automation and motor control technologies help optimize processes, reduce energy consumption, and improve overall operational efficiency.",
+    icon: "/img/markets/oil-gas-mining/why/why_02.svg",
   },
   {
     id: "ogm-why-3",
     href: "",
-    title: "Proven Reliability",
+    title: "Unified Power & Automation",
     description:
-      "Highly reliable and safe power infrastructure tailored to the demanding requirements of commercial buildings",
-    icon: "/img/markets/img_why_03.svg",
+      "A fully integrated portfolio of electrical and automation solutions simplifies project execution while improving plant-wide visibility and control.",
+    icon: "/img/markets/oil-gas-mining/why/why_03.svg",
   },
 ];
 

@@ -179,7 +179,7 @@ export const motorControlMarkets: DevicesMarketItem[] = [
   {
     id: "mkt-6",
     href: "/markets/commercial-residential",
-    image: "/img/main/card_06.png",
+    image: "/img/main/card_06.webp",
     title: "Commercial & Residential",
     tagline: "Optimized Energy for Smart Buildings",
     description:
@@ -191,9 +191,9 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
   {
     id: "help-1",
     href: "",
-    title: "Request Quote & Order",
+    title: "Request a Quote or Place an Order",
     description:
-      "Get detailed specifications, request custom pricing, and manage your orders seamlessly through our dedicated sales platform.",
+      "Get pricing, review technical specifications, using our sales portal for the right LS ELECTRIC solution.",
     cta: "Go to Connect Portal",
     ctaIcon: "link",
     image: "/img/devices-systems/devices_help_01.jpg",
@@ -201,9 +201,9 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
   {
     id: "help-2",
     href: "",
-    title: "Find a Local Distributor",
+    title: "Find an Authorized Distributor",
     description:
-      "Search our global network to locate authorized LS ELECTRIC distributors and sales representatives in your area.",
+      "Connect with an authorized LS ELECTRIC distributor or sales representative serving your area.",
     cta: "Where to Buy",
     ctaIcon: "arrow",
     image: "/img/devices-systems/devices_help_02.jpg",
@@ -211,9 +211,9 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
   {
     id: "help-3",
     href: "",
-    title: "Technical Support & Service",
+    title: "Get Technical Support & Service",
     description:
-      "Need installation, commissioning, or maintenance? Submit a service ticket to our expert engineering team for rapid technical assistance.",
+      "Keep your equipment operating safely and reliably with expert support for installation, maintenance, and repairs.",
     cta: "Go to G-ICS",
     ctaIcon: "link",
     image: "/img/devices-systems/devices_help_03.jpg",

@@ -36,7 +36,11 @@ export default function MarketsSmartGrid({
           <p className="section_desc">
             {descriptionLines.map((line, index) => (
               <span key={line}>
-                {index > 0 ? <br /> : null}
+                {index > 0 ? (
+                  <>
+                    <br />{" "}
+                  </>
+                ) : null}
                 {line}
               </span>
             ))}
@@ -51,7 +55,11 @@ export default function MarketsSmartGrid({
               <h3 className="markets_smart_grid__block_tit">
                 {useCasesTitleLines.map((line, index) => (
                   <span key={line}>
-                    {index > 0 ? <br /> : null}
+                    {index > 0 ? (
+                      <>
+                        <br />{" "}
+                      </>
+                    ) : null}
                     {line}
                   </span>
                 ))}
@@ -80,7 +88,11 @@ export default function MarketsSmartGrid({
               <h3 className="markets_smart_grid__block_tit">
                 {operationTitleLines.map((line, index) => (
                   <span key={line}>
-                    {index > 0 ? <br /> : null}
+                    {index > 0 ? (
+                      <>
+                        <br />{" "}
+                      </>
+                    ) : null}
                     {line}
                   </span>
                 ))}

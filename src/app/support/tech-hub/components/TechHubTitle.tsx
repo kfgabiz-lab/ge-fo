@@ -6,7 +6,7 @@ export default function TechHubTitle() {
     <SupportPageTitle
       id="support-tech-hub-title"
       rootClass="support_tech_hub_title"
-      title={techHubPage.titleLines}
+      title={techHubPage.title}
       description={techHubPage.description}
     />
   );

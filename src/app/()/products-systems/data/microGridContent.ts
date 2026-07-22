@@ -96,7 +96,7 @@ export type MicroGridHighlightItem = {
 };
 
 export const microGridWhySection = {
-  title: "Highlights &\nCapabilities",
+  title: "Highlights & Capabilities",
   items: [
     {
       id: "why-1",

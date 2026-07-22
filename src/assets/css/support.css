@@ -3021,7 +3021,13 @@ section.support_download_contents.devices_product_downloads--center.devices_prod
     padding-right: 20px;
   }
 
-  /* Title — see support_page_title (common) */
+  /* Title — see support_page_title (common)
+     Figma 6858:160491 — MO: wrap after "LS ELECTRIC" via max-width */
+  main.support-page--tech-hub
+    section.support_page_title.support_tech_hub_title
+    .support_page_title__heading {
+    max-width: 230px;
+  }
 
   section.support_tech_hub_search {
     padding: 40px 0 0;

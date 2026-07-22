@@ -1,5 +1,4 @@
 import {
-  marketsBenefitImages,
   type BenefitItem,
   type IndustryTab,
   type ProductItem,
@@ -21,10 +20,8 @@ export const powerGridIntro = {
     "Enabling Resilient and Efficient",
     "Power Networks with Smart Grid & Energy Solutions",
   ],
-  paragraphs: [
-    "LS ELECTRIC supports the evolving power grid ecosystem with advanced power and automation solutions including Power Generation, Transmission & Distribution, Microgrids, BESS, and Renewable Energy. Our comprehensive portfolio ensures stable and efficient energy flow across the grid, from centralized generation to distributed energy resources.",
-    "With intelligent grid technologies, digital monitoring systems, and high-reliability equipment, we enhance grid resilience, optimize energy efficiency, and enable seamless integration of renewable and storage systems. LS ELECTRIC empowers utilities and operators to achieve sustainable, flexible, and future-ready energy infrastructure.",
-  ],
+  text:
+    "LS ELECTRIC supports the evolving power grid ecosystem with advanced power and automation solutions including Power Generation, Transmission & Distribution, Microgrids, BESS, and Renewable Energy. Our comprehensive portfolio ensures stable and efficient energy flow across the grid, from centralized generation to distributed energy resources. With intelligent grid technologies, digital monitoring systems, and high-reliability equipment, we enhance grid resilience, optimize energy efficiency, and enable seamless integration of renewable and storage systems. LS ELECTRIC empowers utilities and operators to achieve sustainable, flexible, and future-ready energy infrastructure.",
 };
 
 export const powerGridIndustryTabs: IndustryTab[] = [
@@ -169,7 +166,7 @@ export const powerGridBenefits: BenefitItem[] = [
       "LS ELECTRIC ensures stable and uninterrupted power flow across generation, transmission, and distribution networks, supporting critical infrastructure and utility operations.",
     capabilities:
       "High-performance switchgear, protection relays, fault detection systems, and grid stabilization solutions for reliable power delivery",
-    image: marketsBenefitImages.benefit05,
+    image: "/img/markets/power-grid/benefits/benefit_01.jpg",
   },
   {
     id: "pg-b2",
@@ -179,7 +176,7 @@ export const powerGridBenefits: BenefitItem[] = [
       "From utilities to microgrids, LS ELECTRIC enables intelligent grid management through advanced automation and real-time monitoring technologies.",
     capabilities:
       "SCADA systems, EMS/DMS platforms, real-time monitoring, and integrated automation for optimized grid operation",
-    image: marketsBenefitImages.benefit10,
+    image: "/img/markets/power-grid/benefits/benefit_02.jpg",
     reverse: true,
   },
   {
@@ -190,7 +187,7 @@ export const powerGridBenefits: BenefitItem[] = [
       "Supporting the transition to clean energy, LS ELECTRIC provides solutions that seamlessly integrate renewables and energy storage systems into the grid.",
     capabilities:
       "BESS solutions, power conversion systems (PCS), renewable interconnection technologies, and grid balancing solutions",
-    image: marketsBenefitImages.benefit09,
+    image: "/img/markets/power-grid/benefits/benefit_03.jpg",
   },
   {
     id: "pg-b4",
@@ -200,7 +197,7 @@ export const powerGridBenefits: BenefitItem[] = [
       "Designed for diverse applications including utilities, microgrids, and distributed energy systems, LS ELECTRIC solutions offer scalable and adaptable power infrastructure.",
     capabilities:
       "Modular substations, microgrid solutions, distribution systems, and flexible grid architecture for evolving energy demands",
-    image: marketsBenefitImages.benefit04,
+    image: "/img/markets/power-grid/benefits/benefit_04.jpg",
     reverse: true,
   },
 ];
@@ -264,26 +261,26 @@ export const powerGridWhyItems: WhyItem[] = [
   {
     id: "pg-why-1",
     href: "",
-    title: "Technological Innovation",
+    title: "Utility Infrastructure Expertise",
     description:
-      "Low-voltage protection devices, power distribution systems, smart electrical rooms, BEMS, and renewable energy solutions",
-    icon: "/img/markets/img_why_01.svg",
+      "With decades of experience in transmission and distribution systems, LS ELECTRIC provides the reliable foundation utilities need to modernize and strengthen grid operations.",
+    icon: "/img/markets/power-grid/why/why_01.svg",
   },
   {
     id: "pg-why-2",
     href: "",
-    title: "Operational Optimization",
+    title: "Renewable & ESS Integration",
     description:
-      "Optimized power consumption, reduced operating costs, and improved energy efficiency across building facilities",
-    icon: "/img/markets/img_why_02.svg",
+      "We help utilities seamlessly integrate renewable energy, battery storage, and distributed energy resources while maintaining grid stability and performance.",
+    icon: "/img/markets/power-grid/why/why_02.svg",
   },
   {
     id: "pg-why-3",
     href: "",
-    title: "Proven Reliability",
+    title: "Intelligent Grid Operations",
     description:
-      "Highly reliable and safe power infrastructure tailored to the demanding requirements of commercial buildings",
-    icon: "/img/markets/img_why_03.svg",
+      "Advanced grid management and automation technologies provide real-time visibility, faster decision-making, and improved system reliability.",
+    icon: "/img/markets/power-grid/why/why_03.svg",
   },
 ];
 

@@ -56,7 +56,7 @@ export const servicesMegaMenu: GnbSimpleMegaMenu = {
         },
         {
           id: "request-for-training",
-          title: "Request for Training",
+          title: "Training Request",
           description: "Submit a request for custom training",
           href: "/services/request-for-training",
         },

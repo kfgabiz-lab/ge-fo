@@ -17,8 +17,7 @@ export const industrialHero = {
 export const industrialIntro = {
   titleLines: ["Powering Smart &", "Efficient Industrial Innovation"],
   paragraphs: [
-    "LS ELECTRIC empowers industrial sectors—including Automotive, Semiconductor, Machinery, and Food & Beverage—with advanced automation and power solutions. From PLCs and drives to smart factory systems, we deliver precision, efficiency, and reliability.",
-    "Our data-driven technologies optimize productivity, reduce downtime, and support sustainable, high-performance operations.",
+    "LS ELECTRIC empowers industrial sectors—including Automotive, Semiconductor, Machinery, and Food & Beverage—with advanced automation and power solutions. From PLCs and drives to smart factory systems, we deliver precision, efficiency, and reliability. Our data-driven technologies optimize productivity, reduce downtime, and support sustainable, high-performance operations.",
   ],
 };
 
@@ -223,26 +222,26 @@ export const industrialWhyItems: WhyItem[] = [
   {
     id: "ind-why-1",
     href: "",
-    title: "Technological Innovation",
+    title: "Factory Automation Excellence",
     description:
-      "High-performance PLCs, AC drives, servo systems, smart factory platforms, and industrial networking solutions",
-    icon: "/img/markets/img_why_01.svg",
+      "LS ELECTRIC offers a comprehensive automation portfolio that enables manufacturers to streamline operations and improve process consistency across the production floor.",
+    icon: "/img/markets/industrial/why/why_01.svg",
   },
   {
     id: "ind-why-2",
     href: "",
-    title: "Operational Optimization",
+    title: "Productivity Optimization",
     description:
-      "Optimized production performance, reduced downtime, and improved energy efficiency across manufacturing operations",
-    icon: "/img/markets/img_why_02.svg",
+      "Advanced control, monitoring, and drive technologies help maximize equipment performance, increase throughput, and reduce operational downtime.",
+    icon: "/img/markets/industrial/why/why_02.svg",
   },
   {
     id: "ind-why-3",
     href: "",
-    title: "Proven Reliability",
+    title: "Smart Factory Innovation",
     description:
-      "Highly reliable automation and power solutions tailored to the demanding requirements of industrial production environments",
-    icon: "/img/markets/img_why_03.svg",
+      "Digitalization, connected technologies, and data-driven insights empower manufacturers to accelerate their Industry 4.0 transformation initiatives.",
+    icon: "/img/markets/industrial/why/why_03.svg",
   },
 ];
 

@@ -3,6 +3,7 @@ import CompanyAboutIntroSection from "./CompanyAboutIntroSection";
 import CompanyAboutSectionHead from "./CompanyAboutSectionHead";
 import CompanyAboutTitleSection from "./CompanyAboutTitleSection";
 import CompanyAmericaIntroStats from "./CompanyAmericaIntroStats";
+import CompanyAmericaShapingVideo from "./CompanyAmericaShapingVideo";
 import CompanyFollowSection from "./CompanyFollowSection";
 import CompanyMissionSection from "./CompanyMissionSection";
 import {
@@ -39,7 +40,11 @@ function ShapingBlock({ block }: { block: AmericaShapingBlock }) {
   return (
     <article className="company-america-shaping__block">
       <div className="company-america-shaping__img">
-        <img loading="lazy" decoding="async" src={block.image} alt="" />
+        {block.video ? (
+          <CompanyAmericaShapingVideo src={block.video} poster={block.image} />
+        ) : (
+          <img loading="lazy" decoding="async" src={block.image} alt="" />
+        )}
         <span className="company-america-shaping__img-overlay" aria-hidden />
       </div>
       <div className="company-america-shaping__panel">
@@ -295,40 +300,77 @@ function AmericaOperateSection() {
 }
 
 function AmericaLeadersSection() {
+  const featured = americaLeaders.featured;
+
   return (
     <section className="company-america-leaders">
       <div className="inner">
-        <CompanyAboutSectionHead
-          title={americaLeaders.title}
-          description={americaLeaders.description}
-        />
-        <div className="company-america-leaders__letter">
-          <h3 className="company-america-leaders__letter-tit">
-            {americaLeaders.letterTitle}
-          </h3>
-          {americaLeaders.letterBody.map((line) => (
-            <p key={line.slice(0, 48)}>{line}</p>
-          ))}
+        <div className="company-america-leaders__top">
+          <CompanyAboutSectionHead
+            title={americaLeaders.title}
+            description={americaLeaders.description}
+          />
+          <article className="company-america-leaders__card company-america-leaders__card--featured">
+            <div className="company-america-leaders__img">
+              {featured.imageMobile ? (
+                <>
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={featured.image}
+                    alt=""
+                    className="company-america-leaders__img-el company-america-leaders__img-el--pc"
+                  />
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={featured.imageMobile}
+                    alt=""
+                    className="company-america-leaders__img-el company-america-leaders__img-el--mo"
+                  />
+                </>
+              ) : (
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={featured.image}
+                  alt=""
+                />
+              )}
+            </div>
+            <div className="company-america-leaders__panel">
+              {featured.signature ? (
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={featured.signature}
+                  alt=""
+                  className="company-america-leaders__signature"
+                  aria-hidden
+                />
+              ) : null}
+              <div className="company-america-leaders__meta">
+                <p className="company-america-leaders__name">{featured.name}</p>
+                <p className="company-america-leaders__role">{featured.role}</p>
+              </div>
+            </div>
+          </article>
         </div>
         <div className="company-america-leaders__grid">
           {americaLeaders.items.map((leader) => (
-            <article
-              key={leader.id}
-              className={[
-                "company-america-leaders__card",
-                leader.gradientStop === "65.122" &&
-                  "company-america-leaders__card--gradient-65",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-            >
+            <article key={leader.id} className="company-america-leaders__card">
               <div className="company-america-leaders__img">
-                <img loading="lazy" decoding="async" src={leader.image} alt="" />
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={leader.image}
+                  alt=""
+                />
                 <span className="company-america-leaders__overlay" aria-hidden />
               </div>
               <div className="company-america-leaders__meta">
-                <p className="company-america-leaders__role">{leader.role}</p>
                 <p className="company-america-leaders__name">{leader.name}</p>
+                <p className="company-america-leaders__role">{leader.role}</p>
               </div>
             </article>
           ))}
@@ -373,4 +415,3 @@ export default function CompanyAmericaPage({ previewSection }: CompanyAmericaPag
     </main>
   );
 }
-

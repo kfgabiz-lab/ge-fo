@@ -4,16 +4,18 @@
 // - 데이터 없거나 개별 필드 비어 있으면 정적 기본값 폴백(화면 깨짐 방지).
 import type { ProductDetail } from "./productDetailContent";
 import { fetchProductDetailBySlug, mapHwProductData } from "./productsSystemsData";
+import { getYoutubeIdFromUrl } from "@/lib/youtubeEmbed";
 
+// 병합된 상세 + productId(FAQ 동적 조회 키). row 없으면 productId:null → 호출부 FAQ 폴백.
 export async function buildHwProductDetail(
   slug: string,
   base: ProductDetail,
-): Promise<ProductDetail> {
+): Promise<{ detail: ProductDetail; productId: number | null }> {
   const row = await fetchProductDetailBySlug(slug);
-  if (!row) return base;
+  if (!row) return { detail: base, productId: null };
 
   const data = mapHwProductData(row);
-  return {
+  const detail: ProductDetail = {
     ...base,
     // 히어로 메인 제목 슬롯(series) = product.product_name
     series: data.name || base.series,
@@ -31,5 +33,10 @@ export async function buildHwProductDetail(
             description: f.content,
           }))
         : base.keyFeatures,
+    // Video: product_etc.video(URL)에서 id 추출, 실패 시 정적 기본값 폴백
+    youtubeVideoId: getYoutubeIdFromUrl(data.video) || base.youtubeVideoId,
+    // Configurator: product_etc.connect_portal 있으면 사용, 없으면 정적 기본값
+    configuratorHref: data.connectPortal || base.configuratorHref,
   };
+  return { detail, productId: Number(row._id) };
 }

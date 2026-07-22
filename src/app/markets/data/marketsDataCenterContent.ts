@@ -158,7 +158,7 @@ export const dataCenterBenefits: BenefitItem[] = [
       "Uninterrupted operation and selective fault isolation for mission-critical power supply.",
     capabilities:
       "We provide ultra-high-voltage substation equipment (up to 154kV) and Gas Insulated Switchgear (GIS) to ensure stable interconnection with the utility grid.",
-    image: "/img/markets/img_benefit_01.png",
+    image: "/img/markets/data-center/benefits/benefit_01.jpg",
   },
   {
     id: "dc-b2",
@@ -168,7 +168,7 @@ export const dataCenterBenefits: BenefitItem[] = [
       "The first and only UL-certified full-lineup supplier in Asia, ensuring full compliance with North American local regulations.",
     capabilities:
       "We provide a full lineup of UL-certified medium-voltage (MV) and low-voltage (LV) switchgear, along with energy-efficient cast resin transformers.",
-    image: "/img/markets/img_benefit_02.png",
+    image: "/img/markets/data-center/benefits/benefit_02.jpg",
     reverse: true,
   },
   {
@@ -179,7 +179,7 @@ export const dataCenterBenefits: BenefitItem[] = [
       "Proven with over 85% market share in Korea, delivering mission-critical reliability and rapid response capability.",
     capabilities:
       "An integrated emergency power system including high-performance UPS (up to 500kVA FAT capacity), STS, and a synchronized CTTS generator transfer system.",
-    image: "/img/markets/img_benefit_03.png",
+    image: "/img/markets/data-center/benefits/benefit_03.jpg",
   },
   {
     id: "dc-b4",
@@ -189,7 +189,7 @@ export const dataCenterBenefits: BenefitItem[] = [
       "Real-time monitoring and autonomous HVAC optimization through 3D digital twin visualization.",
     capabilities:
       "A next-generation platform (Beyond Cube) capable of processing one million data points per second, with AI-based predictive diagnostics.",
-    image: "/img/markets/img_benefit_04.png",
+    image: "/img/markets/data-center/benefits/benefit_04.jpg",
     reverse: true,
   },
 ];
@@ -198,25 +198,25 @@ export const dataCenterWhyItems: WhyItem[] = [
   {
     id: "dc-why-1",
     href: "",
-    title: "Fast deployment & response",
+    title: "Mission-Critical Reliability",
     description:
-      "Extensive references in the North American market (including Big Tech companies and energy corporations)",
+      "LS ELECTRIC delivers highly reliable power distribution, protection, and monitoring solutions that help ensure continuous uptime for hyperscale, colocation, and AI-driven data center environments.",
     icon: "/img/markets/data-center/why/why_01.svg",
   },
   {
     id: "dc-why-2",
     href: "",
-    title: "Proven reliability",
+    title: "AI-Ready Scalability",
     description:
-      "Extensive references in the North American market (including Big Tech companies and energy corporations)",
+      "From traditional facilities to next-generation AI data centers, LS ELECTRIC provides scalable electrical infrastructure designed to support growing power densities and future capacity expansion.",
     icon: "/img/markets/data-center/why/why_02.svg",
   },
   {
     id: "dc-why-3",
     href: "",
-    title: "Energy efficiency",
+    title: "Integrated Energy Intelligence",
     description:
-      "Up to 40% reduction in energy consumption (applicable to HVAC Optimal Free Cooling solutions within data centers)",
+      "By combining power infrastructure with advanced monitoring and energy management platforms, LS ELECTRIC enables operators to improve efficiency, visibility, and operational control.",
     icon: "/img/markets/data-center/why/why_03.svg",
   },
 ];

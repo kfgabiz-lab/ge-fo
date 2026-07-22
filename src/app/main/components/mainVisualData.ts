@@ -1,13 +1,11 @@
 // 메인 히어로 영역(VideoSwiper / BannerSwiper) 데이터 조회 헬퍼
 // - 서버 컴포넌트(MainVisual)에서 호출하여 결과를 각 클라이언트 컴포넌트에 props 로 전달
 // - 설계 문서: fo/docs/dev/main/video-swiper.md, fo/docs/dev/main/banner-swiper.md
+// codes(공통코드) 조회는 page-data slug 조회가 아니므로 fetchApi 직접 사용(리팩터 대상 아님)
 import { fetchApi } from "@/lib/api";
-import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
-
-// bo-api page-data 응답(Spring Data Page) 공통 형태
-interface PageDataResponse {
-  content: PageDataItem[];
-}
+import { pickField } from "@/lib/pageData";
+// page-data slug 조회는 공통 조회+매핑 계층(fetchData)으로 통일 — 목록 브랜치는 res.content가 이미 flatten된 row 배열
+import { fetchData } from "@/lib/pageDataApi";
 
 // ---------------- hero-data (VideoSwiper) ----------------
 
@@ -31,13 +29,15 @@ function orderNoValue(orderNo: string): number {
 }
 
 export async function fetchHeroItems(): Promise<HeroItem[]> {
-  const res = await fetchApi<PageDataResponse>(
-    "/api/v1/fo/page-data/hero-data?drs_post_period=in_range&sort=hero.sort_order,asc&size=100",
-  );
+  // fetchData 목록 브랜치: where 키는 기존 쿼리스트링 키 그대로(BE가 그대로 인식) → res.content는 commonEachData로 flatten 완료
+  const res = await fetchData<Record<string, unknown>>({
+    slug: "hero-data",
+    where: { drs_post_period: "in_range" },
+    sort: "hero.sort_order,asc",
+    size: 100,
+  });
 
-  const items: HeroItem[] = (res.content ?? []).map((item) => {
-    // flattenPageDataItem: hero 섹션 1개(중복 없음) → 콘텐츠키가 root로 flat 병합됨(래퍼명 hero/구heroForm 무관)
-    const row = flattenPageDataItem(item);
+  const items: HeroItem[] = (res.content ?? []).map((row) => {
     // content(미디어ID 배열) key는 신/구 스키마 공통이라 불변
     const contentArr = row.content;
     // content 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
@@ -47,7 +47,8 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
         : null;
     // pickField: 신 스키마(snake) 우선, 없으면 구 스키마(camel) 폴백 → 구·신 데이터 혼재에도 안전
     return {
-      id: item.id,
+      // flatten 후 원본 item.id는 row._id로 내려옴
+      id: row._id as number,
       sub: (pickField(row, "sub_title", "sub") as string) ?? "",
       titleText: (pickField(row, "hero_title", "titleText") as string) ?? "",
       btnUrl: (pickField(row, "button_url", "btnUrl") as string) ?? "",
@@ -90,13 +91,15 @@ function sortOrderValue(sortOrder: string): number {
 }
 
 export async function fetchBannerItems(): Promise<BannerItem[]> {
-  const res = await fetchApi<PageDataResponse>(
-    "/api/v1/fo/page-data/banner-data?eq_banner_position=HERO&eq_is_visible=001&sort=banner.sort_order,asc&size=100",
-  );
+  // fetchData 목록 브랜치: where 키는 기존 쿼리스트링 키 그대로(BE가 그대로 인식) → res.content는 commonEachData로 flatten 완료
+  const res = await fetchData<Record<string, unknown>>({
+    slug: "banner-data",
+    where: { eq_banner_position: "HERO", eq_is_visible: "001" },
+    sort: "banner.sort_order,asc",
+    size: 100,
+  });
 
-  const items: BannerItem[] = (res.content ?? []).map((item) => {
-    // flattenPageDataItem: banner 섹션 1개(중복 없음) → 콘텐츠키가 root로 flat 병합됨(래퍼명 banner/구bannerForm 무관)
-    const row = flattenPageDataItem(item);
+  const items: BannerItem[] = (res.content ?? []).map((row) => {
     // image(미디어ID 배열) key는 신/구 스키마 공통이라 불변
     const imageArr = row.image;
     // image 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
@@ -106,7 +109,8 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
         : null;
     // pickField: 신 스키마(snake) 우선, 없으면 구 스키마(camel) 폴백. url은 신/구 공통 key라 단일 인자
     return {
-      id: item.id,
+      // flatten 후 원본 item.id는 row._id로 내려옴
+      id: row._id as number,
       url: (pickField(row, "url") as string) ?? "",
       mainTitle: (pickField(row, "banner_title", "mainTitle") as string) ?? "",
       subTitle: (pickField(row, "sub_title", "subTitle") as string) ?? "",
@@ -148,19 +152,23 @@ export interface NoticeItem {
 
 export async function fetchNoticeItem(): Promise<NoticeItem | null> {
   // 공지 배너(최신 1건) + prefix 코드목록을 병렬 조회
+  // - 배너: fetchData 목록 브랜치(where 키는 기존 쿼리스트링 키 그대로) → content는 flatten된 row 배열
+  // - codes: page-data slug 조회가 아닌 공통코드 조회이므로 fetchApi 직접 사용(리팩터 대상 아님)
   const [bannerRes, codes] = await Promise.all([
-    fetchApi<PageDataResponse>(
-      "/api/v1/fo/page-data/banner-data?eq_banner_position=INFORMATION&eq_is_visible=001&sort=updatedAt,desc&size=1",
-    ),
+    fetchData<Record<string, unknown>>({
+      slug: "banner-data",
+      where: { eq_banner_position: "INFORMATION", eq_is_visible: "001" },
+      sort: "updatedAt,desc",
+      size: 1,
+    }),
     fetchApi<CodeItem[]>("/api/v1/fo/codes/BANNER_PREFIX"),
   ]);
 
   // 조건 매칭 0건이면 null → 호출부(MainVisual)에서 정적 목업으로 폴백
-  const item = bannerRes.content?.[0];
-  if (!item) return null;
+  // content는 이미 flatten된 row 배열이므로 별도 flattenPageDataItem 불필요
+  const row = bannerRes.content?.[0];
+  if (!row) return null;
 
-  // flattenPageDataItem: banner 섹션 1개(중복 없음) → 콘텐츠키가 root로 flat 병합됨(래퍼명 banner/구bannerForm 무관)
-  const row = flattenPageDataItem(item);
   // prefix key는 신/구 스키마 공통이라 불변
   const prefixCode = (pickField(row, "prefix") as string) ?? "";
 

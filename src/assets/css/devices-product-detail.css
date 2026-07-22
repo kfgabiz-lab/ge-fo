@@ -18,7 +18,9 @@
 #product-help {
   scroll-margin-top: 200px;
 }
-
+.common_banner_03 + #product-markets {
+    margin-top: 200px;
+}
 /* Applications — section padding-top 150px; align native hash to .section_tit */
 #product-applications {
   scroll-margin-top: 50px;
@@ -228,7 +230,7 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
   section.devices_product_hero .devices_product_hero__spec-row {
     display: flex;
     gap: 30px;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 24px;
   }
 
@@ -243,6 +245,7 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     font-weight: 600;
     line-height: 26px;
     color: var(--color-primary);
+    margin-top: 8px;
   }
 
   section.devices_product_hero .devices_product_hero__spec-row dd {
@@ -3811,4 +3814,3 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     justify-items: stretch;
   }
 }
-

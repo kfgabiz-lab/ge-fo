@@ -1,5 +1,6 @@
 import type { MarketsSolutionsPanelProps } from "./marketsSolutionsPanelTypes";
 import {
+  industrialSolutionsCategories,
   industrialSolutionsDiagram,
   industrialSolutionsIntro,
 } from "./marketsIndustrialSolutionsContent";
@@ -11,4 +12,5 @@ export const industrialSolutionsPanel: MarketsSolutionsPanelProps = {
   layout: "stacked",
   groups: [],
   trailingDiagram: industrialSolutionsDiagram,
+  categories: industrialSolutionsCategories,
 };

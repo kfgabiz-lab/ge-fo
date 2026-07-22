@@ -663,7 +663,7 @@ section.main_notic .txt:before {
 
   section.what_we_do__inner .swiper_type_01.swiper-fade .swiper-slide {
     height: auto;
-    transition-duration: 300ms;
+    transition-duration: 0ms;
   }
 
   section.what_we_do__inner .sl_img {
@@ -858,7 +858,7 @@ section.main_notic .txt:before {
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 70.37%, rgba(0, 0, 0, 0.5) 100%);
+    /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 70.37%, rgba(0, 0, 0, 0.5) 100%); */
   }
   section.main_cards .img_area img {
     width: 100%;
@@ -978,6 +978,7 @@ section.main_notic .txt:before {
   }
 
   section.main_products .products_swipers.per4 .tit_product {
+    text-wrap: balance;
     margin-bottom: 2px;
     font-size: 24px;
     font-weight: 600;
@@ -987,16 +988,6 @@ section.main_notic .txt:before {
   }
   section.main_products .products_swipers.per4 .sl:hover .tit_product {
     text-decoration: underline;
-  }
-  section.main_products .products_swipers.per4 .txt {
-    display: -webkit-box;
-    overflow: hidden;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 23px;
-    color: #888;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
   }
 
   section.main_products .products_swipers_controls {
@@ -1226,7 +1217,7 @@ section.main_notic .txt:before {
 
   section.what_we_do__inner .swiper_type_01.swiper-fade .swiper-slide {
     height: auto;
-    transition-duration: 300ms;
+    transition-duration: 0ms;
   }
 
   section.what_we_do__inner .sl_img {
@@ -1888,6 +1879,7 @@ section.main_notic .txt:before {
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
+    display: flex;
   }
 
   section.main_notic .tit_area .tit {
@@ -2213,23 +2205,13 @@ section.main_notic .txt:before {
   }
 
   section.main_products .products_swipers.per4 .tit_product {
+    text-wrap: balance;
     margin-bottom: 0;
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
     letter-spacing: -0.01em;
     color: #222;
-  }
-
-  section.main_products .products_swipers.per4 .txt {
-    display: -webkit-box;
-    overflow: hidden;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-    color: #888;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
   }
 
   section.main_products .products_swipers_controls {
@@ -2405,6 +2387,15 @@ section.main_notic .txt:before {
   }
 }
 
+/* Main cards — tablet 2-col */
+@media (min-width: 600px) and (max-width: 780px) {
+  section.main_cards .items {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
 /* main_cards — scroll reveal */
 section.main_cards .section_tit,
 section.main_cards .item {
@@ -2453,5 +2444,3 @@ section.main_info .info_box .info_box__count-live {
 section.main_info .info_box .info_box__count-ghost {
   visibility: hidden;
 }
-
-

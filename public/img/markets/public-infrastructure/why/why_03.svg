@@ -1,0 +1,22 @@
+<svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.7">
+<path d="M78 1.24316V17H48V7.83301L78 1.24316Z" stroke="white" stroke-width="2"/>
+<path d="M38 109H86C86.5523 109 87 108.552 87 108V18C87 17.4477 86.5523 17 86 17L40 17C39.4477 17 39 17.4477 39 18V30" stroke="white" stroke-width="2"/>
+<path d="M87 31V41H58V31H87Z" stroke="white" stroke-width="2"/>
+<path d="M87 51V61H58V51H87Z" stroke="white" stroke-width="2"/>
+<path d="M45 31V109H1V31H45Z" stroke="white" stroke-width="2"/>
+<path d="M31 81V109H13V81H31Z" stroke="white" stroke-width="2"/>
+<path d="M16 50H31" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M16 66H31" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</g>
+<circle cx="82" cy="82" r="28" fill="#E60040"/>
+<path opacity="0.2" d="M65.4316 59.4258C62.0176 64.0665 60 69.7979 60 76.001C60 91.465 72.536 104.001 88 104.001C94.1999 104.001 99.928 101.984 104.567 98.5732C99.4704 105.502 91.261 109.999 82 109.999C66.536 109.999 54 97.463 54 81.999C54 72.735 58.4993 64.5225 65.4316 59.4258Z" fill="black"/>
+<mask id="mask0_7648_35634" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="54" y="54" width="56" height="56">
+<circle cx="82" cy="82" r="28" fill="#E60040"/>
+</mask>
+<g mask="url(#mask0_7648_35634)">
+<path d="M70 108C71.7911 106.049 77.2828 100.382 80.5067 101.319C83.7307 102.255 85.4323 99.7584 85.8801 98.3932C86.3278 96.2475 89.2384 93.5946 97.2983 100.149C98.6417 101.123 101.463 103.307 102 104.243" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M67.0863 58C69.4864 58.8462 77.4866 63.4118 77.4866 68.1538C77.4866 72.8959 73.6293 72.753 76.3371 76.9682C79.0449 81.1833 80.85 85.9254 76.3371 88.0329C71.8242 90.1405 71.0454 82.2192 67.8863 81.6923C64.7273 81.1654 63.7668 86.103 59.8861 85.0769C56.686 84.2308 55.0859 89.3077 55.0859 91" stroke="white" stroke-width="2" stroke-linecap="round"/>
+<path d="M95.3123 57.6639C93.5288 58.6047 90.2648 63.2307 91.8781 65.3799C92.3209 65.9698 93.5233 66.9358 95.3977 67.8569C97.2722 68.778 96.948 69.276 96.1223 70.2253C95.2967 71.1747 93.0665 76.4467 101.135 76.5188C104.72 76.5509 107.94 74.4287 109.772 72.4719" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</g>
+</svg>
