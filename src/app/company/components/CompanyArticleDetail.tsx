@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { articleDetailClass } from "@/app/company/articleDetailClass";
 import DevicesProductVideoPlayer from "@/components/video/DevicesProductVideoPlayer";
+import { incrementViewCount } from "@/lib/pageDataApi";
 
 export type CompanyArticleDetailVariant = "blog" | "press" | "events" | "articles";
 
@@ -29,6 +30,11 @@ type CompanyArticleDetailBaseProps = {
   listHref: string;
   children: ReactNode;
   embedded?: boolean;
+  // 조회수(count) +1 대상 식별자 — 실제 상세([id]) 진입 시에만 전달.
+  // slug: page_data data_slug(예: "blog-data"), recordId: page_data.id
+  // 정적 미리보기 페이지(/company/*/detail)는 실제 레코드가 없어 미전달 → 증가 호출 안 함.
+  slug?: string;
+  recordId?: string | number;
 };
 
 type CompanyArticleDetailBlogArticlesProps = CompanyArticleDetailBaseProps & {
@@ -94,7 +100,18 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
     listHref,
     children,
     embedded = false,
+    slug,
+    recordId,
   } = props;
+
+  // 마운트 시 1회 조회수(count) +1 — CSR 전용 fire-and-forget.
+  // - 이 컴포넌트는 "use client" 라 useEffect 는 실제 브라우저 마운트 시점에만 실행됨.
+  //   → 상세 page.tsx(서버 컴포넌트) 직접 호출/Link 프리페치로 인한 과다 증가 위험 없음.
+  // - slug/recordId 가 모두 있을 때만(실제 [id] 상세) 호출. 정적 미리보기 페이지는 미호출.
+  useEffect(() => {
+    if (!slug || recordId == null) return;
+    void incrementViewCount(slug, recordId);
+  }, [slug, recordId]);
 
   const pageModifier =
     variant === "blog"

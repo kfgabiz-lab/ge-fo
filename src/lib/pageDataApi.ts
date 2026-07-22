@@ -191,3 +191,26 @@ export async function fetchData(params: {
     size: res.size,
   };
 }
+
+// ---------------- 조회수(count) 증가 ----------------
+
+// page_data.count 를 +1 하는 write 전용 호출(fire-and-forget).
+// - 스펙: docs/pages/page-data/be_page-data_view-count.md
+//   POST /api/v1/fo/page-data/{slug}/{id}/view-count → 204 No Content(요청 바디 없음)
+// - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지 → fetchApi 경유)
+// - fire-and-forget: 결과(204)를 화면에 쓰지 않으며, 실패해도 화면 흐름에 영향 없어야 한다.
+//   · 204는 바디가 없어 fetchApi 내부 res.json() 에서 파싱 예외가 나지만, 서버측 +1 은
+//     응답 전에 이미 커밋되므로 파싱 예외는 무해 → 아래 catch 로 조용히 삼킨다.
+//   · 네트워크/4xx/5xx 실패도 동일하게 catch 로 무시(에러 UI/토스트 없음).
+export async function incrementViewCount(
+  slug: string,
+  id: string | number,
+): Promise<void> {
+  try {
+    await fetchApi<void>(`/api/v1/fo/page-data/${slug}/${id}/view-count`, {
+      method: "POST",
+    });
+  } catch {
+    // fire-and-forget: 조회수 증가 실패는 무시
+  }
+}

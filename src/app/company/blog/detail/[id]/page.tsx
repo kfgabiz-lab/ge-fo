@@ -78,6 +78,8 @@ export default async function CompanyBlogDetailPage({
     <CompanyArticleDetail
       variant="blog"
       pageId="Page_company_blog_detail"
+      slug="blog-data"
+      recordId={id}
       category={categoryLabel}
       title={(row.title as string) ?? ""}
       date={formatDisplayDate((pickField(row, "publish_dttm", "publishDttm") as string) ?? "")}

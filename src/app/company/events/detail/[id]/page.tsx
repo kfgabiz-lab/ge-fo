@@ -63,6 +63,8 @@ export default async function CompanyEventsDetailPage({
     <CompanyArticleDetail
       variant="events"
       pageId="Page_company_events_detail"
+      slug="events-data"
+      recordId={id}
       title={(row.title as string) ?? ""}
       eventsMeta={{
         venue: (row.location as string) ?? "",

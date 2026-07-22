@@ -70,6 +70,8 @@ export default async function CompanyPressDetailPage({
     <CompanyArticleDetail
       variant="press"
       pageId="Page_company_press_detail"
+      slug="press-data"
+      recordId={id}
       title={(row.title as string) ?? ""}
       date={formatDisplayDate((pickField(row, "publish_dttm", "publishDttm") as string) ?? "")}
       heroImage={heroImage}
