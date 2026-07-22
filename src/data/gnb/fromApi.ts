@@ -25,19 +25,6 @@ export type FoGnbMenuApiNode = {
   children: FoGnbMenuApiNode[];
 };
 
-/**
- * API로 연동할 최상위 nav id ↔ API 루트 노드 name 매핑.
- * devices(Products & Systems)는 bo Menu API가 아니라 category-data/product-data로 별도 동적 조립되므로
- * (fetchDevicesMegaMenu, fromCategoryData.ts) 여기 포함하지 않음.
- * key: 정규화(trim+소문자)한 API name, value: gnbNavItems의 nav id.
- */
-const API_NAME_TO_NAV_ID: Record<string, string> = {
-  markets: "markets",
-  services: "services",
-  support: "support",
-  company: "company",
-};
-
 /** msgKey(nameMsgKey/descriptionMsgKey)는 현재 fo에 i18n 해석 유틸이 없어 무시하고 원문(name/description) 사용 */
 function toSimpleItem(node: FoGnbMenuApiNode): GnbSimpleMegaItem {
   const href = node.url ?? undefined;
@@ -75,84 +62,98 @@ export async function fetchGnbMenuData(): Promise<FoGnbMenuApiNode[]> {
 }
 
 /**
- * 매칭된 API 루트 노드의 children으로 GnbSimpleMegaMenu 생성.
- * - 자식들 중 하나라도 손자(children)가 있으면 "sections" (자식=섹션, 손자=item)
- * - 자식이 모두 leaf면 "grid" (자식=item)
+ * gnb.css는 #gnb-mega-panel-markets/services/support/company 등 "고정 문자열 id"를
+ * 셀렉터로 그리드 컬럼 수·간격·hover 등을 지정한다(수백 줄 규모, 이번 작업에서 안 건드림).
+ * panelId를 node.id로 동적 생성하면 이 CSS가 전혀 매칭되지 않으므로,
+ * sortOrder 3번째부터는 기존 고정 문자열을 순서대로 그대로 재사용한다.
+ * (careers까지 4슬롯 소진 후에는 대응 CSS가 없어 동적 id로 폴백 — 현재 데이터 범위 밖)
  */
-function buildSimpleMegaMenu(
-  navId: string,
-  node: FoGnbMenuApiNode,
-): GnbSimpleMegaMenu {
-  const panelId =
-    GNB_MEGA_PANEL_ID[navId as keyof typeof GNB_MEGA_PANEL_ID] ??
-    `gnb-mega-panel-${navId}`;
-  const children = node.children ?? [];
-  const hasGrandchildren = children.some(
-    (child) => (child.children?.length ?? 0) > 0,
-  );
+const SECTIONS_PANEL_IDS_BY_POSITION = [
+  GNB_MEGA_PANEL_ID.services,
+  GNB_MEGA_PANEL_ID.support,
+  GNB_MEGA_PANEL_ID.company,
+  GNB_MEGA_PANEL_ID.careers,
+];
 
-  if (hasGrandchildren) {
-    const sections: GnbSimpleMegaSection[] = children.map((section) => ({
+/** sortOrder 2번째(grid) 전용 — children을 그대로 grid 항목으로 사용 */
+function buildGridMegaMenu(node: FoGnbMenuApiNode): GnbSimpleMegaMenu {
+  return {
+    type: "simple",
+    panelId: GNB_MEGA_PANEL_ID.markets,
+    layout: "grid",
+    items: (node.children ?? []).map(toSimpleItem),
+  };
+}
+
+/** sortOrder 3번째 이후(sections) 전용 — children=섹션, 손자=항목 */
+function buildSectionsMegaMenu(
+  node: FoGnbMenuApiNode,
+  sectionsPosition: number,
+): GnbSimpleMegaMenu {
+  const sections: GnbSimpleMegaSection[] = (node.children ?? []).map(
+    (section) => ({
       id: String(section.id),
       label: section.name,
       items: (section.children ?? []).map(toSimpleItem),
-    }));
-
-    return {
-      type: "simple",
-      panelId,
-      layout: "sections",
-      sections,
-    };
-  }
+    }),
+  );
 
   return {
     type: "simple",
-    panelId,
-    layout: "grid",
-    items: children.map(toSimpleItem),
+    panelId:
+      SECTIONS_PANEL_IDS_BY_POSITION[sectionsPosition] ??
+      `gnb-mega-panel-${node.id}`,
+    layout: "sections",
+    sections,
   };
 }
 
 /**
- * API 응답(FoGnbMenuApiNode[])을 gnbNavItems에 반영해 최종 nav 목록을 만든다.
- * - devices: category-data 기반으로 서버에서 미리 조립한 devicesMegaMenu(있고 categories가 비어있지 않으면)로 override,
- *   없거나 비어있으면(조회 실패 등) 기존 정적 최소 폴백 그대로 사용
- * - markets/services/support/company: 이름이 정확히(trim, 대소문자 무시) "Markets"/"Services"/"Support"/"Company"인
- *   API 루트 노드를 찾아 megaMenu를 API 기반으로 override
- * - 매칭 실패 또는 children 비어있음(운영 초기 DB 미입력 등): 기존 정적 megaMenu 그대로 폴백
- * - 위 4개에 해당하지 않는 최상위 API 노드는 매칭 대상이 없으므로 무시
+ * API 응답(FoGnbMenuApiNode[], BE에서 이미 sortOrder ASC로 정렬돼 옴)을 최종 nav 목록으로 변환.
+ * name 매칭이나 children depth 추론을 쓰지 않고 "응답 순번"만으로 3가지 형태를 고정 결정한다
+ * (admin이 메뉴명을 바꾸거나 트리 깊이가 아직 안 채워져 있어도 항상 같은 형태로 렌더됨):
+ *   1번째: devices — label만 DB(node.name), children은 사용하지 않고 기존처럼
+ *          category-data 기반 devicesMegaMenu(fetchDevicesMegaMenu)로 렌더
+ *   2번째: grid — label/드롭다운 모두 DB(children을 항목으로)
+ *   3번째 이후(개수 무관): sections — label/드롭다운 모두 DB(children=섹션, 손자=항목)
+ * API 응답이 완전히 비어있으면(조회 실패 등) 기존 정적 gnbNavItems 그대로 폴백.
  */
 export function resolveGnbNavItems(
   apiNodes: FoGnbMenuApiNode[] | null | undefined,
   devicesMegaMenu?: GnbDevicesMegaMenu | null,
 ): GnbNavItem[] {
-  // 정규화한 name → API 노드 인덱싱 (매칭 안 되는 노드는 자연스럽게 사용되지 않고 무시됨)
-  const nodeByNavId = new Map<string, FoGnbMenuApiNode>();
-  for (const node of apiNodes ?? []) {
-    const navId = API_NAME_TO_NAV_ID[node.name?.trim().toLowerCase() ?? ""];
-    if (navId) {
-      nodeByNavId.set(navId, node);
-    }
+  const nodes = apiNodes ?? [];
+  if (nodes.length === 0) {
+    return gnbNavItems;
   }
 
-  return gnbNavItems.map((item) => {
-    if (item.id === "devices") {
-      if (devicesMegaMenu && devicesMegaMenu.categories.length > 0) {
-        return { ...item, megaMenu: devicesMegaMenu };
-      }
-      return item;
+  return nodes.map((node, index) => {
+    const order = index + 1;
+
+    if (order === 1) {
+      const fallback = gnbNavItems.find((item) => item.id === "devices");
+      return {
+        id: "devices",
+        label: node.name,
+        href: fallback?.href ?? "",
+        megaMenu:
+          devicesMegaMenu && devicesMegaMenu.categories.length > 0
+            ? devicesMegaMenu
+            : fallback?.megaMenu,
+      };
     }
 
-    const node = nodeByNavId.get(item.id);
-    // API 데이터 없음/매칭 실패 → 정적 폴백
-    if (!node || (node.children?.length ?? 0) === 0) {
-      return item;
-    }
+    const hasChildren = (node.children?.length ?? 0) > 0;
 
     return {
-      ...item,
-      megaMenu: buildSimpleMegaMenu(item.id, node),
+      id: String(node.id),
+      label: node.name,
+      href: node.url ?? "",
+      megaMenu: !hasChildren
+        ? undefined
+        : order === 2
+          ? buildGridMegaMenu(node)
+          : buildSectionsMegaMenu(node, order - 3),
     };
   });
 }

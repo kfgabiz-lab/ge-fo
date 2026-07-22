@@ -1285,11 +1285,7 @@ html.is-mega-open-scroll-lock body {
   max-height: calc(100vh - 144px);
 }
 
-.gnb_mega--simple.gnb_mega--sections.is-mounted,
-.gnb_mega--simple.gnb_mega--sections.gnb_mega--services.is-mounted,
-.gnb_mega--simple.gnb_mega--sections.gnb_mega--support.is-mounted,
-.gnb_mega--simple.gnb_mega--sections.gnb_mega--careers.is-mounted,
-.gnb_mega--simple.gnb_mega--sections.gnb_mega--company.is-mounted {
+.gnb_mega--simple.gnb_mega--sections.is-mounted {
   max-height: calc(100vh - 144px);
 }
 

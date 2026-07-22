@@ -5,6 +5,7 @@ import type { GnbMegaSimplePanelStateProps } from "@/components/layout/shared/gn
 
 /** Figma 17660:104944 — #gnb-mega-panel-markets */
 export default function GnbMarketsMegaPanel({
+  title,
   menu,
   onItemClick,
 }: GnbMegaSimplePanelStateProps) {
@@ -13,7 +14,7 @@ export default function GnbMarketsMegaPanel({
   return (
     <div className="gnb_mega__inner gnb_mega__inner--grid">
       <div className="gnb_mega__head">
-        <h2 className="gnb_mega__tit">Markets</h2>
+        <h2 className="gnb_mega__tit">{title}</h2>
       </div>
       <div className="gnb_mega__divider" aria-hidden />
       <ul className="gnb_mega__grid">

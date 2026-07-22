@@ -13,9 +13,8 @@ import {
   type GnbScrollVisibility,
 } from "@/lib/gnbScrollState";
 import {
+  getGnbMegaPanelComponent,
   getMegaPanelClassName,
-  gnbMegaPanelComponents,
-  isGnbMegaPanelNavId,
 } from "@/components/layout/shared/gnb-mega";
 import GnbMegaCloseButton from "@/components/layout/shared/gnb-mega/GnbMegaCloseButton";
 import GnbGlobalTrigger, {
@@ -949,13 +948,8 @@ export default function GnbMenu({
 
   let megaPanel: ReactNode = null;
 
-  if (
-    showMegaPanel &&
-    megaMenu &&
-    activeNavId &&
-    isGnbMegaPanelNavId(activeNavId)
-  ) {
-    const PanelComponent = gnbMegaPanelComponents[activeNavId];
+  if (showMegaPanel && megaMenu && activeNavId) {
+    const PanelComponent = getGnbMegaPanelComponent(megaMenu);
 
     megaPanel = (
       <div
@@ -975,7 +969,11 @@ export default function GnbMenu({
             onLinkClick={handleGnbLinkClick}
           />
         ) : (
-          <PanelComponent menu={megaMenu} onItemClick={handleGnbLinkClick} />
+          <PanelComponent
+            title={activeNav?.label ?? ""}
+            menu={megaMenu}
+            onItemClick={handleGnbLinkClick}
+          />
         )}
       </div>
     );

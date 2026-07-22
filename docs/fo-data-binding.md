@@ -123,6 +123,10 @@
 | Warranty Policy Extension | `src/app/services/warranty-policy/components/WarrantyPolicyExtension.tsx` | Warranty Extension Overview 섹션 — 카드/Important Notes/Exclusions 패널 | TODO(정적) |
 | Warranty Policy Apply | `src/app/services/warranty-policy/components/WarrantyPolicyApply.tsx` | How to Apply 섹션 — 제품 카테고리별 연락처(mailto) 2열 표 | TODO(정적) |
 | Warranty Feature Cards | `src/app/services/warranty-policy/components/WarrantyFeatureCards.tsx` | Coverage/Extension 공용 번호 카드 리스트(`variant`로 구분) | TODO(정적) |
+| Training Curriculum Page | `src/app/services/training/components/TrainingCurriculumPage.tsx` | sales/engineering/service-training 3개 메뉴가 공유하는 조립 래퍼 — variant로 데이터/클래스/pageId 분기(company/press의 CompanyFeedPage와 동일 패턴) | TODO(정적) |
+| Training Title | `src/app/services/training/components/TrainingTitle.tsx` | 페이지 상단 대제목/설명(`company-about-title` 공통 스타일, CompanyAboutTitleSection 재사용) | TODO(정적) |
+| Training Curriculum | `src/app/services/training/components/TrainingCurriculum.tsx` | 필터(select 3개)+검색+커리큘럼 카드 목록+페이지네이션 섹션 | TODO(정적) |
+| Training Card | `src/app/services/training/components/TrainingCard.tsx` | 커리큘럼 카드 1건(이미지/카테고리/제목/설명), 상세 링크는 variant별 prefix | TODO(정적) |
 
 > Service Center의 FAQ 영역은 별도 컴포넌트가 아니라 공통 `CommonFaq`(2-3절)를 페이지에서 직접 사용합니다(`sectionId="service-center-faq"` 앵커 지정).
 > Warranty Policy는 제품 보증표(`WarrantyPolicyCoverage`의 tableRows)만 `warrantyPolicy-data` slug로 bo 연동하며(공개=is_visible 001 필터, product_type 코드→영문 라벨 변환, id ASC), 그 외 섹션은 fo 정적 데이터(`warrantyPolicyContent.ts`)로 유지합니다.

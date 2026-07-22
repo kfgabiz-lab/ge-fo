@@ -57,10 +57,14 @@ src/app/
 │   # ⚠ blog/detail/page.tsx·articles/detail/page.tsx: [id] 없는 정적 목업(하드코딩 데이터)이 [id]/page.tsx(실 API 연동)와 동시 존재.
 │   #    라우팅 충돌은 없으나(각기 다른 URL) 목업 페이지 정리 대상인지 원 담당자 확인 필요
 │
-├── services/                   # 서비스 — 2개 메뉴
+├── services/                   # 서비스 — 5개 메뉴
 │   ├── layout.tsx                # SubHeader + {children} + SubFooter
 │   ├── service-center/page.tsx + components/(Banner/Cards/Flow/Gics/Offering/Title 6개)
-│   └── warranty-policy/page.tsx + components/(FeatureCards/Apply/Banner/Coverage/Extension/Title 6개) + data/warrantyPolicyData.ts
+│   ├── warranty-policy/page.tsx + components/(FeatureCards/Apply/Banner/Coverage/Extension/Title 6개) + data/warrantyPolicyData.ts
+│   ├── training/components/(TrainingCurriculumPage/Title/Curriculum/Card 4개) + data/trainingContent.ts   # sales/engineering/service-training 공용, variant 패턴(company/press의 CompanyFeedPage와 동일 구조)
+│   └── sales-training/page.tsx, engineering-training/page.tsx, service-training/page.tsx   # 각각 TrainingCurriculumPage에 variant만 주입하는 3줄 래퍼
+│       # ⚠ engineering-training 코스/세션 상세([courseId], [courseId]/[sessionId])는 ls-publish에만 존재, 소스머지 스코프 제외
+│       #    사유: fo의 기존 세션 상세 데이터가 ls-publish 원본보다 먼저 개선 설계됨(탭/아젠다/공유링크 등) → 원본 세션 컴포넌트를 그대로 가져오면 그 데이터와 계약이 맞지 않아 컴파일 실패. 재작업 시 fo 데이터 계약에 맞는 세션 컴포넌트를 별도 설계해야 함
 │
 ├── support/                     # 고객지원 — 3개 메뉴
 │   ├── layout.tsx                # SubHeader + {children} + SubFooter
