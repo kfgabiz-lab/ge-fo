@@ -141,6 +141,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       },
       body: JSON.stringify(payload),
     });
+    setEmail("");
   };
 
   const handleAffiliateSelect = (value: string) => {
