@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
+import { guideSearchFieldMobileSlotProps } from "@/components/form/guideFieldMobileProps";
 import type { CompanyFeedVariant } from "@/app/company/data/companyFeedContent";
 
 // variant별 aria-label 텍스트 (기존 개별 툴바의 라벨을 그대로 이관)
@@ -163,6 +164,7 @@ export default function CompanyFeedListToolbar({
         onChange={(event) => setSearchDraft(event.target.value)}
         onKeyDown={handleSearchKeyDown}
         slotProps={{
+          ...guideSearchFieldMobileSlotProps,
           input: {
             endAdornment: (
               <InputAdornment position="end" className="guide_field__search-adorn">

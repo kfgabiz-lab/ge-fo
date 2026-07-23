@@ -143,13 +143,6 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
         </header>
 
         <article className="company-article-detail__article tiptap ProseMirror">
-          {heroImage ? (
-            <img
-              src={heroImage.src}
-              alt={heroImage.alt}
-              className={articleDetailClass("hero-img")}
-            />
-          ) : null}
           {heroVideo ? (
             <DevicesProductVideoPlayer
               youtubeVideoId={heroVideo.youtubeVideoId}

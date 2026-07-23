@@ -36,10 +36,7 @@ export default function CompanyEventsPage({
   const [pastItems, setPastItems] = useState<EventsPastItem[]>([]);
   const [pastPageIndex, setPastPageIndex] = useState(0);
   const [pastTotalPages, setPastTotalPages] = useState(1);
-  const [pastSearch, setPastSearch] = useState("");
   const [pastSort, setPastSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
-  const [pastMonth, setPastMonth] = useState("");
-  const [pastYear, setPastYear] = useState("");
 
   // Featured/Calendar는 필터 없이 최초 1회 조회
   useEffect(() => {
@@ -69,10 +66,7 @@ export default function CompanyEventsPage({
     fetchData(
       eventsPastQuery({
         page: pastPageIndex,
-        search: pastSearch || undefined,
         sort: pastSort,
-        month: pastMonth || undefined,
-        year: pastYear || undefined,
         fallbackImage: PAST_FALLBACK_IMAGE,
       }),
     )
@@ -87,25 +81,13 @@ export default function CompanyEventsPage({
     return () => {
       alive = false;
     };
-  }, [pastPageIndex, pastSearch, pastSort, pastMonth, pastYear]);
+  }, [pastPageIndex, pastSort]);
 
   const handlePastPageChange = (page: number) => {
     setPastPageIndex(Math.max(0, page - 1));
   };
-  const handlePastSearchSubmit = (value: string) => {
-    setPastSearch(value);
-    setPastPageIndex(0);
-  };
   const handlePastSortChange = (value: "latest" | "oldest" | "az" | "za") => {
     setPastSort(value);
-    setPastPageIndex(0);
-  };
-  const handlePastMonthChange = (value: string) => {
-    setPastMonth(value);
-    setPastPageIndex(0);
-  };
-  const handlePastYearChange = (value: string) => {
-    setPastYear(value);
     setPastPageIndex(0);
   };
 
@@ -123,14 +105,8 @@ export default function CompanyEventsPage({
         currentPage={pastPageIndex + 1}
         totalPages={pastTotalPages}
         onPageChange={handlePastPageChange}
-        searchValue={pastSearch}
-        onSearchSubmit={handlePastSearchSubmit}
         sortValue={pastSort}
         onSortChange={handlePastSortChange}
-        monthValue={pastMonth}
-        onMonthChange={handlePastMonthChange}
-        yearValue={pastYear}
-        onYearChange={handlePastYearChange}
       />
     </main>
   );
