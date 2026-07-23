@@ -12,6 +12,13 @@ import TrainingSessionDetailForm from "./TrainingSessionDetailForm";
 import TrainingSessionDetailAside from "./TrainingSessionDetailAside";
 import TrainingSessionDetailTableScroll from "./TrainingSessionDetailTableScroll";
 import { getLenisInstance } from "@/lib/lenisScroll";
+import {
+  buildGoogleCalendarUrl,
+  buildShareHref,
+  downloadIcs,
+  hasValidEventDate,
+  type CalendarEvent,
+} from "@/lib/eventShare";
 
 const SESSION_TAB_SCROLL_OFFSET = 150;
 const SESSION_TAB_SCROLL_DURATION_MS = 300;
@@ -66,11 +73,35 @@ export default function TrainingSessionDetail({
   session: EngineeringTrainingSessionDetail;
 }) {
   const [activeTab, setActiveTab] = useState<EngineeringTrainingSessionTabId>("training");
+  // 공유 링크에 주입할 현재 페이지 URL(마운트 후 window 접근 → SSR/CSR 안전)
+  const [shareUrl, setShareUrl] = useState("");
+
+  useEffect(() => {
+    setShareUrl(window.location.href);
+  }, []);
 
   const handleRegister = useCallback(() => {
     setActiveTab("registration");
     scrollToSection("session-registration");
   }, []);
+
+  // Add to Calendar 이벤트: 세션 뷰모델 event(원본 날짜/시간) 사용
+  const calendarEvent: CalendarEvent | null =
+    session.event && hasValidEventDate(session.event) ? session.event : null;
+
+  const handleGoogleCalendar = useCallback(() => {
+    if (!calendarEvent) return;
+    window.open(
+      buildGoogleCalendarUrl(calendarEvent),
+      "_blank",
+      "noopener,noreferrer",
+    );
+  }, [calendarEvent]);
+
+  const handleIcalDownload = useCallback(() => {
+    if (!calendarEvent) return;
+    downloadIcs(calendarEvent);
+  }, [calendarEvent]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -109,10 +140,10 @@ export default function TrainingSessionDetail({
               >
                 {session.category}
               </p>
-              {/* 세션 제목: sessionId 로 매칭된 training_schedule 아이템의 title (STEP6 선택) */}
+              {/* 회차 제목: 이 행의 curriculum_detail2.title (부모 curriculum.title 아님) */}
               <h1
                 className="support_service_training_session_detail__title"
-                data-slugkey="title"
+                data-slugkey="curriculum_detail2.title"
               >
                 {session.title}
               </h1>
@@ -124,7 +155,11 @@ export default function TrainingSessionDetail({
               {engineeringTrainingSessionShareLinks.map((link) => (
                 <li key={link.id}>
                   <a
-                    href={link.href}
+                    href={
+                      shareUrl
+                        ? buildShareHref(link.id, shareUrl, session.title)
+                        : link.href
+                    }
                     className="support_service_training_session_detail__share-link"
                     aria-label={link.label}
                     {...(link.external
@@ -222,22 +257,30 @@ export default function TrainingSessionDetail({
                       <th scope="col">Trainer</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  {/* Agenda = 이 회차 행의 training_schedule 배열 반복(단건 main 내부 중첩 다건).
+                      No = index+1(태깅 불필요), Time = time_from~time_to 두 필드 조합이라 미태깅(STEP6 조합) */}
+                  <tbody data-slug="training_schedule" data-slug-repeat="true">
                     {session.agenda.map((row) => (
-                      <tr key={row.id}>
+                      <tr key={row.id} data-slug-item>
                         <td>{row.number}</td>
                         <td>{row.time}</td>
                         <td>
-                          <p className="support_service_training_session_detail__table-tit">
+                          <p
+                            className="support_service_training_session_detail__table-tit"
+                            data-slugkey="title"
+                          >
                             {row.title}
                           </p>
                           {row.description ? (
-                            <p className="support_service_training_session_detail__table-desc">
+                            <p
+                              className="support_service_training_session_detail__table-desc"
+                              data-slugkey="description"
+                            >
                               {row.description}
                             </p>
                           ) : null}
                         </td>
-                        <td>{row.trainer ?? ""}</td>
+                        <td data-slugkey="trainer">{row.trainer ?? ""}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -263,6 +306,8 @@ export default function TrainingSessionDetail({
                 <button
                   type="button"
                   className="btn-base btn-lv01 btn-lv01--line support_service_training_session_detail__calendar-btn"
+                  onClick={handleGoogleCalendar}
+                  disabled={!calendarEvent}
                 >
                   <img
                     src={engineeringTrainingSessionAssets.calendarIcons.google}
@@ -278,6 +323,8 @@ export default function TrainingSessionDetail({
                 <button
                   type="button"
                   className="btn-base btn-lv01 btn-lv01--line support_service_training_session_detail__calendar-btn"
+                  onClick={handleIcalDownload}
+                  disabled={!calendarEvent}
                 >
                   <span>{session.calendar.icalLabel}</span>
                   <img

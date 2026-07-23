@@ -7,6 +7,15 @@ export type EngineeringTrainingAgendaRow = {
   trainer?: string;
 };
 
+export type EngineeringTrainingSessionEvent = {
+  title: string;
+  startIso: string; // 세션 원본 날짜("YYYY-MM-DD")
+  timeFrom?: string; // "HH:MM"
+  timeTo?: string; // "HH:MM"
+  location?: string;
+  description?: string;
+};
+
 export type EngineeringTrainingSessionDetail = {
   courseId: string;
   sessionId: string;
@@ -21,6 +30,10 @@ export type EngineeringTrainingSessionDetail = {
     googleLabel: string;
     icalLabel: string;
   };
+  // Add to Calendar(Google/iCal) 생성용 원본 이벤트 데이터(뷰모델에서 주입)
+  event?: EngineeringTrainingSessionEvent;
+  // 카운트다운 기준(curriculum_detail2.register_period_to, 원본 문자열)
+  countdownTo?: string;
   sidebar: {
     date: string;
     eventDateToAttend: string;

@@ -6,7 +6,7 @@
 > - `fo/src/app/()/products-systems/data/productsSystemsData.ts` — `fetchProductDetailBySlug`/`mapHwProductData`(product-data 단건), `fetchProductFaqItems`(faq-data 제품별 목록, 10-4)
 > - `fo/src/app/()/products-systems/components/product/DevicesProductHero.tsx` (히어로+스펙, 단건)
 > - `fo/src/components/content/DevicesProductFeaturesSection.tsx` (Key Features, `sectionId` 미지정 시 기본값 `product-key-feature`)
-> - `fo/src/app/()/products-systems/components/product/DevicesProductLineup.tsx` (`table="product-template"`로 호출 — **product-data 대응 필드 없는 정적 컴포넌트**, MMS-32/63/100 스펙표 하드코딩)
+> - ~~`fo/src/app/()/products-systems/components/product/DevicesProductLineup.tsx`~~ (삭제됨 2026-07-23 — Lineup을 `product_etc.line_up` 실데이터 바인딩으로 전환, 10-3 참고. 이제 Lineup 섹션은 `GenericProductDetail.tsx`에 인라인)
 > - `fo/src/app/()/products-systems/components/product/DevicesProductVideo.tsx` (Video 섹션, `youtubeVideoId` 있을 때만 렌더 — 10-1)
 > - `fo/src/app/()/products-systems/components/product/DevicesProductDownloads.tsx` (Downloads 섹션 — 10-5)
 > - `fo/src/app/()/products-systems/components/DevicesPageFooter.tsx` (`faqItems` prop 있으면 하단 FAQ 렌더 — 10-4)
@@ -25,7 +25,7 @@
       → fetchProductDetailBySlug(slug)                     // product-data 단건 조회(eq_seo.slug)
       → mapHwProductData(row)                              // 필드 추출(series/desc/image/specs/keyFeatures/video/connectPortal)
     → fetchProductFaqItems(productId)                       // faq-data 제품별 목록(10-4), 0건이면 정적 폴백
-    → DevicesProductHero + DevicesProductFeaturesSection + DevicesProductLineup(정적)
+    → DevicesProductHero + DevicesProductFeaturesSection + Lineup 섹션(인라인, product_etc.line_up HTML — 10-3)
       + DevicesProductDownloads(items=[], 10-5) + DevicesProductVideo(youtubeVideoId 있을 때만, 10-1)
       + DevicesMarkets + DevicesHelp
       + DevicesPageFooter(faqItems)
@@ -93,9 +93,9 @@
 
 관련제품(다른 제품과의 연관) 기능은 이 메커니즘으로 구현할 수 없다 — 하려면 `slug_relation`에 `product-data`→`product-data`(같은 카테고리의 다른 제품 등) 신규 관계를 별도로 등록해야 한다. 이걸 렌더하던 `DevicesProductOtherProducts.tsx`는 애초에 `GenericProductDetail`에서 호출되지 않는(고아) 컴포넌트였고, 2026-07-21 죽은 코드 정리 시 삭제했다. 이 섹션에 대응하는 네비게이션 항목(`product-other`)도 죽은 앵커이며 10-6에서 제거를 다룬다.
 
-## 7. `DevicesProductLineup` — product-data와 무관한 정적 컴포넌트
+## 7. `DevicesProductLineup` — (삭제됨, 2026-07-23) Lineup은 실데이터 바인딩으로 전환
 
-`GenericProductDetail.tsx`가 `table="product-template"`로 호출하며, 이 값은 동적 테이블 생성 로직(`resolveLineupTables`)을 우회해 하드코딩된 `ProductTemplateLineupTable()`(MMS-32/63/100 스펙표)을 그대로 렌더한다. `data-slug`/`data-slugkey` 속성이 전혀 없는 순수 정적 컴포넌트이며, product-data 대응 필드가 없어 이번 문서의 바인딩 대상이 아니다(최초 설계도 이 컴포넌트를 언급하지 않았고, 이는 타당했다). 2026-07-21 확장 검토(10-3)에서도 이 결론은 재확인됐다 — `product_etc.line_up` 필드가 있긴 하나 editor(HTML blob) 타입이라 정형 스펙표(컬럼 구조)로 바로 쓸 수 없다.
+과거 `GenericProductDetail.tsx`는 `DevicesProductLineup`을 `table="product-template"`로 호출해 하드코딩된 MMS-32/63/100 스펙표를 정적 렌더했다(`data-slug`/`data-slugkey` 없는 순수 정적 컴포넌트). 2026-07-23 Lineup을 `product_etc.line_up`(리치텍스트 HTML) 실데이터 바인딩으로 전환하면서 이 컴포넌트는 더 이상 호출되지 않아 삭제했다. 상세는 10-3 참고.
 
 ## 8. 삭제된 죽은 코드 (2026-07-21)
 
@@ -109,7 +109,7 @@
 
 ## 9. 비고 (1차 베이스라인)
 
-1. `product_info.image` 미입력 건은 화면 플레이스홀더로 폴백(정상, 개발 블로커 아님).
+1. `product_info.image` 미입력 건은 화면 전용 플레이스홀더가 아니라 `src` 속성 자체가 비어 **브라우저 기본 깨진 이미지 아이콘**으로 표시된다(레이아웃은 유지됨, 개발 블로커 아님 — 2026-07-23 코드 재확인, "화면 플레이스홀더로 폴백" 기록 정정. `DevicesProductHero.tsx`).
 2. HW `susol-ul-smart-mccb` 등 일부 제품이 `DevicesProductLineup`에서 전용 하드코딩 테이블(`susol-frame`/`metasol-ms`/`h100-plus`)을 쓰는지, `product-template` 공용 테이블을 쓰는지는 `table` prop 값에 따라 갈리며 이번 문서 범위 밖(정적 렌더링 로직).
 3. 관련제품(6번) 기능 자체를 새로 만들지 여부는 이번 스코프 밖 — 별도 기능개발 건으로 취급한다.
 
@@ -121,7 +121,7 @@
 |---|---|---|
 | 10-1 Video | 확정 | **반영됨** — `hwProductDetail.ts` |
 | 10-2 Configurator | 확정 | **반영됨** — `hwProductDetail.ts` |
-| 10-3 Lineup | 확정(정적 유지) | 해당 없음(변경 없음) |
+| 10-3 Lineup | 확정(실데이터 바인딩) | **반영됨(2026-07-23)** — `productsSystemsData.ts`/`hwProductDetail.ts`/`GenericProductDetail.tsx`(`product_etc.line_up` HTML 그대로 렌더) |
 | 10-4 FAQ(제품별) | 확정(⚠️ 사용자 지시와 다른 방식 — 하단 참고) | **반영됨** — `productsSystemsData.ts`(`fetchProductFaqItems`), `GenericProductDetail.tsx` |
 | 10-5 Downloads | 확정(카운트만 0 표시, 목록은 추후) | **부분 반영** — `items={[]}` 전달은 반영됨. 가짜 카운트 `2,658` 텍스트는 `DevicesProductDownloads.tsx:15` `DOWNLOADS_TOTAL_RESULTS`에 **아직 하드코딩 그대로** — 미반영 |
 | 10-6 Other Products 죽은 네비 제거 | 확정 | **미반영** — `productDetailContent.ts:600` `productDetailNavItems`에 `{ id: "product-other", label: "Other Products" }` **아직 존재** |
@@ -131,19 +131,25 @@
 - 필드: `product_etc.video` — 전체 YouTube watch URL(예: `https://www.youtube.com/watch?v=...`).
 - 근거: STEP0에서 확인한 bo `page_template` id=19 `config_json`의 `fieldKey:"video"` input, 실데이터 3건 테스트값(실서비스 데이터 전수는 아님).
 - 변환: FE에서 URL 전체를 그대로 쓰지 않고 `getYoutubeIdFromUrl()`로 videoId만 추출해 `detail.youtubeVideoId`에 대입한다. **이 함수는 신규 작성이 아니라 `fo/src/lib/youtubeEmbed.ts`에 이미 있던 기존 공통함수**다(company Press/Blog 상세 등에서 쓰는 `getYoutubeEmbedSrc`와 같은 파일). 최초 목표설정 대화에서 "신규 순수함수"로 전달됐던 부분은 코드 직접 확인 결과 사실이 아니라 정정한다.
-- 빈값/URL 파싱 실패(`getYoutubeIdFromUrl`이 빈 문자열 반환) 시 정적 기본값(`base.youtubeVideoId`)으로 폴백 — `hwProductDetail.ts:37` `getYoutubeIdFromUrl(data.video) || base.youtubeVideoId`.
-- `GenericProductDetail.tsx`는 `detail.youtubeVideoId`가 있을 때만 `DevicesProductVideo`를 렌더(기존 동작 그대로, 변경 없음).
+- ⚠️ **정정(2026-07-23 코드 재확인)**: 빈값/URL 파싱 실패 시 정적 기본값(`base.youtubeVideoId`)으로 폴백한다고 기록돼 있었으나, 실제 `hwProductDetail.ts`는 `youtubeVideoId: getYoutubeIdFromUrl(data.video)`이며 `|| base.youtubeVideoId` 폴백이 없다. 값이 없으면 빈 문자열이 그대로 전달된다.
+- `DevicesProductVideo.tsx`는 `<section>`(제목 "Video") 컨테이너는 항상 렌더하고, 그 안의 실제 플레이어만 `youtubeVideoId`가 있을 때만 렌더한다(기존 동작 그대로, 변경 없음) — 섹션 자체가 사라지지는 않는다.
 
 ### 10-2. Configurator
 
-- 필드: `product_etc.connect_portal` — 전체 URL. 값 변환 없이 그대로 `detail.configuratorHref`에 대입(`hwProductDetail.ts:39` `data.connectPortal || base.configuratorHref`).
+- 필드: `product_etc.connect_portal` — 전체 URL. 값 변환 없이 그대로 `detail.configuratorHref`에 대입(`hwProductDetail.ts`: `configuratorHref: data.connectPortal`).
 - 근거: bo `page_template` id=19 config의 `fieldKey:"connect_portal"` input.
-- 빈값이면 정적 기본값(`base.configuratorHref`, 템플릿 공용 Configurator 링크)으로 폴백.
-- 소비처: `DevicesProductLineup`의 `configuratorHref`/`configuratorExternal` prop(Lineup 섹션 하단 Configurator 안내 링크) — Lineup 자체(7번/10-3)는 정적이지만 이 CTA 링크만 동적이다.
+- ⚠️ **정정(2026-07-23 코드 재확인)**: 빈값이면 정적 기본값(`base.configuratorHref`)으로 폴백한다고 기록돼 있었으나, 실제 코드에 `|| base.configuratorHref` 폴백이 없다. 값이 없으면 `href=""`(빈 링크)가 그대로 전달된다.
+- 소비처: `GenericProductDetail.tsx` Lineup 섹션 하단 Configurator 안내 링크(`detail.configuratorHref`/`configuratorExternal`) — 10-3에서 Lineup 본문을 실데이터로 바인딩하면서 이 CTA도 같은 섹션 안에 인라인으로 유지된다(과거엔 `DevicesProductLineup` 컴포넌트가 prop으로 받았으나 그 컴포넌트는 삭제됨).
 
-### 10-3. Lineup — 정적 유지 재확인
+### 10-3. Lineup — 실데이터 바인딩 완료(2026-07-23)
 
-`product_etc.line_up` 필드가 product-data에 존재하긴 하나 **editor 타입(HTML blob)** 이라 현재 `DevicesProductLineup`이 요구하는 정형 컬럼 스키마(`ProductLineupRow`/`ProductFrameLineup` — Rated Current/Interrupting/Standard 등 고정 컬럼)와 구조적으로 호환되지 않는다. "라인업 테이블용 필드가 없으면 정적 유지, 임의 slug·필드 생성 금지" 원칙에 따라 **이번 확장에서도 정적 유지**로 확정했다(7번과 동일 결론, 근거만 추가 확인).
+`product_etc.line_up` 필드는 **editor 타입(리치텍스트 HTML blob)** 이라 정형 컬럼 스키마(`ProductLineupRow`/`ProductFrameLineup` 등 고정 컬럼)로는 바로 쓸 수 없다. 당초 이를 근거로 "정적 유지"로 판단했으나(구 결론), HTML을 정형 표로 파싱할 필요 없이 **company Press 상세(리치텍스트 단일 필드 `content`를 `dangerouslySetInnerHTML`로 렌더)와 동일한 패턴**으로 그대로 바인딩할 수 있음을 확인, **실데이터 바인딩으로 확정·반영**했다.
+
+- 필드: `product_etc.line_up` — bo 에디터로 저장된 리치텍스트 HTML(실제 예: `<table>...<tr><th><p>라인업1</p></th>...`).
+- 추출: `mapHwProductData`가 `row["product_etc.line_up"]`을 `str()`로 읽어 `HwProductData.lineUp`에 담고, `buildHwProductDetail`이 폴백 없이 `detail.lineUp`으로 그대로 전달(빈 문자열이면 빈 문자열).
+- ⚠️ **정정(2026-07-23 코드 재확인)**: `detail.lineUp`이 비어 있으면 섹션 자체를 렌더하지 않는다(null)고 기록돼 있었으나, 실제 `GenericProductDetail.tsx`엔 그런 조건문이 없다. `<section className="devices_product_lineup" id="product-lineup">`(제목 "Lineup" 포함) 컨테이너는 값 유무와 무관하게 항상 렌더되고, 그 안의 `data-slug="product-data"` / `data-slugkey="product_etc.line_up"` div만 `dangerouslySetInnerHTML`로 `detail.lineUp`을 그대로 꽂는다 — 값이 빈 문자열이면 그 div 내용만 비고 섹션/제목은 계속 노출된다(컨테이너 유지 정책에 부합).
+- 섹션 하단 Configurator CTA(`Go to Configurator`)는 기존 UI 구조를 보존해 그대로 유지하되 링크만 실데이터(`detail.configuratorHref`, 10-2)를 쓴다.
+- 정형 표를 하드코딩하던 정적 컴포넌트 `DevicesProductLineup.tsx`(및 전용 타입 `ProductLineupRow`/`ProductFrameLineup`/`ProductLineupTypeCell`/`ProductLineupVariant`, 정적 데이터 `sharedLineup`/`susolUlSmartMccbInterruptingLineup`, `ProductDetail`의 `lineup?`/`lineupVariant?`/`frameLineup?` 필드)은 더 이상 호출되지 않아 삭제·정리했다. `DevicesProductLineupGrid.tsx`는 `DevicesProductLineup`만 쓰던 컴포넌트라 삭제 후 고아 상태가 되었으나 이번 정리 범위에서 제외(별도 판단).
 
 ### 10-4. FAQ(제품별) — faq-data 재사용, 필터 방식은 사용자 지시와 다름
 
@@ -154,8 +160,8 @@
 - where 조합(신규): `eq_main_category=001`(faq-data 대분류 코드 — `faq-data.md`의 markets 사용(`002`)과 다른 코드값, "Products & Systems") + `eq_product={productId}` + `eq_is_visible=001`, `sort=id,asc`, `size=100`.
 - 엔드포인트는 신규가 아니다 — `GET /api/v1/fo/page-data/faq-data`(기존, `faq-data.md` STEP4에서 이미 확인된 컨트롤러) 재사용, where 파라미터 조합만 다르다.
 - 구현: `productsSystemsData.ts`의 `fetchProductFaqItems(productId)` — 공통 `fetchData` 유틸(`@/lib/pageDataApi`) + `flattenPageDataItem`(`@/lib/pageData`)로 markets FAQ와 동일한 패턴을 따른다(콘텐츠 키 이름에 의존하지 않음, `faq-data.md` §3의 공통 규칙 재사용). `row.question`/`row.answer`를 그대로 매핑.
-- 0건이면 `productTemplateFaqItems`(정적) 폴백 — `GenericProductDetail.tsx`: `faqItems.length > 0 ? faqItems : productTemplateFaqItems`.
-- **실유효 데이터 현재 0건** — BO에 `main_category=001`(Products & Systems) + 개별 `product` id로 등록된 FAQ가 아직 없다(사용자 재입력 필요). 이는 **데이터 과제이며 코드 블로커가 아니다**.
+- ⚠️ **정정(2026-07-23 코드 재확인)**: 0건이면 `productTemplateFaqItems`(정적)로 폴백한다고 기록돼 있었으나, 실제 `GenericProductDetail.tsx`는 `faqItems`를 그대로 `<DevicesPageFooter faqItems={faqItems} />`에 전달할 뿐 그런 삼항식이 없다. `DevicesPageFooter.tsx`도 `faqItems`가 빈 배열(`[]`, JS에서 truthy)이면 그대로 `<CommonFaq items={faqItems} />`를 렌더한다. 결과적으로 FAQ 섹션 제목/설명은 항상 노출되고, 그 안의 목록만 0건이면 빈 상태로 보인다 — 컨테이너는 유지되므로 정책상 허용되는 패턴이다(정적 폴백 콘텐츠 자체가 없을 뿐).
+- **실유효 데이터 현재 0건(susol-ul-acb 등 대부분 제품)** — BO에 `main_category=001`(Products & Systems) + 개별 `product` id로 등록된 FAQ가 아직 없다(사용자 재입력 필요). 이는 **데이터 과제이며 코드 블로커가 아니다**. 2026-07-23 `product=1664`(susol-ul-acb) 기준 실측: `main_category=001` FAQ는 전체 1건뿐이고 그 `product` 값은 `"1526"`(다른 제품)이라 매칭 0건 — 쿼리 로직 문제가 아니라 데이터 미등록임을 확인.
 - **미검증/확인 필요**: `eq_product` 조회 시 faq-data의 `product` 필드 저장 타입(문자열 vs 숫자)이 product-data `_id`(숫자)와 JSONB 매칭에서 정확히 일치하는지는 실측 curl로 아직 검증되지 않았다. BO에 유효 레코드가 등록된 뒤 fo-fe-builder가 실제 curl 검증으로 확정해야 한다.
 
 ### 10-5. Downloads — 이번 스코프는 카운트만, 목록 바인딩은 추후
@@ -170,7 +176,7 @@
 
 ### 10-7. Expert / Tech Hub 배너
 
-`CommonBanner02`(`variant="expert"`)·`DevicesProductLineup`의 Configurator 배너 등은 이번 확장 대상이 아니며 기존 정적/부분동적(10-2의 `configuratorHref`만 동적) 상태를 그대로 유지한다.
+`CommonBanner02`(`variant="expert"`) 등 배너는 이번 확장 대상이 아니며 기존 정적/부분동적 상태를 그대로 유지한다(Configurator CTA는 10-2/10-3에서 `configuratorHref`만 동적).
 
 ## 11. STEP별 진행 이력
 
@@ -182,3 +188,5 @@
 | STEP0~2(확장) | fo-slug-analyzer / fo-fe-builder | 2026-07-21 | Video(`product_etc.video`)/Configurator(`product_etc.connect_portal`) 필드 스키마 확인(bo page_template id=19), FAQ는 faq-data `product` 필드 필터 방식으로 재설계(사용자 지시였던 product type 필터는 스키마상 불가 판단), Downloads/Other-Products-nav 정리 지점 확정. `#전체진행`으로 판단 위임 승인 |
 | STEP3(확장) | fo-dev-doc-writer | 2026-07-21 | 본 문서 10번 섹션 작성(상태: 승인됨·전체진행). 작성 시점에 STEP4/5(FE 구현)가 이미 병행 진행 중이었음을 코드 직접 확인 후 반영 — Video/Configurator/FAQ는 코드 반영 확인, Downloads 카운트 수정·Other Products 네비 제거는 미반영으로 정정 기록. `faq-data.md`(markets)와 필드 코드값(`main_category`)이 다름을 교차 확인(001=Products & Systems, faq-data.md의 002=Markets와 대비) |
 | 별도 문서 | fo-dev-doc-writer | 2026-07-21 | FAQ(제품별) 상세는 `fo-data-binding-가이드.md` 파일명 규칙(재사용 slug 구분자)에 따라 `faq-data-product.md`로 분리 작성 |
+| STEP6(Lineup) | fo-fe-builder | 2026-07-23 | 10-3 Lineup을 정적 유지에서 **실데이터 바인딩으로 전환** — `product_etc.line_up`(리치텍스트 HTML)을 `mapHwProductData.lineUp`→`buildHwProductDetail.lineUp`→`GenericProductDetail`이 `data-slug="product-data"`/`data-slugkey="product_etc.line_up"` + `dangerouslySetInnerHTML`로 렌더(Press 상세 패턴). 컨테이너는 항상 렌더, 값 없으면 내부만 빈 상태(아래 재확인 항목에서 정정). 정적 컴포넌트 `DevicesProductLineup.tsx` 및 전용 타입/정적 데이터(`ProductLineupRow`/`ProductFrameLineup`/`ProductLineupTypeCell`/`ProductLineupVariant`, `sharedLineup`/`susolUlSmartMccbInterruptingLineup`, `ProductDetail.lineup?`/`lineupVariant?`/`frameLineup?`) 삭제·정리. `DevicesProductLineupGrid.tsx`는 고아화됐으나 정리 범위 제외 |
+| 실코드 재확인·정정 | (사용자 버그 신고 대응, 코드 직접 Read + SSR HTML 대조) | 2026-07-23 | `/product/susol-ul-vcb`(product_info/spec/key_feature/product_etc 미입력) 및 `/product/susol-ul-acb`(id=1664, 대부분 필드 입력됨이나 FAQ 0건) 실사례 조사 중, 10-1/10-2/10-3/10-4/9번 비고에 기록된 "정적 기본값 폴백"·"섹션 미노출" 서술이 실제 코드와 다름을 발견해 전면 정정. 실제로는 `youtubeVideoId`/`configuratorHref`에 `base` 폴백이 없고, Lineup/FAQ 섹션은 조건부로 숨겨지는 게 아니라 컨테이너(제목 등)는 항상 렌더되고 내부 콘텐츠만 빈 상태로 남는다 — 이 패턴(컨테이너 유지, 내부만 빈값)은 사용자와 합의된 정책상 허용 범위로 확정(전체 섹션을 조건부로 제거하는 것만 금지 대상) |

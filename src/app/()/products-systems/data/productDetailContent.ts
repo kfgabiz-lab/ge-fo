@@ -9,34 +9,6 @@ export type ProductKeyFeature = {
   description: string;
 };
 
-export type ProductLineupTypeCell = {
-  image: string;
-  label: string;
-};
-
-export type ProductLineupRow = {
-  type: ProductLineupTypeCell;
-  ratedCurrent: string;
-  /** Figma: pipe-separated interrupting values (MCCB type1) */
-  interrupting: string[];
-  standard: string;
-  /** Taller row (e.g. long type label) — Figma 246px */
-  tall?: boolean;
-};
-
-/** Figma 4288:43889 — VFD frame spec table (Frame × Horse Power × Motor Rating) */
-export type ProductFrameLineupRow = {
-  label: string;
-  values: string[];
-};
-
-export type ProductFrameLineup = {
-  /** type2 테이블 좌상단 헤더 — 기본 "Frame" */
-  cornerHeader?: string;
-  columns: string[];
-  rows: ProductFrameLineupRow[];
-};
-
 export type ProductDownloadFile = {
   name: string;
   size: string;
@@ -78,9 +50,6 @@ export type ProductOtherItem = {
 export const metasolMsOtherProductsSubtitle =
   "Metasol Contactor & Overload Relay";
 
-/** devices_product_lineup · type1(MCCB) · type2(VFD frame) */
-export type ProductLineupVariant = "type1" | "type2";
-
 export type ProductDetail = {
   slug: string;
   category: string;
@@ -91,10 +60,8 @@ export type ProductDetail = {
   image: string | null;
   specs: ProductSpec[];
   keyFeatures: ProductKeyFeature[];
-  lineup?: ProductLineupRow[];
-  /** 가이드: type1(MCCB) · type2(VFD frame) */
-  lineupVariant?: ProductLineupVariant;
-  frameLineup?: ProductFrameLineup;
+  /** product_etc.line_up 리치텍스트 HTML(그대로 렌더). 정적 템플릿은 빈 문자열 */
+  lineUp: string;
   downloads: ProductDownloadItem[];
   otherProducts: ProductOtherItem[];
   youtubeVideoId: string;
@@ -132,58 +99,6 @@ const h100PlusKeyFeatures: ProductKeyFeature[] = [
     title: "Building Automation Connectivity",
     description:
       "Supports building and HVAC automation protocols, including BACnet, N2, and Modbus.",
-  },
-];
-
-const sharedInterrupting = ["35 kA(Ni)", "65 kA(Hi)", "100 kA(Li)"];
-
-/** variant=type1 · devices_product_lineup type1 */
-export const sharedLineup: ProductLineupRow[] = [
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts150.png",
-      label: "UTS150",
-    },
-    ratedCurrent: "40-150A",
-    interrupting: sharedInterrupting,
-    standard: "UL 489, CSA",
-  },
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts250.png",
-      label: "UTS250",
-    },
-    ratedCurrent: "250A",
-    interrupting: sharedInterrupting,
-    standard: "UL 489, CSA",
-  },
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts400.png",
-      label: "UTS400",
-    },
-    ratedCurrent: "250-400A",
-    interrupting: sharedInterrupting,
-    standard: "UL 489, CSA",
-  },
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts600.png",
-      label: "UTS600",
-    },
-    ratedCurrent: "600A",
-    interrupting: sharedInterrupting,
-    standard: "UL 489, CSA",
-  },
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts1200.png",
-      label: "HVDC(High Voltage Direct Current Transmission System)",
-    },
-    ratedCurrent: "800-1200A",
-    interrupting: sharedInterrupting,
-    standard: "UL 489, CSA",
-    tall: true,
   },
 ];
 
@@ -345,6 +260,7 @@ export const metasolMsDetail: ProductDetail = {
     { label: "Standard", value: "UL 60947-4-1" },
   ],
   keyFeatures: metasolMsKeyFeatures,
+  lineUp: "",
   downloads: metasolMsDownloads,
   youtubeVideoId: "E3wi6qPy1Cc",
   configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
@@ -394,6 +310,7 @@ export const h100PlusDetail: ProductDetail = {
     { label: "Standard", value: "UL, cUL, CE, RoHS, Marine, OSHPD" },
   ],
   keyFeatures: h100PlusKeyFeatures,
+  lineUp: "",
   downloads: metasolMsDownloads,
   youtubeVideoId: "E3wi6qPy1Cc",
   configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
@@ -485,66 +402,6 @@ const susolUlSmartMccbKeyFeatures: ProductKeyFeature[] = [
   },
 ];
 
-const mccbInterrupting = ["35 kA(Ni)", "65 kA(Hi)", "100 kA(Li)"];
-
-/** Figma 4513:49818 — MCCB interrupting lineup (items · type1 mccb layout) */
-export const susolUlSmartMccbInterruptingLineup: ProductLineupRow[] = [
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts150.png",
-      label: "UTS150",
-    },
-    ratedCurrent: "40-150A",
-    interrupting: mccbInterrupting,
-    standard: "UL 489, CSA",
-  },
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts250.png",
-      label: "UTS250",
-    },
-    ratedCurrent: "250A",
-    interrupting: mccbInterrupting,
-    standard: "UL 489, CSA",
-  },
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts400.png",
-      label: "UTS400",
-    },
-    ratedCurrent: "250-400A",
-    interrupting: mccbInterrupting,
-    standard: "UL 489, CSA",
-  },
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts600.png",
-      label: "UTS600",
-    },
-    ratedCurrent: "600A",
-    interrupting: mccbInterrupting,
-    standard: "UL 489, CSA",
-  },
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts800.png",
-      label: "UTS800",
-    },
-    ratedCurrent: "400~800 A",
-    interrupting: mccbInterrupting,
-    standard: "UL 489, CSA",
-  },
-  {
-    type: {
-      image: "/img/devices-systems/lineup/lineup_uts1200.png",
-      label: "UTS1200",
-    },
-    ratedCurrent: "800-1200A",
-    interrupting: mccbInterrupting,
-    standard: "UL 489, CSA",
-  },
-];
-
 /** Figma 6788:7460 — Susol UL ACB product detail (route: susol-ul-smart-mccb) */
 export const susolUlSmartMccbDetail: ProductDetail = {
   slug: "susol-ul-smart-mccb",
@@ -568,7 +425,7 @@ export const susolUlSmartMccbDetail: ProductDetail = {
     },
   ],
   keyFeatures: susolUlSmartMccbKeyFeatures,
-  lineupVariant: "type1",
+  lineUp: "",
   downloads: metasolMsDownloads,
   youtubeVideoId: "",
   configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",

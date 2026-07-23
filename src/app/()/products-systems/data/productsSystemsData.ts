@@ -89,13 +89,16 @@ export async function fetchCategoryBySlug(
   opts?: { depth?: number },
 ): Promise<CategoryRow | null> {
   try {
-    const depthQuery =
-      opts?.depth !== undefined ? `eq_category.depth=${opts.depth}&` : "";
-    const rows = await searchPageData(
-      "category-data",
-      `${depthQuery}eq_seo.slug=${encodeURIComponent(slug)}&size=1`,
-    );
-    const row = rows[0];
+    // where 조립 — depth 옵션 지정 시에만 eq_category.depth 추가(직렬화는 fetchData 내부 URLSearchParams가 담당).
+    const where: Record<string, string> = { "eq_seo.slug": slug };
+    if (opts?.depth !== undefined) where["eq_category.depth"] = String(opts.depth);
+    const res = await fetchData<Record<string, unknown>>({
+      slug: "category-data",
+      where,
+      size: 1,
+      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
+    });
+    const row = res.content[0] ?? null;
     if (!row) return null;
     return {
       id: Number(row._id),
@@ -124,11 +127,13 @@ export async function fetchCategoryChildren(
   parentId: number,
 ): Promise<CategoryChild[]> {
   try {
-    const rows = await searchPageData(
-      "category-data",
-      `eq_category.parentId=${parentId}&unpaged=true`,
-    );
-    const mapped = rows.map((row) => ({
+    const res = await fetchData<Record<string, unknown>>({
+      slug: "category-data",
+      where: { "eq_category.parentId": String(parentId) },
+      unpaged: true,
+      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
+    });
+    const mapped = res.content.map((row) => ({
       id: Number(row._id),
       code: String(row["category.code"] ?? ""),
       title: (row["category.title"] as string) ?? "",
@@ -154,11 +159,13 @@ export interface TopCategory {
 // depth2(fetchCategoryChildren)와 동일하게 FE에서 sortOrder ASC(동률 id ASC) 정렬한다(서버 sort 파라미터로는 TEXT/숫자 정렬이 깨짐).
 export async function fetchTopCategories(): Promise<TopCategory[]> {
   try {
-    const rows = await searchPageData(
-      "category-data",
-      `eq_category.depth=1&unpaged=true`,
-    );
-    const mapped = rows.map((row) => ({
+    const res = await fetchData<Record<string, unknown>>({
+      slug: "category-data",
+      where: { "eq_category.depth": "1" },
+      unpaged: true,
+      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
+    });
+    const mapped = res.content.map((row) => ({
       id: Number(row._id),
       code: String(row["category.code"] ?? ""),
       title: (row["category.title"] as string) ?? "",
@@ -193,11 +200,13 @@ export async function fetchAllVisibleProducts(): Promise<
   CategoryProductCardWithCode[]
 > {
   try {
-    const rows = await searchPageData(
-      "product-data",
-      `eq_product.is_visible=001&unpaged=true`,
-    );
-    const products = rows.map((row) => ({
+    const res = await fetchData<Record<string, unknown>>({
+      slug: "product-data",
+      where: { "eq_product.is_visible": "001" },
+      unpaged: true,
+      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
+    });
+    const products = res.content.map((row) => ({
       id: Number(row._id),
       code: String(row["product.product_code"] ?? ""),
       title: (row["product.product_name"] as string) ?? "",
@@ -239,11 +248,13 @@ export async function fetchProductDetailBySlug(
   slug: string,
 ): Promise<Record<string, unknown> | null> {
   try {
-    const rows = await searchPageData(
-      "product-data",
-      `eq_seo.slug=${encodeURIComponent(slug)}&size=1`,
-    );
-    return rows[0] ?? null;
+    const res = await fetchData<Record<string, unknown>>({
+      slug: "product-data",
+      where: { "eq_seo.slug": slug },
+      size: 1,
+      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
+    });
+    return res.content[0] ?? null;
   } catch {
     return null;
   }
@@ -265,6 +276,7 @@ export interface HwProductData {
   keyFeatures: { title: string; content: string }[]; // key_feature{1..4}.key{N}_title/_content
   video: string; // product_etc.video (YouTube URL) — 상세 병합 시 id로 변환
   connectPortal: string; // product_etc.connect_portal (Configurator 링크)
+  lineUp: string; // product_etc.line_up (리치텍스트 HTML, 그대로 렌더)
 }
 
 // HW 제품상세 row → 히어로/Key Features 바인딩용 구조로 가공.
@@ -290,6 +302,7 @@ export function mapHwProductData(row: Record<string, unknown>): HwProductData {
     keyFeatures,
     video: str("product_etc.video"),
     connectPortal: str("product_etc.connect_portal"),
+    lineUp: str("product_etc.line_up"),
   };
 }
 
@@ -337,11 +350,14 @@ export interface ProductNameItem {
 // 전 공개 제품명 목록(A~Z 인덱스용). label = product.product_name.
 export async function fetchAllProductNames(): Promise<ProductNameItem[]> {
   try {
-    const rows = await searchPageData(
-      "product-data",
-      `eq_product.is_visible=001&sort=product.product_name,asc&unpaged=true`,
-    );
-    return rows
+    const res = await fetchData<Record<string, unknown>>({
+      slug: "product-data",
+      where: { "eq_product.is_visible": "001" },
+      sort: "product.product_name,asc",
+      unpaged: true,
+      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
+    });
+    return res.content
       .map((row) => ({
         id: Number(row._id),
         name: (row["product.product_name"] as string) ?? "",
