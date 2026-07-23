@@ -106,6 +106,7 @@ STEP 1. 마크업 태깅 (fo-slug-analyzer)
         → data-slug 값(실제 slug명)은 에이전트가 짓지 않는다 — 사용자가 지정한 값을 그대로 쓰거나, 아직 없으면 TODO로 비워두고 "확인 필요"로 표시
         → 이 시점엔 실제 데이터 연결(fetch) 안 함 — 위치 표시만
         → (권장) slug 값이 이미 정해져 있다면, 태깅에 들어가기 전에 그 slug가 bo에 실제 등록돼 있는지·실제 dataJson 구조가 무엇인지 먼저 스팟체크한다 — STEP4까지 미루면 구조 불일치로 STEP1~3 전체를 재작업하게 될 수 있다
+        → ⚠️ **스키마 드리프트 주의**: 같은 slug라도 운영 중 필드명이 바뀌어 구/신 스키마가 레코드마다 혼재할 수 있다(예: 과거 레코드는 `termsForm.termsType`, 최신 레코드는 `terms.terms_type`). 이런 경우 "아무 레코드나" 스팟체크하면 안 되고, **STEP2에서 확정한 where/orderBy/limit로 실제 뽑힐 그 레코드**를 라이브 API로 직접 조회해서 필드명을 확인해야 한다. 정적 DB 덤프나 오래된 레코드 하나만 보고 필드명을 단정하지 말 것
 
 STEP 2. where 파라미터 / row limit 확인 (fo-slug-analyzer)
         → 해당 slug 조회 시 필터 조건(where)이 필요한지 확인
@@ -219,3 +220,33 @@ fetchData({ slug, id?, adjacent?, page?, size?, where?, sort?, 리턴함수? })
 
 목록에서 무거운 필드(리치텍스트 본문 등)를 빼려면 `where: { exclude: "필드명" }`(콤마로 여러 개).
 안 주면 기존과 동일하게 전체 필드가 내려온다. 상세 조회에는 적용하지 않는다.
+
+### 컴포넌트 자체 useEffect로 단건 fetch할 때 주의사항 — 재호출 가드는 ref로
+
+페이지 레벨이 아니라 모달/위젯 같은 **컴포넌트 자신의 `useEffect` 안에서** `fetchData`를 1회만 호출하는 패턴(예: 모달이 열릴 때 최초 1회 조회)에서, "이미 조회했는지" 판단하는 재호출 가드를 `useState`로 만들면 안 된다.
+
+```js
+// ❌ 잘못된 패턴 — 가드를 state로 관리
+const [status, setStatus] = useState("idle");
+useEffect(() => {
+  if (!open || status !== "idle") return;
+  setStatus("loading");   // 이 호출이 status를 바꿔서
+  ...
+}, [open, status]);        // 의존성 배열의 status 때문에 effect가 스스로 재실행 → 클린업이 먼저 돌며 방금 시작한 요청을 취소해버림
+```
+
+`setStatus("loading")`가 의존성 배열에 들어있는 `status`를 바꾸기 때문에, 리액트가 같은 렌더 사이클에서 effect를 즉시 한 번 더 실행시키고, 이때 클린업(`cancelled = true`)이 먼저 실행되어 방금 시작한 fetch 응답을 스스로 무효 처리해버린다. 네트워크 요청은 정상적으로 나가고 서버 응답도 정상인데(콘솔 에러도 없음), 화면엔 영영 반영되지 않는 형태로 나타나 원인 파악이 어렵다.
+
+```js
+// ✅ 올바른 패턴 — 가드는 ref로 관리(리렌더/effect 재실행을 유발하지 않음)
+const fetchedRef = useRef(false);
+useEffect(() => {
+  if (!open || fetchedRef.current) return;
+  fetchedRef.current = true;
+  let cancelled = false;
+  fetchData({...}).then((res) => { if (!cancelled) setTermsHtml(...); });
+  return () => { cancelled = true; };
+}, [open]);
+```
+
+실제 적용 사례: `src/components/modals/PrivacyPolicyModal.tsx`(termsMgmt-data 바인딩).
