@@ -6,7 +6,9 @@
 // - 서버(SSR/서버 컴포넌트) 실행 시: Node fetch 는 상대경로를 해석 못 하므로
 //   NEXT_PUBLIC_SITE_URL 을 붙여 절대주소로 호출 (내부적으로는 여전히 fo 서버 rewrites 프록시를 거침)
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3002";
+// 사이트 절대주소(서버 fetch 절대화 + OG 이미지 절대경로 구성에 공용 사용)
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3002";
 
 export async function fetchApi<T>(
   endpoint: string,

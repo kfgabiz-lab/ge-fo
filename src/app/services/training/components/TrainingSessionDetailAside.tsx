@@ -3,6 +3,7 @@
 import type { EngineeringTrainingSessionDetail } from "@/data/services/engineeringTrainingSessionDetailContent";
 import { engineeringTrainingSessionAssets } from "@/data/services/engineeringTrainingSessionDetailContent";
 import TrainingSessionCountdown from "./TrainingSessionCountdown";
+import TrainingSessionLocationMap from "./TrainingSessionLocationMap";
 
 // Training 세션 상세 - 우측(PC)/상단(MO) 사이드바 (ls-publish SessionDetailAside 이관)
 function SessionMetaLabel({
@@ -103,11 +104,19 @@ export default function TrainingSessionDetailAside({
             </p>
           </div>
           <ul className="support_service_training_session_detail__meta-bullets">
-            {/* 주소/전화/이메일: 이 회차 행의 curriculum_detail2.address / phone / email */}
-            <li data-slugkey="curriculum_detail2.address">{sidebar.location.address}</li>
+            {/* 주소/전화/이메일: 이 회차 행의 curriculum_detail2.address / phone / email.
+                주소는 Virtual 단독 등으로 빈값이면 뷰모델에서 ""로 게이트됨 → 빈 li 노출 금지(라인 자체 미렌더). */}
+            {sidebar.location.address.trim() ? (
+              <li data-slugkey="curriculum_detail2.address">{sidebar.location.address}</li>
+            ) : null}
             <li data-slugkey="curriculum_detail2.phone">{sidebar.location.phone}</li>
             <li data-slugkey="curriculum_detail2.email">{sidebar.location.email}</li>
           </ul>
+          {/* 지도: 주소 라인이 실제 노출되는 조건(주소 비어있지 않음)과 일치시켜 렌더.
+              주소 빈값(Virtual 단독 등)이면 지도 컴포넌트가 자체적으로 null 반환(미노출). */}
+          {sidebar.location.address.trim() ? (
+            <TrainingSessionLocationMap address={sidebar.location.address} />
+          ) : null}
         </div>
 
         <div className="support_service_training_session_detail__meta-item support_service_training_session_detail__meta-item--products">

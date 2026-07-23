@@ -1,6 +1,4 @@
 import { notFound } from "next/navigation";
-import type { PageDataItem } from "@/lib/pageData";
-import { fetchData } from "@/lib/pageDataApi";
 import type { TrainingVariant } from "../data/trainingContent";
 import {
   TRAINING_COURSE_CODE,
@@ -8,11 +6,9 @@ import {
   toCategoryMap,
 } from "../data/trainingData";
 import {
-  TRAINING_DETAIL_SLUG,
-  TRAINING_DETAIL_SORT,
+  fetchTrainingDetailRows,
   fetchTrainingTypeCodes,
   toTrainingCourseDetail,
-  trainingDetailWhere,
 } from "../data/trainingDetailData";
 import TrainingDetailHero from "./TrainingDetailHero";
 import TrainingDetailSchedule from "./TrainingDetailSchedule";
@@ -30,22 +26,16 @@ export default async function TrainingDetailPage({
   variant: TrainingVariant;
   courseId: string;
 }) {
-  const [result, categoryCodes, trainingTypeCodes] = await Promise.all([
+  const [rows, categoryCodes, trainingTypeCodes] = await Promise.all([
     // 옵션A: courseId(부모 currMgmt-data.id) 역방향 + 공개(is_visible=001) + 과거회차 제외 where.
     // 1:N 모델: 다건 교육회차 전체를 unpaged 로 받아(정렬=교육 시작일 asc) 각 행을 카드로 렌더.
-    fetchData<PageDataItem>({
-      slug: TRAINING_DETAIL_SLUG,
-      where: trainingDetailWhere(courseId),
-      sort: TRAINING_DETAIL_SORT,
-      unpaged: true,
-      리턴함수: (rows) => rows,
-    }),
+    // generateMetadata 와 동일 인자로 fetchTrainingDetailRows 공용 호출 → fetch memoization 으로 실제 요청 1회.
+    fetchTrainingDetailRows(courseId),
     fetchTrainingCategories(),
     fetchTrainingTypeCodes(),
   ]);
 
   // 서버 1차 게이트 결과가 비면(미존재/전부 비공개/전부 과거) 404
-  const rows = result.content;
   if (rows.length === 0) {
     notFound();
   }

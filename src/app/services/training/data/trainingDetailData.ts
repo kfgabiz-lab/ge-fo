@@ -14,7 +14,9 @@
 //   eq_curriculum_detail1.curriculum_id, eq_curriculum_detail3.is_visible=001,
 //   condexpr_training_date_to(training_date_to>=today()?'valid':'past') + condval_training_date_to=valid
 // 이중 방어: 서버 where(is_visible/과거제외) + FE 2차 재판정(_fetchedRel8.curriculum.is_visible & training_date_to>=today)
-import { fetchApi } from "@/lib/api";
+import type { Metadata } from "next";
+import { fetchApi, SITE_URL } from "@/lib/api";
+import { fetchData } from "@/lib/pageDataApi";
 import { formatDisplayDate } from "@/lib/formatDate";
 import type { PageDataItem } from "@/lib/pageData";
 import {
@@ -73,6 +75,7 @@ interface CurriculumDetail2 {
   register_period_to?: string; // 접수마감/카운트다운 산출용
   training_date_from?: string; // 교육 시작일
   training_date_to?: string; // 교육 종료일
+  content?: string; // 세션 본문(WYSIWYG HTML) — 세션 상세 "Who/Meals" 대체 단일 본문
 }
 
 // curriculum_detail3: 공개/수강료
@@ -224,6 +227,22 @@ function isNotPast(dateTo?: string): boolean {
   const endUtc = Date.UTC(ymd.y, ymd.m - 1, ymd.d);
   const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
   return endUtc >= todayUtc;
+}
+
+// Agenda 정렬: date("YYYY-MM-DD") 우선 오름차순, 동일 date면 time_from("HH:MM") 오름차순.
+// - 값 없는 항목 방어: 빈 문자열은 어떤 값보다 앞(빈 date/time 이 선두). 원본 불변(복사 후 정렬).
+function sortSchedule(
+  items: TrainingScheduleItemRaw[],
+): TrainingScheduleItemRaw[] {
+  return [...items].sort((a, b) => {
+    const da = (a.date ?? "").slice(0, 10);
+    const db = (b.date ?? "").slice(0, 10);
+    if (da !== db) return da < db ? -1 : 1;
+    const ta = a.time_from ?? "";
+    const tb = b.time_from ?? "";
+    if (ta !== tb) return ta < tb ? -1 : 1;
+    return 0;
+  });
 }
 
 // training_type CSV → 코드 배열("001,002" → ["001","002"])
@@ -397,37 +416,53 @@ export function toTrainingSessionDetail(
   const trainingTypeLabel = trainingTypeLabels(d1.training_type, trainingTypeMap);
   const productsCovered = extractProductNames(json).join(", ");
   const dateDisplay = formatDisplayDate(d2.training_date_from ?? "");
-  // 주소 + 상세주소 조합(장소명 대응 필드는 없음 → name 은 빈값)
-  const addressFull = [d2.address, d2.addressDetail]
-    .filter((v): v is string => Boolean(v))
-    .join(", ");
+  // 주소 노출 게이트(코스 카드 toCourseCard 와 동일 공통 헬퍼): Virtual(002) 단독이면 숨김.
+  const showAddress = shouldShowAddress(d1.training_type);
+  // 주소 + 상세주소 조합(장소명 대응 필드는 없음 → name 은 빈값).
+  // Virtual 단독이면 빈값 → 사이드바 주소 li·지도·캘린더 location 모두 미노출.
+  const addressFull = showAddress
+    ? [d2.address, d2.addressDetail]
+        .filter((v): v is string => Boolean(v))
+        .join(", ")
+    : "";
 
-  // Agenda: 이 행의 training_schedule[] → No/Time/Contents(title+description)/Trainer
+  // Agenda: 이 행의 training_schedule[] → date+time_from 오름차순 정렬 후 No 재채번(1부터).
   const scheduleRaw = Array.isArray(json.training_schedule)
     ? json.training_schedule
     : [];
-  const agenda: EngineeringTrainingAgendaRow[] = scheduleRaw.map((s, idx) => ({
-    id: s.id ? String(s.id) : `agenda-${idx + 1}`,
-    number: String(idx + 1),
-    time: [s.time_from, s.time_to].filter(Boolean).join(" ~ "),
-    title: s.title ?? "",
-    description: s.description || undefined,
-    trainer: s.trainer || undefined,
-  }));
+  const scheduleSorted = sortSchedule(scheduleRaw);
+  const agenda: EngineeringTrainingAgendaRow[] = scheduleSorted.map(
+    (s, idx) => ({
+      id: s.id ? String(s.id) : `agenda-${idx + 1}`,
+      number: String(idx + 1),
+      time: [s.time_from, s.time_to].filter(Boolean).join(" ~ "),
+      title: s.title ?? "",
+      description: s.description || undefined,
+      trainer: s.trainer || undefined,
+    }),
+  );
+  // Trainer 컬럼 노출 여부: 정렬된 배열 중 하나라도 trainer 값이 있으면 노출(모두 빈값이면 비노출).
+  const showTrainerColumn = scheduleSorted.some(
+    (s) => (s.trainer ?? "").trim().length > 0,
+  );
 
-  // Add to Calendar(A-2) 이벤트: 회차 시작일 + Agenda 첫/끝 시각으로 세션 span 구성
-  const firstSch = scheduleRaw[0];
-  const lastSch = scheduleRaw[scheduleRaw.length - 1];
+  // Add to Calendar(A-2) 이벤트: 회차 시작일 + Agenda(정렬 후) 첫/끝 시각으로 세션 span 구성
+  const firstSch = scheduleSorted[0];
+  const lastSch = scheduleSorted[scheduleSorted.length - 1];
 
   return {
-    ...STATIC_SESSION_BASE, // whoShouldAttend/meals/positionOptions/calendar 정적 유지
+    ...STATIC_SESSION_BASE, // positionOptions/calendar/sidebar 템플릿 정적 유지
     courseId,
     sessionId,
     category: categoryLabel,
     title: d2.title ?? "",
     breadcrumbCurrent: dateDisplay,
+    // 세션 본문(WYSIWYG HTML). 빈값이면 컴포넌트에서 본문 섹션/탭 비노출.
+    content: d2.content ?? "",
     // 동적 Agenda 로 정적 agenda 덮어쓰기
     agenda,
+    // Agenda Trainer 컬럼 노출 여부(뷰모델 계산 결과)
+    showTrainerColumn,
     event: {
       title: d2.title ?? "",
       startIso: (d2.training_date_from ?? "").slice(0, 10),
@@ -455,4 +490,98 @@ export function toTrainingSessionDetail(
       trainingType: trainingTypeLabel,
     },
   };
+}
+
+// ---------------- OG 메타데이터 헬퍼(라우트 generateMetadata 공용) ----------------
+
+// 상세 조회 행 취득(코스/세션 공통, 라우트 generateMetadata + page 컴포넌트 공용).
+// - page 컴포넌트와 "동일 인자"로 fetchData 를 호출해 Next fetch memoization 으로 실제 요청 1회만 발생시킨다.
+export async function fetchTrainingDetailRows(
+  courseId: string,
+): Promise<PageDataItem[]> {
+  const result = await fetchData<PageDataItem>({
+    slug: TRAINING_DETAIL_SLUG,
+    where: trainingDetailWhere(courseId),
+    sort: TRAINING_DETAIL_SORT,
+    unpaged: true,
+    리턴함수: (rows) => rows,
+  });
+  return result.content;
+}
+
+// 게이트 통과 첫 행의 부모 curriculum 선택(메타 대표값 산출용). 없으면 null.
+function pickGateCurriculum(
+  rows: PageDataItem[],
+  expectedCourseCode?: string,
+): ParentCurriculum | null {
+  const valid = rows
+    .map((raw) => ({ json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
+    .filter(({ json }) => passesGate(json, expectedCourseCode));
+  return valid[0]?.json._fetchedRel8?.curriculum ?? null;
+}
+
+// curriculum.image[0] → page-files 절대경로(OG image). 미등록/파싱불가 시 undefined.
+// - 절대화 방식: SITE_URL 접두(옵션 b). 근거: fetchApi 서버측 절대화와 동일 SITE_URL 관례 재사용,
+//   layout 의 기존 openGraph(완전 절대 URL, metadataBase 미의존)에 부작용 없음.
+function ogImageFromCurriculum(
+  curriculum: ParentCurriculum | null,
+): string | undefined {
+  const imageArr = curriculum?.image;
+  const mediaId =
+    Array.isArray(imageArr) && imageArr.length > 0 ? Number(imageArr[0]) : null;
+  if (mediaId == null || Number.isNaN(mediaId)) return undefined;
+  return `${SITE_URL}${trainingImageSrc(mediaId)}`;
+}
+
+// title/description/image → openGraph 포함 Metadata 구성(공용).
+function buildOgMetadata(
+  title: string,
+  description: string,
+  image?: string,
+): Metadata {
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      ...(image ? { images: [{ url: image }] } : {}),
+    },
+  };
+}
+
+// 코스 상세 OG 메타: title=부모 curriculum.title, description=부모 curriculum.description,
+// image=curriculum.image[0]. 데이터 없으면 안전 폴백(빈 Metadata → layout 기본값 유지).
+export function buildCourseMetadata(
+  rows: PageDataItem[],
+  expectedCourseCode?: string,
+): Metadata {
+  const curriculum = pickGateCurriculum(rows, expectedCourseCode);
+  if (!curriculum) return {};
+  return buildOgMetadata(
+    curriculum.title ?? "",
+    curriculum.description ?? "",
+    ogImageFromCurriculum(curriculum),
+  );
+}
+
+// 세션 상세 OG 메타: title=curriculum_detail2.title, description=부모 curriculum.description
+// (세션 별도 설명 필드 없음 → 부모 curriculum.description 사용), image=커리큘럼 image 동일.
+// 미매칭/게이트 탈락 시 안전 폴백(빈 Metadata).
+export function buildSessionMetadata(
+  rows: PageDataItem[],
+  sessionId: string,
+  expectedCourseCode?: string,
+): Metadata {
+  const matched = rows
+    .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
+    .find(({ raw }) => Number(raw.id) === Number(sessionId));
+  if (!matched || !passesGate(matched.json, expectedCourseCode)) return {};
+  const curriculum = matched.json._fetchedRel8?.curriculum ?? null;
+  const d2 = matched.json.curriculum_detail2 ?? {};
+  return buildOgMetadata(
+    d2.title ?? "",
+    curriculum?.description ?? "",
+    ogImageFromCurriculum(curriculum),
+  );
 }

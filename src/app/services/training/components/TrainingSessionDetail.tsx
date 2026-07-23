@@ -1,13 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { EngineeringTrainingSessionDetail } from "@/data/services/engineeringTrainingSessionDetailContent";
 import {
+  buildSessionTabs,
   engineeringTrainingSessionAssets,
   engineeringTrainingSessionShareLinks,
-  engineeringTrainingSessionTabs,
   type EngineeringTrainingSessionTabId,
 } from "@/data/services/engineeringTrainingSessionDetailContent";
+import type { TrainingVariant } from "../data/trainingContent";
 import TrainingSessionDetailForm from "./TrainingSessionDetailForm";
 import TrainingSessionDetailAside from "./TrainingSessionDetailAside";
 import TrainingSessionDetailTableScroll from "./TrainingSessionDetailTableScroll";
@@ -67,12 +68,39 @@ function scrollToSection(id: string) {
   requestAnimationFrame(step);
 }
 
+// 페이지 최상단(top 0)으로 스크롤 — content 비어 session-training 앵커가 없을 때 Agenda 탭 클릭 처리용.
+function scrollToTop() {
+  const immediate = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const lenis = getLenisInstance();
+  if (lenis) {
+    lenis.scrollTo(0, {
+      immediate,
+      duration: SESSION_TAB_SCROLL_DURATION_MS / 1000,
+      programmatic: true,
+      force: true,
+    });
+    return;
+  }
+  window.scrollTo({ top: 0, behavior: immediate ? "auto" : "smooth" });
+}
+
 export default function TrainingSessionDetail({
   session,
+  variant,
 }: {
   session: EngineeringTrainingSessionDetail;
+  variant: TrainingVariant;
 }) {
-  const [activeTab, setActiveTab] = useState<EngineeringTrainingSessionTabId>("training");
+  // 본문(content) 유무 — 탭 노출/본문 섹션 노출/Agenda 탭 스크롤 분기의 단일 기준
+  const hasContent = session.content.trim().length > 0;
+  // 세션 탭 목록: variant(라벨) + content 유무(training 탭 노출)로 동적 구성
+  const tabs = useMemo(
+    () => buildSessionTabs(variant, hasContent),
+    [variant, hasContent],
+  );
+  const [activeTab, setActiveTab] = useState<EngineeringTrainingSessionTabId>(
+    tabs[0].id,
+  );
   // 공유 링크에 주입할 현재 페이지 URL(마운트 후 window 접근 → SSR/CSR 안전)
   const [shareUrl, setShareUrl] = useState("");
 
@@ -106,9 +134,11 @@ export default function TrainingSessionDetail({
   useEffect(() => {
     const onScroll = () => {
       const offset = window.scrollY + SESSION_TAB_SCROLL_OFFSET;
-      let current: EngineeringTrainingSessionTabId = "training";
+      // 기본 활성 탭 = 현재 노출된 첫 탭(content 없으면 training 탭이 없으므로 tabs[0])
+      let current: EngineeringTrainingSessionTabId = tabs[0].id;
 
-      for (const tab of engineeringTrainingSessionTabs) {
+      // 삭제된 앵커(session-training 등)를 참조하지 않도록 노출된 탭만 순회
+      for (const tab of tabs) {
         const element = document.getElementById(`session-${tab.id}`);
         if (element && element.offsetTop <= offset) {
           current = tab.id;
@@ -122,7 +152,7 @@ export default function TrainingSessionDetail({
     onScroll();
 
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [tabs]);
 
   return (
     <section
@@ -194,7 +224,7 @@ export default function TrainingSessionDetail({
               className="support_service_training_session_detail__tabs"
               aria-label="Session sections"
             >
-              {engineeringTrainingSessionTabs.map((tab) => {
+              {tabs.map((tab) => {
                 const isActive = activeTab === tab.id;
 
                 return (
@@ -206,7 +236,12 @@ export default function TrainingSessionDetail({
                     }`}
                     onClick={() => {
                       setActiveTab(tab.id);
-                      scrollToSection(`session-${tab.id}`);
+                      // content 없어 session-training 앵커가 없을 때, Agenda 는 최상단 섹션이므로 page top 0 으로 스크롤
+                      if (tab.id === "agenda" && !hasContent) {
+                        scrollToTop();
+                      } else {
+                        scrollToSection(`session-${tab.id}`);
+                      }
                     }}
                   >
                     {tab.label}
@@ -221,26 +256,24 @@ export default function TrainingSessionDetail({
               })}
             </nav>
 
-            <div
-              id="session-training"
-              className="support_service_training_session_detail__section-group"
-            >
-              <div className="support_service_training_session_detail__block">
-                <h2 className="support_service_training_session_detail__block-tit">
-                  Who should attend?
-                </h2>
-                <ul className="support_service_training_session_detail__bullets">
-                  {session.whoShouldAttend.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
+            {/* 세션 본문: curriculum_detail2.content(WYSIWYG HTML) 단일 블록.
+                신뢰경계 = BO 관리자 입력·동일 오리진 → company blog/press/articles/events 및
+                products GenericProductDetail 선례대로 sanitize 없이 dangerouslySetInnerHTML 직접 렌더.
+                content 비어있으면 섹션(및 training 탭) 전체 비노출. */}
+            {hasContent ? (
+              <div
+                id="session-training"
+                className="support_service_training_session_detail__section-group"
+              >
+                <div className="support_service_training_session_detail__block">
+                  <div
+                    className="support_service_training_session_detail__content"
+                    data-slugkey="content"
+                    dangerouslySetInnerHTML={{ __html: session.content }}
+                  />
+                </div>
               </div>
-
-              <div className="support_service_training_session_detail__block">
-                <h2 className="support_service_training_session_detail__block-tit">Meals</h2>
-                <p className="support_service_training_session_detail__text">{session.meals}</p>
-              </div>
-            </div>
+            ) : null}
 
             <div
               id="session-agenda"
@@ -254,7 +287,10 @@ export default function TrainingSessionDetail({
                       <th scope="col">No</th>
                       <th scope="col">Time</th>
                       <th scope="col">Contents</th>
-                      <th scope="col">Trainer</th>
+                      {/* Trainer 컬럼: 모든 행 trainer 빈값이면 비노출(뷰모델 showTrainerColumn) */}
+                      {session.showTrainerColumn ? (
+                        <th scope="col">Trainer</th>
+                      ) : null}
                     </tr>
                   </thead>
                   {/* Agenda = 이 회차 행의 training_schedule 배열 반복(단건 main 내부 중첩 다건).
@@ -280,7 +316,9 @@ export default function TrainingSessionDetail({
                             </p>
                           ) : null}
                         </td>
-                        <td data-slugkey="trainer">{row.trainer ?? ""}</td>
+                        {session.showTrainerColumn ? (
+                          <td data-slugkey="trainer">{row.trainer ?? ""}</td>
+                        ) : null}
                       </tr>
                     ))}
                   </tbody>

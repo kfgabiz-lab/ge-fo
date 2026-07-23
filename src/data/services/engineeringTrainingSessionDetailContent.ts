@@ -1,3 +1,5 @@
+import type { TrainingVariant } from "@/app/services/training/data/trainingContent";
+
 export type EngineeringTrainingAgendaRow = {
   id: string;
   number: string;
@@ -22,9 +24,11 @@ export type EngineeringTrainingSessionDetail = {
   category: string;
   title: string;
   breadcrumbCurrent: string;
-  whoShouldAttend: string[];
-  meals: string;
+  // 세션 본문(BO 관리자 WYSIWYG HTML, curriculum_detail2.content). 빈 문자열이면 본문 섹션/탭 비노출.
+  content: string;
   agenda: EngineeringTrainingAgendaRow[];
+  // Agenda Trainer 컬럼 노출 여부(모든 행 trainer 빈값이면 false → 컬럼 전체 비노출). 뷰모델에서 계산.
+  showTrainerColumn: boolean;
   positionOptions: string[];
   calendar: {
     googleLabel: string;
@@ -53,17 +57,6 @@ export type EngineeringTrainingSessionDetail = {
 
 const AGENDA_INTRO =
   "Introducing LS ELECTRIC, a global electrical solutions provider and electrical component manufacturer of UL, ANSI, and IEC products.";
-
-const SHARED_WHO_SHOULD_ATTEND = [
-  "Field Service Techs",
-  "Engineers",
-  "Integrators",
-  "Sales Engineers",
-  "Anyone who installs, commissions, or maintains LS Breakers & Switchgear!",
-];
-
-const SHARED_MEALS =
-  "Lunch will be provided during training by LS ELECTRIC America";
 
 const SHARED_AGENDA: EngineeringTrainingAgendaRow[] = [
   {
@@ -144,9 +137,9 @@ export const engineeringTrainingSessionDetails: Record<
     category: "POWER",
     title: SESSION_TITLE,
     breadcrumbCurrent: "Jan 10, 2026",
-    whoShouldAttend: SHARED_WHO_SHOULD_ATTEND,
-    meals: SHARED_MEALS,
+    content: "",
     agenda: SHARED_AGENDA,
+    showTrainerColumn: true,
     positionOptions: ["Rep", "Engineer", "Manager", "Other"],
     calendar: {
       googleLabel: "Google Calender",
@@ -169,9 +162,9 @@ export const engineeringTrainingSessionDetails: Record<
     category: "POWER",
     title: SESSION_TITLE,
     breadcrumbCurrent: "Mar 12, 2026",
-    whoShouldAttend: SHARED_WHO_SHOULD_ATTEND,
-    meals: SHARED_MEALS,
+    content: "",
     agenda: SHARED_AGENDA,
+    showTrainerColumn: true,
     positionOptions: ["Rep", "Engineer", "Manager", "Other"],
     calendar: {
       googleLabel: "Google Calender",
@@ -194,9 +187,9 @@ export const engineeringTrainingSessionDetails: Record<
     category: "POWER",
     title: SESSION_TITLE,
     breadcrumbCurrent: "Jul 14, 2026",
-    whoShouldAttend: SHARED_WHO_SHOULD_ATTEND,
-    meals: SHARED_MEALS,
+    content: "",
     agenda: SHARED_AGENDA,
+    showTrainerColumn: true,
     positionOptions: ["Rep", "Engineer", "Manager", "Other"],
     calendar: {
       googleLabel: "Google Calender",
@@ -219,9 +212,9 @@ export const engineeringTrainingSessionDetails: Record<
     category: "POWER",
     title: SESSION_TITLE,
     breadcrumbCurrent: "Dec 8, 2026",
-    whoShouldAttend: SHARED_WHO_SHOULD_ATTEND,
-    meals: SHARED_MEALS,
+    content: "",
     agenda: SHARED_AGENDA,
+    showTrainerColumn: true,
     positionOptions: ["Rep", "Engineer", "Manager", "Other"],
     calendar: {
       googleLabel: "Google Calender",
@@ -302,14 +295,44 @@ export const engineeringTrainingSessionShareLinks = [
   },
 ] as const;
 
-export const engineeringTrainingSessionTabs = [
-  { id: "training", label: "Engineering Training" },
-  { id: "agenda", label: "Agenda" },
-  { id: "registration", label: "Registration Form" },
+// 세션 탭 id 목록(타입 파생용). 라벨은 variant/조건에 따라 buildSessionTabs 에서 동적 구성.
+export const engineeringTrainingSessionTabIds = [
+  "training",
+  "agenda",
+  "registration",
 ] as const;
 
 export type EngineeringTrainingSessionTabId =
-  (typeof engineeringTrainingSessionTabs)[number]["id"];
+  (typeof engineeringTrainingSessionTabIds)[number];
+
+// 세션 탭(id + 라벨) 런타임 표현
+export type EngineeringTrainingSessionTab = {
+  id: EngineeringTrainingSessionTabId;
+  label: string;
+};
+
+// training 탭 라벨을 variant 별로 동적화(중복 방지 위해 한 곳에만 정의)
+const TRAINING_TAB_LABELS: Record<TrainingVariant, string> = {
+  sales: "Sales Training",
+  engineering: "Engineering Training",
+  service: "Service Training",
+};
+
+// 세션 탭 목록 동적 구성:
+// - training 탭은 본문(content)이 있을 때만 노출(variant별 라벨).
+// - agenda / registration 은 항상 노출.
+export function buildSessionTabs(
+  variant: TrainingVariant,
+  hasContent: boolean,
+): EngineeringTrainingSessionTab[] {
+  const tabs: EngineeringTrainingSessionTab[] = [];
+  if (hasContent) {
+    tabs.push({ id: "training", label: TRAINING_TAB_LABELS[variant] });
+  }
+  tabs.push({ id: "agenda", label: "Agenda" });
+  tabs.push({ id: "registration", label: "Registration Form" });
+  return tabs;
+}
 
 export function getEngineeringTrainingSessionDetail(
   courseId: string,

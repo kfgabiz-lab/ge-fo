@@ -1,6 +1,4 @@
 import { notFound } from "next/navigation";
-import type { PageDataItem } from "@/lib/pageData";
-import { fetchData } from "@/lib/pageDataApi";
 import type { TrainingVariant } from "../data/trainingContent";
 import {
   TRAINING_COURSE_CODE,
@@ -8,11 +6,9 @@ import {
   toCategoryMap,
 } from "../data/trainingData";
 import {
-  TRAINING_DETAIL_SLUG,
-  TRAINING_DETAIL_SORT,
+  fetchTrainingDetailRows,
   fetchTrainingTypeCodes,
   toTrainingSessionDetail,
-  trainingDetailWhere,
 } from "../data/trainingDetailData";
 import TrainingSessionDetail from "./TrainingSessionDetail";
 import "@/assets/css/training.css";
@@ -29,20 +25,14 @@ export default async function TrainingSessionPage({
   courseId: string;
   sessionId: string;
 }) {
-  const [result, categoryCodes, trainingTypeCodes] = await Promise.all([
+  const [rows, categoryCodes, trainingTypeCodes] = await Promise.all([
     // 코스와 동일한 다건 조회(unpaged). 세션 2뎁스는 이 결과에서 행 PK(id===sessionId) 1건 선택.
-    fetchData<PageDataItem>({
-      slug: TRAINING_DETAIL_SLUG,
-      where: trainingDetailWhere(courseId),
-      sort: TRAINING_DETAIL_SORT,
-      unpaged: true,
-      리턴함수: (rows) => rows,
-    }),
+    // generateMetadata 와 동일 인자로 fetchTrainingDetailRows 공용 호출 → fetch memoization 으로 실제 요청 1회.
+    fetchTrainingDetailRows(courseId),
     fetchTrainingCategories(),
     fetchTrainingTypeCodes(),
   ]);
 
-  const rows = result.content;
   if (rows.length === 0) {
     notFound();
   }
@@ -72,7 +62,7 @@ export default async function TrainingSessionPage({
       id="P-FO-SERV-030101P"
       data-slug="currDtlMgmt-data"
     >
-      <TrainingSessionDetail session={session} />
+      <TrainingSessionDetail session={session} variant={variant} />
     </main>
   );
 }
