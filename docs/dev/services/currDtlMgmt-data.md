@@ -1,92 +1,127 @@
 # Training 상세페이지(코스 1뎁스 + 세션 2뎁스) 데이터 바인딩 설계
 
 > 대상 파일:
-> - 코스 상세(1뎁스): `fo/src/app/services/training/components/TrainingDetailPage.tsx`(조립 래퍼, `data-slug="currDtlMgmt-data"` 단건 태깅 완료) + `TrainingDetailHero.tsx`(부모 curriculum 히어로) + `TrainingDetailSchedule.tsx`(중첩 다건 wrapper `data-slug="training_schedule" data-slug-repeat="true"`) + `TrainingDetailSession.tsx`(세션 카드, `data-slug-item`)
-> - 세션 상세(2뎁스): `fo/src/app/services/training/components/TrainingSessionPage.tsx`(동일 slug 단건 태깅 완료) + `TrainingSessionDetail.tsx`(헤더: category/title) + `TrainingSessionDetailAside.tsx`(사이드바: date/duration/training_type/capacity/address/phone/email)
+> - 코스 상세(1뎁스, 오퍼링 카드 다건): `fo/src/app/services/training/components/TrainingDetailPage.tsx`(조립 래퍼) + `TrainingDetailHero.tsx`(부모 curriculum 히어로, `_fetchedRel8`) + `TrainingDetailSchedule.tsx`(`currDtlMgmt-data` 목록 wrapper `data-slug="currDtlMgmt-data" data-slug-repeat="true"`, Training Type/Month 필터) + `TrainingDetailSession.tsx`(오퍼링 카드 1건, `data-slug-item`, 행 PK 기반 상세링크)
+> - 세션 상세(2뎁스, 목록 재사용 + 행PK 매칭 단건): `fo/src/app/services/training/components/TrainingSessionPage.tsx`(조립 래퍼) + `TrainingSessionDetail.tsx`(헤더: category/title, 공유·Add to Calendar·카운트다운 인터랙션) + `TrainingSessionDetailAside.tsx`(사이드바: date/duration/training_type/capacity/address/phone/email/products) + `TrainingSessionDetailForm.tsx` / `TrainingSessionDetailTableScroll.tsx`(Agenda 표, `training_schedule[]` 동적 렌더) + `TrainingSessionCountdown.tsx`(접수마감 카운트다운)
 > - 진입 라우트(variant 3종 × 2뎁스, 공유): `fo/src/app/services/{sales|engineering|service}-training/[courseId]/page.tsx`, `.../[courseId]/[sessionId]/page.tsx`
-> 상태: 설계중 (사용자 승인 하 오케스트레이터/서브에이전트 판단으로 STEP4까지 연속 진행 중)
+> - 공통 로직: `fo/src/data/breadcrumbConfig.ts`(브레드크럼 3 variant 코스/세션 경로 인식) / `fo/src/lib/eventShare.ts`(공유·Add to Calendar 생성 로직)
+> 상태: 설계중 (1:N 모델로 재확정 — 커리큘럼 1건에 오퍼링/교육정보 N행이 정상 구조)
 
 ## 1. data-slug
 - 값: `currDtlMgmt-data` (bo `slug_registry` id=155, type=PAGE_DATA, `is_active=true`)
-- 다건 여부: 단건(코스 상세/세션 상세 공통 — 옵션A 역방향 필터조회 결과[0]) + 그 내부에 `training_schedule` 중첩 다건(서브리스트, repeat)
-- 실DB 현황: `page_data(data_slug='currDtlMgmt-data')` 38건 중 snake_case 정본 스키마(`curriculum_detail1/2/3`) 7건. 레거시 camelCase(`currDltMgmtForm*`)는 이번 문서 where 조건 경로 자체가 없어 자연 제외됨(별도 제외 where 불필요, `currMgmt-data`와 동일 패턴)
+- 다건 여부: **다건(1:N)**. `currMgmt-data`(커리큘럼) 1건에 `currDtlMgmt-data`(교육정보/오퍼링) N건이 정상 구조. `curriculum_id`에 DB unique 제약 없음(`page_data`는 PK(`id`)만 존재) — 한 커리큘럼에 여러 오퍼링 행이 달리는 것을 전제로 설계한다. 관리 화면 근거: `page_template` id=106 `currDtlMgmt-list`(다행 그리드)
+- 세션 2뎁스(`sessionId`)는 이 다건 목록 중 행 PK(`id`, 숫자)로 매칭한 1건이며, 별도 slug/API가 아니다
 
-### 조회/연결 방식 — 옵션A 역방향 필터조회
-- `GET /api/v1/fo/page-data/currDtlMgmt-data?eq_curriculum_detail1.curriculum_id={courseId}&eq_curriculum_detail3.is_visible=001&sort=updatedAt,desc` → 결과[0]을 단건으로 채택
-  - `courseId` = 부모 `currMgmt-data.id`(URL 세그먼트, 리스트 카드 href `${detailHrefPrefix}/${id}`에서 전달)
-  - 부모 `curriculum`(리스트와 동일 레코드)은 응답 필드 `_fetchedRel8`(slug_relation id=8, `curriculum_id` EQ `currMgmt-data.id`, join_type=FETCH)로 자동 병합됨 — 실API로 병합 확인됨
-- 세션 2뎁스(`sessionId`, uuid)는 별도 API 조회 없음 — 위 코스 단건 조회 결과의 `training_schedule` 배열에서 `id === sessionId` 매칭 1건을 FE에서 선택(STEP6 구현 대상)
-- 공개 게이트(이중 방어):
-  - 서버 where: `eq_curriculum_detail3.is_visible=001`
-  - FE 재판정: `_fetchedRel8.curriculum.is_visible !== "001"` 이면 `notFound()` (부모 커리큘럼 자체가 비공개로 전환된 경우 대비)
+### 조회/연결 방식
+**1뎁스(코스 상세) — 오퍼링 카드 목록, 다건**
+- `GET /api/v1/fo/page-data/currDtlMgmt-data?eq_curriculum_detail1.curriculum_id={curriculumId}&eq_curriculum_detail3.is_visible=001&condexpr_training_date_to=training_date_to>=today()?'valid':'past'&condval_training_date_to=valid&sort=curriculum_detail2.training_date_from,asc&unpaged=true`
+  - `curriculumId` = 부모 `currMgmt-data.id`(URL 세그먼트)
+  - 과거 회차 제외는 서버 `condexpr`/`condval`로 1차 처리 + FE 2차 재판정(이중 방어)
+  - ⚠️ `condexpr`는 dot 경로를 지원하지 않는다. `curriculum_detail2.training_date_to`가 아니라 **leaf key `training_date_to`**로 넘겨야 파서가 중첩 구조를 EXISTS로 훑어 매칭한다
+  - `sort=curriculum_detail2.training_date_from,asc`는 다건 정렬을 위한 기술적 필요 orderBy이며, 별도 비즈니스 정렬 요구사항은 없다
+  - `unpaged=true`로 전체 조회(페이지네이션 없음)
+  - 부모 `curriculum`(리스트와 동일 레코드)은 응답 필드 `_fetchedRel8`(slug_relation id=8, `curriculum_id` EQ `currMgmt-data.id`, join_type=FETCH)로 **행별로** 자동 병합됨
+  - 연결제품(오퍼링별 다건)은 응답 필드 `_fetchedRel22`(slug_relation id=22, master 최상위 `power_list`, ARRAY_CONTAINS, FETCH → category-data)와 `_fetchedRel23`(slug_relation id=23, master 최상위 `automation_list`, ARRAY_CONTAINS, FETCH → category-data)로 **행별로** 자동 병합됨. 제품명 경로는 `_fetchedRel22[].product.product_name` / `_fetchedRel23[].product.product_name`(경로가 `curriculum_detail1.power_list` 아래가 아니라 최상위 `power_list`/`automation_list`)
+  - `content` 배열 전체를 카드로 1:1 매핑한다(`content[0]`만 취해 단건 처리하지 않는다)
+- Hero(커리큘럼 설명 영역)는 이 목록 각 행의 `_fetchedRel8.curriculum.*`에서 취득한다(부모 `currMgmt-data` 공개 단건 getById가 없으므로 오퍼링 행에 병합된 값을 재사용). `content`가 0행이면 `notFound()`
+
+**2뎁스(세션 상세) — 목록 재사용 + 행 PK 매칭, 단건**
+- 전용 단건 엔드포인트를 두지 않는다. 1뎁스와 **동일한 목록 조회**를 재사용해 `content.find(row => row.id === sessionId)`로 1건을 FE에서 선택한다
+- `findPublicDetail`(단건 getById) 계열은 채택하지 않음 — `_fetchedRel` 병합이 없어 Hero/제품 표시에 부적합. 목록 브랜치를 재사용하는 편이 원칙에 부합
+- 공개 게이트(이중 방어): 서버 `eq_curriculum_detail3.is_visible=001` + FE 재판정(`_fetchedRel8.curriculum.is_visible !== "001"` 이면 `notFound()`)
 
 ## 2. data-slugKey 매핑
 
-### 2-1. 코스 상세(1뎁스)
+### 2-1. 코스 상세(1뎁스) — 오퍼링 카드(다건)
 
-**Hero — `TrainingDetailHero.tsx`** (모두 부모 `_fetchedRel8.curriculum.*`, 리스트 카드와 동일 원천)
+각 카드 값은 전부 **그 행 고유값**이다(부모 커리큘럼의 값이 아님).
 
-| slugKey | dataJson 필드(flatten 기준) | 타입 | 바인딩 대상 | 설명 |
-|---|---|---|---|---|
-| image | `_fetchedRel8.curriculum.image[0]`(파일id 배열) | number[] | 속성(`img[src]`) | `/api/v1/fo/page-files/{id}`로 렌더. 태깅 완료 |
-| product_category | `_fetchedRel8.curriculum.product_category`(코드 P/A) | string(코드) | 텍스트(`p`) | PRODUCTCATEGORY 코드그룹 — 라벨 변환 필요. 태깅 완료 |
-| title | `_fetchedRel8.curriculum.title` | string | 텍스트(`h1`) | 태깅 완료 |
-| description | `_fetchedRel8.curriculum.description` | string | 텍스트(`p`) | 태깅 완료 (`curriculum_detail2.description` 오버라이드 후보 있었으나 리스트 연속성 우선해 부모 값 채택) |
+| 카드 요소 | slugKey/필드(flatten 기준) | 타입 | 설명 |
+|---|---|---|---|
+| 교육일자 | `curriculum_detail2.training_date_from` ~ `training_date_to` | string(date) | 동월이면 "Jul 30–31, 2026", 월경계면 "Jul 30 – Aug 1, 2026"(연도는 1회만 표기) |
+| 접수마감일 | `curriculum_detail2.register_period_to` | string(date) | 교육일자와 별개로 표시 |
+| 제목 | `curriculum_detail2.title` | string | 부모 커리큘럼 title이 아니라 오퍼링 행 고유 title |
+| 대상제품 | `_fetchedRel22[].product.product_name`(Power) + `_fetchedRel23[].product.product_name`(Automation) | string[] | 두 배열 합산 표시(빈 배열/부재 방어) |
+| 교육타입 | `curriculum_detail1.training_type` | string(CSV 코드) | **CSV 문자열**("001" / "002" / "001,002"). `,` split 후 TRAININGTYPE 코드그룹 라벨 조합("In-Person, Virtual" 등) |
+| 교육시간 | `curriculum_detail2.duration` | string | 원값에 단위 없음("12") → FE 렌더 시 "N Hours"로 표기 |
+| 주소 | `curriculum_detail2.address` | string | `training_type`이 Virtual(002) 단독이면 **비노출**, In-Person(001)이 포함되면 노출 |
+| 상세링크 | 행 PK `id` | number | `href=/services/{variant}-training/{curriculumId}/{행PK}` |
 
-**Schedule 중첩 다건 — `TrainingDetailSchedule.tsx` / `TrainingDetailSession.tsx`** (`data-slug="training_schedule" data-slug-repeat="true"`, 아이템 `data-slug-item`)
+**Hero(커리큘럼 설명 영역) — `TrainingDetailHero.tsx`** (각 오퍼링 행의 `_fetchedRel8.curriculum.*`에서 취득, 공개 커리큘럼 단건 API 없음)
 
-| slugKey | dataJson 필드(flatten 기준) | 타입 | 바인딩 대상 | 설명 |
-|---|---|---|---|---|
-| date | `training_schedule[n].date` | string | 텍스트(`p`) | 세션 날짜. 태깅 완료 |
-| title | `training_schedule[n].title` | string | 텍스트(`h2`) | 세션 제목(코스 제목 `detail.title`은 현재 폴백 표시용 — STEP6에서 세션 title로 교체 여부 확정). 태깅 완료 |
-| id | `training_schedule[n].id`(uuid) | string | 속성(`Link[href]`) | 세션 상세 href `${hrefPrefix}/${courseId}/${id}` 파생. 태깅 완료 |
+| slugKey | dataJson 필드(flatten 기준) | 타입 | 설명 |
+|---|---|---|---|
+| image | `_fetchedRel8.curriculum.image[0]`(파일id 배열) | number[] | `/api/v1/fo/page-files/{id}`로 렌더 |
+| product_category | `_fetchedRel8.curriculum.product_category`(코드 P/A) | string(코드) | PRODUCTCATEGORY 코드그룹 라벨 변환 |
+| title | `_fetchedRel8.curriculum.title` | string | |
+| description | `_fetchedRel8.curriculum.description` | string | 전체 노출(말줄임 없음) |
 
-> ⚠️ **필드명 gap(STEP4 재확인 대상)**: `page_template(slug='currDltMgmt-basicInfo', id=108)` config_json 기준 `training_schedule` 정본 필드는 `date / time(dateRange) / title / description / trainer` 5개. 반면 실데이터 관찰치는 `training_*` 접두사·`time_from/time_to` 분리형이 섞여 있어 과거/테스트 변형으로 판단, 신뢰하지 않음. STEP4에서 정본 config_json과 실데이터를 재대조해 최종 필드명을 확정해야 함.
+> 오퍼링 행이 0건이면(`content.length === 0`) 커리큘럼 상세 자체가 `notFound()` 처리된다.
 
-**코스레벨 단건 필드 — 반복 카드에 동일 표시 (`TrainingDetailSession.tsx`, 현재 미태깅/주석 표기)**
+### 2-2. 필터(1뎁스, client-side)
 
-| 화면 항목 | 예상 dataJson 필드 | 설명 |
+| 필터 | UI | 매칭 대상 | 방식 |
+|---|---|---|---|
+| Training Type | All / In-Person / Virtual, **드롭다운 단일선택** | 행 `curriculum_detail1.training_type`(CSV) | CSV를 split해 선택값과 교집합 있으면 통과. (checkbox가 아니라 드롭다운을 채택한 이유: 퍼블리싱 원본 마크업 유지) |
+| Month | Jun / Jul / Aug / Sep / Oct(고정 옵션, 데이터에서 도출하지 않음) | 행 `curriculum_detail2.training_date_from`의 월 | default 미선택(=전체 노출) |
+
+두 필터는 client-side이며 AND로 적용된다(둘 다 선택 시 교집합).
+
+### 2-3. 세션 상세(2뎁스)
+
+`content.find(row => row.id === sessionId)`로 선택된 오퍼링 행 1건 기준.
+
+| 화면 항목 | dataJson 필드(flatten 기준) | 타입 | 설명 |
+|---|---|---|---|
+| product_category | `_fetchedRel8.curriculum.product_category` | string(코드) | 부모 값, 코스 상세 Hero와 동일 |
+| title | `curriculum_detail2.title` | string | 오퍼링 행 고유 title(카드와 동일 값) |
+| date | `curriculum_detail2.training_date_from` | string(date) | 사이드바 |
+| duration | `curriculum_detail2.duration` | string | "N Hours"로 표기 |
+| training_type | `curriculum_detail1.training_type`(CSV) | string(코드) | split 후 TRAININGTYPE 라벨 조합 |
+| capacity | `curriculum_detail2.capacity` | string/number | |
+| address | `curriculum_detail2.address` | string | |
+| phone | `curriculum_detail2.phone` | string | |
+| email | `curriculum_detail2.email` | string | |
+| 대상제품 | `_fetchedRel22[].product.product_name` + `_fetchedRel23[].product.product_name` | string[] | 카드와 동일 합산 로직 |
+| Agenda 표(No/Time/Contents/Trainer) | 선택된 행의 `training_schedule[]` | array | 아래 참고 |
+
+**Agenda 표 = 선택된 행의 `training_schedule[]` 실데이터**로 렌더한다.
+
+| Agenda 컬럼 | 필드 |
+|---|---|
+| No | 배열 index + 1(순번, 별도 저장 필드 아님) |
+| Time | `training_schedule[n].time_from` ~ `training_schedule[n].time_to` |
+| Contents | `training_schedule[n].title` + `training_schedule[n].description` |
+| Trainer | `training_schedule[n].trainer` |
+
+### 2-4. FE 인터랙션/동적 로직 (신규 BE 불필요, 순수 FE 처리)
+
+| 항목 | 대상 필드 | 처리 방식 |
 |---|---|---|
-| trainingType | `curriculum_detail1.training_type`(코드→라벨) | 반복 아이템이 아닌 부모 단건 값이라 slugKey로 태깅하지 않고 STEP6에서 코드로 채움 |
-| duration | `curriculum_detail2.duration` | 상동 |
-| location | `curriculum_detail2.address` | 상동 |
-| productsCovered | `curriculum_detail1.power_list` / `curriculum_detail1.automation_list` → `product-data` 제품명 | 관계키(`_fetchedRelN`) 미확정 — 3절 참고, **확인 필요** |
-| closesLabel(접수마감 라벨) | `curriculum_detail2.register_date_to` 기반 산출 추정 | `training_schedule` 스키마에 대응 필드 없음 — 산출식 **확인 필요** |
-
-### 2-2. 세션 상세(2뎁스)
-
-| slugKey | dataJson 필드(flatten 기준) | 타입 | 바인딩 대상 | 설명 |
-|---|---|---|---|---|
-| product_category | `_fetchedRel8.curriculum.product_category` | string(코드) | 텍스트(`p`) | 부모 값, 코스 상세와 동일. 태깅 완료 |
-| title | 매칭된 `training_schedule[n].title` | string | 텍스트(`h1`) | STEP6에서 `sessionId` 매칭 후 채움. 태깅 완료(슬롯만) |
-| date | 매칭된 `training_schedule[n].date` | string | 텍스트(`p`) | 태깅 완료 |
-| duration | `curriculum_detail2.duration` | string | 텍스트(`p`) | 코스레벨. 태깅 완료 |
-| training_type | `curriculum_detail1.training_type`(코드→라벨) | string(코드) | 텍스트(`p`) | 코스레벨. 태깅 완료 |
-| capacity | `curriculum_detail2.capacity` | string/number | 텍스트(`p`) | 코스레벨. 태깅 완료 |
-| address | `curriculum_detail2.address` | string | 텍스트(`li`) | 코스레벨. 태깅 완료 |
-| phone | `curriculum_detail2.phone` | string | 텍스트(`li`) | 코스레벨. 태깅 완료 |
-| email | `curriculum_detail2.email` | string | 텍스트(`li`) | 코스레벨. 태깅 완료 |
-| (미태깅) 장소명 | 대응 필드 없음(gap) | - | 텍스트 | `curriculum_detail2`에 장소명 필드 없음 — **확인 필요**(6절 참고) |
-| (미태깅) productsCovered | `power_list`/`automation_list` → `product-data` | - | 텍스트/반복 | 코스 상세와 동일 gap — **확인 필요** |
+| 공유(X/LinkedIn/Email/FB) | 현재 페이지 URL + 선택된 행의 `curriculum_detail2.title` | `fo/src/lib/eventShare.ts`에서 각 채널 href 생성 |
+| Add to Calendar(Google/iCal) | 선택된 행의 `curriculum_detail2.training_date_from/training_date_to/title` + `curriculum_detail2.address` | Google Calendar URL + `.ics` Blob 생성(`fo/src/lib/eventShare.ts`) |
+| 카운트다운 | `curriculum_detail2.register_period_to` | `TrainingSessionCountdown.tsx`에서 실시간 렌더. 카드의 접수마감일 표시와 동일 데이터 소스 사용해 정합성 확보. 마감 경과 시 0/Closed 처리 |
+| 브레드크럼(3 variant) | `fo/src/data/breadcrumbConfig.ts` | 코스(`curriculumId`)·세션(`sessionId`, 숫자) 경로 인식, 실 제목 fetch 불가 구조라 제네릭 고정 라벨 사용 |
 
 ## 3. API 확인 (최종 체크)
-- **코스 단건조회: 신규 개발 불필요.** 기존 `FoPageDataController`(`GET /api/v1/fo/page-data/{slug}`) → `PageDataService.search()`가 옵션A 역방향 where(`eq_curriculum_detail1.curriculum_id`, `eq_curriculum_detail3.is_visible`) + `_fetchedRel8` FETCH 병합(부모 `curriculum` 자동 병합)까지 실API로 검증됨. `currMgmt-data` 목록 조회와 동일한 `fetchData` 브랜치를 재사용 가능
-- **연결제품(power_list/automation_list → product-data) 표시: 신규 필요 — 확인 필요(STEP4 확정 대상).** 현재 `slug_relation` id=11은 master_key가 camel `powerList`(ARRAY_CONTAINS/FETCH)라 snake_case `power_list`/`automation_list`엔 매칭되지 않고, 실측상 기존 relation 11조차 `_fetchedRel11` 산출 0건으로 확인됨. snake_case 전용 신규 `slug_relation`(power_list/automation_list → product-data) 추가 + 기존 relation 11 산출 0건 원인 규명이 STEP4/5 과제
-- 세션 매칭(`training_schedule[n].id === sessionId`): 신규 API 불필요 — 코스 단건 조회 응답 내 배열에서 FE 선택 로직만 필요(STEP6)
+- **1뎁스 오퍼링 목록 조회: 신규 개발 불필요.** 기존 `FoPageDataController`(`GET /api/v1/fo/page-data/{slug}`) → `PageDataService.search()`가 `eq_` dot-notation where + `condexpr_`/`condval_`(leaf key) + dot-notation `sort` + `unpaged` + `_fetchedRel` FETCH 병합까지 전부 기존 범용 기능으로 커버(다른 slug에서 이미 사용 중인 패턴 재조합). 신규 relation 불필요(기존 `_fetchedRel8`/`22`/`23` 재사용)
+- **2뎁스 세션 상세: 신규 개발 불필요.** 전용 단건 API를 두지 않고 1뎁스와 동일한 목록 조회를 재사용해 FE에서 `id===sessionId` 선택
+- **필터(Training Type/Month), 공유/Add to Calendar/카운트다운: 신규 BE 불필요.** 전부 이미 매핑된 필드를 FE에서 가공/재조합하는 순수 FE 로직
 
 ## 4. 조회 조건
-- where(필수, 코스/세션 공통):
-  - `eq_curriculum_detail1.curriculum_id={courseId}`
+- where(1뎁스 목록 및 2뎁스 재사용 공통):
+  - `eq_curriculum_detail1.curriculum_id={curriculumId}`
   - `eq_curriculum_detail3.is_visible=001`
-- sort: `updatedAt,desc`
-- row limit: 단건(결과[0] 채택)
-- 세션 2뎁스 전용: 별도 where 없음 — 위 코스 단건 응답의 `training_schedule` 배열을 FE에서 `id===sessionId` 필터
+  - `condexpr_training_date_to=training_date_to>=today()?'valid':'past'` + `condval_training_date_to=valid`(과거 회차 서버 1차 제외, leaf key 사용) + FE 2차 재판정
+- sort: `curriculum_detail2.training_date_from,asc` (다건 매칭을 위한 기술적 필요 orderBy)
+- row limit: 다건, `unpaged=true`(전체 조회, 페이지네이션 없음)
+- 세션 2뎁스 전용: 별도 where 없음 — 위 목록 응답에서 `id===sessionId`로 FE 선택
+- Training Type / Month 필터: 별도 API where 아님 — 이미 fetch된 배열을 FE에서 client 필터링(AND)
 - 공개 게이트 이중 방어: 서버 where(`is_visible=001`) + FE 재판정(`_fetchedRel8.curriculum.is_visible==="001"` 아니면 `notFound()`)
-- 신규 구조 한정: `curriculum_detail1/2/3.*`(snake_case) 정본만 대상. 레거시 camelCase는 where 경로 자체가 없어 매칭되지 않음(자연 제외)
 
 ## 5. 샘플 응답 데이터
 
-> ⚠️ 아래는 STEP1/2 확정 값(where·병합키·필드 존재)을 기반으로 한 구조 예시이며, `training_schedule` 내부 필드명은 **추정**(`page_template` id=108 config_json 기준: date/time/title/description/trainer). 실데이터 관찰치와 불일치 가능성이 있어 STEP4에서 재확인 필요.
+> ⚠️ 1:N 모델 기준 구조 예시. 한 커리큘럼(`curriculumId=1625`)에 오퍼링 행 2건이 정상적으로 매칭되는 케이스를 보여준다.
 
 ```json
 {
@@ -97,27 +132,41 @@
       "dataJson": {
         "curriculum_detail1": {
           "curriculum_id": 1625,
-          "training_type": "01",
-          "power_list": [1776],
-          "automation_list": []
+          "training_type": "001,002"
         },
         "curriculum_detail2": {
-          "duration": "2 Days",
+          "title": "예시 오퍼링 A",
+          "training_date_from": "2026-07-30",
+          "training_date_to": "2026-07-31",
+          "register_period_to": "2026-07-25",
+          "duration": "12",
           "capacity": 20,
           "address": "123 Example Ave, Seoul",
           "phone": "02-1234-5678",
-          "email": "training@example.com",
-          "register_date_to": "2026-08-01"
+          "email": "training@example.com"
         },
         "curriculum_detail3": {
           "is_visible": "001"
         },
+        "power_list": [1776],
+        "automation_list": [],
         "training_schedule": [
           {
             "id": "b3f1c2a0-1111-4a2b-9c3d-000000000001",
-            "date": "2026-08-15",
-            "title": "예시 세션 제목",
-            "description": "예시 세션 설명",
+            "date": "2026-07-30",
+            "time_from": "09:00",
+            "time_to": "12:00",
+            "title": "예시 세션 1 제목",
+            "description": "예시 세션 1 설명",
+            "trainer": "홍길동"
+          },
+          {
+            "id": "b3f1c2a0-1111-4a2b-9c3d-000000000002",
+            "date": "2026-07-31",
+            "time_from": "09:00",
+            "time_to": "12:00",
+            "title": "예시 세션 2 제목",
+            "description": "예시 세션 2 설명",
             "trainer": "홍길동"
           }
         ]
@@ -131,24 +180,82 @@
           "product_category": "P",
           "is_visible": "001"
         }
-      }
+      },
+      "_fetchedRel22": [
+        { "product": { "id": 1776, "product_name": "예시 Power 제품명" } }
+      ],
+      "_fetchedRel23": []
+    },
+    {
+      "id": 1901,
+      "templateSlug": "currDltMgmt-basicInfo",
+      "dataJson": {
+        "curriculum_detail1": {
+          "curriculum_id": 1625,
+          "training_type": "002"
+        },
+        "curriculum_detail2": {
+          "title": "예시 오퍼링 B(Virtual)",
+          "training_date_from": "2026-08-20",
+          "training_date_to": "2026-08-20",
+          "register_period_to": "2026-08-15",
+          "duration": "6",
+          "capacity": 30,
+          "address": null,
+          "phone": "02-1234-5678",
+          "email": "training@example.com"
+        },
+        "curriculum_detail3": {
+          "is_visible": "001"
+        },
+        "power_list": [],
+        "automation_list": [1801],
+        "training_schedule": [
+          {
+            "id": "b3f1c2a0-1111-4a2b-9c3d-000000000003",
+            "date": "2026-08-20",
+            "time_from": "13:00",
+            "time_to": "19:00",
+            "title": "예시 세션 3 제목",
+            "description": "예시 세션 3 설명",
+            "trainer": "김철수"
+          }
+        ]
+      },
+      "_fetchedRel8": {
+        "curriculum": {
+          "id": 1625,
+          "title": "예시 강의 제목",
+          "description": "예시 강의 설명",
+          "image": [1234],
+          "product_category": "P",
+          "is_visible": "001"
+        }
+      },
+      "_fetchedRel22": [],
+      "_fetchedRel23": [
+        { "product": { "id": 1801, "product_name": "예시 Automation 제품명" } }
+      ]
     }
   ]
 }
 ```
 
 ## 6. 비고
-1. **연결제품 관계키 미확정 — 확인 필요(STEP4)**: `power_list`/`automation_list`(코스레벨 다건) → `product-data` 제품명 매핑에 쓸 `_fetchedRelN`이 아직 없음. 기존 relation id=11(camel `powerList`) 재사용 불가, snake_case 신규 relation 추가 + 다건 렌더 구조(반복 vs 조인 문자열) 결정 필요
-2. **closesLabel(접수마감 라벨) 산출식 — 확인 필요**: `training_schedule` 스키마에 대응 필드가 없어 `curriculum_detail2.register_date_to` 기반 산출로 추정. 확정 안 됨
-3. **사이드바 장소명(location.name) 대응 필드 부재 — 확인 필요**: `curriculum_detail2`에 주소/전화/이메일은 있으나 장소명 필드가 없음(gap). bo 관리자 화면에서 실제 입력 필드 존재 여부 확인 필요
-4. **코스레벨 단건 필드 → 반복 카드 바인딩 로직**: `trainingType`/`duration`/`location`은 `training_schedule` 아이템 필드가 아니라 코스 단건 값을 모든 카드에 동일 표시하는 구조. STEP6에서 부모 단건 레코드 값을 반복 렌더 시 주입하는 로직 필요(현재 마크업엔 slugKey 미태깅, 주석으로만 표기)
-5. **`training_schedule` 필드명 재확인 필요(STEP4)**: 2-1절 참고. config_json 정본(date/time/title/description/trainer)과 실데이터 관찰치(training_* 접두사, time_from/time_to 분리형) 불일치 — 최종 필드명 확정 전까지 임시로 정본 필드명 기준 태깅
-6. **레거시 자연 제외**: `currMgmt-data`와 동일 패턴 — 별도 제외 where 불필요(where 경로 자체가 레거시 구조엔 없음)
-7. **정적 유지(대응 bo 필드 없음, 바인딩 대상 아님)**: Agenda 표(No1~7)/Who should attend/Meals/카운트다운/공유버튼/recaptcha/캘린더연동(Google·iCal)/등록폼(제출 연동 없음) — 이번 데이터 바인딩 스코프 밖
+1. **1:N 모델 확정**: `currMgmt-data`(커리큘럼) 1 : `currDtlMgmt-data`(교육정보/오퍼링) N. `curriculum_id`에 DB unique 제약이 없고(`page_data`는 PK만 존재) 관리 화면(`page_template` id=106 `currDtlMgmt-list`)도 다행 그리드이므로, 한 커리큘럼에 여러 오퍼링 행이 달리는 구조가 정상이다. `content` 전체를 카드로 매핑하며 `content[0]`만 쓰는 단건 처리는 하지 않는다.
+2. **연결제품 관계키**: `power_list`(최상위 필드, slug_relation id=22)/`automation_list`(최상위 필드, id=23) → `category-data` FETCH, 응답 키 `_fetchedRel22`/`_fetchedRel23`, 제품명 경로 `_fetchedRelN[].product.product_name`. 경로는 `curriculum_detail1.power_list`가 아니라 최상위 `power_list`/`automation_list`이다.
+3. **사이드바 장소명(location.name) 대응 필드 부재 — 확인 필요**: `curriculum_detail2`에 주소/전화/이메일은 있으나 장소명 필드가 없다. bo 관리자 화면에서 실제 입력 필드 존재 여부 확인 필요(스코프 밖).
+4. **여전히 정적(대응 bo 필드 없음)**: Who should attend, Meals. Agenda 표는 `training_schedule[]` 실데이터로 동적 렌더된다(더 이상 정적 항목 아님).
+5. **Duration 단위 표기**: `curriculum_detail2.duration` 원값에 단위가 없어(예: "12") FE 렌더 시 "Hours"를 부기한다(카드/사이드바 공통). bo 저장 데이터 자체는 변경하지 않는다.
+6. **Training Type 코드**: `curriculum_detail1.training_type`은 CSV 문자열("001"/"002"/"001,002")이다. `,` split 후 TRAININGTYPE 코드그룹 라벨을 조합해 표시한다.
+7. **레거시 자연 제외**: `currMgmt-data`와 동일 패턴 — where 경로 자체가 레거시(camelCase) 구조엔 없어 자연 제외된다(별도 제외 where 불필요).
 
 ## 7. STEP별 진행 이력
 | STEP | 담당 에이전트 | 날짜 | 결과 요약 |
 |---|---|---|---|
-| STEP1 | fo-slug-analyzer | 2026-07-23 | `TrainingDetailPage.tsx`/`TrainingSessionPage.tsx`(단건 wrapper), `TrainingDetailSchedule.tsx`/`TrainingDetailSession.tsx`(training_schedule 중첩 다건: date/title/id), `TrainingDetailHero.tsx`/`TrainingSessionDetail.tsx`/`TrainingSessionDetailAside.tsx`(단건 필드) 태깅 완료. slug=`currDtlMgmt-data`(id155) 확정 |
-| STEP2 | fo-slug-analyzer | 2026-07-23 | 옵션A 역방향 필터조회(`eq_curriculum_detail1.curriculum_id`+`eq_curriculum_detail3.is_visible=001`, `sort=updatedAt,desc`, 결과[0]) 확정. 부모 병합키 `_fetchedRel8`(slug_relation id=8) 실API로 병합 확인. 세션 2뎁스는 별도 조회 없이 FE `id===sessionId` 선택으로 확정 |
-| STEP3 | fo-dev-doc-writer | 2026-07-23 | 작업 단위 문서 작성(상태: 설계중). API 확인: 코스 단건조회는 기존 `PageDataService.search()`로 신규 BE 불필요(확정), 연결제품(power_list/automation_list→product-data)은 확인 필요로 명시. 미해결 항목(연결제품 관계키/closesLabel 산출식/장소명 gap/training_schedule 필드명 gap/코스레벨→반복카드 바인딩)을 6절에 정리 |
+| STEP1 | fo-slug-analyzer | 2026-07-23 | `TrainingDetailPage.tsx`/`TrainingSessionPage.tsx`(조립 wrapper), `TrainingDetailSchedule.tsx`/`TrainingDetailSession.tsx`, `TrainingDetailHero.tsx`/`TrainingSessionDetail.tsx`/`TrainingSessionDetailAside.tsx` 태깅. slug=`currDtlMgmt-data`(id155) 확정 |
+| STEP2 | fo-slug-analyzer | 2026-07-23 | 옵션A 역방향 필터조회(단건 결과[0] 채택) 확정, 부모 병합키 `_fetchedRel8` 실API 병합 확인 |
+| STEP3 | fo-dev-doc-writer | 2026-07-23 | 작업 단위 문서 작성(상태: 설계중) |
+| B-STEP1~3(경량 갱신) | fo-slug-analyzer → fo-dev-doc-writer | 2026-07-23 | 세션 인터랙션(공유/Add to Calendar/카운트다운)·스케줄 필터·브레드크럼 확정 반영, `training_schedule` 필드 `{id,date,time_from,time_to,title,description,trainer}` 확정 |
+| 정정(관계키/카드 노출범위) | fo-dev-doc-writer | 2026-07-23 | 연결제품 관계키를 `_fetchedRel22`(power_list, id=22)/`_fetchedRel23`(automation_list, id=23)로 확정, 카드 노출 필드범위 명확화 |
+| **1:N 모델 재확정** | fo-dev-doc-writer | 2026-07-23 | `currMgmt-data` 1 : `currDtlMgmt-data` N이 정상 구조임을 확인하고 문서 전면 재작성. 코스 1뎁스를 "단건 결과[0]"에서 **오퍼링 카드 다건 목록**으로 재정의(where에 `condexpr_training_date_to`+`condval` 과거제외, `sort=curriculum_detail2.training_date_from,asc`, `unpaged=true` 추가). 카드 필드를 전부 "그 행 고유값"으로 재정의(교육일자/접수마감일/제목/대상제품/교육타입CSV/교육시간/조건부주소/상세링크). Hero는 각 오퍼링 행의 `_fetchedRel8.curriculum.*`로 취득하도록 재정의. 세션 2뎁스는 `sessionId`를 **행 PK(숫자)**로 재정의하고 전용 단건 API 없이 1뎁스 목록 재사용 + `id===sessionId` 매칭으로 확정(`findPublicDetail`은 `_fetchedRel` 미병합이라 부적합해 미채택). Agenda 표를 선택된 행의 `training_schedule[]` 실데이터로 재정의. 연결제품 경로를 `curriculum_detail1.power_list`에서 최상위 `power_list`/`automation_list`로 정정. Training Type 필터를 드롭다운 단일선택(퍼블리싱 원본 마크업 유지)으로, Month 필터를 고정옵션(Jun~Oct)으로 명확화. 신규 BE 없음(기존 search+condexpr+sort+applyFetch 재사용) |

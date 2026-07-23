@@ -73,6 +73,9 @@ bo 홈페이지관리에서 콘텐츠 입력
 7. **FO 공개 API엔 단건조회(getById)가 없다** — `FoPageDataController`는 목록검색(search)만 제공한다. 글 1건 조회나 인접 레코드(이전/다음)가 필요할 때 `eq_id`로 목록 API를 재사용하지 말 것(PK 인덱스 미사용, 게시 상태 게이트 별도 처리 필요). 전용 단건/인접 엔드포인트를 신설한다 — 구현 예시: `PageDataService.findPublicDetail/findAdjacent`, `FoPageDataController`의 `GET /page-data/{slug}/{id}`, `GET /page-data/{slug}/{id}/adjacent` (company/blog 등 참고).
 8. **필드명은 bo 빌더 템플릿으로 최종 확정한다** — where/응답매핑에 쓸 필드명(예: `mainCategory` vs `main_category`)은 dev 문서의 이전 기록이나 샘플 응답만 보고 확정하지 않는다. 반드시 해당 slug를 저장하는 bo `page_template.config_json`의 실제 `fieldKey`를 조회해 최종 확정한다(등록화면·목록화면 등 여러 템플릿이 있으면 전부 교차 확인). dev 문서에 이미 필드명이 적혀 있어도, 오래됐거나 실제 저장 스키마와 어긋났을 수 있으니 재사용 전 이 확인을 생략하지 않는다.
 9. **slugkey 이름이 실제 필드명과 일치하면 fetch 함수를 새로 만들지 않는다** — `fetchData`/`commonData`/`commonEachData`(`fo/src/lib/pageDataApi.ts`, `pageData.ts`)가 공통 계층이다. 화면 전용 `fetchXxxList`/`fetchXxxDetail`/`fetchXxxAdjacent`를 새로 작성하는 건 이 공통 계층이 이미 하는 일을 중복 개발하는 것이므로 금지한다. 단, 코드값→라벨/파일→URL/날짜포맷 같은 "값 가공"과 반복 마크업 구조는 여전히 화면별로 필요하다(자세한 구분은 `fo-data-binding-가이드.md` 4절 참고).
+10. **⚠️ 퍼블리싱된 마크업/CSS 변경 절대 금지** — STEP1(마크업 태깅)·STEP6(FE 개발/바인딩)은 기존 퍼블리싱 결과물에 `data-slug`/`data-slug-repeat`/`data-slug-item`/`data-slugkey`/`data-slugkey-attr` **속성만** 기존 태그에 추가하는 작업이다. 새 태그(div/span 등) 생성, 기존 태그 구조 변경, className/style/CSS 수정은 어떤 이유로도 하지 않는다. 데이터 바인딩을 위해 마크업 구조가 부족해 보여도 임의로 태그를 추가하거나 스타일을 고치지 말고, 즉시 사용자에게 질문한다.
+11. **⚠️ 퍼블리싱에 없는 정보를 억지로 끼워넣지 않는다** — 퍼블리싱 결과물에 없는 텍스트/이미지/필드를 데이터 바인딩을 위해 새로 만들어 추가하지 않는다. 데이터 항목이 더 필요해 보여도 임의로 지어내지 말고, 그 즉시 사용자에게 확인한다.
+12. **데이터 없음(빈 값/매칭 0건)이어도 컨테이너/섹션 전체를 조건부로 숨기지 않는다** — `data-slugKey` 대응 값이 없거나 where 매칭이 0건이어도 `return null`/`{data && ...}` 등으로 섹션 자체를 렌더링에서 배제하지 않는다. 컨테이너(제목·설명 등)는 유지하고 내부 항목만 있는 만큼 표시한다(항목 0개로 리스트 내부가 비어 보이는 것 자체는 정상, 금지 대상 아님). 상세: `fo-data-binding-가이드.md` 5절.
 
 ---
 

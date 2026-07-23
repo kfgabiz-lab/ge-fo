@@ -1,7 +1,6 @@
-// HW 제품상세(product-data) 실데이터를 정적 ProductDetail 기본값에 병합하는 헬퍼.
-// - 히어로 title(series)/description/image/specs, Key Features 만 실데이터로 덮어쓴다.
-// - Downloads/Lineup/Video/OtherProducts/배너 등 이번 범위 제외 필드는 정적 기본값 그대로 유지.
-// - 데이터 없거나 개별 필드 비어 있으면 정적 기본값 폴백(화면 깨짐 방지).
+// HW 제품상세(product-data) 실데이터를 ProductDetail(기본 레이아웃 틀)에 병합하는 헬퍼.
+// series/description/image/specs/keyFeatures/youtubeVideoId/configuratorHref/lineUp은 실데이터 그대로 쓴다.
+// Downloads/OtherProducts/Expert 배너는 정적 기본값을 그대로 유지한다.
 import type { ProductDetail } from "./productDetailContent";
 import { mapHwProductData } from "./productsSystemsData";
 import { getYoutubeIdFromUrl } from "@/lib/youtubeEmbed";
@@ -19,25 +18,21 @@ export function buildHwProductDetail(
   const detail: ProductDetail = {
     ...base,
     // 히어로 메인 제목 슬롯(series) = product.product_name
-    series: data.name || base.series,
-    description: data.description || base.description,
+    series: data.name,
+    description: data.description,
     image: data.image,
-    specs:
-      data.specs.length > 0
-        ? data.specs.map((s) => ({ label: s.title, value: s.content }))
-        : base.specs,
-    keyFeatures:
-      data.keyFeatures.length > 0
-        ? data.keyFeatures.map((f, i) => ({
-            id: `kf-${i + 1}`,
-            title: f.title,
-            description: f.content,
-          }))
-        : base.keyFeatures,
-    // Video: product_etc.video(URL)에서 id 추출, 실패 시 정적 기본값 폴백
-    youtubeVideoId: getYoutubeIdFromUrl(data.video) || base.youtubeVideoId,
-    // Configurator: product_etc.connect_portal 있으면 사용, 없으면 정적 기본값
-    configuratorHref: data.connectPortal || base.configuratorHref,
+    specs: data.specs.map((s) => ({ label: s.title, value: s.content })),
+    keyFeatures: data.keyFeatures.map((f, i) => ({
+      id: `kf-${i + 1}`,
+      title: f.title,
+      description: f.content,
+    })),
+    // Video: product_etc.video(URL)에서 youtube id 추출
+    youtubeVideoId: getYoutubeIdFromUrl(data.video),
+    // Configurator: product_etc.connect_portal
+    configuratorHref: data.connectPortal,
+    // Lineup: product_etc.line_up (리치텍스트 HTML, 그대로 렌더)
+    lineUp: data.lineUp,
   };
   return { detail, productId: Number(row._id) };
 }

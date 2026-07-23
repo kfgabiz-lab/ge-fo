@@ -2,12 +2,18 @@
 // - 설계 문서: fo/docs/dev/services/currDtlMgmt-data.md
 // - 규칙 근거: fo/docs/FO-RULE.md 원칙9 (네트워크 조회는 공통 fetchData/fetchApi 재사용,
 //   화면전용 fetch 래퍼 신설 금지. 이 파일은 "값가공/마크업 헬퍼"만 담당한다.)
-// - 조회 자체는 서버 컴포넌트(TrainingDetailPage/TrainingSessionPage)에서 공통 fetchData(목록 브랜치)로 수행.
 //
-// 옵션A 역방향 필터조회:
-//   fetchData({ slug, where:{eq_curriculum_detail1.curriculum_id, eq_curriculum_detail3.is_visible=001},
-//               sort:"updatedAt,desc", 리턴함수:(rows)=>rows }) → content[0] 단건 채택
-// 이중 공개 게이트: 서버 where(is_visible=001) + FE 재판정(_fetchedRel8.curriculum.is_visible==="001")
+// ★ 1:N 모델(재작성):
+//   currMgmt-data(커리큘럼) 1 → currDtlMgmt-data(교육회차) N행.
+//   각 행 = 코스상세(1뎁스) 스케줄 카드 1건. 그 행 내부 training_schedule[] = 세션 2뎁스 Agenda.
+//   - 조회는 서버 컴포넌트(TrainingDetailPage/TrainingSessionPage)에서 공통 fetchData(목록 브랜치, unpaged)로
+//     "다건 행 전체"를 받아 여기서 뷰모델로 매핑.
+//   - 세션 2뎁스는 별도 API 없이, 같은 다건 결과에서 행 PK(id === sessionId) 1건을 FE에서 선택.
+//
+// 조회 where(옵션A 역방향 + 공개 게이트 + 과거회차 제외):
+//   eq_curriculum_detail1.curriculum_id, eq_curriculum_detail3.is_visible=001,
+//   condexpr_training_date_to(training_date_to>=today()?'valid':'past') + condval_training_date_to=valid
+// 이중 방어: 서버 where(is_visible/과거제외) + FE 2차 재판정(_fetchedRel8.curriculum.is_visible & training_date_to>=today)
 import { fetchApi } from "@/lib/api";
 import { formatDisplayDate } from "@/lib/formatDate";
 import type { PageDataItem } from "@/lib/pageData";
@@ -18,6 +24,7 @@ import {
 } from "@/data/services/engineeringTrainingDetailContent";
 import {
   engineeringTrainingSessionDetails,
+  type EngineeringTrainingAgendaRow,
   type EngineeringTrainingSessionDetail,
 } from "@/data/services/engineeringTrainingSessionDetailContent";
 import { type CodeItem, trainingImageSrc } from "./trainingData";
@@ -25,11 +32,17 @@ import { type CodeItem, trainingImageSrc } from "./trainingData";
 // 상세 slug (bo slug_registry id=155, type=PAGE_DATA)
 export const TRAINING_DETAIL_SLUG = "currDtlMgmt-data";
 
-// 옵션A where 빌더 — courseId(부모 currMgmt-data.id)로 역방향 필터, 공개(is_visible=001)만
+// 코스/세션 공통 조회 정렬(교육 시작일 오름차순)
+export const TRAINING_DETAIL_SORT = "curriculum_detail2.training_date_from,asc";
+
+// 옵션A where 빌더 — courseId(부모 currMgmt-data.id)로 역방향 필터, 공개(is_visible=001) + 과거회차 제외.
+// - condexpr/condval: 서버에서 training_date_to>=today() 인 행만 통과(과거회차 1차 제외). 값은 STEP4 확정 문자열 그대로 사용.
 export function trainingDetailWhere(courseId: string): Record<string, string> {
   return {
     "eq_curriculum_detail1.curriculum_id": courseId,
     "eq_curriculum_detail3.is_visible": "001",
+    "condexpr_training_date_to": "training_date_to>=today()?'valid':'past'",
+    "condval_training_date_to": "valid",
   };
 }
 
@@ -43,11 +56,11 @@ export async function fetchTrainingTypeCodes(): Promise<CodeItem[]> {
 // curriculum_detail1: 커리큘럼 연결/유형
 interface CurriculumDetail1 {
   curriculum_id?: number | string;
-  training_type?: string; // TRAININGTYPE 코드
+  training_type?: string; // TRAININGTYPE 코드 CSV("001" / "002" / "001,002")
   training_course?: string; // 01/02/03
 }
 
-// curriculum_detail2: 운영 정보(기간/정원/장소/연락처/접수마감)
+// curriculum_detail2: 운영 정보(교육기간/정원/장소/연락처/접수마감)
 interface CurriculumDetail2 {
   title?: string;
   duration?: string | number;
@@ -57,9 +70,9 @@ interface CurriculumDetail2 {
   country_code?: string;
   phone?: string;
   email?: string;
-  register_period_to?: string; // 접수마감 산출용
-  training_date_from?: string;
-  training_date_to?: string;
+  register_period_to?: string; // 접수마감/카운트다운 산출용
+  training_date_from?: string; // 교육 시작일
+  training_date_to?: string; // 교육 종료일
 }
 
 // curriculum_detail3: 공개/수강료
@@ -69,7 +82,7 @@ interface CurriculumDetail3 {
   training_fee?: string | number;
 }
 
-// training_schedule 정본 아이템(dateRange time은 저장 시 time_from/time_to로 분리)
+// training_schedule 정본 아이템(= 세션 2뎁스 Agenda 1행)
 interface TrainingScheduleItemRaw {
   id?: string;
   date?: string;
@@ -96,7 +109,7 @@ interface RelProductItem {
   product?: { product_name?: string } | null;
 }
 
-// currDtlMgmt-data 1건의 dataJson 구조
+// currDtlMgmt-data 1행의 dataJson 구조
 interface CurrDtlDataJson {
   curriculum_detail1?: CurriculumDetail1;
   curriculum_detail2?: CurriculumDetail2;
@@ -107,12 +120,35 @@ interface CurrDtlDataJson {
   _fetchedRel23?: RelProductItem[] | null; // Automation 연결제품
 }
 
+// 파싱된 행(원본 + dataJson) — 뷰모델 빌더 내부 취급용
+interface ParsedRow {
+  raw: PageDataItem;
+  json: CurrDtlDataJson;
+}
+
 // ---------------- 정적 유지(대응 필드 없는 요소) 베이스 ----------------
-// - Agenda/Who should attend/Meals/카운트다운/공유/등록폼/캘린더/필터 셀렉트는 실데이터 바인딩 대상이 아님.
-//   (설계 문서 6절-7 "정적 유지"). 기존 정적 콘텐츠를 템플릿으로 재사용해 해당 필드만 채운다.
+// - Who should attend/Meals/등록폼 옵션/캘린더 라벨 등은 실데이터 바인딩 대상이 아님(설계 6절-7 정적 유지).
+//   기존 정적 콘텐츠를 템플릿으로 재사용해 실데이터 필드만 채운다.
 const STATIC_COURSE_BASE = engineeringTrainingDetails["breaker-training"];
 const STATIC_SESSION_BASE =
   engineeringTrainingSessionDetails["breaker-training/jan-10-2026"];
+
+// 월 약어(교육일자 범위 표기용)
+const MONTH_ABBR = [
+  "",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 // ---------------- 순수 가공 헬퍼 ----------------
 
@@ -131,31 +167,101 @@ function extractProductNames(json: CurrDtlDataJson): string[] {
 // 접수마감 라벨(FE 산출): register_period_to vs today.
 // - 값 없으면 라벨 미표시("" 반환). 마감 경과 시 "Closed", 당일 "Closes today", 그 외 "Closes in N day(s)".
 function computeClosesLabel(registerPeriodTo?: string): string {
-  if (!registerPeriodTo) return "";
-  const datePart = String(registerPeriodTo).trim().slice(0, 10);
-  const parts = datePart.split("-");
-  if (parts.length !== 3) return "";
-  const [y, m, d] = parts.map(Number);
-  if (!Number.isInteger(y) || !Number.isInteger(m) || !Number.isInteger(d)) {
-    return "";
-  }
+  const ymd = parseYmd(registerPeriodTo);
+  if (!ymd) return "";
   const now = new Date();
   // 타임존 영향 제거를 위해 날짜(연/월/일)만으로 UTC 기준 일수 차 계산
-  const endUtc = Date.UTC(y, m - 1, d);
-  const todayUtc = Date.UTC(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-  );
+  const endUtc = Date.UTC(ymd.y, ymd.m - 1, ymd.d);
+  const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
   const days = Math.ceil((endUtc - todayUtc) / 86_400_000);
   if (days < 0) return "Closed";
   if (days === 0) return "Closes today";
   return `Closes in ${days} ${days === 1 ? "day" : "days"}`;
 }
 
+// "YYYY-MM-DD"[...] → {y,m,d}. 파싱 불가 시 null(범위 방어 포함)
+function parseYmd(dateStr?: string): { y: number; m: number; d: number } | null {
+  if (!dateStr) return null;
+  const parts = String(dateStr).trim().slice(0, 10).split("-");
+  if (parts.length !== 3) return null;
+  const [y, m, d] = parts.map(Number);
+  if (![y, m, d].every(Number.isInteger)) return null;
+  if (m < 1 || m > 12 || d < 1 || d > 31) return null;
+  return { y, m, d };
+}
+
+// 교육일자 범위 표기(연도 1회):
+// - 동일일/한쪽만: "Jul 30, 2026"
+// - 동월(동년):    "Jul 30–31, 2026"
+// - 월경계(동년):  "Jul 30 – Aug 1, 2026"
+// - 연경계:        "Dec 30, 2025 – Jan 2, 2026"
+function formatSessionDateRange(from?: string, to?: string): string {
+  const f = parseYmd(from);
+  const t = parseYmd(to);
+  if (f && t) {
+    if (f.y === t.y && f.m === t.m && f.d === t.d) {
+      return `${MONTH_ABBR[f.m]} ${f.d}, ${f.y}`;
+    }
+    if (f.y === t.y && f.m === t.m) {
+      return `${MONTH_ABBR[f.m]} ${f.d}–${t.d}, ${f.y}`;
+    }
+    if (f.y === t.y) {
+      return `${MONTH_ABBR[f.m]} ${f.d} – ${MONTH_ABBR[t.m]} ${t.d}, ${f.y}`;
+    }
+    return `${MONTH_ABBR[f.m]} ${f.d}, ${f.y} – ${MONTH_ABBR[t.m]} ${t.d}, ${t.y}`;
+  }
+  const only = f ?? t;
+  if (!only) return "";
+  return `${MONTH_ABBR[only.m]} ${only.d}, ${only.y}`;
+}
+
+// 과거회차 2차 재판정(FE 방어): training_date_to >= today 면 통과.
+// - 서버 condexpr 로 1차 제외되나, 값 부재/서버 조건 미적용 대비 방어. 종료일 없으면 통과(과거로 단정 안 함).
+function isNotPast(dateTo?: string): boolean {
+  const ymd = parseYmd(dateTo);
+  if (!ymd) return true;
+  const now = new Date();
+  const endUtc = Date.UTC(ymd.y, ymd.m - 1, ymd.d);
+  const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return endUtc >= todayUtc;
+}
+
+// training_type CSV → 코드 배열("001,002" → ["001","002"])
+function splitTypeCodes(csv?: string): string[] {
+  return String(csv ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+// training_type CSV → 라벨 조합("001,002" → "In-Person, Virtual"). 맵 미스 시 코드값 유지.
+function trainingTypeLabels(
+  csv: string | undefined,
+  map: Map<string, string>,
+): string {
+  return splitTypeCodes(csv)
+    .map((code) => map.get(code) ?? code)
+    .join(", ");
+}
+
+// 주소 노출 여부: training_type 이 Virtual(002)만이면 숨김. In-Person(001) 포함 시 노출.
+// - 코드가 비어있으면 기본 노출(정보 손실 방지).
+function shouldShowAddress(csv?: string): boolean {
+  const codes = splitTypeCodes(csv);
+  if (codes.length === 0) return true;
+  return codes.includes("001");
+}
+
 // duration/capacity 등 숫자/문자 혼재 필드 → 표시 문자열
 function toDisplayString(value: unknown): string {
   return value != null ? String(value) : "";
+}
+
+// duration(시간 수) → "N Hours". 값 없으면 빈 문자열("Hours"만 찍히지 않게)
+function formatDurationHours(value: unknown): string {
+  const s = value != null ? String(value).trim() : "";
+  if (!s) return "";
+  return `${s} Hours`;
 }
 
 // 코드 → 라벨(맵 미스 시 코드값 유지: 빈 값보다 정보 손실 적음)
@@ -164,65 +270,51 @@ function codeLabel(map: Map<string, string>, code: string | undefined): string {
   return map.get(key) ?? key;
 }
 
+// 행 1건 → 공개/variant/과거제외 게이트 통과 여부(FE 2차 재판정)
+function passesGate(json: CurrDtlDataJson, expectedCourseCode?: string): boolean {
+  const curriculum = json._fetchedRel8?.curriculum;
+  if (!curriculum || curriculum.is_visible !== "001") return false;
+  if (expectedCourseCode && curriculum.training_course !== expectedCourseCode) {
+    return false;
+  }
+  if (!isNotPast(json.curriculum_detail2?.training_date_to)) return false;
+  return true;
+}
+
 // ---------------- 코스 1뎁스 뷰모델 빌더 ----------------
 
-// 코스 상세(EngineeringTrainingDetail) 뷰모델 생성.
-// - 이중 공개 게이트 재판정(_fetchedRel8.curriculum.is_visible!=="001" → null)
-// - expectedCourseCode(선택): variant 코드와 부모 training_course 불일치 시 null(오배치 방어)
-// - 실데이터 필드는 API로, 필터 셀렉트/브레드크럼 등 정적 유지 필드는 STATIC_COURSE_BASE에서 채움
+// 코스 상세(EngineeringTrainingDetail) 뷰모델 생성 — 다건 행 → 카드 배열.
+// - rows: currDtlMgmt-data 다건(교육회차 N행). 각 행 = 스케줄 카드 1건.
+// - Hero: 게이트 통과 첫 행의 부모 curriculum(_fetchedRel8.curriculum.*).
+// - 게이트 통과 행이 0건이면 null(호출부 notFound).
 export function toTrainingCourseDetail(
-  item: PageDataItem,
+  rows: PageDataItem[],
   courseId: string,
   categoryMap: Map<string, string>,
   trainingTypeMap: Map<string, string>,
   expectedCourseCode?: string,
 ): EngineeringTrainingDetail | null {
-  const json = (item.dataJson ?? {}) as CurrDtlDataJson;
-  const curriculum = json._fetchedRel8?.curriculum;
-  // 이중 공개 게이트: 부모 커리큘럼이 비공개로 전환된 경우 방어
-  if (!curriculum || curriculum.is_visible !== "001") return null;
-  // variant 오배치 방어(선택 게이트)
-  if (expectedCourseCode && curriculum.training_course !== expectedCourseCode) {
-    return null;
-  }
+  const valid: ParsedRow[] = rows
+    .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
+    .filter(({ json }) => passesGate(json, expectedCourseCode));
+  if (valid.length === 0) return null;
 
-  const d1 = json.curriculum_detail1 ?? {};
-  const d2 = json.curriculum_detail2 ?? {};
+  const curriculum = valid[0].json._fetchedRel8?.curriculum;
+  if (!curriculum) return null;
 
   const categoryLabel = codeLabel(categoryMap, curriculum.product_category);
-  const trainingTypeLabel = codeLabel(trainingTypeMap, d1.training_type);
-  const productsCovered = extractProductNames(json).join(", ");
-  const duration = toDisplayString(d2.duration);
-  const location = d2.address ?? "";
-  const closesLabel = computeClosesLabel(d2.register_period_to);
 
   // 히어로 이미지: 부모 curriculum.image[0] → page-files, 미등록 시 정적 폴백
   const imageArr = curriculum.image;
   const mediaId =
-    Array.isArray(imageArr) && imageArr.length > 0
-      ? Number(imageArr[0])
-      : null;
+    Array.isArray(imageArr) && imageArr.length > 0 ? Number(imageArr[0]) : null;
   const heroImage =
     mediaId != null ? trainingImageSrc(mediaId) : STATIC_COURSE_BASE.heroImage;
 
-  // training_schedule 다건 → 세션 카드 배열(코스레벨 값은 모든 카드에 동일 주입)
-  const scheduleRaw = Array.isArray(json.training_schedule)
-    ? json.training_schedule
-    : [];
-  const sessions: EngineeringTrainingSession[] = scheduleRaw
-    .filter((s): s is TrainingScheduleItemRaw => Boolean(s && s.id))
-    .map((s) => ({
-      id: String(s.id),
-      date: formatDisplayDate(s.date ?? ""),
-      // 세션 카드 제목: training_schedule 아이템 title(정본). 비면 코스 제목으로 폴백
-      title: s.title || (curriculum.title ?? ""),
-      closesLabel,
-      trainingType: trainingTypeLabel,
-      duration,
-      // address 있으면 in-person 스타일/맵 아이콘 노출
-      location: location || undefined,
-      productsCovered,
-    }));
+  // 다건 행 → 스케줄 카드 배열(각 행이 곧 회차 카드 1건)
+  const sessions: EngineeringTrainingSession[] = valid.map(({ raw, json }) =>
+    toCourseCard(raw, json, trainingTypeMap),
+  );
 
   return {
     courseId,
@@ -232,7 +324,7 @@ export function toTrainingCourseDetail(
     descriptionLines: [curriculum.description ?? ""],
     heroImage,
     schedule: {
-      // 필터 셀렉트(Training Type/Month)는 정적 유지(설계 6절-7)
+      // 필터 라벨은 정적 유지(Training Type/Month). 옵션/동작은 client(TrainingDetailSchedule)에서 처리.
       trainingTypeFilter: STATIC_COURSE_BASE.schedule.trainingTypeFilter,
       monthFilter: STATIC_COURSE_BASE.schedule.monthFilter,
       sessions,
@@ -240,60 +332,120 @@ export function toTrainingCourseDetail(
   };
 }
 
+// 행 1건 → 스케줄 카드 뷰모델
+function toCourseCard(
+  raw: PageDataItem,
+  json: CurrDtlDataJson,
+  trainingTypeMap: Map<string, string>,
+): EngineeringTrainingSession {
+  const d1 = json.curriculum_detail1 ?? {};
+  const d2 = json.curriculum_detail2 ?? {};
+  const typeCodes = splitTypeCodes(d1.training_type);
+  const showAddress = shouldShowAddress(d1.training_type);
+
+  return {
+    id: String(raw.id), // 행 PK(세션 상세 href 및 2뎁스 픽에 사용)
+    // 교육일자: training_date_from ~ training_date_to 범위 표기(연도 1회)
+    date: formatSessionDateRange(d2.training_date_from, d2.training_date_to),
+    // 월 필터 파생용 원본 시작일(앞 10자리)
+    isoDate: (d2.training_date_from ?? "").slice(0, 10),
+    // 카드 제목: 이 행의 curriculum_detail2.title
+    title: d2.title ?? "",
+    // 접수마감: 이 행의 register_period_to 기준 산출
+    closesLabel: computeClosesLabel(d2.register_period_to),
+    // 교육타입: CSV split + 라벨 조합
+    trainingType: trainingTypeLabels(d1.training_type, trainingTypeMap),
+    // 교육시간: "N Hours"
+    duration: formatDurationHours(d2.duration),
+    // 주소: Virtual(002) 단독이면 숨김(값 자체를 undefined 로 → 카드 위치 미노출)
+    location: showAddress ? d2.address || undefined : undefined,
+    // 대상제품: 연결제품 제품명 합산
+    productsCovered: extractProductNames(json).join(", "),
+    // Training Type 필터 파생용 코드 목록
+    typeCodes,
+  };
+}
+
 // ---------------- 세션 2뎁스 뷰모델 빌더 ----------------
 
-// 세션 상세(EngineeringTrainingSessionDetail) 뷰모델 생성.
-// - 별도 세션 API 없음: 코스 단건의 training_schedule 배열에서 id===sessionId 매칭 1건 선택(없으면 null)
-// - 이중 공개 게이트 + variant 오배치 방어(코스와 동일)
-// - Agenda/Who should attend/Meals/등록폼 옵션/캘린더 등은 STATIC_SESSION_BASE에서 정적 유지
+// 세션 상세(EngineeringTrainingSessionDetail) 뷰모델 생성 — 다건 행에서 행 PK 매칭.
+// - rows 에서 Number(id)===Number(sessionId) 1행 선택(sessionId = currDtlMgmt-data 행 PK). 없으면 null.
+// - 공개/variant/과거제외 게이트(코스와 동일).
+// - Agenda = 그 행의 training_schedule[] 동적 매핑. Who should attend/Meals 등은 STATIC_SESSION_BASE 유지.
 export function toTrainingSessionDetail(
-  item: PageDataItem,
+  rows: PageDataItem[],
   courseId: string,
   sessionId: string,
   categoryMap: Map<string, string>,
   trainingTypeMap: Map<string, string>,
   expectedCourseCode?: string,
 ): EngineeringTrainingSessionDetail | null {
-  const json = (item.dataJson ?? {}) as CurrDtlDataJson;
-  const curriculum = json._fetchedRel8?.curriculum;
-  if (!curriculum || curriculum.is_visible !== "001") return null;
-  if (expectedCourseCode && curriculum.training_course !== expectedCourseCode) {
-    return null;
-  }
-
-  const scheduleRaw = Array.isArray(json.training_schedule)
-    ? json.training_schedule
-    : [];
-  const matched = scheduleRaw.find((s) => s && String(s.id) === sessionId);
+  const matched = rows
+    .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
+    .find(({ raw }) => Number(raw.id) === Number(sessionId));
   if (!matched) return null;
+
+  const { json } = matched;
+  if (!passesGate(json, expectedCourseCode)) return null;
+  const curriculum = json._fetchedRel8?.curriculum;
+  if (!curriculum) return null;
 
   const d1 = json.curriculum_detail1 ?? {};
   const d2 = json.curriculum_detail2 ?? {};
 
   const categoryLabel = codeLabel(categoryMap, curriculum.product_category);
-  const trainingTypeLabel = codeLabel(trainingTypeMap, d1.training_type);
+  const trainingTypeLabel = trainingTypeLabels(d1.training_type, trainingTypeMap);
   const productsCovered = extractProductNames(json).join(", ");
-  const dateDisplay = formatDisplayDate(matched.date ?? "");
-  // 주소 + 상세주소 조합(장소명 대응 필드는 없음 → name은 빈값)
+  const dateDisplay = formatDisplayDate(d2.training_date_from ?? "");
+  // 주소 + 상세주소 조합(장소명 대응 필드는 없음 → name 은 빈값)
   const addressFull = [d2.address, d2.addressDetail]
     .filter((v): v is string => Boolean(v))
     .join(", ");
 
+  // Agenda: 이 행의 training_schedule[] → No/Time/Contents(title+description)/Trainer
+  const scheduleRaw = Array.isArray(json.training_schedule)
+    ? json.training_schedule
+    : [];
+  const agenda: EngineeringTrainingAgendaRow[] = scheduleRaw.map((s, idx) => ({
+    id: s.id ? String(s.id) : `agenda-${idx + 1}`,
+    number: String(idx + 1),
+    time: [s.time_from, s.time_to].filter(Boolean).join(" ~ "),
+    title: s.title ?? "",
+    description: s.description || undefined,
+    trainer: s.trainer || undefined,
+  }));
+
+  // Add to Calendar(A-2) 이벤트: 회차 시작일 + Agenda 첫/끝 시각으로 세션 span 구성
+  const firstSch = scheduleRaw[0];
+  const lastSch = scheduleRaw[scheduleRaw.length - 1];
+
   return {
-    ...STATIC_SESSION_BASE, // whoShouldAttend/meals/agenda/positionOptions/calendar 정적 유지
+    ...STATIC_SESSION_BASE, // whoShouldAttend/meals/positionOptions/calendar 정적 유지
     courseId,
     sessionId,
     category: categoryLabel,
-    title: matched.title ?? "",
+    title: d2.title ?? "",
     breadcrumbCurrent: dateDisplay,
+    // 동적 Agenda 로 정적 agenda 덮어쓰기
+    agenda,
+    event: {
+      title: d2.title ?? "",
+      startIso: (d2.training_date_from ?? "").slice(0, 10),
+      timeFrom: firstSch?.time_from || undefined,
+      timeTo: lastSch?.time_to || firstSch?.time_from || undefined,
+      location: addressFull || undefined,
+      description: firstSch?.description || undefined,
+    },
+    // 카운트다운(A-3) 기준: 이 행의 register_period_to
+    countdownTo: d2.register_period_to || undefined,
     sidebar: {
       ...STATIC_SESSION_BASE.sidebar, // registerLabel 등 정적
       date: dateDisplay,
       eventDateToAttend: dateDisplay,
-      duration: toDisplayString(d2.duration),
+      duration: formatDurationHours(d2.duration),
       classSize: toDisplayString(d2.capacity),
       location: {
-        // 장소명(location.name) 대응 필드 없음(설계 6절-3) → 빈값, address만 표시
+        // 장소명(location.name) 대응 필드 없음(설계 6절-3) → 빈값, address 만 표시
         name: "",
         address: addressFull,
         phone: d2.phone ?? "",

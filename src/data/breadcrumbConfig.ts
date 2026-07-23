@@ -2,8 +2,17 @@ import {
   SOFTWARE_HREF,
   softwareProductHrefs,
 } from "@/data/gnb/mega/devices";
-import { getEngineeringTrainingDetail } from "./services/engineeringTrainingDetailContent";
-import { getEngineeringTrainingSessionDetail } from "./services/engineeringTrainingSessionDetailContent";
+
+/**
+ * Training 상세/세션 경로의 variant(코스 계열)별 목록 라벨 매핑.
+ * sales/engineering/service 3종. 실 courseId(숫자) 또는 세션 id(UUID)는
+ * 동적이므로 blog/press 상세처럼 제네릭 고정 라벨을 사용한다(실 제목 fetch 금지).
+ */
+const TRAINING_VARIANT_LABELS: Record<string, string> = {
+  sales: "Sales Training",
+  engineering: "Engineering Training",
+  service: "Service Training",
+};
 
 export type BreadcrumbCrumb = {
   label: string;
@@ -333,44 +342,46 @@ const configs: Record<string, BreadcrumbConfig> = {
 };
 
 export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
+  // Training 세션 상세(2뎁스): /services/{variant}-training/{courseId}/{sessionId}
+  // — 코스(1뎁스)보다 먼저 검사(세그먼트 수가 더 많으므로 우선 매칭).
+  // courseId(숫자)·sessionId(UUID)는 동적이라 blog/press 상세처럼 제네릭 고정 라벨 사용.
   const sessionMatch = pathname.match(
-    /^\/services\/engineering-training\/([^/]+)\/([^/]+)$/,
+    /^\/services\/(sales|engineering|service)-training\/([^/]+)\/([^/]+)$/,
   );
   if (sessionMatch) {
-    const [, courseId, sessionId] = sessionMatch;
-    const session = getEngineeringTrainingSessionDetail(courseId, sessionId);
-    const detail = getEngineeringTrainingDetail(courseId);
-
-    if (session && detail) {
-      return {
-        crumbs: [
-          { label: "Services" },
-          { label: "Training" },
-          { label: "Engineering Training", href: "/services/engineering-training" },
-          {
-            label: detail.breadcrumbCurrent,
-            href: `/services/engineering-training/${courseId}`,
-          },
-        ],
-        current: session.breadcrumbCurrent,
-      };
-    }
+    const [, variant, courseId] = sessionMatch;
+    const listHref = `/services/${variant}-training`;
+    return {
+      crumbs: [
+        { label: "Services" },
+        { label: "Training" },
+        { label: TRAINING_VARIANT_LABELS[variant], href: listHref },
+        {
+          label: "Curriculum Detail",
+          href: `${listHref}/${courseId}`,
+        },
+      ],
+      current: "Session",
+    };
   }
 
-  const detailMatch = pathname.match(/^\/services\/engineering-training\/([^/]+)$/);
+  // Training 코스 상세(1뎁스): /services/{variant}-training/{courseId}
+  const detailMatch = pathname.match(
+    /^\/services\/(sales|engineering|service)-training\/([^/]+)$/,
+  );
   if (detailMatch) {
-    const detail = getEngineeringTrainingDetail(detailMatch[1]);
-
-    if (detail) {
-      return {
-        crumbs: [
-          { label: "Services" },
-          { label: "Training" },
-          { label: "Engineering Training", href: "/services/engineering-training" },
-        ],
-        current: detail.breadcrumbCurrent,
-      };
-    }
+    const [, variant] = detailMatch;
+    return {
+      crumbs: [
+        { label: "Services" },
+        { label: "Training" },
+        {
+          label: TRAINING_VARIANT_LABELS[variant],
+          href: `/services/${variant}-training`,
+        },
+      ],
+      current: "Curriculum Detail",
+    };
   }
 
   // 블로그 상세는 id 기반 동적 라우트(/company/blog/detail/{id}) — 고정 경로와 동일한 breadcrumb 사용

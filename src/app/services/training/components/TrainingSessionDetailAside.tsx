@@ -38,27 +38,27 @@ export default function TrainingSessionDetailAside({
     <aside
       className={`support_service_training_session_detail__aside support_service_training_session_detail__aside--${variant}`}
     >
-      <TrainingSessionCountdown />
+      <TrainingSessionCountdown targetIso={session.countdownTo} />
 
       <div className="support_service_training_session_detail__meta">
         <div className="support_service_training_session_detail__meta-grid">
           <div className="support_service_training_session_detail__meta-row">
             <div className="support_service_training_session_detail__meta-item">
-              {/* DATE: 매칭된 training_schedule 아이템 date (세션 단위) */}
+              {/* DATE: 이 회차 행의 curriculum_detail2.training_date_from (회차 시작일 → STEP6 포맷) */}
               <SessionMetaLabel icon={metaIcons.date}>DATE</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
-                data-slugkey="date"
+                data-slugkey="curriculum_detail2.training_date_from"
               >
                 {sidebar.date}
               </p>
             </div>
             <div className="support_service_training_session_detail__meta-item">
-              {/* DURATION: curriculum_detail2.duration (코스레벨) */}
+              {/* DURATION: 이 회차 행의 curriculum_detail2.duration (STEP6 "N Hours" 포맷) */}
               <SessionMetaLabel icon={metaIcons.duration}>DURATION</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
-                data-slugkey="duration"
+                data-slugkey="curriculum_detail2.duration"
               >
                 {sidebar.duration}
               </p>
@@ -67,23 +67,23 @@ export default function TrainingSessionDetailAside({
 
           <div className="support_service_training_session_detail__meta-row">
             <div className="support_service_training_session_detail__meta-item">
-              {/* Training Type: curriculum_detail1.training_type 코드 → 라벨 (코스레벨) */}
+              {/* Training Type: 이 회차 행의 curriculum_detail1.training_type 코드 → 라벨 (STEP6) */}
               <SessionMetaLabel icon={metaIcons.trainingType}>
                 Training Type
               </SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
-                data-slugkey="training_type"
+                data-slugkey="curriculum_detail1.training_type"
               >
                 {sidebar.trainingType}
               </p>
             </div>
             <div className="support_service_training_session_detail__meta-item">
-              {/* CLASS SIZE: curriculum_detail2.capacity (코스레벨) */}
+              {/* CLASS SIZE: 이 회차 행의 curriculum_detail2.capacity */}
               <SessionMetaLabel icon={metaIcons.classSize}>CLASS SIZE</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
-                data-slugkey="capacity"
+                data-slugkey="curriculum_detail2.capacity"
               >
                 {sidebar.classSize}
               </p>
@@ -103,10 +103,10 @@ export default function TrainingSessionDetailAside({
             </p>
           </div>
           <ul className="support_service_training_session_detail__meta-bullets">
-            {/* 주소/전화/이메일: curriculum_detail2.address / phone / email (코스레벨) */}
-            <li data-slugkey="address">{sidebar.location.address}</li>
-            <li data-slugkey="phone">{sidebar.location.phone}</li>
-            <li data-slugkey="email">{sidebar.location.email}</li>
+            {/* 주소/전화/이메일: 이 회차 행의 curriculum_detail2.address / phone / email */}
+            <li data-slugkey="curriculum_detail2.address">{sidebar.location.address}</li>
+            <li data-slugkey="curriculum_detail2.phone">{sidebar.location.phone}</li>
+            <li data-slugkey="curriculum_detail2.email">{sidebar.location.email}</li>
           </ul>
         </div>
 

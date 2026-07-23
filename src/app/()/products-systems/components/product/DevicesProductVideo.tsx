@@ -15,7 +15,9 @@ export default function DevicesProductVideo({
     <section className="devices_product_video" id="product-video">
       <div className="inner">
         <h2 className="section_tit">Video</h2>
-        <DevicesProductVideoPlayer youtubeVideoId={youtubeVideoId} title={title} />
+        {youtubeVideoId ? (
+          <DevicesProductVideoPlayer youtubeVideoId={youtubeVideoId} title={title} />
+        ) : null}
       </div>
     </section>
   );

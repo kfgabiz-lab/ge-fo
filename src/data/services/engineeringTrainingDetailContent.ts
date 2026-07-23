@@ -7,6 +7,10 @@ export type EngineeringTrainingSession = {
   duration: string;
   location?: string;
   productsCovered: string;
+  // 월 필터(TrainingDetailSchedule) 파생용 원본 날짜("YYYY-MM-DD") = curriculum_detail2.training_date_from
+  isoDate?: string;
+  // Training Type 필터 파생용 코드 목록(curriculum_detail1.training_type CSV → split). 예: ["001","002"]
+  typeCodes?: string[];
 };
 
 export type EngineeringTrainingScheduleFilter = {
