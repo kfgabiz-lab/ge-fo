@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { eventsDetailHero } from "@/app/company/data/eventsDetailContent";
@@ -30,13 +29,10 @@ export default async function CompanyEventsDetailPage({
     fetchData(eventsAdjacentQuery(id)),
   ]);
 
-  // 존재하지 않거나 비공개/미게시 이벤트면 404
-  if (!detail) {
-    notFound();
-  }
-
+  // 존재하지 않거나 비공개/미게시 이벤트여도 404로 바꾸지 않고 레이아웃 유지 + 빈 상태로 렌더.
+  // detail=null이면 flattenPageDataItem이 TypeError → row를 빈 객체로 폴백(모든 필드 접근 undefined→빈값).
   // flattenPageDataItem: eventsForm/seo 섹션 간 키 충돌 없음 → title/content/location/period_from/period_to가 root로 flat 병합됨
-  const row = flattenPageDataItem(detail);
+  const row: Record<string, unknown> = detail ? flattenPageDataItem(detail) : {};
   const contentHtml = (row.content as string) ?? "";
   // 신규(period_from/period_to)/구(periodFrom/periodTo) 스키마 모두 지원 — 신규 우선
   const periodFrom = (pickField(row, "period_from", "periodFrom") as string) ?? "";

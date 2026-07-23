@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { mediaArticleDetailHero } from "@/app/company/data/mediaArticleDetailContent";
@@ -40,13 +39,10 @@ export default async function CompanyArticlesDetailPage({
     }),
   ]);
 
-  // 존재하지 않거나 비공개/미게시 글이면 404
-  if (!detail) {
-    notFound();
-  }
-
+  // 존재하지 않거나 비공개/미게시 글이어도 404로 바꾸지 않고 레이아웃 유지 + 빈 상태로 렌더.
+  // detail=null이면 flattenPageDataItem이 TypeError → row를 빈 객체로 폴백(모든 필드 접근 undefined→빈값).
   // flattenPageDataItem: articlesForm/seo 섹션 간 키 충돌 없음 → title/publishDttm/image/content가 root로 flat 병합됨
-  const row = flattenPageDataItem(detail);
+  const row: Record<string, unknown> = detail ? flattenPageDataItem(detail) : {};
   const contentHtml = (row.content as string) ?? "";
 
   // hero 이미지: articlesForm.image[0] → page-files, 미등록 시 정적 폴백(별도 heroImage 필드 없음)

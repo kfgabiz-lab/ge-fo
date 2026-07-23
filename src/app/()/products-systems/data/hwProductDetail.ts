@@ -3,15 +3,16 @@
 // - Downloads/Lineup/Video/OtherProducts/배너 등 이번 범위 제외 필드는 정적 기본값 그대로 유지.
 // - 데이터 없거나 개별 필드 비어 있으면 정적 기본값 폴백(화면 깨짐 방지).
 import type { ProductDetail } from "./productDetailContent";
-import { fetchProductDetailBySlug, mapHwProductData } from "./productsSystemsData";
+import { mapHwProductData } from "./productsSystemsData";
 import { getYoutubeIdFromUrl } from "@/lib/youtubeEmbed";
 
 // 병합된 상세 + productId(FAQ 동적 조회 키). row 없으면 productId:null → 호출부 FAQ 폴백.
-export async function buildHwProductDetail(
-  slug: string,
+// row는 호출부(라우트 page.tsx)에서 fetchProductBySlug로 이미 조회한 결과를 그대로 전달받는다.
+// (예전엔 slug로 내부 재조회했으나, 라우트에서 존재확인용으로 이미 같은 조회를 하므로 중복 제거)
+export function buildHwProductDetail(
+  row: Record<string, unknown> | null,
   base: ProductDetail,
-): Promise<{ detail: ProductDetail; productId: number | null }> {
-  const row = await fetchProductDetailBySlug(slug);
+): { detail: ProductDetail; productId: number | null } {
   if (!row) return { detail: base, productId: null };
 
   const data = mapHwProductData(row);

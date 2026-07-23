@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import DevicesCategoryList from "@/app/()/products-systems/components/DevicesCategoryList";
 import DevicesHelp from "@/app/()/products-systems/components/DevicesHelp";
 import DevicesMarkets from "@/app/()/products-systems/components/DevicesMarkets";
@@ -15,7 +14,8 @@ import "@/assets/css/devices-systems.css";
 // 2depth 카테고리(우선) 또는 제품(폴백) 라우트. 예외 slug 없이 전부 동적.
 // ① category-data depth2 를 seo.slug 로 조회 → 카테고리 리스트(DevicesCategoryList) 렌더
 // ② 없으면 product-data 를 seo.slug 로 조회 → 제네릭 제품상세(GenericProductDetail) 렌더
-// ③ 둘 다 없으면 notFound()
+//    (조회한 row를 그대로 전달, 내부 재조회 없음)
+// ③ 둘 다 없어도 404로 바꾸지 않고 제품상세 레이아웃을 빈 상태(row=null)로 렌더 — 레이아웃 유지
 const LANDING_HREF = "/products-category/lv-products-and-systems";
 
 type ProductRangePageProps = {
@@ -59,11 +59,8 @@ export default async function ProductRangeRoutePage({
     );
   }
 
-  // ② 제품 폴백 — product-data 를 seo.slug 로 조회해 제네릭 제품상세로 렌더
+  // ② 제품 폴백 — product-data 를 seo.slug 로 조회해 제네릭 제품상세로 렌더.
+  //    카테고리도 제품도 안 맞으면 row=null → GenericProductDetail이 템플릿 기본값으로 빈 상태 렌더.
   const row = await fetchProductBySlug(slug);
-  if (row) {
-    return <GenericProductDetail slug={slug} />;
-  }
-
-  notFound();
+  return <GenericProductDetail row={row} />;
 }

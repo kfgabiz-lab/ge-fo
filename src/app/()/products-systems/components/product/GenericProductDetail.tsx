@@ -23,11 +23,14 @@ import { fetchProductFaqItems } from "../../data/productsSystemsData";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
-export default async function GenericProductDetail({ slug }: { slug: string }) {
-  const { detail, productId } = await buildHwProductDetail(
-    slug,
-    productTemplateDetail,
-  );
+// row: 라우트 page.tsx에서 fetchProductBySlug로 이미 조회한 제품 단건(없으면 null).
+// null이면 buildHwProductDetail이 템플릿 기본값(base)만으로 빈 상태 렌더 — 레이아웃은 유지된다.
+export default async function GenericProductDetail({
+  row,
+}: {
+  row: Record<string, unknown> | null;
+}) {
+  const { detail, productId } = buildHwProductDetail(row, productTemplateDetail);
   // 제품 FAQ 동적 조회(productId 있을 때만). 결과 0건이면 정적 템플릿 FAQ로 폴백.
   const faqItems = productId ? await fetchProductFaqItems(productId) : [];
 
