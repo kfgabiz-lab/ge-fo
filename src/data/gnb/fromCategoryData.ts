@@ -2,8 +2,11 @@
 // GET /api/v1/fo/gnb/devices-tree 를 1번 호출해 평평한(flat) 행 리스트를 받고,
 // depth("1"/"2"/"3")와 parentId 기준으로 트리(depth1 대분류 → depth2 하위분류 → depth3 제품카드)를 조립한다.
 // (이전엔 category-data depth1 조회 + depth2 반복 조회 + 제품코드 접두사 매칭의 3단계였음.)
-import { fetchApi } from "@/lib/api";
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
+import {
+  type DevicesTreeRow,
+  fetchDevicesTreeRows,
+} from "@/data/gnb/devicesTree";
 import type {
   GnbDevicesMegaMenu,
   GnbMegaDepth2,
@@ -12,35 +15,6 @@ import type {
 } from "@/data/gnb/types";
 // 제품 이미지 URL 가공은 기존 유틸을 그대로 재사용(신규 이미지 유틸 생성 금지).
 import { resolveFirstImageUrl } from "@/app/()/products-systems/data/productsSystemsData";
-
-// devices-tree 엔드포인트 응답의 평평한 행 1개(= bo-api DevicesTreeRowResponse).
-// depth1/2 행: category* 필드 + sortOrder 채워짐, product* 필드 null.
-// depth3 행: product* 필드 채워짐, categoryTitle/categorySlug null. parentId 는 depth 공통.
-interface DevicesTreeRow {
-  rowId: number | null;
-  depth: string | null;
-  parentId: string | null;
-  categoryTitle: string | null;
-  categorySlug: string | null;
-  // 카테고리 설명 원본. "\n" 으로 줄바꿈된 일반 텍스트이며 값이 없으면 null.
-  categoryDescription: string | null;
-  sortOrder: string | null;
-  productId: number | null;
-  productSlug: string | null;
-  productTitle: string | null;
-  productDescription: string | null;
-  productImage: string | null;
-}
-
-// devices-tree 단일 조회. X-Site-Id 헤더는 fetchApi 가 전역 주입(site_id=1)하므로 별도 지정 불필요.
-// 실패 시 [] 반환(호출부가 정적 폴백 여부를 판단).
-async function fetchDevicesTreeRows(): Promise<DevicesTreeRow[]> {
-  try {
-    return await fetchApi<DevicesTreeRow[]>("/api/v1/fo/gnb/devices-tree");
-  } catch {
-    return [];
-  }
-}
 
 // productImage 는 BE 가 JSONB(product_info.image)를 ->> 연산자로 뽑아 JSON 배열이 텍스트 문자열("[123]")로 온다.
 // resolveFirstImageUrl 은 배열을 기대하므로 문자열을 배열로 파싱한 뒤 그대로 재사용한다.

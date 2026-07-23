@@ -17,6 +17,10 @@ import {
 import GuideSelect from "@/components/form/GuideSelect";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
+  type DevicesTreeRow,
+  fetchDevicesTreeRows,
+} from "@/data/gnb/devicesTree";
+import {
   contactUsCategoryLevels,
   contactUsConsentItems,
   contactUsFormCopy,
@@ -42,6 +46,22 @@ function renderSelectValue(label: string) {
     </span>
   );
 }
+
+// devices-tree 행의 rowId → parentId 매칭/셀렉트 value 용 문자열 키.
+function rowKey(row: DevicesTreeRow): string {
+  return row.rowId != null ? String(row.rowId) : "";
+}
+
+// 제품 카테고리 cascading 셀렉트 한 단계의 렌더 설정.
+type CategoryLevelConfig = {
+  id: string;
+  placeholder: string; // 미선택 시 표시 라벨(Lv1/Lv2/Lv3 Category)
+  ariaLabel: string;
+  value: string; // 선택된 rowId(문자열)
+  options: { value: string; label: string }[]; // value=rowId, label=표시명
+  disabled: boolean;
+  onChange: (value: string) => void;
+};
 
 function ContactUsFieldLabel({
   children,
@@ -145,9 +165,14 @@ export default function ContactUsForm() {
 
   // 폼 입력 상태 (제출 시 값을 모으기 위해 전부 제어 컴포넌트로 관리)
   const [inquiryType, setInquiryType] = useState(""); // 선택된 문의유형 code(대문자)
-  const [categoryValues, setCategoryValues] = useState<Record<string, string>>(
-    {},
-  ); // 제품 카테고리 lv1/lv2/lv3 선택값(선택)
+  // 제품 카테고리 원본 데이터(devices-tree flat 행) — GNB 메가메뉴와 동일 엔드포인트 재사용
+  const [deviceRows, setDeviceRows] = useState<DevicesTreeRow[]>([]);
+  // 제품 카테고리 lv1/lv2/lv3 선택값 — 각 단계에서 선택한 행의 rowId(문자열, 선택 항목)
+  const [categoryIds, setCategoryIds] = useState<{
+    lv1: string;
+    lv2: string;
+    lv3: string;
+  }>({ lv1: "", lv2: "", lv3: "" });
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -164,12 +189,9 @@ export default function ContactUsForm() {
   );
   const [termsModalOpen, setTermsModalOpen] = useState(false);
 
-  // 제출 진행/결과 상태
+  // 제출 진행/실패 상태 — 성공은 alert()로 안내하므로 별도 상태 불필요, 실패만 화면에 인라인 표시
   const [submitting, setSubmitting] = useState(false);
-  const [submitResult, setSubmitResult] = useState<{
-    ok: boolean;
-    message: string;
-  } | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // 마운트 시 문의유형/국가 옵션을 공통코드 API로 조회 (warranty-policy의 alive 가드 패턴)
   useEffect(() => {
@@ -196,11 +218,106 @@ export default function ContactUsForm() {
     };
   }, []);
 
+  // 마운트 시 제품 카테고리(devices-tree) 실데이터 조회. 실패 시 빈 배열 폴백 → 옵션 없음 상태로 표시.
+  useEffect(() => {
+    let alive = true;
+    fetchDevicesTreeRows()
+      .then((rows) => {
+        if (alive) setDeviceRows(rows);
+      })
+      .catch(() => {
+        if (alive) setDeviceRows([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // Lv1(depth1) → Lv2(depth2, 상위 rowId 일치) → Lv3(depth3, 상위 rowId 일치) cascading 옵션 파생
+  const lv1Rows = deviceRows.filter((row) => row.depth === "1");
+  const lv2Rows = deviceRows.filter(
+    (row) => row.depth === "2" && row.parentId === categoryIds.lv1,
+  );
+  const lv3Rows = deviceRows.filter(
+    (row) => row.depth === "3" && row.parentId === categoryIds.lv2,
+  );
+
+  // 제품 카테고리 3단 셀렉트 렌더 설정 — 상위 변경 시 하위 선택 초기화(일반 cascading 관행)
+  const categoryLevels: CategoryLevelConfig[] = [
+    {
+      id: contactUsCategoryLevels[0].id,
+      placeholder: contactUsCategoryLevels[0].label,
+      ariaLabel: contactUsCategoryLevels[0].ariaLabel,
+      value: categoryIds.lv1,
+      options: lv1Rows.map((row) => ({
+        value: rowKey(row),
+        label: row.categoryTitle ?? "",
+      })),
+      disabled: false,
+      onChange: (value) => setCategoryIds({ lv1: value, lv2: "", lv3: "" }),
+    },
+    {
+      id: contactUsCategoryLevels[1].id,
+      placeholder: contactUsCategoryLevels[1].label,
+      ariaLabel: contactUsCategoryLevels[1].ariaLabel,
+      value: categoryIds.lv2,
+      options: lv2Rows.map((row) => ({
+        value: rowKey(row),
+        label: row.categoryTitle ?? "",
+      })),
+      disabled: !categoryIds.lv1 || lv2Rows.length === 0,
+      onChange: (value) =>
+        setCategoryIds((prev) => ({ ...prev, lv2: value, lv3: "" })),
+    },
+    {
+      id: contactUsCategoryLevels[2].id,
+      placeholder: contactUsCategoryLevels[2].label,
+      ariaLabel: contactUsCategoryLevels[2].ariaLabel,
+      value: categoryIds.lv3,
+      options: lv3Rows.map((row) => ({
+        value: rowKey(row),
+        label: row.productTitle ?? "",
+      })),
+      disabled: !categoryIds.lv2 || lv3Rows.length === 0,
+      onChange: (value) =>
+        setCategoryIds((prev) => ({ ...prev, lv3: value })),
+    },
+  ];
+
+  // 단일 카테고리 셀렉트 렌더 — value=rowId, renderValue 는 옵션에서 라벨을 역조회해 표시
+  function renderCategorySelect(config: CategoryLevelConfig) {
+    return (
+      <GuideSelect
+        value={config.value}
+        onChange={(event) => config.onChange(String(event.target.value))}
+        displayEmpty
+        disabled={config.disabled}
+        IconComponent={GuideSelectIcon}
+        inputProps={{ "aria-label": config.ariaLabel }}
+        renderValue={(value) => {
+          const selected = config.options.find(
+            (option) => option.value === String(value),
+          );
+          return renderSelectValue(selected ? selected.label : config.placeholder);
+        }}
+      >
+        <MenuItem value="" disabled>
+          {config.placeholder}
+        </MenuItem>
+        {config.options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </GuideSelect>
+    );
+  }
+
   // 제출 처리 — 폼 상태를 ContactUsInquiryRequest로 조립해 POST
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitting) return;
-    setSubmitResult(null);
+    setSubmitError(null);
     setSubmitting(true);
 
     // 필수 필드 + 선택 카테고리를 스펙에 맞게 조립 (교차검증/코드검증은 BE에 위임)
@@ -217,17 +334,18 @@ export default function ContactUsForm() {
       marketingOptInFlag: Boolean(consent[CONSENT_MARKETING_ID]),
       privacyConsentFlag: Boolean(consent[CONSENT_PRIVACY_ID]),
     };
-    // 제품 카테고리는 선택 항목 — 값이 있을 때만 전송
-    if (categoryValues.lv1) payload.productCategoryLv1 = categoryValues.lv1;
-    if (categoryValues.lv2) payload.productCategoryLv2 = categoryValues.lv2;
-    if (categoryValues.lv3) payload.productCategoryLv3 = categoryValues.lv3;
+    // 제품 카테고리는 선택 항목 — 선택된 행의 rowId(devices-tree/category-data PK)를 값이 있을 때만 전송
+    if (categoryIds.lv1) payload.productCategoryLv1Id = Number(categoryIds.lv1);
+    if (categoryIds.lv2) payload.productCategoryLv2Id = Number(categoryIds.lv2);
+    if (categoryIds.lv3) payload.productCategoryLv3Id = Number(categoryIds.lv3);
 
     try {
       await submitContactUs(payload);
-      setSubmitResult({ ok: true, message: contactUsFormCopy.submitSuccess });
+      // 성공은 인라인 문구 대신 alert()로 안내
+      alert(contactUsFormCopy.submitSuccess);
     } catch {
       // fetchApi는 비정상 응답(400 등) 시 Error를 throw — 상세 사유는 BE가 재검증
-      setSubmitResult({ ok: false, message: contactUsFormCopy.submitError });
+      setSubmitError(contactUsFormCopy.submitError);
     } finally {
       setSubmitting(false);
     }
@@ -291,63 +409,15 @@ export default function ContactUsForm() {
                   {contactUsFormCopy.productCategory}
                 </ContactUsFieldLabel>
                 <FormControl className="guide_field">
-                  <GuideSelect
-                    value={categoryValues[contactUsCategoryLevels[0].id] ?? ""}
-                    onChange={(event) =>
-                      setCategoryValues((prev) => ({
-                        ...prev,
-                        [contactUsCategoryLevels[0].id]: String(
-                          event.target.value,
-                        ),
-                      }))
-                    }
-                    displayEmpty
-                    IconComponent={GuideSelectIcon}
-                    inputProps={{
-                      "aria-label": contactUsCategoryLevels[0].ariaLabel,
-                    }}
-                    renderValue={(value) => {
-                      const label = value
-                        ? String(value)
-                        : contactUsCategoryLevels[0].label;
-                      return renderSelectValue(label);
-                    }}
-                  >
-                    <MenuItem value="" disabled>
-                      {contactUsCategoryLevels[0].label}
-                    </MenuItem>
-                    <MenuItem value={contactUsCategoryLevels[0].label}>
-                      {contactUsCategoryLevels[0].label}
-                    </MenuItem>
-                  </GuideSelect>
+                  {renderCategorySelect(categoryLevels[0])}
                 </FormControl>
               </div>
-              {contactUsCategoryLevels.slice(1).map((level) => (
+              {categoryLevels.slice(1).map((level) => (
                 <FormControl
                   key={level.id}
                   className="guide_field support_contact_form__category-select"
                 >
-                  <GuideSelect
-                    value={categoryValues[level.id] ?? ""}
-                    onChange={(event) =>
-                      setCategoryValues((prev) => ({
-                        ...prev,
-                        [level.id]: String(event.target.value),
-                      }))
-                    }
-                    displayEmpty
-                    IconComponent={GuideSelectIcon}
-                    inputProps={{ "aria-label": level.ariaLabel }}
-                    renderValue={(value) => {
-                      const label = value ? String(value) : level.label;
-                      return renderSelectValue(label);
-                    }}
-                  >
-                    <MenuItem value="" disabled>
-                      {level.label}
-                    </MenuItem>
-                    <MenuItem value={level.label}>{level.label}</MenuItem>
-                  </GuideSelect>
+                  {renderCategorySelect(level)}
                 </FormControl>
               ))}
             </div>
@@ -576,16 +646,12 @@ export default function ContactUsForm() {
           </div>
 
           <div className="support_contact_form__submit-wrap">
-            {submitResult ? (
+            {submitError ? (
               <p
-                className={`support_contact_form__message ${
-                  submitResult.ok
-                    ? "support_contact_form__message--success"
-                    : "support_contact_form__message--error"
-                }`}
-                role={submitResult.ok ? "status" : "alert"}
+                className="support_contact_form__message support_contact_form__message--error"
+                role="alert"
               >
-                {submitResult.message}
+                {submitError}
               </p>
             ) : null}
             <button

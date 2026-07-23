@@ -18,11 +18,10 @@ export interface CodeItem {
 // type/country 는 공통코드 API의 code(대문자)를 그대로 전송한다.
 export interface ContactUsInquiryRequest {
   type: string;
-  productCategoryLv1?: string;
-  productCategoryLv2?: string;
-  productCategoryLv3?: string;
-  productCategoryLv1Id?: string;
-  productCategoryLv2Id?: string;
+  // devices-tree(category-data) 행의 rowId(page_data PK) — Lv1/Lv2/Lv3(제품) 공통
+  productCategoryLv1Id?: number;
+  productCategoryLv2Id?: number;
+  productCategoryLv3Id?: number;
   email: string;
   firstName: string;
   lastName: string;

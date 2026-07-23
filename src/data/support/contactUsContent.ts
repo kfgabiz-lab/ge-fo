@@ -123,7 +123,8 @@ export const contactUsFormCopy = {
   sendLabel: "Send",
   sendLabelMobile: "LIST",
   sendingLabel: "Sending...",
-  submitSuccess: "Your inquiry has been submitted successfully.",
+  submitSuccess:
+    "Your inquiry has been submitted. A confirmation number has been sent to your email",
   submitError:
     "Failed to submit your inquiry. Please check your input and try again.",
 } as const;
