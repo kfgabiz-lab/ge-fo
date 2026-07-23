@@ -4,10 +4,16 @@ import { useEffect, useId, useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { contactUsViewResponseModal } from "@/data/support/contactUsContent";
 import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
+import {
+  type ContactUsDetailResponse,
+  fetchContactUsDetail,
+} from "../data/contactUsData";
 
 type ContactUsViewResponseModalProps = {
   open: boolean;
   onClose: () => void;
+  /** 조회 성공 시 상세 데이터를 전달 — 부모가 상세 팝업을 열도록 함 */
+  onSuccess?: (detail: ContactUsDetailResponse) => void;
   /** Section guide preview — in-flow layout without fixed overlay */
   embedded?: boolean;
   /** Figma 5565:128558 — show validation errors on open */
@@ -22,6 +28,7 @@ type FieldErrors = {
 export default function ContactUsViewResponseModal({
   open,
   onClose,
+  onSuccess,
   embedded = false,
   showErrorsOnOpen = false,
 }: ContactUsViewResponseModalProps) {
@@ -32,6 +39,7 @@ export default function ContactUsViewResponseModal({
   const [inquiryNumber, setInquiryNumber] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [checking, setChecking] = useState(false);
 
   useModalFocusTrap(panelRef, open && !embedded);
 
@@ -70,18 +78,39 @@ export default function ContactUsViewResponseModal({
 
   if (!open) return null;
 
-  const handleConfirm = () => {
-    const nextErrors: FieldErrors = {};
+  const handleConfirm = async () => {
+    if (checking) return;
 
+    const nextErrors: FieldErrors = {};
     if (!inquiryNumber.trim()) {
       nextErrors.inquiryNumber = contactUsViewResponseModal.fieldError;
     }
     if (!password.trim()) {
       nextErrors.password = contactUsViewResponseModal.fieldError;
     }
-
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+    if (Object.keys(nextErrors).length > 0) {
+      alert("Please enter your inquiry number and password.");
+      return;
+    }
+
+    setChecking(true);
+    try {
+      const detail = await fetchContactUsDetail({
+        caseNumber: inquiryNumber,
+        password,
+      });
+      onSuccess?.(detail);
+    } catch {
+      // 접수번호/비밀번호 불일치 등 — BE가 404로 응답
+      setErrors({
+        inquiryNumber: contactUsViewResponseModal.fieldError,
+        password: contactUsViewResponseModal.fieldError,
+      });
+      alert("The inquiry number or password is incorrect.");
+    } finally {
+      setChecking(false);
+    }
   };
 
   return (
@@ -160,11 +189,6 @@ export default function ContactUsViewResponseModal({
                 }}
                 error={Boolean(errors.inquiryNumber)}
               />
-              {errors.inquiryNumber ? (
-                <p className="support_contact_view_response_modal__error" role="alert">
-                  {errors.inquiryNumber}
-                </p>
-              ) : null}
             </div>
             <div className="support_contact_view_response_modal__field">
               <label
@@ -192,11 +216,6 @@ export default function ContactUsViewResponseModal({
                 }}
                 error={Boolean(errors.password)}
               />
-              {errors.password ? (
-                <p className="support_contact_view_response_modal__error" role="alert">
-                  {errors.password}
-                </p>
-              ) : null}
             </div>
           </div>
         </div>
@@ -205,6 +224,7 @@ export default function ContactUsViewResponseModal({
             type="button"
             className="btn-base btn-lv01 btn-lv01--solid support_contact_view_response_modal__confirm"
             onClick={handleConfirm}
+            disabled={checking}
           >
             {contactUsViewResponseModal.confirmLabel}
           </button>

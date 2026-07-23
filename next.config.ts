@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
         source: "/api/v1/fo/:path*",
         destination: `${process.env.API_PROXY_TARGET || "http://localhost:8080"}/api/v1/fo/:path*`,
       },
+      {
+        // Contact Us "View Response" 조회(IF_SRR_NAHP_CTP_0002) — 기존 CTP 전용 public API
+        source: "/api/v1/public/:path*",
+        destination: `${process.env.API_PROXY_TARGET || "http://localhost:8080"}/api/v1/public/:path*`,
+      },
     ];
   },
   /* Products & Systems 라우팅 개편 — 구 /products-systems/... → seo.slug 기반 신규 URL(301).

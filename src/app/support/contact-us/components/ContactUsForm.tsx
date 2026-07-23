@@ -189,9 +189,8 @@ export default function ContactUsForm() {
   );
   const [termsModalOpen, setTermsModalOpen] = useState(false);
 
-  // 제출 진행/실패 상태 — 성공은 alert()로 안내하므로 별도 상태 불필요, 실패만 화면에 인라인 표시
+  // 제출 진행 상태 — 성공/실패 모두 퍼블리싱대로 별도 안내 문구 없음(성공만 alert()로 안내)
   const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // 마운트 시 문의유형/국가 옵션을 공통코드 API로 조회 (warranty-policy의 alive 가드 패턴)
   useEffect(() => {
@@ -317,7 +316,24 @@ export default function ContactUsForm() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitting) return;
-    setSubmitError(null);
+
+    // 필수 항목 누락 확인
+    const requiredFilled =
+      inquiryType.trim() !== "" &&
+      email.trim() !== "" &&
+      firstName.trim() !== "" &&
+      lastName.trim() !== "" &&
+      companyName.trim() !== "" &&
+      country.trim() !== "" &&
+      description.trim() !== "" &&
+      password.trim() !== "" &&
+      confirmPassword.trim() !== "" &&
+      Boolean(consent[CONSENT_PRIVACY_ID]);
+    if (!requiredFilled) {
+      alert("Please complete all required fields.");
+      return;
+    }
+
     setSubmitting(true);
 
     // 필수 필드 + 선택 카테고리를 스펙에 맞게 조립 (교차검증/코드검증은 BE에 위임)
@@ -334,18 +350,29 @@ export default function ContactUsForm() {
       marketingOptInFlag: Boolean(consent[CONSENT_MARKETING_ID]),
       privacyConsentFlag: Boolean(consent[CONSENT_PRIVACY_ID]),
     };
-    // 제품 카테고리는 선택 항목 — 선택된 행의 rowId(devices-tree/category-data PK)를 값이 있을 때만 전송
-    if (categoryIds.lv1) payload.productCategoryLv1Id = Number(categoryIds.lv1);
-    if (categoryIds.lv2) payload.productCategoryLv2Id = Number(categoryIds.lv2);
-    if (categoryIds.lv3) payload.productCategoryLv3Id = Number(categoryIds.lv3);
+    // 제품 카테고리는 선택 항목 — 선택된 레벨의 라벨을 "카테고리1 | 카테고리2 | 카테고리3" 형태로 결합해 전송
+    const lv1Row = lv1Rows.find((row) => rowKey(row) === categoryIds.lv1);
+    const lv2Row = lv2Rows.find((row) => rowKey(row) === categoryIds.lv2);
+    const lv3Row = lv3Rows.find((row) => rowKey(row) === categoryIds.lv3);
+    const categoryLabels = [
+      lv1Row?.categoryTitle,
+      lv2Row?.categoryTitle,
+      lv3Row?.productTitle,
+    ].filter((label): label is string => Boolean(label));
+    if (categoryLabels.length > 0) {
+      payload.productCategory = categoryLabels.join(" | ");
+    }
+    // Lv3(제품)의 product-data PK — BE가 담당자 이메일 조회에 사용
+    if (lv3Row?.productId != null) {
+      payload.productId = lv3Row.productId;
+    }
 
     try {
       await submitContactUs(payload);
-      // 성공은 인라인 문구 대신 alert()로 안내
+      // 성공은 alert()로 안내(퍼블리싱엔 없는 문구, 사용자 지정 내용)
       alert(contactUsFormCopy.submitSuccess);
     } catch {
-      // fetchApi는 비정상 응답(400 등) 시 Error를 throw — 상세 사유는 BE가 재검증
-      setSubmitError(contactUsFormCopy.submitError);
+      // 실패 시 퍼블리싱대로 별도 안내 없음
     } finally {
       setSubmitting(false);
     }
@@ -354,7 +381,11 @@ export default function ContactUsForm() {
   return (
     <section className="support_contact_form" id="support-contact-form">
       <div className="inner">
-        <form className="support_contact_form__panel" onSubmit={handleSubmit}>
+        <form
+          className="support_contact_form__panel"
+          onSubmit={handleSubmit}
+          noValidate
+        >
           <div className="support_contact_form__body">
             <fieldset className="support_contact_form__group support_contact_form__group--inquiry">
               <legend className="ir">{contactUsFormCopy.inquiryType}</legend>
@@ -496,10 +527,7 @@ export default function ContactUsForm() {
                     IconComponent={GuideSelectIcon}
                     inputProps={{ "aria-label": contactUsFormCopy.country }}
                     renderValue={(value) => {
-                      const label = value
-                        ? (countries.find((item) => item.code === value)?.name ??
-                          String(value))
-                        : countryPlaceholder;
+                      const label = value ? String(value) : countryPlaceholder;
                       return (
                         <span
                           className={
@@ -527,7 +555,7 @@ export default function ContactUsForm() {
                     )}
                     {countries.map((option) => (
                       <MenuItem key={option.code} value={option.code}>
-                        {option.name}
+                        {option.code}
                       </MenuItem>
                     ))}
                   </GuideSelect>
@@ -646,14 +674,6 @@ export default function ContactUsForm() {
           </div>
 
           <div className="support_contact_form__submit-wrap">
-            {submitError ? (
-              <p
-                className="support_contact_form__message support_contact_form__message--error"
-                role="alert"
-              >
-                {submitError}
-              </p>
-            ) : null}
             <button
               type="submit"
               className="btn-base btn-lv01 btn-lv01--solid support_contact_form__submit"

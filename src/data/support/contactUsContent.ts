@@ -102,8 +102,6 @@ export const contactUsConsentItems = [
   },
 ] as const;
 
-export { privacyPolicyModal as contactUsPrivacyPolicyModal } from "@/data/privacyPolicyContent";
-
 export const contactUsFormCopy = {
   inquiryType: "Inquiry Type",
   productCategory: "Product Category",
@@ -125,6 +123,4 @@ export const contactUsFormCopy = {
   sendingLabel: "Sending...",
   submitSuccess:
     "Your inquiry has been submitted. A confirmation number has been sent to your email",
-  submitError:
-    "Failed to submit your inquiry. Please check your input and try again.",
 } as const;

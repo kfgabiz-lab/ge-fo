@@ -3,10 +3,13 @@
 import { useState } from "react";
 import SupportPageTitle from "@/app/support/components/SupportPageTitle";
 import { contactUsPage } from "@/data/support/contactUsContent";
+import type { ContactUsDetailResponse } from "../data/contactUsData";
 import ContactUsViewResponseModal from "./ContactUsViewResponseModal";
+import ContactUsViewResponseDetailModal from "./ContactUsViewResponseDetailModal";
 
 export default function ContactUsTitle() {
   const [viewResponseOpen, setViewResponseOpen] = useState(false);
+  const [detail, setDetail] = useState<ContactUsDetailResponse | null>(null);
 
   return (
     <>
@@ -28,6 +31,16 @@ export default function ContactUsTitle() {
       <ContactUsViewResponseModal
         open={viewResponseOpen}
         onClose={() => setViewResponseOpen(false)}
+        onSuccess={(result) => {
+          setDetail(result);
+          setViewResponseOpen(false);
+        }}
+      />
+      <ContactUsViewResponseDetailModal
+        open={detail !== null}
+        onClose={() => setDetail(null)}
+        variant={detail?.reply ? "answered" : "pending"}
+        detail={detail ?? undefined}
       />
     </>
   );

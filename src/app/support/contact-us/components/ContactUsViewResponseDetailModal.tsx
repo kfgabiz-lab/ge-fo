@@ -6,12 +6,32 @@ import {
   contactUsViewResponseModal,
 } from "@/data/support/contactUsContent";
 import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
+import type { ContactUsDetailResponse } from "../data/contactUsData";
+
+// CTP가 내려주는 날짜 raw 문자열을 "yyyy-MM-dd HH:mm"로 통일 표시(포맷이 케이스마다 다름 확인됨).
+// 인식 안 되는 형식은 원본 그대로 반환(데이터 유실 방지).
+function formatCtpDate(value: string | null | undefined): string {
+  if (!value) return "";
+  const withTime = value.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+  if (withTime) {
+    const [, y, m, d, hh, mm] = withTime;
+    return `${y}-${m}-${d} ${hh}:${mm}`;
+  }
+  const dateOnly = value.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (dateOnly) {
+    const [, y, m, d] = dateOnly;
+    return `${y}-${m}-${d}`;
+  }
+  return value;
+}
 
 type ContactUsViewResponseDetailModalProps = {
   open: boolean;
   onClose: () => void;
   variant: "answered" | "pending";
   embedded?: boolean;
+  /** 실제 CTP 조회 결과 — 있으면 하드코딩 샘플(contactUsViewResponseDetailSample) 대신 이 데이터를 사용 */
+  detail?: ContactUsDetailResponse;
 };
 
 export default function ContactUsViewResponseDetailModal({
@@ -19,10 +39,25 @@ export default function ContactUsViewResponseDetailModal({
   onClose,
   variant,
   embedded = false,
+  detail,
 }: ContactUsViewResponseDetailModalProps) {
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
-  const sample = contactUsViewResponseDetailSample;
+  const sample = detail
+    ? {
+        inquiryType: detail.type,
+        submittedAt: formatCtpDate(detail.inquiryDate),
+        respondedAt: formatCtpDate(detail.replyDate),
+        productTrail: [
+          "Inquiry products",
+          ...(detail.productCategory ? detail.productCategory.split(" | ") : []),
+        ],
+        inquiryBody: detail.description ? detail.description.split("\n") : [],
+        responseBody: detail.reply ? detail.reply.split("\n") : [],
+        pendingTitle: contactUsViewResponseDetailSample.pendingTitle,
+        pendingDescription: contactUsViewResponseDetailSample.pendingDescription,
+      }
+    : contactUsViewResponseDetailSample;
 
   useModalFocusTrap(panelRef, open && !embedded);
 
@@ -45,9 +80,16 @@ export default function ContactUsViewResponseDetailModal({
 
   if (!open) return null;
 
+  // 실데이터(detail)일 때 pending은 아직 응답일시가 없으므로 표시하지 않는다
+  // (샘플 데모는 기존 표시를 그대로 유지)
+  const showResponseDate = !(detail && variant === "pending");
   const responseDate =
     variant === "answered" ? sample.respondedAt : sample.submittedAt;
-  const responseDateTime = variant === "answered" ? "2026-06-22T11:23" : "2026-06-19T16:25";
+  const responseDateTime = detail
+    ? responseDate
+    : variant === "answered"
+      ? "2026-06-22T11:23"
+      : "2026-06-19T16:25";
 
   const productTrail = (
     <nav
@@ -59,7 +101,10 @@ export default function ContactUsViewResponseDetailModal({
         |
       </span>
       {sample.productTrail.slice(1).map((item, index) => (
-        <span key={item} className="support_contact_view_response_detail_modal__trail-item">
+        <span
+          key={`${item}-${index}`}
+          className="support_contact_view_response_detail_modal__trail-item"
+        >
           {index > 0 ? (
             <span
               className="support_contact_view_response_detail_modal__trail-chevron"
@@ -125,15 +170,15 @@ export default function ContactUsViewResponseDetailModal({
               </div>
               <time
                 className="support_contact_view_response_detail_modal__date"
-                dateTime="2026-06-19T16:25"
+                dateTime={detail ? sample.submittedAt : "2026-06-19T16:25"}
               >
                 {sample.submittedAt}
               </time>
             </div>
             {productTrail}
             <div className="support_contact_view_response_detail_modal__text">
-              {sample.inquiryBody.map((line) => (
-                <p key={line}>{line}</p>
+              {sample.inquiryBody.map((line, index) => (
+                <p key={`${line}-${index}`}>{line}</p>
               ))}
             </div>
           </section>
@@ -152,19 +197,25 @@ export default function ContactUsViewResponseDetailModal({
                   Response Details
                 </h3>
               </div>
-              <time
-                className="support_contact_view_response_detail_modal__date"
-                dateTime={responseDateTime}
-              >
-                {responseDate}
-              </time>
+              {showResponseDate ? (
+                <time
+                  className="support_contact_view_response_detail_modal__date"
+                  dateTime={responseDateTime}
+                >
+                  {responseDate}
+                </time>
+              ) : null}
             </div>
             {variant === "answered" ? (
               <>
                 {productTrail}
                 <div className="support_contact_view_response_detail_modal__text">
-                  {sample.responseBody.map((line) =>
-                    line ? <p key={line}>{line}</p> : <p key="spacer" aria-hidden>&nbsp;</p>,
+                  {sample.responseBody.map((line, index) =>
+                    line ? (
+                      <p key={`${line}-${index}`}>{line}</p>
+                    ) : (
+                      <p key={`spacer-${index}`} aria-hidden>&nbsp;</p>
+                    ),
                   )}
                 </div>
               </>
