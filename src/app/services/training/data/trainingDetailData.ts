@@ -18,6 +18,7 @@ import type { Metadata } from "next";
 import { fetchApi, SITE_URL } from "@/lib/api";
 import { fetchData } from "@/lib/pageDataApi";
 import { formatDisplayDate } from "@/lib/formatDate";
+import { siteToday } from "@/lib/siteTime";
 import type { PageDataItem } from "@/lib/pageData";
 import {
   engineeringTrainingDetails,
@@ -223,7 +224,8 @@ function formatSessionDateRange(from?: string, to?: string): string {
 function isNotPast(dateTo?: string): boolean {
   const ymd = parseYmd(dateTo);
   if (!ymd) return true;
-  const now = new Date();
+  // "오늘" 기준을 사이트(NAHP) 타임존으로 통일(FO 서버 로컬 타임존 영향 제거)
+  const now = siteToday();
   const endUtc = Date.UTC(ymd.y, ymd.m - 1, ymd.d);
   const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
   return endUtc >= todayUtc;

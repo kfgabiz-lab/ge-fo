@@ -131,7 +131,6 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
     const payload = {
       email,
       areasOfInterest: interests.join(", "),
-      userTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     };
 
     await fetchApi("/api/v1/fo/newsletter/insights", {

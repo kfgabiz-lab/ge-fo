@@ -3,6 +3,7 @@
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
 // - press/blog/articles와 달리 category 대신 location/period_from/period_to(행사기간) 필드를 씀
 import { formatDisplayDateRange, formatMonthLabel } from "@/lib/formatDate";
+import { siteToday, siteTodayStr } from "@/lib/siteTime";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 import type {
   EventsCalendarEntry,
@@ -76,7 +77,7 @@ function toEventsCommon(item: EventsRow) {
 // 소비처(CompanyEventsPage / events detail page)는 이 헬퍼 결과를 fetchData에 그대로 넘긴다.
 
 // Featured(상단) — 이번달~다음달, 미시작만(period_from>=today), events-data.md 3-1
-export function eventsFeaturedQuery(fallbackImage: string, now: Date = new Date()) {
+export function eventsFeaturedQuery(fallbackImage: string, now: Date = siteToday()) {
   const { from, to } = thisAndNextMonthRange(now);
   return {
     slug: "events-data",
@@ -119,7 +120,7 @@ export function eventsCalendarQuery() {
     where: { ...EVENTS_VISIBLE_WHERE, exclude: "content" },
     // content 배열 전체 → 월별 그룹핑 변환(원소별 map 아님)
     리턴함수: (rows: PageDataItem[]): EventsCalendarMonth[] => {
-      const todayStr = toDateStr(new Date()); // 로컬 타임존 "YYYY-MM-DD"
+      const todayStr = siteTodayStr(); // 사이트 타임존 기준 오늘 "YYYY-MM-DD"
       const monthMap = new Map<string, EventsCalendarEntry[]>();
       for (const item of rows) {
         const c = toEventsCommon(item);
