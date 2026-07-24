@@ -14,6 +14,7 @@ import { footerAffiliateOptions } from "@/data/footerAffiliateOptions";
 import "@/assets/css/components/MainFooter.css";
 import CookiePreferencesModal from "@/components/modals/CookiePreferencesModal";
 import CookieSettingsModal from "@/components/modals/CookieSettingsModal";
+import { COOKIE_CONSENT_STORAGE_KEY } from "@/data/common/cookieSettingsContent";
 
 const interestOptions = [
   { value: "LV & MV Power Solutions", defaultChecked: false },
@@ -94,6 +95,19 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
   const [privacyPolicyOpen, setPrivacyPolicyOpen] = useState(false);
   const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
   const [cookiePreferencesOpen, setCookiePreferencesOpen] = useState(false);
+
+  // 페이지 로드 시 쿠키 동의 여부 확인 localStrage에 저장된 값이 없으면 쿠키 설정 모달을 열도록 함
+  useEffect(() => {
+    try {
+      const savedConsent = window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
+
+      if (!savedConsent) {
+        setCookieSettingsOpen(true);
+      }
+    } catch {
+      setCookieSettingsOpen(true);
+    }
+  }, []);
 
   const closeAffiliateMenu = useCallback(() => {
     setAffiliateOpen(false);
