@@ -51,14 +51,7 @@ export default function ServiceCenterFlow() {
           >
             {serviceFlow.ctaLabel}
             <span className="btn-text-30__icon">
-              <span
-                className="icon_arrow-14 icon_arrow-14--white support_service_flow__cta-icon support_service_flow__cta-icon--pc"
-                aria-hidden="true"
-              />
-              <span
-                className="icon_link-14 support_service_flow__cta-icon support_service_flow__cta-icon--mo"
-                aria-hidden="true"
-              />
+              <span className="icon_link-14" aria-hidden="true" />
             </span>
           </Link>
         </div>

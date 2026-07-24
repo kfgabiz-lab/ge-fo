@@ -658,6 +658,11 @@
     color: #666;
   }
 
+  /* Agenda timeline — mobile only (Figma 8007:107681) */
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-list {
+    display: none;
+  }
+
   section.support_service_training_session_detail .support_service_training_session_detail__form {
     display: flex;
     flex-direction: column;
@@ -871,6 +876,13 @@
   section.support_service_training_session_detail .support_service_training_session_detail__countdown-unit:first-child {
     min-width: 76px;
     width: 76px;
+  }
+
+  /* Figma 8007:106738 — HOURS 52 · MINS 55 (SECS 제거 후 last-child = MINS) */
+  section.support_service_training_session_detail
+    .support_service_training_session_detail__countdown-unit:last-child {
+    min-width: 55px;
+    width: 55px;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__countdown-value {
@@ -2743,6 +2755,101 @@
     flex-direction: column;
     gap: 24px;
     margin-bottom: 70px;
+  }
+
+  /* Agenda — hide table, show timeline (Figma 8007:107681) */
+  section.support_service_training_session_detail .support_service_training_session_detail__block--agenda .support_service_training_session_detail__table-viewport {
+    display: none;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-list {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-list::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    bottom: 0;
+    left: 3.5px;
+    width: 0;
+    border-left: 1px dashed rgb(15 31 69 / 25%);
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-item {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 14px;
+    margin-top: 3px;
+    background: url("/ico/ico_agenda_dot_8.svg") center 6px / 8px 8px no-repeat;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-time {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #0f1f45;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-tit {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-desc {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #666;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-trainer {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #222;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__block--registration {

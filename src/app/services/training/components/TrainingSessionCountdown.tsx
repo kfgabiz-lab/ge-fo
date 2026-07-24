@@ -103,17 +103,6 @@ export default function TrainingSessionCountdown({
             MINS
           </span>
         </div>
-        <span className="support_service_training_session_detail__countdown-sep" aria-hidden>
-          :
-        </span>
-        <div className="support_service_training_session_detail__countdown-unit">
-          <span className="support_service_training_session_detail__countdown-value">
-            {pad2(remaining.seconds)}
-          </span>
-          <span className="support_service_training_session_detail__countdown-name">
-            SECS
-          </span>
-        </div>
       </div>
     </div>
   );

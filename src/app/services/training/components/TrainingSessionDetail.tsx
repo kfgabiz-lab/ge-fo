@@ -324,6 +324,42 @@ export default function TrainingSessionDetail({
                   </tbody>
                 </table>
               </TrainingSessionDetailTableScroll>
+              {/* Mobile timeline — Figma 8007:107681 (모바일에서 위 테이블 대신 노출) */}
+              <ol className="support_service_training_session_detail__agenda-list">
+                {session.agenda.map((row) => (
+                  <li
+                    key={row.id}
+                    className="support_service_training_session_detail__agenda-item"
+                  >
+                    <span
+                      className="support_service_training_session_detail__agenda-dot"
+                      aria-hidden="true"
+                    />
+                    <div className="support_service_training_session_detail__agenda-body">
+                      <p className="support_service_training_session_detail__agenda-time">
+                        {row.time}
+                      </p>
+                      <div className="support_service_training_session_detail__agenda-copy">
+                        <div className="support_service_training_session_detail__agenda-main">
+                          <p className="support_service_training_session_detail__agenda-tit">
+                            {row.title}
+                          </p>
+                          {row.description ? (
+                            <p className="support_service_training_session_detail__agenda-desc">
+                              {row.description}
+                            </p>
+                          ) : null}
+                        </div>
+                        {row.trainer ? (
+                          <p className="support_service_training_session_detail__agenda-trainer">
+                            Trainer : {row.trainer}
+                          </p>
+                        ) : null}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
 
             <div

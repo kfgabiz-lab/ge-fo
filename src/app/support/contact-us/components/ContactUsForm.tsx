@@ -52,6 +52,19 @@ function rowKey(row: DevicesTreeRow): string {
   return row.rowId != null ? String(row.rowId) : "";
 }
 
+// Send 클릭 시 빈 값인 필수 텍스트/셀렉트 필드에 에러 표시용 맵
+// (체크박스·라디오는 대상 아님 — 텍스트/셀렉트 8개만)
+type ContactFieldErrors = {
+  email?: boolean;
+  firstName?: boolean;
+  lastName?: boolean;
+  companyName?: boolean;
+  country?: boolean;
+  description?: boolean;
+  password?: boolean;
+  confirmPassword?: boolean;
+};
+
 // 제품 카테고리 cascading 셀렉트 한 단계의 렌더 설정.
 type CategoryLevelConfig = {
   id: string;
@@ -92,6 +105,7 @@ function PasswordField({
   value,
   onChange,
   fieldClassName = "",
+  error = false,
 }: {
   id: string;
   label: string;
@@ -99,6 +113,7 @@ function PasswordField({
   value: string;
   onChange: (value: string) => void;
   fieldClassName?: string;
+  error?: boolean;
 }) {
   const [visible, setVisible] = useState(false);
 
@@ -115,6 +130,7 @@ function PasswordField({
         type={visible ? "text" : "password"}
         placeholder={placeholder}
         required
+        error={error}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         slotProps={{
@@ -188,6 +204,8 @@ export default function ContactUsForm() {
     ),
   );
   const [termsModalOpen, setTermsModalOpen] = useState(false);
+  // Send 클릭 시 빈 값인 필수 텍스트/셀렉트 필드 에러 표시 상태
+  const [errors, setErrors] = useState<ContactFieldErrors>({});
 
   // 제출 진행 상태 — 성공/실패 모두 퍼블리싱대로 별도 안내 문구 없음(성공만 alert()로 안내)
   const [submitting, setSubmitting] = useState(false);
@@ -316,6 +334,19 @@ export default function ContactUsForm() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitting) return;
+
+    // 빈 값인 텍스트/셀렉트 필드(8개)를 찾아 에러 표시 상태로 반영
+    const nextErrors: ContactFieldErrors = {
+      email: email.trim() === "",
+      firstName: firstName.trim() === "",
+      lastName: lastName.trim() === "",
+      companyName: companyName.trim() === "",
+      country: country.trim() === "",
+      description: description.trim() === "",
+      password: password.trim() === "",
+      confirmPassword: confirmPassword.trim() === "",
+    };
+    setErrors(nextErrors);
 
     // 필수 항목 누락 확인
     const requiredFilled =
@@ -457,6 +488,7 @@ export default function ContactUsForm() {
               {[
                 {
                   id: "email",
+                  errorKey: "email" as const,
                   label: contactUsFormCopy.email,
                   type: "email",
                   value: email,
@@ -464,6 +496,7 @@ export default function ContactUsForm() {
                 },
                 {
                   id: "first-name",
+                  errorKey: "firstName" as const,
                   label: contactUsFormCopy.firstName,
                   type: "text",
                   value: firstName,
@@ -471,6 +504,7 @@ export default function ContactUsForm() {
                 },
                 {
                   id: "last-name",
+                  errorKey: "lastName" as const,
                   label: contactUsFormCopy.lastName,
                   type: "text",
                   value: lastName,
@@ -492,8 +526,17 @@ export default function ContactUsForm() {
                     className="guide_field support_contact_form__input"
                     type={field.type}
                     required
+                    error={Boolean(errors[field.errorKey])}
                     value={field.value}
-                    onChange={(event) => field.onChange(event.target.value)}
+                    onChange={(event) => {
+                      field.onChange(event.target.value);
+                      if (errors[field.errorKey]) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          [field.errorKey]: undefined,
+                        }));
+                      }
+                    }}
                   />
                 </div>
               ))}
@@ -511,8 +554,14 @@ export default function ContactUsForm() {
                   id={`${formId}-company`}
                   className="guide_field support_contact_form__input"
                   required
+                  error={Boolean(errors.companyName)}
                   value={companyName}
-                  onChange={(event) => setCompanyName(event.target.value)}
+                  onChange={(event) => {
+                    setCompanyName(event.target.value);
+                    if (errors.companyName) {
+                      setErrors((prev) => ({ ...prev, companyName: undefined }));
+                    }
+                  }}
                 />
               </div>
               <div className="support_contact_form__field support_contact_form__field--half support_contact_form__field--country">
@@ -522,7 +571,13 @@ export default function ContactUsForm() {
                 <FormControl className="guide_field">
                   <GuideSelect
                     value={country}
-                    onChange={(event) => setCountry(String(event.target.value))}
+                    onChange={(event) => {
+                      setCountry(String(event.target.value));
+                      if (errors.country) {
+                        setErrors((prev) => ({ ...prev, country: undefined }));
+                      }
+                    }}
+                    error={Boolean(errors.country)}
                     displayEmpty
                     IconComponent={GuideSelectIcon}
                     inputProps={{ "aria-label": contactUsFormCopy.country }}
@@ -577,8 +632,14 @@ export default function ContactUsForm() {
                 multiline
                 minRows={5}
                 required
+                error={Boolean(errors.description)}
                 value={description}
-                onChange={(event) => setDescription(event.target.value)}
+                onChange={(event) => {
+                  setDescription(event.target.value);
+                  if (errors.description) {
+                    setErrors((prev) => ({ ...prev, description: undefined }));
+                  }
+                }}
               />
             </div>
 
@@ -588,7 +649,13 @@ export default function ContactUsForm() {
                 label={contactUsFormCopy.password}
                 placeholder={contactUsFormCopy.passwordPlaceholder}
                 value={password}
-                onChange={setPassword}
+                onChange={(value) => {
+                  setPassword(value);
+                  if (errors.password) {
+                    setErrors((prev) => ({ ...prev, password: undefined }));
+                  }
+                }}
+                error={Boolean(errors.password)}
                 fieldClassName="support_contact_form__field--password"
               />
               <PasswordField
@@ -596,7 +663,13 @@ export default function ContactUsForm() {
                 label={contactUsFormCopy.confirmPassword}
                 placeholder={contactUsFormCopy.confirmPasswordPlaceholder}
                 value={confirmPassword}
-                onChange={setConfirmPassword}
+                onChange={(value) => {
+                  setConfirmPassword(value);
+                  if (errors.confirmPassword) {
+                    setErrors((prev) => ({ ...prev, confirmPassword: undefined }));
+                  }
+                }}
+                error={Boolean(errors.confirmPassword)}
                 fieldClassName="support_contact_form__field--confirm-password"
               />
             </div>

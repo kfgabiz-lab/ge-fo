@@ -345,6 +345,78 @@ section .btn-line-30--on-dark .btn-line-30__icon--copy {
   background-image: url("/ico/ico_copy_white_14.svg");
 }
 
+/* Copy Link — 로딩 + "Link copied!" 토스트 (Figma 7954:145265 / 145273) */
+.devices_product_downloads__file-btn--copy {
+  position: relative;
+}
+
+.devices_product_downloads__file-btn-spinner {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  background: url("/ico/ico_loading_14.svg") center / 14px 14px no-repeat;
+  transform: translate(-50%, -50%);
+  animation: devices_product_downloads_copy_spin 0.7s linear infinite;
+}
+
+.devices_product_downloads__file-btn--copy.is-loading
+  .devices_product_downloads__file-btn-label,
+.devices_product_downloads__file-btn--copy.is-loading
+  .devices_product_downloads__file-btn-icon {
+  visibility: hidden;
+}
+
+.devices_product_downloads__file-btn--copy.is-loading
+  .devices_product_downloads__file-btn-spinner {
+  display: block;
+}
+
+.devices_product_downloads__copy-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  z-index: 2;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 109px;
+  height: 33px;
+  margin-bottom: 8px;
+  padding: 0 14px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  background: rgb(12 22 37 / 90%);
+  border-radius: 16.5px;
+  transform: translateX(-50%);
+}
+
+.devices_product_downloads__copy-toast::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 12px;
+  height: 6px;
+  background: rgb(12 22 37 / 90%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform: translateX(-50%);
+}
+
+@keyframes devices_product_downloads_copy_spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
 /* Accent CTA (footer newsletter) */
 section .btn_flat,
 .main_footer .btn_flat,
