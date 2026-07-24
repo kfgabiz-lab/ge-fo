@@ -2530,6 +2530,7 @@ html.is-mega-open-scroll-lock body {
   justify-content: center;
   min-height: 32px;
   padding: 6px 16px;
+  font: inherit;
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
@@ -2538,6 +2539,7 @@ html.is-mega-open-scroll-lock body {
   background: #fff;
   border: 1px solid rgb(15 31 69 / 80%);
   border-radius: 4px;
+  cursor: pointer;
   transition:
     background 0.2s ease,
     border-color 0.2s ease,

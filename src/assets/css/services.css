@@ -556,20 +556,19 @@
     color: #fff;
   }
 
-  section.support_service_flow .support_service_flow__cta-icon--mo {
-    display: none;
+  /* Figma 7577:140048 — Btn text + Icon / 14px / Link (white) */
+  section.support_service_flow .support_service_flow__cta .icon_link-14 {
+    background-image: url("/ico/ico_link.svg");
+    filter: brightness(0) invert(1);
+  }
+
+  section.support_service_flow .support_service_flow__cta:hover .icon_link-14,
+  section.support_service_flow .support_service_flow__cta:focus-visible .icon_link-14 {
+    filter: brightness(0) invert(1);
   }
 
   section.support_service_flow .support_service_flow__track {
     display: none;
-  }
-
-  section.support_service_flow .support_service_flow__cta .icon_arrow-14--white {
-    background-image: url("/ico/ico_arrow_right_14_white.svg");
-  }
-
-  section.support_service_flow .support_service_flow__cta:hover .icon_arrow-14--white {
-    filter: brightness(0) invert(1);
   }
 
   section.support_service_flow .support_service_flow__diagram {
@@ -1445,12 +1444,7 @@
     box-sizing: border-box;
   }
 
-  section.support_service_flow .support_service_flow__cta-icon--pc {
-    display: none;
-  }
-
-  section.support_service_flow .support_service_flow__cta-icon--mo {
-    display: block;
+  section.support_service_flow .support_service_flow__cta .icon_link-14 {
     filter: brightness(0) invert(1);
   }
 

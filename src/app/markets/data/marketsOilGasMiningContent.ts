@@ -1,5 +1,4 @@
 import {
-  marketsBenefitImages,
   type BenefitItem,
   type IndustryTab,
   type ProductItem,
@@ -148,7 +147,7 @@ export const oilGasMiningBenefits: BenefitItem[] = [
       "Engineered for oil, gas, and mining sites, LS ELECTRIC solutions are designed to operate safely in explosive and high-risk environments, ensuring compliance with global standards while protecting personnel and assets.",
     capabilities:
       "Explosion-proof compatible systems, high-reliability switchgear, protection devices, and solutions designed for hazardous and high-risk industrial zones",
-    image: marketsBenefitImages.benefit05,
+    image: "/img/markets/oil-gas-mining/benefits/benefit_01.jpg",
   },
   {
     id: "ogm-b2",
@@ -158,7 +157,7 @@ export const oilGasMiningBenefits: BenefitItem[] = [
       "Mission-critical operations demand uninterrupted power. LS ELECTRIC delivers highly reliable power distribution and protection systems that ensure stable operation and minimize unplanned downtime.",
     capabilities:
       "Robust switchgear, advanced protection relays, condition monitoring, and fault detection systems for stable, continuous operation",
-    image: marketsBenefitImages.benefit06,
+    image: "/img/markets/oil-gas-mining/benefits/benefit_02.jpg",
     reverse: true,
   },
   {
@@ -169,7 +168,7 @@ export const oilGasMiningBenefits: BenefitItem[] = [
       "Built to withstand harsh environments such as heat, dust, vibration, and corrosion, LS ELECTRIC products ensure long-term durability and consistent performance in mining sites, refineries, and offshore platforms.",
     capabilities:
       "Durable equipment design, high-performance drives, corrosion-resistant systems, and solutions optimized for extreme industrial conditions",
-    image: marketsBenefitImages.benefit07,
+    image: "/img/markets/oil-gas-mining/benefits/benefit_03.jpg",
   },
   {
     id: "ogm-b4",
@@ -179,7 +178,7 @@ export const oilGasMiningBenefits: BenefitItem[] = [
       "From process automation to real-time monitoring, LS ELECTRIC enables data-driven operations that enhance efficiency, improve visibility, and support predictive maintenance across complex industrial processes.",
     capabilities:
       "PLCs, drives, SCADA systems, real-time monitoring, and integrated automation platforms for optimized and intelligent operations",
-    image: marketsBenefitImages.benefit08,
+    image: "/img/markets/oil-gas-mining/benefits/benefit_04.jpg",
     reverse: true,
   },
 ];

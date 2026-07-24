@@ -2,6 +2,7 @@
 
 import { FormControl, MenuItem } from "@mui/material";
 import { useMemo, useState } from "react";
+import DevicesProductDownloadsCopyLink from "@/app/()/products-systems/components/product/DevicesProductDownloadsCopyLink";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
 import PageNumbering from "@/components/pagination/PageNumbering";
@@ -167,16 +168,10 @@ function DownloadCenterContentsBody({
                                     </span>
                                   </div>
                                   <div className="devices_product_downloads__file-actions">
-                                    <button
-                                      type="button"
-                                      className="devices_product_downloads__file-btn devices_product_downloads__file-btn--copy devices_product_downloads__file-btn--line"
-                                    >
-                                      Copy Link
-                                      <span
-                                        className="devices_product_downloads__file-btn-icon"
-                                        aria-hidden
-                                      />
-                                    </button>
+                                    <DevicesProductDownloadsCopyLink
+                                      className="devices_product_downloads__file-btn--line"
+                                      url={file.url}
+                                    />
                                     <button
                                       type="button"
                                       className="devices_product_downloads__file-btn devices_product_downloads__file-btn--download"

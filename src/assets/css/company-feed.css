@@ -269,12 +269,16 @@
   }
 
   section.company-press-list .guide_field .MuiOutlinedInput-root:hover fieldset,
-  section.company-press-list .guide_field .MuiOutlinedInput-root.Mui-focused fieldset,
   section.company-articles-list .guide_field .MuiOutlinedInput-root:hover fieldset,
-  section.company-articles-list .guide_field .MuiOutlinedInput-root.Mui-focused fieldset,
-  section.company-blog-list .guide_field .MuiOutlinedInput-root:hover fieldset,
-  section.company-blog-list .guide_field .MuiOutlinedInput-root.Mui-focused fieldset {
+  section.company-blog-list .guide_field .MuiOutlinedInput-root:hover fieldset {
     border-color: var(--color-border);
+    border-width: 1px;
+  }
+
+  section.company-press-list .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset,
+  section.company-articles-list .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset,
+  section.company-blog-list .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset {
+    border-color: var(--color-text-muted);
     border-width: 1px;
   }
 

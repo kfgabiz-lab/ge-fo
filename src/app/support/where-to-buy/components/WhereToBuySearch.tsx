@@ -16,7 +16,7 @@ import {
 } from "@/lib/geo/places";
 
 // 자동완성 조회 최소 입력 길이 / 디바운스 지연(ms)
-const AUTOCOMPLETE_MIN_LENGTH = 3;
+const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
 type WhereToBuySearchProps = {
