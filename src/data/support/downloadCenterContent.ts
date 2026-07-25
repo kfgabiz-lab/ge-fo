@@ -148,15 +148,25 @@ export const downloadProductCategories: DownloadCategoryOption[] = [
   { id: "software-cat", label: "Software", count: 30, hasArrow: true },
 ];
 
+// Document Type 필터 — option.id = BE docType 코드(C/M/D/S/R/O)로 매핑해
+// 체크된 코드가 그대로 contents API 의 docTypes 파라미터로 나가게 한다.
+// (BE DOC_TYPE_LABELS: C=Catalog, M=Manuals, D=Drawings, S=Software, R=Certificates, O=Tech Data)
+// - OS/Firmware 는 BE 에 대응 코드가 없어(원천 데이터 없음) 필터로 나가지 않는다(inert). 라벨/노출은 퍼블리싱 유지, count 0 정적.
+// - Download Center 필터 패널의 옆 건수 배지는 doctype-counts API 실카운트로 교체된다(DownloadCenterFilterProvider).
+//   여기 count 값은 그 외 화면(products-systems 다운로드 필터)에서 쓰이는 정적 폴백이다.
+// - defaultChecked 는 두지 않는다 — 초기 진입 시 문서유형 미필터(전체 노출)가 되도록.
 export const downloadDocumentTypes: DownloadFilterOption[] = [
-  { id: "catalogs", label: "Catalogs", count: 100, defaultChecked: true },
-  { id: "manuals", label: "Manuals", count: 100, defaultChecked: true },
-  { id: "drawings", label: "Drawings", count: 100 },
-  { id: "certificates", label: "Certificates", count: 100 },
-  { id: "software", label: "Software", count: 100 },
-  { id: "tech", label: "Tech Data", count: 100 },
+  { id: "C", label: "Catalogs", count: 100 },
+  { id: "M", label: "Manuals", count: 100 },
+  { id: "D", label: "Drawings", count: 100 },
+  { id: "R", label: "Certificates", count: 100 },
+  { id: "S", label: "Software", count: 100 },
+  { id: "O", label: "Tech Data", count: 100 },
   { id: "firmware", label: "OS/Firmware", count: 0 },
 ];
+
+// contents API docTypes 로 전달 가능한 실제 코드(위 목록 중 BE 대응 코드만). OS/Firmware(firmware)는 제외.
+export const downloadDocTypeCodes = ["C", "M", "D", "S", "R", "O"] as const;
 
 /**
  * Figma 5841:132466 — Download Center / List (Accordion).

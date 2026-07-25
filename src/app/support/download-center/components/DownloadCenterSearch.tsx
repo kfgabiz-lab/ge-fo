@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import {
   downloadCenterPage,
 } from "@/data/support/downloadCenterContent";
+import { useDownloadCenterQuery } from "./DownloadCenterFilterProvider";
 
 type DownloadCenterSearchProps = {
   initialQuery?: string;
@@ -13,6 +14,8 @@ type DownloadCenterSearchProps = {
 export default function DownloadCenterSearch({
   initialQuery = "",
 }: DownloadCenterSearchProps) {
+  // 입력값은 로컬 상태로 두고, Search 버튼/Enter/인기검색어 클릭 시에만 공유 컨텍스트(query)에 커밋 → 키 입력마다 재조회하지 않는다.
+  const { setQuery: commitQuery } = useDownloadCenterQuery();
   const [query, setQuery] = useState(initialQuery);
   const [isMobile, setIsMobile] = useState(false);
   const hasQuery = query.length > 0;
@@ -30,17 +33,29 @@ export default function DownloadCenterSearch({
     ? downloadCenterPage.searchPlaceholderMobile
     : downloadCenterPage.searchPlaceholder;
 
+  const commit = () => commitQuery(query.trim());
+  const clearAll = () => {
+    setQuery("");
+    commitQuery("");
+  };
+  const selectTag = (tag: string) => {
+    setQuery(tag);
+    commitQuery(tag);
+  };
+
   return (
     <section className="support_download_search" id="support-download-search">
       <div className="inner support_download_search__inner">
         <TextField
-          className={`guide_field guide_field--search support_download_search__field${
-            hasQuery ? " support_download_search__field--filled" : ""
-          }`}
+          className={`guide_field guide_field--search support_download_search__field${hasQuery ? " support_download_search__field--filled" : ""
+            }`}
           placeholder={placeholder}
           aria-label={downloadCenterPage.searchPlaceholder}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") commit();
+          }}
           slotProps={{
             input: {
               endAdornment: (
@@ -53,7 +68,7 @@ export default function DownloadCenterSearch({
                       type="button"
                       className="support_download_search__clear"
                       aria-label="Clear search"
-                      onClick={() => setQuery("")}
+                      onClick={clearAll}
                     >
                       <span className="support_download_search__clear-icon" aria-hidden>
                         <img
@@ -69,6 +84,7 @@ export default function DownloadCenterSearch({
                     type="button"
                     className="guide_field__search-icon-button support_download_search__search-btn"
                     aria-label="Search"
+                    onClick={commit}
                   >
                     <img
                       src="/ico/ico_search_24.svg"
@@ -105,7 +121,7 @@ export default function DownloadCenterSearch({
                 <button
                   type="button"
                   className="support_download_search__tag"
-                  onClick={() => setQuery(tag)}
+                  onClick={() => selectTag(tag)}
                 >
                   {tag}
                 </button>
@@ -119,7 +135,7 @@ export default function DownloadCenterSearch({
                 <button
                   type="button"
                   className="support_download_search__tag"
-                  onClick={() => setQuery(tag)}
+                  onClick={() => selectTag(tag)}
                 >
                   {tag}
                 </button>

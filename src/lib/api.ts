@@ -42,3 +42,31 @@ export async function fetchApi<T>(
 
   return (await res.json()) as T;
 }
+
+// plain text(JSON 아님) 응답 전용 — 본문이 문자열 그대로인 엔드포인트에 사용.
+// 예: CTP 파일 다운로드 URL 발급(GET /api/v1/fo/ctpApi/fileDownUrl)은 URL 문자열을 text/plain 로 반환하므로
+//     fetchApi(res.json())로는 파싱이 깨진다. 그 외 헤더/서버·브라우저 분기/캐시 정책은 fetchApi 와 동일.
+export async function fetchApiText(
+  endpoint: string,
+  init?: RequestInit,
+): Promise<string> {
+  const isServer = typeof window === "undefined";
+  const url = isServer ? `${SERVER_API_BASE}${endpoint}` : endpoint;
+
+  const headers = new Headers(init?.headers);
+  if (!headers.has("X-Site-Id")) {
+    headers.set("X-Site-Id", "1");
+  }
+
+  const cache = init?.cache ?? "no-store";
+
+  const res = await fetch(url, { ...init, headers, cache });
+
+  if (!res.ok) {
+    throw new Error(
+      `fetchApiText 실패: ${res.status} ${res.statusText} (${endpoint})`,
+    );
+  }
+
+  return await res.text();
+}
