@@ -4,6 +4,7 @@
 // - blog-data와 동일 패턴이나 press-data엔 category/hashtag 필드가 없어 관련 로직 없음
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
+import { LIST_DESCRIPTION_MAX_LENGTH, stripHtmlText } from "@/lib/stripHtmlText";
 
 // 목록 페이지당 개수(설계 4절: Featured 1건 + 리스트 9건 = 페이지당 9건 페이지네이션)
 export const PRESS_LIST_SIZE = 9;
@@ -25,7 +26,7 @@ export type PressRow = PageDataItem;
 export interface PressCardItem {
   id: number;
   title: string;
-  description: string; // seo.meta_description(신)/seo.metaDescription(구) 재사용(설계 2-2)
+  description: string; // 본문(press.content) HTML에서 태그 제거 + 150자 컷(폴백 없음)
   date: string; // publishDttm → formatDisplayDate로 변환된 표시용 값("Mon D, YYYY")
   rawDate: string; // publish_dttm 원본 값("YYYY-MM-DD") — 정렬 전용(하이라이트 병합 등), 화면 표시엔 date 사용
   imageSrc: string | null; // 미디어 없으면 null → 호출부에서 정적 폴백
@@ -35,7 +36,8 @@ export interface PressCardItem {
 
 // 원본 행 → 카드 항목
 export function toPressCard(item: PressRow): PressCardItem {
-  // flattenPageDataItem: pressForm/seo 섹션 간 키 충돌 없음 → title/publish_dttm/image/meta_description 전부 root로 flat 병합됨
+  // flattenPageDataItem: press/seo 섹션 간 키 충돌 없음 → title/publish_dttm/image/content 전부 root로 flat 병합됨
+  // (라이브 응답 실측: dataJson.press.content 에만 content 키가 존재 → root "content"로 접근 가능)
   const row = flattenPageDataItem(item);
   const imageArr = row.image;
   const mediaId =
@@ -44,8 +46,9 @@ export function toPressCard(item: PressRow): PressCardItem {
   return {
     id: item.id,
     title: (row.title as string) ?? "",
-    // 신규(meta_description)/구(metaDescription) seo 스키마 모두 지원 — 신규 우선
-    description: (pickField(row, "meta_description", "metaDescription") as string) ?? "",
+    // 본문(content) 리치텍스트 → HTML 태그 제거 후 150자 컷("..." 부착).
+    // ⚠️ 폴백 없음 — content가 비면 빈 문자열(meta_description으로 대체하지 않는다)
+    description: stripHtmlText(row.content as string | undefined, LIST_DESCRIPTION_MAX_LENGTH),
     // 신규(publish_dttm)/구(publishDttm) 스키마 모두 지원 — 신규 우선. 표시용 "Mon D, YYYY" 포맷 변환
     date: formatDisplayDate(publishDttm),
     rawDate: publishDttm,

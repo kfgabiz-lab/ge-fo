@@ -17,7 +17,7 @@
 
 ## 2. data-slugkey 매핑
 
-> ⚠️ press-data와 동일하게 **category 필드 자체가 없다**(`articlesForm`에 category 키 없음, 실제 API 응답으로 확인). description도 별도 필드 없이 `seo.metaDescription` 재사용(press/blog와 공통 결론, blog-data.md 6-10 참고).
+> ⚠️ press-data와 동일하게 **category 필드 자체가 없다**(`articlesForm`에 category 키 없음, 실제 API 응답으로 확인). description도 별도 필드가 없어, **2026-07-25부터 본문(`articles.content`)에서 추출**한다(press/blog와 공통 결론, blog-data.md 6-10 참고).
 
 ### 2-1. 상세 — 본문 (단건, 신규 `articles/detail/[id]/page.tsx`)
 | slugKey | dataJson 필드(실제 accessor) | 타입 | 설명 |
@@ -30,7 +30,7 @@
 | Featured/리스트 | id | `id`(top-level) | id 기반 동적 라우트로 신규 생성 |
 | Featured/리스트 | image | `articlesForm.image[0]` | `/api/v1/fo/page-files/{id}` |
 | Featured/리스트 | title | `articlesForm.title` | |
-| Featured(단건만) | description | `seo.metaDescription` | 리스트에는 description 없음(press와 동일, `CompanyFeedListItem` 타입에 필드 자체 없음) |
+| Featured(단건만) | description | `articles.content`(본문 HTML) | **2026-07-25 변경** — 본문에서 추출(`stripHtmlText`로 HTML 태그 제거 + 150자 컷 + "..."). 폴백 없음(content 비면 빈 문자열, seo 메타 설명으로 대체하지 않음). 리스트에는 description 없음(press와 동일, `CompanyFeedListItem` 타입에 필드 자체 없음) |
 | Featured/리스트 | date | `articlesForm.publishDttm` | |
 | 상세 | title/date/heroImage/pager | `CompanyArticleDetail`의 각 prop | 공용 컴포넌트 내부 렌더(press-data.md 2-2와 동일 사유). **(2026-07-21 갱신)** pager(prev/next) 값의 조회 방식이 신규 인접글 전용 엔드포인트(9절)로 변경됨 — 기존 FE index 계산 방식(Option A)은 폐기 |
 
@@ -92,6 +92,7 @@ FE 바인딩 참조 경로: `content[i].id` / `content[i].dataJson.articlesForm.
 | STEP6 | fo-fe-builder | 2026-07-21 | `CompanyFeedListToolbar`에서 press와 공유하는 Month(Jun~Oct 5개, 공통)/Year(2025~현재, articles 전용 시작연도) 옵션을 `yearOptions` prop으로 연결. articles의 목록개수/Featured 로직은 미변경 |
 | QA | fo-qa-validator | 2026-07-21 | Month 5개(press와 동일), Year 2025~2026(press와 시작연도 다름) 확인, 콘솔 에러 없음 |
 | STEP3.5(성능개선) | fo-dev-doc-writer | 2026-07-21 | 상세 페이지 진입 3~4초 지연 문제 해결을 위해 상세조회/pager를 Option B(신규 BE 엔드포인트 2개)로 재설계 — 상세 단건 `GET /api/v1/fo/page-data/articles-data/{id}`, 인접글 `GET /api/v1/fo/page-data/articles-data/{id}/adjacent`. 기존 Option A(FE index 계산) 폐기 결정 문서화(상태: 설계중, 승인 대기, 10절 참고) |
+| STEP6 | fo-fe-builder | 2026-07-25 | Featured 설명(description) 소스를 `seo.meta_description` → 본문 `articles.content`로 교체(공통 함수 `stripHtmlText` 사용, HTML 제거 + 150자 컷 + "...", 폴백 없음). 목록 조회 where의 `exclude: "content"` 제거. 리스트 그리드는 원래 description이 없어 미변경. 마크업/CSS 무변경. 추가로 `loaded` 플래그 기반 `CompanyFeedEmpty`(검색 결과 없음) 연결 — 조회 완료 후 0건일 때만 표시. `tsc --noEmit` 통과 |
 
 ## 8. Month/Year 필터 옵션 조정 (2026-07-21 신규 스코프, 구현·검증 완료)
 

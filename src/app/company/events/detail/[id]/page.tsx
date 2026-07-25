@@ -10,6 +10,7 @@ import {
 import { fetchData } from "@/lib/pageDataApi";
 import { formatDisplayDateRange } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
+import { isPreviewActive } from "@/lib/previewMode";
 import "@/assets/css/company.css";
 
 type CompanyEventsDetailPageProps = {
@@ -20,12 +21,15 @@ export default async function CompanyEventsDetailPage({
   params,
 }: CompanyEventsDetailPageProps) {
   const { id } = await params;
+  // BO 미리보기 진입 여부(ge_preview 쿠키 → BE 재검증). 이 slug+id 조합에 한해서만 true.
+  const preview = await isPreviewActive("events-data", id);
 
   // 상세 단건 + 인접 이벤트(이전/다음) 병렬 조회(wall-clock 1 round-trip)
   // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE Past 목록 index 계산 폐기)
   // - 상세 게이트(공개만)와 인접 스코프 게이트(공개+과거)가 다름은 eventsData.ts 각 함수에서 처리
+  // - preview=true면 상세만 게이트 해제, 인접은 그대로 유지
   const [detail, adjacent] = await Promise.all([
-    fetchData(eventsDetailQuery(id)),
+    fetchData(eventsDetailQuery(id, { preview })),
     fetchData(eventsAdjacentQuery(id)),
   ]);
 
@@ -61,6 +65,7 @@ export default async function CompanyEventsDetailPage({
       pageId="Page_company_events_detail"
       slug="events-data"
       recordId={id}
+      preview={preview}
       title={(row.title as string) ?? ""}
       eventsMeta={{
         venue: (row.location as string) ?? "",

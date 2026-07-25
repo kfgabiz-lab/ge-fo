@@ -41,7 +41,12 @@ export default function SubHeader({ gnbMenuData, devicesMegaMenu }: SubHeaderPro
         isHeaderHidden={isGnbHidden}
         isHeaderRevealed={isHeaderRevealed}
         onRevealHeader={revealHeader}
-        breadcrumb={<HeaderBreadcrumb />}
+        breadcrumb={
+          <HeaderBreadcrumb
+            devicesMegaMenu={devicesMegaMenu}
+            gnbMenuData={gnbMenuData}
+          />
+        }
         onMegaOpenChange={setIsMegaOpen}
         onMobileMenuOpenChange={setIsMobileMenuOpen}
       />

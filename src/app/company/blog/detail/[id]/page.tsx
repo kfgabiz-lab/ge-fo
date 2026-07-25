@@ -12,6 +12,7 @@ import {
 import { fetchData } from "@/lib/pageDataApi";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
+import { isPreviewActive } from "@/lib/previewMode";
 import "@/assets/css/company.css";
 
 type CompanyBlogDetailPageProps = {
@@ -22,6 +23,8 @@ export default async function CompanyBlogDetailPage({
   params,
 }: CompanyBlogDetailPageProps) {
   const { id } = await params;
+  // BO 미리보기 진입 여부(ge_preview 쿠키 → BE 재검증). 이 slug+id 조합에 한해서만 true.
+  const preview = await isPreviewActive("blog-data", id);
 
   // 상세 단건 + 카테고리 라벨 + 인접글(이전/다음) 병렬 조회(wall-clock 1 round-trip)
   // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE 목록 index 계산 폐기)
@@ -29,7 +32,8 @@ export default async function CompanyBlogDetailPage({
     fetchData({
       slug: "blog-data",
       id,
-      where: { ...BLOG_STATUS_WHERE },
+      // 미리보기 모드면 공개여부 게이트 해제(비공개 글도 조회)
+      where: preview ? {} : { ...BLOG_STATUS_WHERE },
       리턴함수: (x) => x,
     }),
     fetchBlogCategories(),
@@ -39,7 +43,7 @@ export default async function CompanyBlogDetailPage({
       adjacent: true,
       sortField: "createdAt",
       titleField: "blog.title",
-      where: { ...BLOG_STATUS_WHERE },
+      where: { ...BLOG_STATUS_WHERE }, // 인접글은 게이트 유지 — 실제 공개된 글 기준
     }),
   ]);
 
@@ -76,6 +80,7 @@ export default async function CompanyBlogDetailPage({
       pageId="Page_company_blog_detail"
       slug="blog-data"
       recordId={id}
+      preview={preview}
       category={categoryLabel}
       title={(row.title as string) ?? ""}
       date={formatDisplayDate((pickField(row, "publish_dttm", "publishDttm") as string) ?? "")}

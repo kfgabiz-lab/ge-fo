@@ -4,6 +4,7 @@ import { FormControl, InputAdornment, MenuItem, TextField } from "@mui/material"
 import { useEffect, useMemo, useState } from "react";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
+import { guideSearchFieldMobileSlotProps } from "@/components/form/guideFieldMobileProps";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import { fetchData } from "@/lib/pageDataApi";
 import type {
@@ -362,6 +363,7 @@ export default function TrainingCurriculum({
               }
             }}
             slotProps={{
+              ...guideSearchFieldMobileSlotProps,
               input: {
                 endAdornment: (
                   <InputAdornment

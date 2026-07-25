@@ -649,16 +649,15 @@ color: #fff;
   height: 80px;
   opacity: 1;
   pointer-events: auto;
-  border-bottom: 1px solid #2222221a;
 }
-.main_header-wrap.is-at-top .main_header__gnb-row{
-   height: 80px;
-  opacity: 1;
-  pointer-events: auto;
-  border-color:transparent;
+/* 퍼블리싱 원본과 동일: 기본은 흰 20% 라인(투명 헤더 위), invert+revealed 시 진한 라인으로 색만 전환.
+   최상단이라고 라인을 완전히 지우는 규칙은 원본에도 있었으나 주석 처리(죽은 코드)라 여기서도 두지 않는다. */
+.main_header__gnb-row {
+  border-bottom: 1px solid rgb(255 255 255 / 20%);
 }
 .main_header.is-mega-open .main_header__gnb-row,
 .main_header.is-search-open .main_header__gnb-row {
+  border-bottom: 1px solid #2222221a;
   transition: none;
 }
 

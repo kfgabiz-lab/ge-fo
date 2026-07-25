@@ -69,7 +69,7 @@ interface CurriculumDetail2 {
   duration?: string | number;
   capacity?: string | number;
   address?: string;
-  addressDetail?: string;
+  address_detail?: string;
   country_code?: string;
   phone?: string;
   email?: string;
@@ -378,8 +378,10 @@ function toCourseCard(
     trainingType: trainingTypeLabels(d1.training_type, trainingTypeMap),
     // 교육시간: "N Hours"
     duration: formatDurationHours(d2.duration),
-    // 주소: Virtual(002) 단독이면 숨김(값 자체를 undefined 로 → 카드 위치 미노출)
-    location: showAddress ? d2.address || undefined : undefined,
+    // 주소: 상세주소+주소 조합("상세주소, 주소" 순서). Virtual(002) 단독이면 숨김(빈 문자열은 undefined로 → 카드 위치 미노출)
+    location: showAddress
+      ? [d2.address_detail, d2.address].filter(Boolean).join(", ") || undefined
+      : undefined,
     // 대상제품: 연결제품 제품명 합산
     productsCovered: extractProductNames(json).join(", "),
     // Training Type 필터 파생용 코드 목록
@@ -423,7 +425,7 @@ export function toTrainingSessionDetail(
   // 주소 + 상세주소 조합(장소명 대응 필드는 없음 → name 은 빈값).
   // Virtual 단독이면 빈값 → 사이드바 주소 li·지도·캘린더 location 모두 미노출.
   const addressFull = showAddress
-    ? [d2.address, d2.addressDetail]
+    ? [d2.address, d2.address_detail]
         .filter((v): v is string => Boolean(v))
         .join(", ")
     : "";

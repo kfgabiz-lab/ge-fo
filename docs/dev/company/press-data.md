@@ -40,7 +40,7 @@
 | Featured(단건) | id | `CompanyFeedFeatured`의 `href` prop(현재 정적 `/company/press/detail` 고정) | `id`(top-level) | id 기반 동적 라우트로 변경 필요(6번 비고 참고, STEP6 범위) |
 | Featured(단건) | image | `CompanyFeedFeatured`의 `image` prop | `pressForm.image[0]` | `/api/v1/fo/page-files/{id}`로 렌더 예상(STEP4 확인 필요) |
 | Featured(단건) | title | `CompanyFeedFeatured`의 `title` prop | `pressForm.title` | |
-| Featured(단건) | description | `CompanyFeedFeatured`의 `description` prop | `seo.metaDescription` | pressForm에 별도 description 필드 없음 — blog-data.md STEP4에서 press-data 샘플도 함께 확인해 동일 설계임을 이미 검증(seo 메타 설명 재사용) |
+| Featured(단건) | description | `CompanyFeedFeatured`의 `description` prop | `press.content`(본문 HTML) | **2026-07-25 변경** — 본문에서 추출(`stripHtmlText`로 HTML 태그 제거 + 150자 컷 + "..."). 폴백 없음(content 비면 빈 문자열, seo 메타 설명으로 대체하지 않음). 리스트 그리드에는 description 자체가 없어 미적용(아래 리스트 행 참고) |
 | Featured(단건) | date | `CompanyFeedFeatured`의 `date` prop | `press.publish_dttm` | STEP4(fo-be-analyzer, 2026-07-21) Featured 정렬 작업 중 실측 정정 — 컨테이너는 `pressForm`이 아니라 `press`, 필드는 snake_case `publish_dttm`이다(기존 문서의 `pressForm.publishDttm` 표기는 오탈자). dot-path `sort=press.publish_dttm,desc`로 확인 |
 | 리스트(다건) | id | `CompanyFeedListGrid`의 `Link[href]`(현재 `detailHref` 고정값 `/company/press/detail`, item.id 미반영) | `id`(top-level) | id 기반 동적 라우트로 변경 필요(6번 비고 참고) |
 | 리스트(다건) | image | `CompanyFeedListGrid`의 `item.image` | `pressForm.image[0]` | |
@@ -136,6 +136,7 @@ FE 바인딩 시 참조 경로: `content[i].id` / `content[i].dataJson.pressForm
 | STEP6 | fo-fe-builder | 2026-07-21 | `PRESS_LIST_SIZE` 9로 변경, `fetchPressFeatured()` 신설(전역 최신 1건, 필터 무관), `fetchPressList`에 `excludeId`→`ne_id` 연동, 클라이언트 수동 제외필터 제거(BE로 대체), `CompanyFeedListToolbar`를 monthOptions/yearOptions props 주입 구조로 리팩터(press 2017~/articles 2025~ 동적 연도, Month 공통 Jun~Oct 5개) |
 | QA | fo-qa-validator | 2026-07-21 | 브라우저 실검증 9개 항목 전부 통과(Featured 전역고정, 목록 제외, 9개 페이징, Month 5개, Year 2017~2026, articles Year 2025~2026, 콘솔에러 없음) |
 | STEP3.5(성능개선) | fo-dev-doc-writer | 2026-07-21 | 상세 페이지 진입 3~4초 지연 문제 해결을 위해 상세조회/pager를 Option B(신규 BE 엔드포인트 2개)로 재설계 — 상세 단건 `GET /api/v1/fo/page-data/press-data/{id}`, 인접글 `GET /api/v1/fo/page-data/press-data/{id}/adjacent`. 기존 Option A(FE index 계산) 폐기 결정 문서화(상태: 설계중, 승인 대기, 11절 참고) |
+| STEP6 | fo-fe-builder | 2026-07-25 | Featured 설명(description) 소스를 `seo.meta_description` → 본문 `press.content`로 교체(공통 함수 `stripHtmlText` 사용, HTML 제거 + 150자 컷 + "...", 폴백 없음). Featured/목록 조회 where의 `exclude: "content"` 제거. 리스트 그리드는 원래 description이 없어 미변경. 마크업/CSS 무변경. 추가로 `loaded` 플래그 기반 `CompanyFeedEmpty`(검색 결과 없음) 연결 — 조회 완료 후 0건일 때만 표시. `tsc --noEmit` 통과 |
 
 ## 9. 필터·검색·정렬 확장 (2026-07-14 신규 스코프, 설계 확정·승인 완료·개발 완료)
 

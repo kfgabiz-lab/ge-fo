@@ -155,6 +155,40 @@ const configs: Record<string, BreadcrumbConfig> = {
     ],
     current: "Smart Factory",
   },
+  // depth3(제품 상세) — SW 제품은 depth2 항목만 있고 depth3가 빠져 브레드크럼이 안 뜨던 문제 보완.
+  // HW의 /product/metasol-ms 패턴을 그대로 따름(depth2 라벨 + 제품 라벨을 crumbs에 포함).
+  "/product/scada": {
+    crumbs: [
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Software", href: SOFTWARE_HREF },
+      { label: "SCADA", href: softwareProductHrefs.scada },
+    ],
+    current: "SCADA",
+  },
+  "/product/xems": {
+    crumbs: [
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Software", href: SOFTWARE_HREF },
+      { label: "xEMS", href: softwareProductHrefs.xems },
+    ],
+    current: "xEMS",
+  },
+  "/product/micro-grid": {
+    crumbs: [
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Software", href: SOFTWARE_HREF },
+      { label: "Micro Grid", href: softwareProductHrefs.microGrid },
+    ],
+    current: "Micro Grid",
+  },
+  "/product/smart-factory": {
+    crumbs: [
+      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Software", href: SOFTWARE_HREF },
+      { label: "Smart Factory", href: softwareProductHrefs.smartFactory },
+    ],
+    current: "Smart Factory",
+  },
   "/company/ls-electric-america": {
     crumbs: [{ label: "Company" }],
     current: "LS ELECTRIC America",

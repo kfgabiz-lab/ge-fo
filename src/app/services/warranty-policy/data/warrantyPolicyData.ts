@@ -4,7 +4,7 @@
 // - 설계 문서: fo/docs/dev/services/warrantyPolicy-data.md
 // - 재사용 엔드포인트(신규 BE 없음): GET /api/v1/fo/page-data/warrantyPolicy-data
 //   헤더 X-Site-Id: 1, size=100(전건). BE에 eq_/sort 미적용(2세대 필드 혼재로 구세대 누락 방지)
-//   → 전건 조회 후 FE에서 필터(is_visible=001)·정렬(id ASC)·코드라벨 변환 수행
+//   → 전건 조회 후 FE에서 필터(is_visible=001)·정렬(productType ASC → createdAt DESC → id DESC)·코드라벨 변환 수행
 // - 필드 fallback: 신 snake_case(product_name 등) ?? 구 camelCase(productNm 등)
 //   (bo 2026-07-13 폼키 변경으로 2세대 혼재 → pickField로 양세대 영구 fallback. 설계 문서 6번 비고)
 // - 조회/매핑 계층: 공통 fetchData(slug 조회)로 호출하고, flatten된 row는 pickField로 읽는다.
@@ -49,11 +49,26 @@ export async function fetchWarrantyCoverageRows(): Promise<WarrantyCoverageRow[]
       productType: (pickField(row, "product_type", "productType") as string) ?? "",
       warranty: (pickField(row, "warranty_period", "warrantyPeriod") as string) ?? "",
       isVisible: (pickField(row, "is_visible", "isVisible") as string) ?? "",
+      // 감사컬럼 createdAt 은 flattenPageDataItem 이 root에 직접 넣어주는 값(dataJson 필드 아님)
+      // → 신/구 스키마 혼재 대상이 아니므로 pickField 불필요. 값 예시: "2026-07-24T04:07:27.302381"
+      createdAt: (row.createdAt as string | null) ?? "",
     }))
     // 1) 공개(001)만 통과
     .filter((row) => row.isVisible === "001")
-    // 2) id 오름차순
-    .sort((a, b) => a.id - b.id)
+    // 2) 정렬 3단: productType 코드 ASC("001"<"002"<"003") → createdAt DESC → id DESC
+    //    createdAt 은 타임존 없는 고정 폭 ISO 로컬 일시("YYYY-MM-DDTHH:mm:ss.ffffff")라
+    //    문자열 사전순 비교 = 시간순 비교가 성립한다(소수부 자릿수가 달라져도 소수 비교로 동일하게 성립).
+    //    Date 변환은 마이크로초를 밀리초로 절삭해 동시각 오탐이 생기므로 쓰지 않는다.
+    //    값이 비면 ""로 취급되어 가장 오래된 것으로 밀린다.
+    .sort((a, b) => {
+      if (a.productType !== b.productType) {
+        return a.productType < b.productType ? -1 : 1;
+      }
+      if (a.createdAt !== b.createdAt) {
+        return a.createdAt < b.createdAt ? 1 : -1;
+      }
+      return b.id - a.id;
+    })
     // 3)~4) 코드라벨 변환 + 표 행 매핑
     .map((row) => ({
       id: String(row.id),

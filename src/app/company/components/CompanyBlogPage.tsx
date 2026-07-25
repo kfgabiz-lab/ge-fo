@@ -48,6 +48,8 @@ export default function CompanyBlogPage({
   const [totalPages, setTotalPages] = useState(1);
   // 현재 페이지 목록 원본
   const [rows, setRows] = useState<BlogRow[]>([]);
+  // 목록 조회 1회 이상 완료 여부 — 초기 렌더(rows=[])에서 "결과 없음"이 깜빡이는 것 방지
+  const [loaded, setLoaded] = useState(false);
   // Featured(목록 1번째 글) — page 0 조회 때만 갱신하여 페이지 이동 시 고정
   const [featuredRow, setFeaturedRow] = useState<BlogRow | null>(null);
   // 툴바(검색/정렬) 상태 — 설계문서 9절 B/C
@@ -79,10 +81,9 @@ export default function CompanyBlogPage({
       slug: "blog-data",
       page: pageIndex,
       size: BLOG_LIST_SIZE,
+      // Featured/리스트 카드 설명(description)을 본문(content)에서 추출하므로 content 필드는 응답에 포함되어야 함(exclude 미사용)
       where: {
         ...BLOG_STATUS_WHERE,
-        // 목록 카드는 content(본문) slugkey 미사용 → base64 인라인 이미지가 박힌 대용량 content 필드를 응답에서 제외(성능 최적화, 상세는 미적용)
-        exclude: "content",
         // contentKey blogForm→blog. dot-notation eq_는 래퍼키 정확일치 필요
         ...(categoryCode ? { "eq_blog.category": categoryCode } : {}),
         ...(search ? { "title|content": search } : {}),
@@ -106,9 +107,12 @@ export default function CompanyBlogPage({
         if (pageIndex === 0) {
           setFeaturedRow(res.content[0] ?? null);
         }
+        setLoaded(true);
       })
       .catch(() => {
-        if (alive) setRows([]);
+        if (!alive) return;
+        setRows([]);
+        setLoaded(true);
       });
     return () => {
       alive = false;
@@ -151,7 +155,12 @@ export default function CompanyBlogPage({
     setPageIndex(Math.max(0, page - 1));
   };
 
-  const listSectionClass = empty
+  // 조회 완료 후 결과 0건이면 "검색 결과 없음"(CompanyFeedEmpty) 표시.
+  // (Featured가 목록 1번째 글이라 rows 기준 — rows>0이면 Featured가 렌더되므로 결과 없음이 아님)
+  // empty prop이 명시적으로 true면 그대로 우선(정적 no-data 화면 용도 유지)
+  const showEmpty = empty || (loaded && rows.length === 0);
+
+  const listSectionClass = showEmpty
     ? "company-blog-list company-blog-list--no-data"
     : "company-blog-list";
 
@@ -230,7 +239,7 @@ export default function CompanyBlogPage({
           />
 
           <div className="company-blog-list__body">
-            {empty ? (
+            {showEmpty ? (
               <CompanyFeedEmpty variant="blog" />
             ) : (
               <>
@@ -312,7 +321,7 @@ export default function CompanyBlogPage({
             )}
           </div>
 
-          {empty ? (
+          {showEmpty ? (
             <div className="company-blog-list__divider" aria-hidden="true" />
           ) : null}
         </div>

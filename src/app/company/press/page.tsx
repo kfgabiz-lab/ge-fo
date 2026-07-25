@@ -29,6 +29,8 @@ export default function CompanyPressListPage() {
   const [totalPages, setTotalPages] = useState(1);
   // 현재 페이지 목록 원본
   const [rows, setRows] = useState<PressRow[]>([]);
+  // 목록 조회 1회 이상 완료 여부 — 초기 렌더(rows=[])에서 "결과 없음"이 깜빡이는 것 방지
+  const [loaded, setLoaded] = useState(false);
   // Featured(전역 최신 게시글) — 마운트 시 1회 조회하여 페이지 이동/필터 변경과 무관하게 고정
   const [featuredRow, setFeaturedRow] = useState<PressRow | null>(null);
   // 툴바(검색/정렬/월/연도) 상태 — 설계문서 9절 B/C/D
@@ -44,15 +46,16 @@ export default function CompanyPressListPage() {
     (_, i) => String(currentYear - i),
   );
 
-  // Featured 조회: 마운트 시 1회(전역 최신 게시글 1건 고정) — 목록 브랜치 재사용(size=1, publish 최신순)
+  // Featured 조회: 마운트 시 1회(전역 최신 게시글 1건 고정) — 목록 브랜치 재사용(size=1, 등록일 최신순)
   useEffect(() => {
     let alive = true;
     fetchData({
       slug: "press-data",
       size: 1,
-      sort: "press.publish_dttm,desc",
-      // 목록 카드는 content(본문) slugkey 미사용 → 대용량 content 필드를 응답에서 제외(성능 최적화, 상세는 미적용)
-      where: { ...PRESS_STATUS_WHERE, exclude: "content" },
+      // 등록일(글 저장 시각) 기준 최신 1건 — 목록 툴바 oldest("createdAt,asc")와 동일 필드/반대 방향
+      sort: "createdAt,desc",
+      // Featured 카드 설명(description)을 본문(content)에서 추출하므로 content 필드는 응답에 포함되어야 함(exclude 미사용)
+      where: { ...PRESS_STATUS_WHERE },
       리턴함수: (rows) => rows,
     })
       .then((res) => {
@@ -75,8 +78,6 @@ export default function CompanyPressListPage() {
       size: PRESS_LIST_SIZE,
       where: {
         ...PRESS_STATUS_WHERE,
-        // 목록 카드는 content(본문) slugkey 미사용 → 대용량 content 필드를 응답에서 제외(성능 최적화, 상세는 미적용)
-        exclude: "content",
         ...(search ? { "title|content": search } : {}),
         ...(month ? { month_publish_dttm: month } : {}),
         ...(year ? { year_publish_dttm: year } : {}),
@@ -98,9 +99,12 @@ export default function CompanyPressListPage() {
         if (!alive) return;
         setRows(res.content);
         setTotalPages(res.totalPages || 1);
+        setLoaded(true);
       })
       .catch(() => {
-        if (alive) setRows([]);
+        if (!alive) return;
+        setRows([]);
+        setLoaded(true);
       });
     return () => {
       alive = false;
@@ -175,6 +179,8 @@ export default function CompanyPressListPage() {
       <CompanyFeedListSection
         variant="press"
         items={listItems}
+        // 조회 완료 후 결과 0건일 때만 "검색 결과 없음"(CompanyFeedEmpty) 표시
+        empty={loaded && rows.length === 0}
         currentPage={pageIndex + 1}
         totalPages={totalPages}
         onPageChange={handlePageChange}

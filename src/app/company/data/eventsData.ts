@@ -198,11 +198,12 @@ export function eventsPastQuery(params: {
 
 // 상세 단건 — 공개 여부만 게이트(eq_is_visible=001, 게시일 조건 제외). Past 이벤트 상세도 접근 가능해야 함.
 // 리턴함수 identity로 raw EventsRow를 그대로 받아 page.tsx의 flatten/pickField 로직을 유지한다.
-export function eventsDetailQuery(id: string | number) {
+// opts.preview=true(BO 미리보기 진입)면 공개여부 게이트 해제 — 비공개 이벤트도 상세 조회 가능.
+export function eventsDetailQuery(id: string | number, opts?: { preview?: boolean }) {
   return {
     slug: "events-data",
     id,
-    where: { ...EVENTS_VISIBLE_WHERE },
+    where: opts?.preview ? {} : { ...EVENTS_VISIBLE_WHERE },
     리턴함수: (raw: PageDataItem): EventsRow => raw,
   };
 }

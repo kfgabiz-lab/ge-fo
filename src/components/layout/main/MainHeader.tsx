@@ -83,7 +83,12 @@ export default function MainHeader({
         isHeaderHidden={isGnbHidden}
         isHeaderRevealed={isHeaderRevealed}
         onRevealHeader={revealHeader}
-        breadcrumb={<HeaderBreadcrumb />}
+        breadcrumb={
+          <HeaderBreadcrumb
+            devicesMegaMenu={devicesMegaMenu}
+            gnbMenuData={gnbMenuData}
+          />
+        }
         onMegaOpenChange={handleMegaOpenChange}
         onSearchOpenChange={handleSearchOpenChange}
         onMobileMenuOpenChange={setIsMobileMenuOpen}

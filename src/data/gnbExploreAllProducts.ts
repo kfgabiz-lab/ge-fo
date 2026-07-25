@@ -1,5 +1,3 @@
-import { softwareProductHrefs } from "@/data/gnb/mega/devices";
-
 export const EXPLORE_ALL_PRODUCTS_PATH = "/products-systems/explore-all";
 
 export type GnbExploreProduct = {
@@ -18,16 +16,16 @@ export type GnbExploreLetterGroup = {
 const productHrefMap: Record<string, string> = {
   DMPi: "/product/metasol-ms",
   GMP: "/product/metasol-ms",
-  HVDC: softwareProductHrefs.scada,
+  HVDC: "/product/scada",
   "H100 Plus": "/product/h100-plus",
   IMP: "/product/metasol-ms",
   "Metasol MS": "/product/metasol-ms",
   MMP: "/product/metasol-ms",
-  SCADA: softwareProductHrefs.scada,
-  "Diagnosis System": softwareProductHrefs.smartFactory,
-  "Micro Grid": softwareProductHrefs.microGrid,
-  "Smart Factory": softwareProductHrefs.smartFactory,
-  xEMS: softwareProductHrefs.xems,
+  SCADA: "/product/scada",
+  "Diagnosis System": "/product/smart-factory",
+  "Micro Grid": "/product/micro-grid",
+  "Smart Factory": "/product/smart-factory",
+  xEMS: "/product/xems",
   "Susol UL ACB": "/product/metasol-ms",
   "Susol UL MCCB": "/product/susol-ul-smart-mccb",
 };

@@ -35,6 +35,8 @@ type CompanyArticleDetailBaseProps = {
   // 정적 미리보기 페이지(/company/*/detail)는 실제 레코드가 없어 미전달 → 증가 호출 안 함.
   slug?: string;
   recordId?: string | number;
+  // true면 미리보기 모드 — 조회수 증가 스킵
+  preview?: boolean;
 };
 
 type CompanyArticleDetailBlogArticlesProps = CompanyArticleDetailBaseProps & {
@@ -102,16 +104,18 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
     embedded = false,
     slug,
     recordId,
+    preview,
   } = props;
 
   // 마운트 시 1회 조회수(count) +1 — CSR 전용 fire-and-forget.
   // - 이 컴포넌트는 "use client" 라 useEffect 는 실제 브라우저 마운트 시점에만 실행됨.
   //   → 상세 page.tsx(서버 컴포넌트) 직접 호출/Link 프리페치로 인한 과다 증가 위험 없음.
   // - slug/recordId 가 모두 있을 때만(실제 [id] 상세) 호출. 정적 미리보기 페이지는 미호출.
+  // - preview(BO 미리보기 진입) 인 경우도 미호출 — 관리자 미리보기로 조회수가 늘지 않도록.
   useEffect(() => {
-    if (!slug || recordId == null) return;
+    if (!slug || recordId == null || preview) return;
     void incrementViewCount(slug, recordId);
-  }, [slug, recordId]);
+  }, [slug, recordId, preview]);
 
   const pageModifier =
     variant === "blog"

@@ -49,7 +49,7 @@
 | image | `blogForm.image[0]` | number[](미디어ID 배열) | 속성(`img[src]`) | `/api/v1/fo/page-files/{id}`로 렌더 |
 | category | `blogForm.category` | string(코드, 예 "001") | 텍스트(`p`) | 코드값 — `GET /api/v1/fo/codes/BLOGCATEGORY`로 라벨 변환 필요 |
 | title | `blogForm.title` | string | 텍스트(`h2`) | 제목 |
-| description | `seo.metaDescription` | string | 텍스트(`p`) | blogForm에 없음 — seo 메타 설명을 재사용(6-10 참고) |
+| description | `blog.content`(본문 HTML) | string | 텍스트(`p`) | **2026-07-25 변경** — 본문에서 추출(`stripHtmlText`로 HTML 태그 제거 + 150자 컷 + "..."). 폴백 없음(content 비면 빈 문자열, seo 메타 설명으로 대체하지 않음). 6-10 참고 |
 | date | `blogForm.publishDttm` | string(date, "YYYY-MM-DD") | 텍스트(`p`) | 게시일. 필드명이 date가 아니라 publishDttm |
 | tags | `blogForm.hashtag` | string(콤마구분, 배열 아님) | 텍스트(반복 `div`) | 예: `"Moto, Automation"` → FE에서 `split(',').map(trim)` 필요. ls-publish 원본 디자인에 이미 존재 |
 
@@ -80,7 +80,7 @@
 | image | `blogForm.image[0]` | number[](미디어ID 배열) | 속성(`img[src]`) | `/api/v1/fo/page-files/{id}`로 렌더 |
 | category | `blogForm.category` | string(코드) | 텍스트(`p`) | 코드값 — BLOGCATEGORY 코드그룹으로 라벨 변환 필요 |
 | title | `blogForm.title` | string | 텍스트(`h3`) | 제목 |
-| description | `seo.metaDescription` | string | 텍스트(`p`) | blogForm에 없음 — seo 메타 설명을 재사용(6-10 참고) |
+| description | `blog.content`(본문 HTML) | string | 텍스트(`p`) | **2026-07-25 변경** — Featured와 동일하게 본문에서 추출(`stripHtmlText` 150자 컷). 폴백 없음. 6-10 참고 |
 | date | `blogForm.publishDttm` | string(date) | 텍스트(`p`) | 게시일 |
 | tags | `blogForm.hashtag` | string(콤마구분) | 텍스트(반복 `BlogTag`) | `split(',').map(trim)` 필요 |
 
@@ -178,7 +178,7 @@ FE 바인딩 시 참조 경로: `content[i].id` / `content[i].dataJson.blogForm.
 7. where(category)는 `eq_blogForm.category={코드}` (BLOGCATEGORY 코드그룹)로 확정. 목록 화면 카테고리 탭이 코드값을 넘기도록 STEP6에서 구현.
 8. tie-breaker(id): 실데이터 10건 전부 `created_at`이 마이크로초 단위까지 고유해 tie가 실질적으로 발생하지 않음 확인됨 — **Option A(BE 변경 없음, 현행 유지) 권장**. Option B(서비스 기본 정렬에 `, id DESC` 안정정렬 추가)는 저위험이나 불필요.
 9. pager(prev/next 인접 레코드): ~~기존 API에 인접조회 로직 없음 — Option A(BE 변경 없음, FE가 이미 가진 정렬된 10건 목록에서 현재 id의 index로 prev/next 계산) 권장~~ → **2026-07-21 STEP3 확정으로 Option B 채택.** 상세 페이지 진입 3~4초 지연 문제(목록 재조회 비용) 및 목록 10건 밖 과거글 pager 누락 버그를 함께 해결하기 위해 상세/인접 분리 신규 엔드포인트를 신설한다. 상세 설계는 10절 참고.
-10. ✅ **description 필드 — 해결됨**: `press-data`/`articles-data`(이미 등록된 동일 계열 slug) 실데이터도 확인한 결과, blog/press/articles 3종 모두 폼에 별도 description 필드가 없는 것이 공통 설계임을 확인. 대신 모든 레코드에 `dataJson.seo.metaDescription`(짧은 설명 텍스트)이 존재 — 이를 목록 카드 description으로 재사용하기로 결정. accessor: `dataJson.seo.metaDescription`.
+10. ✅ **description 필드 — 해결됨**: ~~`press-data`/`articles-data`(이미 등록된 동일 계열 slug) 실데이터도 확인한 결과, blog/press/articles 3종 모두 폼에 별도 description 필드가 없는 것이 공통 설계임을 확인. 대신 모든 레코드에 `dataJson.seo.metaDescription`(짧은 설명 텍스트)이 존재 — 이를 목록 카드 description으로 재사용하기로 결정.~~ → **2026-07-25 변경: 본문(`dataJson.blog.content`) 기반으로 전환.** 목록 카드 설명은 공통 함수 `stripHtmlText(content, 150)`(fo/src/lib/stripHtmlText.ts)로 HTML 태그·엔티티 제거 후 150자에서 자르고 "..."을 붙여 만든다. **폴백 없음** — content가 비면 빈 문자열로 두고 `meta_description`으로 대체하지 않는다. 마크업의 `data-slugkey="description"`은 논리 필드명이므로 그대로 유지(값을 만드는 소스만 변경). 이에 따라 목록 조회 where의 `exclude: "content"`(응답 경량화용)를 제거해 content를 응답에 포함시킨다.
 11. ✅ **isVisible 노출 필터 — 해결됨**: `GET /api/v1/fo/codes/VISIBILITY` 실제 조회 결과 `001=공개`, `002=비공개`. `articles-data` 샘플에서 실제 `isVisible:"002"`(비공개) 레코드를 확인해 필터링이 실제로 필요함을 검증. **`eq_blogForm.isVisible=001`을 where에 추가해 공개 글만 노출**하기로 확정.
 
 ## 7. STEP별 진행 이력
@@ -193,6 +193,7 @@ FE 바인딩 시 참조 경로: `content[i].id` / `content[i].dataJson.blogForm.
 | QA | fo-qa-validator + 호출자 재검증 | 2026-07-14 | 노출필터·Featured 중복방지·카테고리 필터·프록시 경로 PASS. 상세 500은 최초 QA 시점엔 재현됐으나 **호출자가 fo dev 서버(Turbopack) 재기동 후 재확인한 결과 정상 200 — 코드 결함 아닌 stale 컴파일 워커 문제로 판명**. 비차단 이슈 2건은 8절 참고 |
 | STEP9(리팩터) | 호출자 | 2026-07-14 | `fo-data-binding-가이드.md`의 "flatten 기준 필드명" 설명과 실제 fo API(nested 응답) 간 불일치를 사용자가 지적 → bo `utils.ts`의 `flattenPageDataItem`을 `fo/src/lib/pageData.ts`에 포팅. `blogData.ts`(`toBlogCard`)와 `blog/detail/[id]/page.tsx`(본문·pager)가 `blogForm.title` 수동 언랩 대신 `flattenPageDataItem(item)` 결과를 사용하도록 전면 교체. 같은 문제를 겪던 `mainVisualData.ts`(hero-data/banner-data×2)도 함께 리팩터링. tsc 통과, curl(main SSR)·Playwright(blog 목록/상세 CSR) 재검증으로 회귀 없음 확인 |
 | STEP3.5(성능개선) | fo-dev-doc-writer | 2026-07-21 | 상세 페이지 진입 3~4초 지연 문제 해결을 위해 상세조회/pager를 Option B(신규 BE 엔드포인트 2개)로 재설계 — 상세 단건 `GET /api/v1/fo/page-data/blog-data/{id}`, 인접글 `GET /api/v1/fo/page-data/blog-data/{id}/adjacent`. 기존 Option A(FE index 계산) 폐기 결정 문서화(상태: 설계중, 승인 대기, 10절 참고) |
+| STEP6 | fo-fe-builder | 2026-07-25 | 목록 설명(description) 소스를 `seo.meta_description` → 본문 `blog.content`로 교체(공통 함수 `stripHtmlText` 신설, HTML 제거 + 150자 컷 + "...", 폴백 없음). Featured/리스트 카드 모두 적용, 목록 where의 `exclude: "content"` 제거. 마크업/CSS·`data-slugkey="description"` 무변경. 추가로 `loaded` 플래그 기반 `CompanyFeedEmpty`(검색 결과 없음) 연결 — 조회 완료 후 0건일 때만 표시. `tsc --noEmit` 통과 |
 
 ## 8. 비차단(non-blocking) 알려진 이슈 — 코드 수정 없이 종료
 1. **레거시 스키마 레코드 5건 목록 공백**(id 1290/1283/1172/1171/1011, 939는 필드 자체 없음) — 구(舊) 필드명(`blogTitle`/`blogImage`/`blogContent`/`blogHashtag`/`blogPubDttm`/`blogCategory`)으로 저장된 과거 테스트 데이터라 현재 `blogForm.{title|image|content|hashtag|publishDttm|category}` 스키마로 값을 못 읽어 목록에서 제목/카테고리/날짜/태그가 공백으로 표시됨(id 링크는 정상). **FE에 구스키마 호환 코드를 추가하지 않기로 함** — 오래된 테스트 데이터를 위한 영구적 이중 스키마 유지비용이 더 크다고 판단. 해당 레코드를 BO 관리자 화면에서 현재 폼으로 다시 저장하면 자동 해결됨(데이터 정리 필요, 코드 변경 아님).
