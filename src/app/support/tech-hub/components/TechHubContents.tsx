@@ -1,12 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PageNumbering from "@/components/pagination/PageNumbering";
+import TechHubActiveFilters from "./TechHubActiveFilters";
 import TechHubEmpty from "./TechHubEmpty";
-import { TechHubFilterBoundary } from "./TechHubFilterProvider";
+import {
+  TechHubFilterBoundary,
+  useTechHubFilter,
+  useTechHubQuery,
+} from "./TechHubFilterProvider";
 import TechHubFilterPanel from "./TechHubFilterPanel";
 import TechHubVideoCard from "./TechHubVideoCard";
-import { techHubPage, techHubVideos } from "@/data/support/techHubContent";
+import { techHubPage } from "@/data/support/techHubContent";
+import {
+  fetchTechHubContents,
+  type TechHubCard,
+} from "@/data/support/techHubData";
+
+const PAGE_SIZE = techHubPage.pageSize; // 12
 
 type TechHubContentsProps = {
   empty?: boolean;
@@ -21,29 +32,69 @@ export default function TechHubContents({ empty = false }: TechHubContentsProps)
 }
 
 function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const { totalResults, pageSize } = techHubPage;
-  const resultCount = empty ? 0 : totalResults;
+  const { query, page, setPage } = useTechHubQuery();
+  const { getSelectedCategoryValues } = useTechHubFilter();
 
-  const totalPages = Math.max(1, Math.ceil(totalResults / pageSize));
+  // 선택된 LV2 코드(그룹 내 OR). 정렬해 안정적인 의존성 키로 사용.
+  const selectedCodes = getSelectedCategoryValues("category");
+  const codesKey = [...selectedCodes].sort().join(",");
 
-  const pageItems = useMemo(() => {
-    if (empty) return [];
+  const [items, setItems] = useState<TechHubCard[]>([]);
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-    const start = (currentPage - 1) * pageSize;
-    const pool: typeof techHubVideos = [];
-
-    while (pool.length < start + pageSize) {
-      pool.push(...techHubVideos);
+  // 검색/필터 변경 시 1페이지로(최초 실행 제외). 검색어는 provider.setQuery 에서도 리셋하므로 중복이나 무해.
+  const firstResetRef = useRef(true);
+  useEffect(() => {
+    if (firstResetRef.current) {
+      firstResetRef.current = false;
+      return;
     }
+    setPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, codesKey]);
 
-    return pool.slice(start, start + pageSize);
-  }, [currentPage, empty, pageSize]);
+  // 실목록 조회(검색어/선택 카테고리/페이지 변경 시).
+  useEffect(() => {
+    if (empty) {
+      setItems([]);
+      setTotalElements(0);
+      setTotalPages(1);
+      setLoading(false);
+      return;
+    }
+    let alive = true;
+    setLoading(true);
+    fetchTechHubContents({
+      q: query,
+      categories: selectedCodes,
+      page: page - 1, // UI 는 1-based, API 는 0-based
+      size: PAGE_SIZE,
+    })
+      .then((res) => {
+        if (!alive) return;
+        setItems(res.content);
+        setTotalElements(res.totalElements);
+        setTotalPages(Math.max(1, res.totalPages));
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, codesKey, page, empty]);
+
+  const isEmptyResult = !loading && items.length === 0;
+  const showEmpty = empty || isEmptyResult;
+  const resultCount = empty ? 0 : totalElements;
 
   return (
     <section
       className={`support_tech_hub_contents devices_product_downloads devices_product_downloads--tech-hub${
-        empty
+        showEmpty
           ? " support_tech_hub_contents--no-data devices_product_downloads--no-data"
           : ""
       }`}
@@ -54,28 +105,26 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
           <TechHubFilterPanel variant="sidebar" />
 
           <div className="devices_product_downloads__main">
+            <TechHubActiveFilters />
             <p className="devices_product_downloads__count support_tech_hub_contents__count">
               Total <strong>{resultCount.toLocaleString()}</strong>
             </p>
 
-            {empty ? (
+            {showEmpty ? (
               <TechHubEmpty />
             ) : (
               <>
                 <div className="support_tech_hub_grid">
-                  {pageItems.map((item, index) => (
-                    <TechHubVideoCard
-                      key={`${item.id}-${currentPage}-${index}`}
-                      item={item}
-                    />
+                  {items.map((item) => (
+                    <TechHubVideoCard key={item.id} item={item} />
                   ))}
                 </div>
 
                 <PageNumbering
                   className="support_tech_hub_contents__pagination"
-                  currentPage={currentPage}
+                  currentPage={page}
                   totalPages={totalPages}
-                  onPageChange={setCurrentPage}
+                  onPageChange={setPage}
                   ariaLabel="Tech Hub pagination"
                 />
               </>

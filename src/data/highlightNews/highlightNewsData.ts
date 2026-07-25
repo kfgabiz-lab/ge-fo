@@ -5,11 +5,13 @@
 //   (병합/정렬/포맷/폴백 로직은 완전히 동일 → 내부 헬퍼로 추출해 두 함수가 공유)
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유한 각 목록 헬퍼 재사용)
 import type { HighlightNewsItem } from "@/types/highlightNews";
+import { fetchApi } from "@/lib/api";
 import { fetchData } from "@/lib/pageDataApi";
 import {
   PRESS_LIST_SIZE,
   PRESS_STATUS_WHERE,
   pressDetailHref,
+  pressImageSrc,
   toPressCard,
   type PressRow,
 } from "@/app/company/data/pressData";
@@ -17,6 +19,7 @@ import {
   BLOG_LIST_SIZE,
   BLOG_STATUS_WHERE,
   blogDetailHref,
+  blogImageSrc,
   toBlogCard,
   type BlogRow,
 } from "@/app/company/data/blogData";
@@ -24,6 +27,7 @@ import {
   ARTICLES_LIST_SIZE,
   ARTICLES_STATUS_WHERE,
   articlesDetailHref,
+  articlesImageSrc,
   toArticlesCard,
   type ArticlesRow,
 } from "@/app/company/data/articlesData";
@@ -175,4 +179,69 @@ export async function fetchMarketHighlightNews(
   marketCode: string,
 ): Promise<HighlightNewsItem[]> {
   return fetchHighlightNews(marketCode);
+}
+
+// ---------------- 제품상세 Insights(스펙 38) — 제품 맵핑 게시글, 서버 필터(BE) ----------------
+
+// BE `GET /api/v1/fo/products/{id}/insights` 응답 1건(ProductInsightRowResponse).
+interface ProductInsightRow {
+  id: number;
+  dataSlug: string; // 'press-data' | 'blog-data' | 'articles-data'
+  title: string;
+  publishDttm: string;
+  image: string | null; // 파일ID 배열의 JSON 텍스트("[123]") 또는 null
+}
+
+// slug별 태그/상세href/폴백이미지/이미지URL 헬퍼(기존 company 데이터 헬퍼 재사용).
+function resolveInsightMeta(slug: string) {
+  switch (slug) {
+    case "press-data":
+      return { tag: "Press", href: pressDetailHref, fallback: PRESS_FALLBACK_IMAGE, img: pressImageSrc };
+    case "blog-data":
+      return { tag: "Blog", href: blogDetailHref, fallback: BLOG_FALLBACK_IMAGE, img: blogImageSrc };
+    case "articles-data":
+      return { tag: "Articles", href: articlesDetailHref, fallback: ARTICLES_FALLBACK_IMAGE, img: articlesImageSrc };
+    default:
+      return null;
+  }
+}
+
+// 제품에 맵핑된 게시글 최신 3건(공개+게시일 과거는 BE에서 필터). BE 응답을 HighlightNewsItem으로 변환.
+// 정렬/건수(게시일 내림차순·동률 id 내림차순·최대 3)는 BE 쿼리가 이미 확정하므로 FE는 매핑만 한다.
+// 실패/0건 시 빈 배열 → HighlightNewsSection이 items 0건이면 섹션 자체를 렌더하지 않음(자연 숨김).
+export async function fetchProductInsights(
+  productId: number,
+): Promise<HighlightNewsItem[]> {
+  try {
+    const rows = await fetchApi<ProductInsightRow[]>(
+      `/api/v1/fo/products/${productId}/insights`,
+    );
+    return rows
+      .map((row): HighlightNewsItem | null => {
+        const meta = resolveInsightMeta(row.dataSlug);
+        if (!meta) return null;
+        // image: "[123]" → 첫 파일ID → page-files URL. 실패/없으면 폴백 이미지.
+        let imageSrc: string | null = null;
+        try {
+          const arr = row.image ? JSON.parse(row.image) : null;
+          const mediaId =
+            Array.isArray(arr) && arr.length > 0 ? Number(arr[0]) : null;
+          imageSrc = mediaId != null && !Number.isNaN(mediaId) ? meta.img(mediaId) : null;
+        } catch {
+          imageSrc = null;
+        }
+        return {
+          id: `${meta.tag.toLowerCase()}-${row.id}`,
+          href: meta.href(row.id),
+          image: imageSrc ?? meta.fallback,
+          imageAlt: row.title,
+          tag: meta.tag,
+          title: row.title,
+          date: formatNewsDate(row.publishDttm),
+        };
+      })
+      .filter((item): item is HighlightNewsItem => item !== null);
+  } catch {
+    return [];
+  }
 }

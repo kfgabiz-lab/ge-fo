@@ -1,18 +1,17 @@
 import Link from "next/link";
-import {
-  getTechHubViewHref,
-  type TechHubVideoItem,
-} from "@/data/support/techHubContent";
+import { getYoutubeIdFromUrl, getYoutubePosterSrc } from "@/lib/youtubeEmbed";
+import type { TechHubCard } from "@/data/support/techHubData";
 
 type TechHubVideoCardProps = {
-  item: TechHubVideoItem;
+  item: TechHubCard;
 };
 
 export default function TechHubVideoCard({ item }: TechHubVideoCardProps) {
-  const titleLines = Array.isArray(item.title) ? item.title : [item.title];
-  const label =
-    item.ariaLabel ?? titleLines.join(" ").replace(/\s+/g, " ").trim();
-  const viewHref = getTechHubViewHref();
+  // 썸네일: contents_file 에 영상 파일이 없으므로 video_url 의 YouTube id → 표준 썸네일 URL 파생(기존 공통함수 재사용).
+  const videoId = item.videoUrl ? getYoutubeIdFromUrl(item.videoUrl) : "";
+  const poster = videoId ? getYoutubePosterSrc(videoId) : undefined;
+  const viewHref = `/support/tech-hub/view/${item.id}`;
+  const label = item.title ?? "";
 
   return (
     <article className="support_tech_hub_card">
@@ -22,15 +21,14 @@ export default function TechHubVideoCard({ item }: TechHubVideoCardProps) {
         aria-label={`Play video: ${label}`}
       >
         <span className="support_tech_hub_card__thumb" aria-hidden>
-          <img src={item.poster} alt="" loading="lazy" decoding="async" />
+          {/* poster 없으면 src 미설정(undefined) — 빈 문자열 src 로 인한 재다운로드 경고 방지 */}
+          <img src={poster || undefined} alt="" loading="lazy" decoding="async" />
         </span>
       </Link>
       <h2 className="support_tech_hub_card__tit">
-        {titleLines.map((line) => (
-          <span key={line} className="support_tech_hub_card__tit-line">
-            {line}
-          </span>
-        ))}
+        <Link href={viewHref} className="support_tech_hub_card__tit-line">
+          {label}
+        </Link>
       </h2>
     </article>
   );

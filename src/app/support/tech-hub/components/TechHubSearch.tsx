@@ -3,6 +3,7 @@
 import { InputAdornment, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { techHubPage } from "@/data/support/techHubContent";
+import { useTechHubQuery } from "./TechHubFilterProvider";
 
 type TechHubSearchProps = {
   initialQuery?: string;
@@ -11,9 +12,11 @@ type TechHubSearchProps = {
 export default function TechHubSearch({
   initialQuery = techHubPage.defaultSearchQuery,
 }: TechHubSearchProps) {
-  const [query, setQuery] = useState<string>(initialQuery);
+  // 입력값은 로컬 상태로 두고, Search 버튼/Enter 시에만 공유 컨텍스트(query)에 커밋 → 키 입력마다 재조회하지 않는다.
+  const { setQuery } = useTechHubQuery();
+  const [value, setValue] = useState<string>(initialQuery);
   const [isMobile, setIsMobile] = useState(false);
-  const hasQuery = query.length > 0;
+  const hasQuery = value.length > 0;
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 780px)");
@@ -27,6 +30,12 @@ export default function TechHubSearch({
     ? techHubPage.searchPlaceholderMobile
     : techHubPage.searchPlaceholder;
 
+  const commit = () => setQuery(value.trim());
+  const clear = () => {
+    setValue("");
+    setQuery("");
+  };
+
   return (
     <section className="support_tech_hub_search" id="support-tech-hub-search">
       <div className="inner">
@@ -36,8 +45,11 @@ export default function TechHubSearch({
           }`}
           placeholder={placeholder}
           aria-label={techHubPage.searchPlaceholder}
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") commit();
+          }}
           slotProps={{
             input: {
               endAdornment: (
@@ -50,7 +62,7 @@ export default function TechHubSearch({
                       type="button"
                       className="support_tech_hub_search__clear"
                       aria-label="Clear search"
-                      onClick={() => setQuery("")}
+                      onClick={clear}
                     >
                       <span className="support_tech_hub_search__clear-icon" aria-hidden>
                         <img
@@ -66,6 +78,7 @@ export default function TechHubSearch({
                     type="button"
                     className="guide_field__search-icon-button support_tech_hub_search__search-btn"
                     aria-label="Search"
+                    onClick={commit}
                   >
                     <img
                       src="/ico/ico_search_24.svg"
