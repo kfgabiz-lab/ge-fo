@@ -74,34 +74,6 @@ type MainSlide = SlideContent &
       }
   );
 
-const mainSlides: MainSlide[] = [
-  {
-    id: "slide-video-1",
-    type: "video",
-    sources: [{ src: "/img/main_001.webm", type: "video/webm" }],
-    alt: "Powering Industries Across North America",
-    subtit: "With a Strong North American Presence",
-    titLines: ["Powering Industries", "Across North America"],
-    link: { href: "", label: "Explore" },
-  },
-  {
-    id: "slide-video-2",
-    type: "video",
-    sources: [{ src: "/img/main_002.webm", type: "video/webm" }],
-    alt: "Built for Performance, Ready to Deliver",
-    subtit: "With Integrated Manufacturing & Supply Capabilities",
-    titLines: ["Built for Performance,", "Ready to Deliver"],
-  },
-  {
-    id: "slide-video-3",
-    type: "video",
-    sources: [{ src: "/img/main_003.webm", type: "video/webm" }],
-    alt: "Engineering Reliability, Delivering Confidence",
-    subtit: "With Trusted Engineering & Service Expertise",
-    titLines: ["Engineering Reliability,", "Delivering Confidence"],
-  },
-];
-
 const MAIN_VISUAL_MOBILE_MQ = "(max-width: 780px)";
 
 function getVideoProgress(video: HTMLVideoElement) {
@@ -154,42 +126,37 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
   const [autoplayProgress, setAutoplayProgress] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
 
-  // 실데이터(heroItems) 기반 슬라이드 구성.
-  //  - item.mediaId 가 있으면: 해당 슬라이드를 "이미지" 타입으로 강제하고
-  //    src 를 업로드 미디어 스트리밍 엔드포인트(/api/v1/fo/page-files/{mediaId})로 설정.
-  //    (실제 파일이 이미지/영상인지 mime 으로 판단하기 어려워 우선 이미지로 렌더링. 영상 미처리 — 문서 비고 참고)
-  //  - item.mediaId 가 없으면(null): 기존 정적 목업(mainSlides)을 index 순환으로 유지.
-  //  - 텍스트/링크(sub/titleText/btnUrl/btnText)는 항상 실데이터로 교체.
+  // 실데이터(heroItems) 기반 슬라이드 구성 — 목업(mainSlides) 폴백 없음, 값이 없으면 그 부분/항목을 비운다.
+  //  - item.mediaId 가 없으면: 표시할 미디어가 없으므로 해당 슬라이드 자체를 제외한다.
+  //  - item.mediaId 가 있으면: mediaMimeType(Content-Type)으로 영상/이미지를 구분해 렌더링.
+  //  - 타이틀/버튼/서브타이틀은 값이 있는 그대로만 반영, 조회 0건이면 slides 도 빈 배열.
   const slides = useMemo<MainSlide[]>(() => {
-    if (heroItems.length === 0) return mainSlides; // 조회 0건 시 목업 폴백
-    return heroItems.map((item, index) => {
-      const media = mainSlides[index % mainSlides.length];
-      const base = {
-        id: `hero-${item.id}`,
-        subtit: item.sub,
-        titLines: item.titleText ? [item.titleText] : media.titLines,
-        link: {
-          href: item.btnUrl || media.link?.href || "",
-          label: item.btnText || media.link?.label || "",
-        },
-      };
+    return heroItems
+      .filter((item): item is HeroItem & { mediaId: number } => item.mediaId != null)
+      .map((item) => {
+        const base = {
+          id: `hero-${item.id}`,
+          subtit: item.sub,
+          titLines: item.titleText ? [item.titleText] : [],
+          ...(item.btnText ? { link: { href: item.btnUrl || "", label: item.btnText } } : {}),
+        };
 
-      if (item.mediaId != null) {
-        // 실 업로드 미디어를 이미지 슬라이드로 렌더링
+        if (item.mediaMimeType?.startsWith("video/")) {
+          return {
+            ...base,
+            type: "video",
+            sources: [{ src: PAGE_FILE_SRC(item.mediaId), type: item.mediaMimeType }],
+            alt: item.titleText || "",
+          } as MainSlide;
+        }
+
         return {
           ...base,
           type: "image",
           src: PAGE_FILE_SRC(item.mediaId),
-          alt: item.titleText || media.alt,
+          alt: item.titleText || "",
         } as MainSlide;
-      }
-
-      // 미디어ID 없음 → 기존 목업 미디어(type/src/sources/youtubeId/poster) 유지
-      return {
-        ...media,
-        ...base,
-      } as MainSlide;
-    });
+      });
   }, [heroItems]);
 
   // 콜백들이 최신 slides 를 참조하도록 ref 로 보관(콜백 의존성 배열 변경 최소화 목적)

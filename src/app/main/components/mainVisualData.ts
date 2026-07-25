@@ -17,8 +17,33 @@ export interface HeroItem {
   btnUrl: string;
   btnText: string;
   orderNo: string;
-  // content 배열의 첫 요소(대표 미디어ID). 없으면 null → 정적 목업 유지
+  // content 배열의 첫 요소(대표 미디어ID). 없으면 null
   mediaId: number | null;
+  // mediaId 파일의 실제 Content-Type(예: "video/webm", "image/jpeg"). mediaId 없거나 조회 실패 시 null
+  mediaMimeType: string | null;
+}
+
+// 업로드 미디어 스트리밍 엔드포인트 — VideoSwiper.tsx의 PAGE_FILE_SRC와 동일 경로(중복 정의, 상수 하나 바뀌면 양쪽 다 반영 필요)
+const PAGE_FILE_ENDPOINT = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
+
+// mediaId 파일이 영상인지 이미지인지 판별하기 위해 Content-Type만 HEAD로 조회(본문 다운로드 없음)
+// 실패 시 null 반환 — 호출부가 이미지로 안전하게 폴백 처리
+async function fetchMediaMimeType(mediaId: number): Promise<string | null> {
+  const isServer = typeof window === "undefined";
+  const base = isServer
+    ? process.env.API_PROXY_TARGET || "http://localhost:8080"
+    : "";
+  try {
+    const res = await fetch(`${base}${PAGE_FILE_ENDPOINT(mediaId)}`, {
+      method: "HEAD",
+      headers: { "X-Site-Id": "1" },
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    return res.headers.get("content-type");
+  } catch {
+    return null;
+  }
 }
 
 // orderNo 오름차순 정렬용 캐스팅: 빈 문자열/비숫자는 맨 뒤(Infinity)
@@ -37,26 +62,31 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
     size: 100,
   });
 
-  const items: HeroItem[] = (res.content ?? []).map((row) => {
-    // content(미디어ID 배열) key는 신/구 스키마 공통이라 불변
-    const contentArr = row.content;
-    // content 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
-    const mediaId =
-      Array.isArray(contentArr) && contentArr.length > 0
-        ? (contentArr[0] as number)
-        : null;
-    // pickField: 신 스키마(snake) 우선, 없으면 구 스키마(camel) 폴백 → 구·신 데이터 혼재에도 안전
-    return {
-      // flatten 후 원본 item.id는 row._id로 내려옴
-      id: row._id as number,
-      sub: (pickField(row, "sub_title", "sub") as string) ?? "",
-      titleText: (pickField(row, "hero_title", "titleText") as string) ?? "",
-      btnUrl: (pickField(row, "button_url", "btnUrl") as string) ?? "",
-      btnText: (pickField(row, "button_text", "btnText") as string) ?? "",
-      orderNo: (pickField(row, "sort_order", "orderNo") as string) ?? "",
-      mediaId,
-    };
-  });
+  const items: HeroItem[] = await Promise.all(
+    (res.content ?? []).map(async (row) => {
+      // content(미디어ID 배열) key는 신/구 스키마 공통이라 불변
+      const contentArr = row.content;
+      // content 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
+      const mediaId =
+        Array.isArray(contentArr) && contentArr.length > 0
+          ? (contentArr[0] as number)
+          : null;
+      const mediaMimeType =
+        mediaId != null ? await fetchMediaMimeType(mediaId) : null;
+      // pickField: 신 스키마(snake) 우선, 없으면 구 스키마(camel) 폴백 → 구·신 데이터 혼재에도 안전
+      return {
+        // flatten 후 원본 item.id는 row._id로 내려옴
+        id: row._id as number,
+        sub: (pickField(row, "sub_title", "sub") as string) ?? "",
+        titleText: (pickField(row, "hero_title", "titleText") as string) ?? "",
+        btnUrl: (pickField(row, "button_url", "btnUrl") as string) ?? "",
+        btnText: (pickField(row, "button_text", "btnText") as string) ?? "",
+        orderNo: (pickField(row, "sort_order", "orderNo") as string) ?? "",
+        mediaId,
+        mediaMimeType,
+      };
+    }),
+  );
 
   // FE 후처리(BE 문자열 정렬 "10"<"2" 오정렬·빈값 처리 보정):
   //  1) orderNo 숫자 오름차순, 빈 값/비숫자는 맨 뒤
