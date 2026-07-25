@@ -1,4 +1,4 @@
-import GenericProductDetail from "@/app/()/products-systems/components/product/GenericProductDetail";
+import ProductDetailRouter from "@/app/()/products-systems/components/product/ProductDetailRouter";
 import { fetchProductBySlug } from "@/app/()/products-systems/data/productsSystemsData";
 
 // 일반 3depth 제품 상세 라우트 — 예외 없이 seo.slug → product-data 조회 하나의 경로로 렌더.
@@ -14,5 +14,5 @@ export default async function ProductDetailRoutePage({
   const { slug } = await params;
 
   const row = await fetchProductBySlug(slug);
-  return <GenericProductDetail row={row} />;
+  return <ProductDetailRouter slug={slug} row={row} />;
 }

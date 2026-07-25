@@ -62,4 +62,5 @@
 | STEP3 | fo-dev-doc-writer | 2026-07-23 | 작업 단위 문서 작성(상태: 설계중). API 확인 "기존 활용 가능" 확정, try/catch 폴백 유지 리스크 명시 |
 | 승인 | 세션 에이전트(사용자 #진행 확인) | 2026-07-23 | 확인 필요 항목 없음 확인 후 상태 "승인됨"으로 변경, STEP4 진행 |
 | STEP4 | fo-be-analyzer | 2026-07-23 | 신규 BE 불필요 최종 확정(BE 코드 변경 없음). 기존 `GET /api/v1/fo/page-data/{slug}`를 `fetchData()` 목록 브랜치가 그대로 재사용 |
+| 후속 정리 | fo-fe-builder | 2026-07-25 | 위 6번까지 남겨뒀던 dead code를 정리 — `fetchCategoryByCode` 삭제(fo/src 전체 grep 결과 호출부 0건 재확인), 이에 따라 전용 헬퍼 `searchPageData`·타입 `CategoryHero`·`PageDataResponse`·`fetchApi` import도 함께 제거. 이제 이 파일의 모든 PageData 조회는 `fetchData()` 단일 경로다(비고 2·3번 항목 해소). |
 | STEP6 | fo-fe-developer | 2026-07-23 | 6개 함수(`fetchCategoryBySlug`/`fetchCategoryChildren`/`fetchTopCategories`/`fetchAllVisibleProducts`/`fetchProductDetailBySlug`/`fetchAllProductNames`)의 `searchPageData(slug,query)` 호출을 `fetchData()` 목록 브랜치 호출로 전환. `리턴함수`로 `flattenPageDataItem` 매핑(기존 raw row 형태 유지), 단건 2개는 `size:1`+`res.content[0] ?? null`. 함수 레벨 try/catch 폴백·값 가공 로직·export 시그니처 전부 유지. `fetchCategoryByCode`(dead code)와 `searchPageData` 헬퍼는 미변경 존치. `npx tsc --noEmit` 오류 없음 |

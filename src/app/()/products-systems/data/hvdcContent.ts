@@ -286,7 +286,7 @@ export const hvSystemIntro = {
 export const hvSystemProducts = [
   {
     id: "hv-1",
-    href: "/product-range/scada",
+    href: "/product/scada",
     image: hvdcImg("overview_hero.jpg"),
     title: "SCADA",
     description: hvdcHero.description,

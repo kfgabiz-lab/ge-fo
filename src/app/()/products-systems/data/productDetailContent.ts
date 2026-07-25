@@ -65,9 +65,13 @@ export type ProductDetail = {
   downloads: ProductDownloadItem[];
   otherProducts: ProductOtherItem[];
   youtubeVideoId: string;
+  /** product.awards — "01"이면 iF Design Awards 수상. 히어로 로고/문구(8번) 조건부 노출용. 정적 템플릿은 미설정(undefined) */
+  awards?: string;
   parentHref: string;
   parentLabel: string;
   configuratorHref?: string;
+  /** product_etc.connect_portal — configuratorHref와 동일 값이지만 Help 카드(help-1) CTA 링크로 별도 노출한다 */
+  connectPortal?: string;
   configuratorExternal?: boolean;
   configuratorBannerBg?: string;
   expertBannerHref?: string;
@@ -454,6 +458,7 @@ export const productDetailNavItems = [
   { id: "product-lineup", label: "Lineup" },
   { id: "product-downloads", label: "Downloads" },
   { id: "product-video", label: "Video" },
+  { id: "product-other", label: "Other Products" },
   { id: "product-markets", label: "Markets" },
   { id: "product-help", label: "Help" },
 ] as const;

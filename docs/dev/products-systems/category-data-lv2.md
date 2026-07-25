@@ -18,7 +18,7 @@
 <!-- 인트로(단건, depth1) — stacked: .devices_category__header / split: .devices_category__intro-inner -->
 <div className="devices_category__header" data-slug="category-data">
   <h1 className="devices_category__tit" data-slugkey="category.title">{intro.title}</h1>
-  <p className="devices_category__desc" data-slugkey="category.description">{intro.description}</p>
+  <p className="devices_category__desc" data-slugkey="device_systems.description">{intro.description}</p>
 </div>
 
 <!-- 카드 목록(다건, product-data) — stacked: .devices_category__grid / split: .devices_category__list-inner -->
@@ -34,7 +34,7 @@
 | slugKey | dataJson 필드(flatten 기준) | 타입 | 바인딩 대상 | 설명 |
 |---|---|---|---|---|
 | category.title (인트로, 단건) | category.title | string | 텍스트(`h1`) | LV2 상위 카테고리명 (depth1 레코드) |
-| category.description (인트로, 단건) | category.description | string | 텍스트(`p`) | LV2 상위 카테고리 설명 (depth1 레코드) |
+| device_systems.description (인트로, 단건) | device_systems.description | string | 텍스트(`p`) | LV2 카테고리 설명. 관리자가 "카테고리 설명"으로 입력하는 필드는 bo 템플릿 `category2-DeviceSystems`의 `device_systems.description`이다(`category.description`은 어떤 템플릿도 채우지 않으므로 사용하지 않는다) |
 | product_info.image (카드, 다건) | product_info.image | array(파일ID) → string(url) | 속성(`img.src`) | 제품 카드 썸네일. `/api/v1/fo/page-files/{id}` 프록시 변환 |
 | product.product_name (카드, 다건) | product.product_name | string | 텍스트(`h2`) | 제품명 |
 | product_info.info_description (카드, 다건) | product_info.info_description | string | 텍스트(`p`) | 제품 설명 — lv1(`DevicesProducts.tsx`) 카드에는 없는 필드로, `DevicesCategoryList` 카드에만 존재 |
@@ -77,3 +77,4 @@
 | STEP4(정정) | (미기록, 소스 주석만 존재) | 2026-07-16~21 사이 | 카드 목록이 실제로는 product-data(제품)임을 확인, 코드 재작업(`DevicesCategoryList.tsx` 주석 "STEP4 정정") — 문서는 갱신 안 됨(누락) |
 | 라우팅 개편 | (route-restructure.md 참고) | 2026-07-21 | `/product-range/[slug]` 동적 라우트로 통합, `category.code`→`seo.slug` 전환, stacked 호출부 소멸 |
 | 재검증·문서 전면 재작성 | (심층분석) | 2026-07-21 | 소스 직접 대조로 문서-코드 완전 불일치 확인 후 본 문서 재작성(카드 slug/필드 정정, layout 현황 반영, slug_registry 확인 결과 반영) |
+| 카테고리 설명 필드 정정 | fo-fe-builder | 2026-07-25 | 인트로 설명 slugKey를 `category.description` → `device_systems.description`으로 교체(stacked/split 두 분기 모두). 데이터 소스인 `fetchCategoryBySlug`도 동일 필드 참조로 교정, 폴백 없음(빈 값이면 빈 값 그대로 노출) |

@@ -200,7 +200,7 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
   },
   {
     id: "help-2",
-    href: "",
+    href: "/support/where-to-buy",
     title: "Find an Authorized Distributor",
     description:
       "Connect with an authorized LS ELECTRIC distributor or sales representative serving your area.",
@@ -210,7 +210,7 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
   },
   {
     id: "help-3",
-    href: "",
+    href: "https://gics.ls-electric.com/public/index.do?lang=en",
     title: "Get Technical Support & Service",
     description:
       "Keep your equipment operating safely and reliably with expert support for installation, maintenance, and repairs.",

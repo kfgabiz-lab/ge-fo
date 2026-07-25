@@ -10,9 +10,11 @@
 > - `fo/src/app/()/products-systems/components/product/DevicesProductVideo.tsx` (Video 섹션, `youtubeVideoId` 있을 때만 렌더 — 10-1)
 > - `fo/src/app/()/products-systems/components/product/DevicesProductDownloads.tsx` (Downloads 섹션 — 10-5)
 > - `fo/src/app/()/products-systems/components/DevicesPageFooter.tsx` (`faqItems` prop 있으면 하단 FAQ 렌더 — 10-4)
+> - `fo/src/app/()/products-systems/components/DevicesHelp.tsx` (Help 섹션, `variant="overlay"`만 대상 — 10-8)
+> - `fo/src/app/()/products-systems/components/product/SwProductDetail.tsx` (SW 4종 상세: scada/xems/micro-grid/smart-factory, `bindSwDetail()` — 10-8)
 > - `fo/src/lib/youtubeEmbed.ts` (`getYoutubeIdFromUrl` — 기존 공통함수, 10-1)
 > - 사용 페이지: `fo/src/app/()/product/[slug]/page.tsx`, `fo/src/app/()/product-range/[slug]/page.tsx`(제품 폴백 분기) — 둘 다 `<GenericProductDetail slug={slug} />` 렌더
-> 상태: 개발완료(1차 베이스라인 — series/description/image/specs/keyFeatures 5필드) + **Video/Configurator/FAQ(제품별) 확장 반영됨(2026-07-21, 코드 확인 완료)** + Downloads 카운트 표시 수정/Other Products 죽은 네비 제거는 **설계 승인됨(전체진행) — 코드 미반영, 진행 중**(10번 참고)
+> 상태: 개발완료(1차 베이스라인 — series/description/image/specs/keyFeatures 5필드) + **Video/Configurator/FAQ(제품별) 확장 반영됨(2026-07-21, 코드 확인 완료)** + Downloads 카운트 표시 수정/Other Products 죽은 네비 제거는 **설계 승인됨(전체진행) — 코드 미반영, 진행 중**(10번 참고) + Help 카드(Connect Portal) 링크 노출은 **설계 확정(2026-07-25, 외부창/빈값 정책 정정) — 코드 반영됨(2026-07-25)**(10-8 참고)
 
 ## 1. 아키텍처 — HW/SW 구분 없이 단일 컴포넌트
 
@@ -66,7 +68,7 @@
 | product_spec.spec{1~3}_title/content | product_spec.spec{N}_* | string | HW 스펙, 값 비면 정적 기본값 폴백 |
 | key_feature{1~4}.key{N}_title/content | key_feature{N}.key{N}_* | string | Key Features 카드, 값 비면 정적 기본값 폴백 |
 | product_etc.video | product_etc.video | string(YouTube watch URL 전체) | Video 섹션 소스. FE에서 `getYoutubeIdFromUrl`로 id만 추출해 `detail.youtubeVideoId`에 대입(10-1) |
-| product_etc.connect_portal | product_etc.connect_portal | string(URL) | Configurator CTA 링크(`detail.configuratorHref`), 변환 없이 그대로 사용(10-2) |
+| product_etc.connect_portal | product_etc.connect_portal | string(URL) | Configurator CTA 링크(`detail.configuratorHref`), 변환 없이 그대로 사용(10-2). Help 카드(`help-1`) CTA 링크로도 동일 값 재노출(10-8) |
 
 `buildHwProductDetail`이 실데이터로 덮어쓰는 필드는 **series/description/image/specs/keyFeatures/youtubeVideoId/configuratorHref 7개**다(2026-07-21 확장 반영, 코드 확인 완료 — `hwProductDetail.ts`). `productTemplateDetail`(정적, `productDetailContent.ts`)의 나머지 필드 — `downloads`, `otherProducts` 등 — 는 이번 스코프에서도 실데이터 연동 대상이 아니며 정적 값 그대로 렌더된다(10-5/10-6, 설계상 정상).
 
@@ -80,7 +82,9 @@
 - row limit: 단건(`size=1`) — VFD 6종처럼 seo.slug가 중복되는 경우 첫 건만 사용(`route-restructure.md` §2-1, 사용자 승인 정책)
 - orderBy: 없음(단건)
 
-## 6. 관련제품(Other Products) — 미구현, `_fetchedRel5`/`_fetchedRel6`와는 무관
+## 6. 관련제품(Other Products) — ⚠️ 2026-07-25 구현됨(§12로 대체). `_fetchedRel5`/`_fetchedRel6`와는 무관
+
+> **갱신(2026-07-25)**: 본 절은 "미구현·별도 기능개발 건"으로 기록돼 있었으나, category-data depth3 junction(GNB devices-tree) 기반으로 **실제 구현·검증 완료**되었다. 아래 §6 본문은 "왜 `_fetchedRel5/6`로는 안 되는지"의 배경 설명으로 유지하되, **실제 구현 방식·필드·파일은 §12를 참조**한다.
 
 2026-07-16 최초 설계는 관련제품이 product-data의 `_fetchedRel5`/`_fetchedRel6` 관계 필드로 채워질 거라 **추정**했다. 2026-07-21 `slug_relation` 테이블(`docs/ge_guide/builder/02.builder_data_process.md` §0-5) 직접 조회로 실제 정의를 확인한 결과, 이 추정은 **틀렸다**:
 
@@ -125,6 +129,7 @@
 | 10-4 FAQ(제품별) | 확정(⚠️ 사용자 지시와 다른 방식 — 하단 참고) | **반영됨** — `productsSystemsData.ts`(`fetchProductFaqItems`), `GenericProductDetail.tsx` |
 | 10-5 Downloads | 확정(카운트만 0 표시, 목록은 추후) | **부분 반영** — `items={[]}` 전달은 반영됨. 가짜 카운트 `2,658` 텍스트는 `DevicesProductDownloads.tsx:15` `DOWNLOADS_TOTAL_RESULTS`에 **아직 하드코딩 그대로** — 미반영 |
 | 10-6 Other Products 죽은 네비 제거 | 확정 | **미반영** — `productDetailContent.ts:600` `productDetailNavItems`에 `{ id: "product-other", label: "Other Products" }` **아직 존재** |
+| 10-8 Help 카드(Connect Portal) | 확정(정정, 2026-07-25) | **반영됨(2026-07-25)** — `DevicesHelp.tsx`에 `CONNECT_PORTAL_FALLBACK_HREF` 상수 신설, href는 `connectPortalHref || 폴백URL`, help-1에만 `target="_blank" rel="noopener noreferrer"` 및 data-slug/data-slugkey 부착. `hwProductDetail.ts`/`productDetailContent.ts`/`GenericProductDetail.tsx`/`SwProductDetail.tsx`는 이전 STEP5에서 이미 반영됨 |
 
 ### 10-1. Video
 
@@ -139,7 +144,7 @@
 - 필드: `product_etc.connect_portal` — 전체 URL. 값 변환 없이 그대로 `detail.configuratorHref`에 대입(`hwProductDetail.ts`: `configuratorHref: data.connectPortal`).
 - 근거: bo `page_template` id=19 config의 `fieldKey:"connect_portal"` input.
 - ⚠️ **정정(2026-07-23 코드 재확인)**: 빈값이면 정적 기본값(`base.configuratorHref`)으로 폴백한다고 기록돼 있었으나, 실제 코드에 `|| base.configuratorHref` 폴백이 없다. 값이 없으면 `href=""`(빈 링크)가 그대로 전달된다.
-- 소비처: `GenericProductDetail.tsx` Lineup 섹션 하단 Configurator 안내 링크(`detail.configuratorHref`/`configuratorExternal`) — 10-3에서 Lineup 본문을 실데이터로 바인딩하면서 이 CTA도 같은 섹션 안에 인라인으로 유지된다(과거엔 `DevicesProductLineup` 컴포넌트가 prop으로 받았으나 그 컴포넌트는 삭제됨).
+- 소비처: `GenericProductDetail.tsx` Lineup 섹션 하단 Configurator 안내 링크(`detail.configuratorHref`/`configuratorExternal`) — 10-3에서 Lineup 본문을 실데이터로 바인딩하면서 이 CTA도 같은 섹션 안에 인라인으로 유지된다(과거엔 `DevicesProductLineup` 컴포넌트가 prop으로 받았으나 그 컴포넌트는 삭제됨). 동일 값이 Help 카드(`help-1`) CTA로도 재노출된다(10-8).
 
 ### 10-3. Lineup — 실데이터 바인딩 완료(2026-07-23)
 
@@ -178,6 +183,20 @@
 
 `CommonBanner02`(`variant="expert"`) 등 배너는 이번 확장 대상이 아니며 기존 정적/부분동적 상태를 그대로 유지한다(Configurator CTA는 10-2/10-3에서 `configuratorHref`만 동적).
 
+### 10-8. Help 카드(Connect Portal) — 신규 필드 아님, 이미 추출된 `connectPortal` 값 노출 위치 추가(확정, 2026-07-25 / 외부창·빈값 정책 정정 2026-07-25)
+
+- 필드: `product_etc.connect_portal` — **10-2 Configurator와 동일 필드**. `mapHwProductData()`(`productsSystemsData.ts:304`)가 이미 `connectPortal: str("product_etc.connect_portal")`로 추출하고 있고, 지금까지는 `hwProductDetail.ts:33`(`configuratorHref: data.connectPortal`)에서 `detail.configuratorHref`로만 흘려보냈다. 이번 확장은 **새 데이터 추출/매핑이 아니라 이미 있는 이 값을 한 곳(Help 카드) 더 노출**하는 것이다.
+- 대상 컴포넌트: `DevicesHelp.tsx` — `variant="overlay"` 렌더 경로만 대상. `variant="default"`는 fo 내 실사용 호출부가 없어(grep 확인) 이번 스코프 제외.
+- 대상 카드: `motorControlHelpCards`의 `help-1`("Go to Connect Portal")만. 현재 `href: ""`(정적 빈 문자열, `motorControlContent.ts:193`)로 고정돼 클릭해도 이동하지 않는다. `help-2`(Where to Buy)/`help-3`(Go to G-ICS)는 이번 스코프 제외.
+- 설계:
+  - `DevicesHelp.tsx`에 `connectPortalHref?: string` prop을 추가하고, `cards` 렌더 시 `id === "help-1"`인 카드만 `href`를 이 prop 값으로 override — prop이 비어 있으면 아래 빈 값 정책에 따라 `https://connect.ls-electric.com/`으로 폴백하고, `target="_blank" rel="noopener noreferrer"`도 함께 적용한다.
+  - `GenericProductDetail.tsx`(HW 63종) 85행 `<DevicesHelp variant="overlay" sectionId="product-help" />` → `connectPortalHref={detail.connectPortal}` 전달. `hwProductDetail.ts` 33행(`configuratorHref: data.connectPortal,`) 옆에 `connectPortal: data.connectPortal,` 한 줄 추가(이미 만들어지는 값을 `detail`에 한 필드 더 노출). `ProductDetail` 타입(`productDetailContent.ts:70` `configuratorHref?: string` 옆)에 `connectPortal?: string` 추가 필요.
+  - `SwProductDetail.tsx`(SW 4종: scada/xems/micro-grid/smart-factory) 161/225/289/358행 각 `<DevicesHelp>` 호출부에 `connectPortalHref={bind.connectPortal}` 전달. `bindSwDetail()`(101~111행)이 이미 `mapHwProductData(row)`로 `data.connectPortal`을 만들고 있으므로, 반환 객체에 `connectPortal: data?.connectPortal` 한 줄만 추가한다.
+- 제외 대상(현행 유지): `products-category/[slug]/page.tsx`, `product-range/[slug]/page.tsx` — 제품 목록 화면이라 단건 제품 데이터(`detail`/`bind`)가 없음, `<DevicesHelp>` prop 미전달 유지.
+- 빈 값 정책(2026-07-25 정정): `product_etc.connect_portal`이 비어 있으면 Connect Portal 메인 화면(`https://connect.ls-electric.com/`)으로 폴백한다 — 원 기획 스펙 "링크가 없는 경우, Connect Portal 메인 화면 새 창 이동"에 따름. `help-1` 카드는 항상 렌더되고 `href`도 항상 유효한 링크를 가진다(빈 문자열(`""`)로 남는 경우 없음). ~~기존 "현행 유지(href="" 그대로)" 서술은 스펙 대조 결과 오류였다.~~
+- 외부창 처리(2026-07-25 정정): `target="_blank" rel="noopener noreferrer"`로 새 창 이동한다 — 원 기획 스펙 "Admin에 등록한 Connect Portal 링크로 새 창 이동"에 따름. ~~기존 "외부창 처리 없음" 서술은 스펙 대조 결과 오류였다.~~
+- API/조회: 신규 API·신규 조회 없음. `product-data` 단건 조회(4번/5번)를 그대로 재사용 — `mapHwProductData`가 이미 값을 추출해두고 있어 조회 조건 변경도 없다.
+
 ## 11. STEP별 진행 이력
 
 | STEP | 담당 | 날짜 | 결과 요약 |
@@ -190,3 +209,73 @@
 | 별도 문서 | fo-dev-doc-writer | 2026-07-21 | FAQ(제품별) 상세는 `fo-data-binding-가이드.md` 파일명 규칙(재사용 slug 구분자)에 따라 `faq-data-product.md`로 분리 작성 |
 | STEP6(Lineup) | fo-fe-builder | 2026-07-23 | 10-3 Lineup을 정적 유지에서 **실데이터 바인딩으로 전환** — `product_etc.line_up`(리치텍스트 HTML)을 `mapHwProductData.lineUp`→`buildHwProductDetail.lineUp`→`GenericProductDetail`이 `data-slug="product-data"`/`data-slugkey="product_etc.line_up"` + `dangerouslySetInnerHTML`로 렌더(Press 상세 패턴). 컨테이너는 항상 렌더, 값 없으면 내부만 빈 상태(아래 재확인 항목에서 정정). 정적 컴포넌트 `DevicesProductLineup.tsx` 및 전용 타입/정적 데이터(`ProductLineupRow`/`ProductFrameLineup`/`ProductLineupTypeCell`/`ProductLineupVariant`, `sharedLineup`/`susolUlSmartMccbInterruptingLineup`, `ProductDetail.lineup?`/`lineupVariant?`/`frameLineup?`) 삭제·정리. `DevicesProductLineupGrid.tsx`는 고아화됐으나 정리 범위 제외 |
 | 실코드 재확인·정정 | (사용자 버그 신고 대응, 코드 직접 Read + SSR HTML 대조) | 2026-07-23 | `/product/susol-ul-vcb`(product_info/spec/key_feature/product_etc 미입력) 및 `/product/susol-ul-acb`(id=1664, 대부분 필드 입력됨이나 FAQ 0건) 실사례 조사 중, 10-1/10-2/10-3/10-4/9번 비고에 기록된 "정적 기본값 폴백"·"섹션 미노출" 서술이 실제 코드와 다름을 발견해 전면 정정. 실제로는 `youtubeVideoId`/`configuratorHref`에 `base` 폴백이 없고, Lineup/FAQ 섹션은 조건부로 숨겨지는 게 아니라 컨테이너(제목 등)는 항상 렌더되고 내부 콘텐츠만 빈 상태로 남는다 — 이 패턴(컨테이너 유지, 내부만 빈값)은 사용자와 합의된 정책상 허용 범위로 확정(전체 섹션을 조건부로 제거하는 것만 금지 대상) |
+| STEP2(Help 카드) | fo-slug-analyzer / fo-dev-doc-writer | 2026-07-25 | Help 카드(`help-1`, "Go to Connect Portal") 링크를 `product_etc.connect_portal`(기존 필드, `mapHwProductData`가 이미 추출 중)로 노출하는 설계 확정(10-8). **"새 필드를 만든다"는 이전 표현은 오류** — 실제로는 이미 존재하는 `data.connectPortal` 값을 `detail.connectPortal`/`bind.connectPortal`로 한 곳 더 노출하는 것으로 정정. 대상은 `GenericProductDetail.tsx`(HW 63종)와 `SwProductDetail.tsx`(SW 4종)뿐, `products-category`/`product-range` 목록 화면은 제외. 상태: 설계 확정, 코드 미반영 |
+| STEP2(Help 카드) 정정 | fo-slug-analyzer / fo-dev-doc-writer | 2026-07-25 | 사용자가 원 기획 스펙 문서(Lv3 보조설명/Overview/Applications/Tech Hub 비디오 배너/Connect Portal/FAQ 전체 포함)를 제시, 10-8절의 외부창 처리·빈 값 정책이 스펙과 다름을 지적하여 정정. 외부창: "없음" → `target="_blank" rel="noopener noreferrer"`(스펙: "Admin에 등록한 Connect Portal 링크로 새 창 이동"). 빈 값: "현행 유지(href="" 그대로)" → `https://connect.ls-electric.com/`로 폴백(스펙: "링크가 없는 경우, Connect Portal 메인 화면 새 창 이동"). 상태: 설계 확정(정정), 코드 미반영. 스펙에 있던 다른 항목(Tech Hub 비디오 배너 조건부 노출, Lv3 보조설명 등)은 이번 정정 대상 아님 — 별도 확인 필요 |
+| STEP1~6(제품 담당/Insights) | fo-slug-analyzer / fo-dev-doc-writer / fo-be-builder / fo-fe-builder / fo-qa-validator | 2026-07-25 | 스펙 11~13(제품 담당 배너)/38(제품 맵핑 게시글 Insights) 구현·검증 완료(§13). FO 제네릭 where가 JSONB 배열 포함(`@>`)을 지원하지 않아 신규 `FoProductController`(manager-email=기존 findProductManagerEmail 노출, insights=신규 findProductInsights)로 서버 필터. 담당자 없으면 CommonBanner02에 `contactEmail=""`로 축약형(공용 컴포넌트 무수정). insights 필드가 섹션 중첩(press/blog/articles)이라 `data_json->(replace(data_slug,'-data',''))` 접근으로 정정. bo-api(local 프로파일) 재빌드·재기동 후 브라우저 검증 |
+| STEP1~6(Other Products) | fo-slug-analyzer / fo-dev-doc-writer / fo-fe-builder / fo-qa-validator | 2026-07-25 | 스펙 31/32번 구현·검증 완료(§12). Other Products를 category-data depth3 junction(GNB `fetchDevicesTreeRows()`) 기반으로 동일 Lv2 제품 조회(자기 제외)해 `DevicesProductOtherProducts` 재배선, Design Awards 배지(`product.awards="01"`) 연결, `product-other` 네비 복원(10번 짝 규칙). tsc/SSR/브라우저 콘솔 0 검증. 스펙 8번(히어로 Design Awards 로고/문구)은 최초 보류였으나 사용자 확정(에셋 `badge_if_award_lg.png` 재사용, 문구 확정, 기존 배지 CSS 재사용)에 따라 같은 날 구현·검증 완료(§12-5) |
+
+## 12. Other Products(31) / Design Awards 배지(32) — 구현 완료(2026-07-25)
+
+§6에서 "미구현"으로 남았던 관련제품을, 사용자 지시(“Lv2는 category-data — GNB가 쓰는 그 메커니즘”)에 따라 **GNB devices 메가메뉴와 동일한 소스**로 구현했다. `product_code` 접두사 방식(과거 후보)은 폐기.
+
+### 12-1. 데이터 소스 — category-data depth3 junction (GNB와 공유)
+
+- 엔드포인트: `GET /api/v1/fo/gnb/devices-tree`(기존, **신규 API 없음**). FE 조회 유틸 `fetchDevicesTreeRows()`(`fo/src/data/gnb/devicesTree.ts`)를 GNB와 공유.
+- 구조: category-data 레코드 중 **depth3 = 제품↔카테고리 junction**(`data_json.product = { id: <product-data PK>, depth:"3", parentId: <Lv2 카테고리 id> }`). BE(`PageDataService.findDevicesTree`)가 junction의 `product.id`로 product-data를 LEFT JOIN(`is_visible='001'`)해 표시정보(slug/name/info_description/image)를 붙여 내려준다.
+- "동일 Lv2를 가지는 다른 제품" = 현재 제품의 junction `parentId`(들)을 구한 뒤, 그 `parentId`에 속한 다른 junction 제품을 모으면 된다(제품↔Lv2는 다대다 가능 — junction 레코드 복수 = Lv2 복수).
+
+### 12-2. 구현 함수 — `fetchOtherProductsInSameLv2(currentProductId)` (`productsSystemsData.ts`)
+
+- `fetchDevicesTreeRows()` 결과에서 depth3 행만 필터 → 현재 productId의 `parentId` 집합(myLv2) 수집 → myLv2에 속한 다른 depth3 제품을 **자기 자신 제외 + productId 중복 제거**해 `ProductOtherItem[]`로 매핑.
+- 이미지: junction `productImage`("[123]" JSON 문자열)를 로컬 `resolveJunctionImage()`가 `JSON.parse` 후 기존 `resolveFirstImageUrl()` 재사용해 URL 변환(값 없으면 빈 문자열).
+- **slug 없는 제품도 그대로 카드 노출**(href=""): 필터/비활성화하지 않는다(사용자 승인 정책). 실측: Lv2 "Molded Case Circuit Breaker"(parentId 575)의 `Susol UL MCCB(up to 1000V)`(id 1667)가 `seo.slug` 미입력 → href="" 카드로 노출됨(정상).
+- 0건이면 빈 배열 → 호출부에서 섹션·네비 동반 숨김.
+
+### 12-3. Design Awards 배지(32) — `product.awards`
+
+- 필드: **`product.awards`**(flatten 경로, 실측 확정). 값 `"01"` = iF Design Awards, 빈 문자열 = 미수상. (실측상 `"01"` 보유 제품은 소수 — 1664/1703/1909.)
+- ⚠️ devices-tree 응답에는 `awards`가 없다(name/desc/slug/image만 select) → `fetchProductAwardsMap()`이 **product-data를 1회 추가 조회**해 id→awards 맵을 만들어 보강한다(FE only, BE 무변경).
+- 매핑: `badge: awardsMap.get(productId) === "01"` → `DevicesProductOtherProducts`의 기존 배지 슬롯(`getProductBadgeType` → `type1`, `ProductAwardBadge`, `/img/devices-systems/products/badge_if_award_sm.png`)이 노출. 검증: `/product/dfsdfsdf`(Lv2 2044)에서 수상 형제 `testtest`(1909)에 `type1` 배지 렌더 확인.
+
+### 12-4. 렌더/네비 배선 (`GenericProductDetail.tsx`, `productDetailContent.ts`)
+
+- `GenericProductDetail`이 `productId`로 `fetchOtherProductsInSameLv2`를 FAQ와 병렬 조회 → `showOtherProducts = otherProducts.length > 0`.
+- 섹션은 Video와 Markets 사이에 `{showOtherProducts ? <DevicesProductOtherProducts items={otherProducts}/> : null}`로 렌더(`DevicesProductOtherProducts`는 SW 상세에서도 쓰는 공용 컴포넌트 재배선. 4개 이하면 [<,>] 미노출은 컴포넌트 기존 로직).
+- 네비: `productDetailNavItems`에 `{ id:"product-other", label:"Other Products" }`를 Video와 Markets 사이에 복원. **10번 짝 규칙**대로 `visibleNavItems` 필터에 `product-other → showOtherProducts` 추가(섹션↔네비 항상 짝). SW 상세는 자체 navItems를 써서 영향 없음.
+- 빈-src 방어: `DevicesProductOtherProducts`의 카드 `<img>`를 `src={item.image || undefined}`로(이미지 미입력 동적 제품의 `src=""`가 유발하던 브라우저 재다운로드 콘솔 에러 제거 — `DevicesProductHero`와 동일 패턴, 카드는 그대로 노출).
+
+### 12-5. 스펙 8번(히어로 Design Awards 로고/문구) — 구현 완료(2026-07-25)
+
+- 스펙: "Design Awards 체크 시 로고 및 대표이미지 하단에 문구 출력".
+- 데이터: `product.awards === "01"`(§12-3과 동일 필드). `mapHwProductData`가 `awards`를 추출 → `HwProductData.awards` → `buildHwProductDetail`이 `ProductDetail.awards`로 전달(정적 템플릿은 미설정=undefined이라 미노출).
+- 렌더(`DevicesProductHero.tsx`): 대표 이미지(`devices_product_hero__img`) 바로 아래에 `product.awards === "01"`일 때만 조건부로 로고+문구를 추가.
+- CSS/에셋: **신규 CSS·클래스 없이** 기존 배지 클래스만 재사용. 로고는 `<div className="type1"><span className="product_award_badge__icon"/></div>` — 베이스 `components/product-award-badge.css`(루트 `app/layout.tsx` 전역 import)의 `.type1 .product_award_badge__icon` → `badge_if_award_lg.png`(80×40, 대형)이 적용된다. **주의**: `section.devices_product_other` 하위에서는 type1↔type2가 sm/lg로 뒤바뀌지만, 히어로는 그 스코프 밖이라 베이스 규칙(type1=lg)이 그대로 적용된다. 절대배치용 래퍼 `.product_award_badge`(오버레이 용도)는 이미지 하단 흐름 배치에 부적합하여 제외하고 로고를 만드는 클래스만 사용.
+- 문구(원문 그대로): `Winner of the iF Design Award Germany's premier design prize`(JSX는 `&apos;`로 이스케이프).
+- 검증: `/product/susol-ul-acb`(awards="01")에서 lg iF 로고+문구 렌더 확인(스크린샷). `/product/susol-ul-mccb`(awards="")는 미노출. (참고: susol-ul-acb 히어로 대표이미지 파일 `page-files/540`이 서버에 없어 404가 나나, 이는 award와 무관한 기존 데이터 미비이며 award 로고는 정적 CSS background-image라 영향 없음.)
+
+## 13. 제품 담당 배너(11~13) / 제품 맵핑 게시글 Insights(38) — 서버 필터(BE) 구현 완료(2026-07-25)
+
+두 기능 모두 **JSONB 배열 포함 검색(`data_json->'...' @> to_jsonb(:id)`)이 필요**한데, FO 제네릭 where(eq_/has_markets_ 등)는 배열 포함을 지원하지 않는다(has_markets_는 CSV 문자열 토큰 전용). 따라서 **전량조회+클라이언트 필터 대신 서버 측 신규 엔드포인트**로 처리한다(사용자 지시). 두 쿼리 모두 기존 `findProductManagerEmail`의 `@>` 컨벤션을 재사용한다.
+
+### 13-1. BE — `FoProductController`(`/api/v1/fo/products`) + `PageDataService`
+- `GET /{productId}/manager-email` → **기존 `findProductManagerEmail(productId, siteId)` 그대로 노출**(신규 로직 없음). `productManager-data.ms`(JSONB 배열, 담당 product id) `@> to_jsonb(:productId)` + `product_manager.is_visible='001'`로 서버 필터, `{"email": <string>|null}` 반환.
+- `GET /{productId}/insights` → **신규 `findProductInsights(productId, siteId)`**:
+  - `data_slug IN ('blog-data','press-data','articles-data')` + `data_json->'product_list' @> to_jsonb(:productId)`(맵핑) + 공개 + 게시일 과거 + site 스코프, 게시일 내림차순(동률 id 내림차순) **LIMIT 3**.
+  - ⚠️ **필드 위치 주의(실측)**: `title/is_visible/publish_dttm/image`는 `data_json` 최상위가 아니라 **콘텐츠 섹션(press/blog/articles) 하위 중첩**이다(`product_list`만 최상위). 섹션명 = slug에서 `-data` 제거값이라 `data_json->(replace(data_slug,'-data',''))->>'필드'`로 접근한다(최초 top-level 접근은 전부 NULL이 되어 0건이 나오는 버그였고 정정함).
+  - 게시일 과거 판정: `substring(regexp_replace(...publish_dttm, '[^0-9]', '', 'g'),1,8) <= :today`(사이트 tz `resolveTodayParam`, condexpr 게시상태 게이트와 동일 방식).
+  - 신규 DTO `ProductInsightRowResponse{id, dataSlug, title, publishDttm, image}`(태그/상세href/이미지URL 가공은 FE).
+- 보안: `/api/v1/fo/**` permitAll(`SecurityConfig`)이라 신규 `/api/v1/fo/products/**`도 비로그인 허용. **site 스코프**: 두 쿼리 모두 `(site_id = :siteId OR site_id IS NULL)` — FE `fetchApi`가 `X-Site-Id=1`을 전역 주입하므로 SSR에서 정상 매칭(헤더 없이 호출하면 0건이니 주의).
+
+### 13-2. FE
+- `productsSystemsData.ts` `fetchProductManagerEmail(productId)`: 매칭 없으면 `""` 반환.
+- `highlightNewsData.ts` `fetchProductInsights(productId)`(배럴 `@/data/highlightNews`에 재노출): BE 응답 → `HighlightNewsItem[]`. slug→tag(Press/Blog/Articles)·상세href·폴백이미지·`image("[123]")`→page-files URL 변환은 기존 company 데이터 헬퍼(`pressImageSrc`/`pressDetailHref` 등) + `formatNewsDate` 재사용. 정렬/건수는 BE가 확정하므로 FE는 매핑만.
+- `GenericProductDetail.tsx`(HW): `managerEmail`·`insights`를 FAQ/OtherProducts와 병렬 조회.
+  - 담당 배너: `CommonBanner02 variant="expert"`의 `contactEmail={managerEmail}`(기존 정적 `detail.expertContactEmail` 대체). 담당자 없으면 `""` → **공용 CommonBanner02 무수정**으로 이메일/복사 블록 미렌더(축약형): expert는 `resolvedContactEmail = contactEmail ?? DEFAULT_EXPERT_EMAIL`이고 `{contactEmail ? ... : null}`이라, `""`는 `?? `로 폴백되지 않고(빈문자열) 조건도 falsy라 블록이 사라지고 "Send an Inquiry"만 남는다. (expert variant 사용처는 `GenericProductDetail` 단 1곳 — 회귀 영향 없음.)
+  - Insights: `DevicesPageFooter`에 `highlightItems={insights}` 전달. `DevicesPageFooter`는 `highlightItems`가 주어지면 그대로 쓰고(제품 맵핑), 없으면(카테고리/랜딩) 기존 `fetchMainHighlightNews()`. 0건이면 `HighlightNewsSection`이 `items.length===0`에서 `return null` → 섹션 자연 숨김.
+- SW 상세(`SwProductDetail.tsx`)는 자체 구조라 이번 배선 대상 아님(HW `GenericProductDetail`만).
+
+### 13-3. 검증(실측)
+- `/product/ix7nh-servo-drives`(1715): 담당 배너에 실담당자 `sales.us@lselectricamerica.com`(mailto)+Copy Link+Send Inquiry, Insights에 제품 맵핑 Articles 1건("order tset"). 콘솔 0.
+- `/product/l7p-servo-drives`(1718): Insights에 제품 맵핑 Press 1건("order tset").
+- `/product/dfsdfsdf`(2035, 담당자 없음): 배너에 이메일/복사 미노출, Send Inquiry만(축약형). (콘솔 404는 이 테스트 제품 대표이미지 `page-files/506` 부재 — 무관한 기존 데이터 이슈.)
+- blog는 실데이터 매핑 0건이라 결과에 안 잡히는 게 정상. tsc/gradle compileJava 통과, bo-api(local 프로파일) 재빌드·재기동으로 신규 엔드포인트 반영.

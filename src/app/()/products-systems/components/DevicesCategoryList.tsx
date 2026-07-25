@@ -95,7 +95,7 @@ export default function DevicesCategoryList({
             <p className="devices_category__parent">{intro.parentLabel}</p>
           )}
           <h1 className="devices_category__tit" data-slugkey="category.title">{intro.title}</h1>
-          <p className="devices_category__desc" data-slugkey="category.description">{intro.description}</p>
+          <p className="devices_category__desc" data-slugkey="device_systems.description">{intro.description}</p>
         </div>
         <div className="devices_category__grid-wrap">
           {/* STEP4 정정: 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
@@ -142,7 +142,7 @@ export default function DevicesCategoryList({
               <p className="devices_category__parent">{intro.parentLabel}</p>
             )}
             <h1 className="devices_category__tit" data-slugkey="category.title">{intro.title}</h1>
-            <p className="devices_category__desc" data-slugkey="category.description">{intro.description}</p>
+            <p className="devices_category__desc" data-slugkey="device_systems.description">{intro.description}</p>
           </div>
         </div>
         <div className="devices_category__list">

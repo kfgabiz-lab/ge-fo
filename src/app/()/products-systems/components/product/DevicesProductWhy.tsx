@@ -12,7 +12,8 @@ function renderWhyBlockHead(block: HvdcWhyBlock) {
   );
 }
 
-function renderWhyBlockCards(block: HvdcWhyBlock) {
+// imageOnly=true면 카드 본문(제목/설명)을 렌더하지 않고 비주얼만 노출한다(구 SoftwareHighlights 동작).
+function renderWhyBlockCards(block: HvdcWhyBlock, imageOnly: boolean) {
   return (
     <div className="devices_product_why__cards">
       {block.cards.map((card) => (
@@ -20,12 +21,14 @@ function renderWhyBlockCards(block: HvdcWhyBlock) {
           <div className="devices_product_why__card-visual">
             <img loading="lazy" decoding="async" src={card.image} alt="" />
           </div>
-          <div className="devices_product_why__card-body">
-            <h4 className="devices_product_why__card-tit">{card.title}</h4>
-            <p className="devices_product_why__card-desc">
-              {renderMultilineText(card.description)}
-            </p>
-          </div>
+          {imageOnly ? null : (
+            <div className="devices_product_why__card-body">
+              <h4 className="devices_product_why__card-tit">{card.title}</h4>
+              <p className="devices_product_why__card-desc">
+                {renderMultilineText(card.description)}
+              </p>
+            </div>
+          )}
         </article>
       ))}
     </div>
@@ -35,13 +38,32 @@ function renderWhyBlockCards(block: HvdcWhyBlock) {
 type DevicesProductWhyProps = {
   title: string;
   blocks: HvdcWhyBlock[];
+  // imageOnly=true: 카드 비주얼만 노출 + 헤드 영역을 __head 래퍼로 감싸고 description 노출(--image-only 변형).
+  imageOnly?: boolean;
+  description?: string;
 };
 
-export default function DevicesProductWhy({ title, blocks }: DevicesProductWhyProps) {
+export default function DevicesProductWhy({
+  title,
+  blocks,
+  imageOnly = false,
+  description,
+}: DevicesProductWhyProps) {
+  const sectionClassName = imageOnly
+    ? "devices_product_why devices_product_why--image-only"
+    : "devices_product_why";
+
   return (
-    <section className="devices_product_why" id="product-why">
+    <section className={sectionClassName} id="product-why">
       <div className="inner">
-        <h2 className="section_tit">{title}</h2>
+        {imageOnly ? (
+          <div className="devices_product_why__head">
+            <h2 className="section_tit">{title}</h2>
+            {description ? <p className="section_desc">{description}</p> : null}
+          </div>
+        ) : (
+          <h2 className="section_tit">{title}</h2>
+        )}
         <div className="devices_product_why__blocks">
           {blocks.map((block) => {
             const isSplit = block.layout === "split";
@@ -54,7 +76,7 @@ export default function DevicesProductWhy({ title, blocks }: DevicesProductWhyPr
                 <div key={block.id} className={blockClassName}>
                   <div className="devices_product_why__block-split">
                     {renderWhyBlockHead(block)}
-                    {renderWhyBlockCards(block)}
+                    {renderWhyBlockCards(block, imageOnly)}
                   </div>
                 </div>
               );
@@ -63,7 +85,7 @@ export default function DevicesProductWhy({ title, blocks }: DevicesProductWhyPr
             return (
               <div key={block.id} className={blockClassName}>
                 {renderWhyBlockHead(block)}
-                {renderWhyBlockCards(block)}
+                {renderWhyBlockCards(block, imageOnly)}
               </div>
             );
           })}

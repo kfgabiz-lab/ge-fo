@@ -31,7 +31,7 @@ export default function DevicesHero({
             depth1 레코드에는 이미지 필드 없음(정상) — 히어로에 이미지 미사용 */}
         <div className="devices_hero__inner" data-slug="category-data">
           <h1 className="devices_hero__tit" data-slugkey="category.title">{title}</h1>
-          <p className="devices_hero__desc" data-slugkey="category.description">{description}</p>
+          <p className="devices_hero__desc" data-slugkey="device_systems.description">{description}</p>
           {showCta ? (
             <div className="devices_hero__btns">
               <Link href="/support/contact-us" className="btn-base btn-lv01 btn-lv01--solid">

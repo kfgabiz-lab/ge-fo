@@ -2,7 +2,7 @@ import DevicesCategoryList from "@/app/()/products-systems/components/DevicesCat
 import DevicesHelp from "@/app/()/products-systems/components/DevicesHelp";
 import DevicesMarkets from "@/app/()/products-systems/components/DevicesMarkets";
 import DevicesPageFooter from "@/app/()/products-systems/components/DevicesPageFooter";
-import GenericProductDetail from "@/app/()/products-systems/components/product/GenericProductDetail";
+import ProductDetailRouter from "@/app/()/products-systems/components/product/ProductDetailRouter";
 import type { DevicesCategoryProduct } from "@/app/()/products-systems/data/vfdContent";
 import {
   fetchCategoryBySlug,
@@ -62,5 +62,5 @@ export default async function ProductRangeRoutePage({
   // ② 제품 폴백 — product-data 를 seo.slug 로 조회해 제네릭 제품상세로 렌더.
   //    카테고리도 제품도 안 맞으면 row=null → GenericProductDetail이 템플릿 기본값으로 빈 상태 렌더.
   const row = await fetchProductBySlug(slug);
-  return <GenericProductDetail row={row} />;
+  return <ProductDetailRouter slug={slug} row={row} />;
 }

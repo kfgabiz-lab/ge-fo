@@ -1,23 +1,18 @@
 // Products & Systems(devices-systems) PageData 연동 헬퍼 + 타입
 // - 설계: STEP4 확정(신규 BE 없음). 기존 FoPageDataController + PageDataService.search() 재사용
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
-// - press-data/where-to-buy와 동일 패턴(fetchApi + flattenPageDataItem으로 dataJson 중첩 언랩)
+// - press-data/where-to-buy와 동일 패턴(fetchData + flattenPageDataItem으로 dataJson 중첩 언랩)
 // - 각 page.tsx가 자기 where로 여기 함수를 호출해 데이터를 가져오고, 공용 컴포넌트에 prop 으로 전달한다.
 import { fetchApi } from "@/lib/api";
 import { fetchData } from "@/lib/pageDataApi";
-import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
+import { flattenPageDataItem } from "@/lib/pageData";
 import type { CommonFaqEntry } from "@/components/faq/CommonFaq";
+import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
+import type { ProductOtherItem } from "./productDetailContent";
 
 // 데이터 0건 / 이미지 미입력(파일ID 배열 비어있음) 시 화면이 깨지지 않도록 쓰는 공용 플레이스홀더.
 // 별도 자산이 없어 기존 정적 제품 이미지를 재사용한다.
 export const PRODUCTS_SYSTEMS_PLACEHOLDER = "/img/main/product_01.jpg";
-
-// Spring Data Page 공통 형태 — content[] 안에 PageData 원본 item
-interface PageDataResponse {
-  content: PageDataItem[];
-  totalElements?: number;
-  totalPages?: number;
-}
 
 // 파일ID 배열(예: device_systems.image / product_info.image) → 첫 이미지 프록시 URL.
 // 값이 없거나 배열이 비어 있으면 null(호출부에서 정적/플레이스홀더 폴백).
@@ -32,47 +27,7 @@ export function resolveFirstImageUrl(value: unknown): string | null {
   return null;
 }
 
-// slug + 쿼리스트링으로 page-data 조회 → 각 item 을 flatten row 로 변환.
-// flatten 후 "category.title" / "product.product_code" 같은 dot notation 키로 접근한다.
-async function searchPageData(
-  slug: string,
-  query: string,
-): Promise<Record<string, unknown>[]> {
-  const res = await fetchApi<PageDataResponse>(
-    `/api/v1/fo/page-data/${slug}?${query}`,
-  );
-  return (res.content ?? []).map((item) => flattenPageDataItem(item));
-}
-
 // ---------------- ① category-data (motor-control · lv-automation/vfd 인트로) ----------------
-
-export interface CategoryHero {
-  title: string;
-  description: string;
-}
-
-// 카테고리 단건(인트로/히어로) 조회. depth 지정 시 eq_category.depth 필터 추가.
-export async function fetchCategoryByCode(
-  code: string,
-  opts?: { depth?: number },
-): Promise<CategoryHero | null> {
-  try {
-    const depthQuery =
-      opts?.depth !== undefined ? `eq_category.depth=${opts.depth}&` : "";
-    const rows = await searchPageData(
-      "category-data",
-      `${depthQuery}eq_category.code=${encodeURIComponent(code)}&size=1`,
-    );
-    const row = rows[0];
-    if (!row) return null;
-    return {
-      title: (row["category.title"] as string) ?? "",
-      description: (row["category.description"] as string) ?? "",
-    };
-  } catch {
-    return null;
-  }
-}
 
 // 카테고리 단건(seo.slug 기준) 조회. 신규 라우트(/products-category, /product-range)에서 slug → 카테고리 레코드 해석에 사용.
 // depth 지정 시 eq_category.depth 필터 추가. id/code 를 함께 반환해 하위 조회(children/제품 접두사)에 활용한다.
@@ -104,7 +59,10 @@ export async function fetchCategoryBySlug(
       id: Number(row._id),
       code: String(row["category.code"] ?? ""),
       title: (row["category.title"] as string) ?? "",
-      description: (row["category.description"] as string) ?? "",
+      // 관리자가 "카테고리 설명"으로 입력하는 실제 필드는 device_systems.description 이다
+      // (bo 템플릿 category1-DeviceSystems / category2-DeviceSystems, contentKey=device_systems, fieldKey=description).
+      // category.description 은 어떤 템플릿도 채우지 않는 값이라 폴백으로도 쓰지 않는다(빈 값이면 빈 값 그대로 노출).
+      description: (row["device_systems.description"] as string) ?? "",
       slug: (row["seo.slug"] as string) ?? slug,
     };
   } catch {
@@ -277,6 +235,7 @@ export interface HwProductData {
   video: string; // product_etc.video (YouTube URL) — 상세 병합 시 id로 변환
   connectPortal: string; // product_etc.connect_portal (Configurator 링크)
   lineUp: string; // product_etc.line_up (리치텍스트 HTML, 그대로 렌더)
+  awards: string; // product.awards ("01"=iF Design Awards, ""=미수상) — 히어로 로고/문구(8번) + 카드 배지(32번)
 }
 
 // HW 제품상세 row → 히어로/Key Features 바인딩용 구조로 가공.
@@ -303,6 +262,7 @@ export function mapHwProductData(row: Record<string, unknown>): HwProductData {
     video: str("product_etc.video"),
     connectPortal: str("product_etc.connect_portal"),
     lineUp: str("product_etc.line_up"),
+    awards: str("product.awards"),
   };
 }
 
@@ -363,6 +323,107 @@ export async function fetchAllProductNames(): Promise<ProductNameItem[]> {
         name: (row["product.product_name"] as string) ?? "",
       }))
       .filter((p) => p.name);
+  } catch {
+    return [];
+  }
+}
+
+// ---------------- ⑦ Other Products(동일 Lv2 소속 다른 제품) — devices-tree(GNB와 동일 소스) 재사용 ----------------
+
+// junction의 productImage("[123]" 형태 JSON 문자열) → 첫 이미지 프록시 URL.
+// gnb/fromCategoryData.ts의 resolveProductImage와 동일 로직이나, 그 파일이 이 파일의 resolveFirstImageUrl을
+// import 하므로(순환참조 회피) 여기서는 로컬로 두고 기존 resolveFirstImageUrl만 재사용한다.
+function resolveJunctionImage(productImage: string | null): string {
+  if (!productImage) return "";
+  try {
+    return resolveFirstImageUrl(JSON.parse(productImage)) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+// 공개 제품 id→awards 맵(Other Products 카드 Design Awards 배지 판정용, 32번).
+// devices-tree 응답에는 awards 필드가 없어(name/desc/slug/image만 내려옴) product-data를 1회 조회해 보강한다.
+async function fetchProductAwardsMap(): Promise<Map<number, string>> {
+  const map = new Map<number, string>();
+  try {
+    const res = await fetchData<{ id: number; awards: string }>({
+      slug: "product-data",
+      where: { "eq_product.is_visible": "001" },
+      unpaged: true,
+      리턴함수: (rows) =>
+        rows.map((item) => {
+          const row = flattenPageDataItem(item);
+          return {
+            id: Number(row._id),
+            awards: (row["product.awards"] as string) ?? "",
+          };
+        }),
+    });
+    for (const p of res.content) map.set(p.id, p.awards);
+  } catch {
+    // 조회 실패 시 배지 없이 진행(빈 맵)
+  }
+  return map;
+}
+
+// ---------------- ⑧ 제품 담당자 이메일(제품 담당 배너, 11~13) — 서버 필터(BE) ----------------
+
+// 제품에 맵핑된 담당자 이메일 조회. BE `GET /api/v1/fo/products/{id}/manager-email`가
+// productManager-data.ms 배열에 productId 포함 + is_visible=001로 서버 필터(전량조회 금지).
+// 매칭 담당자 없으면 "" 반환 → 호출부에서 CommonBanner02 expert에 contactEmail=""로 넘겨
+// 축약형 배너(이메일/복사 미노출, "Send an Inquiry"만) 처리(공용 컴포넌트 수정 없이 기존 조건부 활용).
+export async function fetchProductManagerEmail(productId: number): Promise<string> {
+  try {
+    const res = await fetchApi<{ email: string | null }>(
+      `/api/v1/fo/products/${productId}/manager-email`,
+    );
+    return res.email ?? "";
+  } catch {
+    return "";
+  }
+}
+
+// 현재 제품과 동일한 Lv2(category-data depth3 junction 레코드의 parentId)를 가지는 "다른" 제품 목록.
+// - 소스: fetchDevicesTreeRows()(GNB 메가메뉴와 동일 엔드포인트, 신규 API 없음).
+// - 현재 제품이 속한 Lv2(parentId) 전부 수집 → 그 Lv2의 다른 depth3 junction 제품 → 자기 자신 제외 → productId 중복 제거.
+// - slug 없는 제품도 그대로 카드로 노출한다(href는 빈 값, 사용자 승인 정책).
+// - 배지(32번): product.awards === "01"(iF Design Awards)면 badge=true → DevicesProductOtherProducts의 ProductAwardBadge 노출.
+export async function fetchOtherProductsInSameLv2(
+  currentProductId: number,
+): Promise<ProductOtherItem[]> {
+  try {
+    const [rows, awardsMap] = await Promise.all([
+      fetchDevicesTreeRows(),
+      fetchProductAwardsMap(),
+    ]);
+    const depth3 = rows.filter((r) => r.depth === "3");
+    // 현재 제품이 속한 Lv2(parentId) 집합
+    const myLv2 = new Set(
+      depth3
+        .filter((r) => r.productId === currentProductId)
+        .map((r) => r.parentId)
+        .filter((p): p is string => p != null && p !== ""),
+    );
+    if (myLv2.size === 0) return [];
+
+    const seen = new Set<number>();
+    const items: ProductOtherItem[] = [];
+    for (const r of depth3) {
+      if (r.productId == null || r.productId === currentProductId) continue;
+      if (r.parentId == null || !myLv2.has(r.parentId)) continue;
+      if (seen.has(r.productId)) continue;
+      seen.add(r.productId);
+      items.push({
+        id: r.productSlug || `product-${r.productId}`,
+        href: r.productSlug ? `/product/${r.productSlug}` : "",
+        image: resolveJunctionImage(r.productImage),
+        title: r.productTitle ?? "",
+        subtitle: r.productDescription ?? "",
+        badge: awardsMap.get(r.productId) === "01",
+      });
+    }
+    return items;
   } catch {
     return [];
   }

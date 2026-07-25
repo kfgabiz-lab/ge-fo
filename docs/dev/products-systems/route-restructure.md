@@ -25,7 +25,7 @@
 - `products-category/[slug]`: 데이터 구동 — `DevicesHero withProducts` + `DevicesMarkets`/`DevicesHelp`/`DevicesPageFooter`.
 - `product-range/[slug]` 카테고리 분기: 데이터 구동 — `DevicesCategoryList`(layout split) + 공통 섹션.
 - `product-range/[slug]` 제품 분기 · `product/[slug]`: **`GenericProductDetail`(신규, `components/product/GenericProductDetail.tsx`) 하나로 통일**. `fetchProductBySlug` → `buildHwProductDetail(slug, productTemplateDetail)`로 실데이터를 제네릭 템플릿에 병합해 `DevicesProductHero`+`DevicesProductFeaturesSection`+`DevicesProductLineup`(table="product-template")+`DevicesProductDownloads`+선택적 `DevicesProductVideo`를 렌더한다. slug별 분기·레지스트리 없음.
-- 데이터 접근은 `productsSystemsData.ts`의 slug 기준 함수(`fetchCategoryBySlug`, `fetchProductBySlug`) 재사용. 기존 `fetchCategoryByCode`/`fetchCategoryChildren`/`fetchProductsByCodePrefix`/`fetchProductDetailBySlug`도 카테고리 카드·제품 그리드 조회에 그대로 쓰인다.
+- 데이터 접근은 `productsSystemsData.ts`의 slug 기준 함수(`fetchCategoryBySlug`, `fetchProductBySlug`) 재사용. 기존 `fetchCategoryChildren`/`fetchProductsByCodePrefix`/`fetchProductDetailBySlug`도 카테고리 카드·제품 그리드 조회에 그대로 쓰인다(2026-07-25: 호출부가 없던 `fetchCategoryByCode`는 삭제됨).
 
 ## 4. 폐기된 접근 — slug→기존 페이지 레지스트리
 

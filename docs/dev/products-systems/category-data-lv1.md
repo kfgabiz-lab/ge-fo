@@ -16,7 +16,7 @@
 <!-- DevicesHero.tsx: 히어로 인트로(단건, depth1) -->
 <div className="devices_hero__inner" data-slug="category-data">
   <h1 className="devices_hero__tit" data-slugKey="category.title">{title}</h1>
-  <p className="devices_hero__desc" data-slugKey="category.description">{description}</p>
+  <p className="devices_hero__desc" data-slugKey="device_systems.description">{description}</p>
 </div>
 
 <!-- DevicesProducts.tsx: 하위 카테고리 카드 그리드(다건, depth2) -->
@@ -31,7 +31,7 @@
 | slugKey | dataJson 필드(flatten 기준) | 타입 | 바인딩 대상(텍스트 / 속성명) | 설명 |
 |---|---|---|---|---|
 | category.title (히어로, 단건) | category.title | string | 텍스트(`h1.devices_hero__tit`) | LV1 카테고리명 (depth1 레코드) |
-| category.description (히어로, 단건) | category.description | string | 텍스트(`p.devices_hero__desc`) | LV1 카테고리 설명 (depth1 레코드) |
+| device_systems.description (히어로, 단건) | device_systems.description | string | 텍스트(`p.devices_hero__desc`) | LV1 카테고리 설명 (depth1 레코드). 관리자가 "카테고리 설명"으로 입력하는 필드는 bo 템플릿 `category1-DeviceSystems`의 `device_systems.description`이다(`category.description`은 어떤 템플릿도 채우지 않으므로 사용하지 않는다) |
 | device_systems.image (카드, 다건) | device_systems.image | array(파일ID) → string(url) | 속성(`img.src`) | 하위 카테고리 카드 썸네일. 파일ID 배열 → FE에서 `/api/v1/fo/page-files/{id}` 프록시로 변환. 현재 실측 0건 입력(플레이스홀더 폴백 필요, 정상) |
 | category.title (카드, 다건) | category.title | string | 텍스트(`h3.tit`) | 하위 카테고리명 (depth2 레코드) |
 
@@ -69,7 +69,9 @@
         "category": {
           "depth": 1,
           "code": "L01",
-          "title": "LV Products and Systems",
+          "title": "LV Products and Systems"
+        },
+        "device_systems": {
           "description": "Explore our comprehensive lineup of UL-certified low voltage solutions."
         }
       }
@@ -106,3 +108,4 @@
 | STEP1 | fo-slug-analyzer | 2026-07-16 | `DevicesHero.tsx`(`.devices_hero__inner`)에 `data-slug="category-data"` + `category.title`/`category.description` 단건 태깅, `DevicesProducts.tsx`(`.devices_products__grid`)에 `data-slug="category-data" data-slug-repeat`/`data-slug-item` + `device_systems.image`(attr src)/`category.title` 다건 태깅 완료 |
 | STEP2 | fo-slug-analyzer | 2026-07-16 | 히어로 where(`depth=1 AND code=L01`, motor-control 실측 확정) / 카드 where(`parentId=568` 또는 `code LIKE 'L01-%' AND depth=2`), orderBy `sortOrder ASC`, tie `id ASC` 확정 |
 | STEP3 | fo-dev-doc-writer | 2026-07-16 | 작업 단위 문서 작성 (상태: 설계중). API 확인 결과 "확인 필요"로 명시 |
+| 카테고리 설명 필드 정정 | fo-fe-builder | 2026-07-25 | 히어로 설명 slugKey를 `category.description` → `device_systems.description`으로 교체(bo 템플릿 `category1-DeviceSystems` 실제 입력 필드). `fetchCategoryBySlug`의 참조 필드도 동일 교정, 폴백 없음. 데드 코드 `fetchCategoryByCode`(+ 전용 헬퍼 `searchPageData`/`CategoryHero`) 삭제 |

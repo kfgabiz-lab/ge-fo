@@ -22,6 +22,15 @@ export default function DevicesProductHero({ product }: DevicesProductHeroProps)
             data-slugkey="product_info.image"
             data-slugkey-attr="src"
           />
+          {/* 8번 Design Awards: product.awards === "01"(iF Design Awards)면 대표 이미지 하단에 iF 로고(lg) + 문구.
+              신규 CSS/클래스 없이 카드 배지와 동일한 기존 클래스(type1 > product_award_badge__icon = badge_if_award_lg.png)만
+              재사용한다. 절대배치용 래퍼(.product_award_badge)는 오버레이 용도라 제외하고, 로고를 만드는 클래스만 사용해 이미지 하단에 흐름 배치. */}
+          {product.awards === "01" ? (
+            <div className="type1">
+              <span className="product_award_badge__icon" aria-hidden="true" />
+              <p>Winner of the iF Design Award Germany&apos;s premier design prize</p>
+            </div>
+          ) : null}
         </div>
         <div className="devices_product_hero__content">
           {/* <div className="devices_product_hero__meta">

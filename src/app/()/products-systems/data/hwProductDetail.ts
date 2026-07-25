@@ -31,8 +31,12 @@ export function buildHwProductDetail(
     youtubeVideoId: getYoutubeIdFromUrl(data.video),
     // Configurator: product_etc.connect_portal
     configuratorHref: data.connectPortal,
+    // Help 카드(help-1) CTA도 같은 connect_portal 값을 쓴다(별도 필드로 노출)
+    connectPortal: data.connectPortal,
     // Lineup: product_etc.line_up (리치텍스트 HTML, 그대로 렌더)
     lineUp: data.lineUp,
+    // Design Awards(8번): product.awards ("01"=iF Design Awards)
+    awards: data.awards,
   };
   return { detail, productId: Number(row._id) };
 }
