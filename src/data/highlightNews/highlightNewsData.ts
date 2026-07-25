@@ -181,9 +181,12 @@ export async function fetchMarketHighlightNews(
   return fetchHighlightNews(marketCode);
 }
 
-// ---------------- 제품상세 Insights(스펙 38) — 제품 맵핑 게시글, 서버 필터(BE) ----------------
+// ---------------- Insights — 서버 필터(BE) ----------------
+// - 제품상세(스펙 38): `GET /api/v1/fo/products/{id}/insights`
+// - Lv1 카테고리(기획서 13번): `GET /api/v1/fo/categories/{id}/insights`
+// 두 엔드포인트의 응답 shape이 ProductInsightRowResponse로 동일해 매핑 로직을 공유한다.
 
-// BE `GET /api/v1/fo/products/{id}/insights` 응답 1건(ProductInsightRowResponse).
+// BE 응답 1건(ProductInsightRowResponse).
 interface ProductInsightRow {
   id: number;
   dataSlug: string; // 'press-data' | 'blog-data' | 'articles-data'
@@ -206,42 +209,58 @@ function resolveInsightMeta(slug: string) {
   }
 }
 
-// 제품에 맵핑된 게시글 최신 3건(공개+게시일 과거는 BE에서 필터). BE 응답을 HighlightNewsItem으로 변환.
+// Insights 응답 행 → HighlightNewsItem 변환 공통 로직(제품상세 / 카테고리 Lv1 공용).
 // 정렬/건수(게시일 내림차순·동률 id 내림차순·최대 3)는 BE 쿼리가 이미 확정하므로 FE는 매핑만 한다.
+// dataSlug가 press/blog/articles가 아니면(알 수 없는 slug) 해당 행은 버린다.
+function toHighlightNewsItems(rows: ProductInsightRow[]): HighlightNewsItem[] {
+  return rows
+    .map((row): HighlightNewsItem | null => {
+      const meta = resolveInsightMeta(row.dataSlug);
+      if (!meta) return null;
+      // image: "[123]" → 첫 파일ID → page-files URL. 실패/없으면 폴백 이미지.
+      let imageSrc: string | null = null;
+      try {
+        const arr = row.image ? JSON.parse(row.image) : null;
+        const mediaId =
+          Array.isArray(arr) && arr.length > 0 ? Number(arr[0]) : null;
+        imageSrc = mediaId != null && !Number.isNaN(mediaId) ? meta.img(mediaId) : null;
+      } catch {
+        imageSrc = null;
+      }
+      return {
+        id: `${meta.tag.toLowerCase()}-${row.id}`,
+        href: meta.href(row.id),
+        image: imageSrc ?? meta.fallback,
+        imageAlt: row.title,
+        tag: meta.tag,
+        title: row.title,
+        date: formatNewsDate(row.publishDttm),
+      };
+    })
+    .filter((item): item is HighlightNewsItem => item !== null);
+}
+
+// Insights 계열 엔드포인트 공통 호출부(응답 shape이 ProductInsightRowResponse로 동일).
 // 실패/0건 시 빈 배열 → HighlightNewsSection이 items 0건이면 섹션 자체를 렌더하지 않음(자연 숨김).
-export async function fetchProductInsights(
-  productId: number,
-): Promise<HighlightNewsItem[]> {
+async function fetchInsights(endpoint: string): Promise<HighlightNewsItem[]> {
   try {
-    const rows = await fetchApi<ProductInsightRow[]>(
-      `/api/v1/fo/products/${productId}/insights`,
-    );
-    return rows
-      .map((row): HighlightNewsItem | null => {
-        const meta = resolveInsightMeta(row.dataSlug);
-        if (!meta) return null;
-        // image: "[123]" → 첫 파일ID → page-files URL. 실패/없으면 폴백 이미지.
-        let imageSrc: string | null = null;
-        try {
-          const arr = row.image ? JSON.parse(row.image) : null;
-          const mediaId =
-            Array.isArray(arr) && arr.length > 0 ? Number(arr[0]) : null;
-          imageSrc = mediaId != null && !Number.isNaN(mediaId) ? meta.img(mediaId) : null;
-        } catch {
-          imageSrc = null;
-        }
-        return {
-          id: `${meta.tag.toLowerCase()}-${row.id}`,
-          href: meta.href(row.id),
-          image: imageSrc ?? meta.fallback,
-          imageAlt: row.title,
-          tag: meta.tag,
-          title: row.title,
-          date: formatNewsDate(row.publishDttm),
-        };
-      })
-      .filter((item): item is HighlightNewsItem => item !== null);
+    return toHighlightNewsItems(await fetchApi<ProductInsightRow[]>(endpoint));
   } catch {
     return [];
   }
+}
+
+// 제품에 맵핑된 게시글 최신 3건(공개+게시일 과거는 BE에서 필터).
+export async function fetchProductInsights(
+  productId: number,
+): Promise<HighlightNewsItem[]> {
+  return fetchInsights(`/api/v1/fo/products/${productId}/insights`);
+}
+
+// Lv1 카테고리(products-category/[slug]) Highlights — 해당 Lv1의 "노출가능 제품"에 맵핑된 게시글 최신 3건.
+// 대상 제품 집합 판정(Lv2 노출조건 + 제품 공개/판매중)과 정렬/건수는 전부 BE가 처리한다.
+export async function fetchCategoryInsights(
+  categoryId: number,
+): Promise<HighlightNewsItem[]> {
+  return fetchInsights(`/api/v1/fo/categories/${categoryId}/insights`);
 }

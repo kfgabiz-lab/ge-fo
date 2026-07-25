@@ -4,4 +4,5 @@ export {
   fetchMainHighlightNews,
   fetchMarketHighlightNews,
   fetchProductInsights,
+  fetchCategoryInsights,
 } from "./highlightNewsData";

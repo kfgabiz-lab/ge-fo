@@ -63,7 +63,7 @@ export default function DevicesHelp({
                   key={card.id}
                   href={href}
                   className="devices_help__card devices_help__card--overlay"
-                  {...(isConnectPortal
+                  {...(isConnectPortal && connectPortalHref
                     ? {
                         "data-slug": "product-data",
                         "data-slugkey": "product_etc.connect_portal",

@@ -9,6 +9,7 @@ import { flattenPageDataItem } from "@/lib/pageData";
 import type { CommonFaqEntry } from "@/components/faq/CommonFaq";
 import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
 import type { ProductOtherItem } from "./productDetailContent";
+import type { DevicesProductItem } from "./motorControlContent";
 
 // 데이터 0건 / 이미지 미입력(파일ID 배열 비어있음) 시 화면이 깨지지 않도록 쓰는 공용 플레이스홀더.
 // 별도 자산이 없어 기존 정적 제품 이미지를 재사용한다.
@@ -27,6 +28,18 @@ export function resolveFirstImageUrl(value: unknown): string | null {
   return null;
 }
 
+// 파일ID 배열의 JSON "텍스트"(예: "[542]") → 첫 이미지 프록시 URL. 값/파싱 실패 시 null.
+// BE 전용 엔드포인트들(devices-tree junction의 productImage, categories/{id}/lv2 의 image)이
+// 배열을 파싱하지 않고 원문 텍스트 그대로 내려주기 때문에 공통으로 쓴다(내부에서 resolveFirstImageUrl 재사용).
+function resolveImageUrlFromJsonText(value: string | null): string | null {
+  if (!value) return null;
+  try {
+    return resolveFirstImageUrl(JSON.parse(value));
+  } catch {
+    return null;
+  }
+}
+
 // ---------------- ① category-data (motor-control · lv-automation/vfd 인트로) ----------------
 
 // 카테고리 단건(seo.slug 기준) 조회. 신규 라우트(/products-category, /product-range)에서 slug → 카테고리 레코드 해석에 사용.
@@ -37,6 +50,10 @@ export interface CategoryRow {
   title: string;
   description: string;
   slug: string;
+  // SEO(설계 5절) — generateMetadata 용. 미입력이면 빈 문자열이며 폴백(정적 기본 타이틀/설명)은 두지 않는다.
+  // 기존 호출부 하위호환을 위해 옵셔널.
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 export async function fetchCategoryBySlug(
@@ -64,6 +81,9 @@ export async function fetchCategoryBySlug(
       // category.description 은 어떤 템플릿도 채우지 않는 값이라 폴백으로도 쓰지 않는다(빈 값이면 빈 값 그대로 노출).
       description: (row["device_systems.description"] as string) ?? "",
       slug: (row["seo.slug"] as string) ?? slug,
+      // seo.meta_title / seo.meta_description 은 스네이크케이스가 실제 저장 필드명(설계 5절 실데이터 확인).
+      metaTitle: (row["seo.meta_title"] as string) ?? "",
+      metaDescription: (row["seo.meta_description"] as string) ?? "",
     };
   } catch {
     return null;
@@ -101,6 +121,40 @@ export async function fetchCategoryChildren(
     }));
     mapped.sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
     return mapped.map(({ sortOrder: _sortOrder, ...rest }) => rest);
+  } catch {
+    return [];
+  }
+}
+
+// Lv1 랜딩(products-category/[slug])의 "노출가능 Lv2" 카드 목록 — 서버 필터(BE 전용 엔드포인트).
+// BE `GET /api/v1/fo/categories/{categoryId}/lv2`가 아래를 전부 서버에서 처리한다(설계 3·4절):
+//  - category.parentId={categoryId} AND depth=2 AND is_visible='001'
+//  - EXISTS: 하위 depth3 junction이 가리키는 product-data 가 is_visible='001' AND order_status='01'
+//  - sortOrder 숫자 오름차순(NULLS LAST), 동률 시 id 오름차순
+// 위 4조건/숫자정렬은 제네릭 page-data search()로 표현할 수 없어(다른 slug 레코드 조인) 전용 API를 쓴다.
+// 기존 fetchCategoryChildren(parentId 단일조건)은 techHubData.ts가 계속 쓰므로 그대로 둔다.
+// 실패 시 빈 배열 → 카드 0개(그리드 컨테이너는 유지, 정적 폴백 금지).
+interface CategoryLv2Row {
+  id: number;
+  title: string;
+  slug: string;
+  image: string | null; // 파일ID 배열의 JSON 텍스트("[542]") 또는 null
+}
+
+export async function fetchVisibleLv2Categories(
+  categoryId: number,
+): Promise<DevicesProductItem[]> {
+  try {
+    const rows = await fetchApi<CategoryLv2Row[]>(
+      `/api/v1/fo/categories/${categoryId}/lv2`,
+    );
+    return rows.map((row) => ({
+      id: String(row.id),
+      // slug 없으면 링크 비활성("") — 카드 자체는 노출한다.
+      href: row.slug ? `/product-range/${row.slug}` : "",
+      image: resolveImageUrlFromJsonText(row.image),
+      title: row.title ?? "",
+    }));
   } catch {
     return [];
   }
@@ -330,18 +384,6 @@ export async function fetchAllProductNames(): Promise<ProductNameItem[]> {
 
 // ---------------- ⑦ Other Products(동일 Lv2 소속 다른 제품) — devices-tree(GNB와 동일 소스) 재사용 ----------------
 
-// junction의 productImage("[123]" 형태 JSON 문자열) → 첫 이미지 프록시 URL.
-// gnb/fromCategoryData.ts의 resolveProductImage와 동일 로직이나, 그 파일이 이 파일의 resolveFirstImageUrl을
-// import 하므로(순환참조 회피) 여기서는 로컬로 두고 기존 resolveFirstImageUrl만 재사용한다.
-function resolveJunctionImage(productImage: string | null): string {
-  if (!productImage) return "";
-  try {
-    return resolveFirstImageUrl(JSON.parse(productImage)) ?? "";
-  } catch {
-    return "";
-  }
-}
-
 // 공개 제품 id→awards 맵(Other Products 카드 Design Awards 배지 판정용, 32번).
 // devices-tree 응답에는 awards 필드가 없어(name/desc/slug/image만 내려옴) product-data를 1회 조회해 보강한다.
 async function fetchProductAwardsMap(): Promise<Map<number, string>> {
@@ -417,7 +459,8 @@ export async function fetchOtherProductsInSameLv2(
       items.push({
         id: r.productSlug || `product-${r.productId}`,
         href: r.productSlug ? `/product/${r.productSlug}` : "",
-        image: resolveJunctionImage(r.productImage),
+        // 기존 동작 유지 — ProductOtherItem.image 는 string(빈문자 허용)이라 null 을 ""로 낮춘다
+        image: resolveImageUrlFromJsonText(r.productImage) ?? "",
         title: r.productTitle ?? "",
         subtitle: r.productDescription ?? "",
         badge: awardsMap.get(r.productId) === "01",
