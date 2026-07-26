@@ -7,12 +7,14 @@ export interface TrainingProductOption {
   name: string;
 }
 
+/**
+ * 두 번째 드롭다운의 옵션 1개(= 하위 제품 목록을 가진 그룹).
+ * power/automation 모두 평평한 배열이라 FE는 계층 없이 "title + products" 로만 다룬다.
+ */
 export interface TrainingProductNode {
   id: number;
   title: string;
-  /** 하위 카테고리가 있으면 값, 없으면 null(이 경우 products에 제품이 있음) */
-  children: TrainingProductNode[] | null;
-  /** 하위 카테고리 없이 제품만 있는 리프 노드일 때만 값 */
+  /** 이 그룹에서 체크박스로 노출할 항목들(Power는 Lv2 카테고리명, Automation은 제품명) */
   products: TrainingProductOption[] | null;
 }
 

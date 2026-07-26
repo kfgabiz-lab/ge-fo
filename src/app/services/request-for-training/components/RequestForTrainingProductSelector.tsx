@@ -45,10 +45,10 @@ function renderSelectValue(label: string, isPlaceholder: boolean) {
 }
 
 // "Other"는 실제 제품이 아니라 기획서(traning_req4dc.png)상 "제품과 상관없이 고정값으로 노출"되는 항목이라
-// 리프 카테고리(id)마다 음수 id를 부여해 실제 제품 id와 충돌 없이 선택 상태를 관리한다.
+// 그룹(id)마다 음수 id를 부여해 실제 제품 id와 충돌 없이 선택 상태를 관리한다.
 const OTHER_LABEL = "Other";
-function otherId(leafCategoryId: number): number {
-  return -leafCategoryId;
+function otherId(groupId: number): number {
+  return -groupId;
 }
 
 export default function RequestForTrainingProductSelector() {
@@ -58,7 +58,8 @@ export default function RequestForTrainingProductSelector() {
   const [tree, setTree] = useState<TrainingProductTree>({ power: [], automation: [] });
   // 기획서 규칙: default 미선택 — 카테고리를 직접 고르기 전까지 하위 드롭다운/체크박스는 나타나지 않는다.
   const [categoryType, setCategoryType] = useState<TrainingCategoryType | "">("");
-  const [path, setPath] = useState<TrainingProductNode[]>([]);
+  // 두 번째 드롭다운에서 고른 그룹 id(문자열). 미선택이면 빈 문자열.
+  const [groupId, setGroupId] = useState<string>("");
 
   useEffect(() => {
     let alive = true;
@@ -70,7 +71,8 @@ export default function RequestForTrainingProductSelector() {
     };
   }, []);
 
-  const rootNodes = categoryType ? tree[categoryType] : [];
+  // 첫 번째 드롭다운(Power/Automation)에 대응하는 그룹 목록 — 계층 없이 평평한 배열이다.
+  const groups: TrainingProductNode[] = categoryType ? tree[categoryType] : [];
 
   const selectedIds = useMemo(
     () => new Set(step4.selectedProducts.map((p) => p.id)),
@@ -79,15 +81,12 @@ export default function RequestForTrainingProductSelector() {
 
   function handleCategoryTypeChange(nextType: TrainingCategoryType) {
     setCategoryType(nextType);
-    setPath([]);
+    // 카테고리를 바꾸면 두 번째 드롭다운은 다시 미선택 상태로 돌아간다.
+    setGroupId("");
   }
 
-  // depth번째 드롭다운에서 nextNode를 고르면, 그보다 하위(depth+1 이후) 선택은 다시 미선택 상태로 돌아간다.
-  function handleLevelChange(depth: number, nextNode: TrainingProductNode) {
-    setPath([...path.slice(0, depth), nextNode]);
-  }
-
-  function toggleProduct(id: number, name: string) {
+  // groupId/groupTitle 은 두 번째 드롭다운에서 고른 그룹 정보 — VFD 조건부 질문 노출 판별에 쓰인다.
+  function toggleProduct(id: number, name: string, groupId: number, groupTitle: string) {
     if (selectedIds.has(id)) {
       setStep4Field(
         "selectedProducts",
@@ -99,6 +98,8 @@ export default function RequestForTrainingProductSelector() {
       id,
       name,
       type: categoryType === "power" ? "P" : "A",
+      groupId,
+      groupTitle,
     };
     setStep4Field("selectedProducts", [...step4.selectedProducts, next]);
   }
@@ -110,23 +111,9 @@ export default function RequestForTrainingProductSelector() {
     );
   }
 
-  // 카테고리를 고를 때마다 그 하위 단계까지만 드롭다운을 하나씩 노출한다(있는 데이터만큼만).
-  const dropdownLevels: { key: string; options: TrainingProductNode[]; value: string }[] = [];
-  let levelNodes = rootNodes;
-  for (let depth = 0; depth < path.length + 1; depth += 1) {
-    if (levelNodes.length === 0) break;
-    const selectedNode = path[depth];
-    dropdownLevels.push({
-      key: `level-${depth}`,
-      options: levelNodes,
-      value: selectedNode ? String(selectedNode.id) : "",
-    });
-    if (!selectedNode || !selectedNode.children) break;
-    levelNodes = selectedNode.children;
-  }
-
-  const leaf = path.length > 0 && !path[path.length - 1].children ? path[path.length - 1] : undefined;
-  const products = leaf?.products ?? [];
+  // 두 번째 드롭다운에서 고른 그룹. 고르기 전에는 undefined라 체크박스 영역이 노출되지 않는다.
+  const selectedGroup = groups.find((group) => String(group.id) === groupId);
+  const products = selectedGroup?.products ?? [];
 
   return (
     <div className="support_service_training_request__field support_service_training_request__field--products">
@@ -162,38 +149,32 @@ export default function RequestForTrainingProductSelector() {
           ))}
         </GuideSelect>
 
-        {dropdownLevels.map((level, depth) => (
+        {categoryType ? (
           <GuideSelect
-            key={level.key}
             className="guide_field guide_field--h50 support_service_training_request__select"
-            value={level.value}
-            onChange={(event) => {
-              const nextNode = level.options.find(
-                (o) => String(o.id) === event.target.value,
-              );
-              if (nextNode) handleLevelChange(depth, nextNode);
-            }}
+            value={groupId}
+            onChange={(event) => setGroupId(event.target.value as string)}
             displayEmpty
             IconComponent={GuideSelectIcon}
-            inputProps={{ "aria-label": `Product subcategory ${depth + 1}` }}
+            inputProps={{ "aria-label": "Product subcategory" }}
             renderValue={(value) => {
-              const current = level.options.find((o) => String(o.id) === value);
+              const current = groups.find((group) => String(group.id) === value);
               return renderSelectValue(current ? current.title : CATEGORY_PLACEHOLDER, !current);
             }}
           >
             <MenuItem value="" disabled>
               {CATEGORY_PLACEHOLDER}
             </MenuItem>
-            {level.options.map((option) => (
-              <MenuItem key={option.id} value={String(option.id)}>
-                {option.title}
+            {groups.map((group) => (
+              <MenuItem key={group.id} value={String(group.id)}>
+                {group.title}
               </MenuItem>
             ))}
           </GuideSelect>
-        ))}
+        ) : null}
       </div>
 
-      {leaf ? (
+      {selectedGroup ? (
         <div className="support_service_training_request__product-panel">
           <fieldset
             className="support_service_training_request__checkbox-group support_service_training_request__checkbox-group--no-legend"
@@ -214,7 +195,14 @@ export default function RequestForTrainingProductSelector() {
                       className="guide_checkbox support_service_training_request__checkbox"
                       disableRipple
                       checked={checked}
-                      onChange={() => toggleProduct(product.id, product.name)}
+                      onChange={() =>
+                        toggleProduct(
+                          product.id,
+                          product.name,
+                          selectedGroup.id,
+                          selectedGroup.title,
+                        )
+                      }
                       icon={<GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />}
                       checkedIcon={
                         <GuideCheckboxIcon checked {...guideCheckboxIconsContactConsent} />
@@ -232,8 +220,15 @@ export default function RequestForTrainingProductSelector() {
                   id={`${formId}-product-other`}
                   className="guide_checkbox support_service_training_request__checkbox"
                   disableRipple
-                  checked={selectedIds.has(otherId(leaf.id))}
-                  onChange={() => toggleProduct(otherId(leaf.id), OTHER_LABEL)}
+                  checked={selectedIds.has(otherId(selectedGroup.id))}
+                  onChange={() =>
+                    toggleProduct(
+                      otherId(selectedGroup.id),
+                      OTHER_LABEL,
+                      selectedGroup.id,
+                      selectedGroup.title,
+                    )
+                  }
                   icon={<GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />}
                   checkedIcon={<GuideCheckboxIcon checked {...guideCheckboxIconsContactConsent} />}
                 />

@@ -177,8 +177,9 @@ export const requestForTrainingStep3Copy = {
   },
 } as const;
 
-// 기획서(traning_req4dc.png) item1 — 이번 STEP(4-1)은 제품선택 필드 카피만 필요.
+// 기획서(traning_req4dc.png) item1~2 — 제품선택 + VFD 조건부 질문 필드 카피.
 // comments/consent 등 나머지 필드는 해당 서브STEP 승인 후 추가한다.
+// jobTitles/studentInvolvement/vfdUnderstanding 옵션 텍스트는 ls-publish 원본 그대로(정적, DB 연동 없음).
 export const requestForTrainingStep4Copy = {
   ...requestForTrainingQuestionnaireCopy,
   fields: {
@@ -186,6 +187,46 @@ export const requestForTrainingStep4Copy = {
       label: "What products do you want training for?",
       hint: "*Select all that apply.",
       required: true,
+    },
+    // 아래 3개는 Variable Frequency Drive 제품을 고른 경우에만 노출된다.
+    jobTitles: {
+      label: "What are the job titles of the students that will be trained?",
+      options: [
+        "E & I Technician and/or Maintenance",
+        "Mechanic",
+        "Electrical Engineer",
+        "Sales Engineer",
+        "Inside Tech",
+        "Field Service Enginee",
+        "Other",
+      ],
+      required: true,
+    },
+    studentInvolvement: {
+      label: "Are the students involved with any of the following?",
+      options: [
+        "Installation, Start-up",
+        "Integration and Parameter setup",
+        "Feld Troubleshooting (understanding fault codes)",
+        "Sales and Explanation of the Product",
+        "Serial communications",
+        "Unit troubleshooting (to determine damaged components)",
+        "Other",
+      ],
+      required: true,
+    },
+    vfdUnderstanding: {
+      label: "Do the students have a basic understanding of variable frequency drives?",
+      required: true,
+      // Yes 를 고른 경우에만 추가로 노출되는 하위 체크박스 옵션
+      yesFollowUpOptions: [
+        "Motor technology (construction, theory of operation)",
+        "Drive technology (construction, theory of operation)",
+        "DriveView Software",
+        "PID Applications",
+        "Auto-Tuning",
+        "Other Topics",
+      ],
     },
   },
 } as const;

@@ -6,6 +6,9 @@ export type GnbExploreProduct = {
   href: string;
   discontinued?: boolean;
   lv1Id?: string;
+  // 이 제품이 매핑된 "공개 Lv2"(devices-tree depth3 junction의 parentId, visibleLv2 교집합) rowId 목록.
+  // Explore All 페이지의 Lv1/Lv2 셀렉트 필터(OR 다중매핑)에 사용. 정적 폴백 데이터에는 없음.
+  lv2Ids?: string[];
 };
 
 export type GnbExploreLetterGroup = {

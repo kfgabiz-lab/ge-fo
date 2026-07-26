@@ -4,29 +4,71 @@ import {
   resolveExploreHref,
   type GnbExploreProduct,
 } from "@/data/gnbExploreAllProducts";
-import { fetchAllProductNames, fetchTopCategories } from "../data/productsSystemsData";
+import { fetchAllProductNames } from "../data/productsSystemsData";
+import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
 import "@/assets/css/devices-systems.css";
 
 export default async function ExploreAllProductsPage() {
-  const [products, topCategories] = await Promise.all([
+  const [products, deviceRows] = await Promise.all([
     fetchAllProductNames(),
-    fetchTopCategories(),
+    fetchDevicesTreeRows(),
   ]);
-  const lv1Categories = topCategories.map((c) => ({
-    id: c.slug || String(c.id),
-    label: c.title,
-  }));
 
-  // product-data 있으면 실데이터로 A~Z 목록 구성, 없으면 undefined → 정적 폴백.
-  // href 는 정적 라우팅(제품명 매핑), discontinued 는 대응 필드 불명확하여 기존 클라이언트 동작 유지(정적 false).
+  // ── 조건1: 카테고리 공개 게이트 (devices-tree 기반 판정, order_status와 완전 별개 로직) ──
+  // 공개 depth1(Lv1) rowId 집합
+  const visibleLv1Ids = new Set(
+    deviceRows.filter((r) => r.depth === "1").map((r) => String(r.rowId)),
+  );
+  // 공개 depth2(Lv2) = 상위 Lv1이 공개인 depth2 행
+  const visibleLv2Rows = deviceRows.filter(
+    (r) => r.depth === "2" && r.parentId != null && visibleLv1Ids.has(r.parentId),
+  );
+  const visibleLv2Ids = new Set(visibleLv2Rows.map((r) => String(r.rowId)));
+  // productId → 매핑된 Lv2(depth3 junction의 parentId) 집합 (전 depth3 행 기준, 설계 그대로)
+  const productLv2Map = new Map<number, Set<string>>();
+  for (const r of deviceRows) {
+    if (r.depth !== "3" || r.productId == null || r.parentId == null) continue;
+    const set = productLv2Map.get(r.productId) ?? new Set<string>();
+    set.add(r.parentId);
+    productLv2Map.set(r.productId, set);
+  }
+
+  // ── 조건2/3: Lv1/Lv2 셀렉트 옵션 (devices-tree 공개 행 기반 cascading) ──
+  // Lv1 옵션: 공개 depth1 전부(소속 제품 0건이어도 포함, 사용자 확정)
+  const lv1Categories = deviceRows
+    .filter((r) => r.depth === "1")
+    .map((r) => ({ id: String(r.rowId), label: r.categoryTitle ?? "" }));
+  // Lv2 옵션(선택 Lv1별 그룹): 공개 depth2를 상위 Lv1 rowId로 묶는다
+  const lv2CategoriesByLv1: Record<string, { id: string; label: string }[]> = {};
+  for (const r of visibleLv2Rows) {
+    const parent = r.parentId as string;
+    (lv2CategoriesByLv1[parent] ??= []).push({
+      id: String(r.rowId),
+      label: r.categoryTitle ?? "",
+    });
+  }
+
+  // 게이트 통과 제품만 최종 노출: productLv2Map[id] 와 visibleLv2Ids 교집합이 있으면 통과.
+  // 각 제품의 "노출 Lv2 집합"(공개 교집합)을 함께 전달해 클라 Lv1/Lv2 필터(OR 다중매핑)에 사용.
+  // discontinued 는 order_status==='99' 실데이터로 판정(카테고리 게이트와 무관).
   const exploreProducts: GnbExploreProduct[] | undefined =
     products.length > 0
-      ? products.map((p) => ({
-          id: String(p.id),
-          label: p.name,
-          href: resolveExploreHref(p.name),
-          discontinued: false,
-        }))
+      ? products
+          .map((p) => {
+            const mapped = productLv2Map.get(p.id);
+            const lv2Ids = mapped
+              ? [...mapped].filter((id) => visibleLv2Ids.has(id))
+              : [];
+            return { p, lv2Ids };
+          })
+          .filter(({ lv2Ids }) => lv2Ids.length > 0)
+          .map(({ p, lv2Ids }) => ({
+            id: String(p.id),
+            label: p.name,
+            href: resolveExploreHref(p.name),
+            discontinued: p.orderStatus === "99",
+            lv2Ids,
+          }))
       : undefined;
 
   return (
@@ -44,7 +86,11 @@ export default async function ExploreAllProductsPage() {
               organized from A to Z.
             </p>
           </header>
-          <DevicesExploreAll products={exploreProducts} lv1Categories={lv1Categories} />
+          <DevicesExploreAll
+            products={exploreProducts}
+            lv1Categories={lv1Categories}
+            lv2CategoriesByLv1={lv2CategoriesByLv1}
+          />
         </div>
       </section>
       <CommonBanner04 />

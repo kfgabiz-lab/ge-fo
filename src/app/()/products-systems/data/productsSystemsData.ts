@@ -395,9 +395,13 @@ export async function fetchProductFaqItems(
 export interface ProductNameItem {
   id: number;
   name: string;
+  // 주문 상태 원본값(product.order_status). "99"=단종(Discontinued) 판정용.
+  // where 필터에는 쓰지 않는다(단종 제품도 목록엔 나오되 표기만 달라짐) — is_visible='001'만 서버 필터.
+  orderStatus: string;
 }
 
 // 전 공개 제품명 목록(A~Z 인덱스용). label = product.product_name.
+// order_status는 필터가 아닌 파생 표기(단종)용 필드로만 함께 반환한다.
 export async function fetchAllProductNames(): Promise<ProductNameItem[]> {
   try {
     const res = await fetchData<Record<string, unknown>>({
@@ -411,6 +415,7 @@ export async function fetchAllProductNames(): Promise<ProductNameItem[]> {
       .map((row) => ({
         id: Number(row._id),
         name: (row["product.product_name"] as string) ?? "",
+        orderStatus: (row["product.order_status"] as string) ?? "",
       }))
       .filter((p) => p.name);
   } catch {

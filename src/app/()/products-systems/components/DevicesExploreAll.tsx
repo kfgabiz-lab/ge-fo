@@ -57,25 +57,50 @@ function ExploreLetterColumn({ group }: { group: GnbExploreLetterGroup }) {
 }
 
 type DevicesExploreAllProps = {
-  /** product-data 전제품(A~Z). 미지정 시 정적 gnbExploreAllProducts 폴백 */
+  /** product-data 전제품(A~Z, 카테고리 공개 게이트 통과분). 미지정 시 정적 gnbExploreAllProducts 폴백 */
   products?: GnbExploreProduct[];
-  /** category-data depth1 목록(Lv1 Category 필터 옵션, 서버에서 조회해 주입) */
+  /** devices-tree 공개 depth1 목록(Lv1 Category 필터 옵션, 서버에서 조회해 주입) */
   lv1Categories?: { id: string; label: string }[];
+  /** 선택 Lv1 rowId별 공개 Lv2 옵션(cascading), 서버에서 조회해 주입 */
+  lv2CategoriesByLv1?: Record<string, { id: string; label: string }[]>;
 };
 
 export default function DevicesExploreAll({
   products: productsData,
   lv1Categories = [],
+  lv2CategoriesByLv1 = {},
 }: DevicesExploreAllProps = {}) {
   const [showDiscontinued, setShowDiscontinued] = useState(true);
+  const [selectedLv1, setSelectedLv1] = useState("");
+  const [selectedLv2, setSelectedLv2] = useState("");
   const source = productsData ?? gnbExploreAllProducts;
 
+  // 선택된 Lv1의 Lv2 옵션(Lv1 미선택 시 빈 배열 → Lv2 비활성)
+  const lv2Categories = selectedLv1 ? lv2CategoriesByLv1[selectedLv1] ?? [] : [];
+
   const letterRows = useMemo(() => {
-    const products = showDiscontinued
-      ? source
-      : source.filter((item) => !item.discontinued);
+    let products = source;
+    // Lv1 필터 — 제품의 노출 Lv2 집합이 "선택 Lv1 하위 공개 Lv2"와 교집합이 있으면 노출(OR 다중매핑)
+    if (selectedLv1) {
+      const lv2UnderLv1 = new Set(
+        (lv2CategoriesByLv1[selectedLv1] ?? []).map((o) => o.id),
+      );
+      products = products.filter((item) =>
+        (item.lv2Ids ?? []).some((id) => lv2UnderLv1.has(id)),
+      );
+    }
+    // Lv2 필터 — 선택 Lv2가 제품의 노출 Lv2 집합에 포함되면 노출
+    if (selectedLv2) {
+      products = products.filter((item) =>
+        (item.lv2Ids ?? []).includes(selectedLv2),
+      );
+    }
+    // 단종 필터(재정렬 없음) — showDiscontinued off 시 discontinued 제품만 제거
+    if (!showDiscontinued) {
+      products = products.filter((item) => !item.discontinued);
+    }
     return chunkLetterGroups(groupExploreProductsByLetter(products), 3);
-  }, [showDiscontinued, source]);
+  }, [showDiscontinued, selectedLv1, selectedLv2, source, lv2CategoriesByLv1]);
 
   return (
     <div className="devices_explore__body">
@@ -83,6 +108,15 @@ export default function DevicesExploreAll({
         showDiscontinued={showDiscontinued}
         onToggle={() => setShowDiscontinued((prev) => !prev)}
         lv1Categories={lv1Categories}
+        lv2Categories={lv2Categories}
+        selectedLv1={selectedLv1}
+        selectedLv2={selectedLv2}
+        onLv1Change={(value) => {
+          // 상위 변경 시 하위 선택 초기화(ContactUsForm cascading 패턴)
+          setSelectedLv1(value);
+          setSelectedLv2("");
+        }}
+        onLv2Change={(value) => setSelectedLv2(value)}
       />
       <div className="devices_explore__grid">
         {letterRows.map((row, rowIndex) => (

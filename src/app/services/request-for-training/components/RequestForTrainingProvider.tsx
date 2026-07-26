@@ -114,17 +114,30 @@ export type RequestForTrainingSelectedProduct = {
   id: number;
   name: string;
   type: "P" | "A";
+  /** 어느 그룹(두 번째 드롭다운) 아래에서 고른 제품인지 — VFD 조건부 노출 판별에 사용 */
+  groupId: number;
+  groupTitle: string;
 };
 
-/** Step4(Training Class Details) 입력값 — 이번 STEP(4-1)은 제품선택만 다룬다. VFD/의견/동의/reCAPTCHA는 후속 STEP에서 확장. */
+/** Step4(Training Class Details) 입력값 — 제품선택 + VFD 조건부 질문. 의견/동의/reCAPTCHA는 후속 STEP에서 확장. */
 export type RequestForTrainingStep4Values = {
   selectedProducts: RequestForTrainingSelectedProduct[];
+  // 기획서(traning_req4dc.png) item2 — Variable Frequency Drive 제품 선택 시에만 노출되는 3문항.
+  // 조건이 꺼져도 값은 지우지 않고 화면에서만 숨긴다(Step3 In-Person/Virtual 과 동일 관례).
+  jobTitles: string[];
+  studentInvolvement: string[];
+  vfdUnderstanding: "Yes" | "No" | "";
+  vfdUnderstandingTopics: string[];
 };
 
 export type RequestForTrainingStep4FieldKey = keyof RequestForTrainingStep4Values;
 
 const STEP4_INITIAL: RequestForTrainingStep4Values = {
   selectedProducts: [],
+  jobTitles: [],
+  studentInvolvement: [],
+  vfdUnderstanding: "",
+  vfdUnderstandingTopics: [],
 };
 
 const STORAGE_KEY = "request-for-training-form";
