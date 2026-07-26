@@ -20,6 +20,7 @@ import {
   fetchDownloadCenterDocTypeCounts,
   type DownloadCenterSort,
 } from "@/data/support/downloadCenterData";
+import { fetchPopularKeywords } from "@/data/search/searchKeywordData";
 
 // doctype-counts API 로 실카운트를 채우는 대상 코드(C/M/D/S/R/O). OS/Firmware(firmware)는 대응 코드 없음 → 정적 0 유지.
 const DOC_TYPE_API_CODES = new Set<string>(downloadDocTypeCodes);
@@ -59,6 +60,7 @@ type DownloadCenterQueryContextValue = {
   categories: DownloadCategoryOption[]; // 아코디언 표시용(코드 + LV2별 count)
   categoriesLoaded: boolean;
   documentTypes: DownloadFilterOption[]; // 문서유형 옵션(옆 건수 배지 = doctype-counts 실카운트)
+  popularKeywords: string[]; // 인기 검색어(source=DOWNLOAD_CENTER). 폴백 없음 — 빈 배열이면 태그 영역 미노출.
 };
 
 const DownloadCenterQueryContext =
@@ -83,6 +85,7 @@ export function DownloadCenterFilterProvider({
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [documentTypes, setDocumentTypes] =
     useState<DownloadFilterOption[]>(DOC_TYPES_PENDING);
+  const [popularKeywords, setPopularKeywords] = useState<string[]>([]);
   const [query, setQueryState] = useState("");
   const [page, setPage] = useState(1);
   const [sort, setSortState] = useState<DownloadCenterSort>("");
@@ -119,6 +122,19 @@ export function DownloadCenterFilterProvider({
     };
   }, []);
 
+  // 인기 검색어(Popular Keywords) — Download Center 자체 검색 랭킹(source=DOWNLOAD_CENTER).
+  // 실패/미집계 시 빈 배열 그대로 유지 — 폴백 없음(표시 시점에 태그 영역 미노출, DownloadCenterSearch).
+  useEffect(() => {
+    let alive = true;
+    fetchPopularKeywords("DOWNLOAD_CENTER").then((keywords) => {
+      if (!alive) return;
+      setPopularKeywords(keywords);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   // 검색어/정렬 변경 시 항상 1페이지로.
   const setQuery = (q: string) => {
     setQueryState(q);
@@ -140,8 +156,17 @@ export function DownloadCenterFilterProvider({
       categories,
       categoriesLoaded,
       documentTypes,
+      popularKeywords,
     }),
-    [query, page, sort, categories, categoriesLoaded, documentTypes],
+    [
+      query,
+      page,
+      sort,
+      categories,
+      categoriesLoaded,
+      documentTypes,
+      popularKeywords,
+    ],
   );
 
   return (

@@ -5,8 +5,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { gnbSearchContent } from "@/data/gnb/gnbSearchContent";
+import {
+  gnbSearchContent,
+  type GnbSearchTag,
+} from "@/data/gnb/gnbSearchContent";
 import { buildSearchAllHref } from "@/data/search/searchAllContent";
+import {
+  fetchPopularKeywords,
+  logSearchKeyword,
+} from "@/data/search/searchKeywordData";
 
 type GnbSearchPanelProps = {
   isOpen: boolean;
@@ -19,11 +26,34 @@ export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelPro
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [canPortal, setCanPortal] = useState(false);
+  const [popularKeywords, setPopularKeywords] = useState<string[]>([]);
+  const keywordsRequestedRef = useRef(false);
   const hasQuery = query.length > 0;
+
+  // 인기 검색어 = 통합검색 랭킹(source=UNIFIED_SEARCH). 폴백 없음 — 집계 데이터가 없으면 태그 영역 미노출.
+  // 태그 클릭(<Link>)은 사용자의 직접 입력이 아니므로 집계 로깅 없이 이동만 한다(기획 결정).
+  const popularTags: readonly GnbSearchTag[] = popularKeywords.map((label) => ({
+    label,
+    href: buildSearchAllHref(label),
+  }));
 
   useEffect(() => {
     setCanPortal(true);
   }, []);
+
+  // GNB 검색 패널은 모든 페이지에 상시 마운트되므로, 실제로 열렸을 때 1회만 인기검색어를 조회한다.
+  useEffect(() => {
+    if (!isOpen || keywordsRequestedRef.current) return;
+    keywordsRequestedRef.current = true;
+    let alive = true;
+    fetchPopularKeywords("UNIFIED_SEARCH").then((keywords) => {
+      if (!alive) return;
+      setPopularKeywords(keywords);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [isOpen]);
 
   // 열릴 때 검색 입력에 포커스
   useEffect(() => {
@@ -53,6 +83,8 @@ export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelPro
           role="search"
           onSubmit={(event) => {
             event.preventDefault();
+            // 사용자가 직접 입력해서 실행한 검색만 인기검색어 집계 대상(fire-and-forget, 실패해도 이동엔 영향 없음).
+            void logSearchKeyword("UNIFIED_SEARCH", query);
             router.push(buildSearchAllHref(query));
             onNavigate?.();
           }}
@@ -114,7 +146,7 @@ export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelPro
             {gnbSearchContent.popularSearchLabel}
           </span>
           <ul className="gnb_search__tags">
-            {gnbSearchContent.popularTags.map((tag) => (
+            {popularTags.map((tag) => (
               <li key={tag.label}>
                 <Link
                   href={tag.href}

@@ -9,8 +9,9 @@ export const pressDetailMeta = {
   dates: "Feb 02, 2026~ Feb 04, 2026",
 };
 
+/** press 상세 hero 폴백 이미지 — 등록 이미지가 없을 때만 사용 */
 export const pressDetailHero = {
-  src: "/img/company/events/detail_hero.png",
+  src: "/img/company/press/detail_hero.png",
   alt: "ELECS KOREA 2026 exhibition booth",
 };
 

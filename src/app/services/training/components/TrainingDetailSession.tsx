@@ -9,24 +9,29 @@ const { type: typeIcon, duration: durationIcon, location: locationIcon } =
 
 // Training 코스 상세 - 스케줄 세션 카드 (ls-publish EngineeringTrainingDetailSession 이관)
 // 세션 상세 링크는 variant별 hrefPrefix 주입으로 파생.
+// 마크업은 퍼블리싱 원본과 동일: <li>(__item) 안에 날짜(__date) + 카드(__session).
 export default function TrainingDetailSession({
   courseId,
   session,
   hrefPrefix,
+  showDate,
 }: {
   courseId: string;
   session: EngineeringTrainingSession;
   hrefPrefix: string;
+  // 날짜 그룹 첫 세션이면 true. 같은 날짜 묶음의 뒤 세션은 false → __date 를 빈 값으로 렌더해
+  //   날짜 중복 노출을 막고, PC 250px 날짜 컬럼(spacer)은 유지해 카드 정렬을 맞춘다.
+  showDate: boolean;
 }) {
   const sessionHref = `${hrefPrefix}/${courseId}/${session.id}`;
 
   return (
     // data-slug-item: 가장 가까운 조상 data-slug-repeat(currDtlMgmt-data)의 반복 단위 = 교육회차 1행
     <li className="support_service_training_detail_schedule__item" data-slug-item>
-      {/* 교육일자: curriculum_detail2.training_date_from ~ curriculum_detail2.training_date_to 두 필드를
-          FE가 "Jul 30–31, 2026"/"Jul 30 – Aug 1, 2026" 형태로 조합. 한 요소에 두 필드라 단일 slugKey 미태깅(STEP6 조합) */}
+      {/* 교육일자: 이 행의 training_date_from/to 로 FE 산출(formatSessionDateRange). 파생 포맷 문자열이라 미태깅.
+          같은 날짜 묶음의 첫 세션에만 텍스트 노출(뒤 세션은 빈 값 = 날짜 컬럼 spacer 유지). */}
       <p className="support_service_training_detail_schedule__date">
-        {session.date}
+        {showDate ? session.date : ""}
       </p>
       <article
         className={[

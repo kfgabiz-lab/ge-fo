@@ -5,7 +5,7 @@
 import { fetchApi } from "@/lib/api";
 import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
 import { fetchData } from "@/lib/pageDataApi";
-import type { TrainingFilterOption, TrainingVariant } from "./trainingContent";
+import type { TrainingFilterOption } from "./trainingContent";
 
 // 목록 slug 및 페이지당 개수(설계 4절: size=10 페이지네이션)
 export const TRAINING_SLUG = "currMgmt-data";
@@ -13,13 +13,6 @@ export const TRAINING_LIST_SIZE = 10;
 
 // Lv/Sub Category 옵션 파생용 카테고리 트리 slug(depth3 제품 노드 조회)
 export const TRAINING_CATEGORY_SLUG = "category-data";
-
-// variant → curriculum.training_course 코드(설계 4절)
-export const TRAINING_COURSE_CODE: Record<TrainingVariant, string> = {
-  sales: "03",
-  engineering: "01",
-  service: "02",
-};
 
 // 업로드 미디어 스트리밍 엔드포인트(curriculum.image[0] → page-files)
 export const trainingImageSrc = (mediaId: number) =>
@@ -29,12 +22,10 @@ export const trainingImageSrc = (mediaId: number) =>
 export const trainingDetailHref = (prefix: string, id: number) =>
   `${prefix}/${id}`;
 
-// variant 고정 where — training_course(variant별) + is_visible=001(공개 게이트, variant 무관)
-export function trainingStatusWhere(
-  variant: TrainingVariant,
-): Record<string, string> {
+// 공통 where — is_visible=001(공개 게이트)만. variant(sales/engineering/service)와 무관하게 동일 조회.
+// (3개 메뉴는 진입점만 다르고 동일한 커리큘럼 데이터를 노출 → training_course 분기 제거)
+export function trainingStatusWhere(): Record<string, string> {
   return {
-    "eq_curriculum.training_course": TRAINING_COURSE_CODE[variant],
     "eq_curriculum.is_visible": "001",
   };
 }
@@ -259,16 +250,15 @@ export interface TrainingByCategoryResponse {
 // - 단일/묶음 카테고리 선택을 category-data PK 목록으로 표현(콤마 구분).
 // - page-data/{slug} 경로가 아니라 전용 경로라 fetchData가 아닌 fetchApi를 직접 사용.
 // - 응답 구조가 currMgmt-data 목록과 동일 → 호출부에서 toTrainingCard 매핑 그대로 재사용.
+// - trainingCourse 미전달: 3개 메뉴 모두 동일 커리큘럼 노출(variant 분기 제거).
 export async function fetchTrainingByCategoryIds(params: {
   categoryIds: number[];
-  variant: TrainingVariant;
   page: number;
   size: number;
 }): Promise<{ content: TrainingRow[]; totalPages: number }> {
-  const { categoryIds, variant, page, size } = params;
+  const { categoryIds, page, size } = params;
   const sp = new URLSearchParams();
   sp.set("categoryIds", categoryIds.join(","));
-  sp.set("trainingCourse", TRAINING_COURSE_CODE[variant]);
   sp.set("page", String(page));
   sp.set("size", String(size));
   sp.set("sort", "createdAt,desc");

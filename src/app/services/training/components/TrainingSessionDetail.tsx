@@ -9,6 +9,7 @@ import {
   type EngineeringTrainingSessionTabId,
 } from "@/data/services/engineeringTrainingSessionDetailContent";
 import type { TrainingVariant } from "../data/trainingContent";
+import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
 import TrainingSessionDetailForm from "./TrainingSessionDetailForm";
 import TrainingSessionDetailAside from "./TrainingSessionDetailAside";
 import TrainingSessionDetailTableScroll from "./TrainingSessionDetailTableScroll";
@@ -107,6 +108,16 @@ export default function TrainingSessionDetail({
   useEffect(() => {
     setShareUrl(window.location.href);
   }, []);
+
+  // 세션상세 → 코스상세 소프트 이동(중간 "코스로 돌아가기" 크럼 클릭) 대비:
+  // 코스상세 경로에 실 코스 제목을 미리 seed 해두면, 재진입 시 코스상세 current 가 무플래시로 실 제목이 된다.
+  // (courseTitle 은 이미 조회된 부모 커리큘럼 값 — 추가 네트워크 없음)
+  useEffect(() => {
+    seedBreadcrumbTitle(
+      `/services/${variant}-training/${session.courseId}`,
+      session.courseTitle,
+    );
+  }, [variant, session.courseId, session.courseTitle]);
 
   const handleRegister = useCallback(() => {
     setActiveTab("registration");

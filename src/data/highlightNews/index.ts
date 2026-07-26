@@ -5,4 +5,5 @@ export {
   fetchMarketHighlightNews,
   fetchProductInsights,
   fetchCategoryInsights,
+  fetchCategoryInsightsLv2,
 } from "./highlightNewsData";

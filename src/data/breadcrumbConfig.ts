@@ -4,9 +4,10 @@ import {
 } from "@/data/gnb/mega/devices";
 
 /**
- * Training 상세/세션 경로의 variant(코스 계열)별 목록 라벨 매핑.
- * sales/engineering/service 3종. 실 courseId(숫자) 또는 세션 id(UUID)는
- * 동적이므로 blog/press 상세처럼 제네릭 고정 라벨을 사용한다(실 제목 fetch 금지).
+ * Training 상세/세션 경로의 variant(코스 계열)별 "목록" 라벨 매핑.
+ * sales/engineering/service 3종. 이 라벨은 상위(목록) 크럼용 정적 값이다.
+ * 코스 상세(1뎁스)의 마지막 항목(current)만은 services 레이아웃이 SSR 시점에 조회한 실 코스 제목으로
+ *   렌더된다(HeaderBreadcrumb serverOverride). 아래 정적 "Curriculum Detail" 은 그 조회가 없을 때의 폴백이다.
  */
 const TRAINING_VARIANT_LABELS: Record<string, string> = {
   sales: "Sales Training",
@@ -331,13 +332,6 @@ const configs: Record<string, BreadcrumbConfig> = {
     crumbs: [{ label: "Services" }],
     current: "Warranty Policy",
   },
-  "/services/engineering-training": {
-    crumbs: [
-      { label: "Services" },
-      { label: "Training" },
-    ],
-    current: "Engineering Training",
-  },
   "/services/request-for-training": {
     crumbs: [
       { label: "Services" },
@@ -379,6 +373,9 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
   // Training 세션 상세(2뎁스): /services/{variant}-training/{courseId}/{sessionId}
   // — 코스(1뎁스)보다 먼저 검사(세그먼트 수가 더 많으므로 우선 매칭).
   // courseId(숫자)·sessionId(UUID)는 동적이라 blog/press 상세처럼 제네릭 고정 라벨 사용.
+  // 중간 "코스로 돌아가기" 크럼의 "Curriculum Detail" 은 실 코스 제목 조회 실패 시의 폴백 라벨이다.
+  //   정상 경로에서는 services 레이아웃이 SSR 시점에 조회한 실 코스 제목을 HeaderBreadcrumb serverOverride(crumb)
+  //   로 내려, 이 크럼(href=`${listHref}/${courseId}`) 라벨을 실 제목으로 덮어쓴다(SSR 최초 HTML 부터 반영).
   const sessionMatch = pathname.match(
     /^\/services\/(sales|engineering|service)-training\/([^/]+)\/([^/]+)$/,
   );
@@ -400,6 +397,9 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
   }
 
   // Training 코스 상세(1뎁스): /services/{variant}-training/{courseId}
+  // current 의 "Curriculum Detail" 은 실 코스 제목 조회 실패 시의 폴백 라벨이다.
+  // 정상 경로에서는 services 레이아웃이 SSR 시점에 조회한 실 코스 제목을 HeaderBreadcrumb serverOverride 로
+  //   내려 이 값을 덮어쓴다(SSR 최초 HTML 부터 실 제목 → 클라이언트 텍스트 교체 없음).
   const detailMatch = pathname.match(
     /^\/services\/(sales|engineering|service)-training\/([^/]+)$/,
   );
@@ -415,6 +415,20 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
         },
       ],
       current: "Curriculum Detail",
+    };
+  }
+
+  // Training 목록(진입점): /services/{variant}-training
+  // — sales/engineering/service 3종 모두 동일 구조. 특정 variant 하드코딩 대신
+  //   상세/세션과 같은 정규식 패턴으로 통일(current 만 variant 라벨로 분기).
+  const listMatch = pathname.match(
+    /^\/services\/(sales|engineering|service)-training$/,
+  );
+  if (listMatch) {
+    const [, variant] = listMatch;
+    return {
+      crumbs: [{ label: "Services" }, { label: "Training" }],
+      current: TRAINING_VARIANT_LABELS[variant],
     };
   }
 

@@ -3,12 +3,12 @@ import DevicesHelp from "@/app/()/products-systems/components/DevicesHelp";
 import DevicesMarkets from "@/app/()/products-systems/components/DevicesMarkets";
 import DevicesPageFooter from "@/app/()/products-systems/components/DevicesPageFooter";
 import ProductDetailRouter from "@/app/()/products-systems/components/product/ProductDetailRouter";
-import type { DevicesCategoryProduct } from "@/app/()/products-systems/data/vfdContent";
 import {
   fetchCategoryBySlug,
-  fetchProductsByCodePrefix,
+  fetchCategoryLv2Products,
   fetchProductBySlug,
 } from "@/app/()/products-systems/data/productsSystemsData";
+import { fetchCategoryInsightsLv2 } from "@/data/highlightNews";
 import "@/assets/css/devices-systems.css";
 
 // 2depth 카테고리(우선) 또는 제품(폴백) 라우트. 예외 slug 없이 전부 동적.
@@ -30,15 +30,11 @@ export default async function ProductRangeRoutePage({
   // ① depth2 카테고리 우선
   const category = await fetchCategoryBySlug(slug, { depth: 2 });
   if (category) {
-    // 카드 = 해당 카테고리 코드 접두사(L01-15-) 제품(product-data)
-    const products = await fetchProductsByCodePrefix(`${category.code}-`);
-    const productCards: DevicesCategoryProduct[] = products.map((p) => ({
-      id: String(p.id),
-      href: p.slug ? `/product/${p.slug}` : "",
-      image: p.image,
-      title: p.title,
-      description: p.description,
-    }));
+    // 카드 = 이 Lv2에 맵핑된(하위 depth3 연결행) 노출가능 제품(product-data).
+    // 구 방식(product_code 접두사 매칭)은 폐기 — 맵핑 관계/공개·판매중 필터/정렬을 전부 BE가 처리한다.
+    const productCards = await fetchCategoryLv2Products(category.id);
+    // Highlights(기획서 13번) — 이 Lv2 자신에 맵핑된 노출가능 제품의 게시글 최신 3건(BE 서버 필터).
+    const highlightItems = await fetchCategoryInsightsLv2(category.id);
     const intro = {
       parentLabel: "Products & Systems",
       parentHref: LANDING_HREF,
@@ -54,7 +50,10 @@ export default async function ProductRangeRoutePage({
         />
         <DevicesMarkets />
         <DevicesHelp variant="overlay" />
-        <DevicesPageFooter />
+        <DevicesPageFooter
+          highlightItems={highlightItems}
+          bannerLinkHref="/support/contact-us"
+        />
       </main>
     );
   }

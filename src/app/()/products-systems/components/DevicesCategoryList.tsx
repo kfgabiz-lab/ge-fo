@@ -98,8 +98,11 @@ export default function DevicesCategoryList({
           <p className="devices_category__desc" data-slugkey="device_systems.description">{intro.description}</p>
         </div>
         <div className="devices_category__grid-wrap">
-          {/* STEP4 정정: 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
-              data-slug: product-data (다건 — VFD 제품 카드). where=product.is_visible=001 후 product_code 접두사(L01-15-) 클라이언트 필터, product_code ASC 정렬 */}
+          {/* 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
+              data-slug: product-data (다건 — Lv2 랜딩 제품 카드).
+              소스: GET /api/v1/fo/categories/{lv2Id}/products — 해당 Lv2 하위 depth3 연결행이 가리키는 제품 중
+              product.is_visible=001 AND product.order_status=01, 연결행 sortOrder ASC(동률 시 제품 id ASC).
+              (구 조건이던 product_code 접두사 클라이언트 필터는 폐기) */}
           <div className="inner devices_category__grid" data-slug="product-data" data-slug-repeat="true">
             {chunkProducts(products, 2).map((row, rowIndex) => (
               <div key={row.map((item) => item.id).join("-")} className="devices_category__grid-row">
@@ -146,8 +149,10 @@ export default function DevicesCategoryList({
           </div>
         </div>
         <div className="devices_category__list">
-          {/* STEP4 정정: 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
-              data-slug: product-data (다건 — VFD 제품 카드). where=product.is_visible=001 후 product_code 접두사(L01-15-) 클라이언트 필터, product_code ASC 정렬 */}
+          {/* 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
+              data-slug: product-data (다건 — VFD 등 Lv2 랜딩 제품 카드). split 레이아웃도 stacked 와 동일 소스를 쓴다.
+              소스: GET /api/v1/fo/categories/{lv2Id}/products — 맵핑된 depth3 연결행 기준, 공개+판매중 필터, 연결행 sortOrder ASC.
+              (구 조건이던 product_code 접두사 클라이언트 필터는 폐기) */}
           <div className="devices_category__list-inner" data-slug="product-data" data-slug-repeat="true">
             {products.map((item, index) => (
               <CategoryProductCard

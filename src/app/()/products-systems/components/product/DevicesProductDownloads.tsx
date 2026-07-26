@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
 import PageNumbering from "@/components/pagination/PageNumbering";
+import DevicesProductDownloadsCopyLink from "./DevicesProductDownloadsCopyLink";
 import DevicesProductDownloadsDocumentFilter from "./DevicesProductDownloadsDocumentFilter";
 import DevicesProductDownloadsFilter from "./DevicesProductDownloadsFilter";
 import { DevicesProductDownloadsFilterBoundary } from "./DevicesProductDownloadsFilterProvider";
@@ -191,16 +192,7 @@ export default function DevicesProductDownloads({
                               </span>
                             </div>
                             <div className="devices_product_downloads__file-actions">
-                              <button
-                                type="button"
-                                className="devices_product_downloads__file-btn devices_product_downloads__file-btn--copy"
-                              >
-                                Copy Link
-                                <span
-                                  className="devices_product_downloads__file-btn-icon"
-                                  aria-hidden="true"
-                                />
-                              </button>
+                              <DevicesProductDownloadsCopyLink url={file.url} />
                               <button
                                 type="button"
                                 className="devices_product_downloads__file-btn devices_product_downloads__file-btn--download"

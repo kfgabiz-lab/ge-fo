@@ -15,6 +15,14 @@ export type PlaceSuggestion = {
   description: string;
 };
 
+/** placeId → 주소 컴포넌트 파싱 결과(폼 자동 채움용). 파싱 못한 항목은 빈 문자열. */
+export type PlaceAddress = {
+  street: string; // 도로명(street_number + route)
+  city: string; // 도시(locality 우선)
+  state: string; // 주/도(administrative_area_level_1 short)
+  zip: string; // 우편번호(postal_code)
+};
+
 // AutocompleteService 인스턴스 캐시(입력마다 재생성 방지)
 let autocompleteService: google.maps.places.AutocompleteService | null = null;
 
@@ -75,6 +83,61 @@ export async function geocodePlaceId(
       if (status === "OK" && results && results[0]) {
         const location = results[0].geometry.location;
         resolve({ lat: location.lat(), lng: location.lng() });
+      } else {
+        resolve(null);
+      }
+    });
+  });
+}
+
+// address_components 에서 특정 type 값을 조회(없으면 빈 문자열). useShort=true 면 short_name.
+function pickComponent(
+  components: google.maps.GeocoderAddressComponent[],
+  type: string,
+  useShort = false,
+): string {
+  const found = components.find((comp) => comp.types.includes(type));
+  if (!found) return "";
+  return useShort ? found.short_name : found.long_name;
+}
+
+/**
+ * 자동완성 후보(placeId) → 주소 컴포넌트(street/city/state/zip) 파싱.
+ * - Registration Form 주소 선택 시 City/State/ZIP 등을 자동 채우기 위한 용도.
+ * - API 키 없음/빈 placeId/결과 없음/에러는 모두 null 로 반환(호출부에서 자동채움 스킵).
+ * - geocodePlaceId 와 동일하게 loadGoogleMapsGeocoding 로더를 재사용한다.
+ */
+export async function fetchPlaceAddress(
+  placeId: string,
+): Promise<PlaceAddress | null> {
+  const apiKey = getGoogleMapsApiKey();
+  if (!apiKey || !placeId) {
+    return null;
+  }
+
+  const maps = await loadGoogleMapsGeocoding(apiKey);
+  const geocoder = new maps.Geocoder();
+
+  return new Promise<PlaceAddress | null>((resolve) => {
+    geocoder.geocode({ placeId }, (results, status) => {
+      if (status === "OK" && results && results[0]) {
+        const components = results[0].address_components;
+        const streetNumber = pickComponent(components, "street_number");
+        const route = pickComponent(components, "route");
+        const street = [streetNumber, route].filter(Boolean).join(" ");
+        // 도시: locality 우선, 없으면 대체 타입 순차 폴백
+        const city =
+          pickComponent(components, "locality") ||
+          pickComponent(components, "postal_town") ||
+          pickComponent(components, "sublocality") ||
+          pickComponent(components, "administrative_area_level_2");
+        const state = pickComponent(
+          components,
+          "administrative_area_level_1",
+          true,
+        );
+        const zip = pickComponent(components, "postal_code");
+        resolve({ street, city, state, zip });
       } else {
         resolve(null);
       }

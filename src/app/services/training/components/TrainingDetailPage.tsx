@@ -1,10 +1,6 @@
 import { notFound } from "next/navigation";
 import type { TrainingVariant } from "../data/trainingContent";
-import {
-  TRAINING_COURSE_CODE,
-  fetchTrainingCategories,
-  toCategoryMap,
-} from "../data/trainingData";
+import { fetchTrainingCategories, toCategoryMap } from "../data/trainingData";
 import {
   fetchTrainingDetailRows,
   fetchTrainingTypeCodes,
@@ -43,13 +39,13 @@ export default async function TrainingDetailPage({
   const categoryMap = toCategoryMap(categoryCodes);
   const trainingTypeMap = toCategoryMap(trainingTypeCodes);
 
-  // FE 2차 재판정(공개/과거제외) + variant 오배치 방어는 빌더 내부에서 처리(통과 0건이면 null)
+  // FE 2차 재판정(공개/과거제외)은 빌더 내부에서 처리(통과 0건이면 null).
+  // variant 무관 동일 커리큘럼 노출 정책 → training_course 게이트 없음.
   const detail = toTrainingCourseDetail(
     rows,
     courseId,
     categoryMap,
     trainingTypeMap,
-    TRAINING_COURSE_CODE[variant],
   );
   if (!detail) {
     notFound();
@@ -69,6 +65,8 @@ export default async function TrainingDetailPage({
       className={`support-page support-page--${variant}-training-detail`}
       id="P-FO-SERV-030100P"
     >
+      {/* 헤더 브레드크럼 마지막 항목(current)은 services 레이아웃이 SSR 시점에 실 코스 제목으로 렌더한다
+          (middleware x-pathname → 레이아웃 서버 조회 → HeaderBreadcrumb serverOverride). 페이지 측 주입 없음. */}
       <TrainingDetailHero detail={detail} />
       <TrainingDetailSchedule detail={detail} hrefPrefix={hrefPrefix} />
     </main>

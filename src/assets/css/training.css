@@ -3978,3 +3978,109 @@
     animation: none;
   }
 }
+
+/* Training 세션 등록 폼 — 주소 자동완성 드롭다운(WhereToBuySearch 패턴) + reCAPTCHA 위젯 */
+section.support_service_training_session_detail .support_service_training_session_detail__street-wrap {
+  position: relative;
+  width: 100%;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  box-shadow: 0 12px 24px rgb(0 0 0 / 10%);
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__suggestion {
+  margin: 0;
+  padding: 0;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__suggestion-button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 15px;
+  line-height: 22px;
+  color: #222;
+  cursor: pointer;
+  white-space: normal;
+  word-break: break-word;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__suggestion-button:hover,
+section.support_service_training_session_detail .support_service_training_session_detail__suggestion-button:focus-visible {
+  background: #f4f6fa;
+  color: #0f1f45;
+  outline: none;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__recaptcha-box {
+  align-self: flex-start;
+  width: fit-content;
+  max-width: 100%;
+}
+
+/* Training Request(Step1) 폼 — 주소 자동완성 드롭다운. 위 세션 등록 폼 규칙과 값 동일(스코프만 다름) */
+section.support_service_training_request .support_service_training_request__street-wrap {
+  position: relative;
+  width: 100%;
+}
+
+section.support_service_training_request .support_service_training_request__suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  box-shadow: 0 12px 24px rgb(0 0 0 / 10%);
+}
+
+section.support_service_training_request .support_service_training_request__suggestion {
+  margin: 0;
+  padding: 0;
+}
+
+section.support_service_training_request .support_service_training_request__suggestion-button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 15px;
+  line-height: 22px;
+  color: #222;
+  cursor: pointer;
+  white-space: normal;
+  word-break: break-word;
+}
+
+section.support_service_training_request .support_service_training_request__suggestion-button:hover,
+section.support_service_training_request .support_service_training_request__suggestion-button:focus-visible {
+  background: #f4f6fa;
+  color: #0f1f45;
+  outline: none;
+}

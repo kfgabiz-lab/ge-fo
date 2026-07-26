@@ -4,7 +4,10 @@ import { FormControl, MenuItem } from "@mui/material";
 import { useMemo, useState } from "react";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
-import type { EngineeringTrainingDetail } from "@/data/services/engineeringTrainingDetailContent";
+import type {
+  EngineeringTrainingDetail,
+  EngineeringTrainingSession,
+} from "@/data/services/engineeringTrainingDetailContent";
 import TrainingDetailSession from "./TrainingDetailSession";
 
 // Training 코스 상세 - 스케줄 섹션 (ls-publish EngineeringTrainingDetailSchedule 이관)
@@ -56,6 +59,27 @@ export default function TrainingDetailSchedule({
       }),
     [sessions, typeValue, monthValue],
   );
+
+  // 날짜 그룹핑: 필터 통과 세션들을 표시 날짜(session.date = formatSessionDateRange 결과)로 묶는다.
+  // - 같은 날짜(여러 날 범위 포함)의 세션이 2건 이상이면 날짜 헤더를 1회만 노출하고 그 아래 카드를 묶어 렌더.
+  // - session.date 는 from/to 를 연/월/일까지 반영한 문자열이라 "같은 문자열 ⇔ 같은 날짜(범위)"가 성립.
+  // - 상위 정렬(TRAINING_DETAIL_SORT, training_date_from asc)이 유지되므로 첫 등장 순서 = 날짜 오름차순.
+  const groupedSessions = useMemo(() => {
+    const groups: { date: string; sessions: EngineeringTrainingSession[] }[] =
+      [];
+    const indexByDate = new Map<string, number>();
+    for (const session of filteredSessions) {
+      const key = session.date ?? "";
+      const existing = indexByDate.get(key);
+      if (existing === undefined) {
+        indexByDate.set(key, groups.length);
+        groups.push({ date: key, sessions: [session] });
+      } else {
+        groups[existing].sessions.push(session);
+      }
+    }
+    return groups;
+  }, [filteredSessions]);
 
   const typeLabel =
     TYPE_OPTIONS.find((o) => o.value === typeValue)?.label ?? "All";
@@ -121,20 +145,27 @@ export default function TrainingDetailSchedule({
         </div>
 
         {/* data-slug: currDtlMgmt-data 다건(교육회차 N행). 각 회차 행 = 이 스케줄 카드 1건.
-            1:N 모델에서 코스상세 스케줄 리스트가 곧 회차 목록이라 리스트 <ul> 이 반복 컨테이너. */}
+            마크업/CSS 는 퍼블리싱 원본(EngineeringTrainingDetailSchedule) 구조 그대로:
+            리스트 <ul>(__list) 이 반복 컨테이너이고, 각 회차는 <li>(__item) = [날짜(__date) | 카드(__session)] 이다.
+            날짜 그룹핑 "로직"(groupedSessions)은 유지하되, 원본 마크업을 벗어나는 그룹 래퍼는 두지 않는다.
+            대신 같은 날짜 묶음에서 날짜 헤더가 1회만 보이도록 그룹 첫 세션에만 __date 텍스트를 노출한다
+            (뒤 세션은 __date 를 빈 값으로 렌더 → PC 250px 날짜 컬럼 정렬 유지, 날짜 중복 노출 방지). */}
         <ul
           className="support_service_training_detail_schedule__list"
           data-slug="currDtlMgmt-data"
           data-slug-repeat="true"
         >
-          {filteredSessions.map((session) => (
-            <TrainingDetailSession
-              key={session.id}
-              courseId={detail.courseId}
-              session={session}
-              hrefPrefix={hrefPrefix}
-            />
-          ))}
+          {groupedSessions.map((group) =>
+            group.sessions.map((session, indexInGroup) => (
+              <TrainingDetailSession
+                key={session.id}
+                courseId={detail.courseId}
+                session={session}
+                hrefPrefix={hrefPrefix}
+                showDate={indexInGroup === 0}
+              />
+            )),
+          )}
         </ul>
       </div>
     </section>

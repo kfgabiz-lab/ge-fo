@@ -10,6 +10,7 @@ import type { CommonFaqEntry } from "@/components/faq/CommonFaq";
 import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
 import type { ProductOtherItem } from "./productDetailContent";
 import type { DevicesProductItem } from "./motorControlContent";
+import type { DevicesCategoryProduct } from "./vfdContent";
 
 // 데이터 0건 / 이미지 미입력(파일ID 배열 비어있음) 시 화면이 깨지지 않도록 쓰는 공용 플레이스홀더.
 // 별도 자산이 없어 기존 정적 제품 이미지를 재사용한다.
@@ -154,6 +155,41 @@ export async function fetchVisibleLv2Categories(
       href: row.slug ? `/product-range/${row.slug}` : "",
       image: resolveImageUrlFromJsonText(row.image),
       title: row.title ?? "",
+    }));
+  } catch {
+    return [];
+  }
+}
+
+// Lv2 랜딩(product-range/[slug])의 제품 카드 목록 — 서버 필터(BE 전용 엔드포인트).
+// BE `GET /api/v1/fo/categories/{categoryId}/products`가 아래를 전부 서버에서 처리한다(설계 3·4절):
+//  - 해당 Lv2 하위 depth3 연결행(category-data)이 가리키는 product-data 만 대상
+//    (구 방식이던 product_code 접두사 매칭은 폐기 — 코드 체계와 무관하게 맵핑 관계로만 판정)
+//  - product-data 가 is_visible='001' AND order_status='01'
+//  - 연결행 sortOrder 숫자 오름차순(NULLS LAST), 동률 시 제품 id 오름차순
+// 실패 시 빈 배열 → 카드 0개(리스트 컨테이너/인트로는 그대로 유지, 정적 폴백 금지).
+interface CategoryProductRow {
+  id: number;
+  productName: string | null;
+  image: string | null; // 파일ID 배열의 JSON 텍스트("[506]") 또는 null
+  infoDescription: string | null;
+  slug: string | null;
+}
+
+export async function fetchCategoryLv2Products(
+  categoryId: number,
+): Promise<DevicesCategoryProduct[]> {
+  try {
+    const rows = await fetchApi<CategoryProductRow[]>(
+      `/api/v1/fo/categories/${categoryId}/products`,
+    );
+    return rows.map((row) => ({
+      id: String(row.id),
+      // slug 없으면 링크 비활성("") — 카드 자체는 노출한다(fetchVisibleLv2Categories와 동일 정책).
+      href: row.slug ? `/product/${row.slug}` : "",
+      image: resolveImageUrlFromJsonText(row.image),
+      title: row.productName ?? "",
+      description: row.infoDescription ?? "",
     }));
   } catch {
     return [];

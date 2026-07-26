@@ -4,6 +4,8 @@
 // - 부트스트랩 로더는 importLibrary 호출을 내부 큐에 쌓아뒀다가 실제 스크립트 로딩이 끝나면
 //   순서대로 처리하므로, "언제 importLibrary 가 붙는지"에 대한 레이스 컨디션 자체가 없다.
 
+import { getClientSiteLocale } from "./clientSiteLocale";
+
 // 부트스트랩 로더가 설치/사용하는 google.maps 내부 슬롯 타입
 type ImportLibraryFn = (name: string, ...rest: unknown[]) => Promise<unknown>;
 
@@ -95,7 +97,7 @@ export function loadGoogleMaps(apiKey: string): Promise<typeof google.maps> {
   loadPromise = (async () => {
     // 부트스트랩 로더는 한 번만 설치한다.
     if (!bootstrapInstalled) {
-      installBootstrapLoader({ key: apiKey, v: "weekly" });
+      installBootstrapLoader({ key: apiKey, v: "weekly", language: getClientSiteLocale() });
       bootstrapInstalled = true;
     }
     // core 라이브러리 로딩이 끝나야 window.google.maps.Map 등이 사용 가능해진다.

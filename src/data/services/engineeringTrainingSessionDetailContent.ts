@@ -23,6 +23,9 @@ export type EngineeringTrainingSessionDetail = {
   sessionId: string;
   category: string;
   title: string;
+  // 부모 커리큘럼 제목(_fetchedRel8.curriculum.title). 세션상세 → 코스상세 소프트 이동 시
+  // 브레드크럼 current 를 실 코스 제목으로 미리 seed 하기 위해 뷰모델에 노출(추가 조회 없음).
+  courseTitle?: string;
   breadcrumbCurrent: string;
   // 세션 본문(BO 관리자 WYSIWYG HTML, curriculum_detail2.content). 빈 문자열이면 본문 섹션/탭 비노출.
   content: string;

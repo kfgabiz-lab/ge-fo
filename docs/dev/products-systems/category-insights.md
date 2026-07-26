@@ -5,6 +5,8 @@
 > - `fo/src/components/content/HighlightNewsSection.tsx` (프레젠테이션 전용, items를 그대로 렌더)
 > - 사용 페이지: `fo/src/app/()/products-category/[slug]/page.tsx` (`<DevicesPageFooter />` 호출, 현재 `highlightItems` 미전달)
 > 상태: 완료 (2026-07-26 — STEP4~6 개발 및 QA 검증 완료. 573 카테고리 실측 3건: press 2125/2101, articles 1887 — publish_dttm DESC/id DESC 정렬·LIMIT 3 정상 동작 확인)
+>
+> ⚠️ **범위 안내**: 1~7절은 Lv1 카테고리 랜딩(`products-category/[slug]`) 기준으로 이미 완료된 스펙이다. 8절은 동일한 "Highlights" 기능을 Lv2 카테고리 랜딩(`product-range/[slug]`)에 적용하는 **신규(설계중)** variant이며, 1~7절의 완료 상태와는 별개다.
 
 기획서 13번(Highlights: Lv1 기준 맵핑 게시글) 요건을 반영하는 작업 단위 문서. `category-data-lv1.md`(Lv1 하위 노출가능 Lv2/제품 스펙)와 짝을 이루며, Lv1에 노출 가능한 제품에 실제로 맵핑된 press/blog/articles 게시글만 "Highlights"에 노출하도록 조회를 확장한다.
 
@@ -66,7 +68,43 @@ N/A. `HighlightNewsSection`은 서버(page.tsx/데이터 헬퍼)에서 이미 �
 
 - **예외**: `HighlightNewsSection`은 매칭 0건(신규 `/insights` 응답이 빈 배열)이면 섹션 컨테이너 자체를 렌더링하지 않는다(`items.length === 0` → `return null`). 이는 기존에 이미 구현돼 운영 중인 동작이며, 이번 13번 요건 작업의 범위가 아니므로 그대로 유지한다. 일반 원칙(컨테이너 유지 + 항목만 있는 만큼 표시)의 예외 케이스로 명시적으로 기록해 둔다.
 
-## 8. STEP별 진행 이력
+---
+
+## 8. Lv2 변형 — products-systems Lv2 페이지(`product-range/[slug]`) Highlights (신규, 2026-07-26 추가)
+
+> 대상 파일: `fo/src/app/()/product-range/[slug]/page.tsx`(`DevicesPageFooter` 호출부, 현재 `highlightItems` 미전달 — 직접 코드 확인 완료). 렌더링 컴포넌트는 1~7절과 동일(`DevicesPageFooter.tsx`→`HighlightNewsSection.tsx`, 코드 변경 없음).
+> 상태: 완료 (2026-07-26 — STEP4~6 개발 및 QA 검증 완료. id=2044 실측 2건: press 2125/articles 1887, id=587은 매핑 게시글 0건이라 섹션 미렌더 정상 확인)
+
+1~7절과 데이터 소스 구조(대상 slug 3종, where 골격, DTO/매핑 로직 재사용 전제)는 동일하되, **"노출가능 제품" 집합의 산출 기준(anchor)이 다르다**:
+
+- 1~7절(Lv1): Lv1 categoryId를 anchor로 하는 `CATEGORY_LV2_CTE`의 `visible_product` — 그 Lv1 하위 **모든 Lv2들**에 매핑된 제품 전체.
+- 본 절(Lv2): 이 **Lv2 자신**(categoryId=Lv2 id)에 매핑된 제품만 — `category-data-lv2.md` 4절("카드 목록 — 2026-07-26 개정")의 junction 대상 제품 집합과 동일 범위(anchor가 Lv2 id 자신이라는 점에서 그 문서와 정확히 같은 집합).
+
+### 8-1. data-slug
+동일(변경 없음) — `press-data`, `blog-data`, `articles-data` (다건)
+
+### 8-2. data-slugKey 매핑
+동일(변경 없음, N/A) — 2절 참고
+
+### 8-3. API 확인 — 확정
+- 신규 API 필요 여부: **신규 필요(확정)** — 기존 `findCategoryInsights(categoryId, siteId)`(`PageDataService.java`)는 `CATEGORY_LV2_CTE`(Lv1 anchor 전제)의 `visible_product`를 그대로 쓰는 구조라, Lv2 id를 넣으면 `visible_lv2`(그 Lv1의 하위 Lv2 탐색)가 0행이 되어 결과가 항상 빈 배열임을 STEP4 psql로 직접 확인(`category.parentId=585 AND depth=2` → 0건). Lv1/Lv2 anchor가 근본적으로 다른 단계라 파라미터 교체만으로는 재사용 불가 확정.
+- 확정 엔드포인트: `GET /api/v1/fo/categories/{lv2Id}/lv2-insights` (기존 `/{categoryId}/insights`는 Lv1용으로 이미 운영 중이라 URL 재사용 시 회귀 위험 — 별도 경로로 신설). 서비스: `PageDataService.findCategoryInsightsBySelf`(내부적으로 `queryCategoryInsights(CATEGORY_SELF_PRODUCT_CTE, ...)` 공유 헬퍼 사용, 기존 `findCategoryInsights`도 동일 헬퍼로 리팩터링해 로직 중복 없음). 응답 DTO는 기존 `ProductInsightRowResponse` 그대로 재사용. FE 진입점: `fetchCategoryInsightsLv2()`(`highlightNewsData.ts`).
+
+### 8-4. 조회 조건
+- where(① ~ ④, 구조는 1~7절과 동일하고 ④의 제품집합 anchor만 다름):
+  1. `data_slug IN ('press-data','blog-data','articles-data')`
+  2. 각 글 `is_visible='001'`
+  3. `publish_dttm <= today()`(사이트 tz)
+  4. 최상위 `product_list`(snake_case) 배열이 "이 Lv2 자신"의 노출가능 제품 id 집합(`category-data-lv2.md` 4절)과 교집합
+- orderBy: `publish_dttm` DESC, tie `id` DESC
+- row limit: 3
+
+### 8-5. 비고 — 확정
+1. `findCategoryInsights`는 Lv2 anchor로 재사용 불가 확정(위 8-3 근거). 신규 `findCategoryInsightsBySelf` + 공유 헬퍼 `queryCategoryInsights`로 Lv1/Lv2 로직 중복 없이 구현 완료.
+2. `HighlightNewsSection`의 "0건 시 섹션 자체 미렌더" 예외 동작(7절)이 Lv2 케이스에도 동일 적용됨을 QA로 확인(id=587, 매핑 게시글 0건 → 섹션 미렌더).
+3. `page.tsx`(Lv2)에 `highlightItems={await fetchCategoryInsightsLv2(category.id)}` 전달 완료 — 신규 prop 추가 없이 기존 통로 재사용.
+
+## 9. STEP별 진행 이력
 
 | STEP | 담당 에이전트 | 날짜 | 결과 요약 |
 |---|---|---|---|
@@ -76,5 +114,10 @@ N/A. `HighlightNewsSection`은 서버(page.tsx/데이터 헬퍼)에서 이미 �
 | STEP5 | fo-be-builder | 2026-07-26 | `findCategoryInsights` 구현 + `FoCategoryController.getInsights` 연결. curl 검증: `/categories/573/insights` → press 2125/2101, articles 1887 (STEP4 psql 결과와 일치). 기존 `/products/{id}/insights` 회귀 정상 |
 | STEP6 | fo-fe-builder | 2026-07-26 | `fetchCategoryInsights` 신규(`highlightNewsData.ts`), `fetchProductInsights`와 매핑 로직(`toHighlightNewsItems`) 공유 추출. `page.tsx`에서 `<DevicesPageFooter highlightItems={await fetchCategoryInsights(category.id)} />` 연결 |
 | QA | fo-qa-validator | 2026-07-26 | 브라우저 실검증: 573 페이지 Highlights 3건이 API 응답과 id·순서 일치, 각 링크(press/articles detail) 클릭해 상세 페이지 제목까지 일치 확인. 568 페이지는 0건이라 `HighlightNewsSection` 미렌더(기존 동작대로 정상) |
+| 8절 신규 추가(Lv2 variant) | fo-dev-doc-writer | 2026-07-26 | 기획서(product-lv2.png) ⑯ Highlights 요건 반영, Lv2(`product-range/[slug]`) 자신 기준 제품집합으로 산출 anchor가 다름을 8절에 신규 절로 추가. API 확인은 "확인 필요"로 명시(기존 `findCategoryInsights`가 Lv1 anchor 전제 CTE라 그대로 재사용 가능한지 단정하지 않음). **코드 변경 없음(문서만), 승인 대기** |
+| 8절 STEP4(Lv2 variant) | fo-be-analyzer | 2026-07-26 | `findCategoryInsights`의 Lv2 anchor 재사용 불가를 psql로 확정(`parentId=585 AND depth=2` → 0건). `CATEGORY_SELF_PRODUCT_CTE` 공유 설계, 엔드포인트 `GET /{lv2Id}/lv2-insights` 확정(기존 `/insights`와 경로 충돌 회피) |
+| 8절 STEP5(Lv2 variant) | fo-be-builder | 2026-07-26 | `queryCategoryInsights(cte, ...)` 공유 헬퍼로 리팩터링(기존 `findCategoryInsights` 시그니처/반환 불변), `findCategoryInsightsBySelf` 신규 + 컨트롤러 연결. curl 검증: 2044→2건(press 2125/articles 1887), 585→0건(psql 매핑 0건과 일치). 8080/8081 A/B 비교로 Lv1 insights 회귀 없음 확인 |
+| 8절 STEP6(Lv2 variant) | fo-fe-builder | 2026-07-26 | `fetchCategoryInsightsLv2()` 신규(기존 `fetchInsights` 헬퍼 재사용), `page.tsx`에 `highlightItems={await fetchCategoryInsightsLv2(category.id)}` 연결 |
+| 8절 QA(Lv2 variant) | fo-qa-validator + 세션 에이전트 | 2026-07-26 | 브라우저 실검증: 2044 페이지 Highlights 2건이 API 응답과 일치, 상세 페이지 제목까지 일치. 587 페이지는 0건이라 섹션 미렌더(정책대로 정상) |
 
-**최종 상태: 완료.** `#완료` 처리됨.
+**최종 상태: 1~7절(Lv1) + 8절(Lv2 variant) 전부 완료. `#완료` 처리됨.**

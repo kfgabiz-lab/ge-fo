@@ -4,6 +4,8 @@ import HistoryReloadOnNavigate from "@/components/layout/HistoryReloadOnNavigate
 import LenisScrollProvider from "@/components/layout/LenisScrollProvider";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import ScrollToTopOnNavigate from "@/components/layout/ScrollToTopOnNavigate";
+import SiteLocaleSync from "@/components/layout/SiteLocaleSync";
+import { loadSiteSettings, SITE_LOCALE } from "@/lib/siteTime";
 import "../assets/css/reset.css";
 import "../assets/css/fonts.css";
 import "../assets/css/globals.css";
@@ -40,16 +42,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // 서버 프로세스 생애주기 동안 1회만 조회(모듈 전역 캐싱) — 이후 요청은 캐시된 값을 그대로 사용.
+  await loadSiteSettings();
+
   return (
     <html lang="en">
       <body>
         <LenisScrollProvider>
           {children}
+          <SiteLocaleSync locale={SITE_LOCALE} />
           <HistoryReloadOnNavigate />
           <ScrollToTopOnNavigate />
           <ScrollToTopButton />

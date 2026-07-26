@@ -1,34 +1,14 @@
-import type { ProductDownloadItem } from "@/app/()/products-systems/data/productDetailContent";
+import {
+  productDownloadFile,
+  type ProductDownloadFile,
+  type ProductDownloadItem,
+} from "@/app/()/products-systems/data/productDetailContent";
 import { emptyStateIconSrc } from "@/data/commonAssets";
 
-/** Copy Link 클립보드 대상 URL을 포함한 Download Center 전용 파일 타입 */
-type DownloadCenterFile = {
-  name: string;
-  size: string;
-  /** Copy Link 클립보드 대상 URL */
-  url?: string;
-};
-
-/** Download Center 아이템 — files에 Copy Link용 url을 포함 */
+/** Download Center 아이템 — files에 Copy Link용 url을 포함(공용 헬퍼 productDownloadFile 재사용) */
 type DownloadCenterItem = Omit<ProductDownloadItem, "files"> & {
-  files: DownloadCenterFile[];
+  files: ProductDownloadFile[];
 };
-
-/** 더미 다운로드 베이스 — `url` 미지정 시 사용 */
-const DOWNLOAD_LINK_BASE = "https://www.ls-electric.com/download" as const;
-
-/**
- * Download 파일 데이터 생성 헬퍼 (Download Center 전용).
- * @example
- * productDownloadFile({ name: "a.pdf", size: "1MB", url: "https://www.ls-electric.com/download/a.pdf" })
- */
-function productDownloadFile({
-  name,
-  size,
-  url = `${DOWNLOAD_LINK_BASE}/${encodeURIComponent(name)}`,
-}: DownloadCenterFile): DownloadCenterFile {
-  return { name, size, url };
-}
 
 export const downloadCenterPage = {
   title: "Download Center",

@@ -291,13 +291,11 @@ function codeLabel(map: Map<string, string>, code: string | undefined): string {
   return map.get(key) ?? key;
 }
 
-// 행 1건 → 공개/variant/과거제외 게이트 통과 여부(FE 2차 재판정)
-function passesGate(json: CurrDtlDataJson, expectedCourseCode?: string): boolean {
+// 행 1건 → 공개/과거제외 게이트 통과 여부(FE 2차 재판정)
+// - variant(training_course) 분기 없음: 3개 메뉴 모두 동일 커리큘럼을 상세로 진입 가능해야 함.
+function passesGate(json: CurrDtlDataJson): boolean {
   const curriculum = json._fetchedRel8?.curriculum;
   if (!curriculum || curriculum.is_visible !== "001") return false;
-  if (expectedCourseCode && curriculum.training_course !== expectedCourseCode) {
-    return false;
-  }
   if (!isNotPast(json.curriculum_detail2?.training_date_to)) return false;
   return true;
 }
@@ -313,11 +311,10 @@ export function toTrainingCourseDetail(
   courseId: string,
   categoryMap: Map<string, string>,
   trainingTypeMap: Map<string, string>,
-  expectedCourseCode?: string,
 ): EngineeringTrainingDetail | null {
   const valid: ParsedRow[] = rows
     .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
-    .filter(({ json }) => passesGate(json, expectedCourseCode));
+    .filter(({ json }) => passesGate(json));
   if (valid.length === 0) return null;
 
   const curriculum = valid[0].json._fetchedRel8?.curriculum;
@@ -401,7 +398,6 @@ export function toTrainingSessionDetail(
   sessionId: string,
   categoryMap: Map<string, string>,
   trainingTypeMap: Map<string, string>,
-  expectedCourseCode?: string,
 ): EngineeringTrainingSessionDetail | null {
   const matched = rows
     .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
@@ -409,7 +405,7 @@ export function toTrainingSessionDetail(
   if (!matched) return null;
 
   const { json } = matched;
-  if (!passesGate(json, expectedCourseCode)) return null;
+  if (!passesGate(json)) return null;
   const curriculum = json._fetchedRel8?.curriculum;
   if (!curriculum) return null;
 
@@ -460,6 +456,8 @@ export function toTrainingSessionDetail(
     sessionId,
     category: categoryLabel,
     title: d2.title ?? "",
+    // 부모 커리큘럼 제목(이미 조회된 _fetchedRel8.curriculum). 세션→코스 소프트 이동 시 브레드크럼 seed 용.
+    courseTitle: curriculum.title ?? undefined,
     breadcrumbCurrent: dateDisplay,
     // 세션 본문(WYSIWYG HTML). 빈값이면 컴포넌트에서 본문 섹션/탭 비노출.
     content: d2.content ?? "",
@@ -516,12 +514,24 @@ export async function fetchTrainingDetailRows(
 // 게이트 통과 첫 행의 부모 curriculum 선택(메타 대표값 산출용). 없으면 null.
 function pickGateCurriculum(
   rows: PageDataItem[],
-  expectedCourseCode?: string,
 ): ParentCurriculum | null {
   const valid = rows
     .map((raw) => ({ json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
-    .filter(({ json }) => passesGate(json, expectedCourseCode));
+    .filter(({ json }) => passesGate(json));
   return valid[0]?.json._fetchedRel8?.curriculum ?? null;
+}
+
+// 코스 상세 브레드크럼(current)용 코스 제목만 산출.
+// - 헤더 브레드크럼을 SSR 시점에 실 제목으로 렌더하기 위해 services 레이아웃(서버)에서 호출한다.
+// - page 컴포넌트/ generateMetadata 와 "동일 인자"(fetchTrainingDetailRows)라 Next fetch memoization 으로
+//   실제 요청은 요청당 1회만 발생(추가 조회 아님).
+// - 게이트 통과 행이 없으면 null → 헤더는 정적 폴백(getBreadcrumbConfig) 사용.
+export async function fetchTrainingCourseTitle(
+  courseId: string,
+): Promise<string | null> {
+  const rows = await fetchTrainingDetailRows(courseId);
+  const title = pickGateCurriculum(rows)?.title;
+  return title && title.trim() ? title : null;
 }
 
 // curriculum.image[0] → page-files 절대경로(OG image). 미등록/파싱불가 시 undefined.
@@ -558,9 +568,8 @@ function buildOgMetadata(
 // image=curriculum.image[0]. 데이터 없으면 안전 폴백(빈 Metadata → layout 기본값 유지).
 export function buildCourseMetadata(
   rows: PageDataItem[],
-  expectedCourseCode?: string,
 ): Metadata {
-  const curriculum = pickGateCurriculum(rows, expectedCourseCode);
+  const curriculum = pickGateCurriculum(rows);
   if (!curriculum) return {};
   return buildOgMetadata(
     curriculum.title ?? "",
@@ -575,12 +584,11 @@ export function buildCourseMetadata(
 export function buildSessionMetadata(
   rows: PageDataItem[],
   sessionId: string,
-  expectedCourseCode?: string,
 ): Metadata {
   const matched = rows
     .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
     .find(({ raw }) => Number(raw.id) === Number(sessionId));
-  if (!matched || !passesGate(matched.json, expectedCourseCode)) return {};
+  if (!matched || !passesGate(matched.json)) return {};
   const curriculum = matched.json._fetchedRel8?.curriculum ?? null;
   const d2 = matched.json.curriculum_detail2 ?? {};
   return buildOgMetadata(

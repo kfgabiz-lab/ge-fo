@@ -1,3 +1,4 @@
+import MainImagePopup from "./components/MainImagePopup";
 import MainVisual from "./components/MainVisual";
 import MainInfo from "./components/MainInfo";
 import WhatWeDoSwiper from "./components/WhatWeDoSwiper";
@@ -15,6 +16,7 @@ export default async function MainPage() {
   const highlightNewsItems = await fetchMainHighlightNews();
   return (
     <main className="main-page" id="Page_main">
+      <MainImagePopup />
       <MainVisual />
 
       <MainInfo />

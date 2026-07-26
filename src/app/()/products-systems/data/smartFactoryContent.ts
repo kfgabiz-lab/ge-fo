@@ -1,5 +1,6 @@
 import type { DevicesProductFeatureListItem } from "@/components/content/DevicesProductFeaturesSection";
 import {
+  productDownloadFile,
   productDownloadDescriptionSample,
   type ProductDownloadItem,
   type ProductOtherItem,
@@ -7,7 +8,7 @@ import {
 import type { ProductNavItem } from "../components/product/DevicesProductNav";
 import type { HvdcApplication, HvdcWhyBlock } from "./hvdcContent";
 
-const smartFactoryImg = (file: string) => `/pub/img/devices-systems/smart-factory/${file}`;
+const smartFactoryImg = (file: string) => `/img/devices-systems/smart-factory/${file}`;
 
 export const smartFactoryHero = {
   title: "Smart Factory",
@@ -141,8 +142,8 @@ export const smartFactoryDownloads: ProductDownloadItem[] = [
     versions: ["V38.0", "V37.0", "V36.0"],
     description: productDownloadDescriptionSample,
     files: [
-      { name: "MC-800a, 630a, 500a.pdf", size: "12.09MB" },
-      { name: "Metasol MS_MC-800a_500-800A_3P_2D CAD.pdf", size: "5.23MB" },
+      productDownloadFile({ name: "MC-800a, 630a, 500a.pdf", size: "12.09MB", url: "https://www.ls-electric.com/download/MC-800a%2C%20630a%2C%20500a.pdf" }),
+      productDownloadFile({ name: "Metasol MS_MC-800a_500-800A_3P_2D CAD.pdf", size: "5.23MB", url: "https://www.ls-electric.com/download/Metasol%20MS_MC-800a_500-800A_3P_2D%20CAD.pdf" }),
     ],
   },
   {
@@ -152,7 +153,7 @@ export const smartFactoryDownloads: ProductDownloadItem[] = [
     date: "Dec 08, 2025",
     version: "V38.0",
     versions: ["V38.0", "V37.0", "V36.0"],
-    files: [{ name: "[HVDC_and_FACTS]_EN_C84602-02-201905.pdf", size: "4.62MB" }],
+    files: [productDownloadFile({ name: "[HVDC_and_FACTS]_EN_C84602-02-201905.pdf", size: "4.62MB", url: "https://www.ls-electric.com/download/%5BHVDC_and_FACTS%5D_EN_C84602-02-201905.pdf" })],
   },
   {
     id: "smart-factory-dl-3",
@@ -162,8 +163,8 @@ export const smartFactoryDownloads: ProductDownloadItem[] = [
     version: "V38.0",
     versions: ["V38.0", "V37.0", "V36.0"],
     files: [
-      { name: "LS_Solution_Overview_EN_CZZZ02-04-202603", size: "" },
-      { name: "[HVDC_and_FACTS]_EN_C84602-02-201905.pdf", size: "4.62MB" },
+      productDownloadFile({ name: "LS_Solution_Overview_EN_CZZZ02-04-202603", size: "", url: "https://www.ls-electric.com/download/LS_Solution_Overview_EN_CZZZ02-04-202603" }),
+      productDownloadFile({ name: "[HVDC_and_FACTS]_EN_C84602-02-201905.pdf", size: "4.62MB", url: "https://www.ls-electric.com/download/%5BHVDC_and_FACTS%5D_EN_C84602-02-201905.pdf" }),
     ],
   },
 ];
@@ -176,21 +177,21 @@ export const smartFactoryOtherProducts: ProductOtherItem[] = [
   {
     id: "smart-factory-op-1",
     href: "/products-systems/motor-control/metasol-ms",
-    image: "/pub/img/devices-systems/products/other/product_other_metasol_ms.png",
+    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
     title: "Metasol MS",
     subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
   },
   {
     id: "smart-factory-op-2",
     href: "/products-systems/motor-control/susol-ul-smart-mccb",
-    image: "/pub/img/devices-systems/products/other/product_other_mcb.png",
+    image: "/img/devices-systems/products/other/product_other_mcb.png",
     title: "Miniature circuit breaker",
     subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
   },
   {
     id: "smart-factory-op-3",
     href: "",
-    image: "/pub/img/devices-systems/products/other/product_other_metasol_mms.png",
+    image: "/img/devices-systems/products/other/product_other_metasol_mms.png",
     title: "Metasol MMS",
     subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
     badges: 2,
@@ -198,21 +199,21 @@ export const smartFactoryOtherProducts: ProductOtherItem[] = [
   {
     id: "smart-factory-op-4",
     href: "/products-systems/motor-control/susol-ul-smart-mccb",
-    image: "/pub/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
+    image: "/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
     title: "Susol UL MCCB",
     subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
   },
   {
     id: "smart-factory-op-5",
     href: "",
-    image: "/pub/img/devices-systems/products/other/product_other_metasol_ms.png",
+    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
     title: "Magnetic Contactor",
     subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
   },
   {
     id: "smart-factory-op-6",
     href: "",
-    image: "/pub/img/devices-systems/products/other/product_other_metasol_ms.png",
+    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
     title: "Overload Relay",
     subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
   },

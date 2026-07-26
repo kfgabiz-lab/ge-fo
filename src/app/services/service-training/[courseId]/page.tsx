@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import TrainingDetailPage from "@/app/services/training/components/TrainingDetailPage";
-import { TRAINING_COURSE_CODE } from "@/app/services/training/data/trainingData";
 import {
   buildCourseMetadata,
   fetchTrainingDetailRows,
@@ -17,7 +16,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { courseId } = await params;
   const rows = await fetchTrainingDetailRows(courseId);
-  return buildCourseMetadata(rows, TRAINING_COURSE_CODE.service);
+  return buildCourseMetadata(rows);
 }
 
 export default async function ServiceTrainingDetailRoute({ params }: PageProps) {

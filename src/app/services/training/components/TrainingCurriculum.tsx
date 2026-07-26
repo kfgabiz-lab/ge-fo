@@ -172,7 +172,6 @@ export default function TrainingCurriculum({
       }
       fetchTrainingByCategoryIds({
         categoryIds: ids,
-        variant,
         page: pageIndex,
         size: TRAINING_LIST_SIZE,
       })
@@ -196,7 +195,7 @@ export default function TrainingCurriculum({
       page: pageIndex,
       size: TRAINING_LIST_SIZE,
       where: {
-        ...trainingStatusWhere(variant),
+        ...trainingStatusWhere(),
         ...(categoryValue
           ? { "eq_curriculum.product_category": categoryValue }
           : {}),

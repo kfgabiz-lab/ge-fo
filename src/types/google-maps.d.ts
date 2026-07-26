@@ -93,9 +93,18 @@ declare namespace google.maps {
     location: LatLng;
   }
 
+  // 지오코딩 결과의 주소 구성요소(도로명/도시/주/우편번호 파싱용)
+  interface GeocoderAddressComponent {
+    long_name: string;
+    short_name: string;
+    types: string[];
+  }
+
   interface GeocoderResult {
     geometry: GeocoderGeometry;
     formatted_address?: string;
+    // placeId 지오코딩 시 주소 컴포넌트(등록 폼 City/State/ZIP 자동 채움용)
+    address_components: GeocoderAddressComponent[];
   }
 
   class Point {

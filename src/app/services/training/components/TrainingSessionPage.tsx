@@ -1,10 +1,6 @@
 import { notFound } from "next/navigation";
 import type { TrainingVariant } from "../data/trainingContent";
-import {
-  TRAINING_COURSE_CODE,
-  fetchTrainingCategories,
-  toCategoryMap,
-} from "../data/trainingData";
+import { fetchTrainingCategories, toCategoryMap } from "../data/trainingData";
 import {
   fetchTrainingDetailRows,
   fetchTrainingTypeCodes,
@@ -40,14 +36,14 @@ export default async function TrainingSessionPage({
   const categoryMap = toCategoryMap(categoryCodes);
   const trainingTypeMap = toCategoryMap(trainingTypeCodes);
 
-  // 공개/과거제외 게이트 + variant 오배치 방어 + 행 PK 매칭(미매칭 시 null → 404)
+  // 공개/과거제외 게이트 + 행 PK 매칭(미매칭 시 null → 404).
+  // variant 무관 동일 커리큘럼 노출 정책 → training_course 게이트 없음.
   const session = toTrainingSessionDetail(
     rows,
     courseId,
     sessionId,
     categoryMap,
     trainingTypeMap,
-    TRAINING_COURSE_CODE[variant],
   );
   if (!session) {
     notFound();

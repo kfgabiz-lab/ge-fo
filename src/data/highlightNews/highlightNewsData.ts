@@ -264,3 +264,11 @@ export async function fetchCategoryInsights(
 ): Promise<HighlightNewsItem[]> {
   return fetchInsights(`/api/v1/fo/categories/${categoryId}/insights`);
 }
+
+// Lv2 카테고리(product-range/[slug]) Highlights — 해당 Lv2 "자신"에 맵핑된 노출가능 제품의 게시글 최신 3건.
+// Lv1용 /insights 와 응답 shape·매핑 로직은 동일하고 대상 제품 집합만 다르다(Lv1: 하위 Lv2 전체 / Lv2: 자신 직접 맵핑).
+export async function fetchCategoryInsightsLv2(
+  categoryId: number,
+): Promise<HighlightNewsItem[]> {
+  return fetchInsights(`/api/v1/fo/categories/${categoryId}/lv2-insights`);
+}

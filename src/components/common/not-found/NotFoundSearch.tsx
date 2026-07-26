@@ -7,15 +7,31 @@ import {
   buildNotFoundSearchHref,
   notFoundPage,
 } from "@/data/common/notFoundContent";
+import { logSearchKeyword } from "@/data/search/searchKeywordData";
 
-export default function NotFoundSearch() {
+type NotFoundSearchProps = {
+  /** 서버(NotFoundPage)에서 조회한 인기 검색어(source=UNIFIED_SEARCH). 폴백 없음 — 비어 있으면 태그 영역 미노출. */
+  popularKeywords?: string[];
+};
+
+export default function NotFoundSearch({
+  popularKeywords = [],
+}: NotFoundSearchProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const hasQuery = query.length > 0;
 
+  const popularTags: readonly string[] = popularKeywords;
+
   const navigateToQuery = (nextQuery: string) => {
     setQuery(nextQuery);
     router.push(buildNotFoundSearchHref(nextQuery));
+  };
+
+  // 폼 제출(Enter/검색버튼) — 사용자가 직접 입력해서 실행한 검색만 집계 대상(fire-and-forget).
+  const submitQuery = (nextQuery: string) => {
+    void logSearchKeyword("UNIFIED_SEARCH", nextQuery);
+    navigateToQuery(nextQuery);
   };
 
   return (
@@ -26,7 +42,7 @@ export default function NotFoundSearch() {
           role="search"
           onSubmit={(event) => {
             event.preventDefault();
-            navigateToQuery(query);
+            submitQuery(query);
           }}
         >
           <TextField
@@ -85,7 +101,7 @@ export default function NotFoundSearch() {
             {notFoundPage.popularKeywordsLabel}
           </span>
           <ul className="common_404_search__tags">
-            {notFoundPage.popularKeywords.map((tag) => (
+            {popularTags.map((tag) => (
               <li key={tag}>
                 <button
                   type="button"

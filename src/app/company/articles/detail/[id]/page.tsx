@@ -76,7 +76,7 @@ export default async function CompanyArticlesDetailPage({
       title={(row.title as string) ?? ""}
       date={formatDisplayDate((pickField(row, "publish_dttm", "publishDttm") as string) ?? "")}
       heroImage={heroImage}
-      pagerAriaLabel="Articles post navigation"
+      pagerAriaLabel="Media article navigation"
       prev={prev}
       next={next}
       listHref="/company/articles"
