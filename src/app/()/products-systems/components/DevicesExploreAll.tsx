@@ -33,7 +33,7 @@ function ExploreLetterColumn({ group }: { group: GnbExploreLetterGroup }) {
         {group.items.map((item) => (
           <li key={item.id} data-slug-item>
             {item.discontinued ? (
-              // href = 정적 라우팅(정적 유지). discontinued 표기는 product.is_visible 파생 가능성 있음 — 확인 필요
+              // href = 정적 라우팅(정적 유지). discontinued = product.order_status==='99' 파생(데이터 레이어 필드, DOM 슬러그키 없음)
               <Link
                 href={item.href}
                 prefetch={false}
