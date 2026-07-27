@@ -7,8 +7,6 @@ import {
   guideCheckboxIconsContactConsent,
 } from "@/components/form/GuideFieldIcons";
 
-// 다중선택 체크박스 그룹(legend + 체크박스 + 힌트). ls-publish 원본 마크업 그대로 이관.
-// legend 가 빈 문자열이면 legend 없이 --no-legend 로 렌더된다.
 type RequestForTrainingCheckboxGroupProps = {
   legend: string;
   required?: boolean;

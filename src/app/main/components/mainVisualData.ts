@@ -1,15 +1,7 @@
-// 메인 히어로 영역(VideoSwiper / BannerSwiper) 데이터 조회 헬퍼
-// - 서버 컴포넌트(MainVisual)에서 호출하여 결과를 각 클라이언트 컴포넌트에 props 로 전달
-// - 설계 문서: fo/docs/dev/main/video-swiper.md, fo/docs/dev/main/banner-swiper.md
-// codes(공통코드) 조회는 page-data slug 조회가 아니므로 fetchApi 직접 사용(리팩터 대상 아님)
 import { fetchApi } from "@/lib/api";
 import { pickField } from "@/lib/pageData";
-// page-data slug 조회는 공통 조회+매핑 계층(fetchData)으로 통일 — 목록 브랜치는 res.content가 이미 flatten된 row 배열
 import { fetchData } from "@/lib/pageDataApi";
 
-// ---------------- hero-data (VideoSwiper) ----------------
-
-// 화면 바인딩에 실제 사용하는 히어로 항목(텍스트/링크 + 대표 미디어ID)
 export interface HeroItem {
   id: number;
   sub: string;
@@ -17,17 +9,12 @@ export interface HeroItem {
   btnUrl: string;
   btnText: string;
   orderNo: string;
-  // content 배열의 첫 요소(대표 미디어ID). 없으면 null
   mediaId: number | null;
-  // mediaId 파일의 실제 Content-Type(예: "video/webm", "image/jpeg"). mediaId 없거나 조회 실패 시 null
   mediaMimeType: string | null;
 }
 
-// 업로드 미디어 스트리밍 엔드포인트 — VideoSwiper.tsx의 PAGE_FILE_SRC와 동일 경로(중복 정의, 상수 하나 바뀌면 양쪽 다 반영 필요)
 const PAGE_FILE_ENDPOINT = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-// mediaId 파일이 영상인지 이미지인지 판별하기 위해 Content-Type만 HEAD로 조회(본문 다운로드 없음)
-// 실패 시 null 반환 — 호출부가 이미지로 안전하게 폴백 처리
 async function fetchMediaMimeType(mediaId: number): Promise<string | null> {
   const isServer = typeof window === "undefined";
   const base = isServer
@@ -46,7 +33,6 @@ async function fetchMediaMimeType(mediaId: number): Promise<string | null> {
   }
 }
 
-// orderNo 오름차순 정렬용 캐스팅: 빈 문자열/비숫자는 맨 뒤(Infinity)
 function orderNoValue(orderNo: string): number {
   if (orderNo === "") return Number.POSITIVE_INFINITY;
   const n = Number(orderNo);
@@ -54,7 +40,6 @@ function orderNoValue(orderNo: string): number {
 }
 
 export async function fetchHeroItems(): Promise<HeroItem[]> {
-  // fetchData 목록 브랜치: where 키는 기존 쿼리스트링 키 그대로(BE가 그대로 인식) → res.content는 commonEachData로 flatten 완료
   const res = await fetchData<Record<string, unknown>>({
     slug: "hero-data",
     where: { drs_post_period: "in_range" },
@@ -64,18 +49,14 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
 
   const items: HeroItem[] = await Promise.all(
     (res.content ?? []).map(async (row) => {
-      // content(미디어ID 배열) key는 신/구 스키마 공통이라 불변
       const contentArr = row.content;
-      // content 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
       const mediaId =
         Array.isArray(contentArr) && contentArr.length > 0
           ? (contentArr[0] as number)
           : null;
       const mediaMimeType =
         mediaId != null ? await fetchMediaMimeType(mediaId) : null;
-      // pickField: 신 스키마(snake) 우선, 없으면 구 스키마(camel) 폴백 → 구·신 데이터 혼재에도 안전
       return {
-        // flatten 후 원본 item.id는 row._id로 내려옴
         id: row._id as number,
         sub: (pickField(row, "sub_title", "sub") as string) ?? "",
         titleText: (pickField(row, "hero_title", "titleText") as string) ?? "",
@@ -88,9 +69,6 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
     }),
   );
 
-  // FE 후처리(BE 문자열 정렬 "10"<"2" 오정렬·빈값 처리 보정):
-  //  1) orderNo 숫자 오름차순, 빈 값/비숫자는 맨 뒤
-  //  2) tie-breaker: orderNo 동일 시 id ASC
   items.sort((a, b) => {
     const av = orderNoValue(a.orderNo);
     const bv = orderNoValue(b.orderNo);
@@ -101,16 +79,12 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
   return items;
 }
 
-// ---------------- banner-data (BannerSwiper) ----------------
-
-// 화면 바인딩에 실제 사용하는 배너 항목(텍스트/링크 + 대표 미디어ID)
 export interface BannerItem {
   id: number;
   url: string;
   mainTitle: string;
   subTitle: string;
   sortOrder: string;
-  // image 배열의 첫 요소(대표 미디어ID). 없으면 null → 정적 목업 유지
   mediaId: number | null;
 }
 
@@ -121,7 +95,6 @@ function sortOrderValue(sortOrder: string): number {
 }
 
 export async function fetchBannerItems(): Promise<BannerItem[]> {
-  // fetchData 목록 브랜치: where 키는 기존 쿼리스트링 키 그대로(BE가 그대로 인식) → res.content는 commonEachData로 flatten 완료
   const res = await fetchData<Record<string, unknown>>({
     slug: "banner-data",
     where: { eq_banner_position: "HERO", eq_is_visible: "001" },
@@ -130,16 +103,12 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
   });
 
   const items: BannerItem[] = (res.content ?? []).map((row) => {
-    // image(미디어ID 배열) key는 신/구 스키마 공통이라 불변
     const imageArr = row.image;
-    // image 배열의 첫 요소를 대표 미디어ID로 사용(비어있으면 null)
     const mediaId =
       Array.isArray(imageArr) && imageArr.length > 0
         ? (imageArr[0] as number)
         : null;
-    // pickField: 신 스키마(snake) 우선, 없으면 구 스키마(camel) 폴백. url은 신/구 공통 key라 단일 인자
     return {
-      // flatten 후 원본 item.id는 row._id로 내려옴
       id: row._id as number,
       url: (pickField(row, "url") as string) ?? "",
       mainTitle: (pickField(row, "banner_title", "mainTitle") as string) ?? "",
@@ -149,8 +118,6 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
     };
   });
 
-  // 설계 문서(banner-swiper.md 4절): sortOrder ASC, tie-breaker id ASC
-  //  현재 실데이터가 둘 다 sortOrder=1 로 tie 이므로 id ASC 보정이 실제로 필요
   items.sort((a, b) => {
     const av = sortOrderValue(a.sortOrder);
     const bv = sortOrderValue(b.sortOrder);
@@ -161,56 +128,42 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
   return items;
 }
 
-// ---------------- banner-data (Main Notic 공지) ----------------
-// 설계 문서: fo/docs/dev/main/banner-data-information.md
-// - HERO 배너와 동일 slug(banner-data), where 조건으로 INFORMATION 위치만 구분
-// - 다건 조회이나 size=1 + updatedAt DESC 로 최신 1건만 노출(단건 구조)
-
-// 코드그룹 조회 응답 항목(GET /api/v1/fo/codes/BANNER_PREFIX)
 interface CodeItem {
   code: string;
   name: string;
 }
 
-// 화면 바인딩에 사용하는 공지 항목(prefix 코드→라벨 변환 완료 상태)
 export interface NoticeItem {
-  // BANNER_PREFIX 코드→라벨 변환 결과(예: "001" → "뉴스레터")
   prefixLabel: string;
   bottomText: string;
   url: string;
 }
 
 export async function fetchNoticeItem(): Promise<NoticeItem | null> {
-  // 공지 배너(최신 1건) + prefix 코드목록을 병렬 조회
-  // - 배너: fetchData 목록 브랜치(where 키는 기존 쿼리스트링 키 그대로) → content는 flatten된 row 배열
-  // - codes: page-data slug 조회가 아닌 공통코드 조회이므로 fetchApi 직접 사용(리팩터 대상 아님)
   const [bannerRes, codes] = await Promise.all([
     fetchData<Record<string, unknown>>({
       slug: "banner-data",
-      where: { eq_banner_position: "INFORMATION", eq_is_visible: "001" },
-      sort: "updatedAt,desc",
+      where: {
+        eq_banner_position: "INFORMATION",
+        eq_is_visible: "001",
+        drs_post_period: "in_range",
+      },
+      sort: "banner.post_period_from,desc",
       size: 1,
     }),
     fetchApi<CodeItem[]>("/api/v1/fo/codes/BANNER_PREFIX"),
   ]);
 
-  // 조건 매칭 0건이면 null → 호출부(MainVisual)에서 정적 목업으로 폴백
-  // content는 이미 flatten된 row 배열이므로 별도 flattenPageDataItem 불필요
   const row = bannerRes.content?.[0];
   if (!row) return null;
 
-  // prefix key는 신/구 스키마 공통이라 불변
   const prefixCode = (pickField(row, "prefix") as string) ?? "";
 
-  // 코드→라벨 맵 구성(code → name)
   const codeMap = new Map<string, string>(
     (codes ?? []).map((c) => [c.code, c.name]),
   );
-  // 코드 매칭 실패 시 원본 코드값을 그대로 사용(빈 값보다 정보 손실이 적음).
-  //  → 설계 문서 6.비고 2)의 "prefix가 '1'로 저장돼 '001'과 불일치" 케이스가 해당.
   const prefixLabel = codeMap.get(prefixCode) ?? prefixCode;
 
-  // pickField: bottomText는 신 스키마(banner_text) 우선, url은 신/구 공통 key라 단일 인자
   return {
     prefixLabel,
     bottomText: (pickField(row, "banner_text", "bottomText") as string) ?? "",

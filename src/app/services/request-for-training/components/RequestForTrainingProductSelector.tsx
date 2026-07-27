@@ -3,6 +3,10 @@
 import { Checkbox, MenuItem } from "@mui/material";
 import { useEffect, useId, useMemo, useState } from "react";
 import {
+  fetchTrainingCategories,
+  type CodeItem,
+} from "@/app/services/training/data/trainingData";
+import {
   GuideCheckboxIcon,
   GuideSelectIcon,
   guideCheckboxIconsContactConsent,
@@ -22,12 +26,18 @@ import {
 
 type TrainingCategoryType = "power" | "automation";
 
-const CATEGORY_TYPE_OPTIONS: { id: TrainingCategoryType; label: string }[] = [
-  { id: "power", label: "Power" },
-  { id: "automation", label: "Automation" },
-];
+type CategoryTypeOption = { id: TrainingCategoryType; label: string };
 
 const CATEGORY_PLACEHOLDER = "Category";
+
+function toCategoryTypeOptions(codes: CodeItem[]): CategoryTypeOption[] {
+  return (codes ?? [])
+    .map((code) => ({
+      id: code.name.toLowerCase() as TrainingCategoryType,
+      label: code.name,
+    }))
+    .filter((option) => option.id === "power" || option.id === "automation");
+}
 
 function renderSelectValue(label: string, isPlaceholder: boolean) {
   return (
@@ -44,8 +54,6 @@ function renderSelectValue(label: string, isPlaceholder: boolean) {
   );
 }
 
-// "Other"는 실제 제품이 아니라 기획서(traning_req4dc.png)상 "제품과 상관없이 고정값으로 노출"되는 항목이라
-// 그룹(id)마다 음수 id를 부여해 실제 제품 id와 충돌 없이 선택 상태를 관리한다.
 const OTHER_LABEL = "Other";
 function otherId(groupId: number): number {
   return -groupId;
@@ -56,9 +64,8 @@ export default function RequestForTrainingProductSelector() {
   const { fields } = requestForTrainingStep4Copy;
   const { step4, setStep4Field } = useRequestForTrainingForm();
   const [tree, setTree] = useState<TrainingProductTree>({ power: [], automation: [] });
-  // 기획서 규칙: default 미선택 — 카테고리를 직접 고르기 전까지 하위 드롭다운/체크박스는 나타나지 않는다.
+  const [categoryTypeOptions, setCategoryTypeOptions] = useState<CategoryTypeOption[]>([]);
   const [categoryType, setCategoryType] = useState<TrainingCategoryType | "">("");
-  // 두 번째 드롭다운에서 고른 그룹 id(문자열). 미선택이면 빈 문자열.
   const [groupId, setGroupId] = useState<string>("");
 
   useEffect(() => {
@@ -71,7 +78,18 @@ export default function RequestForTrainingProductSelector() {
     };
   }, []);
 
-  // 첫 번째 드롭다운(Power/Automation)에 대응하는 그룹 목록 — 계층 없이 평평한 배열이다.
+  useEffect(() => {
+    let alive = true;
+    fetchTrainingCategories()
+      .then((codes) => {
+        if (alive) setCategoryTypeOptions(toCategoryTypeOptions(codes ?? []));
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   const groups: TrainingProductNode[] = categoryType ? tree[categoryType] : [];
 
   const selectedIds = useMemo(
@@ -81,11 +99,9 @@ export default function RequestForTrainingProductSelector() {
 
   function handleCategoryTypeChange(nextType: TrainingCategoryType) {
     setCategoryType(nextType);
-    // 카테고리를 바꾸면 두 번째 드롭다운은 다시 미선택 상태로 돌아간다.
     setGroupId("");
   }
 
-  // groupId/groupTitle 은 두 번째 드롭다운에서 고른 그룹 정보 — VFD 조건부 질문 노출 판별에 쓰인다.
   function toggleProduct(id: number, name: string, groupId: number, groupTitle: string) {
     if (selectedIds.has(id)) {
       setStep4Field(
@@ -111,7 +127,6 @@ export default function RequestForTrainingProductSelector() {
     );
   }
 
-  // 두 번째 드롭다운에서 고른 그룹. 고르기 전에는 undefined라 체크박스 영역이 노출되지 않는다.
   const selectedGroup = groups.find((group) => String(group.id) === groupId);
   const products = selectedGroup?.products ?? [];
 
@@ -135,14 +150,14 @@ export default function RequestForTrainingProductSelector() {
           IconComponent={GuideSelectIcon}
           inputProps={{ "aria-label": "Product category", id: `${formId}-product-category` }}
           renderValue={(value) => {
-            const current = CATEGORY_TYPE_OPTIONS.find((o) => o.id === value);
+            const current = categoryTypeOptions.find((o) => o.id === value);
             return renderSelectValue(current ? current.label : CATEGORY_PLACEHOLDER, !current);
           }}
         >
           <MenuItem value="" disabled>
             {CATEGORY_PLACEHOLDER}
           </MenuItem>
-          {CATEGORY_TYPE_OPTIONS.map((option) => (
+          {categoryTypeOptions.map((option) => (
             <MenuItem key={option.id} value={option.id}>
               {option.label}
             </MenuItem>

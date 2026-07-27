@@ -5,9 +5,6 @@ import {
 } from "@/data/services/requestForTrainingContent";
 import RequestForTrainingSteps from "./RequestForTrainingSteps";
 
-// Step1~4 공용 셸(스텝 바 + 본문 + 이전/다음 버튼). ls-publish 원본 마크업 그대로 이관.
-// nextHref 없이 onNextClick 을 넘기면 원본에 이미 있던 button 분기를 그대로 쓰면서
-// 클릭 시 검증 후 이동하도록 처리한다(마크업/클래스 변경 없음).
 export default function RequestForTraining({
   currentStep,
   children,

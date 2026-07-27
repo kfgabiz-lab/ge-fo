@@ -13,32 +13,25 @@ import RequestForTrainingQuestionnaireIntro from "./RequestForTrainingQuestionna
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
 import type { RequestForTrainingStep3Errors } from "./RequestForTrainingStep3";
 
-// 주소 자동완성 조회 최소 입력 길이 / 디바운스 지연(ms) — Step1Form과 동일 값
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
-// 기획서(traning_req3dc.png) 입력 제한 — 허용되지 않는 문자는 입력 시점에 자동 제거한다.
-const LOCATION_NAME_MAX = 200; // 교육 장소: 영문만, 최대 200byte
-const CONTACT_PERSON_MAX = 50; // 수업 담당자: 모든 문자 허용, 최대 50byte(필터 없음)
-const CONTACT_DETAILS_MAX = 400; // 연락처/이메일: 영문/숫자/-_@ + 마침표(사용자 확정), 최대 400byte
+const LOCATION_NAME_MAX = 200;
+const CONTACT_PERSON_MAX = 50;
+const CONTACT_DETAILS_MAX = 400;
 
-/** 영문자 + 공백만 남기고 최대 200자로 자름 */
 function filterLocationName(value: string): string {
   return value.replace(/[^A-Za-z ]/g, "").slice(0, LOCATION_NAME_MAX);
 }
 
-/** 필터 없이 최대 50자로만 자름(기획서: 모든 문자 입력 가능) */
 function filterContactPerson(value: string): string {
   return value.slice(0, CONTACT_PERSON_MAX);
 }
 
-/** 이메일/전화 혼용 허용 문자(영문/숫자/. _ - @)만 남기고 최대 400자로 자름 */
 function filterContactDetails(value: string): string {
   return value.replace(/[^A-Za-z0-9._@-]/g, "").slice(0, CONTACT_DETAILS_MAX);
 }
 
-// 입력값은 스텝 간 유지를 위해 Provider(Context + sessionStorage)에서 관리하고,
-// 필수값 누락 표시(errors)는 Next 클릭 시점에 상위(RequestForTrainingStep3)에서 내려준다.
 export default function RequestForTrainingStep3Form({
   errors,
   onClearError,
@@ -51,7 +44,6 @@ export default function RequestForTrainingStep3Form({
   const { step3, setStep3Field } = useRequestForTrainingForm();
   const isInPerson = step3.trainingFormat === "In-Person";
 
-  // 주소 자동완성 후보/드롭다운 상태 (Step1Form 로직 그대로 복붙 — 필드명만 step3 기준으로 교체)
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suppressFetchRef = useRef(false);
@@ -124,7 +116,6 @@ export default function RequestForTrainingStep3Form({
         if (address.zip) setStep3Field("zip", address.zip);
       }
     } catch {
-      // 주소 파싱 실패 시 자동채움 스킵 — 수동 입력 유지
     }
   }
 
@@ -171,7 +162,6 @@ export default function RequestForTrainingStep3Form({
               </div>
             </div>
 
-            {/* 기획서(traning_req3dc.png) 요구 — Virtual 선택 시 [1a] 영역(장소명~연락처) 전체 숨김 */}
             {isInPerson ? (
               <>
                 <div className="support_service_training_request__field support_service_training_request__field--full">

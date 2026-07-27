@@ -5,7 +5,6 @@ import {
 } from "@/data/services/requestForTrainingContent";
 import { Fragment, type CSSProperties } from "react";
 
-// Step1~4 진행 표시 바. ls-publish 원본 마크업 그대로 이관.
 export default function RequestForTrainingSteps({
   currentStep,
 }: {

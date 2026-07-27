@@ -24,7 +24,7 @@
 |---|---|---|---|
 | Main 레이아웃 | `src/app/main/layout.tsx` | MainHeader(`components/layout/main/MainHeader`)와 MainFooter(`components/layout/main/MainFooter`)로 children을 감싸는 레이아웃 | TODO |
 | Main 페이지 | `src/app/main/page.tsx` | 메인 홈페이지 — MainVisual, MainInfo, WhatWeDoSwiper, HighlightNewsSection(공통, variant="main"), MainCards, MainProducts, CommonBanner01(공통), IconCards, CommonBanner03Link(공통) 순으로 조립하는 페이지 | TODO |
-| Main Visual | `src/app/main/components/MainVisual.tsx` | 히어로 영역(VideoSwiper+BannerSwiper)을 감싸고, 공지사항 배너 1줄(main_notic)을 렌더링하는 컴포넌트 (전용 데이터: `mainVisualData.ts` colocate) | banner-data - bannerPosition: INFORMATION (승인됨 — `fo/docs/dev/main/banner-data-information.md` 참고) |
+| Main Visual | `src/app/main/components/MainVisual.tsx` | 히어로 영역(VideoSwiper+BannerSwiper)을 감싸고, 공지사항 배너 1줄(main_notic)을 렌더링하는 컴포넌트 (전용 데이터: `mainVisualData.ts` colocate) | banner-data - banner_position: INFORMATION (where: banner_position=INFORMATION, is_visible=001, 게시기간 in_range / orderBy: banner.post_period_from DESC / limit 1) |
 | Video Swiper | `src/app/main/components/VideoSwiper.tsx` | 히어로 영상/이미지 슬라이드 3개를 자동 재생 Swiper로 보여주는 컴포넌트, 각 슬라이드에 "Explore" 버튼 | hero-data (승인됨 — `fo/docs/dev/main/hero-data.md` 참고) |
 | Banner Swiper | `src/app/main/components/BannerSwiper.tsx` | 히어로 옆 사이드 배너 슬라이드 3개를 보여주는 컴포넌트 | banner-data - bannerPosition: HERO (승인됨 — `fo/docs/dev/main/banner-data-hero.md` 참고) |
 | Main Info | `src/app/main/components/MainInfo.tsx` | 스크롤 진입 시 통계 숫자 3개를 카운트업 애니메이션으로 보여주는 컴포넌트 | TODO |

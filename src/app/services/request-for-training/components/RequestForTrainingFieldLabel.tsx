@@ -1,4 +1,3 @@
-// 폼 필드 라벨(필수 표시 * 포함). ls-publish 원본 마크업 그대로 이관.
 export default function RequestForTrainingFieldLabel({
   children,
   required = false,

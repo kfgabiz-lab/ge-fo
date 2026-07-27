@@ -16,6 +16,8 @@ import CookiePreferencesModal from "@/components/modals/CookiePreferencesModal";
 import CookieSettingsModal from "@/components/modals/CookieSettingsModal";
 import { COOKIE_CONSENT_STORAGE_KEY } from "@/data/common/cookieSettingsContent";
 
+const EMAIL_FORMAT_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const interestOptions = [
   { value: "LV & MV Power Solutions", defaultChecked: false },
   { value: "Grid & Utility Infrastructure", defaultChecked: true },
@@ -48,12 +50,6 @@ const snsLinks = [
     className: "link_youtube",
     icon: "/img/footer/ico_youtube_40.svg",
   },
-  // {
-  //   label: "Facebook",
-  //   href: "https://www.facebook.com/lselectricofficial",
-  //   className: "link_facebook",
-  //   icon: "/img/footer/ico_face_40.svg",
-  // },
 ] as const;
 
 type MainFooterProps = {
@@ -95,8 +91,8 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
   const [privacyPolicyOpen, setPrivacyPolicyOpen] = useState(false);
   const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
   const [cookiePreferencesOpen, setCookiePreferencesOpen] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
-  // 페이지 로드 시 쿠키 동의 여부 확인 localStrage에 저장된 값이 없으면 쿠키 설정 모달을 열도록 함
   useEffect(() => {
     try {
       const savedConsent = window.localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
@@ -142,8 +138,22 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const trimmedEmail = email.trim();
+    const emailValid =
+      trimmedEmail !== "" && EMAIL_FORMAT_REGEX.test(trimmedEmail);
+    setEmailError(!emailValid);
+
+    if (!emailValid) {
+      alert(
+        trimmedEmail === ""
+          ? "Please enter your email address."
+          : "Please enter a valid email address.",
+      );
+      return;
+    }
+
     const payload = {
-      email,
+      email: trimmedEmail,
       areasOfInterest: interests.join(", "),
     };
 
@@ -155,6 +165,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       body: JSON.stringify(payload),
     });
     setEmail("");
+    setEmailError(false);
   };
 
   const handleAffiliateSelect = (value: string) => {
@@ -197,8 +208,12 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
                   className="main_footer__field"
                   type="email"
                   placeholder="Email address"
+                  error={emailError}
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    if (emailError) setEmailError(false);
+                  }}
                 />
               </div>
 

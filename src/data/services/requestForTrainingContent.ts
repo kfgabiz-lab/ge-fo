@@ -1,5 +1,3 @@
-// Services — Training Request(Step 1~4) 정적 카피/에셋. ls-publish 원본(src/data/services/requestForTrainingContent.ts) 이관.
-// fo 는 퍼블리싱의 `/pub` 프리픽스를 사용하지 않으므로 에셋 경로만 `/img`, `/ico` 로 보정.
 const IMG = "/img/services/request-for-training";
 
 export const requestForTrainingAssets = {
@@ -113,7 +111,6 @@ export const requestForTrainingStep1Copy = {
     state: { label: "State/Province", placeholder: "State/Province", required: true },
     zip: { label: "ZIP / Postal Code", placeholder: "ZIP / Postal Code", required: true },
     phone: { label: "Phone", placeholder: "Phone", required: true },
-    // 기획서(traning_req1.png) 기준 추가 — ZIP/Phone 줄 다음, Cell Phone/Sales Contact 줄 앞에 배치
     email: { label: "Email Address", placeholder: "Email Address", required: true },
     title: { label: "Title", placeholder: "Title" },
     cellPhone: { label: "Cell Phone", placeholder: "Cell Phone" },
@@ -157,7 +154,6 @@ export const requestForTrainingStep3Copy = {
       label: "Where will the class be held? (Company or Location Name)",
       required: true,
     },
-    // 기획서(traning_req3dc.png) 기준 — 원본은 required:true였으나 선택 항목으로 확정.
     streetAddress: {
       label: "Street Address",
       searchPlaceholder: "Keyword Search",
@@ -177,9 +173,6 @@ export const requestForTrainingStep3Copy = {
   },
 } as const;
 
-// 기획서(traning_req4dc.png) item1~2 — 제품선택 + VFD 조건부 질문 필드 카피.
-// comments/consent 등 나머지 필드는 해당 서브STEP 승인 후 추가한다.
-// jobTitles/studentInvolvement/vfdUnderstanding 옵션 텍스트는 ls-publish 원본 그대로(정적, DB 연동 없음).
 export const requestForTrainingStep4Copy = {
   ...requestForTrainingQuestionnaireCopy,
   fields: {
@@ -188,7 +181,6 @@ export const requestForTrainingStep4Copy = {
       hint: "*Select all that apply.",
       required: true,
     },
-    // 아래 3개는 Variable Frequency Drive 제품을 고른 경우에만 노출된다.
     jobTitles: {
       label: "What are the job titles of the students that will be trained?",
       options: [
@@ -197,7 +189,7 @@ export const requestForTrainingStep4Copy = {
         "Electrical Engineer",
         "Sales Engineer",
         "Inside Tech",
-        "Field Service Enginee",
+        "Field Service Engineer",
         "Other",
       ],
       required: true,
@@ -207,7 +199,7 @@ export const requestForTrainingStep4Copy = {
       options: [
         "Installation, Start-up",
         "Integration and Parameter setup",
-        "Feld Troubleshooting (understanding fault codes)",
+        "Field Troubleshooting (understanding fault codes)",
         "Sales and Explanation of the Product",
         "Serial communications",
         "Unit troubleshooting (to determine damaged components)",
@@ -218,7 +210,6 @@ export const requestForTrainingStep4Copy = {
     vfdUnderstanding: {
       label: "Do the students have a basic understanding of variable frequency drives?",
       required: true,
-      // Yes 를 고른 경우에만 추가로 노출되는 하위 체크박스 옵션
       yesFollowUpOptions: [
         "Motor technology (construction, theory of operation)",
         "Drive technology (construction, theory of operation)",
@@ -227,6 +218,14 @@ export const requestForTrainingStep4Copy = {
         "Auto-Tuning",
         "Other Topics",
       ],
+    },
+    comments: {
+      label: "Comments/questions about certification",
+      placeholder: "Please enter your comments/questions.",
+    },
+    consent: {
+      label: "Consent to Collection and Use of Personal Information",
+      termsLabel: "View Full Terms",
     },
   },
 } as const;
@@ -237,7 +236,6 @@ export const requestForTrainingTypeOptions = [
   { id: "service", label: "Service Training" },
 ] as const;
 
-// Step2~4 페이지는 아직 미개발 — 경로 상수만 선정의(Step1 Next 이동 대상은 step2).
 export const requestForTrainingRoutes = {
   step1: "/services/request-for-training",
   step2: "/services/request-for-training/step-2",

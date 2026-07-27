@@ -16,40 +16,25 @@ import RequestForTrainingQuestionnaireIntro from "./RequestForTrainingQuestionna
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
 import type { RequestForTrainingStep1Errors } from "./RequestForTrainingStep1";
 
-// 주소 자동완성 조회 최소 입력 길이 / 디바운스 지연(ms) — TrainingSessionDetailForm(WhereToBuySearch 패턴)과 동일 값
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
-// 기획서(traning_req1dc.png) 입력 제한 — 허용되지 않는 문자는 입력 시점에 자동 제거한다.
-// 영문 텍스트 필드(First Name / Last Name / Company / Title): 영문자 + 공백만, 최대 200byte(영문만이라 1자=1byte).
 const LETTERS_MAX = 200;
-// 전화 계열(Phone / Cell Phone / Sales Contact): 숫자만, 지역코드 3 + 국번 3 + 가입자번호 4 = 10자리.
 const PHONE_MAX_DIGITS = 10;
-// Email Address 최대 길이(기획서에 길이 규정이 없어 별도 확정된 값).
 const EMAIL_MAX = 50;
 
-/** 영문자 + 공백만 남기고 최대 200자로 자름 */
 function filterLetters(value: string): string {
   return value.replace(/[^A-Za-z ]/g, "").slice(0, LETTERS_MAX);
 }
 
-/** 숫자만 남기고 최대 10자리로 자름(하이픈 자동삽입은 기획서에 없어 하지 않음) */
 function filterPhoneDigits(value: string): string {
   return value.replace(/[^0-9]/g, "").slice(0, PHONE_MAX_DIGITS);
 }
 
-/** 이메일 허용 문자(영문/숫자/. _ - @)만 남기고 최대 50자로 자름 */
 function filterEmail(value: string): string {
   return value.replace(/[^A-Za-z0-9._@-]/g, "").slice(0, EMAIL_MAX);
 }
 
-/**
- * 에러 / 정상 구분 (값 내용이 아니라 props로 판단) — Figma 1689:8145
- * - 에러: FieldShell `error="메시지"` + TextField `error`
- *   → `--field--error` 클래스, helper 문구, 빨간 보더
- * - 정상: `error` prop 생략 (FieldShell / TextField 모두)
- *   → 기본 보더, helper 없음
- */
 function FieldError({ message }: { message: string }) {
   return (
     <p className="support_service_training_request__error" role="alert">
@@ -60,7 +45,7 @@ function FieldError({ message }: { message: string }) {
 
 function FieldShell({
   className = "",
-  error, // string이면 에러 UI, undefined면 정상
+  error,
   label,
   children,
 }: {
@@ -88,8 +73,6 @@ function FieldShell({
   );
 }
 
-// 입력값은 스텝 간 유지를 위해 Provider(Context + sessionStorage)에서 관리하고,
-// 필수값 누락 표시(errors)는 Next 클릭 시점에 상위(RequestForTrainingStep1)에서 내려준다.
 export default function RequestForTrainingStep1Form({
   errors,
   onClearError,
@@ -101,15 +84,12 @@ export default function RequestForTrainingStep1Form({
   const { fields } = requestForTrainingStep1Copy;
   const { step1, setStep1Field } = useRequestForTrainingForm();
 
-  // 주소 자동완성 후보/드롭다운 상태 (TrainingSessionDetailForm 로직 이식)
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  // 후보 선택으로 인한 streetAddress 갱신 시 재조회 1회 억제
   const suppressFetchRef = useRef(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const streetWrapRef = useRef<HTMLDivElement>(null);
 
-  // 도로명 입력 변화 시 디바운스 후 자동완성 후보 조회
   useEffect(() => {
     if (suppressFetchRef.current) {
       suppressFetchRef.current = false;
@@ -145,7 +125,6 @@ export default function RequestForTrainingStep1Form({
     };
   }, [step1.streetAddress]);
 
-  // 바깥 클릭 시 드롭다운 닫기
   useEffect(() => {
     if (!showSuggestions) return;
     function handlePointerDown(event: MouseEvent) {
@@ -160,7 +139,6 @@ export default function RequestForTrainingStep1Form({
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [showSuggestions]);
 
-  // 자동완성 후보 선택 → 도로명 채움 + City/State/ZIP 자동 채움(실패 시 조용히 스킵, 이후 수동 수정 가능)
   async function selectSuggestion(suggestion: PlaceSuggestion) {
     suppressFetchRef.current = true;
     setStep1Field("streetAddress", suggestion.description);
@@ -170,7 +148,6 @@ export default function RequestForTrainingStep1Form({
     try {
       const address = await fetchPlaceAddress(suggestion.placeId);
       if (address) {
-        // street 파싱값이 있으면 그것으로 정규화(없으면 선택한 description 유지)
         if (address.street) {
           suppressFetchRef.current = true;
           setStep1Field("streetAddress", address.street);
@@ -189,7 +166,6 @@ export default function RequestForTrainingStep1Form({
         }
       }
     } catch {
-      // 주소 파싱 실패 시 자동채움 스킵 — 수동 입력 유지
     }
   }
 
@@ -297,7 +273,6 @@ export default function RequestForTrainingStep1Form({
                 <FieldShell
                   className="support_service_training_request__field--address-search"
                 >
-                  {/* 자동완성 드롭다운 앵커(position: relative) — 입력 마크업 자체는 원본 그대로 */}
                   <div
                     className="support_service_training_request__street-wrap"
                     ref={streetWrapRef}
@@ -354,7 +329,6 @@ export default function RequestForTrainingStep1Form({
                             <button
                               type="button"
                               className="support_service_training_request__suggestion-button"
-                              // onMouseDown: input blur 전에 선택이 확정되도록 mousedown 에서 처리
                               onMouseDown={(event) => {
                                 event.preventDefault();
                                 void selectSuggestion(suggestion);
@@ -456,7 +430,6 @@ export default function RequestForTrainingStep1Form({
               </div>
             </div>
 
-            {/* 기획서(traning_req1.png) 기준 추가 행 — ZIP/Phone 다음, Cell Phone/Sales Contact 앞 */}
             <div className="support_service_training_request__form-row support_service_training_request__form-row--2">
               <div className="support_service_training_request__field">
                 <RequestForTrainingFieldLabel htmlFor={`${formId}-email`} required>

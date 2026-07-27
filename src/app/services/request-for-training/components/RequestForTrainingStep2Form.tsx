@@ -10,22 +10,17 @@ import RequestForTrainingQuestionnaireIntro from "./RequestForTrainingQuestionna
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
 import type { RequestForTrainingStep2Errors } from "./RequestForTrainingStep2";
 
-// 기획서(traning_req2dc.png) 입력 제한 — 허용되지 않는 문자는 입력 시점에 자동 제거한다.
-const SESSION_COUNT_MAX = 200; // 교육 세션 수: 영문+숫자만, 최대 200byte
-// 교육 기간(sessionDays)은 기획서상 "최대 20byte"가 있으나 사용자 확정으로 별도 글자수 제한 없음(숫자만 필터만 적용).
-const STUDENT_COUNT_MAX = 18; // 교육 인원 수: 1~18만 허용(19 이상 차단, 사용자 확정 — 원본 힌트 "Maximum 18 per session"과 경계값 일치)
+const SESSION_COUNT_MAX = 200;
+const STUDENT_COUNT_MAX = 18;
 
-/** 영문자+숫자만 남기고 최대 200자로 자름 */
 function filterLettersAndDigits(value: string): string {
   return value.replace(/[^A-Za-z0-9]/g, "").slice(0, SESSION_COUNT_MAX);
 }
 
-/** 숫자만 남김(길이 제한 없음) */
 function filterDigitsOnly(value: string): string {
   return value.replace(/[^0-9]/g, "");
 }
 
-/** 숫자만 남기고 18 초과 시 18로 고정 */
 function filterStudentCount(value: string): string {
   const digits = value.replace(/[^0-9]/g, "");
   if (digits === "") return "";
@@ -58,8 +53,6 @@ function RequestStudentCountLabel({
   );
 }
 
-// 입력값은 스텝 간 유지를 위해 Provider(Context + sessionStorage)에서 관리하고,
-// 필수값 누락 표시(errors)는 Next 클릭 시점에 상위(RequestForTrainingStep2)에서 내려준다.
 export default function RequestForTrainingStep2Form({
   errors,
   onClearError,
@@ -73,7 +66,6 @@ export default function RequestForTrainingStep2Form({
   const { fields } = requestForTrainingStep2Copy;
   const { step2, setStep2Field } = useRequestForTrainingForm();
 
-  // 시작일 변경 시 종료일이 시작일보다 이전이면 초기화(원본 로직 그대로)
   const handleScheduleStartChange = (value: string) => {
     setStep2Field("scheduleStart", value);
     onClearError("scheduleStart");
