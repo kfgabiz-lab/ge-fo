@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
+    // BO 관리형 이미지(배너/히어로 등) 교체 반영 지연과 캐시 효율의 절충 — 1주일
+    minimumCacheTTL: 604800,
     remotePatterns: [
       {
         protocol: "https",
