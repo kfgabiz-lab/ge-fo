@@ -7,7 +7,6 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import Link from "next/link";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useEffect, useId, useRef, useState } from "react";
 import {
@@ -16,6 +15,7 @@ import {
   guideCheckboxIconsContactConsent,
 } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
+import PrivacyPolicyModal from "@/components/modals/PrivacyPolicyModal";
 import type { EngineeringTrainingSessionDetail } from "@/data/services/engineeringTrainingSessionDetailContent";
 import { engineeringTrainingSessionFormCopy } from "@/data/services/engineeringTrainingSessionDetailContent";
 import {
@@ -23,6 +23,12 @@ import {
   fetchPlaceSuggestions,
   type PlaceSuggestion,
 } from "@/lib/geo/places";
+import {
+  PHONE_MAX_DIGITS,
+  filterEmail,
+  filterLetters,
+  filterPhoneDigits,
+} from "@/lib/formInputFilters";
 import {
   type CodeItem,
   type TrainingRegistrationRequest,
@@ -106,6 +112,8 @@ export default function TrainingSessionDetailForm({
   const [typeOfBusiness, setTypeOfBusiness] = useState(""); // BUSINESSTYPE 코드값(001/002/003)
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [errors, setErrors] = useState<SessionFieldErrors>({});
+  // 약관 상세 팝업(View Full Terms) 노출 여부
+  const [termsModalOpen, setTermsModalOpen] = useState(false);
 
   // Type of Business 옵션(공통코드 API)
   const [businessTypes, setBusinessTypes] = useState<CodeItem[]>([]);
@@ -319,7 +327,8 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.studentName)}
               value={studentName}
               onChange={(event) => {
-                setStudentName(event.target.value);
+                // DC10: 영문만 입력 가능 / 최대 100자
+                setStudentName(filterLetters(event.target.value, 100));
                 clearError("studentName");
               }}
               slotProps={{ htmlInput: { maxLength: 100 } }}
@@ -337,7 +346,8 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.email)}
               value={email}
               onChange={(event) => {
-                setEmail(event.target.value);
+                // DC10: 영문/숫자/특수문자(이메일 허용문자)만 입력 가능
+                setEmail(filterEmail(event.target.value, 255));
                 clearError("email");
               }}
               slotProps={{ htmlInput: { maxLength: 255 } }}
@@ -357,7 +367,8 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.jobTitle)}
               value={jobTitle}
               onChange={(event) => {
-                setJobTitle(event.target.value);
+                // DC10: 영문만 입력 가능 / 최대 100자
+                setJobTitle(filterLetters(event.target.value, 100));
                 clearError("jobTitle");
               }}
               slotProps={{ htmlInput: { maxLength: 100 } }}
@@ -376,11 +387,12 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.phone)}
               value={phone}
               onChange={(event) => {
-                // 자동 하이픈 포맷팅 없이 숫자만 남긴다(숫자 아닌 입력 차단)
-                setPhone(event.target.value.replace(/[^0-9]/g, ""));
+                // DC10: 숫자만 입력 가능 / 지역코드3+국번3+가입자번호4 = 10자리 제한
+                // (자동 하이픈 포맷팅 없이 숫자만 남긴다)
+                setPhone(filterPhoneDigits(event.target.value));
                 clearError("phone");
               }}
-              slotProps={{ htmlInput: { maxLength: 20 } }}
+              slotProps={{ htmlInput: { maxLength: PHONE_MAX_DIGITS } }}
             />
           </div>
         </div>
@@ -397,7 +409,8 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.companyName)}
               value={companyName}
               onChange={(event) => {
-                setCompanyName(event.target.value);
+                // DC10: 영문만 입력 가능 / 최대 100자
+                setCompanyName(filterLetters(event.target.value, 100));
                 clearError("companyName");
               }}
               slotProps={{ htmlInput: { maxLength: 100 } }}
@@ -619,12 +632,15 @@ export default function TrainingSessionDetailForm({
                 />
                 <span>Consent to Collection and Use of Personal Information</span>
               </label>
-              <Link
-                href="/support/contact-us/terms"
+              {/* DC10: View Full Terms 선택 시 약관 상세 팝업 호출(공통 PrivacyPolicyModal).
+                  폼 내부이므로 type="button" 으로 제출 방지. */}
+              <button
+                type="button"
                 className="support_service_training_session_detail__terms-link"
+                onClick={() => setTermsModalOpen(true)}
               >
                 View Full Terms
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -648,6 +664,11 @@ export default function TrainingSessionDetailForm({
       >
         {engineeringTrainingSessionFormCopy.submitLabel}
       </button>
+
+      <PrivacyPolicyModal
+        open={termsModalOpen}
+        onClose={() => setTermsModalOpen(false)}
+      />
     </form>
   );
 }

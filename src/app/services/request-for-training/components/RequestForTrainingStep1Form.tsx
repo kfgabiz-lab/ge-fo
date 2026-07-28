@@ -11,6 +11,11 @@ import {
   fetchPlaceSuggestions,
   type PlaceSuggestion,
 } from "@/lib/geo/places";
+import {
+  filterEmail,
+  filterLetters,
+  filterPhoneDigits,
+} from "@/lib/formInputFilters";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import RequestForTrainingQuestionnaireIntro from "./RequestForTrainingQuestionnaireIntro";
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
@@ -19,21 +24,9 @@ import type { RequestForTrainingStep1Errors } from "./RequestForTrainingStep1";
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
+// 이 화면 고유의 입력 최대 길이(필터 로직은 @/lib/formInputFilters 공통 함수 사용)
 const LETTERS_MAX = 200;
-const PHONE_MAX_DIGITS = 10;
 const EMAIL_MAX = 50;
-
-function filterLetters(value: string): string {
-  return value.replace(/[^A-Za-z ]/g, "").slice(0, LETTERS_MAX);
-}
-
-function filterPhoneDigits(value: string): string {
-  return value.replace(/[^0-9]/g, "").slice(0, PHONE_MAX_DIGITS);
-}
-
-function filterEmail(value: string): string {
-  return value.replace(/[^A-Za-z0-9._@-]/g, "").slice(0, EMAIL_MAX);
-}
 
 function FieldError({ message }: { message: string }) {
   return (
@@ -227,7 +220,7 @@ export default function RequestForTrainingStep1Form({
                   value={step1.firstName}
                   error={Boolean(errors.firstName)}
                   onChange={(event) => {
-                    setStep1Field("firstName", filterLetters(event.target.value));
+                    setStep1Field("firstName", filterLetters(event.target.value, LETTERS_MAX));
                     onClearError("firstName");
                   }}
                 />
@@ -242,7 +235,7 @@ export default function RequestForTrainingStep1Form({
                   placeholder={fields.lastName.placeholder}
                   value={step1.lastName}
                   onChange={(event) =>
-                    setStep1Field("lastName", filterLetters(event.target.value))
+                    setStep1Field("lastName", filterLetters(event.target.value, LETTERS_MAX))
                   }
                 />
               </div>
@@ -259,7 +252,7 @@ export default function RequestForTrainingStep1Form({
                 value={step1.company}
                 error={Boolean(errors.company)}
                 onChange={(event) => {
-                  setStep1Field("company", filterLetters(event.target.value));
+                  setStep1Field("company", filterLetters(event.target.value, LETTERS_MAX));
                   onClearError("company");
                 }}
               />
@@ -442,7 +435,7 @@ export default function RequestForTrainingStep1Form({
                   value={step1.email}
                   error={Boolean(errors.email)}
                   onChange={(event) => {
-                    setStep1Field("email", filterEmail(event.target.value));
+                    setStep1Field("email", filterEmail(event.target.value, EMAIL_MAX));
                     onClearError("email");
                   }}
                 />
@@ -457,7 +450,7 @@ export default function RequestForTrainingStep1Form({
                   placeholder={fields.title.placeholder}
                   value={step1.title}
                   onChange={(event) =>
-                    setStep1Field("title", filterLetters(event.target.value))
+                    setStep1Field("title", filterLetters(event.target.value, LETTERS_MAX))
                   }
                 />
               </div>

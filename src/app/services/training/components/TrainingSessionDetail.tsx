@@ -100,6 +100,8 @@ type AgendaGroup = {
 // 정렬된 agenda 행 → 교육일 기준 그룹 배열.
 // - TrainingDetailSchedule 의 날짜 그룹핑(groupedSessions)과 동일한 "첫 등장 순서 유지 + Map 인덱스" 패턴.
 // - date 가 비어있는 행들도 하나의 그룹(키 "")으로 묶어 순서를 잃지 않게 한다.
+// - No(number)는 목업(curri_det2.png)대로 세션 그룹마다 1부터 다시 채번한다.
+//   (뷰모델/정적 샘플의 통짜 연속 채번을 이 시점에 그룹 기준으로 덮어쓴다)
 function toAgendaGroups(rows: EngineeringTrainingAgendaRow[]): AgendaGroup[] {
   const groups: AgendaGroup[] = [];
   const indexByDate = new Map<string, number>();
@@ -112,10 +114,11 @@ function toAgendaGroups(rows: EngineeringTrainingAgendaRow[]): AgendaGroup[] {
       groups.push({
         date: key,
         label: `Session ${groups.length + 1}`,
-        rows: [row],
+        rows: [{ ...row, number: "1" }],
       });
     } else {
-      groups[existing].rows.push(row);
+      const target = groups[existing];
+      target.rows.push({ ...row, number: String(target.rows.length + 1) });
     }
   }
 
@@ -148,8 +151,11 @@ export default function TrainingSessionDetail({
     session.agenda,
   ]);
   const showAgendaSessions = agendaGroups.length > 1;
-  // Agenda 테이블 컬럼 수(No/Time/Contents [+Trainer]) — 세션 구분 행 colSpan 계산용
-  const agendaColumnCount = session.showTrainerColumn ? 4 : 3;
+  // 스케줄이 0건이어도 Agenda 제목/표 컨테이너는 유지해야 하므로 빈 그룹 1개로 대체해 렌더한다.
+  const agendaRenderGroups: AgendaGroup[] =
+    agendaGroups.length > 0
+      ? agendaGroups
+      : [{ date: "", label: "Session 1", rows: [] }];
 
   useEffect(() => {
     setShareUrl(window.location.href);
@@ -336,33 +342,35 @@ export default function TrainingSessionDetail({
               id="session-agenda"
               className="support_service_training_session_detail__block support_service_training_session_detail__block--agenda"
             >
-              <h2 className="support_service_training_session_detail__block-tit">Agenda</h2>
-              <TrainingSessionDetailTableScroll>
-                <table className="support_service_training_session_detail__table">
-                  <thead>
-                    <tr>
-                      <th scope="col">No</th>
-                      <th scope="col">Time</th>
-                      <th scope="col">Contents</th>
-                      {/* Trainer 컬럼: 모든 행 trainer 빈값이면 비노출(뷰모델 showTrainerColumn) */}
-                      {session.showTrainerColumn ? (
-                        <th scope="col">Trainer</th>
-                      ) : null}
-                    </tr>
-                  </thead>
-                  {/* Agenda = 이 회차 행의 training_schedule 배열 반복(단건 main 내부 중첩 다건).
-                      No = index+1(태깅 불필요), Time = time_from~time_to 두 필드 조합이라 미태깅(STEP6 조합)
-                      교육일(date)이 여러 날이면 날짜별로 "Session N" 구분 행을 앞에 끼워 넣는다. */}
-                  <tbody data-slug="training_schedule" data-slug-repeat="true">
-                    {agendaGroups.map((group) => (
-                      <Fragment key={group.date || group.label}>
-                        {showAgendaSessions ? (
-                          <tr className="support_service_training_session_detail__table-session">
-                            <th scope="colgroup" colSpan={agendaColumnCount}>
-                              {group.label}
-                            </th>
-                          </tr>
-                        ) : null}
+              {/* Agenda = 이 회차 행의 training_schedule 배열 반복(단건 main 내부 중첩 다건).
+                  목업(curri_det2.png)대로 세션(교육일)마다 "제목 + 독립 표"를 통째로 반복 렌더하고,
+                  No 는 세션마다 1부터 다시 시작한다(toAgendaGroups 에서 재채번).
+                  No 는 화면 채번이라 미태깅, Time 은 time_from~time_to 두 필드 조합이라 미태깅(STEP6 조합).
+
+                  ⚠️ 한 그룹 = 제목(h2) + 표(PC) + 타임라인(MO) 를 이 반복 하나에서 함께 렌더한다.
+                  표/타임라인은 CSS 로 서로 반대 브레이크포인트에서만 노출되는데(PC: agenda-list 숨김,
+                  MO: table-viewport 숨김), 타임라인만 반복 밖으로 빼면 모바일에서 표가 사라진 자리에
+                  제목(h2)만 그룹 수만큼 연달아 쌓이고 타임라인은 맨 끝에 한 번만 나와 제목이 중복된다.
+                  그룹 구분을 h2 가 전담하므로 타임라인 내부의 "Session N" 라벨 항목도 두지 않는다. */}
+              {agendaRenderGroups.map((group) => (
+                <Fragment key={group.date || group.label}>
+                  <h2 className="support_service_training_session_detail__block-tit">
+                    {showAgendaSessions ? `Agenda / ${group.label}` : "Agenda"}
+                  </h2>
+                  <TrainingSessionDetailTableScroll>
+                    <table className="support_service_training_session_detail__table">
+                      <thead>
+                        <tr>
+                          <th scope="col">No</th>
+                          <th scope="col">Time</th>
+                          <th scope="col">Contents</th>
+                          {/* Trainer 컬럼: 모든 행 trainer 빈값이면 비노출(뷰모델 showTrainerColumn) */}
+                          {session.showTrainerColumn ? (
+                            <th scope="col">Trainer</th>
+                          ) : null}
+                        </tr>
+                      </thead>
+                      <tbody data-slug="training_schedule" data-slug-repeat="true">
                         {group.rows.map((row) => (
                           <tr key={row.id} data-slug-item>
                             <td>{row.number}</td>
@@ -388,21 +396,12 @@ export default function TrainingSessionDetail({
                             ) : null}
                           </tr>
                         ))}
-                      </Fragment>
-                    ))}
-                  </tbody>
-                </table>
-              </TrainingSessionDetailTableScroll>
-              {/* Mobile timeline — Figma 8007:107681 (모바일에서 위 테이블 대신 노출)
-                  교육일이 여러 날이면 타임라인에도 "Session N" 구분 항목을 끼워 넣는다(테이블과 동일 기준). */}
-              <ol className="support_service_training_session_detail__agenda-list">
-                {agendaGroups.map((group) => (
-                  <Fragment key={group.date || group.label}>
-                    {showAgendaSessions ? (
-                      <li className="support_service_training_session_detail__agenda-session">
-                        {group.label}
-                      </li>
-                    ) : null}
+                      </tbody>
+                    </table>
+                  </TrainingSessionDetailTableScroll>
+                  {/* Mobile timeline — Figma 8007:107681 (모바일에서 바로 위 테이블 대신 노출).
+                      그룹 구분은 위 h2 가 담당하므로 타임라인 안에는 세션 라벨을 넣지 않는다. */}
+                  <ol className="support_service_training_session_detail__agenda-list">
                     {group.rows.map((row) => (
                       <li
                         key={row.id}
@@ -436,9 +435,9 @@ export default function TrainingSessionDetail({
                         </div>
                       </li>
                     ))}
-                  </Fragment>
-                ))}
-              </ol>
+                  </ol>
+                </Fragment>
+              ))}
             </div>
 
             <div

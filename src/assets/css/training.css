@@ -643,18 +643,6 @@
     text-align: left;
   }
 
-  /* Agenda 세션 구분 행(Session 1/Session 2) — 교육일이 여러 날일 때만 렌더됨 */
-  section.support_service_training_session_detail .support_service_training_session_detail__table-session th {
-    padding: 14px 16px;
-    border-bottom: 1px solid #ddd;
-    background: #f5f7fa;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-    color: #0f1f45;
-    text-align: left;
-  }
-
   section.support_service_training_session_detail .support_service_training_session_detail__table-tit {
     margin: 0 0 6px;
     font-size: 16px;
@@ -2841,17 +2829,6 @@
     gap: 20px;
     align-items: flex-start;
     width: 100%;
-  }
-
-  /* Agenda 세션 구분 항목(Session 1/Session 2) — 교육일이 여러 날일 때만 렌더됨.
-     타임라인 점(8px) + gap(20px) 만큼 들여써 본문 텍스트와 좌측을 맞춘다. */
-  section.support_service_training_session_detail .support_service_training_session_detail__agenda-session {
-    position: relative;
-    padding-left: 28px;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-    color: #0f1f45;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__agenda-dot {

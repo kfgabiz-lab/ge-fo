@@ -1,9 +1,3 @@
-// Download Center(Support > Download Center) 실데이터 조회 헬퍼
-// - 데이터 소스: 신규 BE 엔드포인트(/api/v1/fo/download-center/*, contents_master/version/file/category 기반). page_data slug 아님.
-// - LV1>LV2 카테고리 계층은 신규 체계를 만들지 않고 category-data(devices 카테고리)를 재사용한다
-//   (productsSystemsData 의 fetchTopCategories/fetchCategoryChildren — category.code 반환). Tech Hub 와 동일 사상.
-// - 파일 다운로드/URL 복사는 기존 CTP 엔드포인트(GET /api/v1/fo/ctpApi/fileDownUrl)를 그대로 재사용한다.
-// - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi/fetchApiText 경유)
 import { fetchApi, fetchApiText } from "@/lib/api";
 import {
   fetchTopCategories,
@@ -11,9 +5,6 @@ import {
 } from "@/app/()/products-systems/data/productsSystemsData";
 import type { DownloadCategoryOption } from "@/data/support/downloadCenterContent";
 
-// ---------------- 응답 타입(BE DownloadCenter* record 와 1:1) ----------------
-
-// 파일 1건(contents_file). filePath 를 CTP 다운로드 엔드포인트에 넘겨 fresh SAS URL 을 발급받는다.
 export interface DownloadCenterFile {
   fileId: number | null;
   fileName: string | null;
@@ -24,7 +15,6 @@ export interface DownloadCenterFile {
   filePath: string | null;
 }
 
-// 버전 1건(contents_version). files = 해당 버전 노출 파일. sortKey 클수록 최신.
 export interface DownloadCenterVersion {
   versionId: number;
   versionName: string | null;
@@ -32,13 +22,12 @@ export interface DownloadCenterVersion {
   files: DownloadCenterFile[];
 }
 
-// 카드 1건(contents_master). versions 는 sortKey DESC(최신 먼저).
 export interface DownloadCenterItem {
   id: number;
   docType: string | null;
   docTypeLabel: string | null;
   title: string | null;
-  date: string | null; // YYYY-MM-DD(nullable)
+  date: string | null;
   categoryL1Id: string | null;
   categoryL2Id: string | null;
   versions: DownloadCenterVersion[];
@@ -48,16 +37,10 @@ export interface DownloadCenterContentsPage {
   content: DownloadCenterItem[];
   totalElements: number;
   totalPages: number;
-  page: number; // 0-based(BE 기준)
+  page: number;
   size: number;
 }
 
-// 정렬 파라미터 — "" 는 미지정(BE 기본 newest).
-// - doctype: 문서유형 우선순위(Catalogs > Manuals > Certificates > Software > Tech Data > Drawings)
-//            → 동일 유형 내에서는 등록일시 내림차순. 제품상세 Downloads 섹션 기본값.
-// - title_desc: 제목 역순(Z to A).
-// ⚠️ doctype / title_desc 는 제품상세 Downloads 섹션 전용으로 추가한 값이다.
-//    Download Center(support) 화면은 기존 3종(newest/oldest/title)만 드롭다운에 노출한다.
 export type DownloadCenterSort =
   | ""
   | "doctype"
@@ -68,18 +51,14 @@ export type DownloadCenterSort =
 
 export interface DownloadCenterContentsParams {
   q?: string;
-  categories?: string[]; // 선택된 LV2 코드 목록(그룹 내 OR)
-  docTypes?: string[]; // 선택된 문서유형 코드 목록(C/M/D/S/R/O)
-  // 연계 제품코드 목록(contents_category 의 category_l3_id = product.product_code 체계).
-  // ⚠️ 제품상세 Downloads 섹션 전용 조건이다. Download Center(support) 화면은 이 값을 넘기지 않으며,
-  //    미전달/빈 배열이면 BE 는 제품 필터 없이 전체 목록을 반환한다(기존 동작 유지).
+  categories?: string[];
+  docTypes?: string[];
   productCodes?: string[];
   sort?: DownloadCenterSort;
-  page?: number; // 0-based
+  page?: number;
   size?: number;
 }
 
-// 목록 조회. 실패 시 빈 페이지(섹션은 Empty 로 표시).
 export async function fetchDownloadCenterContents(
   params: DownloadCenterContentsParams,
 ): Promise<DownloadCenterContentsPage> {
@@ -108,8 +87,6 @@ export async function fetchDownloadCenterContents(
   }
 }
 
-// ---------------- 카테고리 건수 ----------------
-
 export interface DownloadCenterCategoryCount {
   categoryL2Id: string;
   count: number;
@@ -127,16 +104,12 @@ export async function fetchDownloadCenterCategoryCounts(): Promise<
   }
 }
 
-// ---------------- 문서유형(Document Type) 건수 ----------------
-
-// 문서유형별 실카운트 1건. docType = BE 코드(C/M/D/S/R/O).
 export interface DownloadCenterDocTypeCount {
   docType: string;
   docTypeLabel: string;
   count: number;
 }
 
-// 문서유형 필터 옆 건수 배지용 실카운트. 실패 시 빈 배열(호출부에서 정적 폴백).
 export async function fetchDownloadCenterDocTypeCounts(): Promise<
   DownloadCenterDocTypeCount[]
 > {
@@ -149,11 +122,6 @@ export async function fetchDownloadCenterDocTypeCounts(): Promise<
   }
 }
 
-// ---------------- LV1>LV2 필터 트리(category-data 재사용 + 건수 병합) ----------------
-
-// 필터 아코디언용 카테고리 옵션(코드 기반). option.id = category.code(L01 / L01-02 ...).
-// - 상위(LV1) = depth1, 하위(nested LV2) = depth2. 각 LV2 옆 숫자는 category-counts 병합(없으면 0).
-// - 콘텐츠 0건 LV2도 그대로 노출(0 표시) — Admin 전체 LV1>LV2 노출. Tech Hub fetchTechHubCategoryTree 와 동일 구조.
 export async function fetchDownloadCenterCategoryTree(): Promise<
   DownloadCategoryOption[]
 > {
@@ -188,12 +156,6 @@ export async function fetchDownloadCenterCategoryTree(): Promise<
   }
 }
 
-// ---------------- 파일 다운로드/URL 복사(CTP fresh URL 발급) ----------------
-
-// filePath(예: "CTP/Catalog/UL_VCB_EN_C050E2-12-202512.pdf") → 그때그때 발급되는 fresh 다운로드 URL.
-// - 기존 CtpFileDownloadController(String 반환, text/plain)라 fetchApiText 로 받는다.
-// - 로컬 개발환경에서는 외부 CTP 연동이 안 되어 500 이 날 수 있다(인프라 제약). 호출부에서 try/catch 로 방어한다.
-// - 실패/빈 경로 시 "" 반환.
 export async function fetchDownloadCenterFileUrl(
   filePath: string | null | undefined,
 ): Promise<string> {
@@ -202,7 +164,6 @@ export async function fetchDownloadCenterFileUrl(
     const text = await fetchApiText(
       `/api/v1/fo/ctpApi/fileDownUrl?filePath=${encodeURIComponent(filePath)}`,
     );
-    // text/plain 이 아닌 JSON 문자열("...")로 오는 환경 대비 앞뒤 따옴표 제거.
     return text.replace(/^"|"$/g, "").trim();
   } catch {
     return "";

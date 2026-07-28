@@ -14,9 +14,7 @@ import {
   productDownloadsDefaultDocTypes,
 } from "@/data/support/downloadCenterContent";
 
-// contents API docTypes 로 내보낼 수 있는 코드(BE 대응 없는 옵션은 제외).
 const DOC_TYPE_API_CODES = new Set<string>(downloadDocTypeCodes);
-// 제품상세 Downloads 필터 초기 체크(기획서: Catalog, Manual). 공유 데이터가 아닌 화면 전용 상수를 쓴다.
 const DEFAULT_CHECKED_DOC_TYPES = new Set<string>(
   productDownloadsDefaultDocTypes,
 );
@@ -40,7 +38,6 @@ type DevicesProductDownloadsFilterContextValue = {
   isChecked: (id: string) => boolean;
   toggleFilter: (id: string, checked: boolean) => void;
   clearSection: () => void;
-  /** 체크된 문서유형 중 BE 대응 코드만 — contents API 의 docTypes 파라미터로 그대로 전달한다. */
   selectedDocTypes: string[];
 };
 
@@ -100,7 +97,6 @@ export function DevicesProductDownloadsFilterProvider({
     });
   }, []);
 
-  // 체크 상태 → 조회 파라미터로 나갈 코드 목록. 옵션 정의 순서를 유지한다.
   const selectedDocTypes = useMemo(
     () =>
       downloadDocumentTypes

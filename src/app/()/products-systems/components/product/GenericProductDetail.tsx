@@ -18,6 +18,7 @@ import {
   productDetailNavItems,
   productTemplateDetail,
   fetchProductDownloadsPage,
+  fetchProductDownloadsGateCount,
 } from "../../data/productDetailContent";
 import { buildHwProductDetail } from "../../data/hwProductDetail";
 import {
@@ -51,6 +52,8 @@ export default async function GenericProductDetail({
   // Downloads는 현재 제품과 연계된 파일만 조회한 1페이지(5건)다.
   // 문서유형은 기본 체크 상태(Catalog/Manual)와 동일한 조건으로 조회해 SSR 결과와 필터 UI 초기값을 일치시킨다.
   // 이후 사용자가 필터를 바꾸거나 페이지를 이동하면 DevicesProductDownloads 가 클라이언트에서 재조회한다.
+  // downloadsGateCount: 섹션 노출 여부 판정 전용 건수(문서유형 제한 없음) — 기획서 18번은 문서유형을 한정하지
+  // 않으므로 목록 조회(Catalog/Manual)와 판정 기준을 분리한다. 자세한 이유는 헬퍼 주석 참고.
   // lv2Context: 히어로 카테고리 라벨(4번)과 Other Products 섹션(3·31번)이 같은 Lv2 값을 쓰므로
   // devices-tree 를 두 번 조회하지 않도록 한 번의 호출로 { lv2Name, otherProducts } 를 함께 받는다.
   const [
@@ -59,6 +62,7 @@ export default async function GenericProductDetail({
     managerEmail,
     insights,
     downloadsPage,
+    downloadsGateCount,
     techHubBanner,
   ] = await Promise.all([
     productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
@@ -71,6 +75,7 @@ export default async function GenericProductDetail({
       docTypes: productDownloadsDefaultDocTypes,
       productCodes,
     }),
+    fetchProductDownloadsGateCount(productCodes),
     productId ? fetchProductTechHubBanner(productId) : Promise.resolve(null),
   ]);
 
@@ -93,7 +98,10 @@ export default async function GenericProductDetail({
   const showVideo = Boolean(detail.youtubeVideoId);
   const showOtherProducts = otherProducts.length > 0;
   // 18번: 현재 제품과 연계된 다운로드 파일이 0건이면 Downloads 섹션 자체를 미출력한다.
-  const showDownloads = downloadsPage.totalElements > 0;
+  // 판정은 문서유형 제한 없는 전체 연계 건수(downloadsGateCount) 기준이다.
+  // 초기 목록(downloadsPage)은 Catalog/Manual 로 걸러진 결과라 이걸로 판정하면
+  // 인증서/도면 등만 연계된 제품에서 섹션이 사라진다(기획서 18번에 문서유형 제한 없음).
+  const showDownloads = downloadsGateCount > 0;
   const visibleNavItems = productDetailNavItems.filter((item) => {
     if (item.id === "product-key-feature") return showKeyFeatures;
     if (item.id === "product-lineup") return showLineup;

@@ -166,7 +166,7 @@ export const engineeringTrainingSessionDetails: Record<
       location: SHARED_SIDEBAR_LOCATION,
       productsCovered: SHARED_PRODUCTS,
       trainingType: "In-Person",
-      registerLabel: "REGISTER",
+      registerLabel: "Scroll to Downloads",
     },
   },
   "breaker-training/mar-12-2026": {
@@ -191,7 +191,7 @@ export const engineeringTrainingSessionDetails: Record<
       location: SHARED_SIDEBAR_LOCATION,
       productsCovered: SHARED_PRODUCTS,
       trainingType: "In-Person",
-      registerLabel: "REGISTER",
+      registerLabel: "Scroll to Downloads",
     },
   },
   "breaker-training/jul-14-2026": {
@@ -216,7 +216,7 @@ export const engineeringTrainingSessionDetails: Record<
       location: SHARED_SIDEBAR_LOCATION,
       productsCovered: SHARED_PRODUCTS,
       trainingType: "In-Person",
-      registerLabel: "REGISTER",
+      registerLabel: "Scroll to Downloads",
     },
   },
   "breaker-training/dec-8-2026": {
@@ -241,7 +241,7 @@ export const engineeringTrainingSessionDetails: Record<
       location: SHARED_SIDEBAR_LOCATION,
       productsCovered: SHARED_PRODUCTS,
       trainingType: "In-Person",
-      registerLabel: "REGISTER",
+      registerLabel: "Scroll to Downloads",
     },
   },
 };
@@ -277,14 +277,8 @@ export const engineeringTrainingSessionAssets = {
 export type EngineeringTrainingSessionMetaIconKey =
   keyof typeof engineeringTrainingSessionAssets.metaIcons;
 
+// 공유 아이콘 목록 — 기획(curri_det3.png DC3)은 트위터(X)/링크드인/이메일 3종만 명시.
 export const engineeringTrainingSessionShareLinks = [
-  {
-    id: "facebook",
-    href: "https://www.facebook.com/sharer/sharer.php",
-    icon: "/ico/ico_share_facebook_44.svg",
-    label: "Share on Facebook",
-    external: true,
-  },
   {
     id: "x",
     href: "https://twitter.com/intent/tweet",
@@ -358,7 +352,8 @@ export const engineeringTrainingSessionParams = Object.values(
   engineeringTrainingSessionDetails,
 ).map(({ courseId, sessionId }) => ({ courseId, sessionId }));
 
-// 등록 폼 제출 버튼 카피 (ls-publish 상세 마크업 이관분)
+// 등록 폼 제출 버튼 카피
+// 기획(curri_det3.png DESCRIPTION 11번 "REGISTER CTA") 기준 라벨.
 export const engineeringTrainingSessionFormCopy = {
-  submitLabel: "Get the Whitepaper",
+  submitLabel: "REGISTER",
 } as const;

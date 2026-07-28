@@ -21,11 +21,8 @@ import {
   type DownloadCenterSort,
 } from "@/data/support/downloadCenterData";
 
-const PAGE_SIZE = 12; // BE 기본 페이지 크기
+const PAGE_SIZE = 12;
 
-// PC 정렬 드롭다운 표시 라벨 매핑.
-// doctype/title_desc 는 제품상세 Downloads 섹션 전용 값이라 이 화면 드롭다운에는 옵션으로 노출하지 않는다.
-// (공유 타입 DownloadCenterSort 를 전부 채워야 해서 라벨만 정의해 둔다 — 이 화면에서는 선택될 수 없다.)
 const SORT_LABELS: Record<DownloadCenterSort, string> = {
   "": "Sort by",
   doctype: "Document Type",
@@ -35,7 +32,6 @@ const SORT_LABELS: Record<DownloadCenterSort, string> = {
   title_desc: "Title Z-A",
 };
 
-// 문서유형 필터로 나갈 유효 코드(BE 미대응 값이 섞여도 걸러내는 안전장치).
 const VALID_DOC_TYPE_CODES = new Set<string>(downloadDocTypeCodes);
 
 type DownloadCenterContentsProps = {
@@ -58,10 +54,8 @@ function DownloadCenterContentsBody({
   const { query, page, setPage, sort, setSort } = useDownloadCenterQuery();
   const { getSelectedCategoryValues } = useDownloadCenterFilter();
 
-  // 선택된 LV2 코드(그룹 내 OR). 정렬해 안정적인 의존성 키로 사용.
   const selectedCategoryCodes = getSelectedCategoryValues("category");
   const categoryKey = [...selectedCategoryCodes].sort().join(",");
-  // 선택된 문서유형 코드(BE 대응 코드만).
   const selectedDocTypes = getSelectedCategoryValues("document").filter((c) =>
     VALID_DOC_TYPE_CODES.has(c),
   );
@@ -72,7 +66,6 @@ function DownloadCenterContentsBody({
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  // 검색/필터/정렬 변경 시 1페이지로(최초 실행 제외). 검색어/정렬은 provider 에서도 리셋하므로 중복이나 무해.
   const firstResetRef = useRef(true);
   useEffect(() => {
     if (firstResetRef.current) {
@@ -83,7 +76,6 @@ function DownloadCenterContentsBody({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, categoryKey, docTypeKey, sort]);
 
-  // 실목록 조회(검색어/선택 카테고리/문서유형/정렬/페이지 변경 시).
   useEffect(() => {
     if (empty) {
       setItems([]);
@@ -99,7 +91,7 @@ function DownloadCenterContentsBody({
       categories: selectedCategoryCodes,
       docTypes: selectedDocTypes,
       sort,
-      page: page - 1, // UI 는 1-based, API 는 0-based
+      page: page - 1,
       size: PAGE_SIZE,
     })
       .then((res) => {

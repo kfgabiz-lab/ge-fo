@@ -8,6 +8,7 @@ import {
   fetchPlaceSuggestions,
   type PlaceSuggestion,
 } from "@/lib/geo/places";
+import { filterEmail, filterLetters } from "@/lib/formInputFilters";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import RequestForTrainingQuestionnaireIntro from "./RequestForTrainingQuestionnaireIntro";
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
@@ -16,20 +17,14 @@ import type { RequestForTrainingStep3Errors } from "./RequestForTrainingStep3";
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
+// 이 화면 고유의 입력 최대 길이(영문만/이메일 허용문자 필터 로직은 @/lib/formInputFilters 공통 함수 사용)
 const LOCATION_NAME_MAX = 200;
 const CONTACT_PERSON_MAX = 50;
 const CONTACT_DETAILS_MAX = 400;
 
-function filterLocationName(value: string): string {
-  return value.replace(/[^A-Za-z ]/g, "").slice(0, LOCATION_NAME_MAX);
-}
-
+// 담당자명은 문자 제한 없이 길이만 자르므로 공통 필터 대상 아님(기존 동작 유지)
 function filterContactPerson(value: string): string {
   return value.slice(0, CONTACT_PERSON_MAX);
-}
-
-function filterContactDetails(value: string): string {
-  return value.replace(/[^A-Za-z0-9._@-]/g, "").slice(0, CONTACT_DETAILS_MAX);
 }
 
 function FieldShell({
@@ -195,7 +190,10 @@ export default function RequestForTrainingStep3Form({
                     value={step3.locationName}
                     error={Boolean(errors.locationName)}
                     onChange={(event) => {
-                      setStep3Field("locationName", filterLocationName(event.target.value));
+                      setStep3Field(
+                        "locationName",
+                        filterLetters(event.target.value, LOCATION_NAME_MAX),
+                      );
                       onClearError("locationName");
                     }}
                   />
@@ -355,7 +353,7 @@ export default function RequestForTrainingStep3Form({
                     onChange={(event) => {
                       setStep3Field(
                         "contactDetails",
-                        filterContactDetails(event.target.value),
+                        filterEmail(event.target.value, CONTACT_DETAILS_MAX),
                       );
                       onClearError("contactDetails");
                     }}

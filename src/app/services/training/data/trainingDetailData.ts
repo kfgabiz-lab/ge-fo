@@ -440,7 +440,9 @@ export function toTrainingSessionDetail(
         .join(", ")
     : "";
 
-  // Agenda: 이 행의 training_schedule[] → date+time_from 오름차순 정렬 후 No 재채번(1부터).
+  // Agenda: 이 행의 training_schedule[] → date+time_from 오름차순 정렬.
+  // No 는 화면단(TrainingSessionDetail.toAgendaGroups)에서 세션(교육일) 그룹별로 1부터 재채번하므로
+  // 여기서 넣는 통짜 연속번호는 폴백 값이다.
   const scheduleRaw = Array.isArray(json.training_schedule)
     ? json.training_schedule
     : [];

@@ -36,6 +36,7 @@ import {
 import { motorControlHighlights } from "../../data/motorControlContent";
 import {
   fetchProductDownloadsPage,
+  fetchProductDownloadsGateCount,
   type ProductDownloadsPage,
 } from "../../data/productDetailContent";
 import { productDownloadsDefaultDocTypes } from "@/data/support/downloadCenterContent";
@@ -102,6 +103,11 @@ type SwDetailProps = {
   row: Record<string, unknown> | null;
   dbFaq: CommonFaqEntry[];
   downloads: ProductDownloadsPage;
+  /**
+   * Downloads 섹션 노출 여부 판정용 전체 연계 파일 건수(문서유형 제한 없음 — 기획서 18번).
+   * downloads(Catalog/Manual 필터 목록)와 판정 기준을 분리하기 위한 별도 값이다.
+   */
+  downloadsGateCount: number;
   /** Downloads 클라이언트 재조회(필터/정렬/페이지)에도 동일 조건을 유지하기 위한 제품코드 */
   productCodes: string[];
   /**
@@ -144,11 +150,14 @@ function ScadaDetail({
   row,
   dbFaq,
   downloads,
+  downloadsGateCount,
   productCodes,
   techHubCopy,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
-  const showDownloads = downloads.totalElements > 0;
+  // 기획서 18번은 문서유형을 제한하지 않으므로 Catalog/Manual 목록(downloads)이 아니라
+  // 전체 연계 건수(downloadsGateCount)로 섹션·네비 노출을 판정한다.
+  const showDownloads = downloadsGateCount > 0;
   // Key Features(list variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
@@ -229,11 +238,14 @@ function XemsDetail({
   row,
   dbFaq,
   downloads,
+  downloadsGateCount,
   productCodes,
   techHubCopy,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
-  const showDownloads = downloads.totalElements > 0;
+  // 기획서 18번은 문서유형을 제한하지 않으므로 Catalog/Manual 목록(downloads)이 아니라
+  // 전체 연계 건수(downloadsGateCount)로 섹션·네비 노출을 판정한다.
+  const showDownloads = downloadsGateCount > 0;
   // Key Features(desc variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
@@ -311,11 +323,14 @@ function MicroGridDetail({
   row,
   dbFaq,
   downloads,
+  downloadsGateCount,
   productCodes,
   techHubCopy,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
-  const showDownloads = downloads.totalElements > 0;
+  // 기획서 18번은 문서유형을 제한하지 않으므로 Catalog/Manual 목록(downloads)이 아니라
+  // 전체 연계 건수(downloadsGateCount)로 섹션·네비 노출을 판정한다.
+  const showDownloads = downloadsGateCount > 0;
   // Key Features(list variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
@@ -393,11 +408,14 @@ function SmartFactoryDetail({
   row,
   dbFaq,
   downloads,
+  downloadsGateCount,
   productCodes,
   techHubCopy,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
-  const showDownloads = downloads.totalElements > 0;
+  // 기획서 18번은 문서유형을 제한하지 않으므로 Catalog/Manual 목록(downloads)이 아니라
+  // 전체 연계 건수(downloadsGateCount)로 섹션·네비 노출을 판정한다.
+  const showDownloads = downloadsGateCount > 0;
   // Key Features(list variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
@@ -501,12 +519,15 @@ export default async function SwProductDetail({
   //    Lv2 이름만 얻는 경량 헬퍼를 쓴다. 0건이면 null 을 반환하는 전자로는 SW 요건을 만족할 수 없다.
   // 아래 default 분기(미등록 slug)는 GenericProductDetail 이 스스로 조회하므로 SW 4종일 때만 호출한다.
   const isSwSlug = (SW_PRODUCT_SLUGS as readonly string[]).includes(slug);
-  const [dbFaq, downloads, lv2Name] = await Promise.all([
+  // downloadsGateCount: 섹션 노출 여부 판정 전용 건수(문서유형 제한 없음 — 기획서 18번).
+  // 목록(downloads)은 필터 초기값(Catalog/Manual)에 맞춘 결과라 판정 기준으로 쓸 수 없다.
+  const [dbFaq, downloads, downloadsGateCount, lv2Name] = await Promise.all([
     productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
     fetchProductDownloadsPage({
       docTypes: productDownloadsDefaultDocTypes,
       productCodes,
     }),
+    fetchProductDownloadsGateCount(productCodes),
     isSwSlug && productId
       ? fetchProductLv2Name(productId)
       : Promise.resolve(""),
@@ -520,6 +541,7 @@ export default async function SwProductDetail({
           row={row}
           dbFaq={dbFaq}
           downloads={downloads}
+          downloadsGateCount={downloadsGateCount}
           productCodes={productCodes}
           techHubCopy={techHubCopy}
         />
@@ -530,6 +552,7 @@ export default async function SwProductDetail({
           row={row}
           dbFaq={dbFaq}
           downloads={downloads}
+          downloadsGateCount={downloadsGateCount}
           productCodes={productCodes}
           techHubCopy={techHubCopy}
         />
@@ -540,6 +563,7 @@ export default async function SwProductDetail({
           row={row}
           dbFaq={dbFaq}
           downloads={downloads}
+          downloadsGateCount={downloadsGateCount}
           productCodes={productCodes}
           techHubCopy={techHubCopy}
         />
@@ -550,6 +574,7 @@ export default async function SwProductDetail({
           row={row}
           dbFaq={dbFaq}
           downloads={downloads}
+          downloadsGateCount={downloadsGateCount}
           productCodes={productCodes}
           techHubCopy={techHubCopy}
         />

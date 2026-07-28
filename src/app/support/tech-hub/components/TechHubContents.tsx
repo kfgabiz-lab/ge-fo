@@ -17,7 +17,7 @@ import {
   type TechHubCard,
 } from "@/data/support/techHubData";
 
-const PAGE_SIZE = techHubPage.pageSize; // 12
+const PAGE_SIZE = techHubPage.pageSize;
 
 type TechHubContentsProps = {
   empty?: boolean;
@@ -35,10 +35,8 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
   const { query, page, setPage } = useTechHubQuery();
   const { getSelectedCategoryValues } = useTechHubFilter();
 
-  // 선택된 LV2 코드(그룹 내 OR). 정렬해 안정적인 의존성 키로 사용.
   const selectedCodes = getSelectedCategoryValues("category");
   const codesKey = [...selectedCodes].sort().join(",");
-  // 선택된 인증 코드("ul"/"iec", 그룹 내 OR).
   const selectedCerts = getSelectedCategoryValues("certification");
   const certsKey = [...selectedCerts].sort().join(",");
 
@@ -47,7 +45,6 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  // 검색/필터 변경 시 1페이지로(최초 실행 제외). 검색어는 provider.setQuery 에서도 리셋하므로 중복이나 무해.
   const firstResetRef = useRef(true);
   useEffect(() => {
     if (firstResetRef.current) {
@@ -58,7 +55,6 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, codesKey, certsKey]);
 
-  // 실목록 조회(검색어/선택 카테고리/선택 인증/페이지 변경 시).
   useEffect(() => {
     if (empty) {
       setItems([]);
@@ -73,7 +69,7 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
       q: query,
       categories: selectedCodes,
       certs: selectedCerts,
-      page: page - 1, // UI 는 1-based, API 는 0-based
+      page: page - 1,
       size: PAGE_SIZE,
     })
       .then((res) => {

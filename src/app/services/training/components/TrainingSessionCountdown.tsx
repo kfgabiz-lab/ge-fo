@@ -37,10 +37,6 @@ function computeRemaining(targetMs: number): Remaining {
   };
 }
 
-function pad2(n: number): string {
-  return String(n).padStart(2, "0");
-}
-
 export default function TrainingSessionCountdown({
   targetIso,
 }: {
@@ -86,7 +82,7 @@ export default function TrainingSessionCountdown({
         </span>
         <div className="support_service_training_session_detail__countdown-unit">
           <span className="support_service_training_session_detail__countdown-value">
-            {pad2(remaining.hours)}
+            {remaining.hours}
           </span>
           <span className="support_service_training_session_detail__countdown-name">
             HOURS
@@ -97,7 +93,7 @@ export default function TrainingSessionCountdown({
         </span>
         <div className="support_service_training_session_detail__countdown-unit">
           <span className="support_service_training_session_detail__countdown-value">
-            {pad2(remaining.minutes)}
+            {remaining.minutes}
           </span>
           <span className="support_service_training_session_detail__countdown-name">
             MINS
