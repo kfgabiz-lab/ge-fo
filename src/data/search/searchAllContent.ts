@@ -19,8 +19,11 @@ export function buildSearchAllHref(query?: string): string {
 export const searchAllPage = {
   defaultQuery: "DC Device",
   searchPlaceholder: downloadCenterPage.searchPlaceholder,
+  searchPlaceholderMobile: downloadCenterPage.searchPlaceholderMobile,
   popularSearchLabel: downloadCenterPage.popularSearchLabel,
+  popularSearchLabelMobile: downloadCenterPage.popularSearchLabelMobile,
   popularTags: downloadCenterPage.popularTags,
+  popularTagsMobile: downloadCenterPage.popularTagsMobile,
   aiDisclaimer: "AI-generated content may be incomplete. Verify important info.",
   aiTitle: "AI-generated summary of your search results",
 } as const;

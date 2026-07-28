@@ -62,6 +62,13 @@ export type SupportFilterStoreConfig = {
   secondaryGroup: string;
   secondarySection: string;
   secondaryOptions: DownloadFilterOption[];
+  /**
+   * 데이터의 defaultChecked 로 표현할 수 없는 페이지별 추가 기본 체크 id(선택).
+   * 예: Search Documents 탭의 Figma 기본 활성 필터(특정 카테고리/문서유형 조합).
+   * 정적 데이터(searchProductCategories 등)를 다른 탭과 공유해 defaultChecked 를 못 넣는 경우 사용.
+   * 미지정 시 기존 동작 그대로(하위호환) — Download Center / Tech Hub 는 사용하지 않음.
+   */
+  extraDefaultCheckedIds?: string[];
 };
 
 type FilterMeta = {
@@ -211,6 +218,21 @@ function buildInitialChecked(
   for (const option of secondaryOptions) {
     if (option.defaultChecked) {
       checked[`${secondaryIdPrefix}-${option.id}`] = true;
+    }
+  }
+
+  // 페이지별 추가 기본 체크(선택) — 데이터 defaultChecked 로 표현 불가한 Figma 기본 활성 필터.
+  if (config.extraDefaultCheckedIds?.length) {
+    for (const id of config.extraDefaultCheckedIds) {
+      checked[id] = true;
+    }
+    // 자식 카테고리가 켜졌을 수 있으므로 부모 카테고리 체크 상태를 재동기화.
+    for (const option of categories) {
+      syncCategoryParentState(
+        checked,
+        `${config.categoryIdPrefix}-${option.id}`,
+        childrenMap,
+      );
     }
   }
 
