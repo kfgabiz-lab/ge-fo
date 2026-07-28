@@ -2,10 +2,13 @@
 // - company 섹션(blog/press/articles/events)의 "조회+매핑" 레이어를 단일 함수로 통합.
 // - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
 // - pageData.ts는 "bo util 순수 포팅"이라 네트워크 코드를 넣지 않는 원칙 → 네트워크 조회는 이 파일에 둔다.
-// - BE 변경 없음. 기존 엔드포인트 3종을 그대로 재사용:
+// - 기존 엔드포인트 3종을 그대로 재사용:
 //   목록 GET /api/v1/fo/page-data/{slug}
 //   단건 GET /api/v1/fo/page-data/{slug}/{id}          ← id는 반드시 PK 엔드포인트로(FO-RULE.md 핵심원칙 7)
 //   인접 GET /api/v1/fo/page-data/{slug}/{id}/adjacent
+// - 목록 전용 4번째 옵션(datetimeRange): 게시기간(drs_) 조건을 분단위(datetime)까지 정확히 비교해야 하는
+//   소비처(mainVisualData.ts의 hero-data/banner-data)를 위해 GET /api/v1/fo/page-data/{slug}/datetime-range
+//   를 탄다. 기존 목록 엔드포인트(날짜 8자리 절삭 비교)는 그대로 두고 이 옵션이 true일 때만 경로만 바뀐다.
 import { fetchApi } from "@/lib/api";
 import { commonData, commonEachData, type PageDataItem } from "@/lib/pageData";
 
@@ -77,6 +80,8 @@ interface FetchDataListParams<T> extends FetchDataCommonParams {
   // 후처리 콜백(content 배열 "전체" → 배열). 없으면 commonEachData(content) 적용.
   // ⚠️ 원소별 map이 아니라 배열→배열(events 캘린더 그룹핑 등 전체 변환도 이 안에서).
   리턴함수?: (rows: PageDataItem[]) => T[];
+  // true면 게시기간(drs_) 조건을 분단위(datetime)까지 정확히 비교하는 전용 엔드포인트 사용
+  datetimeRange?: boolean;
 }
 
 // ---------------- fetchData 오버로드 ----------------
@@ -107,6 +112,7 @@ export async function fetchData(params: {
   리턴함수?:
     | ((raw: PageDataItem) => unknown)
     | ((rows: PageDataItem[]) => unknown[]);
+  datetimeRange?: boolean;
 }): Promise<unknown> {
   const {
     slug,
@@ -120,6 +126,7 @@ export async function fetchData(params: {
     sortField,
     titleField,
     리턴함수,
+    datetimeRange,
   } = params;
   const sp = new URLSearchParams();
 
@@ -176,7 +183,7 @@ export async function fetchData(params: {
   if (sort) sp.set("sort", sort);
 
   const res = await fetchApi<RawPageResponse>(
-    `/api/v1/fo/page-data/${slug}?${sp.toString()}`,
+    `/api/v1/fo/page-data/${slug}${datetimeRange ? "/datetime-range" : ""}?${sp.toString()}`,
   );
   const rawContent = res.content ?? [];
   // 리턴함수는 content 배열 "전체"를 받아 배열을 반환(원소별 map 아님)

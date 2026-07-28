@@ -65,7 +65,8 @@ export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
         img: item.mediaId != null ? PAGE_FILE_SRC(item.mediaId) : mock.img,
         alt: item.mainTitle || mock.alt,
         tit: item.mainTitle || mock.tit,
-        txt: item.subTitle || mock.txt,
+        // 서브타이틀은 목업 폴백 없음 — 실데이터가 빈 값이면 빈 값 그대로 노출한다.
+        txt: item.subTitle,
       };
     });
   }, [bannerItems]);
