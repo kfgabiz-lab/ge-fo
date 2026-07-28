@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSyncExternalStore } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useSyncExternalStore } from "react";
 import {
   getBreadcrumbConfig,
   type BreadcrumbConfig,
@@ -15,6 +15,11 @@ import {
 } from "./breadcrumbTitleStore";
 import { CONNECT_PORTAL_EXTERNAL_URL } from "@/data/support/connectPortalContent";
 import { isMainPath } from "@/lib/navigation/crossSectionNav";
+import {
+  CATEGORY_CONTEXT_PARAM,
+  hrefPathname,
+  parseCategoryContext,
+} from "@/lib/navigation/categoryContext";
 import { resolveGnbNavItems, type FoGnbMenuApiNode } from "@/data/gnb";
 import type {
   GnbDevicesMegaMenu,
@@ -39,6 +44,17 @@ export type BreadcrumbServerOverride = {
   crumb?: { href: string; label: string };
 } | null;
 
+/**
+ * 컨텍스트(?category=) 없이 들어온 Lv2/제품 경로에서 "본문이 실제로 고른 레코드"의 소속 Lv2 id.
+ * - 서버 레이아웃이 본문과 동일한 조회로 산출해 내려준다(추가 왕복 없음).
+ * - pathname 을 함께 담아, 공유 레이아웃이 재실행되지 않는 소프트 내비게이션에서 낡은 값이
+ *   다른 경로에 잘못 적용되는 것을 막는다(serverOverride 와 동일한 방어).
+ */
+export type BreadcrumbCategoryFallback = {
+  pathname: string;
+  categoryId: number;
+} | null;
+
 type HeaderBreadcrumbProps = {
   /** 서버 레이아웃에서 조회한 Products & Systems 메가메뉴 트리 — 있으면 브레드크럼을 동적 도출 */
   devicesMegaMenu?: GnbDevicesMegaMenu | null;
@@ -46,6 +62,8 @@ type HeaderBreadcrumbProps = {
   gnbMenuData?: FoGnbMenuApiNode[];
   /** 서버 레이아웃에서 산출한 오버라이드 — 경로 일치 시 정적 config 대신 SSR 반영 */
   serverOverride?: BreadcrumbServerOverride;
+  /** URL 에 ?category= 가 없을 때 쓸 카테고리 컨텍스트 폴백(본문이 고른 레코드 기준) */
+  categoryFallback?: BreadcrumbCategoryFallback;
 };
 
 // Products & Systems 브랜치 브레드크럼의 고정 최상단 크럼(트리 depth1과 별개인 상위 레이블).
@@ -65,13 +83,22 @@ function toProductList(
 // GNB devices 메가메뉴 트리에서 현재 pathname과 일치하는 노드를 찾아 브레드크럼을 도출.
 // depth1(/products-category/{slug}) → depth2(/product-range/{slug}) → depth3(/product/{slug}) 순으로 검사.
 // 매칭되는 노드가 없으면 null 반환(호출부가 정적 폴백 getBreadcrumbConfig 사용).
+//
+// ⚠️ 트리 href 에는 중복 slug 해소용 ?category={Lv2 id} 가 붙어 있고 usePathname() 은 쿼리를 포함하지
+//    않으므로, 비교는 반드시 hrefPathname()(쿼리 제거)으로 한다. 원시 href 와 pathname 을 직접 비교하면
+//    devices 하위 전 경로에서 매칭이 실패해 브레드크럼 바가 통째로 사라진다.
+//
+// categoryId: URL 의 ?category= 컨텍스트. 지정하면 "그 id 를 가진 Lv2" 만 후보로 삼아
+//   slug 가 같은 다른 Lv2 가 먼저 걸리는 일을 막는다(예: variable-frequency-drive 587 vs 607).
+//   null 이면 기존처럼 slug 기준 첫 매칭(컨텍스트 없는 진입 하위호환).
 function getCrumbsFromMegaMenu(
   megaMenu: GnbDevicesMegaMenu,
   pathname: string,
+  categoryId: number | null,
 ): BreadcrumbConfig | null {
   for (const depth1 of megaMenu.categories) {
-    // depth1 매칭
-    if (depth1.href && depth1.href === pathname) {
+    // depth1(Lv1) 매칭 — Lv1 은 slug 중복이 없어 카테고리 컨텍스트와 무관하게 판정한다.
+    if (depth1.href && hrefPathname(depth1.href) === pathname) {
       return {
         crumbs: [PRODUCTS_ROOT_CRUMB],
         current: depth1.label,
@@ -79,8 +106,11 @@ function getCrumbsFromMegaMenu(
     }
 
     for (const depth2 of depth1.children) {
-      // depth2 매칭
-      if (depth2.href && depth2.href === pathname) {
+      // 컨텍스트가 주어졌으면 그 id 의 Lv2 만 본다 → 이 Lv2 와 그 하위 제품의 조상 체인이 정확해진다.
+      if (categoryId !== null && depth2.categoryId !== categoryId) continue;
+
+      // depth2(Lv2) 매칭
+      if (depth2.href && hrefPathname(depth2.href) === pathname) {
         return {
           crumbs: [PRODUCTS_ROOT_CRUMB, { label: depth1.label, href: depth1.href }],
           current: depth2.label,
@@ -89,7 +119,7 @@ function getCrumbsFromMegaMenu(
 
       // depth3(제품) 매칭
       for (const product of toProductList(depth2.product)) {
-        if (product.href && product.href === pathname) {
+        if (product.href && hrefPathname(product.href) === pathname) {
           return {
             crumbs: [
               PRODUCTS_ROOT_CRUMB,
@@ -109,7 +139,8 @@ function getCrumbsFromMegaMenu(
 // GNB 일반(non-devices) 최상위 항목들의 서브아이템에서 현재 pathname과 일치하는 항목을 찾아 브레드크럼을 도출.
 // devices 트리 매칭이 실패한 뒤 두 번째로 시도한다(둘 다 실패해야 정적 폴백).
 // 최상위 크럼은 item.label(예: Services), href는 top nav href(대부분 빈 문자열 → span으로 렌더),
-// current는 매칭된 서브아이템 title. 섹션 label 자체는 크럼에 쓰지 않는다(참고 마크업에 섹션명 없음).
+// current는 매칭된 서브아이템 title. sections 레이아웃은 매칭된 섹션의 label을 중간 크럼으로 추가한다
+// (단 섹션 label이 current와 같으면 중복이라 생략 — 예: /company/articles 자체는 섹션명과 항목명이 동일).
 // 매칭되는 항목이 없으면 null 반환.
 function getCrumbsFromGeneralNav(
   navItems: GnbNavItem[],
@@ -137,7 +168,11 @@ function getCrumbsFromGeneralNav(
       for (const section of megaMenu.sections) {
         for (const sub of section.items) {
           if (sub.href && sub.href === pathname) {
-            return { crumbs: [topCrumb], current: sub.title };
+            const sectionCrumb: BreadcrumbCrumb[] =
+              section.label && section.label !== sub.title
+                ? [{ label: section.label }]
+                : [];
+            return { crumbs: [topCrumb, ...sectionCrumb], current: sub.title };
           }
         }
       }
@@ -147,12 +182,38 @@ function getCrumbsFromGeneralNav(
   return null;
 }
 
-export default function HeaderBreadcrumb({
+// useSearchParams() 는 정적 프리렌더 경로에서 Suspense 경계를 요구한다(없으면 빌드 실패).
+// 이 컴포넌트를 렌더하는 레이아웃은 대부분 no-store fetch 로 동적이지만 app/not-found.tsx 만
+// 예외(정적 프리렌더)라, 호출부 3곳을 고치는 대신 여기서 경계를 세워 한 곳에서 보장한다.
+export default function HeaderBreadcrumb(props: HeaderBreadcrumbProps) {
+  return (
+    <Suspense fallback={null}>
+      <HeaderBreadcrumbContent {...props} />
+    </Suspense>
+  );
+}
+
+function HeaderBreadcrumbContent({
   devicesMegaMenu,
   gnbMenuData,
   serverOverride,
+  categoryFallback,
 }: HeaderBreadcrumbProps) {
   const pathname = usePathname();
+  // 카테고리 컨텍스트 결정 순서:
+  //   ① URL 의 ?category={Lv2 id} — 클릭해서 들어온 경우. "원래 카테고리 구조"대로 표시한다.
+  //   ② 서버 폴백 — URL 로 직접 들어온 경우. 본문이 고른 레코드(조회 첫 건)의 소속 Lv2 를 따라가
+  //      본문과 브레드크럼이 서로 다른 중복 항목을 가리키지 않게 한다.
+  //   ③ 둘 다 없으면 null → 트리에서 slug 첫 매칭(기존 동작).
+  // 동적 렌더 경로에서는 ①②가 SSR 시점에 이미 확정돼 최초 HTML 부터 정확하다(폴백 flash 없음).
+  const urlCategoryId = parseCategoryContext(
+    useSearchParams().get(CATEGORY_CONTEXT_PARAM),
+  );
+  const fallbackCategoryId =
+    categoryFallback && categoryFallback.pathname === pathname
+      ? categoryFallback.categoryId
+      : null;
+  const categoryId = urlCategoryId ?? fallbackCategoryId;
   // 소프트 내비게이션(목록 카드 클릭 등) 대비 클라이언트 오버라이드 스토어 구독.
   // - getServerSnapshot 은 항상 고정 EMPTY_MAP → SSR/CSR 최초 스냅샷 일치(hydration mismatch 없음).
   const clientTitles = useSyncExternalStore(
@@ -162,8 +223,14 @@ export default function HeaderBreadcrumb({
   );
   const clientOverride = clientTitles.get(pathname);
   // 우선순위: devices 트리 매칭 → 일반 GNB(non-devices) 서브아이템 매칭 → 정적 폴백(getBreadcrumbConfig).
+  // devices 트리는 2패스다:
+  //   1패스 — 카테고리 컨텍스트가 있으면 그 id 의 노드로 한정해 정확한 조상 체인을 얻는다.
+  //   2패스 — 컨텍스트가 없거나(기존 URL·북마크) 그 id 로 못 찾으면(파라미터가 낡거나 잘못됨)
+  //           기존과 동일한 slug 기준 첫 매칭으로 폴백한다 → 어떤 경우에도 바가 사라지지 않는다.
   const fromMegaMenu = devicesMegaMenu
-    ? getCrumbsFromMegaMenu(devicesMegaMenu, pathname)
+    ? (categoryId !== null
+        ? getCrumbsFromMegaMenu(devicesMegaMenu, pathname, categoryId)
+        : null) ?? getCrumbsFromMegaMenu(devicesMegaMenu, pathname, null)
     : null;
   const fromGeneralNav = fromMegaMenu
     ? null

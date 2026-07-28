@@ -105,7 +105,8 @@ export default function TrainingSessionDetailAside({
           </div>
           <ul className="support_service_training_session_detail__meta-bullets">
             {/* 주소/전화/이메일: 이 회차 행의 curriculum_detail2.address / phone / email.
-                주소는 Virtual 단독 등으로 빈값이면 뷰모델에서 ""로 게이트됨 → 빈 li 노출 금지(라인 자체 미렌더). */}
+                주소는 Virtual 단독 등으로 빈값이면 뷰모델에서 ""로 게이트됨 → 빈 li 노출 금지(라인 자체 미렌더).
+                전화번호는 뷰모델에서 공통 함수(formatPhoneDisplay)로 미국식 3-3-4 포맷 적용됨 → 여기서 재가공하지 않는다. */}
             {sidebar.location.address.trim() ? (
               <li data-slugkey="curriculum_detail2.address">{sidebar.location.address}</li>
             ) : null}
@@ -120,8 +121,8 @@ export default function TrainingSessionDetailAside({
         </div>
 
         <div className="support_service_training_session_detail__meta-item support_service_training_session_detail__meta-item--products">
-          {/* PRODUCTS COVERED: 연결제품 제품명 합산(_fetchedRel22=Power + _fetchedRel23=Automation,
-              각 원소 _fetchedRelN[].product.product_name)을 join 문자열로 렌더.
+          {/* PRODUCTS COVERED: 연결제품(power_list + automation_list = category-data depth3 연결행 PK)을
+              전용 엔드포인트(/training/product-tree) 평면 행으로 제품명 해석 후 join 문자열로 렌더.
               다중소스 합산이라 단일 slugKey 미태깅(trainingDetailData.extractProductNames) */}
           <SessionMetaLabel icon={metaIcons.products}>
             PRODUCTS COVERED

@@ -1,4 +1,5 @@
 import { emptyStateIconSrc } from "@/data/commonAssets";
+import { formatPhoneDisplay } from "@/lib/formatPhone";
 import { haversineMiles, type GeoCoord } from "@/lib/geo/distance";
 import { fetchData } from "@/lib/pageDataApi";
 import { flattenPageDataItem, type PageDataItem } from "@/lib/pageData";
@@ -84,7 +85,8 @@ export function toWhereToBuyLocation(item: PageDataItem): WhereToBuyLocation {
     badges: [],
     name: (row.agency_name as string) ?? "",
     address,
-    phone,
+    // 표시용 전화번호는 공통 함수로 미국식 3-3-4 정규화(입력 형식 혼재 방어). href 는 원본 숫자 기준 유지.
+    phone: formatPhoneDisplay(phone),
     website: homepage,
     websiteLabel: homepage,
     // 소스에 방향안내 URL 없음 — 주소 기반으로 FE 생성(기존 목데이터 패턴 유지)

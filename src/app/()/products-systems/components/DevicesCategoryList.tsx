@@ -1,4 +1,6 @@
 import Link from "next/link";
+import ProductAwardBadge from "@/components/product/ProductAwardBadge";
+import { getProductBadgeType } from "@/lib/productBadge";
 import type { DevicesCategoryProduct } from "../data/vfdContent";
 
 type DevicesCategoryIntro = {
@@ -22,9 +24,17 @@ function CategoryProductCard({
   item: DevicesCategoryProduct;
   loading?: "eager" | "lazy";
 }) {
+  // 기획서 9번 Design Awards 배지 — 퍼블리싱 표준 패턴(DevicesProducts/MarketsProducts/DevicesProductOtherProducts)과 동일:
+  // 카드 루트에 type 클래스, 이미지 래퍼 첫 자식에 공용 ProductAwardBadge. 판정도 공용 getProductBadgeType 재사용.
+  const badgeType = getProductBadgeType(item);
+
   return (
-    <article className="devices_category__item" data-slug-item>
+    <article
+      className={badgeType ? `devices_category__item ${badgeType}` : "devices_category__item"}
+      data-slug-item
+    >
       <div className="devices_category__item-img">
+        {badgeType ? <ProductAwardBadge dataSlugKey="product.awards" /> : null}
         {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환. 없으면 src 빈값으로 브라우저 기본 깨진 이미지 표시(레이아웃 유지) */}
         <img loading={loading} decoding="async" src={item.image ?? undefined} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>
@@ -57,10 +67,18 @@ function CategoryProductCardStacked({
   item: DevicesCategoryProduct;
   loading?: "eager" | "lazy";
 }) {
+  // 기획서 9번 Design Awards 배지 — split 카드와 동일한 퍼블리싱 표준 패턴 적용
+  const badgeType = getProductBadgeType(item);
+
   return (
     // href는 하위 카테고리/제품 상세 라우트로 이동하는 정적 라우팅 → 데이터 필드 아님(정적 유지)
-    <Link href={item.href} className="devices_category__item" data-slug-item>
+    <Link
+      href={item.href}
+      className={badgeType ? `devices_category__item ${badgeType}` : "devices_category__item"}
+      data-slug-item
+    >
       <div className="devices_category__item-img">
+        {badgeType ? <ProductAwardBadge dataSlugKey="product.awards" /> : null}
         {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환. 없으면 src 빈값으로 브라우저 기본 깨진 이미지 표시(레이아웃 유지) */}
         <img loading={loading} decoding="async" src={item.image ?? undefined} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>

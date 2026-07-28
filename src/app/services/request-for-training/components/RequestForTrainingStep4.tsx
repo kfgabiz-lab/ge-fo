@@ -7,7 +7,12 @@ import {
 } from "@/data/services/requestForTrainingContent";
 import { submitTrainingRequest } from "@/lib/training/trainingRequestSubmit";
 import RequestForTraining from "./RequestForTraining";
-import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
+import {
+  isStep1Complete,
+  isStep2Complete,
+  isStep3Complete,
+  useRequestForTrainingForm,
+} from "./RequestForTrainingProvider";
 import RequestForTrainingStep4Form from "./RequestForTrainingStep4Form";
 
 const VFD_GROUP_TITLE = "Variable Frequency Drive";
@@ -22,28 +27,9 @@ export default function RequestForTrainingStep4() {
   async function handleSubmit() {
     if (submitting) return;
 
-    const step1Filled =
-      step1.trainingTrack.trim() !== "" &&
-      step1.firstName.trim() !== "" &&
-      step1.company.trim() !== "" &&
-      step1.streetAddress.trim() !== "" &&
-      step1.city.trim() !== "" &&
-      step1.state.trim() !== "" &&
-      step1.zip.trim() !== "" &&
-      step1.phone.trim() !== "" &&
-      step1.email.trim() !== "";
-
-    const step2Filled =
-      step2.sessionCount.trim() !== "" &&
-      step2.sessionDays.trim() !== "" &&
-      step2.scheduleStart.trim() !== "" &&
-      step2.scheduleEnd.trim() !== "" &&
-      step2.studentCount.trim() !== "";
-
-    const isInPerson = step3.trainingFormat === "In-Person";
-    const step3Filled =
-      !isInPerson ||
-      (step3.locationName.trim() !== "" && step3.contactDetails.trim() !== "");
+    const step1Filled = isStep1Complete(step1);
+    const step2Filled = isStep2Complete(step2);
+    const step3Filled = isStep3Complete(step3);
 
     const hasVfdProduct = step4.selectedProducts.some(
       (product) => product.type === "A" && product.groupTitle === VFD_GROUP_TITLE,
@@ -105,8 +91,10 @@ export default function RequestForTrainingStep4() {
         recaptchaToken: step4.recaptchaToken,
       });
       alert(SUCCESS_ALERT);
-    } catch {
-      alert(REQUIRED_ALERT);
+    } catch (error) {
+      // 제출 실패(서버 오류) 문구는 기획서(dc)에 규정이 없어 사용자 알림을 띄우지 않는다.
+      // 필수값 미충족 alert 를 재사용하면 "필수값 누락"으로 잘못 안내되므로 콘솔 로그만 남긴다.
+      console.error("[request-for-training] submit failed", error);
     } finally {
       setSubmitting(false);
     }

@@ -1,6 +1,11 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useState } from "react";
+import {
+  emptyRequestForTrainingStep4Options,
+  fetchRequestForTrainingStep4Options,
+  type RequestForTrainingStep4Options,
+} from "@/app/services/request-for-training/data/requestForTrainingCodes";
 import { requestForTrainingStep4Copy } from "@/data/services/requestForTrainingContent";
 import RequestForTrainingCheckboxGroup from "./RequestForTrainingCheckboxGroup";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
@@ -13,12 +18,27 @@ export default function RequestForTrainingVfdQuestionnaire() {
   const { fields } = requestForTrainingStep4Copy;
   const { step4, setStep4Field } = useRequestForTrainingForm();
 
+  // 체크박스 3그룹 옵션은 공통코드 API에서 조회(이 컴포넌트는 VFD 제품 선택 시에만 마운트됨)
+  const [codeOptions, setCodeOptions] = useState<RequestForTrainingStep4Options>(
+    emptyRequestForTrainingStep4Options,
+  );
+
+  useEffect(() => {
+    let alive = true;
+    fetchRequestForTrainingStep4Options().then((options) => {
+      if (alive) setCodeOptions(options);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   return (
     <>
       <RequestForTrainingCheckboxGroup
         legend={fields.jobTitles.label}
         required={fields.jobTitles.required}
-        options={fields.jobTitles.options}
+        options={codeOptions.jobTitles}
         selected={step4.jobTitles}
         onChange={(next) => setStep4Field("jobTitles", next)}
       />
@@ -26,7 +46,7 @@ export default function RequestForTrainingVfdQuestionnaire() {
       <RequestForTrainingCheckboxGroup
         legend={fields.studentInvolvement.label}
         required={fields.studentInvolvement.required}
-        options={fields.studentInvolvement.options}
+        options={codeOptions.studentInvolvement}
         selected={step4.studentInvolvement}
         onChange={(next) => setStep4Field("studentInvolvement", next)}
       />
@@ -67,7 +87,7 @@ export default function RequestForTrainingVfdQuestionnaire() {
           <div className="support_service_training_request__product-panel support_service_training_request__product-panel--nested">
             <RequestForTrainingCheckboxGroup
               legend=""
-              options={fields.vfdUnderstanding.yesFollowUpOptions}
+              options={codeOptions.vfdTopics}
               selected={step4.vfdUnderstandingTopics}
               onChange={(next) => setStep4Field("vfdUnderstandingTopics", next)}
             />

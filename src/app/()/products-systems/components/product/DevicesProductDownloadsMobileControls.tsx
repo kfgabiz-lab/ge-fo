@@ -4,16 +4,26 @@ import { TextField, InputAdornment } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import DevicesProductDownloadsDocumentFilter from "./DevicesProductDownloadsDocumentFilter";
+import {
+  productDownloadsSortLabel,
+  productDownloadsSortOptions,
+} from "../../data/productDetailContent";
+import type { DownloadCenterSort } from "@/data/support/downloadCenterData";
 
-const SORT_OPTIONS = ["Most Recent", "A to Z", "Z to A"] as const;
 const MOBILE_MAX_WIDTH_QUERY = "(max-width: 780px)";
 
-export default function DevicesProductDownloadsMobileControls() {
+type DevicesProductDownloadsMobileControlsProps = {
+  /** 정렬 상태는 PC 드롭다운과 공유해야 하므로 부모(DevicesProductDownloads)가 소유한다. */
+  sort: DownloadCenterSort;
+  onSortChange: (sort: DownloadCenterSort) => void;
+};
+
+export default function DevicesProductDownloadsMobileControls({
+  sort,
+  onSortChange,
+}: DevicesProductDownloadsMobileControlsProps) {
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
-  const [sortValue, setSortValue] = useState<(typeof SORT_OPTIONS)[number]>(
-    SORT_OPTIONS[0],
-  );
   const sortRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -94,7 +104,7 @@ export default function DevicesProductDownloadsMobileControls() {
               onClick={() => setSortOpen((open) => !open)}
             >
               <span className="devices_product_downloads__mo-sort-label">
-                {sortOpen ? "Sort by" : sortValue}
+                {sortOpen ? "Sort by" : productDownloadsSortLabel(sort)}
               </span>
               <span className="devices_product_downloads__mo-sort-icon" aria-hidden>
                 <img src="/ico/ico_down_16.svg" alt="" width={14} height={14} />
@@ -106,23 +116,23 @@ export default function DevicesProductDownloadsMobileControls() {
                 className="devices_product_downloads__mo-sort-list"
                 role="listbox"
               >
-                {SORT_OPTIONS.map((option) => (
-                  <li key={option}>
+                {productDownloadsSortOptions.map((option) => (
+                  <li key={option.value}>
                     <button
                       type="button"
                       className={`devices_product_downloads__mo-sort-option${
-                        sortValue === option
+                        sort === option.value
                           ? " devices_product_downloads__mo-sort-option--active"
                           : ""
                       }`}
                       role="option"
-                      aria-selected={sortValue === option}
+                      aria-selected={sort === option.value}
                       onClick={() => {
-                        setSortValue(option);
+                        onSortChange(option.value);
                         setSortOpen(false);
                       }}
                     >
-                      {option}
+                      {option.label}
                     </button>
                   </li>
                 ))}

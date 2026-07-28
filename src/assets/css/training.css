@@ -643,6 +643,18 @@
     text-align: left;
   }
 
+  /* Agenda 세션 구분 행(Session 1/Session 2) — 교육일이 여러 날일 때만 렌더됨 */
+  section.support_service_training_session_detail .support_service_training_session_detail__table-session th {
+    padding: 14px 16px;
+    border-bottom: 1px solid #ddd;
+    background: #f5f7fa;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #0f1f45;
+    text-align: left;
+  }
+
   section.support_service_training_session_detail .support_service_training_session_detail__table-tit {
     margin: 0 0 6px;
     font-size: 16px;
@@ -1252,13 +1264,45 @@
   }
 
   section.support_service_training_request .support_service_training_request__form-row--address {
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
   }
 
   section.support_service_training_request .support_service_training_request__form-row--address .support_service_training_request__input {
     flex: 1 1 0;
     min-width: 0;
+  }
+
+  section.support_service_training_request .support_service_training_request__control {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    gap: 10px;
+    width: 100%;
+  }
+
+  section.support_service_training_request .support_service_training_request__control > .guide_field,
+  section.support_service_training_request .support_service_training_request__control > .support_service_training_request__input {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  section.support_service_training_request .support_service_training_request__field--error {
+    position: relative;
+    gap: 0;
+    padding-bottom: calc(8px + 23px);
+  }
+
+  section.support_service_training_request .support_service_training_request__error {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: var(--color-error, #e53a3d);
   }
 
   section.support_service_training_request .support_service_training_request__form-row--2 .support_service_training_request__field,
@@ -1699,6 +1743,15 @@
     width: 270px;
     max-width: 100%;
     height: auto;
+    margin: 0 auto;
+  }
+
+  /* 실제 reCAPTCHA 위젯 래퍼 — PUB 목업 이미지(__recaptcha)의 가운데 정렬을 그대로 재현.
+     위젯 iframe 은 고정 폭이라 width 를 지정하지 않고 fit-content + auto margin 으로 중앙에 둔다. */
+  section.support_service_training_request .support_service_training_request__recaptcha-box {
+    align-self: center;
+    width: fit-content;
+    max-width: 100%;
     margin: 0 auto;
   }
 }
@@ -2790,6 +2843,17 @@
     width: 100%;
   }
 
+  /* Agenda 세션 구분 항목(Session 1/Session 2) — 교육일이 여러 날일 때만 렌더됨.
+     타임라인 점(8px) + gap(20px) 만큼 들여써 본문 텍스트와 좌측을 맞춘다. */
+  section.support_service_training_session_detail .support_service_training_session_detail__agenda-session {
+    position: relative;
+    padding-left: 28px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #0f1f45;
+  }
+
   section.support_service_training_session_detail .support_service_training_session_detail__agenda-dot {
     flex-shrink: 0;
     width: 8px;
@@ -3527,7 +3591,39 @@
   section.support_service_training_request .support_service_training_request__form-row--address {
     flex-direction: row;
     gap: 10px;
-    align-items: stretch;
+    align-items: flex-start;
+  }
+
+  section.support_service_training_request .support_service_training_request__control {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    gap: 10px;
+    width: 100%;
+  }
+
+  section.support_service_training_request .support_service_training_request__control > .guide_field,
+  section.support_service_training_request .support_service_training_request__control > .support_service_training_request__input {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  section.support_service_training_request .support_service_training_request__field--error {
+    position: relative;
+    gap: 0;
+    padding-bottom: calc(8px + 23px);
+  }
+
+  section.support_service_training_request .support_service_training_request__error {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: var(--color-error, #e53a3d);
   }
 
   section.support_service_training_request .support_service_training_request__form-row--2 .support_service_training_request__field,
@@ -3860,6 +3956,14 @@
     width: 295px;
     max-width: 100%;
     height: auto;
+    margin: 6px auto 0;
+  }
+
+  /* 모바일 — PUB __recaptcha 의 margin(6px auto 0) 을 위젯 래퍼에 동일 적용 */
+  section.support_service_training_request .support_service_training_request__recaptcha-box {
+    align-self: center;
+    width: fit-content;
+    max-width: 100%;
     margin: 6px auto 0;
   }
 

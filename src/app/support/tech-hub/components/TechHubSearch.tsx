@@ -1,7 +1,7 @@
 "use client";
 
 import { InputAdornment, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { techHubPage } from "@/data/support/techHubContent";
 import { useTechHubQuery } from "./TechHubFilterProvider";
 
@@ -13,10 +13,19 @@ export default function TechHubSearch({
   initialQuery = techHubPage.defaultSearchQuery,
 }: TechHubSearchProps) {
   // 입력값은 로컬 상태로 두고, Search 버튼/Enter 시에만 공유 컨텍스트(query)에 커밋 → 키 입력마다 재조회하지 않는다.
-  const { setQuery } = useTechHubQuery();
+  const { setQuery, resetSignal } = useTechHubQuery();
   const [value, setValue] = useState<string>(initialQuery);
   const [isMobile, setIsMobile] = useState(false);
   const hasQuery = value.length > 0;
+
+  // 전체 초기화 신호(View All)가 오면 입력값을 무조건 비운다.
+  // 첫 렌더는 건너뛴다(initialQuery 로 들어온 초기 검색어를 지우지 않기 위해).
+  const prevResetSignal = useRef(resetSignal);
+  useEffect(() => {
+    if (prevResetSignal.current === resetSignal) return;
+    prevResetSignal.current = resetSignal;
+    setValue("");
+  }, [resetSignal]);
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 780px)");

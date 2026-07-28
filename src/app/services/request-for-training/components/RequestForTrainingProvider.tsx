@@ -100,6 +100,37 @@ const STEP3_INITIAL: RequestForTrainingStep3Values = {
   contactDetails: "",
 };
 
+export function isStep1Complete(step1: RequestForTrainingStep1Values): boolean {
+  return (
+    step1.trainingTrack.trim() !== "" &&
+    step1.firstName.trim() !== "" &&
+    step1.company.trim() !== "" &&
+    step1.streetAddress.trim() !== "" &&
+    step1.city.trim() !== "" &&
+    step1.state.trim() !== "" &&
+    step1.zip.trim() !== "" &&
+    step1.phone.length === 10 &&
+    step1.email.trim() !== ""
+  );
+}
+
+export function isStep2Complete(step2: RequestForTrainingStep2Values): boolean {
+  return (
+    step2.sessionCount.trim() !== "" &&
+    step2.sessionDays.trim() !== "" &&
+    step2.scheduleStart.trim() !== "" &&
+    step2.scheduleEnd.trim() !== "" &&
+    step2.studentCount.trim() !== ""
+  );
+}
+
+export function isStep3Complete(step3: RequestForTrainingStep3Values): boolean {
+  return (
+    step3.trainingFormat !== "In-Person" ||
+    (step3.locationName.trim() !== "" && step3.contactDetails.trim() !== "")
+  );
+}
+
 export type RequestForTrainingSelectedProduct = {
   id: number;
   name: string;
@@ -108,7 +139,18 @@ export type RequestForTrainingSelectedProduct = {
   groupTitle: string;
 };
 
+/** Step4 제품 선택 1번째 드롭다운(카테고리) 값 — 미선택은 "" */
+export type RequestForTrainingCategoryType = "power" | "automation";
+
 export type RequestForTrainingStep4Values = {
+  /**
+   * 제품 선택 드롭다운 선택 위치.
+   * 선택된 제품 태그(selectedProducts)와 함께 step4 상태로 보관해야
+   * Step3 왕복 후 다시 Step4 로 돌아왔을 때 드롭다운/체크박스 목록까지 복원된다.
+   */
+  productCategoryType: RequestForTrainingCategoryType | "";
+  /** 2번째 드롭다운(그룹) 선택값 — MUI Select 값이라 문자열로 보관, 미선택은 "" */
+  productGroupId: string;
   selectedProducts: RequestForTrainingSelectedProduct[];
   jobTitles: string[];
   studentInvolvement: string[];
@@ -122,6 +164,8 @@ export type RequestForTrainingStep4Values = {
 export type RequestForTrainingStep4FieldKey = keyof RequestForTrainingStep4Values;
 
 const STEP4_INITIAL: RequestForTrainingStep4Values = {
+  productCategoryType: "",
+  productGroupId: "",
   selectedProducts: [],
   jobTitles: [],
   studentInvolvement: [],
@@ -155,6 +199,8 @@ type RequestForTrainingFormContextValue = {
     key: K,
     value: RequestForTrainingStep4Values[K],
   ) => void;
+  /** sessionStorage 복원(마운트 시 1회) 완료 여부 — 복원 전 판정으로 인한 오탐 가드 방지용 */
+  isRestored: boolean;
 };
 
 const RequestForTrainingFormContext =
@@ -184,6 +230,7 @@ export function RequestForTrainingProvider({
   const [step3, setStep3] = useState<RequestForTrainingStep3Values>(STEP3_INITIAL);
   const [step4, setStep4] = useState<RequestForTrainingStep4Values>(STEP4_INITIAL);
   const restoredRef = useRef(false);
+  const [isRestored, setIsRestored] = useState(false);
 
   useEffect(() => {
     try {
@@ -203,6 +250,7 @@ export function RequestForTrainingProvider({
     } catch {
     } finally {
       restoredRef.current = true;
+      setIsRestored(true);
     }
   }, []);
 
@@ -267,6 +315,7 @@ export function RequestForTrainingProvider({
       setStep3Field,
       step4,
       setStep4Field,
+      isRestored,
     }),
     [
       step1,
@@ -277,6 +326,7 @@ export function RequestForTrainingProvider({
       setStep3Field,
       step4,
       setStep4Field,
+      isRestored,
     ],
   );
 

@@ -15,7 +15,7 @@ export default function RequestForTrainingStep4Form() {
   );
 
   return (
-    <div className="support_service_training_request__panel">
+    <div className="support_service_training_request__panel support_service_training_request__panel--bordered">
       <div className="support_service_training_request__panel-inner">
         <RequestForTrainingQuestionnaireIntro />
 

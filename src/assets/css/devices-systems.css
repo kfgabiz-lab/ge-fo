@@ -103,10 +103,18 @@
   }
 
   section.devices_category .devices_category__item-img {
+    position: relative; /* Design Awards 배지(.product_award_badge, position:absolute) 앵커 — .devices_products .img_area 등 배지 사용 화면과 동일 */
     flex-shrink: 0;
     width: 180px;
     height: 180px;
     overflow: hidden;
+  }
+
+  /* Design Awards 배지 아이콘 크기 — 기획서 product-lv2.png 실측 50x50.
+     section.devices_product_other / section.main_products의 섹션 override와 동일한 방식 */
+  section.devices_category .type2 .product_award_badge__icon {
+    width: 50px;
+    height: 50px;
   }
 
   section.devices_category .devices_category__item-img img {
@@ -857,10 +865,17 @@
   }
 
   section.devices_category .devices_category__item-img {
+    position: relative; /* Design Awards 배지 앵커 (데스크톱 블록과 동일) */
     width: 100%;
     max-width: 180px;
     height: auto;
     aspect-ratio: 1;
+  }
+
+  /* Design Awards 배지 아이콘 크기 — 모바일도 데스크톱과 동일 50x50 (section.devices_product_other와 같은 방식) */
+  section.devices_category .type2 .product_award_badge__icon {
+    width: 50px;
+    height: 50px;
   }
 
   section.devices_category .devices_category__item-body {

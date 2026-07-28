@@ -1,3 +1,10 @@
+import {
+  fetchDownloadCenterContents,
+  fetchDownloadCenterFileUrl,
+  type DownloadCenterItem,
+  type DownloadCenterSort,
+} from "@/data/support/downloadCenterData";
+
 export type ProductSpec = {
   label: string;
   value: string;
@@ -59,6 +66,124 @@ export type ProductDownloadItem = {
   /** Search results — title/file name highlight (inline or suffix) */
   highlight?: string;
 };
+
+// 다운로드센터 공통 최신 목록(DownloadCenterItem[]) → 제품상세 Downloads 섹션이 요구하는 ProductDownloadItem[] 변환.
+// - files는 sortKey가 가장 큰(최신) 버전의 파일만 매핑한다. version/versions는 전체 버전명 기준.
+// - files의 url은 filePath를 fetchDownloadCenterFileUrl로 조회한 실제 다운로드 URL(파일별 병렬 조회).
+// - GenericProductDetail(HW)과 SwProductDetail(SW 4종) 양쪽에서 공유한다(중복 작성 금지).
+export async function mapDownloadCenterItemsToProductDownloads(
+  items: DownloadCenterItem[],
+): Promise<ProductDownloadItem[]> {
+  return Promise.all(
+    items.map(async (item) => {
+      const latestVersion = item.versions.reduce<
+        (typeof item.versions)[number] | null
+      >((latest, v) => (!latest || v.sortKey > latest.sortKey ? v : latest), null);
+      const files = latestVersion?.files ?? [];
+      const mappedFiles: ProductDownloadFile[] = await Promise.all(
+        files.map(async (file) => ({
+          name: file.fileName ?? "",
+          size: file.fileSizeText ?? "",
+          url: await fetchDownloadCenterFileUrl(file.filePath),
+        })),
+      );
+      const versionNames = item.versions
+        .map((v) => v.versionName)
+        .filter((name): name is string => Boolean(name));
+      return {
+        id: String(item.id),
+        type: item.docTypeLabel || item.docType || "",
+        title: item.title ?? "",
+        date: item.date ?? "",
+        version: latestVersion?.versionName ?? "",
+        versions: versionNames,
+        files: mappedFiles,
+      } satisfies ProductDownloadItem;
+    }),
+  );
+}
+
+// 제품상세 Downloads 섹션 페이지 크기.
+// 기획서(fo/docs/dev/products-systems/product.png DESCRIPTION 20번) "리스트에 최대 5개 데이터 출력 /
+// 5개 초과 시 페이징처리" 에 명시된 값이다. Download Center(support, 12개)와 다른 화면 전용 값이라
+// 공유 상수를 쓰지 않고 여기서 별도로 정의한다.
+export const PRODUCT_DOWNLOADS_PAGE_SIZE = 5;
+
+// 제품상세 Downloads 섹션 "Sort by" 옵션.
+// 기획서(fo/docs/dev/products-systems/product.png DESCRIPTION 21번)가 지정한 4종 그대로이며,
+// 표시 순서도 기획서 나열 순서를 따른다. PC 드롭다운(DevicesProductDownloads)과
+// 모바일 정렬 시트(DevicesProductDownloadsMobileControls)가 같은 목록을 공유한다(중복 정의 금지).
+export const productDownloadsSortOptions = [
+  { value: "doctype", label: "Document Type" },
+  { value: "newest", label: "Most Recent" },
+  { value: "title", label: "A to Z" },
+  { value: "title_desc", label: "Z to A" },
+] as const satisfies ReadonlyArray<{ value: DownloadCenterSort; label: string }>;
+
+// 기본 선택값 — 기획서 "Default 정렬순서 : Document Type".
+export const PRODUCT_DOWNLOADS_DEFAULT_SORT: DownloadCenterSort = "doctype";
+
+// 정렬 코드 → 표시 라벨. 드롭다운 renderValue / 모바일 트리거 라벨이 공유한다.
+export function productDownloadsSortLabel(sort: DownloadCenterSort): string {
+  return (
+    productDownloadsSortOptions.find((option) => option.value === sort)?.label ??
+    "Sort by"
+  );
+}
+
+// 제품상세 Downloads 섹션 1페이지 조회 결과.
+export type ProductDownloadsPage = {
+  items: ProductDownloadItem[];
+  /** 필터 조건 전체 건수(현재 페이지 건수 아님) — "Showing x-y of N results" 의 N */
+  totalElements: number;
+  /** 최소 1(0건이어도 페이저는 1페이지로 표시) */
+  totalPages: number;
+};
+
+// 제품상세 Downloads 섹션 페이지 조회(SSR 초기 렌더 / 클라이언트 페이지 이동 공용).
+// - 페이징은 BE(download-center/contents)에 위임한다. 전체 목록을 받아 클라이언트에서 잘라내지 않는다
+//   (기획서 페이저가 68페이지까지 그려진 대용량 목록이라 전량 조회가 성립하지 않는다).
+// - page 는 UI 기준 1-based. BE 는 0-based 라 여기서 변환한다.
+// - 정렬도 BE 위임이다. 기본값(doctype)은 SSR 초기 렌더와 클라이언트 초기 상태가 반드시 같아야 하므로
+//   여기 기본 인자 한 곳에서만 정한다(호출부에서 각자 지정하지 말 것).
+// - GenericProductDetail(HW) / SwProductDetail(SW 4종) / DevicesProductDownloads(클라이언트) 세 곳이
+//   같은 조건으로 조회해야 하므로 조회+변환을 이 함수 한 곳에만 둔다(중복 작성 금지).
+// - productCodes: 현재 제품과 연계된 파일만 노출하기 위한 제품코드 필터(기획서 DESCRIPTION 18번).
+//   BE(download-center/contents)의 productCodes 파라미터(CSV)로 위임한다.
+export async function fetchProductDownloadsPage({
+  docTypes,
+  productCodes,
+  page = 1,
+  sort = PRODUCT_DOWNLOADS_DEFAULT_SORT,
+}: {
+  docTypes: string[];
+  /** 연계 제품코드(product.product_code). 제품코드를 못 구하면 빈 배열로 넘긴다. */
+  productCodes: string[];
+  page?: number;
+  sort?: DownloadCenterSort;
+}): Promise<ProductDownloadsPage> {
+  // ⚠️ 제품코드가 하나도 없으면 BE 를 호출하지 않고 즉시 빈 페이지를 돌려준다.
+  //    BE 는 productCodes 가 비면 "필터 없음"으로 보고 전체 목록을 반환하는데,
+  //    기획서 18번("현재 제품과 연계된 파일만 출력") 기준에서 제품코드를 못 구한 상황은
+  //    "연계 파일 0건"이지 "전체 노출"이 아니다. 호출을 생략해야 무관한 전체 목록 노출을 막을 수 있다.
+  if (productCodes.length === 0) {
+    return { items: [], totalElements: 0, totalPages: 1 };
+  }
+
+  const res = await fetchDownloadCenterContents({
+    docTypes,
+    productCodes,
+    sort,
+    page: Math.max(0, page - 1),
+    size: PRODUCT_DOWNLOADS_PAGE_SIZE,
+  });
+
+  return {
+    items: await mapDownloadCenterItemsToProductDownloads(res.content),
+    totalElements: res.totalElements,
+    totalPages: Math.max(1, res.totalPages),
+  };
+}
 
 export type ProductOtherItem = {
   id: string;

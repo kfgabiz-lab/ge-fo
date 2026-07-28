@@ -131,10 +131,13 @@ export const downloadProductCategories: DownloadCategoryOption[] = [
 // Document Type 필터 — option.id = BE docType 코드(C/M/D/S/R/O)로 매핑해
 // 체크된 코드가 그대로 contents API 의 docTypes 파라미터로 나가게 한다.
 // (BE DOC_TYPE_LABELS: C=Catalog, M=Manuals, D=Drawings, S=Software, R=Certificates, O=Tech Data)
-// - OS/Firmware 는 BE 에 대응 코드가 없어(원천 데이터 없음) 필터로 나가지 않는다(inert). 라벨/노출은 퍼블리싱 유지, count 0 정적.
+// - 기획서(LSEA-FO-SUPP-200/201) 기준 노출 옵션은 아래 6종뿐이다. BE 대응 코드가 없는 옵션은 추가하지 않는다
+//   (체크해도 docTypes 로 나가지 못해 "필터 무반응"으로 보이는 오동작이 된다).
 // - Download Center 필터 패널의 옆 건수 배지는 doctype-counts API 실카운트로 교체된다(DownloadCenterFilterProvider).
 //   여기 count 값은 그 외 화면(products-systems 다운로드 필터)에서 쓰이는 정적 폴백이다.
-// - defaultChecked 는 두지 않는다 — 초기 진입 시 문서유형 미필터(전체 노출)가 되도록.
+// - defaultChecked 는 두지 않는다 — Download Center(support)는 초기 진입 시 문서유형 미필터(전체 노출)가 스펙이다.
+//   화면별로 기본 체크가 다르면 이 공유 배열이 아니라 화면 전용 상수로 분리한다
+//   (제품상세는 아래 productDownloadsDefaultDocTypes 참고).
 export const downloadDocumentTypes: DownloadFilterOption[] = [
   { id: "C", label: "Catalogs", count: 100 },
   { id: "M", label: "Manuals", count: 100 },
@@ -142,11 +145,18 @@ export const downloadDocumentTypes: DownloadFilterOption[] = [
   { id: "R", label: "Certificates", count: 100 },
   { id: "S", label: "Software", count: 100 },
   { id: "O", label: "Tech Data", count: 100 },
-  { id: "firmware", label: "OS/Firmware", count: 0 },
 ];
 
-// contents API docTypes 로 전달 가능한 실제 코드(위 목록 중 BE 대응 코드만). OS/Firmware(firmware)는 제외.
+// contents API docTypes 로 전달 가능한 실제 코드(= 위 목록의 BE 대응 코드).
 export const downloadDocTypeCodes = ["C", "M", "D", "S", "R", "O"] as const;
+
+// 제품상세(Products & Systems > 제품상세) Downloads 섹션 전용 초기 체크 문서유형.
+// 기획서(fo/docs/dev/product.png "Downloads 섹션 · Filter 기본 체크 상태: Catalog, Manual") = C(Catalogs) + M(Manuals).
+// downloadDocumentTypes 에 defaultChecked 를 직접 넣지 않는 이유: 같은 옵션 배열을 Download Center(support)
+// 필터가 공유하는데 그쪽은 "초기 진입 시 전체 노출"이 스펙이라, 공유 데이터에 기본 체크를 넣으면 그 화면이 회귀한다.
+// SSR 초기 조회(GenericProductDetail / SwProductDetail)와 클라이언트 초기 체크 상태
+// (DevicesProductDownloadsFilterProvider)가 항상 같은 값을 쓰도록 여기 한 곳에서만 정의한다.
+export const productDownloadsDefaultDocTypes: string[] = ["C", "M"];
 
 /**
  * Figma 5841:132466 — Download Center / List (Accordion).

@@ -23,12 +23,25 @@ import DevicesProductWhy from "./DevicesProductWhy";
 import DevicesMicroGridHighlights from "./DevicesMicroGridHighlights";
 import DevicesXemsEnergySolutions from "./DevicesXemsEnergySolutions";
 import GenericProductDetail from "./GenericProductDetail";
-import { mapHwProductData, fetchProductFaqItems } from "../../data/productsSystemsData";
+import {
+  mapHwProductData,
+  fetchProductFaqItems,
+  fetchProductLv2Name,
+  SW_PRODUCT_SLUGS,
+} from "../../data/productsSystemsData";
+import {
+  buildSwProductTechHubBannerCopy,
+  type ProductTechHubBannerCopy,
+} from "@/data/support/techHubData";
 import { motorControlHighlights } from "../../data/motorControlContent";
+import {
+  fetchProductDownloadsPage,
+  type ProductDownloadsPage,
+} from "../../data/productDetailContent";
+import { productDownloadsDefaultDocTypes } from "@/data/support/downloadCenterContent";
 import {
   hvdcApplicationsSection,
   hvdcBenefitsSection,
-  hvdcDownloads,
   hvdcFaqItems,
   hvdcNavItems,
   hvdcOtherProducts,
@@ -38,7 +51,6 @@ import {
 } from "../../data/hvdcContent";
 import {
   xemsBenefitsSection,
-  xemsDownloads,
   xemsFaqItems,
   xemsNavItems,
   xemsOtherProducts,
@@ -49,7 +61,6 @@ import {
 import {
   microGridApplicationsSection,
   microGridBenefitsSection,
-  microGridDownloads,
   microGridFaqItems,
   microGridNavItems,
   microGridOtherProducts,
@@ -59,7 +70,6 @@ import {
 import {
   smartFactoryApplicationsSection,
   smartFactoryBenefitsSection,
-  smartFactoryDownloads,
   smartFactoryFaqItems,
   smartFactoryNavItems,
   smartFactoryOtherProducts,
@@ -71,12 +81,10 @@ import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
 // page_type === "SW" 이면서 전용 구성을 가진 slug 목록. 라우터에서 등록 여부 판별에 재사용한다.
-export const SW_PRODUCT_SLUGS = [
-  "scada",
-  "xems",
-  "micro-grid",
-  "smart-factory",
-] as const;
+// 정의 위치는 데이터 계층(productsSystemsData)이다 — 제품 단건 조회(fetchProductDetailBySlug)가
+// 같은 목록을 봐야 하는데, 데이터 모듈이 이 컴포넌트를 import 하면 순환 참조가 생기기 때문.
+// 기존 import 경로(이 파일에서 가져다 쓰는 코드)를 유지하기 위해 그대로 재수출한다.
+export { SW_PRODUCT_SLUGS } from "../../data/productsSystemsData";
 
 // 공통 FAQ 설명 문구(4개 SW 페이지 원본 공통)
 const swFaqDescription = (
@@ -89,11 +97,30 @@ const swFaqDescription = (
   </>
 );
 
-// 각 SW 제품상세 함수 공통 prop — 라우트에서 조회한 product-data row + 동적 조회한 FAQ.
+// 각 SW 제품상세 함수 공통 prop — 라우트에서 조회한 product-data row + 동적 조회한 FAQ + 제품 연계 다운로드 목록.
 type SwDetailProps = {
   row: Record<string, unknown> | null;
   dbFaq: CommonFaqEntry[];
+  downloads: ProductDownloadsPage;
+  /** Downloads 클라이언트 재조회(필터/정렬/페이지)에도 동일 조건을 유지하기 위한 제품코드 */
+  productCodes: string[];
+  /**
+   * Tech Hub 배너(CommonBanner03) 문구 — SW 전용 포맷(고정 타이틀 "Video Tutorials" + 본문만 Lv2명 치환, 건수 없음).
+   * 영상 건수와 무관하게 적용되며, 배너 노출조건은 기존 그대로(SW 는 항상 렌더)다.
+   */
+  techHubCopy: ProductTechHubBannerCopy;
 };
+
+// 기획서 18번: 현재 제품과 연계된 다운로드 파일이 0건이면 Downloads 섹션과 사이드 네비 항목을 함께 숨긴다.
+// 네비 원본 배열(hvdcNavItems 등)은 다른 화면도 참조할 수 있으므로 원본을 수정하지 않고 여기서 걸러 넘긴다.
+function filterSwNavItems<T extends { readonly id: string }>(
+  navItems: readonly T[],
+  showDownloads: boolean,
+): T[] {
+  return navItems.filter(
+    (item) => showDownloads || item.id !== "product-downloads",
+  );
+}
 
 // row → Hero/Overview 바인딩 값 추출(필드별 fallback).
 // 빈 문자열이면 undefined로 반환 → Hero 컴포넌트의 정적 default가 유지되게 한다.
@@ -113,8 +140,15 @@ function bindSwDetail(row: Record<string, unknown> | null) {
 }
 
 // scada(seo.slug=scada, 데이터=hvdcContent) — 정적 구성 유지 + Hero/Overview/KeyFeatures/FAQ만 실데이터 바인딩(필드별 fallback)
-function ScadaDetail({ row, dbFaq }: SwDetailProps) {
+function ScadaDetail({
+  row,
+  dbFaq,
+  downloads,
+  productCodes,
+  techHubCopy,
+}: SwDetailProps) {
   const bind = bindSwDetail(row);
+  const showDownloads = downloads.totalElements > 0;
   // Key Features(list variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
@@ -134,7 +168,9 @@ function ScadaDetail({ row, dbFaq }: SwDetailProps) {
       id="Page_devices_hvdc"
     >
       <DevicesHvdcHero title={bind.title} description={bind.description} />
-      <DevicesProductNavScope navItems={hvdcNavItems}>
+      <DevicesProductNavScope
+        navItems={filterSwNavItems(hvdcNavItems, showDownloads)}
+      >
         <DevicesSoftwareOverview data={overviewData} imageMode="img" />
         <DevicesProductFeaturesSection
           variant="list"
@@ -151,8 +187,13 @@ function ScadaDetail({ row, dbFaq }: SwDetailProps) {
           title={hvdcWhySection.title}
           blocks={hvdcWhySection.blocks}
         />
-        <DevicesProductDownloads items={hvdcDownloads} />
-        <CommonBanner03 />
+        {showDownloads ? (
+          <DevicesProductDownloads
+            initial={downloads}
+            productCodes={productCodes}
+          />
+        ) : null}
+        <CommonBanner03 {...techHubCopy} />
         <DevicesProductOtherProducts
           title={hvdcOtherProductsTitle}
           items={hvdcOtherProducts}
@@ -184,8 +225,15 @@ function ScadaDetail({ row, dbFaq }: SwDetailProps) {
 }
 
 // xems(seo.slug=xems, 데이터=xemsContent) — 정적 구성 유지 + Hero/Overview/KeyFeatures/FAQ만 실데이터 바인딩(필드별 fallback)
-function XemsDetail({ row, dbFaq }: SwDetailProps) {
+function XemsDetail({
+  row,
+  dbFaq,
+  downloads,
+  productCodes,
+  techHubCopy,
+}: SwDetailProps) {
   const bind = bindSwDetail(row);
+  const showDownloads = downloads.totalElements > 0;
   // Key Features(desc variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
@@ -205,7 +253,9 @@ function XemsDetail({ row, dbFaq }: SwDetailProps) {
       id="P-FO-PROD-040000P"
     >
       <DevicesXemsHero title={bind.title} description={bind.description} />
-      <DevicesProductNavScope navItems={xemsNavItems}>
+      <DevicesProductNavScope
+        navItems={filterSwNavItems(xemsNavItems, showDownloads)}
+      >
         <DevicesSoftwareOverview data={overviewData} imageMode="bg" />
         <DevicesProductFeaturesSection
           variant="desc"
@@ -219,8 +269,13 @@ function XemsDetail({ row, dbFaq }: SwDetailProps) {
           blocks={xemsWhySection.blocks}
           imageOnly
         />
-        <DevicesProductDownloads items={xemsDownloads} />
-        <CommonBanner03 />
+        {showDownloads ? (
+          <DevicesProductDownloads
+            initial={downloads}
+            productCodes={productCodes}
+          />
+        ) : null}
+        <CommonBanner03 {...techHubCopy} />
         <DevicesProductOtherProducts
           title={xemsOtherProductsTitle}
           items={xemsOtherProducts}
@@ -252,8 +307,15 @@ function XemsDetail({ row, dbFaq }: SwDetailProps) {
 }
 
 // micro-grid(seo.slug=micro-grid, 데이터=microGridContent) — 정적 구성 유지 + Hero/Overview/KeyFeatures/FAQ만 실데이터 바인딩(필드별 fallback)
-function MicroGridDetail({ row, dbFaq }: SwDetailProps) {
+function MicroGridDetail({
+  row,
+  dbFaq,
+  downloads,
+  productCodes,
+  techHubCopy,
+}: SwDetailProps) {
   const bind = bindSwDetail(row);
+  const showDownloads = downloads.totalElements > 0;
   // Key Features(list variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
@@ -273,7 +335,9 @@ function MicroGridDetail({ row, dbFaq }: SwDetailProps) {
       id="P-FO-PROD-040000P"
     >
       <DevicesMicroGridHero title={bind.title} description={bind.description} />
-      <DevicesProductNavScope navItems={microGridNavItems}>
+      <DevicesProductNavScope
+        navItems={filterSwNavItems(microGridNavItems, showDownloads)}
+      >
         <DevicesSoftwareOverview data={overviewData} imageMode="bg" />
         <DevicesProductFeaturesSection
           variant="list"
@@ -287,8 +351,13 @@ function MicroGridDetail({ row, dbFaq }: SwDetailProps) {
           items={microGridApplicationsSection.items}
         />
         <DevicesMicroGridHighlights />
-        <DevicesProductDownloads items={microGridDownloads} />
-        <CommonBanner03 />
+        {showDownloads ? (
+          <DevicesProductDownloads
+            initial={downloads}
+            productCodes={productCodes}
+          />
+        ) : null}
+        <CommonBanner03 {...techHubCopy} />
         <DevicesProductOtherProducts
           title={microGridOtherProductsTitle}
           items={microGridOtherProducts}
@@ -320,8 +389,15 @@ function MicroGridDetail({ row, dbFaq }: SwDetailProps) {
 }
 
 // smart-factory(seo.slug=smart-factory, 데이터=smartFactoryContent) — 정적 구성 유지 + Hero/Overview/KeyFeatures/FAQ만 실데이터 바인딩(필드별 fallback)
-function SmartFactoryDetail({ row, dbFaq }: SwDetailProps) {
+function SmartFactoryDetail({
+  row,
+  dbFaq,
+  downloads,
+  productCodes,
+  techHubCopy,
+}: SwDetailProps) {
   const bind = bindSwDetail(row);
+  const showDownloads = downloads.totalElements > 0;
   // Key Features(list variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
@@ -341,7 +417,9 @@ function SmartFactoryDetail({ row, dbFaq }: SwDetailProps) {
       id="P-FO-PROD-040000P"
     >
       <DevicesSmartFactoryHero title={bind.title} description={bind.description} />
-      <DevicesProductNavScope navItems={smartFactoryNavItems}>
+      <DevicesProductNavScope
+        navItems={filterSwNavItems(smartFactoryNavItems, showDownloads)}
+      >
         <DevicesSoftwareOverview data={overviewData} imageMode="bg" />
         <DevicesProductFeaturesSection
           variant="list"
@@ -360,8 +438,13 @@ function SmartFactoryDetail({ row, dbFaq }: SwDetailProps) {
           blocks={smartFactoryWhySection.blocks}
           imageOnly
         />
-        <DevicesProductDownloads items={smartFactoryDownloads} />
-        <CommonBanner03 />
+        {showDownloads ? (
+          <DevicesProductDownloads
+            initial={downloads}
+            productCodes={productCodes}
+          />
+        ) : null}
+        <CommonBanner03 {...techHubCopy} />
         <DevicesProductOtherProducts
           title={smartFactoryOtherProductsTitle}
           items={smartFactoryOtherProducts}
@@ -404,17 +487,73 @@ export default async function SwProductDetail({
   row: Record<string, unknown> | null;
 }) {
   const productId = row ? Number(row._id) : null;
-  const dbFaq = productId ? await fetchProductFaqItems(productId) : [];
+  // Downloads 필터용 제품코드(기획서 18번) — 다운로드센터 콘텐츠의 category_l3_id 가 product.product_code 체계다.
+  // row 가 없거나 코드가 비면 빈 배열 → fetchProductDownloadsPage 가 조회 없이 빈 결과를 반환한다(전체 목록 노출 방지).
+  const productCode = row ? String(row["product.product_code"] ?? "").trim() : "";
+  const productCodes = productCode ? [productCode] : [];
+  // Downloads는 현재 제품과 연계된 파일만 담은 1페이지(5건). 아래 slug 분기에서 실제로 렌더되는 Detail은
+  // 하나뿐이라 여기서 한 번만 조회해 넘긴다.
+  // HW 제품상세(GenericProductDetail)와 동일하게 문서유형 기본 체크(Catalog/Manual) 조건으로 조회해
+  // SSR 결과와 DevicesProductDownloads 필터 초기 체크 상태를 맞춘다.
+  // 2페이지 이후는 DevicesProductDownloads 가 클라이언트에서 같은 헬퍼로 재조회한다.
+  // Tech Hub 배너 문구용 Lv2 이름(기획서 software.png: 본문에만 Lv2명 치환).
+  // ⚠️ 영상 건수와 무관하게 문구를 맞춰야 하므로 Tech Hub 콘텐츠 조회(fetchProductTechHubBanner)가 아니라
+  //    Lv2 이름만 얻는 경량 헬퍼를 쓴다. 0건이면 null 을 반환하는 전자로는 SW 요건을 만족할 수 없다.
+  // 아래 default 분기(미등록 slug)는 GenericProductDetail 이 스스로 조회하므로 SW 4종일 때만 호출한다.
+  const isSwSlug = (SW_PRODUCT_SLUGS as readonly string[]).includes(slug);
+  const [dbFaq, downloads, lv2Name] = await Promise.all([
+    productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
+    fetchProductDownloadsPage({
+      docTypes: productDownloadsDefaultDocTypes,
+      productCodes,
+    }),
+    isSwSlug && productId
+      ? fetchProductLv2Name(productId)
+      : Promise.resolve(""),
+  ]);
+  const techHubCopy = buildSwProductTechHubBannerCopy(lv2Name);
 
   switch (slug) {
     case "scada":
-      return <ScadaDetail row={row} dbFaq={dbFaq} />;
+      return (
+        <ScadaDetail
+          row={row}
+          dbFaq={dbFaq}
+          downloads={downloads}
+          productCodes={productCodes}
+          techHubCopy={techHubCopy}
+        />
+      );
     case "xems":
-      return <XemsDetail row={row} dbFaq={dbFaq} />;
+      return (
+        <XemsDetail
+          row={row}
+          dbFaq={dbFaq}
+          downloads={downloads}
+          productCodes={productCodes}
+          techHubCopy={techHubCopy}
+        />
+      );
     case "micro-grid":
-      return <MicroGridDetail row={row} dbFaq={dbFaq} />;
+      return (
+        <MicroGridDetail
+          row={row}
+          dbFaq={dbFaq}
+          downloads={downloads}
+          productCodes={productCodes}
+          techHubCopy={techHubCopy}
+        />
+      );
     case "smart-factory":
-      return <SmartFactoryDetail row={row} dbFaq={dbFaq} />;
+      return (
+        <SmartFactoryDetail
+          row={row}
+          dbFaq={dbFaq}
+          downloads={downloads}
+          productCodes={productCodes}
+          techHubCopy={techHubCopy}
+        />
+      );
     default:
       return <GenericProductDetail row={row} />;
   }

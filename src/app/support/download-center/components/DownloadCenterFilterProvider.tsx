@@ -22,10 +22,10 @@ import {
 } from "@/data/support/downloadCenterData";
 import { fetchPopularKeywords } from "@/data/search/searchKeywordData";
 
-// doctype-counts API 로 실카운트를 채우는 대상 코드(C/M/D/S/R/O). OS/Firmware(firmware)는 대응 코드 없음 → 정적 0 유지.
+// doctype-counts API 로 실카운트를 채우는 대상 코드(C/M/D/S/R/O).
 const DOC_TYPE_API_CODES = new Set<string>(downloadDocTypeCodes);
 
-// 실카운트 도착 전 초기 상태 — API 대상 6종은 배지 미표시(count undefined), firmware(0)만 정적 노출.
+// 실카운트 도착 전 초기 상태 — API 대상 코드는 배지 미표시(count undefined).
 // (STEP5 이전 목업 100 이 잠깐 노출되는 것을 막는다.)
 const DOC_TYPES_PENDING: DownloadFilterOption[] = downloadDocumentTypes.map(
   (opt) =>
@@ -105,7 +105,7 @@ export function DownloadCenterFilterProvider({
     };
   }, []);
 
-  // 문서유형 옆 건수 배지 = doctype-counts 실카운트 병합(코드 기준). OS/Firmware 는 응답에 없으므로 정적 0 유지.
+  // 문서유형 옆 건수 배지 = doctype-counts 실카운트 병합(코드 기준). 응답에 없는 코드는 정적 count 유지.
   useEffect(() => {
     let alive = true;
     fetchDownloadCenterDocTypeCounts().then((counts) => {

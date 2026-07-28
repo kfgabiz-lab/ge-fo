@@ -24,14 +24,18 @@ import {
 const PAGE_SIZE = 12; // BE 기본 페이지 크기
 
 // PC 정렬 드롭다운 표시 라벨 매핑.
+// doctype/title_desc 는 제품상세 Downloads 섹션 전용 값이라 이 화면 드롭다운에는 옵션으로 노출하지 않는다.
+// (공유 타입 DownloadCenterSort 를 전부 채워야 해서 라벨만 정의해 둔다 — 이 화면에서는 선택될 수 없다.)
 const SORT_LABELS: Record<DownloadCenterSort, string> = {
   "": "Sort by",
+  doctype: "Document Type",
   newest: "Newest",
   oldest: "Oldest",
   title: "Title A-Z",
+  title_desc: "Title Z-A",
 };
 
-// 문서유형 필터로 나갈 유효 코드(OS/Firmware 등 BE 미대응 값 제외).
+// 문서유형 필터로 나갈 유효 코드(BE 미대응 값이 섞여도 걸러내는 안전장치).
 const VALID_DOC_TYPE_CODES = new Set<string>(downloadDocTypeCodes);
 
 type DownloadCenterContentsProps = {

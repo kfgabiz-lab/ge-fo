@@ -4,7 +4,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { requestForTrainingRoutes } from "@/data/services/requestForTrainingContent";
 import RequestForTraining from "./RequestForTraining";
-import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
+import {
+  isStep1Complete,
+  useRequestForTrainingForm,
+} from "./RequestForTrainingProvider";
 import RequestForTrainingStep1Form from "./RequestForTrainingStep1Form";
 
 export type RequestForTrainingStep1Errors = {
@@ -35,15 +38,12 @@ export default function RequestForTrainingStep1() {
       city: step1.city.trim() === "",
       state: step1.state.trim() === "",
       zip: step1.zip.trim() === "",
-      phone: step1.phone.trim() === "",
+      phone: step1.phone.length !== 10,
       email: step1.email.trim() === "",
     };
     setErrors(nextErrors);
 
-    const requiredFilled =
-      step1.trainingTrack.trim() !== "" &&
-      !Object.values(nextErrors).some(Boolean);
-    if (!requiredFilled) {
+    if (!isStep1Complete(step1)) {
       alert("Please complete all required fields.");
       return;
     }

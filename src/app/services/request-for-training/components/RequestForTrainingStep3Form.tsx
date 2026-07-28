@@ -1,7 +1,7 @@
 "use client";
 
 import { InputAdornment, TextField } from "@mui/material";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { requestForTrainingStep3Copy } from "@/data/services/requestForTrainingContent";
 import {
   fetchPlaceAddress,
@@ -30,6 +30,24 @@ function filterContactPerson(value: string): string {
 
 function filterContactDetails(value: string): string {
   return value.replace(/[^A-Za-z0-9._@-]/g, "").slice(0, CONTACT_DETAILS_MAX);
+}
+
+function FieldShell({
+  className = "",
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={["support_service_training_request__field", className]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      {children}
+    </div>
+  );
 }
 
 export default function RequestForTrainingStep3Form({
@@ -188,79 +206,83 @@ export default function RequestForTrainingStep3Form({
                     {fields.streetAddress.label}
                   </RequestForTrainingFieldLabel>
                   <div className="support_service_training_request__form-row support_service_training_request__form-row--address">
-                    <div
-                      className="support_service_training_request__street-wrap"
-                      ref={streetWrapRef}
-                    >
-                      <TextField
-                        id={`${formId}-street`}
-                        className="guide_field guide_field--h50 guide_field--search support_service_training_request__input support_service_training_request__input--search"
-                        placeholder={fields.streetAddress.searchPlaceholder}
-                        value={step3.streetAddress}
-                        onChange={(event) =>
-                          setStep3Field("streetAddress", event.target.value)
-                        }
-                        slotProps={{
-                          input: {
-                            endAdornment: (
-                              <InputAdornment
-                                position="end"
-                                className="guide_field__search-adorn"
+                    <FieldShell className="support_service_training_request__field--address-search">
+                      <div
+                        className="support_service_training_request__street-wrap"
+                        ref={streetWrapRef}
+                      >
+                        <TextField
+                          id={`${formId}-street`}
+                          className="guide_field guide_field--h50 guide_field--search support_service_training_request__input support_service_training_request__input--search"
+                          placeholder={fields.streetAddress.searchPlaceholder}
+                          value={step3.streetAddress}
+                          onChange={(event) =>
+                            setStep3Field("streetAddress", event.target.value)
+                          }
+                          slotProps={{
+                            input: {
+                              endAdornment: (
+                                <InputAdornment
+                                  position="end"
+                                  className="guide_field__search-adorn"
+                                >
+                                  <button
+                                    type="button"
+                                    className="guide_field__search-icon-button"
+                                    aria-label="Search address"
+                                  >
+                                    <img
+                                      src="/ico/ico_search_24.svg"
+                                      alt=""
+                                      width={18}
+                                      height={18}
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
+                                  </button>
+                                </InputAdornment>
+                              ),
+                            },
+                          }}
+                        />
+                        {showSuggestions ? (
+                          <ul
+                            className="support_service_training_request__suggestions"
+                            role="listbox"
+                            aria-label="Address suggestions"
+                          >
+                            {suggestions.map((suggestion) => (
+                              <li
+                                key={suggestion.placeId}
+                                className="support_service_training_request__suggestion"
+                                role="option"
+                                aria-selected={false}
                               >
                                 <button
                                   type="button"
-                                  className="guide_field__search-icon-button"
-                                  aria-label="Search address"
+                                  className="support_service_training_request__suggestion-button"
+                                  onMouseDown={(event) => {
+                                    event.preventDefault();
+                                    void selectSuggestion(suggestion);
+                                  }}
                                 >
-                                  <img
-                                    src="/ico/ico_search_24.svg"
-                                    alt=""
-                                    width={18}
-                                    height={18}
-                                    loading="lazy"
-                                    decoding="async"
-                                  />
+                                  {suggestion.description}
                                 </button>
-                              </InputAdornment>
-                            ),
-                          },
-                        }}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </div>
+                    </FieldShell>
+                    <FieldShell className="support_service_training_request__field--address-2">
+                      <TextField
+                        id={`${formId}-address-2`}
+                        className="guide_field guide_field--h50 support_service_training_request__input"
+                        placeholder={fields.streetAddress.address2Placeholder}
+                        value={step3.address2}
+                        onChange={(event) => setStep3Field("address2", event.target.value)}
                       />
-                      {showSuggestions ? (
-                        <ul
-                          className="support_service_training_request__suggestions"
-                          role="listbox"
-                          aria-label="Address suggestions"
-                        >
-                          {suggestions.map((suggestion) => (
-                            <li
-                              key={suggestion.placeId}
-                              className="support_service_training_request__suggestion"
-                              role="option"
-                              aria-selected={false}
-                            >
-                              <button
-                                type="button"
-                                className="support_service_training_request__suggestion-button"
-                                onMouseDown={(event) => {
-                                  event.preventDefault();
-                                  void selectSuggestion(suggestion);
-                                }}
-                              >
-                                {suggestion.description}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </div>
-                    <TextField
-                      id={`${formId}-address-2`}
-                      className="guide_field guide_field--h50 support_service_training_request__input"
-                      placeholder={fields.streetAddress.address2Placeholder}
-                      value={step3.address2}
-                      onChange={(event) => setStep3Field("address2", event.target.value)}
-                    />
+                    </FieldShell>
                   </div>
                 </div>
 

@@ -1,5 +1,6 @@
 import { siteTodayStr } from "@/lib/siteTime";
 import { RequestForTrainingProvider } from "./components/RequestForTrainingProvider";
+import RequestForTrainingStepGuard from "./components/RequestForTrainingStepGuard";
 
 export default function RequestForTrainingLayout({
   children,
@@ -8,7 +9,7 @@ export default function RequestForTrainingLayout({
 }>) {
   return (
     <RequestForTrainingProvider todayStr={siteTodayStr()}>
-      {children}
+      <RequestForTrainingStepGuard>{children}</RequestForTrainingStepGuard>
     </RequestForTrainingProvider>
   );
 }

@@ -2,6 +2,11 @@ import type { EngineeringTrainingDetail } from "@/data/services/engineeringTrain
 
 // Training 코스 상세 히어로 (ls-publish EngineeringTrainingDetailHero 이관)
 // fo 데이터 컨벤션에 맞춰 description(문자열) → descriptionLines(배열) 렌더로 조정.
+//
+// ⚠️ 값의 실제 출처: 부모 커리큘럼(currMgmt-data)을 PK 로 "라이브 재조회"한 결과
+//    (trainingDetailData.fetchTrainingCurriculum). 자식 행에 스냅샷으로 남는 관계설정 값은 쓰지 않는다.
+//    아래 data-slugkey 의 _fetchedRel8.curriculum.* 는 "부모 커리큘럼의 어느 필드인지"를 가리키는
+//    필드 경로 표기로만 유지한다(런타임 조회 경로가 아님). BO 에서 커리큘럼을 수정하면 즉시 반영된다.
 export default function TrainingDetailHero({
   detail,
 }: {

@@ -9,6 +9,13 @@ export type GnbMegaProduct = {
 
 export type GnbMegaDepth3 = {
   id: string;
+  /**
+   * 이 Lv2 노드의 category-data PK.
+   * id 는 slug 기반이라 slug 가 겹치는 Lv2(예: "variable-frequency-drive" 587/607)를 구별하지 못한다.
+   * URL 의 ?category={id} 컨텍스트와 대조해 "클릭한 바로 그 노드"를 특정하는 데 쓴다(브레드크럼 조상 체인).
+   * 정적 폴백 트리(gnb/mega/*.ts)처럼 실데이터가 아닌 경우 없을 수 있어 옵셔널.
+   */
+  categoryId?: number | null;
   label: string;
   /** depth4 패널 타이틀 (product 없는 링크 전용 항목은 생략) */
   panelTitle?: string;

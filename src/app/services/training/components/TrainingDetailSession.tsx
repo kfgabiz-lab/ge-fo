@@ -55,8 +55,8 @@ export default function TrainingDetailSession({
             >
               <Link href={sessionHref}>{session.title}</Link>
             </h2>
-            {/* PRODUCTS COVERED: 이 행의 연결제품 제품명 합산(_fetchedRel22=Power + _fetchedRel23=Automation,
-                각 원소 _fetchedRelN[].product.product_name)을 join 문자열로 렌더 →
+            {/* PRODUCTS COVERED: 이 행의 연결제품(power_list + automation_list = category-data depth3 연결행 PK)을
+                전용 엔드포인트(/training/product-tree) 평면 행으로 제품명 해석 후 join 문자열로 렌더 →
                 다중소스 합산이라 단일 slugKey 미태깅(trainingDetailData.extractProductNames) */}
             <p className="support_service_training_detail_session__products">
               {session.productsCovered}

@@ -21,10 +21,12 @@ import {
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import {
   useRequestForTrainingForm,
+  type RequestForTrainingCategoryType,
   type RequestForTrainingSelectedProduct,
 } from "./RequestForTrainingProvider";
 
-type TrainingCategoryType = "power" | "automation";
+/** 카테고리 타입은 Provider(step4) 에서 관리하므로 타입도 Provider 정의를 그대로 사용 */
+type TrainingCategoryType = RequestForTrainingCategoryType;
 
 type CategoryTypeOption = { id: TrainingCategoryType; label: string };
 
@@ -63,10 +65,17 @@ export default function RequestForTrainingProductSelector() {
   const formId = useId();
   const { fields } = requestForTrainingStep4Copy;
   const { step4, setStep4Field } = useRequestForTrainingForm();
-  const [tree, setTree] = useState<TrainingProductTree>({ power: [], automation: [] });
+  // items(평면 행)는 이 화면에서 쓰지 않지만 타입 충족을 위해 초기값에 빈 배열로 둔다.
+  const [tree, setTree] = useState<TrainingProductTree>({
+    power: [],
+    automation: [],
+    items: [],
+  });
   const [categoryTypeOptions, setCategoryTypeOptions] = useState<CategoryTypeOption[]>([]);
-  const [categoryType, setCategoryType] = useState<TrainingCategoryType | "">("");
-  const [groupId, setGroupId] = useState<string>("");
+  // 드롭다운 선택 위치는 로컬 state 가 아니라 Provider(step4) 보관 →
+  // sessionStorage 에 함께 저장되어 Step3 왕복 후에도 복원된다.
+  const categoryType = step4.productCategoryType;
+  const groupId = step4.productGroupId;
 
   useEffect(() => {
     let alive = true;
@@ -98,8 +107,9 @@ export default function RequestForTrainingProductSelector() {
   );
 
   function handleCategoryTypeChange(nextType: TrainingCategoryType) {
-    setCategoryType(nextType);
-    setGroupId("");
+    setStep4Field("productCategoryType", nextType);
+    // 카테고리가 바뀌면 하위 그룹 선택은 초기화
+    setStep4Field("productGroupId", "");
   }
 
   function toggleProduct(id: number, name: string, groupId: number, groupTitle: string) {
@@ -168,7 +178,9 @@ export default function RequestForTrainingProductSelector() {
           <GuideSelect
             className="guide_field guide_field--h50 support_service_training_request__select"
             value={groupId}
-            onChange={(event) => setGroupId(event.target.value as string)}
+            onChange={(event) =>
+              setStep4Field("productGroupId", event.target.value as string)
+            }
             displayEmpty
             IconComponent={GuideSelectIcon}
             inputProps={{ "aria-label": "Product subcategory" }}

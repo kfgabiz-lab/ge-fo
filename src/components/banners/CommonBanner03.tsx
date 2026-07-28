@@ -5,6 +5,8 @@ type CommonBanner03Props = {
   titleTop?: string;
   title?: string;
   description?: string[];
+  /** 본문 아래 건수 문구(예: "7 Electronic Motor Protection Relay Video Tutorials Available"). 미전달 시 미렌더 */
+  countText?: string;
   linkHref?: string;
   linkLabel?: string;
   linkExternal?: boolean;
@@ -51,6 +53,46 @@ function BannerLink({
   );
 }
 
+// 배너 본문(텍스트 + CTA) — 링크형/비링크형 두 분기가 같은 내용을 렌더하므로 한 곳에서만 정의한다.
+function BannerBody({
+  titleTop,
+  title,
+  description,
+  countText,
+  linkLabel,
+}: {
+  titleTop: string;
+  title: string;
+  description: string[];
+  countText?: string;
+  linkLabel: string;
+}) {
+  return (
+    <>
+      <div className="common_banner_03__text">
+        <p className="common_banner_03__kicker">{titleTop}</p>
+        <h2 className="common_banner_03__tit">{title}</h2>
+        <div className="common_banner_03__desc">
+          {description.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
+        {/* 건수 문구 — 값이 있을 때만 노출(기획서 product.png: 본문과 CTA 사이) */}
+        {countText ? (
+          <p className="common_banner_03__count">{countText}</p>
+        ) : null}
+      </div>
+
+      <span className="btn-text-30 common_banner_03__link">
+        {linkLabel}
+        <span className="btn-text-30__icon">
+          <span className="icon_arrow-18" aria-hidden="true" />
+        </span>
+      </span>
+    </>
+  );
+}
+
 const DEFAULT_DESCRIPTION = [
   "Need help with installation, configuration, troubleshooting, or maintenance?",
   "Watch step-by-step video guides for the MCCB series in our Tech Hub.",
@@ -64,6 +106,7 @@ export default function CommonBanner03({
   titleTop = "Tech Hub Video Guide",
   title = "MCCB Video Tutorials",
   description = DEFAULT_DESCRIPTION,
+  countText,
   linkHref = "/support/tech-hub",
   linkLabel = "Explore Tech Hub",
   linkExternal,
@@ -129,41 +172,23 @@ export default function CommonBanner03({
             linkExternal={linkExternal}
             className="common_banner_03__body"
           >
-            <div className="common_banner_03__text">
-              <p className="common_banner_03__kicker">{titleTop}</p>
-              <h2 className="common_banner_03__tit">{title}</h2>
-              <div className="common_banner_03__desc">
-                {description.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              </div>
-            </div>
-
-            <span className="btn-text-30 common_banner_03__link">
-              {linkLabel}
-              <span className="btn-text-30__icon">
-                <span className="icon_arrow-18" aria-hidden="true" />
-              </span>
-            </span>
+            <BannerBody
+              titleTop={titleTop}
+              title={title}
+              description={description}
+              countText={countText}
+              linkLabel={linkLabel}
+            />
           </BannerLink>
         ) : (
           <div className="common_banner_03__body">
-            <div className="common_banner_03__text">
-              <p className="common_banner_03__kicker">{titleTop}</p>
-              <h2 className="common_banner_03__tit">{title}</h2>
-              <div className="common_banner_03__desc">
-                {description.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              </div>
-            </div>
-
-            <span className="btn-text-30 common_banner_03__link">
-              {linkLabel}
-              <span className="btn-text-30__icon">
-                <span className="icon_arrow-18" aria-hidden="true" />
-              </span>
-            </span>
+            <BannerBody
+              titleTop={titleTop}
+              title={title}
+              description={description}
+              countText={countText}
+              linkLabel={linkLabel}
+            />
           </div>
         )}
       </div>

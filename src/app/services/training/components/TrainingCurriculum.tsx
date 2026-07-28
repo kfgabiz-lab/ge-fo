@@ -59,11 +59,12 @@ function renderFilterPlaceholder(label: string) {
 }
 
 // Training 커리큘럼: 필터 3종 + 검색 + 카드 목록(다건, slug=currMgmt-data) + 페이지네이션.
+// - 목록은 공개 게이트 + 메뉴별 교육과정(training_course) 필터로 조회한다(trainingStatusWhere(variant)).
 // - Category 필터(All/Power/Automation)와 검색(title|description)은 currMgmt-data where에 연동해 재조회한다.
-// - Lv/Sub Category 옵션은 category-data(depth3 노드)에서 파생. Lv/Sub가 선택되면
-//   해당 그룹의 category-data PK 목록(resolveCategoryIds)을 신규 엔드포인트
-//   (/training/curriculum-by-category, categoryIds 복수)로 넘겨 목록을 재조회한다.
-//   (검색어는 신규 엔드포인트 미지원 — Lv/Sub 선택 중에는 검색이 API에 실리지 않음)
+// - Lv/Sub Category 옵션은 전용 엔드포인트(/training/product-tree)의 평면 행에서 파생. Lv/Sub가 선택되면
+//   해당 그룹의 연결행 PK 목록(resolveCategoryIds)을 /training/curriculum-by-category(categoryIds 복수 +
+//   trainingCourse)로 넘겨 목록을 재조회한다.
+//   (검색어는 해당 엔드포인트 미지원 — Lv/Sub 선택 중에는 검색이 API에 실리지 않음)
 export default function TrainingCurriculum({
   curriculum,
   variant,
@@ -172,6 +173,8 @@ export default function TrainingCurriculum({
       }
       fetchTrainingByCategoryIds({
         categoryIds: ids,
+        // 메뉴별 교육과정 필터(engineering=01/service=02/sales=03)를 이 경로에서도 동일 적용
+        variant,
         page: pageIndex,
         size: TRAINING_LIST_SIZE,
       })
@@ -195,7 +198,8 @@ export default function TrainingCurriculum({
       page: pageIndex,
       size: TRAINING_LIST_SIZE,
       where: {
-        ...trainingStatusWhere(),
+        // 공개 게이트 + 메뉴별 교육과정(training_course) 필터
+        ...trainingStatusWhere(variant),
         ...(categoryValue
           ? { "eq_curriculum.product_category": categoryValue }
           : {}),

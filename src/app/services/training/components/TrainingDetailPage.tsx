@@ -2,8 +2,11 @@ import { notFound } from "next/navigation";
 import type { TrainingVariant } from "../data/trainingContent";
 import { fetchTrainingCategories, toCategoryMap } from "../data/trainingData";
 import {
+  fetchTrainingCurriculum,
   fetchTrainingDetailRows,
+  fetchTrainingProductNameMap,
   fetchTrainingTypeCodes,
+  isCurriculumVisible,
   toTrainingCourseDetail,
 } from "../data/trainingDetailData";
 import TrainingDetailHero from "./TrainingDetailHero";
@@ -22,34 +25,39 @@ export default async function TrainingDetailPage({
   variant: TrainingVariant;
   courseId: string;
 }) {
-  const [rows, categoryCodes, trainingTypeCodes] = await Promise.all([
-    // 옵션A: courseId(부모 currMgmt-data.id) 역방향 + 공개(is_visible=001) + 과거회차 제외 where.
-    // 1:N 모델: 다건 교육회차 전체를 unpaged 로 받아(정렬=교육 시작일 asc) 각 행을 카드로 렌더.
-    // generateMetadata 와 동일 인자로 fetchTrainingDetailRows 공용 호출 → fetch memoization 으로 실제 요청 1회.
-    fetchTrainingDetailRows(courseId),
-    fetchTrainingCategories(),
-    fetchTrainingTypeCodes(),
-  ]);
+  const [rows, curriculum, categoryCodes, trainingTypeCodes, productNameMap] =
+    await Promise.all([
+      // 옵션A: courseId(부모 currMgmt-data.id) 역방향 + 공개(is_visible=001) + 과거회차 제외 where.
+      // 1:N 모델: 다건 교육회차 전체를 unpaged 로 받아(정렬=교육 시작일 asc) 각 행을 카드로 렌더.
+      // generateMetadata 와 동일 인자로 fetchTrainingDetailRows 공용 호출 → fetch memoization 으로 실제 요청 1회.
+      fetchTrainingDetailRows(courseId),
+      // 히어로/공개게이트 원천 = 부모 커리큘럼 라이브 조회(자식 행 스냅샷 사용 금지).
+      fetchTrainingCurriculum(courseId),
+      fetchTrainingCategories(),
+      fetchTrainingTypeCodes(),
+      // 연결제품(PRODUCTS COVERED) 해석용 "연결행 PK → 제품명" 맵
+      fetchTrainingProductNameMap(),
+    ]);
 
-  // 서버 1차 게이트 결과가 비면(미존재/전부 비공개/전부 과거) 404
-  if (rows.length === 0) {
+  // 404 기준은 "커리큘럼 자체"만 — 미존재 또는 비공개(is_visible≠001).
+  // 예정 회차가 0건인 경우는 404 가 아니다(히어로는 노출하고 스케줄 목록만 비어 보이게 처리).
+  if (!curriculum || !isCurriculumVisible(curriculum)) {
     notFound();
   }
 
   const categoryMap = toCategoryMap(categoryCodes);
   const trainingTypeMap = toCategoryMap(trainingTypeCodes);
 
-  // FE 2차 재판정(공개/과거제외)은 빌더 내부에서 처리(통과 0건이면 null).
+  // FE 2차 재판정(과거회차 제외)은 빌더 내부에서 처리. 통과 0건이면 스케줄 목록만 빈 배열.
   // variant 무관 동일 커리큘럼 노출 정책 → training_course 게이트 없음.
   const detail = toTrainingCourseDetail(
     rows,
     courseId,
+    curriculum,
     categoryMap,
     trainingTypeMap,
+    productNameMap,
   );
-  if (!detail) {
-    notFound();
-  }
 
   // 세션 상세 링크 접두어를 variant별로 파생 (/services/{variant}-training)
   const hrefPrefix = `/services/${variant}-training`;
@@ -58,9 +66,9 @@ export default async function TrainingDetailPage({
     // 1:N 모델: currMgmt-data(커리큘럼) 1 → currDtlMgmt-data(교육회차) N행.
     // data-slug(currDtlMgmt-data, 다건)는 스케줄 리스트 <ul>(TrainingDetailSchedule)로 이동해
     //   각 회차 행 = 스케줄 카드 1건으로 반복(data-slug-repeat/item).
-    // Hero 는 반복 밖 단건 표시라 부모 curriculum(_fetchedRel8.curriculum.*) slugKey만 유지
-    //   (대표 1건 값 — data-slug 컨텍스트 자체는 반복 밖이라 없음. STEP6에서 목록 결과[0]의
-    //    _fetchedRel8 로 히어로를 채움).
+    // Hero 는 반복 밖 단건 표시라 부모 curriculum 필드 경로 표기(slugKey)만 유지한다.
+    //   값은 currMgmt-data 를 PK 로 라이브 재조회한 결과(fetchTrainingCurriculum)로 채운다
+    //   — 회차 행이 0건이어도 히어로가 정상 노출되어야 하고, BO 수정이 즉시 반영되어야 하기 때문.
     <main
       className={`support-page support-page--${variant}-training-detail`}
       id="P-FO-SERV-030100P"

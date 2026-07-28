@@ -38,6 +38,9 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
   // 선택된 LV2 코드(그룹 내 OR). 정렬해 안정적인 의존성 키로 사용.
   const selectedCodes = getSelectedCategoryValues("category");
   const codesKey = [...selectedCodes].sort().join(",");
+  // 선택된 인증 코드("ul"/"iec", 그룹 내 OR).
+  const selectedCerts = getSelectedCategoryValues("certification");
+  const certsKey = [...selectedCerts].sort().join(",");
 
   const [items, setItems] = useState<TechHubCard[]>([]);
   const [totalElements, setTotalElements] = useState(0);
@@ -53,9 +56,9 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
     }
     setPage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, codesKey]);
+  }, [query, codesKey, certsKey]);
 
-  // 실목록 조회(검색어/선택 카테고리/페이지 변경 시).
+  // 실목록 조회(검색어/선택 카테고리/선택 인증/페이지 변경 시).
   useEffect(() => {
     if (empty) {
       setItems([]);
@@ -69,6 +72,7 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
     fetchTechHubContents({
       q: query,
       categories: selectedCodes,
+      certs: selectedCerts,
       page: page - 1, // UI 는 1-based, API 는 0-based
       size: PAGE_SIZE,
     })
@@ -85,7 +89,7 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, codesKey, page, empty]);
+  }, [query, codesKey, certsKey, page, empty]);
 
   const isEmptyResult = !loading && items.length === 0;
   const showEmpty = empty || isEmptyResult;

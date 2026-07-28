@@ -181,43 +181,21 @@ export const requestForTrainingStep4Copy = {
       hint: "*Select all that apply.",
       required: true,
     },
+    // 아래 3개 필드의 체크박스 옵션은 공통코드(BO 공통코드 관리)로 관리한다.
+    // 조회: app/services/request-for-training/data/requestForTrainingCodes.ts
+    //   jobTitles → TRAININGJOBTITLE / studentInvolvement → TRAININGJOIN
+    //   vfdUnderstanding(Yes 후속 주제) → TRAININGVFD
     jobTitles: {
       label: "What are the job titles of the students that will be trained?",
-      options: [
-        "E & I Technician and/or Maintenance",
-        "Mechanic",
-        "Electrical Engineer",
-        "Sales Engineer",
-        "Inside Tech",
-        "Field Service Engineer",
-        "Other",
-      ],
       required: true,
     },
     studentInvolvement: {
       label: "Are the students involved with any of the following?",
-      options: [
-        "Installation, Start-up",
-        "Integration and Parameter setup",
-        "Field Troubleshooting (understanding fault codes)",
-        "Sales and Explanation of the Product",
-        "Serial communications",
-        "Unit troubleshooting (to determine damaged components)",
-        "Other",
-      ],
       required: true,
     },
     vfdUnderstanding: {
       label: "Do the students have a basic understanding of variable frequency drives?",
       required: true,
-      yesFollowUpOptions: [
-        "Motor technology (construction, theory of operation)",
-        "Drive technology (construction, theory of operation)",
-        "DriveView Software",
-        "PID Applications",
-        "Auto-Tuning",
-        "Other Topics",
-      ],
     },
     comments: {
       label: "Comments/questions about certification",

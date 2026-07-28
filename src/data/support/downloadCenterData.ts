@@ -53,12 +53,27 @@ export interface DownloadCenterContentsPage {
 }
 
 // 정렬 파라미터 — "" 는 미지정(BE 기본 newest).
-export type DownloadCenterSort = "" | "newest" | "oldest" | "title";
+// - doctype: 문서유형 우선순위(Catalogs > Manuals > Certificates > Software > Tech Data > Drawings)
+//            → 동일 유형 내에서는 등록일시 내림차순. 제품상세 Downloads 섹션 기본값.
+// - title_desc: 제목 역순(Z to A).
+// ⚠️ doctype / title_desc 는 제품상세 Downloads 섹션 전용으로 추가한 값이다.
+//    Download Center(support) 화면은 기존 3종(newest/oldest/title)만 드롭다운에 노출한다.
+export type DownloadCenterSort =
+  | ""
+  | "doctype"
+  | "newest"
+  | "oldest"
+  | "title"
+  | "title_desc";
 
 export interface DownloadCenterContentsParams {
   q?: string;
   categories?: string[]; // 선택된 LV2 코드 목록(그룹 내 OR)
   docTypes?: string[]; // 선택된 문서유형 코드 목록(C/M/D/S/R/O)
+  // 연계 제품코드 목록(contents_category 의 category_l3_id = product.product_code 체계).
+  // ⚠️ 제품상세 Downloads 섹션 전용 조건이다. Download Center(support) 화면은 이 값을 넘기지 않으며,
+  //    미전달/빈 배열이면 BE 는 제품 필터 없이 전체 목록을 반환한다(기존 동작 유지).
+  productCodes?: string[];
   sort?: DownloadCenterSort;
   page?: number; // 0-based
   size?: number;
@@ -77,6 +92,9 @@ export async function fetchDownloadCenterContents(
   }
   if (params.docTypes && params.docTypes.length > 0) {
     sp.set("docTypes", params.docTypes.join(","));
+  }
+  if (params.productCodes && params.productCodes.length > 0) {
+    sp.set("productCodes", params.productCodes.join(","));
   }
   if (params.sort) sp.set("sort", params.sort);
   sp.set("page", String(page));
@@ -111,7 +129,7 @@ export async function fetchDownloadCenterCategoryCounts(): Promise<
 
 // ---------------- 문서유형(Document Type) 건수 ----------------
 
-// 문서유형별 실카운트 1건. docType = BE 코드(C/M/D/S/R/O). OS/Firmware 는 대응 코드가 없어 응답에 포함되지 않는다.
+// 문서유형별 실카운트 1건. docType = BE 코드(C/M/D/S/R/O).
 export interface DownloadCenterDocTypeCount {
   docType: string;
   docTypeLabel: string;

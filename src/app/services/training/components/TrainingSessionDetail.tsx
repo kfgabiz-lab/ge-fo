@@ -1,7 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type { EngineeringTrainingSessionDetail } from "@/data/services/engineeringTrainingSessionDetailContent";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import type {
+  EngineeringTrainingAgendaRow,
+  EngineeringTrainingSessionDetail,
+} from "@/data/services/engineeringTrainingSessionDetailContent";
 import {
   buildSessionTabs,
   engineeringTrainingSessionAssets,
@@ -85,6 +88,40 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: immediate ? "auto" : "smooth" });
 }
 
+// Agenda 를 교육일(date) 기준으로 묶은 그룹 1개.
+// - 기획(curri_det3.png DESCRIPTION 우측 1번): "회차가 많은 경우 Session 1, Session 2 등으로 구분 노출"
+// - 그룹 순서는 뷰모델 정렬(date → time_from 오름차순)을 그대로 따르므로 첫 등장 순 = 날짜 오름차순.
+type AgendaGroup = {
+  date: string;
+  label: string; // "Session 1" / "Session 2" ...
+  rows: EngineeringTrainingAgendaRow[];
+};
+
+// 정렬된 agenda 행 → 교육일 기준 그룹 배열.
+// - TrainingDetailSchedule 의 날짜 그룹핑(groupedSessions)과 동일한 "첫 등장 순서 유지 + Map 인덱스" 패턴.
+// - date 가 비어있는 행들도 하나의 그룹(키 "")으로 묶어 순서를 잃지 않게 한다.
+function toAgendaGroups(rows: EngineeringTrainingAgendaRow[]): AgendaGroup[] {
+  const groups: AgendaGroup[] = [];
+  const indexByDate = new Map<string, number>();
+
+  for (const row of rows) {
+    const key = row.date ?? "";
+    const existing = indexByDate.get(key);
+    if (existing === undefined) {
+      indexByDate.set(key, groups.length);
+      groups.push({
+        date: key,
+        label: `Session ${groups.length + 1}`,
+        rows: [row],
+      });
+    } else {
+      groups[existing].rows.push(row);
+    }
+  }
+
+  return groups;
+}
+
 export default function TrainingSessionDetail({
   session,
   variant,
@@ -104,6 +141,15 @@ export default function TrainingSessionDetail({
   );
   // 공유 링크에 주입할 현재 페이지 URL(마운트 후 window 접근 → SSR/CSR 안전)
   const [shareUrl, setShareUrl] = useState("");
+
+  // Agenda 교육일 그룹. 그룹이 2개 이상일 때만 "Session N" 구분 헤더를 노출한다
+  // (기획 문구가 "회차가 많은 경우" 조건이므로 단일 교육일이면 기존 표기 그대로 유지).
+  const agendaGroups = useMemo(() => toAgendaGroups(session.agenda), [
+    session.agenda,
+  ]);
+  const showAgendaSessions = agendaGroups.length > 1;
+  // Agenda 테이블 컬럼 수(No/Time/Contents [+Trainer]) — 세션 구분 행 colSpan 계산용
+  const agendaColumnCount = session.showTrainerColumn ? 4 : 3;
 
   useEffect(() => {
     setShareUrl(window.location.href);
@@ -305,70 +351,92 @@ export default function TrainingSessionDetail({
                     </tr>
                   </thead>
                   {/* Agenda = 이 회차 행의 training_schedule 배열 반복(단건 main 내부 중첩 다건).
-                      No = index+1(태깅 불필요), Time = time_from~time_to 두 필드 조합이라 미태깅(STEP6 조합) */}
+                      No = index+1(태깅 불필요), Time = time_from~time_to 두 필드 조합이라 미태깅(STEP6 조합)
+                      교육일(date)이 여러 날이면 날짜별로 "Session N" 구분 행을 앞에 끼워 넣는다. */}
                   <tbody data-slug="training_schedule" data-slug-repeat="true">
-                    {session.agenda.map((row) => (
-                      <tr key={row.id} data-slug-item>
-                        <td>{row.number}</td>
-                        <td>{row.time}</td>
-                        <td>
-                          <p
-                            className="support_service_training_session_detail__table-tit"
-                            data-slugkey="title"
-                          >
-                            {row.title}
-                          </p>
-                          {row.description ? (
-                            <p
-                              className="support_service_training_session_detail__table-desc"
-                              data-slugkey="description"
-                            >
-                              {row.description}
-                            </p>
-                          ) : null}
-                        </td>
-                        {session.showTrainerColumn ? (
-                          <td data-slugkey="trainer">{row.trainer ?? ""}</td>
+                    {agendaGroups.map((group) => (
+                      <Fragment key={group.date || group.label}>
+                        {showAgendaSessions ? (
+                          <tr className="support_service_training_session_detail__table-session">
+                            <th scope="colgroup" colSpan={agendaColumnCount}>
+                              {group.label}
+                            </th>
+                          </tr>
                         ) : null}
-                      </tr>
+                        {group.rows.map((row) => (
+                          <tr key={row.id} data-slug-item>
+                            <td>{row.number}</td>
+                            <td>{row.time}</td>
+                            <td>
+                              <p
+                                className="support_service_training_session_detail__table-tit"
+                                data-slugkey="title"
+                              >
+                                {row.title}
+                              </p>
+                              {row.description ? (
+                                <p
+                                  className="support_service_training_session_detail__table-desc"
+                                  data-slugkey="description"
+                                >
+                                  {row.description}
+                                </p>
+                              ) : null}
+                            </td>
+                            {session.showTrainerColumn ? (
+                              <td data-slugkey="trainer">{row.trainer ?? ""}</td>
+                            ) : null}
+                          </tr>
+                        ))}
+                      </Fragment>
                     ))}
                   </tbody>
                 </table>
               </TrainingSessionDetailTableScroll>
-              {/* Mobile timeline — Figma 8007:107681 (모바일에서 위 테이블 대신 노출) */}
+              {/* Mobile timeline — Figma 8007:107681 (모바일에서 위 테이블 대신 노출)
+                  교육일이 여러 날이면 타임라인에도 "Session N" 구분 항목을 끼워 넣는다(테이블과 동일 기준). */}
               <ol className="support_service_training_session_detail__agenda-list">
-                {session.agenda.map((row) => (
-                  <li
-                    key={row.id}
-                    className="support_service_training_session_detail__agenda-item"
-                  >
-                    <span
-                      className="support_service_training_session_detail__agenda-dot"
-                      aria-hidden="true"
-                    />
-                    <div className="support_service_training_session_detail__agenda-body">
-                      <p className="support_service_training_session_detail__agenda-time">
-                        {row.time}
-                      </p>
-                      <div className="support_service_training_session_detail__agenda-copy">
-                        <div className="support_service_training_session_detail__agenda-main">
-                          <p className="support_service_training_session_detail__agenda-tit">
-                            {row.title}
+                {agendaGroups.map((group) => (
+                  <Fragment key={group.date || group.label}>
+                    {showAgendaSessions ? (
+                      <li className="support_service_training_session_detail__agenda-session">
+                        {group.label}
+                      </li>
+                    ) : null}
+                    {group.rows.map((row) => (
+                      <li
+                        key={row.id}
+                        className="support_service_training_session_detail__agenda-item"
+                      >
+                        <span
+                          className="support_service_training_session_detail__agenda-dot"
+                          aria-hidden="true"
+                        />
+                        <div className="support_service_training_session_detail__agenda-body">
+                          <p className="support_service_training_session_detail__agenda-time">
+                            {row.time}
                           </p>
-                          {row.description ? (
-                            <p className="support_service_training_session_detail__agenda-desc">
-                              {row.description}
-                            </p>
-                          ) : null}
+                          <div className="support_service_training_session_detail__agenda-copy">
+                            <div className="support_service_training_session_detail__agenda-main">
+                              <p className="support_service_training_session_detail__agenda-tit">
+                                {row.title}
+                              </p>
+                              {row.description ? (
+                                <p className="support_service_training_session_detail__agenda-desc">
+                                  {row.description}
+                                </p>
+                              ) : null}
+                            </div>
+                            {row.trainer ? (
+                              <p className="support_service_training_session_detail__agenda-trainer">
+                                Trainer : {row.trainer}
+                              </p>
+                            ) : null}
+                          </div>
                         </div>
-                        {row.trainer ? (
-                          <p className="support_service_training_session_detail__agenda-trainer">
-                            Trainer : {row.trainer}
-                          </p>
-                        ) : null}
-                      </div>
-                    </div>
-                  </li>
+                      </li>
+                    ))}
+                  </Fragment>
                 ))}
               </ol>
             </div>

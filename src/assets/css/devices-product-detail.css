@@ -167,6 +167,37 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     object-fit: contain;
   }
 
+  /* Hero Design Award 배치 — iF 로고는 이미지 우하단 오버레이(공용 .product_award_badge 재사용),
+     문구는 이미지 폭 전체 아래 별도 줄. 배지 로고 자체의 스타일은 components/product-award-badge.css 그대로 사용하고,
+     여기서는 Hero 전용 배치 컨테이너만 정의한다. */
+  section.devices_product_hero .devices_product_hero__visual--award {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    /* 이미지 영역 크기는 아래 __award-visual 이 그대로 승계하고, 문구 줄만큼 아래로 늘어난다 */
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+
+  section.devices_product_hero .devices_product_hero__award-visual {
+    /* .product_award_badge(absolute right:0/bottom:0) 의 기준 박스 */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 540px;
+    aspect-ratio: 540/540;
+  }
+
+  section.devices_product_hero .devices_product_hero__award-text {
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #666;
+  }
+
   section.devices_product_hero .devices_product_hero__meta {
     display: flex;
     align-items: center;
@@ -1880,6 +1911,31 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     height: auto;
     max-height: 295px;
     object-fit: contain;
+  }
+
+  /* Hero Design Award 배치(모바일) — 데스크톱과 동일 구조, 이미지 영역 높이만 모바일 기준(295px) */
+  section.devices_product_hero .devices_product_hero__visual--award {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    min-height: 0;
+  }
+
+  section.devices_product_hero .devices_product_hero__award-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 295px;
+  }
+
+  section.devices_product_hero .devices_product_hero__award-text {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #666;
   }
 
   section.devices_product_hero .devices_product_hero__content {

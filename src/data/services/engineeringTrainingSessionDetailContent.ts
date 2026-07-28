@@ -3,6 +3,9 @@ import type { TrainingVariant } from "@/app/services/training/data/trainingConte
 export type EngineeringTrainingAgendaRow = {
   id: string;
   number: string;
+  // 교육일("YYYY-MM-DD", training_schedule[].date 원본 앞 10자리).
+  // Agenda 를 Session 1/Session 2 로 나누는 그룹 키. 값이 없을 수도 있어 빈 문자열 허용.
+  date: string;
   time: string;
   title: string;
   description?: string;
@@ -65,6 +68,7 @@ const SHARED_AGENDA: EngineeringTrainingAgendaRow[] = [
   {
     id: "agenda-01",
     number: "1",
+    date: "",
     time: "09:10~09:30",
     title: "LS ELECTRIC Introduction",
     description: AGENDA_INTRO,
@@ -73,6 +77,7 @@ const SHARED_AGENDA: EngineeringTrainingAgendaRow[] = [
   {
     id: "agenda-02",
     number: "2",
+    date: "",
     time: "09:30~10:45",
     title: "MV, LV BREAKER: VCB, ACB, MCCB",
     description: AGENDA_INTRO,
@@ -81,6 +86,7 @@ const SHARED_AGENDA: EngineeringTrainingAgendaRow[] = [
   {
     id: "agenda-03",
     number: "3",
+    date: "",
     time: "10:45~12:00",
     title: "MV, LV SWITCH GEAR",
     description: AGENDA_INTRO,
@@ -89,12 +95,14 @@ const SHARED_AGENDA: EngineeringTrainingAgendaRow[] = [
   {
     id: "agenda-04",
     number: "4",
+    date: "",
     time: "12:00~13:00",
     title: "Lunch Time",
   },
   {
     id: "agenda-05",
     number: "5",
+    date: "",
     time: "13:00~14:00",
     title: "CAST RESIN TRANSFORMER",
     description: AGENDA_INTRO,
@@ -103,6 +111,7 @@ const SHARED_AGENDA: EngineeringTrainingAgendaRow[] = [
   {
     id: "agenda-06",
     number: "6",
+    date: "",
     time: "14:00~14:20",
     title: "Factory Line Tour",
     description: AGENDA_INTRO,
@@ -111,6 +120,7 @@ const SHARED_AGENDA: EngineeringTrainingAgendaRow[] = [
   {
     id: "agenda-07",
     number: "7",
+    date: "",
     time: "14:20~15:00",
     title: "Circuit breaker & SWGR handling practice",
     description: AGENDA_INTRO,

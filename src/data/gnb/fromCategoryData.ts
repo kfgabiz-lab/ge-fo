@@ -15,6 +15,8 @@ import type {
 } from "@/data/gnb/types";
 // 제품 이미지 URL 가공은 기존 유틸을 그대로 재사용(신규 이미지 유틸 생성 금지).
 import { resolveFirstImageUrl } from "@/app/()/products-systems/data/productsSystemsData";
+// 카테고리 컨텍스트(?category=) 부착 — 중복 slug 해소용 공용 헬퍼.
+import { withCategoryContext } from "@/lib/navigation/categoryContext";
 
 // productImage 는 BE 가 JSONB(product_info.image)를 ->> 연산자로 뽑아 JSON 배열이 텍스트 문자열("[123]")로 온다.
 // resolveFirstImageUrl 은 배열을 기대하므로 문자열을 배열로 파싱한 뒤 그대로 재사용한다.
@@ -67,7 +69,12 @@ function toMegaProduct(row: DevicesTreeRow): GnbMegaProduct {
     title: row.productTitle ?? "",
     subtitle: row.productDescription ?? "",
     image: resolveProductImage(row.productImage),
-    href: row.productSlug ? `/product/${row.productSlug}` : "",
+    // seo.slug 가 겹치는 제품(VFD 6종)이 실제로 있어 slug 만으로는 대상이 확정되지 않는다.
+    // depth3 행은 자신이 속한 Lv2 의 id(parentId)를 갖고 있으므로 그대로 컨텍스트로 실어 보낸다.
+    href: withCategoryContext(
+      row.productSlug ? `/product/${row.productSlug}` : "",
+      row.parentId,
+    ),
   };
 }
 
@@ -88,10 +95,17 @@ export async function fetchDevicesMegaMenu(): Promise<GnbDevicesMegaMenu> {
       const productRows = depth3ByParent.get(rowKey(child)) ?? [];
       return {
         id: child.categorySlug || rowKey(child),
+        // 중복 slug 구별용 실제 카테고리 PK(브레드크럼이 ?category= 와 대조해 조상 체인을 확정한다).
+        categoryId: child.rowId,
         label: child.categoryTitle ?? "",
         panelTitle: child.categoryTitle ?? "",
         description: splitDescription(child.categoryDescription),
-        href: child.categorySlug ? `/product-range/${child.categorySlug}` : "",
+        // "Variable Frequency Drive" 처럼 서로 다른 Lv1 밑에 같은 seo.slug 를 가진 Lv2 가 존재한다.
+        // 트리 행의 고유 id(rowId = category-data PK)를 함께 넘겨 클릭한 그 카테고리로 이동시킨다.
+        href: withCategoryContext(
+          child.categorySlug ? `/product-range/${child.categorySlug}` : "",
+          child.rowId,
+        ),
         product: productRows.map(toMegaProduct),
       };
     });

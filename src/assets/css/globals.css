@@ -916,6 +916,14 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     margin: 0;
   }
 
+  /* Tech Hub 영상 건수 문구 — 본문 아래, CTA 위 */
+  section.common_banner_03 .common_banner_03__count {
+    margin: 20px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgb(255 255 255 / 70%);
+  }
+
   section.common_banner_03 .common_banner_03__link {
     color: #fff;
   }
@@ -990,6 +998,14 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
 
   section.common_banner_03 .common_banner_03__desc p {
     margin: 0;
+  }
+
+  /* Tech Hub 영상 건수 문구 — 본문 아래, CTA 위 */
+  section.common_banner_03 .common_banner_03__count {
+    margin: 14px 0 0;
+    font-size: 13px;
+    line-height: 19px;
+    color: rgb(255 255 255 / 78%);
   }
 
   section.common_banner_03 .common_banner_03__link {

@@ -8,6 +8,7 @@ import {
   fetchCategoryLv2Products,
   fetchProductBySlug,
 } from "@/app/()/products-systems/data/productsSystemsData";
+import { parseCategoryContext } from "@/lib/navigation/categoryContext";
 import { fetchCategoryInsightsLv2 } from "@/data/highlightNews";
 import "@/assets/css/devices-systems.css";
 
@@ -16,19 +17,27 @@ import "@/assets/css/devices-systems.css";
 // ② 없으면 product-data 를 seo.slug 로 조회 → 제네릭 제품상세(GenericProductDetail) 렌더
 //    (조회한 row를 그대로 전달, 내부 재조회 없음)
 // ③ 둘 다 없어도 404로 바꾸지 않고 제품상세 레이아웃을 빈 상태(row=null)로 렌더 — 레이아웃 유지
+// ?category={Lv2 id} — GNB/Lv1 랜딩 카드에서 넘어온 카테고리 컨텍스트.
+// "variable-frequency-drive" 처럼 seo.slug 가 겹치는 Lv2 가 실제로 있어(587/607) slug 만으로는
+// 대상이 확정되지 않으므로, 클릭한 그 카테고리의 id 를 함께 받아 조회를 좁힌다.
+// 파라미터가 없으면(외부 유입·직접 입력·기존 북마크) 기존과 동일하게 slug 첫 건으로 동작한다.
 const LANDING_HREF = "/products-category/lv-products-and-systems";
 
 type ProductRangePageProps = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ category?: string }>;
 };
 
 export default async function ProductRangeRoutePage({
   params,
+  searchParams,
 }: ProductRangePageProps) {
   const { slug } = await params;
+  const { category: categoryParam } = await searchParams;
+  const categoryId = parseCategoryContext(categoryParam);
 
   // ① depth2 카테고리 우선
-  const category = await fetchCategoryBySlug(slug, { depth: 2 });
+  const category = await fetchCategoryBySlug(slug, { depth: 2, categoryId });
   if (category) {
     // 카드 = 이 Lv2에 맵핑된(하위 depth3 연결행) 노출가능 제품(product-data).
     // 구 방식(product_code 접두사 매칭)은 폐기 — 맵핑 관계/공개·판매중 필터/정렬을 전부 BE가 처리한다.
@@ -60,6 +69,6 @@ export default async function ProductRangeRoutePage({
 
   // ② 제품 폴백 — product-data 를 seo.slug 로 조회해 제네릭 제품상세로 렌더.
   //    카테고리도 제품도 안 맞으면 row=null → GenericProductDetail이 템플릿 기본값으로 빈 상태 렌더.
-  const row = await fetchProductBySlug(slug);
+  const row = await fetchProductBySlug(slug, { categoryId });
   return <ProductDetailRouter slug={slug} row={row} />;
 }

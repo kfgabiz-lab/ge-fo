@@ -2,6 +2,7 @@ import CommonBanner04 from "@/components/banners/CommonBanner04";
 import DevicesExploreAll from "../components/DevicesExploreAll";
 import {
   resolveExploreHref,
+  withExploreProductCategory,
   type GnbExploreProduct,
 } from "@/data/gnbExploreAllProducts";
 import { fetchAllProductNames } from "../data/productsSystemsData";
@@ -31,6 +32,17 @@ export default async function ExploreAllProductsPage() {
     const set = productLv2Map.get(r.productId) ?? new Set<string>();
     set.add(r.parentId);
     productLv2Map.set(r.productId, set);
+  }
+
+  // 제품 slug → 그 제품이 속한 공개 Lv2 id (링크에 카테고리 컨텍스트를 싣기 위한 표).
+  // seo.slug 가 겹치는 제품(VFD 6종)이 있어 slug 만으로는 대상이 확정되지 않으므로,
+  // GNB 링크와 동일하게 ?category={Lv2 id} 를 붙여 이동 대상을 확정한다.
+  // 복수 Lv2 소속이면 devices-tree 정렬 순서상 첫 번째를 쓴다(GNB/Other Products 와 동일 규칙).
+  const lv2IdBySlug = new Map<string, string>();
+  for (const r of deviceRows) {
+    if (r.depth !== "3" || !r.productSlug || r.parentId == null) continue;
+    if (!visibleLv2Ids.has(r.parentId)) continue;
+    if (!lv2IdBySlug.has(r.productSlug)) lv2IdBySlug.set(r.productSlug, r.parentId);
   }
 
   // ── 조건2/3: Lv1/Lv2 셀렉트 옵션 (devices-tree 공개 행 기반 cascading) ──
@@ -65,7 +77,10 @@ export default async function ExploreAllProductsPage() {
           .map(({ p, lv2Ids }) => ({
             id: String(p.id),
             label: p.name,
-            href: resolveExploreHref(p.name),
+            href: withExploreProductCategory(
+              resolveExploreHref(p.name),
+              lv2IdBySlug,
+            ),
             discontinued: p.orderStatus === "99",
             lv2Ids,
           }))

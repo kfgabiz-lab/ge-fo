@@ -4,7 +4,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { requestForTrainingRoutes } from "@/data/services/requestForTrainingContent";
 import RequestForTraining from "./RequestForTraining";
-import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
+import {
+  isStep3Complete,
+  useRequestForTrainingForm,
+} from "./RequestForTrainingProvider";
 import RequestForTrainingStep3Form from "./RequestForTrainingStep3Form";
 
 export type RequestForTrainingStep3Errors = {
@@ -29,8 +32,7 @@ export default function RequestForTrainingStep3() {
     };
     setErrors(nextErrors);
 
-    const requiredFilled = !Object.values(nextErrors).some(Boolean);
-    if (!requiredFilled) {
+    if (!isStep3Complete(step3)) {
       alert("Please complete all required fields.");
       return;
     }

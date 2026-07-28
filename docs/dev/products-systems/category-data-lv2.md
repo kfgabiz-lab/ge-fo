@@ -23,8 +23,15 @@
 
 <!-- 카드 목록(다건, product-data) — stacked: .devices_category__grid / split: .devices_category__list-inner -->
 <div className="devices_category__grid" data-slug="product-data" data-slug-repeat="true">
-  <div data-slug-item> <!-- stacked: CategoryProductCardStacked / split: CategoryProductCard -->
-    <img data-slugkey="product_info.image" data-slugkey-attr="src" />
+  <!-- 카드 루트: awards 있으면 type 클래스 부여(퍼블리싱 표준 패턴) -->
+  <div class="devices_category__item type2" data-slug-item> <!-- stacked: CategoryProductCardStacked / split: CategoryProductCard -->
+    <div class="devices_category__item-img">
+      <!-- 기획서 9번: product.awards === "01" 일 때만 렌더 -->
+      <div class="product_award_badge" data-slugkey="product.awards">
+        <span class="product_award_badge__icon"></span>
+      </div>
+      <img data-slugkey="product_info.image" data-slugkey-attr="src" />
+    </div>
     <h2 data-slugkey="product.product_name">...</h2>
     <p data-slugkey="product_info.info_description">...</p>
   </div>
@@ -38,12 +45,14 @@
 | product_info.image (카드, 다건) | product_info.image | array(파일ID) → string(url) | 속성(`img.src`) | 제품 카드 썸네일. `/api/v1/fo/page-files/{id}` 프록시 변환 |
 | product.product_name (카드, 다건) | product.product_name | string | 텍스트(`h2`) | 제품명 |
 | product_info.info_description (카드, 다건) | product_info.info_description | string | 텍스트(`p`) | 제품 설명 — lv1(`DevicesProducts.tsx`) 카드에는 없는 필드로, `DevicesCategoryList` 카드에만 존재 |
+| product.awards (카드, 다건) | product.awards | string(코드값) | 조건부 노출(`.product_award_badge`) | Design Awards 배지(기획서 9번). `"01"`(iF Design Awards)이면 배지 노출, 빈 값/null이면 미노출. 텍스트·속성에 값을 쓰는 바인딩이 아니라 **엘리먼트 존재 여부**를 좌우하는 플래그이므로 `data-slugkey-attr` 없음 |
 
 > `intro.parentLabel`/`intro.parentHref`(브레드크럼)와 카드의 `href`(제품상세 라우트)는 정적 라우팅/네비게이션 값이며 대응 필드 없음(정적 유지, 태그 없음).
 
 ## 3. API 확인
 
 - 인트로: 신규 API 불필요 — `GET /api/v1/fo/page-data/category-data` 기존 `FoPageDataController`(`PageDataService.search()`) 재사용. `fetchCategoryBySlug`로 구현.
+- 카드 목록 `awards` 필드(2026-07-27 추가): 신규 API 불필요 — 위 `GET /api/v1/fo/categories/{lv2Id}/products`의 SELECT에 `vp.data_json->'product'->>'awards'` 1개 컬럼과 `CategoryProductRowResponse.awards` 1개 필드만 추가했다. 이미 `visible_product` CTE가 `p.data_json`을 통째로 들고 있어 조인/쿼리 구조 변경은 없다.
 - 카드 목록: **신규 구현 완료** (2026-07-26, 기획서 product-lv2.png ④번 요건 반영) — 기존 `GET /api/v1/fo/categories/{id}/lv2`(`category-data-lv1.md`, Lv1 하위 Lv2 목록 전용)는 응답이 Lv2 목록이라 재사용 불가. `PageDataService.CATEGORY_LV2_CTE`와 동일 패턴의 신규 CTE(`CATEGORY_SELF_PRODUCT_CTE`, Lv2 id 자신을 anchor로 함)를 추가해 구현. 확정 엔드포인트: `GET /api/v1/fo/categories/{lv2Id}/products`(`FoCategoryController.java`), 서비스 `PageDataService.findCategoryProducts`, 응답 DTO `CategoryProductRowResponse(id, productName, image, infoDescription, slug)`. FE 진입점: `fetchCategoryLv2Products()`(`productsSystemsData.ts`).
 
 ## 4. 조회 조건
@@ -82,7 +91,18 @@
 3. **⑮ Contact Us 배너(기획서 product-lv2.png) — 구현 완료**: 대상 `page.tsx:57` `<DevicesPageFooter bannerLinkHref="/support/contact-us" />`. `DevicesPageFooter`의 `bannerLinkHref?: string` optional prop은 Lv1 작업 때 추가된 것을 그대로 재사용(`category-data-lv1.md` 비고 참고). 신규 API/쿼리 없음. 브라우저 실클릭 검증 완료(`/support/contact-us`로 정상 이동).
 4. **① 브레드크럼(기획서 1번) — 범위 제외, 코드 변경 불필요, QA로 최종 확인**: 전역 상단 브레드크럼(`HeaderBreadcrumb.tsx`)이 `fetchDevicesMegaMenu()`(bo-api `findDevicesTree`, `ORDER BY depth ASC, sortOrder ASC NULLS LAST, id ASC`) 기반으로 이미 동적 매칭 구현돼 있었음. Lv2가 여러 Lv1에 중복 매핑된 경우(실측: `variable-frequency-drive` slug가 id=587/parentId=568(sortOrder=1), id=607/parentId=572(sortOrder=5) 두 건 존재)에도 sortOrder 낮은 Lv1(568 "LV Products and Systems")이 자동으로 먼저 매칭되어 표시됨 — 데스크톱 뷰포트(1440px) 실브라우저로 확인 완료.
    - ⚠️ **QA 시 주의(이번 작업과 무관한 기존 사실)**: `.sub_breadcrumb`에 기존 CSS `@media (max-width: 1200px) { .sub_breadcrumb { display: none; } }` 규칙이 있어, 브라우저 뷰포트가 1200px 미만(기본 Playwright 뷰포트 등)이면 브레드크럼 자체가 안 보인다. 브레드크럼 관련 QA는 반드시 1200px 이상 데스크톱 뷰포트로 확인할 것 — 좁은 뷰포트에서의 "안 보임"은 버그가 아니라 기존 반응형 설계다.
-5. **⑨ Design Awards 로고(기획서 9번) — 범위 제외**: ls-publish 원본 퍼블리싱에도 이 카드 마크업엔 배지 슬롯이 처음부터 없음(다른 화면 `DevicesProducts`/`MarketsProducts`/`DevicesProductOtherProducts`에만 원본부터 존재). 사용자 지시("퍼블리싱 그대로, CSS/태그 변경 금지")에 따라 이번 범위에서 제외.
+5. **⑨ Design Awards 로고(기획서 9번) — 구현 완료 (2026-07-27)**: 2026-07-26 시점엔 "범위 제외"로 처리했으나, 그 판단의 근거였던 "퍼블리싱에 배지가 없다"는 조사 결과가 **조사 범위 오류**였음이 확인되어 반영으로 전환했다.
+   - 정정된 사실: 배지가 없는 것은 `DevicesCategoryList.tsx` **파일 하나**일 뿐이고, ls-publish 저장소 전체로 보면 배지는 이미 **공용 자산 3종**으로 분리돼 4개 화면에서 쓰이는 확립된 표준이다.
+     - 컴포넌트 `ls-publish/src/components/product/ProductAwardBadge.tsx`
+     - 판정 함수 `ls-publish/src/lib/productBadge.ts`의 `getProductBadgeType()`
+     - 공용 CSS `ls-publish/src/assets/css/components/product-award-badge.css` (`layout.tsx`에서 전역 import)
+     - 사용처: `products-systems/DevicesProducts.tsx:49`, `devices-systems/DevicesProducts.tsx:49`, `markets/MarketsProducts.tsx:35`, `products-systems/product/DevicesProductOtherProducts.tsx:202`
+   - 따라서 이번 작업은 "퍼블리싱에 없는 마크업 발명"이 아니라 **기존 퍼블리싱 공용 자산의 재사용**이며, FO-RULE 10·11번에 저촉되지 않는다(사용자 재확인 후 진행).
+   - 적용한 퍼블리싱 표준 패턴(위 4개 사용처와 동일): 카드 루트에 `type1`/`type2` 클래스 → 이미지 래퍼 첫 자식에 `<ProductAwardBadge />`.
+   - **배지 레벨은 `type2`(정사각 sm)**: 기획서 `product-lv2.png`의 배지를 픽셀 실측한 결과 정확히 50x50, 비율 1:1. 카드 그리드 폭이 사이트 표준 `.inner` 1440px과 일치해 스케일 1:1로 확인. `badge_if_award_lg.png`는 2:1 가로형이므로 해당 없음.
+   - **CSS 추가 2건**(`fo/src/assets/css/devices-systems.css`, 데스크톱·모바일 블록 각각):
+     - `section.devices_category .devices_category__item-img { position: relative }` — 배지 앵커. 배지를 쓰는 다른 화면은 모두 이 짝을 이미 갖고 있다(`.devices_products .img_area`, `section.markets_products .img_area`, `.devices_product_other__img-wrap`). 이 한 줄이 없으면 배지가 카드가 아니라 `.devices_category__grid`(position:relative) 기준으로 잡혀 그리드 전체 우하단에 겹쳐 쌓인다.
+     - `section.devices_category .type2 .product_award_badge__icon { width:50px; height:50px }` — 기획서 실측 50x50 반영. base `.type2`는 40x40이므로 섹션 override가 필요하며, 이는 `section.devices_product_other`(devices-product-detail.css:1379)·`section.main_products`(product-award-badge.css:75)와 동일한 관행이다.
 
 ## 7. STEP별 진행 이력
 
@@ -101,4 +121,5 @@
 | STEP5(기획서 반영) | fo-be-builder | 2026-07-26 | `CategoryProductRowResponse` DTO, `PageDataService.findCategoryProducts`, `FoCategoryController.getProducts` 구현(`DISTINCT ON (p.id)`로 중복 junction 방어 추가). curl 검증 STEP4 psql 결과와 일치. 기존 `/{categoryId}/lv2`·`/{categoryId}/insights`(Lv1용) 8080/8081 A/B 비교로 응답 완전 일치(회귀 없음) 확인 |
 | STEP6(기획서 반영) | fo-fe-builder | 2026-07-26 | `page.tsx` 데이터 소스를 `fetchProductsByCodePrefix` → `fetchCategoryLv2Products()`로 교체, `bannerLinkHref`/`highlightItems` prop 전달 추가. `DevicesCategoryList.tsx`는 주석만 갱신(마크업/CSS 무변경, git diff로 직접 확인). SSR HTML 대조로 587(6건)/2044(5건) 카드 순서·href 일치 확인 |
 | QA(기획서 반영) | fo-qa-validator + 세션 에이전트 | 2026-07-26 | Playwright 실브라우저 검증: ④ 제품 카드(587/2044) 순서·href·이미지 정상, ⑮ Contact Us 클릭 이동 정상, ⑯ Highlights 2044에서 2건 렌더(587은 0건이라 섹션 미렌더, 정책대로 정상), ① 브레드크럼 데스크톱 뷰포트(1440px)에서 정상. QA 1차 결과의 "① 부분 FAIL"은 재추적 결과 테스트에 쓴 카테고리(id=2044, `is_visible=002`+존재하지 않는 `parentId=2040`)가 애초에 비공개 고아 데이터였던 것이 원인으로 확인, 실제 공개 데이터(id=574)로 재검증해 정상 동작 확정. 좁은 뷰포트(800px)에서 브레드크럼이 안 보이는 것은 기존 반응형 CSS(1200px 미만 숨김)에 의한 것으로 이번 작업과 무관 |
+| ⑨ Design Awards 배지 반영 | fo-orchestrator + fo-qa-validator | 2026-07-27 | 2026-07-26에 "범위 제외"로 처리했던 ⑨번을 재조사 후 반영. 제외 근거였던 "퍼블리싱에 배지 없음"이 `DevicesCategoryList.tsx` 한 파일만 본 조사 범위 오류였음을 확인(ls-publish 전체에는 공용 컴포넌트/CSS/판정함수 + 사용처 4곳 존재). BE: `PageDataService.findCategoryProducts` SELECT에 `awards` 1컬럼 + `CategoryProductRowResponse`에 1필드 추가. FE: 데이터 계층에서 `awards === "01" → badges: 2` 변환(`fetchOtherProductsInSameLv2` 선례와 동일), 카드 2종(split/stacked)에 퍼블리싱 표준 패턴 적용. CSS: `position: relative`(앵커) + `.type2` 아이콘 50x50 override. 배지 크기는 기획서 PNG 픽셀 실측(50x50, 1:1)으로 확정 |
 | 최종 상태 | — | 2026-07-26 | **완료.** 기획서(product-lv2.png) 16항목 중 실제 개발 필요 3항목(④⑮⑯) + QA전용 1항목(①) 전부 반영·검증 완료. ⑨는 범위 제외 확정. `#완료` 처리됨. |

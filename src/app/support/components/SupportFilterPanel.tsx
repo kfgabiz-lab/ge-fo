@@ -30,7 +30,7 @@ type SupportFilterPanelProps = {
   categories: DownloadCategoryOption[];
   categoryIdPrefix: string;
   categorySection?: string;
-  /** 두 번째 평면 섹션(문서유형 / 인증) — 선택. 미전달 시 해당 섹션을 렌더하지 않는다(Tech Hub: Certification 제외). */
+  /** 두 번째 평면 섹션(문서유형 / 인증) — 선택. 미전달(또는 빈 배열)이면 해당 섹션을 렌더하지 않는다. */
   secondaryTitle?: string;
   secondaryVariant?: DevicesProductDownloadsFilterSectionVariant;
   secondaryIdPrefix?: string;
@@ -75,7 +75,7 @@ export default function SupportFilterPanel({
     </DevicesProductDownloadsFilterSection>
   );
 
-  // 2차(문서유형/인증) 섹션은 secondaryOptions 가 전달됐을 때만 렌더(Tech Hub 는 Certification 제외 → 미렌더).
+  // 2차(문서유형/인증) 섹션은 secondaryOptions 가 비어있지 않을 때만 렌더.
   const hasSecondary = Boolean(secondaryOptions && secondaryOptions.length > 0);
   const secondSection = hasSecondary ? (
     <DevicesProductDownloadsFilterSection
