@@ -1,6 +1,12 @@
+import { cache } from "react";
 import { fetchApi } from "@/lib/api";
 import { pickField } from "@/lib/pageData";
 import { fetchData } from "@/lib/pageDataApi";
+import { getPreviewBannerId } from "@/lib/previewMode";
+
+const BANNER_SLUG = "banner-data";
+const BANNER_POSITION_HERO = "HERO";
+const BANNER_POSITION_INFORMATION = "INFORMATION";
 
 export interface HeroItem {
   id: number;
@@ -45,6 +51,7 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
     where: { drs_post_period: "in_range" },
     sort: "hero.sort_order,asc",
     size: 100,
+    datetimeRange: true,
   });
 
   const items: HeroItem[] = await Promise.all(
@@ -94,15 +101,59 @@ function sortOrderValue(sortOrder: string): number {
   return Number.isNaN(n) ? Number.POSITIVE_INFINITY : n;
 }
 
-export async function fetchBannerItems(): Promise<BannerItem[]> {
-  const res = await fetchData<Record<string, unknown>>({
-    slug: "banner-data",
-    where: { eq_banner_position: "HERO", eq_is_visible: "001" },
-    sort: "banner.sort_order,asc",
-    size: 100,
-  });
+// ---------------- BO 미리보기(비공개 배너 1건 병합) ----------------
 
-  const items: BannerItem[] = (res.content ?? []).map((row) => {
+// 미리보기 대상 배너 1건을 게시상태 게이트(is_visible/게시기간) 없이 조회한다.
+// - getPreviewBannerId가 토큰 검증을 통과시킨 recordId일 때만 호출되므로,
+//   토큰이 지정한 그 1건 외의 비공개 배너는 절대 함께 조회되지 않는다.
+// - where를 넘기지 않는 것이 곧 게이트 해제(상세 미리보기의 `preview ? {} : STATUS_WHERE`와 동일 원리).
+// - HERO/INFORMATION 두 소비처가 같은 렌더에서 병렬 호출하므로 react cache로 요청당 1회만 실행.
+const fetchPreviewBannerRow = cache(
+  async (): Promise<Record<string, unknown> | null> => {
+    const recordId = await getPreviewBannerId();
+    if (!recordId) return null;
+    return fetchData<Record<string, unknown>>({
+      slug: BANNER_SLUG,
+      id: recordId,
+    });
+  },
+);
+
+// 미리보기 대상 배너가 지정한 노출 영역(HERO/INFORMATION)의 것인지 판별한다.
+// 영역이 다르면 병합하지 않는다 — 공지 배너가 히어로 슬라이드에 섞이는 오노출 방지.
+function isPreviewRowForPosition(
+  row: Record<string, unknown> | null,
+  position: string,
+): row is Record<string, unknown> {
+  if (!row) return false;
+  const rowPosition =
+    (pickField(row, "banner_position", "bannerPosition") as string) ?? "";
+  return rowPosition === position;
+}
+
+export async function fetchBannerItems(): Promise<BannerItem[]> {
+  const [res, previewRow] = await Promise.all([
+    fetchData<Record<string, unknown>>({
+      slug: BANNER_SLUG,
+      where: {
+        eq_banner_position: BANNER_POSITION_HERO,
+        eq_is_visible: "001",
+      },
+      sort: "banner.sort_order,asc",
+      size: 100,
+    }),
+    fetchPreviewBannerRow(),
+  ]);
+
+  // 목록 조회 조건은 그대로 유지하고, 미리보기 대상 1건만 결과 배열에 덧붙인다.
+  // 대상이 이미 공개 상태라 목록에 포함돼 있으면 _id로 중복 제거(슬라이드 2개로 늘어나지 않도록).
+  const rows = [...(res.content ?? [])];
+  if (isPreviewRowForPosition(previewRow, BANNER_POSITION_HERO)) {
+    const alreadyListed = rows.some((row) => row._id === previewRow._id);
+    if (!alreadyListed) rows.push(previewRow);
+  }
+
+  const items: BannerItem[] = rows.map((row) => {
     const imageArr = row.image;
     const mediaId =
       Array.isArray(imageArr) && imageArr.length > 0
@@ -118,6 +169,7 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
     };
   });
 
+  // 기존 정렬 로직을 그대로 태운다 → 병합된 미리보기 배너도 원래 sort_order 자리에 자연스럽게 배치된다.
   items.sort((a, b) => {
     const av = sortOrderValue(a.sortOrder);
     const bv = sortOrderValue(b.sortOrder);
@@ -140,21 +192,27 @@ export interface NoticeItem {
 }
 
 export async function fetchNoticeItem(): Promise<NoticeItem | null> {
-  const [bannerRes, codes] = await Promise.all([
+  const [bannerRes, codes, previewRow] = await Promise.all([
     fetchData<Record<string, unknown>>({
-      slug: "banner-data",
+      slug: BANNER_SLUG,
       where: {
-        eq_banner_position: "INFORMATION",
+        eq_banner_position: BANNER_POSITION_INFORMATION,
         eq_is_visible: "001",
         drs_post_period: "in_range",
       },
       sort: "banner.post_period_from,desc",
       size: 1,
+      datetimeRange: true,
     }),
     fetchApi<CodeItem[]>("/api/v1/fo/codes/BANNER_PREFIX"),
+    fetchPreviewBannerRow(),
   ]);
 
-  const row = bannerRes.content?.[0];
+  // 공지 영역은 1건만 노출되는 슬롯이라 "병합"이 아니라 "치환"이어야 한다.
+  // (뒤에 덧붙이면 화면에 아예 보이지 않아 미리보기 목적을 달성하지 못함)
+  const row = isPreviewRowForPosition(previewRow, BANNER_POSITION_INFORMATION)
+    ? previewRow
+    : bannerRes.content?.[0];
   if (!row) return null;
 
   const prefixCode = (pickField(row, "prefix") as string) ?? "";

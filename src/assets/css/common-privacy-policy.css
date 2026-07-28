@@ -1,0 +1,223 @@
+/* Common — Privacy Policy
+ * PC  Figma 8113:132101 · P-FO-COMMON-030000P
+ * MO  Figma 8113:132293
+ * Select: /guide/components #dropdown Select_50px — globals.css
+ *   (section.common_privacy_policy .guide_field)
+ */
+
+.common-page--privacy-policy {
+  background: #fff;
+}
+
+@media (min-width: 781px) {
+  section.common_privacy_policy_title {
+    padding: 75px 0 0;
+  }
+
+  section.common_privacy_policy_title .common_privacy_policy_title__heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 70px;
+    font-weight: 800;
+    line-height: 80px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.common_privacy_policy {
+    padding: 80px 0 164px;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__toolbar {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__content {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__intro p,
+  section.common_privacy_policy .common_privacy_policy__toc,
+  section.common_privacy_policy .common_privacy_policy__section-body p,
+  section.common_privacy_policy .common_privacy_policy__blocks p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__toc {
+    list-style: none;
+    padding: 0;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__toc li + li {
+    margin-top: 0;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__section-tit {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__section-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__blocks {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* MO Figma 8113:132293 — 375 · CON inset 20 · title→dropdown 40 · dropdown→body 30 · sections 40 · footer gap 80 */
+@media (max-width: 780px) {
+  section.common_privacy_policy_title {
+    padding: 40px 0 0;
+  }
+
+  section.common_privacy_policy_title .common_privacy_policy_title__heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 46px;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  /* title → dropdown 40px · content → newsletter 80px */
+  section.common_privacy_policy {
+    padding: 40px 0 80px;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__toolbar {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  /* Select_50px full width (Figma Drop down 335×50) */
+  section.common_privacy_policy .common_privacy_policy__toolbar .guide_field,
+  section.common_privacy_policy .common_privacy_policy__toolbar .guide_field--w200 {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* COMPONENT_GUIDE: GuideSelect native — MuiNativeSelect-icon 화살표 */
+  section.common_privacy_policy .guide_field .MuiNativeSelect-root {
+    position: relative;
+  }
+
+  section.common_privacy_policy .guide_field .MuiNativeSelect-select {
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  section.common_privacy_policy .guide_field .guide_field__select-icon,
+  section.common_privacy_policy .guide_field .MuiSelect-icon,
+  section.common_privacy_policy .guide_field .MuiNativeSelect-icon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    padding: 0;
+    transform: translateY(-50%);
+    transform-origin: center center;
+    pointer-events: none;
+    color: transparent;
+    background: url("/ico/ico_up_16.svg") center / contain no-repeat;
+    z-index: 1;
+  }
+
+  section.common_privacy_policy .guide_field .MuiNativeSelect-icon svg {
+    display: none;
+  }
+
+  /* dropdown → body 30px · intro↔section 40px */
+  section.common_privacy_policy .common_privacy_policy__content {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Body/16px/Regular — Figma MO도 16/24 */
+  section.common_privacy_policy .common_privacy_policy__intro p,
+  section.common_privacy_policy .common_privacy_policy__toc,
+  section.common_privacy_policy .common_privacy_policy__section-body p,
+  section.common_privacy_policy .common_privacy_policy__blocks p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__toc {
+    list-style: none;
+    padding: 0;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__toc li + li {
+    margin-top: 0;
+  }
+
+  /* Headline3/22px/Medium · gap 20 */
+  section.common_privacy_policy .common_privacy_policy__section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__section-tit {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__section-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  section.common_privacy_policy .common_privacy_policy__blocks {
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import PrivacyPolicyModal from "@/components/modals/PrivacyPolicyModal";
 import { footerAffiliateOptions } from "@/data/footerAffiliateOptions";
 import "@/assets/css/components/MainFooter.css";
 import CookiePreferencesModal from "@/components/modals/CookiePreferencesModal";
@@ -25,7 +24,7 @@ const interestOptions = [
 ] as const;
 
 const legalLinks = [
-  { label: "Privacy Policy", opensPrivacyModal: true },
+  { label: "Privacy Policy", href: "/privacy-policy" },
   { label: "Terms of Use", href: "" },
   { label: "Cookie Policy", href: "" },
   { label: "Change Your Cookie Setting", opensCookieSettingsModal: true },
@@ -88,7 +87,6 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       .map((option) => option.value),
   );
   const [affiliateOpen, setAffiliateOpen] = useState(false);
-  const [privacyPolicyOpen, setPrivacyPolicyOpen] = useState(false);
   const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
   const [cookiePreferencesOpen, setCookiePreferencesOpen] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -248,13 +246,9 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
               </button>
               <p className="main_footer__agree">
                 and I agree with the terms of use as described in the{" "}
-                <button
-                  type="button"
-                  className="main_footer__agree-link"
-                  onClick={() => setPrivacyPolicyOpen(true)}
-                >
+                <Link href="/privacy-policy" className="main_footer__agree-link">
                   Privacy Policy.
-                </button>
+                </Link>
               </p>
             </div>
           </form>
@@ -328,15 +322,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
             >
               {legalLinks.map((item, index) => (
                 <span key={item.label} className="main_footer_02__legal-item">
-                {"opensPrivacyModal" in item ? (
-                  <button
-                    type="button"
-                    className="main_footer_02__legal-link"
-                    onClick={() => setPrivacyPolicyOpen(true)}
-                  >
-                    {item.label}
-                  </button>
-                ) : "opensCookieSettingsModal" in item ? (
+                {"opensCookieSettingsModal" in item ? (
                   <button
                     type="button"
                     className="main_footer_02__legal-link"
@@ -378,10 +364,6 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
           </div>
         </div>
       </div>
-      <PrivacyPolicyModal
-        open={privacyPolicyOpen}
-        onClose={() => setPrivacyPolicyOpen(false)}
-      />
       <CookieSettingsModal
         open={cookieSettingsOpen}
         onClose={() => setCookieSettingsOpen(false)}
