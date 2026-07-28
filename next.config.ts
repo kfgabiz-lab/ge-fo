@@ -93,6 +93,17 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // public/ 정적 자원(fonts, ico, img, pub, video) — BO 관리형 파일 교체 반영 지연과
+        // 캐시 효율의 절충으로 이미지(minimumCacheTTL)와 동일하게 1주일
+        source: "/:dir(fonts|ico|img|pub|video)/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=604800",
+          },
+        ],
+      },
+      {
         source: "/:path*",
         headers: [
           {
