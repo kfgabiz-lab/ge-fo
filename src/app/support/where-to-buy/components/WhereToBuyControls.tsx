@@ -3,7 +3,9 @@
 import { FormControl, MenuItem, type SelectChangeEvent } from "@mui/material";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
-import WhereToBuySearch from "./WhereToBuySearch";
+import WhereToBuySearch, {
+  type WhereToBuyLocateSource,
+} from "./WhereToBuySearch";
 import {
   whereToBuyDistanceOptions,
   whereToBuyFilterLabels,
@@ -15,8 +17,8 @@ type WhereToBuyControlsProps = {
   radiusValue: string;
   /** 반경 드롭다운 변경 콜백 */
   onRadiusChange: (value: string) => void;
-  /** 검색좌표(지오코딩/내위치) 확정 콜백 */
-  onLocate: (coord: GeoCoord | null) => void;
+  /** 검색좌표(지오코딩/내위치) 확정 콜백 — 좌표 출처(device/address)를 함께 전달 */
+  onLocate: (coord: GeoCoord | null, source: WhereToBuyLocateSource) => void;
 };
 
 function renderSelectValue(label: string) {

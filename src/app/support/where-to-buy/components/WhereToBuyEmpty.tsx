@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { whereToBuyEmptyContent } from "@/data/support/whereToBuyContent";
 
 export default function WhereToBuyEmpty() {
-  const { title, iconSrc, viewAllLabel, viewAllHref } = whereToBuyEmptyContent;
+  // 기획서 항목10 — 아이콘 + 안내 문구만 노출(View All 버튼은 기획서에 없어 제거)
+  const { title, iconSrc } = whereToBuyEmptyContent;
 
   return (
     <div className="support_where_to_buy_empty">
@@ -12,13 +12,6 @@ export default function WhereToBuyEmpty() {
         </div>
         <p className="support_where_to_buy_empty__title">{title}</p>
       </div>
-
-      <Link
-        href={viewAllHref}
-        className="btn-base btn-lv01 btn-lv01--solid support_where_to_buy_empty__view-all"
-      >
-        {viewAllLabel}
-      </Link>
     </div>
   );
 }

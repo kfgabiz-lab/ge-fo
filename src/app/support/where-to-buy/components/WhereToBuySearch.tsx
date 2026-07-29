@@ -19,15 +19,23 @@ import {
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
+/**
+ * 검색좌표 출처.
+ * - "device": 브라우저 위치 권한을 허용받아 얻은 실제 사용자 위치("use my location")
+ * - "address": 주소 입력/자동완성 지오코딩 결과
+ * 기획서 항목9(길찾기 출발지)에서 "현 위치를 가져올 수 있는 경우"를 판별하는 데 쓰인다.
+ */
+export type WhereToBuyLocateSource = "device" | "address";
+
 type WhereToBuySearchProps = {
   initialQuery?: string;
   /** Figma 5752:47215 — left column search inside contents */
   embedded?: boolean;
   /**
    * 검색좌표 확정 콜백. 지오코딩/내위치로 얻은 좌표를 상위(Contents)로 올린다.
-   * null 이면 검색 해제(전체 목록 복귀).
+   * null 이면 검색 해제(전체 목록 복귀). 두 번째 인자로 좌표 출처를 함께 전달한다.
    */
-  onLocate?: (coord: GeoCoord | null) => void;
+  onLocate?: (coord: GeoCoord | null, source: WhereToBuyLocateSource) => void;
 };
 
 // 위치 획득 실패 사유별 사용자 알림 문구
@@ -128,7 +136,7 @@ export default function WhereToBuySearch({
     try {
       const coord = await geocodeAddress(trimmed);
       if (coord) {
-        onLocate?.(coord);
+        onLocate?.(coord, "address");
       } else {
         window.alert(
           "We couldn't find that location. Please check the city, state, or ZIP and try again.",
@@ -153,7 +161,7 @@ export default function WhereToBuySearch({
     try {
       const coord = await geocodePlaceId(suggestion.placeId);
       if (coord) {
-        onLocate?.(coord);
+        onLocate?.(coord, "address");
       } else {
         window.alert(
           "We couldn't find that location. Please check the city, state, or ZIP and try again.",
@@ -172,16 +180,17 @@ export default function WhereToBuySearch({
     setQuery("");
     setSuggestions([]);
     setShowSuggestions(false);
-    onLocate?.(null);
+    onLocate?.(null, "address");
   }
 
   // 내 위치 사용 → geolocation 좌표를 검색좌표와 동일 파이프라인에 태움
+  // (출처를 "device" 로 알려 상위가 길찾기 출발지로 재사용할 수 있게 한다)
   async function useMyLocation() {
     if (busy) return;
     setBusy(true);
     try {
       const coord = await getBrowserLocation();
-      onLocate?.(coord);
+      onLocate?.(coord, "device");
     } catch (error) {
       window.alert(geolocationMessage(error));
     } finally {

@@ -6,6 +6,7 @@ import WhereToBuyEmpty from "./WhereToBuyEmpty";
 import WhereToBuyLocationCard from "./WhereToBuyLocationCard";
 import WhereToBuyMap, { type PopupPixel } from "./WhereToBuyMap";
 import WhereToBuyMapPopup from "./WhereToBuyMapPopup";
+import type { WhereToBuyLocateSource } from "./WhereToBuySearch";
 import WhereToBuyViewToggle, {
   type WhereToBuyMobileView,
 } from "./WhereToBuyViewToggle";
@@ -35,6 +36,9 @@ export default function WhereToBuyContents({
   const [locations, setLocations] = useState<WhereToBuyLocation[]>([]);
   // 검색좌표(지오코딩/내위치). null 이면 검색 전 → 전체 목록 노출
   const [searchCoord, setSearchCoord] = useState<GeoCoord | null>(null);
+  // 브라우저 위치 권한으로 이미 확보한 "내 위치". 길찾기 출발지로만 쓰며, 새 권한 요청은 하지 않는다.
+  // null 이면 본사 주소가 출발지가 된다(기획서 항목9).
+  const [myLocation, setMyLocation] = useState<GeoCoord | null>(null);
   // 선택 반경 값("500mi" 등). 기본은 최대 옵션(첫 항목)
   const [radiusValue, setRadiusValue] = useState<string>(
     whereToBuyDistanceOptions[0].value,
@@ -67,6 +71,21 @@ export default function WhereToBuyContents({
     };
   }, []);
 
+  // 반경필터 원점 — 검색좌표가 있으면 그것을, 없으면 본사(mapDefaultCenter)를 사용.
+  // 지도 반경 Circle 의 중심과 반드시 같은 값이어야 원과 목록이 일치한다(기획서 항목1·2).
+  const radiusOrigin = useMemo<GeoCoord>(
+    () =>
+      searchCoord ?? {
+        lat: whereToBuyPage.mapDefaultCenter.lat,
+        lng: whereToBuyPage.mapDefaultCenter.lng,
+      },
+    [searchCoord],
+  );
+  const radiusMiles = useMemo(
+    () => parseDistanceMiles(radiusValue),
+    [radiusValue],
+  );
+
   // 영역검색 모드(boundsFilter)면 지도 영역 안의 지점만 노출, 아니면 기존 반경필터.
   // 레퍼런스(lselectricamerica) 동작: 주소 검색이 없어도 고정 기본 중심좌표(mapDefaultCenter)를
   // 원점으로 항상 반경 필터를 실행한다(반경만 바꿔도 즉시 필터링). 검색좌표가 있으면 그것을 원점으로 사용.
@@ -74,18 +93,27 @@ export default function WhereToBuyContents({
     if (boundsFilter) {
       return filterLocationsByBounds(locations, boundsFilter);
     }
-    const origin = searchCoord ?? whereToBuyPage.mapDefaultCenter;
-    return filterLocationsByRadius(
-      locations,
-      origin,
-      parseDistanceMiles(radiusValue),
-    ).locations;
-  }, [locations, searchCoord, radiusValue, boundsFilter]);
+    return filterLocationsByRadius(locations, radiusOrigin, radiusMiles);
+  }, [locations, radiusOrigin, radiusMiles, boundsFilter]);
 
   // 주소 검색/내위치 확정 — 영역검색 모드를 해제하고 일반 검색모드로 전환(상호배타)
-  const handleLocate = (coord: GeoCoord | null) => {
+  const handleLocate = (
+    coord: GeoCoord | null,
+    source: WhereToBuyLocateSource,
+  ) => {
     setBoundsFilter(null);
     setSearchCoord(coord);
+    // 브라우저 위치 권한으로 얻은 좌표만 길찾기 출발지로 기억한다(주소 지오코딩 결과는 "내 위치"가 아님)
+    if (source === "device" && coord) {
+      setMyLocation(coord);
+    }
+  };
+
+  // 기획서 항목8 — 새로고침 아이콘: 필터를 기본값(Distance 500mi)으로 초기화.
+  // 주소 검색어/검색좌표/영역검색 상태는 건드리지 않는다.
+  const handleRefresh = () => {
+    setRefreshSpin(true);
+    setRadiusValue(whereToBuyDistanceOptions[0].value);
   };
 
   // 반경 변경 — 영역검색 모드를 해제하고 일반 반경모드로 전환(상호배타)
@@ -103,7 +131,7 @@ export default function WhereToBuyContents({
   };
 
   // "실제로 검색/필터가 적용된 상태" 판단: 검색좌표가 있거나, 반경이 기본값(첫 옵션)이 아닐 때.
-  // 지도는 이 값이 false(사실상 초기 상태)면 원래 퍼블리싱된 mapDefaultCenter/mapDefaultZoom 뷰를 유지한다.
+  // 지도는 이 값이 false(사실상 초기 상태)면 결과로 자동팬하지 않고 반경 원 전체가 보이는 뷰를 유지한다.
   // 영역검색 모드에서는 searchCoord=null·반경=기본값으로 리셋되므로 자연히 false(→ fitBounds 없이 사용자 뷰 유지).
   const isFiltered =
     searchCoord !== null || radiusValue !== whereToBuyDistanceOptions[0].value;
@@ -136,31 +164,31 @@ export default function WhereToBuyContents({
             onLocate={handleLocate}
           />
 
-          {hasResults ? (
-            <div className="support_where_to_buy_contents__results">
-              <div className="support_where_to_buy_contents__count-row">
-                <p className="support_where_to_buy_contents__count">
-                  Total{" "}
-                  <strong>{filtered.length.toLocaleString()}</strong>
-                </p>
-                <button
-                  type="button"
-                  className="support_where_to_buy_contents__refresh"
-                  onClick={() => setRefreshSpin(true)}
-                >
-                  <span
-                    className={
-                      refreshSpin
-                        ? "support_where_to_buy_contents__refresh-icon is-spinning"
-                        : "support_where_to_buy_contents__refresh-icon"
-                    }
-                    onAnimationEnd={() => setRefreshSpin(false)}
-                    aria-hidden
-                  />
-                  <span className="ir">Refresh results</span>
-                </button>
-              </div>
+          {/* 기획서 항목8 — Total 개수 + 새로고침 버튼은 결과 0건이어도 항상 노출한다(리스트/Empty만 분기) */}
+          <div className="support_where_to_buy_contents__results">
+            <div className="support_where_to_buy_contents__count-row">
+              <p className="support_where_to_buy_contents__count">
+                Total <strong>{filtered.length.toLocaleString()}</strong>
+              </p>
+              <button
+                type="button"
+                className="support_where_to_buy_contents__refresh"
+                onClick={handleRefresh}
+              >
+                <span
+                  className={
+                    refreshSpin
+                      ? "support_where_to_buy_contents__refresh-icon is-spinning"
+                      : "support_where_to_buy_contents__refresh-icon"
+                  }
+                  onAnimationEnd={() => setRefreshSpin(false)}
+                  aria-hidden
+                />
+                <span className="ir">Refresh results</span>
+              </button>
+            </div>
 
+            {hasResults ? (
               <div
                 className="support_where_to_buy_contents__list"
                 data-slug="wheretobuy-agency-data"
@@ -172,26 +200,16 @@ export default function WhereToBuyContents({
                     location={location}
                     isActive={location.id === activeId}
                     onSelect={() => setActiveId(location.id)}
+                    myLocation={myLocation}
                   />
                 ))}
               </div>
-            </div>
-          ) : (
-            <div className="support_where_to_buy_contents__no-data">
-              <div className="support_where_to_buy_contents__count-total">
-                <div className="support_where_to_buy_contents__count-row">
-                  <p className="support_where_to_buy_contents__count">
-                    Total <strong>0</strong>
-                  </p>
-                </div>
-                <hr
-                  className="support_where_to_buy_contents__count-divider"
-                  aria-hidden
-                />
+            ) : (
+              <div className="support_where_to_buy_contents__no-data">
+                <WhereToBuyEmpty />
               </div>
-              <WhereToBuyEmpty />
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         <div id="store_locator_main" className="support_where_to_buy_contents__map-col">
@@ -203,6 +221,8 @@ export default function WhereToBuyContents({
             isFiltered={isFiltered}
             boundsMode={boundsFilter !== null}
             onSearchArea={handleSearchArea}
+            radiusOrigin={radiusOrigin}
+            radiusMiles={radiusMiles}
           />
           {activeLocation ? (
             <div

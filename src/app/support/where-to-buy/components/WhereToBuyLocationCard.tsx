@@ -1,16 +1,29 @@
-import type { WhereToBuyLocation } from "@/data/support/whereToBuyContent";
+import {
+  buildDirectionsHref,
+  type WhereToBuyLocation,
+} from "@/data/support/whereToBuyContent";
+import type { GeoCoord } from "@/lib/geo/distance";
 
 type WhereToBuyLocationCardProps = {
   location: WhereToBuyLocation;
   isActive: boolean;
   onSelect: () => void;
+  /**
+   * 이미 확보된 "내 위치" 좌표(상위 Contents 소유). null 이면 본사 주소가 길찾기 출발지가 된다.
+   * 렌더 시점에 href 를 만들어야 하므로 정적 가공값 대신 이 prop 을 받는다(기획서 항목9).
+   */
+  myLocation?: GeoCoord | null;
 };
 
 export default function WhereToBuyLocationCard({
   location,
   isActive,
   onSelect,
+  myLocation = null,
 }: WhereToBuyLocationCardProps) {
+  // 출발지: 내 위치(권한 허용 시) → 없으면 본사 주소. 목적지: 좌표 우선, 없으면 주소.
+  const directionsHref = buildDirectionsHref(location, myLocation);
+
   return (
     <article
       data-slug-item
@@ -61,7 +74,7 @@ export default function WhereToBuyLocationCard({
 
       <div className="support_where_to_buy_card__actions">
         <a
-          href={location.directionsHref}
+          href={directionsHref}
           className="support_where_to_buy_card__action"
           target="_blank"
           rel="noopener noreferrer"

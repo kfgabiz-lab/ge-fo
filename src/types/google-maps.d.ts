@@ -39,6 +39,33 @@ declare namespace google.maps {
     constructor(width: number, height: number);
   }
 
+  // ---- Circle (core "maps" 라이브러리 포함) — Where to Buy 반경 오버레이용 ----
+  // 인스턴스를 재생성하지 않고 setCenter/setRadius/setVisible 로 갱신하는 용도만 선언한다.
+  class Circle {
+    constructor(opts: CircleOptions);
+    setMap(map: Map | null): void;
+    setCenter(center: LatLngLiteral): void;
+    setRadius(radius: number): void;
+    setVisible(visible: boolean): void;
+    // 원에 외접하는 사각영역(fitBounds 로 원 전체를 화면에 맞출 때 사용)
+    getBounds(): LatLngBounds | null;
+  }
+
+  interface CircleOptions {
+    map?: Map;
+    center?: LatLngLiteral;
+    /** 미터 단위 반경 */
+    radius?: number;
+    clickable?: boolean;
+    visible?: boolean;
+    strokeColor?: string;
+    strokeOpacity?: number;
+    strokeWeight?: number;
+    fillColor?: string;
+    fillOpacity?: number;
+    zIndex?: number;
+  }
+
   // ---- OverlayView (importLibrary("maps") 로 로드) — 마커 화면 픽셀좌표 계산용 ----
   class OverlayView {
     setMap(map: Map | null): void;
