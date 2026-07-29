@@ -28,7 +28,8 @@ import {
   buildSwProductTechHubBannerCopy,
   type ProductTechHubBannerCopy,
 } from "@/data/support/techHubData";
-import { motorControlHighlights } from "../../data/motorControlContent";
+import { fetchProductInsights } from "@/data/highlightNews/highlightNewsData";
+import type { HighlightNewsItem } from "@/types/highlightNews";
 import {
   fetchProductDownloadsPage,
   type ProductDownloadsPage,
@@ -93,6 +94,7 @@ type SwDetailProps = {
   downloads: ProductDownloadsPage;
   productCodes: string[];
   techHubCopy: ProductTechHubBannerCopy;
+  highlights: HighlightNewsItem[];
 };
 
 function filterSwNavItems<T extends { readonly id: string }>(
@@ -122,6 +124,7 @@ function ScadaDetail({
   downloads,
   productCodes,
   techHubCopy,
+  highlights,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
   const showDownloads = downloads.totalElements > 0;
@@ -186,7 +189,7 @@ function ScadaDetail({
       <HighlightNewsSection
         variant="markets"
         title="Highlights"
-        items={motorControlHighlights}
+        items={highlights}
         sectionId="devices-highlights"
       />
       <CommonFaq
@@ -205,6 +208,7 @@ function XemsDetail({
   downloads,
   productCodes,
   techHubCopy,
+  highlights,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
   const showDownloads = downloads.totalElements > 0;
@@ -266,7 +270,7 @@ function XemsDetail({
       <HighlightNewsSection
         variant="markets"
         title="Highlights"
-        items={motorControlHighlights}
+        items={highlights}
         sectionId="devices-highlights"
       />
       <CommonFaq
@@ -285,6 +289,7 @@ function MicroGridDetail({
   downloads,
   productCodes,
   techHubCopy,
+  highlights,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
   const showDownloads = downloads.totalElements > 0;
@@ -346,7 +351,7 @@ function MicroGridDetail({
       <HighlightNewsSection
         variant="markets"
         title="Highlights"
-        items={motorControlHighlights}
+        items={highlights}
         sectionId="devices-highlights"
       />
       <CommonFaq
@@ -365,6 +370,7 @@ function SmartFactoryDetail({
   downloads,
   productCodes,
   techHubCopy,
+  highlights,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
   const showDownloads = downloads.totalElements > 0;
@@ -431,7 +437,7 @@ function SmartFactoryDetail({
       <HighlightNewsSection
         variant="markets"
         title="Highlights"
-        items={motorControlHighlights}
+        items={highlights}
         sectionId="devices-highlights"
       />
       <CommonFaq
@@ -455,7 +461,7 @@ export default async function SwProductDetail({
   const productCode = row ? String(row["product.product_code"] ?? "").trim() : "";
   const productCodes = productCode ? [productCode] : [];
   const isSwSlug = (SW_PRODUCT_SLUGS as readonly string[]).includes(slug);
-  const [dbFaq, downloads, lv2Name] = await Promise.all([
+  const [dbFaq, downloads, lv2Name, highlights] = await Promise.all([
     productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
     fetchProductDownloadsPage({
       docTypes: productDownloadsDefaultDocTypes,
@@ -464,6 +470,7 @@ export default async function SwProductDetail({
     isSwSlug && productId
       ? fetchProductLv2Name(productId)
       : Promise.resolve(""),
+    productId ? fetchProductInsights(productId) : Promise.resolve([]),
   ]);
   const techHubCopy = buildSwProductTechHubBannerCopy(lv2Name);
 
@@ -476,6 +483,7 @@ export default async function SwProductDetail({
           downloads={downloads}
           productCodes={productCodes}
           techHubCopy={techHubCopy}
+          highlights={highlights}
         />
       );
     case "xems":
@@ -486,6 +494,7 @@ export default async function SwProductDetail({
           downloads={downloads}
           productCodes={productCodes}
           techHubCopy={techHubCopy}
+          highlights={highlights}
         />
       );
     case "micro-grid":
@@ -496,6 +505,7 @@ export default async function SwProductDetail({
           downloads={downloads}
           productCodes={productCodes}
           techHubCopy={techHubCopy}
+          highlights={highlights}
         />
       );
     case "smart-factory":
@@ -506,6 +516,7 @@ export default async function SwProductDetail({
           downloads={downloads}
           productCodes={productCodes}
           techHubCopy={techHubCopy}
+          highlights={highlights}
         />
       );
     default:
