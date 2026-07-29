@@ -50,6 +50,13 @@ function getDateValue(row: TermsRow): string {
   return raw.slice(0, 10);
 }
 
+// mm dd, yyyy 형식으로 날짜 포맷
+function formatLegalDate(date: string): string {
+  const [year, month, day] = date.split("-");
+  if (!year || !month || !day) return date;
+  return `${month} ${day}, ${year}`;
+}
+
 export default function CommonLegalBody({
   bodyId,
   content,
@@ -87,7 +94,7 @@ export default function CommonLegalBody({
             const date = getDateValue(row);
             return {
               value: date,
-              label: date,
+              label: formatLegalDate(date),
               content: row.content ?? "",
             } satisfies TermsEntry;
           })
@@ -112,6 +119,7 @@ export default function CommonLegalBody({
   }, [termsType]);
 
   const handleVersionChange = (nextVersion: string) => {
+    if (!nextVersion) return;
     setVersion(nextVersion);
     const selectedEntry = termsEntries.find(
       (entry) => entry.value === nextVersion,
@@ -146,7 +154,7 @@ export default function CommonLegalBody({
                 );
               }}
             >
-              <MenuItem value="">{versionPlaceholder}</MenuItem>
+              <MenuItem value="" disabled>{versionPlaceholder}</MenuItem>
               {versionOptions.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}

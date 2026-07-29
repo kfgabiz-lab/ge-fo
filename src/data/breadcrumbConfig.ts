@@ -356,6 +356,19 @@ const configs: Record<string, BreadcrumbConfig> = {
     ],
     current: "Request for Training",
   },
+  // 약관관리 breadcrumb config 추가
+   "/privacy-policy": {
+    crumbs: [],
+    current: "Privacy Policy",
+  },
+  "/terms-of-service": {
+    crumbs: [],
+    current: "Terms of Service",
+  },
+  "/general-terms-of-purchase": {
+    crumbs: [],
+    current: "General Terms of Purchase",
+  },
 };
 
 export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
