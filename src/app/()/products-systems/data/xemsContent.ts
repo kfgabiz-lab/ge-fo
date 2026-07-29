@@ -1,6 +1,4 @@
 import type { DevicesProductFeatureDescItem } from "@/components/content/DevicesProductFeaturesSection";
-import type { ProductOtherItem } from "./productDetailContent";
-import type { ProductNavItem } from "../components/product/DevicesProductNav";
 import type { HvdcApplication, HvdcWhyBlock } from "./hvdcContent";
 
 const xemsImg = (file: string) => `/img/devices-systems/xems/${file}`;
@@ -162,56 +160,6 @@ export const xemsWhySection = {
   ] satisfies HvdcWhyBlock[],
 };
 
-const XEMS_OTHER_PRODUCT_SUBTITLE = "Metasol Contactor & Overload Relay";
-
-export const xemsOtherProductsTitle = "Relavant Products";
-
-export const xemsOtherProducts: ProductOtherItem[] = [
-  {
-    id: "xems-op-1",
-    href: "/product/metasol-ms",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Metasol MS",
-    subtitle: XEMS_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "xems-op-2",
-    href: "/product/susol-ul-smart-mccb",
-    image: "/img/devices-systems/products/other/product_other_mcb.png",
-    title: "Miniature circuit breaker",
-    subtitle: XEMS_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "xems-op-3",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_mms.png",
-    title: "Metasol MMS",
-    subtitle: XEMS_OTHER_PRODUCT_SUBTITLE,
-    badges: 2,
-  },
-  {
-    id: "xems-op-4",
-    href: "/product/susol-ul-smart-mccb",
-    image: "/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
-    title: "Susol UL MCCB",
-    subtitle: XEMS_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "xems-op-5",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Magnetic Contactor",
-    subtitle: XEMS_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "xems-op-6",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Overload Relay",
-    subtitle: XEMS_OTHER_PRODUCT_SUBTITLE,
-  },
-];
-
 export const xemsFaqItems = [
   {
     question: "What is xEMS and how does it support energy management?",
@@ -228,15 +176,4 @@ export const xemsFaqItems = [
     answer:
       "xEMS supports proprietary protocols such as DNP 3.0 and IEC 61850, along with standard protocols like Modbus TCP, enabling integration with existing power and building systems.",
   },
-];
-
-export const xemsNavItems: readonly ProductNavItem[] = [
-  { id: "product-overview", label: "Overview" },
-  { id: "product-benefits", label: "Key Features" },
-  { id: "product-applications", label: "Applications" },
-  { id: "product-why", label: "Why" },
-  { id: "product-downloads", label: "Downloads" },
-  { id: "product-other", label: "Relavant Products" },
-  { id: "product-markets", label: "Markets" },
-  { id: "product-help", label: "Help" },
 ];

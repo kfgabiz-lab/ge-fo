@@ -1,6 +1,4 @@
 import type { DevicesProductFeatureListItem } from "@/components/content/DevicesProductFeaturesSection";
-import type { ProductOtherItem } from "./productDetailContent";
-import type { ProductNavItem } from "../components/product/DevicesProductNav";
 import type { HvdcApplication } from "./hvdcContent";
 
 const microGridImg = (file: string) => `/img/devices-systems/micro-grid/${file}`;
@@ -118,56 +116,6 @@ export const microGridWhySection = {
   diagramAlt: "Microgrid system diagram with distributed energy resources, storage, and controls",
 };
 
-const MICRO_GRID_OTHER_PRODUCT_SUBTITLE = "Metasol Contactor & Overload Relay";
-
-export const microGridOtherProductsTitle = "Relavant Products";
-
-export const microGridOtherProducts: ProductOtherItem[] = [
-  {
-    id: "micro-grid-op-1",
-    href: "/product/metasol-ms",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Metasol MS",
-    subtitle: MICRO_GRID_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "micro-grid-op-2",
-    href: "/product/susol-ul-smart-mccb",
-    image: "/img/devices-systems/products/other/product_other_mcb.png",
-    title: "Miniature circuit breaker",
-    subtitle: MICRO_GRID_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "micro-grid-op-3",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_mms.png",
-    title: "Metasol MMS",
-    subtitle: MICRO_GRID_OTHER_PRODUCT_SUBTITLE,
-    badges: 2,
-  },
-  {
-    id: "micro-grid-op-4",
-    href: "/product/susol-ul-smart-mccb",
-    image: "/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
-    title: "Susol UL MCCB",
-    subtitle: MICRO_GRID_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "micro-grid-op-5",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Magnetic Contactor",
-    subtitle: MICRO_GRID_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "micro-grid-op-6",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Overload Relay",
-    subtitle: MICRO_GRID_OTHER_PRODUCT_SUBTITLE,
-  },
-];
-
 export const microGridFaqItems = [
   {
     question: "What is a microgrid and how does LS ELECTRIC Micro Grid support it?",
@@ -184,15 +132,4 @@ export const microGridFaqItems = [
     answer:
       "The platform supports solar, wind, generators, BESS, ultracapacitor systems, EV chargers, and critical loads through MG-EMS and microgrid controllers for coordinated monitoring and control.",
   },
-];
-
-export const microGridNavItems: readonly ProductNavItem[] = [
-  { id: "product-overview", label: "Overview" },
-  { id: "product-benefits", label: "Key Features" },
-  { id: "product-applications", label: "Applications" },
-  { id: "product-why", label: "Why" },
-  { id: "product-downloads", label: "Downloads" },
-  { id: "product-other", label: "Relavant Products" },
-  { id: "product-markets", label: "Markets" },
-  { id: "product-help", label: "Help" },
 ];

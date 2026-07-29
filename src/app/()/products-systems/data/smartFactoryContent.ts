@@ -1,6 +1,4 @@
 import type { DevicesProductFeatureListItem } from "@/components/content/DevicesProductFeaturesSection";
-import type { ProductOtherItem } from "./productDetailContent";
-import type { ProductNavItem } from "../components/product/DevicesProductNav";
 import type { HvdcApplication, HvdcWhyBlock } from "./hvdcContent";
 
 const smartFactoryImg = (file: string) => `/img/devices-systems/smart-factory/${file}`;
@@ -127,56 +125,6 @@ export const smartFactoryWhySection = {
   ] satisfies HvdcWhyBlock[],
 };
 
-const SMART_FACTORY_OTHER_PRODUCT_SUBTITLE = "Metasol Contactor & Overload Relay";
-
-export const smartFactoryOtherProductsTitle = "Relavant Products";
-
-export const smartFactoryOtherProducts: ProductOtherItem[] = [
-  {
-    id: "smart-factory-op-1",
-    href: "/products-systems/motor-control/metasol-ms",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Metasol MS",
-    subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "smart-factory-op-2",
-    href: "/products-systems/motor-control/susol-ul-smart-mccb",
-    image: "/img/devices-systems/products/other/product_other_mcb.png",
-    title: "Miniature circuit breaker",
-    subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "smart-factory-op-3",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_mms.png",
-    title: "Metasol MMS",
-    subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
-    badges: 2,
-  },
-  {
-    id: "smart-factory-op-4",
-    href: "/products-systems/motor-control/susol-ul-smart-mccb",
-    image: "/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
-    title: "Susol UL MCCB",
-    subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "smart-factory-op-5",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Magnetic Contactor",
-    subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "smart-factory-op-6",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Overload Relay",
-    subtitle: SMART_FACTORY_OTHER_PRODUCT_SUBTITLE,
-  },
-];
-
 export const smartFactoryFaqItems = [
   {
     question: "What is LS ELECTRIC Diagnosis and how does it support Smart Factory operations?",
@@ -193,15 +141,4 @@ export const smartFactoryFaqItems = [
     answer:
       "Yes. The Mobile HMI provides web-based access to equipment status, alarms, and diagnostic information from anywhere, supporting faster response and maintenance planning.",
   },
-];
-
-export const smartFactoryNavItems: readonly ProductNavItem[] = [
-  { id: "product-overview", label: "Overview" },
-  { id: "product-benefits", label: "Key Features" },
-  { id: "product-applications", label: "Applications" },
-  { id: "product-why", label: "Why" },
-  { id: "product-downloads", label: "Downloads" },
-  { id: "product-other", label: "Relavant Products" },
-  { id: "product-markets", label: "Markets" },
-  { id: "product-help", label: "Help" },
 ];

@@ -1,6 +1,4 @@
 import type { DevicesProductFeatureListItem } from "@/components/content/DevicesProductFeaturesSection";
-import type { ProductOtherItem } from "./productDetailContent";
-import type { ProductNavItem } from "../components/product/DevicesProductNav";
 
 const hvdcImg = (file: string) => `/img/devices-systems/hvdc/${file}`;
 
@@ -155,57 +153,6 @@ export const hvdcWhySection = {
   ] satisfies HvdcWhyBlock[],
 };
 
-
-const HVDC_OTHER_PRODUCT_SUBTITLE = "Metasol Contactor & Overload Relay";
-
-export const hvdcOtherProductsTitle = "Relavant Products";
-
-export const hvdcOtherProducts: ProductOtherItem[] = [
-  {
-    id: "hvdc-op-1",
-    href: "/product/metasol-ms",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Metasol MS",
-    subtitle: HVDC_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "hvdc-op-2",
-    href: "/product/susol-ul-smart-mccb",
-    image: "/img/devices-systems/products/other/product_other_mcb.png",
-    title: "Miniature circuit breaker",
-    subtitle: HVDC_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "hvdc-op-3",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_mms.png",
-    title: "Metasol MMS",
-    subtitle: HVDC_OTHER_PRODUCT_SUBTITLE,
-    badges: 2,
-  },
-  {
-    id: "hvdc-op-4",
-    href: "/product/susol-ul-smart-mccb",
-    image: "/img/devices-systems/products/other/product_other_susol_ul_mccb.png",
-    title: "Susol UL MCCB",
-    subtitle: HVDC_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "hvdc-op-5",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Magnetic Contactor",
-    subtitle: HVDC_OTHER_PRODUCT_SUBTITLE,
-  },
-  {
-    id: "hvdc-op-6",
-    href: "",
-    image: "/img/devices-systems/products/other/product_other_metasol_ms.png",
-    title: "Overload Relay",
-    subtitle: HVDC_OTHER_PRODUCT_SUBTITLE,
-  },
-];
-
 export const hvdcFaqItems = [
   {
     question: "What is SCADA and what role does it play in power grid management?",
@@ -222,17 +169,6 @@ export const hvdcFaqItems = [
     answer:
       "The system supports IEC 61850, DNP 3.0, Modbus, and RESTful API, enabling integration with existing utility systems, protection relays, and third-party applications.",
   },
-];
-
-export const hvdcNavItems: readonly ProductNavItem[] = [
-  { id: "product-overview", label: "Overview" },
-  { id: "product-benefits", label: "Key Features" },
-  { id: "product-applications", label: "Applications" },
-  { id: "product-why", label: "Why" },
-  { id: "product-downloads", label: "Downloads" },
-  { id: "product-other", label: "Relavant Products" },
-  { id: "product-markets", label: "Markets" },
-  { id: "product-help", label: "Help" },
 ];
 
 export const hvSystemIntro = {

@@ -1,23 +1,14 @@
-import HighlightNewsSection from "@/components/content/HighlightNewsSection";
-import CommonBanner04 from "@/components/banners/CommonBanner04";
-import CommonFaq, { type CommonFaqEntry } from "@/components/faq/CommonFaq";
-import DevicesHelp from "../DevicesHelp";
-import DevicesMarkets from "../DevicesMarkets";
-import CommonBanner03 from "@/components/banners/CommonBanner03";
-import DevicesHvdcHero from "./DevicesHvdcHero";
-import DevicesMicroGridHero from "./DevicesMicroGridHero";
-import DevicesSmartFactoryHero from "./DevicesSmartFactoryHero";
-import DevicesXemsHero from "./DevicesXemsHero";
-import DevicesSoftwareOverview from "./DevicesSoftwareOverview";
+import type { ReactElement } from "react";
+import type { CommonFaqEntry } from "@/components/faq/CommonFaq";
 import DevicesProductApplications from "./DevicesProductApplications";
-import DevicesProductFeaturesSection from "@/components/content/DevicesProductFeaturesSection";
-import DevicesProductDownloads from "./DevicesProductDownloads";
-import DevicesProductNavScope from "./DevicesProductNavScope";
-import DevicesProductOtherProducts from "./DevicesProductOtherProducts";
 import DevicesProductWhy from "./DevicesProductWhy";
 import DevicesMicroGridHighlights from "./DevicesMicroGridHighlights";
 import DevicesXemsEnergySolutions from "./DevicesXemsEnergySolutions";
 import GenericProductDetail from "./GenericProductDetail";
+import SwProductDetailShell, {
+  type SwProductFeaturesConfig,
+} from "./SwProductDetailShell";
+import type { SoftwareOverviewData } from "./DevicesSoftwareOverview";
 import {
   mapHwProductData,
   fetchProductFaqItems,
@@ -40,18 +31,14 @@ import {
   hvdcApplicationsSection,
   hvdcBenefitsSection,
   hvdcFaqItems,
-  hvdcNavItems,
-  hvdcOtherProducts,
-  hvdcOtherProductsTitle,
+  hvdcHero,
   hvdcOverview,
   hvdcWhySection,
 } from "../../data/hvdcContent";
 import {
   xemsBenefitsSection,
   xemsFaqItems,
-  xemsNavItems,
-  xemsOtherProducts,
-  xemsOtherProductsTitle,
+  xemsHero,
   xemsOverview,
   xemsWhySection,
 } from "../../data/xemsContent";
@@ -59,35 +46,22 @@ import {
   microGridApplicationsSection,
   microGridBenefitsSection,
   microGridFaqItems,
-  microGridNavItems,
-  microGridOtherProducts,
-  microGridOtherProductsTitle,
+  microGridHero,
   microGridOverview,
 } from "../../data/microGridContent";
 import {
   smartFactoryApplicationsSection,
   smartFactoryBenefitsSection,
   smartFactoryFaqItems,
-  smartFactoryNavItems,
-  smartFactoryOtherProducts,
-  smartFactoryOtherProductsTitle,
+  smartFactoryHero,
   smartFactoryOverview,
   smartFactoryWhySection,
 } from "../../data/smartFactoryContent";
+import { mapSwKeyFeatures, type SwKeyFeature } from "../../lib/mapSwKeyFeatures";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
 export { SW_PRODUCT_SLUGS } from "../../data/productsSystemsData";
-
-const swFaqDescription = (
-  <>
-    Find quick answers to common questions about installation, troubleshooting, and
-    maintenance.
-    <br />
-    Our expert engineering team has curated these responses to help you optimize product
-    performance.
-  </>
-);
 
 type SwDetailProps = {
   row: Record<string, unknown> | null;
@@ -98,15 +72,6 @@ type SwDetailProps = {
   highlights: HighlightNewsItem[];
   contactHref: string;
 };
-
-function filterSwNavItems<T extends { readonly id: string }>(
-  navItems: readonly T[],
-  showDownloads: boolean,
-): T[] {
-  return navItems.filter(
-    (item) => showDownloads || item.id !== "product-downloads",
-  );
-}
 
 function bindSwDetail(row: Record<string, unknown> | null) {
   const data = row ? mapHwProductData(row) : null;
@@ -120,357 +85,196 @@ function bindSwDetail(row: Record<string, unknown> | null) {
   };
 }
 
-function ScadaDetail({
-  row,
-  dbFaq,
-  downloads,
-  productCodes,
-  techHubCopy,
-  highlights,
-  contactHref,
-}: SwDetailProps) {
-  const bind = bindSwDetail(row);
-  const showDownloads = downloads.totalElements > 0;
-  const featureItems =
-    bind.keyFeatures.length > 0
-      ? bind.keyFeatures.map((f, i) => ({
-          id: `kf-${i + 1}`,
-          title: f.title,
-          bullets: [f.content],
-        }))
-      : hvdcBenefitsSection.items;
-  const overviewData = bind.infoDesc
-    ? { ...hvdcOverview, description: bind.infoDesc }
-    : hvdcOverview;
-  const faqItems = dbFaq.length > 0 ? dbFaq : hvdcFaqItems;
+function swShellCommonProps(
+  props: SwDetailProps,
+  bind: ReturnType<typeof bindSwDetail>,
+  fallbackFaq: CommonFaqEntry[],
+) {
+  return {
+    downloads: props.downloads,
+    productCodes: props.productCodes,
+    techHubCopy: props.techHubCopy,
+    highlights: props.highlights,
+    faqItems: props.dbFaq.length > 0 ? props.dbFaq : fallbackFaq,
+    connectPortalHref: bind.connectPortal,
+  };
+}
+
+function resolveSwOverview(
+  overview: SoftwareOverviewData,
+  infoDesc: string,
+): SoftwareOverviewData {
+  return infoDesc ? { ...overview, description: infoDesc } : overview;
+}
+
+function resolveSwFeatures(
+  keyFeatures: readonly SwKeyFeature[],
+  fallback: SwProductFeaturesConfig,
+): SwProductFeaturesConfig {
+  if (keyFeatures.length === 0) {
+    return fallback;
+  }
+  return fallback.variant === "list"
+    ? {
+        variant: "list",
+        title: fallback.title,
+        items: mapSwKeyFeatures(keyFeatures, "list"),
+      }
+    : {
+        variant: "desc",
+        title: fallback.title,
+        items: mapSwKeyFeatures(keyFeatures, "desc"),
+      };
+}
+
+function ScadaDetail(props: SwDetailProps) {
+  const bind = bindSwDetail(props.row);
   return (
-    <main
-      className="devices-page devices-page--product devices-page--hvdc"
-      id="Page_devices_hvdc"
-    >
-      <DevicesHvdcHero
-        title={bind.title}
-        description={bind.description}
-        contactHref={contactHref}
-      />
-      <DevicesProductNavScope
-        navItems={filterSwNavItems(hvdcNavItems, showDownloads)}
-      >
-        <DevicesSoftwareOverview data={overviewData} imageMode="img" />
-        <DevicesProductFeaturesSection
-          variant="list"
-          sectionId="product-benefits"
-          title={hvdcBenefitsSection.title}
-          items={featureItems}
-        />
+    <SwProductDetailShell
+      pageClassName="devices-page devices-page--product devices-page--hvdc"
+      pageId="Page_devices_hvdc"
+      hero={{
+        title: bind.title ?? hvdcHero.title,
+        description: bind.description ?? hvdcHero.description,
+        tagline: hvdcHero.tagline,
+        showTagline: true,
+        contactHref: props.contactHref,
+      }}
+      overview={resolveSwOverview(hvdcOverview, bind.infoDesc)}
+      overviewImageMode="img"
+      features={resolveSwFeatures(bind.keyFeatures, {
+        variant: "list",
+        title: hvdcBenefitsSection.title,
+        items: hvdcBenefitsSection.items,
+      })}
+      applicationsSlot={
         <DevicesProductApplications
           title={hvdcApplicationsSection.title}
           description={hvdcApplicationsSection.description}
           items={hvdcApplicationsSection.items}
         />
+      }
+      whySlot={
         <DevicesProductWhy
           title={hvdcWhySection.title}
           blocks={hvdcWhySection.blocks}
         />
-        {showDownloads ? (
-          <DevicesProductDownloads
-            initial={downloads}
-            productCodes={productCodes}
-          />
-        ) : null}
-        <CommonBanner03 {...techHubCopy} />
-        <DevicesProductOtherProducts
-          title={hvdcOtherProductsTitle}
-          items={hvdcOtherProducts}
-        />
-        <div id="product-markets">
-          <DevicesMarkets />
-        </div>
-        <DevicesHelp
-          variant="overlay"
-          sectionId="product-help"
-          connectPortalHref={bind.connectPortal}
-        />
-      </DevicesProductNavScope>
-      <CommonBanner04 />
-      <HighlightNewsSection
-        variant="markets"
-        title="Highlights"
-        items={highlights}
-        sectionId="devices-highlights"
-      />
-      <CommonFaq
-        sectionId="product-faq"
-        defaultOpenIndex={-1}
-        description={swFaqDescription}
-        items={faqItems}
-      />
-    </main>
+      }
+      {...swShellCommonProps(props, bind, hvdcFaqItems)}
+    />
   );
 }
 
-function XemsDetail({
-  row,
-  dbFaq,
-  downloads,
-  productCodes,
-  techHubCopy,
-  highlights,
-  contactHref,
-}: SwDetailProps) {
-  const bind = bindSwDetail(row);
-  const showDownloads = downloads.totalElements > 0;
-  const featureItems =
-    bind.keyFeatures.length > 0
-      ? bind.keyFeatures.map((f, i) => ({
-          id: `kf-${i + 1}`,
-          title: f.title,
-          description: f.content,
-        }))
-      : xemsBenefitsSection.items;
-  const overviewData = bind.infoDesc
-    ? { ...xemsOverview, description: bind.infoDesc }
-    : xemsOverview;
-  const faqItems = dbFaq.length > 0 ? dbFaq : xemsFaqItems;
+function XemsDetail(props: SwDetailProps) {
+  const bind = bindSwDetail(props.row);
   return (
-    <main
-      className="devices-page devices-page--product devices-page--xems"
-      id="P-FO-PROD-040000P"
-    >
-      <DevicesXemsHero
-        title={bind.title}
-        description={bind.description}
-        contactHref={contactHref}
-      />
-      <DevicesProductNavScope
-        navItems={filterSwNavItems(xemsNavItems, showDownloads)}
-      >
-        <DevicesSoftwareOverview data={overviewData} imageMode="bg" />
-        <DevicesProductFeaturesSection
-          variant="desc"
-          sectionId="product-benefits"
-          title={xemsBenefitsSection.title}
-          items={featureItems}
-        />
-        <DevicesXemsEnergySolutions />
+    <SwProductDetailShell
+      pageClassName="devices-page devices-page--product devices-page--xems"
+      pageId="P-FO-PROD-040000P"
+      hero={{
+        title: bind.title ?? xemsHero.title,
+        description: bind.description ?? xemsHero.description,
+        contactHref: props.contactHref,
+      }}
+      overview={resolveSwOverview(xemsOverview, bind.infoDesc)}
+      overviewImageMode="bg"
+      features={resolveSwFeatures(bind.keyFeatures, {
+        variant: "desc",
+        title: xemsBenefitsSection.title,
+        items: xemsBenefitsSection.items,
+      })}
+      applicationsSlot={<DevicesXemsEnergySolutions />}
+      whySlot={
         <DevicesProductWhy
           title={xemsWhySection.title}
           blocks={xemsWhySection.blocks}
           imageOnly
         />
-        {showDownloads ? (
-          <DevicesProductDownloads
-            initial={downloads}
-            productCodes={productCodes}
-          />
-        ) : null}
-        <CommonBanner03 {...techHubCopy} />
-        <DevicesProductOtherProducts
-          title={xemsOtherProductsTitle}
-          items={xemsOtherProducts}
-        />
-        <div id="product-markets">
-          <DevicesMarkets />
-        </div>
-        <DevicesHelp
-          variant="overlay"
-          sectionId="product-help"
-          connectPortalHref={bind.connectPortal}
-        />
-      </DevicesProductNavScope>
-      <CommonBanner04 />
-      <HighlightNewsSection
-        variant="markets"
-        title="Highlights"
-        items={highlights}
-        sectionId="devices-highlights"
-      />
-      <CommonFaq
-        sectionId="product-faq"
-        defaultOpenIndex={-1}
-        description={swFaqDescription}
-        items={faqItems}
-      />
-    </main>
+      }
+      {...swShellCommonProps(props, bind, xemsFaqItems)}
+    />
   );
 }
 
-function MicroGridDetail({
-  row,
-  dbFaq,
-  downloads,
-  productCodes,
-  techHubCopy,
-  highlights,
-  contactHref,
-}: SwDetailProps) {
-  const bind = bindSwDetail(row);
-  const showDownloads = downloads.totalElements > 0;
-  const featureItems =
-    bind.keyFeatures.length > 0
-      ? bind.keyFeatures.map((f, i) => ({
-          id: `kf-${i + 1}`,
-          title: f.title,
-          bullets: [f.content],
-        }))
-      : microGridBenefitsSection.items;
-  const overviewData = bind.infoDesc
-    ? { ...microGridOverview, description: bind.infoDesc }
-    : microGridOverview;
-  const faqItems = dbFaq.length > 0 ? dbFaq : microGridFaqItems;
+function MicroGridDetail(props: SwDetailProps) {
+  const bind = bindSwDetail(props.row);
   return (
-    <main
-      className="devices-page devices-page--product devices-page--micro-grid"
-      id="P-FO-PROD-040000P"
-    >
-      <DevicesMicroGridHero
-        title={bind.title}
-        description={bind.description}
-        contactHref={contactHref}
-      />
-      <DevicesProductNavScope
-        navItems={filterSwNavItems(microGridNavItems, showDownloads)}
-      >
-        <DevicesSoftwareOverview data={overviewData} imageMode="bg" />
-        <DevicesProductFeaturesSection
-          variant="list"
-          sectionId="product-benefits"
-          title={microGridBenefitsSection.title}
-          items={featureItems}
-        />
+    <SwProductDetailShell
+      pageClassName="devices-page devices-page--product devices-page--micro-grid"
+      pageId="P-FO-PROD-040000P"
+      hero={{
+        title: bind.title ?? microGridHero.title,
+        description: bind.description ?? microGridHero.description,
+        multilineDescription: true,
+        contactHref: props.contactHref,
+      }}
+      overview={resolveSwOverview(microGridOverview, bind.infoDesc)}
+      overviewImageMode="bg"
+      features={resolveSwFeatures(bind.keyFeatures, {
+        variant: "list",
+        title: microGridBenefitsSection.title,
+        items: microGridBenefitsSection.items,
+      })}
+      applicationsSlot={
         <DevicesProductApplications
           title={microGridApplicationsSection.title}
           description={microGridApplicationsSection.description}
           items={microGridApplicationsSection.items}
         />
-        <DevicesMicroGridHighlights />
-        {showDownloads ? (
-          <DevicesProductDownloads
-            initial={downloads}
-            productCodes={productCodes}
-          />
-        ) : null}
-        <CommonBanner03 {...techHubCopy} />
-        <DevicesProductOtherProducts
-          title={microGridOtherProductsTitle}
-          items={microGridOtherProducts}
-        />
-        <div id="product-markets">
-          <DevicesMarkets />
-        </div>
-        <DevicesHelp
-          variant="overlay"
-          sectionId="product-help"
-          connectPortalHref={bind.connectPortal}
-        />
-      </DevicesProductNavScope>
-      <CommonBanner04 />
-      <HighlightNewsSection
-        variant="markets"
-        title="Highlights"
-        items={highlights}
-        sectionId="devices-highlights"
-      />
-      <CommonFaq
-        sectionId="product-faq"
-        defaultOpenIndex={-1}
-        description={swFaqDescription}
-        items={faqItems}
-      />
-    </main>
+      }
+      whySlot={<DevicesMicroGridHighlights />}
+      {...swShellCommonProps(props, bind, microGridFaqItems)}
+    />
   );
 }
 
-function SmartFactoryDetail({
-  row,
-  dbFaq,
-  downloads,
-  productCodes,
-  techHubCopy,
-  highlights,
-  contactHref,
-}: SwDetailProps) {
-  const bind = bindSwDetail(row);
-  const showDownloads = downloads.totalElements > 0;
-  const featureItems =
-    bind.keyFeatures.length > 0
-      ? bind.keyFeatures.map((f, i) => ({
-          id: `kf-${i + 1}`,
-          title: f.title,
-          bullets: [f.content],
-        }))
-      : smartFactoryBenefitsSection.items;
-  const overviewData = bind.infoDesc
-    ? { ...smartFactoryOverview, description: bind.infoDesc }
-    : smartFactoryOverview;
-  const faqItems = dbFaq.length > 0 ? dbFaq : smartFactoryFaqItems;
+function SmartFactoryDetail(props: SwDetailProps) {
+  const bind = bindSwDetail(props.row);
   return (
-    <main
-      className="devices-page devices-page--product devices-page--smart-factory"
-      id="P-FO-PROD-040000P"
-    >
-      <DevicesSmartFactoryHero
-        title={bind.title}
-        description={bind.description}
-        contactHref={contactHref}
-      />
-      <DevicesProductNavScope
-        navItems={filterSwNavItems(smartFactoryNavItems, showDownloads)}
-      >
-        <DevicesSoftwareOverview data={overviewData} imageMode="bg" />
-        <DevicesProductFeaturesSection
-          variant="list"
-          sectionId="product-benefits"
-          title={smartFactoryBenefitsSection.title}
-          items={featureItems}
-        />
+    <SwProductDetailShell
+      pageClassName="devices-page devices-page--product devices-page--smart-factory"
+      pageId="P-FO-PROD-040000P"
+      hero={{
+        title: bind.title ?? smartFactoryHero.title,
+        description: bind.description ?? smartFactoryHero.description,
+        contactHref: props.contactHref,
+      }}
+      overview={resolveSwOverview(smartFactoryOverview, bind.infoDesc)}
+      overviewImageMode="bg"
+      features={resolveSwFeatures(bind.keyFeatures, {
+        variant: "list",
+        title: smartFactoryBenefitsSection.title,
+        items: smartFactoryBenefitsSection.items,
+      })}
+      applicationsSlot={
         <DevicesProductApplications
           title={smartFactoryApplicationsSection.title}
           description={smartFactoryApplicationsSection.description}
           items={smartFactoryApplicationsSection.items}
         />
+      }
+      whySlot={
         <DevicesProductWhy
           title={smartFactoryWhySection.title}
           description={smartFactoryWhySection.description}
           blocks={smartFactoryWhySection.blocks}
           imageOnly
         />
-        {showDownloads ? (
-          <DevicesProductDownloads
-            initial={downloads}
-            productCodes={productCodes}
-          />
-        ) : null}
-        <CommonBanner03 {...techHubCopy} />
-        <DevicesProductOtherProducts
-          title={smartFactoryOtherProductsTitle}
-          items={smartFactoryOtherProducts}
-        />
-        <div id="product-markets">
-          <DevicesMarkets />
-        </div>
-        <DevicesHelp
-          variant="overlay"
-          sectionId="product-help"
-          connectPortalHref={bind.connectPortal}
-        />
-      </DevicesProductNavScope>
-      <CommonBanner04 />
-      <HighlightNewsSection
-        variant="markets"
-        title="Highlights"
-        items={highlights}
-        sectionId="devices-highlights"
-      />
-      <CommonFaq
-        sectionId="product-faq"
-        defaultOpenIndex={-1}
-        description={swFaqDescription}
-        items={faqItems}
-      />
-    </main>
+      }
+      {...swShellCommonProps(props, bind, smartFactoryFaqItems)}
+    />
   );
 }
+
+const SW_DETAIL_COMPONENTS: Record<
+  string,
+  ((props: SwDetailProps) => ReactElement) | undefined
+> = {
+  scada: ScadaDetail,
+  xems: XemsDetail,
+  "micro-grid": MicroGridDetail,
+  "smart-factory": SmartFactoryDetail,
+};
 
 export default async function SwProductDetail({
   slug,
@@ -503,56 +307,20 @@ export default async function SwProductDetail({
     productId,
   );
 
-  switch (slug) {
-    case "scada":
-      return (
-        <ScadaDetail
-          row={row}
-          dbFaq={dbFaq}
-          downloads={downloads}
-          productCodes={productCodes}
-          techHubCopy={techHubCopy}
-          highlights={highlights}
-          contactHref={contactHref}
-        />
-      );
-    case "xems":
-      return (
-        <XemsDetail
-          row={row}
-          dbFaq={dbFaq}
-          downloads={downloads}
-          productCodes={productCodes}
-          techHubCopy={techHubCopy}
-          highlights={highlights}
-          contactHref={contactHref}
-        />
-      );
-    case "micro-grid":
-      return (
-        <MicroGridDetail
-          row={row}
-          dbFaq={dbFaq}
-          downloads={downloads}
-          productCodes={productCodes}
-          techHubCopy={techHubCopy}
-          highlights={highlights}
-          contactHref={contactHref}
-        />
-      );
-    case "smart-factory":
-      return (
-        <SmartFactoryDetail
-          row={row}
-          dbFaq={dbFaq}
-          downloads={downloads}
-          productCodes={productCodes}
-          techHubCopy={techHubCopy}
-          highlights={highlights}
-          contactHref={contactHref}
-        />
-      );
-    default:
-      return <GenericProductDetail row={row} categoryId={categoryId} />;
+  const Detail = SW_DETAIL_COMPONENTS[slug];
+  if (!Detail) {
+    return <GenericProductDetail row={row} categoryId={categoryId} />;
   }
+
+  return (
+    <Detail
+      row={row}
+      dbFaq={dbFaq}
+      downloads={downloads}
+      productCodes={productCodes}
+      techHubCopy={techHubCopy}
+      highlights={highlights}
+      contactHref={contactHref}
+    />
+  );
 }
