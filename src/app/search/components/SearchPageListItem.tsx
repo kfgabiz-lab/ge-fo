@@ -109,7 +109,7 @@ export default function SearchPageListItem({
     </div>
   );
 
-  // 이동 대상 URL 이 없는 항목(page-search 결과)은 클릭 불가 항목으로 렌더한다.
+  // 이동 대상 URL 이 없는 예외 항목은 클릭 불가 항목으로 렌더한다(방어용 분기).
   // href="" 는 Next 에서 현재 URL 로 해석돼 불필요한 이동이 발생하므로 Link 로 감싸지 않는다.
   // className/내부 구조는 링크 항목과 동일하게 유지한다(스타일 변경 없음).
   if (!item.href) {
