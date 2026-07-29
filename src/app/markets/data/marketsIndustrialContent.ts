@@ -91,8 +91,8 @@ export const industrialReferences: ReferenceItem[] = [
     title: "Lotte Hanoi Mall",
     description:
       "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears",
-    // location: "Vietnam",
-    // country: "",
+    location: "Vietnam",
+     country: "",
     modal: {
       modalTitle: "Lotte Hanoi Mall",
       images: ["/img/markets/industrial/references/ref_01.jpg"],
@@ -120,8 +120,8 @@ export const industrialReferences: ReferenceItem[] = [
     title: "LG USA New Headquarters",
     description:
       "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears",
-    // location: "United States",
-    // country: "",
+     location: "United States",
+     country: "",
     modal: {
       modalTitle: "LG USA New Headquarters",
       images: ["/img/markets/industrial/references/ref_02.jpg"],
@@ -149,8 +149,8 @@ export const industrialReferences: ReferenceItem[] = [
     title: "KPX Energy Management System",
     description:
       "Owing to the next-generation EMS constructed at the operators can now optimally manage power generation, analyze systems",
-    // location: "South Korea",
-    // country: "",
+     location: "South Korea",
+     country: "",
     modal: {
       modalTitle: "KPX Energy Management System",
       images: ["/img/markets/industrial/references/ref_03.jpg"],
