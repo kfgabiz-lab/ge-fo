@@ -185,25 +185,6 @@ export async function fetchProductDownloadsPage({
   };
 }
 
-// Downloads 섹션 노출 여부 판정용 건수 조회(기획서 DESCRIPTION 18번).
-// ⚠️ 화면에 렌더되는 초기 목록(fetchProductDownloadsPage)과 목적이 다르다.
-//   - 목록 조회: 문서유형 기본 체크(Catalog/Manual) 조건 → 필터 UI 초기값과 SSR 결과를 맞추기 위함.
-//   - 이 함수: 기획서 18번은 "연계된 파일이 1개이상 존재하는 경우에만 해당 섹션 출력"으로 문서유형을 제한하지 않는다.
-//     따라서 docTypes 를 주지 않고(= 전체 문서유형) 건수만 센다. Certificates/Drawings/Software/Tech Data 만
-//     연계된 제품도 섹션이 노출돼야 한다.
-// 건수만 필요하므로 size: 1 로 최소 조회하고, 파일별 CTP URL 을 조회하는 무거운 변환
-// (mapDownloadCenterItemsToProductDownloads)은 거치지 않는다.
-// GenericProductDetail(HW) / SwProductDetail(SW 4종) 양쪽에서 공유한다(중복 작성 금지).
-export async function fetchProductDownloadsGateCount(
-  productCodes: string[],
-): Promise<number> {
-  // 제품코드를 못 구한 상황은 "연계 파일 0건"이지 "전체 노출"이 아니다(fetchProductDownloadsPage 와 동일 가드).
-  // BE 는 productCodes 가 비면 필터 없음으로 보고 전체 건수를 반환하므로 호출 자체를 생략한다.
-  if (productCodes.length === 0) return 0;
-  const res = await fetchDownloadCenterContents({ productCodes, size: 1 });
-  return res.totalElements;
-}
-
 export type ProductOtherItem = {
   id: string;
   href: string;

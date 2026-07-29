@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -12,11 +13,20 @@ import {
   downloadDocTypeCodes,
   downloadDocumentTypes,
   productDownloadsDefaultDocTypes,
+  type DownloadFilterOption,
 } from "@/data/support/downloadCenterContent";
+import { fetchDownloadCenterDocTypeCounts } from "@/data/support/downloadCenterData";
 
 const DOC_TYPE_API_CODES = new Set<string>(downloadDocTypeCodes);
 const DEFAULT_CHECKED_DOC_TYPES = new Set<string>(
   productDownloadsDefaultDocTypes,
+);
+
+// 실카운트가 도착하기 전에는 정적 샘플 건수(count: 100)를 노출하지 않는다.
+// count 가 undefined 면 라벨에 "(n)" 자체가 렌더되지 않는다.
+const DOC_TYPES_PENDING: DownloadFilterOption[] = downloadDocumentTypes.map(
+  (option) =>
+    DOC_TYPE_API_CODES.has(option.id) ? { ...option, count: undefined } : option,
 );
 
 function buildFilterId(optionId: string) {
@@ -39,6 +49,8 @@ type DevicesProductDownloadsFilterContextValue = {
   toggleFilter: (id: string, checked: boolean) => void;
   clearSection: () => void;
   selectedDocTypes: string[];
+  /** 문서 유형 목록 + 실제 검색결과 건수(도착 전에는 count undefined) */
+  documentTypes: DownloadFilterOption[];
 };
 
 const DevicesProductDownloadsFilterContext =
@@ -58,8 +70,10 @@ export function useDevicesProductDownloadsFilter() {
 
 export function DevicesProductDownloadsFilterBoundary({
   children,
+  productCodes = [],
 }: {
   children: ReactNode;
+  productCodes?: string[];
 }) {
   const context = useContext(DevicesProductDownloadsFilterContext);
 
@@ -68,16 +82,44 @@ export function DevicesProductDownloadsFilterBoundary({
   }
 
   return (
-    <DevicesProductDownloadsFilterProvider>{children}</DevicesProductDownloadsFilterProvider>
+    <DevicesProductDownloadsFilterProvider productCodes={productCodes}>
+      {children}
+    </DevicesProductDownloadsFilterProvider>
   );
 }
 
 export function DevicesProductDownloadsFilterProvider({
   children,
+  productCodes = [],
 }: {
   children: ReactNode;
+  productCodes?: string[];
 }) {
   const [checked, setChecked] = useState(buildInitialChecked);
+  const [documentTypes, setDocumentTypes] =
+    useState<DownloadFilterOption[]>(DOC_TYPES_PENDING);
+
+  const productCodeKey = [...productCodes].sort().join(",");
+
+  // 이 제품(productCodes)에 해당하는 문서 유형별 실제 건수를 조회해 필터 라벨에 반영한다.
+  useEffect(() => {
+    let alive = true;
+    const codes = productCodeKey ? productCodeKey.split(",") : [];
+    fetchDownloadCenterDocTypeCounts(codes).then((counts) => {
+      if (!alive) return;
+      const countMap = new Map(counts.map((c) => [c.docType, c.count]));
+      setDocumentTypes(
+        downloadDocumentTypes.map((option) =>
+          DOC_TYPE_API_CODES.has(option.id)
+            ? { ...option, count: countMap.get(option.id) ?? 0 }
+            : option,
+        ),
+      );
+    });
+    return () => {
+      alive = false;
+    };
+  }, [productCodeKey]);
 
   const isChecked = useCallback((id: string) => Boolean(checked[id]), [checked]);
 
@@ -114,8 +156,9 @@ export function DevicesProductDownloadsFilterProvider({
       toggleFilter,
       clearSection,
       selectedDocTypes,
+      documentTypes,
     }),
-    [clearSection, isChecked, selectedDocTypes, toggleFilter],
+    [clearSection, documentTypes, isChecked, selectedDocTypes, toggleFilter],
   );
 
   return (

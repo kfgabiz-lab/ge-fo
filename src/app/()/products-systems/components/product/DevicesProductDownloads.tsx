@@ -33,7 +33,7 @@ export default function DevicesProductDownloads({
   productCodes,
 }: DevicesProductDownloadsProps) {
   return (
-    <DevicesProductDownloadsFilterBoundary>
+    <DevicesProductDownloadsFilterBoundary productCodes={productCodes}>
       <DevicesProductDownloadsBody
         initial={initial}
         productCodes={productCodes}

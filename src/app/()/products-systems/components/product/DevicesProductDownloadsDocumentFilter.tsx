@@ -1,6 +1,5 @@
 "use client";
 
-import { downloadDocumentTypes } from "@/data/support/downloadCenterContent";
 import {
   DevicesProductDownloadsFilterCheckRow,
   DevicesProductDownloadsFilterSection,
@@ -17,7 +16,8 @@ type DevicesProductDownloadsDocumentFilterProps = {
 export default function DevicesProductDownloadsDocumentFilter({
   compactHead = false,
 }: DevicesProductDownloadsDocumentFilterProps) {
-  const { isChecked, toggleFilter, clearSection } = useDevicesProductDownloadsFilter();
+  const { isChecked, toggleFilter, clearSection, documentTypes } =
+    useDevicesProductDownloadsFilter();
 
   return (
     <DevicesProductDownloadsFilterSection
@@ -26,7 +26,7 @@ export default function DevicesProductDownloadsDocumentFilter({
       compactHead={compactHead}
       onRefresh={clearSection}
     >
-      {downloadDocumentTypes.map((option) => {
+      {documentTypes.map((option) => {
         const filterId = getDevicesProductDownloadsFilterId(option.id);
 
         return (

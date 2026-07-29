@@ -135,7 +135,11 @@ export const downloadDocumentTypes: DownloadFilterOption[] = [
 
 export const downloadDocTypeCodes = ["C", "M", "D", "S", "R", "O"] as const;
 
-export const productDownloadsDefaultDocTypes: string[] = ["C", "M"];
+// 제품상세 Downloads 섹션의 문서유형 기본 체크 상태 = 전체 6종(Catalog/Manual/Drawings/Software/Certificates/Tech Data).
+// 기획서 18번("연계된 파일이 1개 이상 존재하는 경우에만 섹션 출력")이 문서유형을 제한하지 않으므로,
+// 기본값을 전체로 두면 SSR 조회 1건이 "섹션 노출 판정"과 "화면에 보여줄 초기 목록"을 동시에 만족한다
+// (별도 게이트 카운트 조회 불필요 / 인증서만 연계된 제품도 진입 즉시 목록에 보인다).
+export const productDownloadsDefaultDocTypes: string[] = [...downloadDocTypeCodes];
 
 const downloadVersions = ["V38.0", "V37.0", "V36.0"];
 
