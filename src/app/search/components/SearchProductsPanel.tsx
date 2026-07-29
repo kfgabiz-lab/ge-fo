@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import PageNumbering from "@/components/pagination/PageNumbering";
+import SearchEmptyResult from "./SearchEmptyResult";
 import SearchProductCard from "./SearchProductCard";
 import SearchProductsActiveFilters from "./SearchProductsActiveFilters";
 import SearchProductsFilterPanel from "./SearchProductsFilterPanel";
@@ -27,6 +28,8 @@ function SearchProductsPanelContent() {
     total: 0,
     items: [],
   });
+  // 최초 응답 도착 여부. 도착 전에는 Empty State 를 띄우지 않는다(로딩 중 깜빡임 방지).
+  const [loaded, setLoaded] = useState(false);
 
   // 검색어(q)는 URL ?q= 에서 읽는다(All 탭과 동일 소스).
   const searchParams = useSearchParams();
@@ -40,6 +43,8 @@ function SearchProductsPanelContent() {
   const pageItems = result.items;
   const totalResults = result.total;
   const totalPages = Math.max(1, Math.ceil(totalResults / PAGE_SIZE));
+  // 응답이 도착한 뒤 0건일 때만 공통 Empty State 를 노출한다.
+  const isEmptyResult = loaded && pageItems.length === 0;
 
   // 검색어/필터 변경 시 1페이지로(최초 실행 제외).
   const firstResetRef = useRef(true);
@@ -59,7 +64,9 @@ function SearchProductsPanelContent() {
       offset: (currentPage - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
     }).then((res) => {
-      if (alive) setResult(res);
+      if (!alive) return;
+      setResult(res);
+      setLoaded(true);
     });
     return () => {
       alive = false;
@@ -107,26 +114,32 @@ function SearchProductsPanelContent() {
                   Total <strong>{totalResults.toLocaleString()}</strong>
                 </p>
 
-                <ul className="search_products__list">
-                  {pageItems.map((item, index) => (
-                    <li
-                      key={`${item.id}-${currentPage}-${index}`}
-                      className={searchAllListClasses.item}
-                    >
-                      <SearchProductCard item={item} searchTerm={query} />
-                    </li>
-                  ))}
-                </ul>
+                {isEmptyResult ? (
+                  <SearchEmptyResult />
+                ) : (
+                  <ul className="search_products__list">
+                    {pageItems.map((item, index) => (
+                      <li
+                        key={`${item.id}-${currentPage}-${index}`}
+                        className={searchAllListClasses.item}
+                      >
+                        <SearchProductCard item={item} searchTerm={query} />
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
 
-            <PageNumbering
-              className="search_products__pagination"
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-              ariaLabel="Search products pagination"
-            />
+            {isEmptyResult ? null : (
+              <PageNumbering
+                className="search_products__pagination"
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                ariaLabel="Search products pagination"
+              />
+            )}
           </div>
         </div>
       </div>

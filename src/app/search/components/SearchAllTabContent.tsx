@@ -22,6 +22,7 @@ import {
   type SearchPagesResult,
 } from "@/data/search/searchPagesData";
 import SearchDocumentsCard from "./SearchDocumentsCard";
+import SearchEmptyResult from "./SearchEmptyResult";
 import SearchProductCard from "./SearchProductCard";
 import SearchDocumentsPanel from "./SearchDocumentsPanel";
 import SearchMediaList from "./SearchMediaList";
@@ -133,11 +134,31 @@ export default function SearchAllTabContent({
   const [pagesResult, setPagesResult] = useState<SearchPagesResult>(
     EMPTY_SEARCH_PAGES_RESULT,
   );
+  // 4개 섹션 각각의 최초 응답 도착 여부. 전부 도착하기 전에는 Empty State 를 띄우지 않는다
+  // (모든 결과의 초기값이 0건이라 로딩 중에 Empty State 가 깜빡이는 것을 막는다).
+  const [loaded, setLoaded] = useState({
+    products: false,
+    documents: false,
+    media: false,
+    pages: false,
+  });
+
+  // 검색어가 바뀌면 로딩 상태를 초기화한다(아래 fetch 이펙트보다 먼저 선언되어야 순서가 보장된다).
+  useEffect(() => {
+    setLoaded({
+      products: false,
+      documents: false,
+      media: false,
+      pages: false,
+    });
+  }, [query]);
 
   useEffect(() => {
     let alive = true;
     void fetchSearchAllProducts(query, { limit: 4 }).then((result) => {
-      if (alive) setProductResult(result);
+      if (!alive) return;
+      setProductResult(result);
+      setLoaded((prev) => ({ ...prev, products: true }));
     });
     return () => {
       alive = false;
@@ -148,7 +169,9 @@ export default function SearchAllTabContent({
     let alive = true;
     // 기획서 "최대 10개" — limit 10.
     void fetchSearchAllDocuments(query, 10).then((result) => {
-      if (alive) setDocumentResult(result);
+      if (!alive) return;
+      setDocumentResult(result);
+      setLoaded((prev) => ({ ...prev, documents: true }));
     });
     return () => {
       alive = false;
@@ -160,7 +183,9 @@ export default function SearchAllTabContent({
     // 퍼블리싱 Media 섹션 카드 4개 기준 — size 4(소스 필터 없이 4종 전체).
     // totalElements 는 size 와 무관한 전체 건수라 탭/헤더 카운트로 그대로 재사용한다(카운트 전용 추가 호출 없음).
     void fetchSearchMedia(query, { size: 4 }).then((result) => {
-      if (alive) setMediaResult(result);
+      if (!alive) return;
+      setMediaResult(result);
+      setLoaded((prev) => ({ ...prev, media: true }));
     });
     return () => {
       alive = false;
@@ -172,12 +197,26 @@ export default function SearchAllTabContent({
     // 퍼블리싱 Pages 섹션 목록 4건 기준 — size 4.
     // totalElements 는 size 와 무관한 전체 건수라 탭/헤더 카운트로 그대로 재사용한다(카운트 전용 추가 호출 없음).
     void fetchSearchPages(query, { size: 4 }).then((result) => {
-      if (alive) setPagesResult(result);
+      if (!alive) return;
+      setPagesResult(result);
+      setLoaded((prev) => ({ ...prev, pages: true }));
     });
     return () => {
       alive = false;
     };
   }, [query]);
+
+  // All 탭은 섹션 4개가 모두 0건일 때만 Empty State 를 노출한다
+  // (한 섹션이라도 결과가 있으면 기존 정책대로 빈 섹션만 숨긴다).
+  const isAllTabEmpty =
+    loaded.products &&
+    loaded.documents &&
+    loaded.media &&
+    loaded.pages &&
+    productResult.items.length === 0 &&
+    documentResult.items.length === 0 &&
+    mediaResult.items.length === 0 &&
+    pagesResult.items.length === 0;
 
   return (
     <section className="search_all" id="search-all">
@@ -218,7 +257,8 @@ export default function SearchAllTabContent({
         {activeTab === "media" ? <SearchMediaPanel /> : null}
         {activeTab === "pages" ? <SearchPagesPanel /> : null}
 
-        {isAllTab ? (
+        {/* 결과가 하나도 없으면 AI 요약도 의미가 없으므로 감춘다(기획서 Empty State 화면 기준). */}
+        {isAllTab && !isAllTabEmpty ? (
           <div className={aiExpanded ? "search_all__ai is-expanded" : "search_all__ai"}>
             <div className="search_all__ai-content">
               <div className="search_all__ai-head">
@@ -312,7 +352,8 @@ export default function SearchAllTabContent({
             <SearchSectionHead
               title="Pages"
               count={formatSearchCount(pagesResult.totalElements)}
-              exploreHref={searchSectionExploreLinks.pages}
+              // Pages 도 Media 와 같이 전용 화면이 없어 상단 Pages 탭으로 전환한다(기획 주석 #11). 검색어(q)는 유지.
+              exploreHref={buildSearchTabHref(query, "pages")}
             />
             <SearchPageList
               items={pagesResult.items}
@@ -322,6 +363,9 @@ export default function SearchAllTabContent({
             />
           </div>
         ) : null}
+
+        {/* All 탭 4개 섹션이 모두 0건일 때의 공통 Empty State(LSEA-FO-SEARCH-102). */}
+        {isAllTab && isAllTabEmpty ? <SearchEmptyResult /> : null}
       </div>
     </section>
   );

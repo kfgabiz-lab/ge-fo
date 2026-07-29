@@ -207,16 +207,36 @@ export const searchAllDocuments: ProductDownloadItem[] = [
 // Pages 항목 데이터는 @/data/search/searchPagesData 의 fetchSearchPages 가 생성한다(SearchPageItem 타입은 계속 사용).
 
 // All 탭 섹션별 Explore 이동 대상(다른 화면으로 나가는 고정 링크).
-// Media 섹션은 다른 화면이 아니라 상단 Media 탭으로 전환되므로(기획 주석 #11)
-// 여기 두지 않고 buildSearchTabHref(query, "media") 로 검색어를 유지한 href 를 만든다.
+// Media/Pages 섹션은 전용 화면이 없어 다른 화면이 아니라 상단 해당 탭으로 전환되므로(기획 주석 #11)
+// 여기 두지 않고 buildSearchTabHref(query, "media" | "pages") 로 검색어를 유지한 href 를 만든다.
 export const searchSectionExploreLinks: Record<
-  "products" | "documents" | "pages",
+  "products" | "documents",
   string
 > = {
   products: "/products-systems/explore-all",
   documents: "/support/download-center",
-  pages: "/",
 };
+
+/**
+ * 통합검색 공통 Empty State 문구(LSEA-FO-SEARCH-102).
+ * All/Products/Documents/Media/Pages 5개 탭이 결과 0건일 때 동일하게 사용한다.
+ */
+export const searchEmptyResult = {
+  title: "We could not find any results",
+  notes: [
+    "Ensure all search terms are spelled correctly.",
+    "Narrow your results by using more specific keywords. (e.g. 'ACS 600 manual')",
+    "Search is not case sensitive — 'acs 600' and 'ACS 600' return identical results.",
+    "Wildcard searches are not supported. Please enter the full term instead. (e.g. 'transformer' instead of 'transf*')",
+  ],
+  // 마지막 안내는 문장 중간에 Contact Us 링크가 들어가므로 앞/링크/뒤로 나눠 둔다.
+  contactNote: {
+    before: "If you are unable to find the required information, please visit our ",
+    linkLabel: "Contact Us",
+    linkHref: "/support/contact-us",
+    after: " page.",
+  },
+} as const;
 
 /** ?tab= 파라미터 값 검증 — searchAllTabs 에 정의된 탭이면 해당 id, 아니면 undefined. */
 export function toSearchTabId(value: string | null): SearchTabId | undefined {

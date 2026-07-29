@@ -6,6 +6,7 @@ import PageNumbering from "@/components/pagination/PageNumbering";
 import SearchDocumentsActiveFilters from "./SearchDocumentsActiveFilters";
 import SearchDocumentsCard from "./SearchDocumentsCard";
 import SearchDocumentsFilterPanel from "./SearchDocumentsFilterPanel";
+import SearchEmptyResult from "./SearchEmptyResult";
 import { SearchDocumentsFilterProvider } from "./SearchDocumentsFilterProvider";
 import {
   getSearchDocumentPageItems,
@@ -24,6 +25,8 @@ function SearchDocumentsPanelContent() {
     () => getSearchDocumentPageItems(currentPage, pageSize),
     [currentPage, pageSize],
   );
+  // 결과 0건이면 목록/페이지네이션 대신 공통 Empty State 를 노출한다.
+  const isEmptyResult = pageItems.length === 0;
 
   return (
     <section
@@ -65,28 +68,34 @@ function SearchDocumentsPanelContent() {
                 Total <strong>{totalResults.toLocaleString()}</strong>
               </p>
 
-              <ul className="search_documents__list">
-                {pageItems.map((item, index) => (
-                  <li
-                    key={`${item.id}-${currentPage}-${index}`}
-                    className={searchAllListClasses.item}
-                  >
-                    <SearchDocumentsCard
-                      item={item}
-                      searchTerm={searchDocumentsDemoKeyword}
-                    />
-                  </li>
-                ))}
-              </ul>
+              {isEmptyResult ? (
+                <SearchEmptyResult />
+              ) : (
+                <ul className="search_documents__list">
+                  {pageItems.map((item, index) => (
+                    <li
+                      key={`${item.id}-${currentPage}-${index}`}
+                      className={searchAllListClasses.item}
+                    >
+                      <SearchDocumentsCard
+                        item={item}
+                        searchTerm={searchDocumentsDemoKeyword}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
-            <PageNumbering
-              className="search_documents__pagination"
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-              ariaLabel="Search documents pagination"
-            />
+            {isEmptyResult ? null : (
+              <PageNumbering
+                className="search_documents__pagination"
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                ariaLabel="Search documents pagination"
+              />
+            )}
           </div>
         </div>
       </div>

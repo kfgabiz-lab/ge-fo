@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import PageNumbering from "@/components/pagination/PageNumbering";
+import SearchEmptyResult from "./SearchEmptyResult";
 import SearchPageList from "./SearchPageList";
 import SearchPagesFilterPanel from "./SearchPagesFilterPanel";
 import {
@@ -29,6 +30,8 @@ function SearchPagesPanelContent() {
     totalPages: 0,
     counts: {},
   });
+  // 최초 응답 도착 여부. 도착 전에는 Empty State 를 띄우지 않는다(로딩 중 깜빡임 방지).
+  const [loaded, setLoaded] = useState(false);
 
   // 검색어(q)는 URL ?q= 에서 읽는다(All 탭/다른 탭과 동일 소스).
   const searchParams = useSearchParams();
@@ -42,6 +45,8 @@ function SearchPagesPanelContent() {
   const pageItems = result.items;
   const totalResults = result.totalElements;
   const totalPages = Math.max(1, result.totalPages);
+  // 응답이 도착한 뒤 0건일 때만 공통 Empty State 를 노출한다.
+  const isEmptyResult = loaded && pageItems.length === 0;
 
   // 검색어/필터 변경 시 1페이지로(최초 실행 제외).
   const firstResetRef = useRef(true);
@@ -62,7 +67,9 @@ function SearchPagesPanelContent() {
       page: currentPage - 1,
       size: PAGE_SIZE,
     }).then((res) => {
-      if (alive) setResult(res);
+      if (!alive) return;
+      setResult(res);
+      setLoaded(true);
     });
     return () => {
       alive = false;
@@ -106,22 +113,28 @@ function SearchPagesPanelContent() {
                   Total <strong>{totalResults.toLocaleString()}</strong>
                 </p>
 
-                <SearchPageList
-                  items={pageItems}
-                  listClassName="search_all__pages"
-                  itemClassName="search_all__page-item"
-                  variant="pages"
-                />
+                {isEmptyResult ? (
+                  <SearchEmptyResult />
+                ) : (
+                  <SearchPageList
+                    items={pageItems}
+                    listClassName="search_all__pages"
+                    itemClassName="search_all__page-item"
+                    variant="pages"
+                  />
+                )}
               </div>
             </div>
 
-            <PageNumbering
-              className="search_pages__pagination"
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-              ariaLabel="Search pages pagination"
-            />
+            {isEmptyResult ? null : (
+              <PageNumbering
+                className="search_pages__pagination"
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                ariaLabel="Search pages pagination"
+              />
+            )}
           </div>
         </div>
       </div>

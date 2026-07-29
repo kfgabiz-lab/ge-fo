@@ -2156,6 +2156,55 @@
   /* — Media tab (Figma 6430:112128) — list: search_all__media card variant */
 
   /* — Pages tab (Figma 4701:84367) — list: search_all__pages 공유 */
+
+  /* — 통합검색 공통 Empty State (LSEA-FO-SEARCH-102) — 5개 탭 공용이라 섹션 접두사 없이 정의 */
+  .search_empty {
+    padding: 80px 0 120px;
+    text-align: center;
+  }
+
+  .search_empty__title {
+    margin: 0 0 24px;
+    font-size: 40px;
+    line-height: 52px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  .search_empty__list {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    list-style: none;
+  }
+
+  .search_empty__item {
+    position: relative;
+    padding-left: 14px;
+    font-size: 18px;
+    line-height: 30px;
+    color: #444;
+  }
+
+  .search_empty__item::before {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #444;
+  }
+
+  .search_empty__link {
+    color: #222;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 
 @media (max-width: 780px) {
@@ -5487,6 +5536,59 @@
     background: transparent;
     border: none;
     cursor: pointer;
+  }
+
+  /* — 통합검색 공통 Empty State (LSEA-FO-SEARCH-102) mobile — 5개 탭 공용 */
+  .search_empty {
+    padding: 40px 0 60px;
+    text-align: center;
+  }
+
+  .search_empty__title {
+    margin: 0 0 16px;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  .search_empty__list {
+    display: block;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    list-style: none;
+  }
+
+  .search_empty__item {
+    position: relative;
+    padding-left: 12px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #444;
+  }
+
+  .search_empty__item + .search_empty__item {
+    margin-top: 4px;
+  }
+
+  .search_empty__item::before {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #444;
+  }
+
+  .search_empty__link {
+    color: #222;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 }
 
