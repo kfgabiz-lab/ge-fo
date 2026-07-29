@@ -12,18 +12,37 @@ import {
   toPressCard,
   type PressRow,
 } from "@/app/company/data/pressData";
+import { useFeaturedFeed } from "@/hooks/useFeaturedFeed";
 import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
 
 const FEATURED_FALLBACK_IMAGE = "/img/company/press/hero.png";
 const LIST_FALLBACK_IMAGE = "/img/company/press/list_01.png";
 
+interface PressFeaturedCard {
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  href: string;
+}
+
+function toPressFeaturedCard(row: PressRow): PressFeaturedCard {
+  const card = toPressCard(row);
+  return {
+    title: card.title,
+    description: card.description,
+    date: card.date,
+    image: card.imageSrc ?? FEATURED_FALLBACK_IMAGE,
+    href: pressDetailHref(card.id),
+  };
+}
+
 export default function CompanyPressListPage() {
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<PressRow[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [featuredRow, setFeaturedRow] = useState<PressRow | null>(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
@@ -35,25 +54,12 @@ export default function CompanyPressListPage() {
     (_, i) => String(currentYear - i),
   );
 
-  useEffect(() => {
-    let alive = true;
-    fetchData({
-      slug: "press-data",
-      size: 1,
-      sort: "createdAt,desc",
-      where: { ...PRESS_STATUS_WHERE },
-      리턴함수: (rows) => rows,
-    })
-      .then((res) => {
-        if (alive) setFeaturedRow(res.content[0] ?? null);
-      })
-      .catch(() => {
-        if (alive) setFeaturedRow(null);
-      });
-    return () => {
-      alive = false;
-    };
-  }, []);
+  const { featured, excludeWhere } = useFeaturedFeed<PressFeaturedCard>({
+    slug: "press-data",
+    where: PRESS_STATUS_WHERE,
+    sort: "createdAt,desc",
+    toCard: toPressFeaturedCard,
+  });
 
   useEffect(() => {
     let alive = true;
@@ -66,7 +72,7 @@ export default function CompanyPressListPage() {
         ...(search ? { "title|content": search } : {}),
         ...(month ? { month_publish_dttm: month } : {}),
         ...(year ? { year_publish_dttm: year } : {}),
-        ...(featuredRow?.id != null ? { ne_id: String(featuredRow.id) } : {}),
+        ...excludeWhere,
       },
       sort:
         sort === "oldest"
@@ -92,19 +98,7 @@ export default function CompanyPressListPage() {
     return () => {
       alive = false;
     };
-  }, [pageIndex, search, sort, month, year, featuredRow?.id]);
-
-  const featured = useMemo(() => {
-    if (!featuredRow) return null;
-    const card = toPressCard(featuredRow);
-    return {
-      title: card.title,
-      description: card.description,
-      date: card.date,
-      image: card.imageSrc ?? FEATURED_FALLBACK_IMAGE,
-      href: pressDetailHref(card.id),
-    };
-  }, [featuredRow]);
+  }, [pageIndex, search, sort, month, year, excludeWhere]);
 
   const listItems = useMemo<CompanyFeedListItem[]>(
     () =>

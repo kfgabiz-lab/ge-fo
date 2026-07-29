@@ -12,18 +12,37 @@ import {
   toArticlesCard,
   type ArticlesRow,
 } from "@/app/company/data/articlesData";
+import { useFeaturedFeed } from "@/hooks/useFeaturedFeed";
 import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
 
 const FEATURED_FALLBACK_IMAGE = "/img/company/articles/hero.png";
 const LIST_FALLBACK_IMAGE = "/img/company/articles/list_01.png";
 
+interface ArticlesFeaturedCard {
+  title: string;
+  description: string;
+  date: string;
+  image: string;
+  href: string;
+}
+
+function toArticlesFeaturedCard(row: ArticlesRow): ArticlesFeaturedCard {
+  const card = toArticlesCard(row);
+  return {
+    title: card.title,
+    description: card.description,
+    date: card.date,
+    image: card.imageSrc ?? FEATURED_FALLBACK_IMAGE,
+    href: articlesDetailHref(card.id),
+  };
+}
+
 export default function CompanyArticlesListPage() {
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<ArticlesRow[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [featuredRow, setFeaturedRow] = useState<ArticlesRow | null>(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
@@ -34,6 +53,13 @@ export default function CompanyArticlesListPage() {
     { length: currentYear - 2025 + 1 },
     (_, i) => String(currentYear - i),
   );
+
+  const { featured, excludeWhere } = useFeaturedFeed<ArticlesFeaturedCard>({
+    slug: "articles-data",
+    where: ARTICLES_STATUS_WHERE,
+    sort: "createdAt,desc",
+    toCard: toArticlesFeaturedCard,
+  });
 
   useEffect(() => {
     let alive = true;
@@ -46,6 +72,7 @@ export default function CompanyArticlesListPage() {
         ...(search ? { "title|content": search } : {}),
         ...(month ? { month_publish_dttm: month } : {}),
         ...(year ? { year_publish_dttm: year } : {}),
+        ...excludeWhere,
       },
       sort:
         sort === "oldest"
@@ -61,9 +88,6 @@ export default function CompanyArticlesListPage() {
         if (!alive) return;
         setRows(res.content);
         setTotalPages(res.totalPages || 1);
-        if (pageIndex === 0) {
-          setFeaturedRow(res.content[0] ?? null);
-        }
         setLoaded(true);
       })
       .catch(() => {
@@ -74,35 +98,21 @@ export default function CompanyArticlesListPage() {
     return () => {
       alive = false;
     };
-  }, [pageIndex, search, sort, month, year]);
-
-  const featured = useMemo(() => {
-    if (!featuredRow) return null;
-    const card = toArticlesCard(featuredRow);
-    return {
-      title: card.title,
-      description: card.description,
-      date: card.date,
-      image: card.imageSrc ?? FEATURED_FALLBACK_IMAGE,
-      href: articlesDetailHref(card.id),
-    };
-  }, [featuredRow]);
+  }, [pageIndex, search, sort, month, year, excludeWhere]);
 
   const listItems = useMemo<CompanyFeedListItem[]>(
     () =>
-      rows
-        .filter((row) => row.id !== featuredRow?.id)
-        .map((row) => {
-          const card = toArticlesCard(row);
-          return {
-            id: String(card.id),
-            title: card.title,
-            date: card.date,
-            image: card.imageSrc ?? LIST_FALLBACK_IMAGE,
-            href: articlesDetailHref(card.id),
-          };
-        }),
-    [rows, featuredRow],
+      rows.map((row) => {
+        const card = toArticlesCard(row);
+        return {
+          id: String(card.id),
+          title: card.title,
+          date: card.date,
+          image: card.imageSrc ?? LIST_FALLBACK_IMAGE,
+          href: articlesDetailHref(card.id),
+        };
+      }),
+    [rows],
   );
 
   const handlePageChange = (page: number) => {

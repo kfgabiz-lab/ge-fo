@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import CompanyFeedEmpty from "@/app/company/components/CompanyFeedEmpty";
 import CompanyBlogListToolbar from "@/app/company/components/CompanyBlogListToolbar";
@@ -15,9 +15,11 @@ import {
   fetchBlogCategories,
   toBlogCard,
   toCategoryMap,
+  type BlogCardItem,
   type BlogRow,
   type CodeItem,
 } from "@/app/company/data/blogData";
+import { useFeaturedFeed } from "@/hooks/useFeaturedFeed";
 import { fetchData } from "@/lib/pageDataApi";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import "@/assets/css/company.css";
@@ -44,7 +46,6 @@ export default function CompanyBlogPage({
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<BlogRow[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [featuredRow, setFeaturedRow] = useState<BlogRow | null>(null);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
 
@@ -63,6 +64,18 @@ export default function CompanyBlogPage({
     };
   }, []);
 
+  const toFeaturedCard = useCallback(
+    (row: BlogRow) => toBlogCard(row, categoryMap),
+    [categoryMap],
+  );
+
+  const { featured, excludeWhere } = useFeaturedFeed<BlogCardItem>({
+    slug: "blog-data",
+    where: BLOG_STATUS_WHERE,
+    sort: "createdAt,desc",
+    toCard: toFeaturedCard,
+  });
+
   useEffect(() => {
     let alive = true;
     fetchData({
@@ -73,6 +86,7 @@ export default function CompanyBlogPage({
         ...BLOG_STATUS_WHERE,
         ...(categoryCode ? { "eq_blog.category": categoryCode } : {}),
         ...(search ? { "title|content": search } : {}),
+        ...excludeWhere,
       },
       sort:
         sort === "oldest"
@@ -88,9 +102,6 @@ export default function CompanyBlogPage({
         if (!alive) return;
         setRows(res.content);
         setTotalPages(res.totalPages || 1);
-        if (pageIndex === 0) {
-          setFeaturedRow(res.content[0] ?? null);
-        }
         setLoaded(true);
       })
       .catch(() => {
@@ -101,19 +112,11 @@ export default function CompanyBlogPage({
     return () => {
       alive = false;
     };
-  }, [categoryCode, search, sort, pageIndex]);
-
-  const featured = useMemo(
-    () => (featuredRow ? toBlogCard(featuredRow, categoryMap) : null),
-    [featuredRow, categoryMap],
-  );
+  }, [categoryCode, search, sort, pageIndex, excludeWhere]);
 
   const listItems = useMemo(
-    () =>
-      rows
-        .filter((row) => row.id !== featuredRow?.id)
-        .map((row) => toBlogCard(row, categoryMap)),
-    [rows, featuredRow, categoryMap],
+    () => rows.map((row) => toBlogCard(row, categoryMap)),
+    [rows, categoryMap],
   );
 
   const handleCategoryChange = (code: string) => {
