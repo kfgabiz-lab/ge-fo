@@ -90,8 +90,8 @@ export const commercialResidentialReferences: ReferenceItem[] = [
     title: "HV-LV Integrated Turnkey Supply",
     description:
       "The rapid expansion of AI data centers has increased demand for reliable and integrated power infrastructure solutions. This project focused on providing a comprehensive electrical package to support a large-scale data center facility with high-voltage and low-voltage equipment.",
-    location: "United States",
-    country: "",
+    // location: "United States",
+    // country: "",
     modal: {
       modalTitle: "HV-LV Integrated Turnkey Supply",
       images: ["/img/markets/commercial-residential/references/ref_01.jpg"],
@@ -119,8 +119,8 @@ export const commercialResidentialReferences: ReferenceItem[] = [
     title: "Australian Data Center Project",
     description:
       "PROJECT DUNE is a data center project in Australia aimed at providing an integrated solution by combining advanced power infrastructure and building automation capabilities. The project focuses on delivering reliable and cost-effective solutions for global colocation data center customers.",
-    location: "Australia",
-    country: "",
+    // location: "Australia",
+    // country: "",
     modal: {
       modalTitle: "Australian Data Center Project",
       images: ["/img/markets/commercial-residential/references/ref_02.jpg"],
@@ -149,8 +149,8 @@ export const commercialResidentialReferences: ReferenceItem[] = [
     title: "AI Data Center Demonstration Testbed",
     description:
       "To address the rapid expansion of the global data center market, the company and a strategic partner established a collaborative demonstration testbed. This facility aims to strengthen validation capabilities in power and cooling infrastructure, supporting joint market entry into the emerging AI data center sector.",
-    location: "South Korea",
-    country: "",
+    // location: "South Korea",
+    // country: "",
     modal: {
       modalTitle: "AI Data Center Demonstration Testbed",
       images: ["/img/markets/commercial-residential/references/ref_03.jpg"],

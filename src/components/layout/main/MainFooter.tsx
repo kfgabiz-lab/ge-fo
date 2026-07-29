@@ -25,8 +25,8 @@ const interestOptions = [
 
 const legalLinks = [
   { label: "Privacy Policy", href: "/privacy-policy" },
-  { label: "Terms of Use", href: "" },
-  { label: "Cookie Policy", href: "" },
+  { label: "Terms of Service", href: "/terms-of-service" },
+  { label: "General Terms of Purchase", href: "/general-terms-of-purchase" },
   { label: "Change Your Cookie Setting", opensCookieSettingsModal: true },
 ] as const;
 

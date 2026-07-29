@@ -73,8 +73,8 @@ export type ReferenceItem = {
   image: string;
   title: string;
   description: string;
-  location: string;
-  country: string;
+  // location: string;
+  // country: string;
   modal: ReferenceModalContent;
 };
 
@@ -216,8 +216,8 @@ export const references: ReferenceItem[] = [
     title: "Global Commercial Tower",
     description:
       "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears",
-    location: "Ho Chi Minh",
-    country: "Vietnam",
+    // location: "Ho Chi Minh",
+    // country: "Vietnam",
     modal: {
       images: [
         "/img/markets/markets_ref_01.png",
@@ -253,8 +253,8 @@ export const references: ReferenceItem[] = [
     title: "LG USA New Headquarters",
     description:
       "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears",
-    location: "New Jersey",
-    country: "United States",
+    // location: "New Jersey",
+    // country: "United States",
     modal: {
       modalTitle: "LG Electronics USA New Headquarters",
       images: [
@@ -293,8 +293,8 @@ export const references: ReferenceItem[] = [
     title: "KPX Energy Management System",
     description:
       "Owing to the next-generation EMS constructed at the operators can now optimally manage power generation, analyze systems",
-    location: "Naju",
-    country: "South Korea",
+    // location: "Naju",
+    // country: "South Korea",
     modal: {
       images: [
         "/img/markets/markets_ref_03.png",
