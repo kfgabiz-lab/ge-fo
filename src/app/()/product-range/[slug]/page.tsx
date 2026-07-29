@@ -8,7 +8,10 @@ import {
   fetchCategoryLv2Products,
   fetchProductBySlug,
 } from "@/app/()/products-systems/data/productsSystemsData";
-import { parseCategoryContext } from "@/lib/navigation/categoryContext";
+import {
+  parseCategoryContext,
+  withCategoryContext,
+} from "@/lib/navigation/categoryContext";
 import { fetchCategoryInsightsLv2 } from "@/data/highlightNews";
 import "@/assets/css/devices-systems.css";
 
@@ -48,12 +51,15 @@ export default async function ProductRangeRoutePage({
         <DevicesHelp variant="overlay" />
         <DevicesPageFooter
           highlightItems={highlightItems}
-          bannerLinkHref="/support/contact-us"
+          bannerLinkHref={withCategoryContext(
+            "/support/contact-us",
+            category.id,
+          )}
         />
       </main>
     );
   }
 
   const row = await fetchProductBySlug(slug, { categoryId });
-  return <ProductDetailRouter slug={slug} row={row} />;
+  return <ProductDetailRouter slug={slug} row={row} categoryId={categoryId} />;
 }

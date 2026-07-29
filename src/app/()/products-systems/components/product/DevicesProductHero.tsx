@@ -6,11 +6,13 @@ import ProductSectionScrollLink from "./ProductSectionScrollLink";
 type DevicesProductHeroProps = {
   product: ProductDetail;
   showDownloads?: boolean;
+  contactHref?: string;
 };
 
 export default function DevicesProductHero({
   product,
   showDownloads = true,
+  contactHref,
 }: DevicesProductHeroProps) {
   const hasAward = product.awards === "01";
 
@@ -74,7 +76,7 @@ export default function DevicesProductHero({
           </dl>
           <div className="devices_product_hero__btns">
             <Link
-              href={product.expertBannerHref ?? "/support/contact-us"}
+              href={contactHref ?? product.expertBannerHref ?? "/support/contact-us"}
               prefetch={false}
               className="btn-base btn-lv01 btn-lv01--solid"
             >

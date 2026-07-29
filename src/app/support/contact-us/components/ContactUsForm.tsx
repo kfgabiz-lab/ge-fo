@@ -8,7 +8,8 @@ import {
   TextField,
 } from "@mui/material";
 import Link from "next/link";
-import { useEffect, useId, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useId, useState } from "react";
 import {
   GuideCheckboxIcon,
   GuideSelectIcon,
@@ -19,7 +20,14 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   type DevicesTreeRow,
   fetchDevicesTreeRows,
+  resolveDevicesCategorySelection,
 } from "@/data/gnb/devicesTree";
+import {
+  CATEGORY_CONTEXT_PARAM,
+  PRODUCT_CONTEXT_PARAM,
+  parseCategoryContext,
+  parseProductContext,
+} from "@/lib/navigation/categoryContext";
 import {
   contactUsCategoryLevels,
   contactUsConsentItems,
@@ -165,7 +173,22 @@ function PasswordField({
 }
 
 export default function ContactUsForm() {
+  return (
+    <Suspense fallback={null}>
+      <ContactUsFormContent />
+    </Suspense>
+  );
+}
+
+function ContactUsFormContent() {
   const formId = useId();
+  const searchParams = useSearchParams();
+  const initialCategoryId = parseCategoryContext(
+    searchParams.get(CATEGORY_CONTEXT_PARAM),
+  );
+  const initialProductId = parseProductContext(
+    searchParams.get(PRODUCT_CONTEXT_PARAM),
+  );
   const isMobile = useMediaQuery("(max-width: 780px)");
   const countryPlaceholder = isMobile
     ? contactUsFormCopy.countryPlaceholderMobile
@@ -229,7 +252,14 @@ export default function ContactUsForm() {
     let alive = true;
     fetchDevicesTreeRows()
       .then((rows) => {
-        if (alive) setDeviceRows(rows);
+        if (!alive) return;
+        setDeviceRows(rows);
+        const selection = resolveDevicesCategorySelection(
+          rows,
+          initialCategoryId,
+          initialProductId,
+        );
+        if (selection.lv1) setCategoryIds(selection);
       })
       .catch(() => {
         if (alive) setDeviceRows([]);
@@ -237,7 +267,7 @@ export default function ContactUsForm() {
     return () => {
       alive = false;
     };
-  }, []);
+  }, [initialCategoryId, initialProductId]);
 
   const lv1Rows = deviceRows.filter((row) => row.depth === "1");
   const lv2Rows = deviceRows.filter(

@@ -29,6 +29,7 @@ import {
   type ProductTechHubBannerCopy,
 } from "@/data/support/techHubData";
 import { fetchProductInsights } from "@/data/highlightNews/highlightNewsData";
+import { withProductInquiryContext } from "@/lib/navigation/categoryContext";
 import type { HighlightNewsItem } from "@/types/highlightNews";
 import {
   fetchProductDownloadsPage,
@@ -95,6 +96,7 @@ type SwDetailProps = {
   productCodes: string[];
   techHubCopy: ProductTechHubBannerCopy;
   highlights: HighlightNewsItem[];
+  contactHref: string;
 };
 
 function filterSwNavItems<T extends { readonly id: string }>(
@@ -125,6 +127,7 @@ function ScadaDetail({
   productCodes,
   techHubCopy,
   highlights,
+  contactHref,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
   const showDownloads = downloads.totalElements > 0;
@@ -145,7 +148,11 @@ function ScadaDetail({
       className="devices-page devices-page--product devices-page--hvdc"
       id="Page_devices_hvdc"
     >
-      <DevicesHvdcHero title={bind.title} description={bind.description} />
+      <DevicesHvdcHero
+        title={bind.title}
+        description={bind.description}
+        contactHref={contactHref}
+      />
       <DevicesProductNavScope
         navItems={filterSwNavItems(hvdcNavItems, showDownloads)}
       >
@@ -209,6 +216,7 @@ function XemsDetail({
   productCodes,
   techHubCopy,
   highlights,
+  contactHref,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
   const showDownloads = downloads.totalElements > 0;
@@ -229,7 +237,11 @@ function XemsDetail({
       className="devices-page devices-page--product devices-page--xems"
       id="P-FO-PROD-040000P"
     >
-      <DevicesXemsHero title={bind.title} description={bind.description} />
+      <DevicesXemsHero
+        title={bind.title}
+        description={bind.description}
+        contactHref={contactHref}
+      />
       <DevicesProductNavScope
         navItems={filterSwNavItems(xemsNavItems, showDownloads)}
       >
@@ -290,6 +302,7 @@ function MicroGridDetail({
   productCodes,
   techHubCopy,
   highlights,
+  contactHref,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
   const showDownloads = downloads.totalElements > 0;
@@ -310,7 +323,11 @@ function MicroGridDetail({
       className="devices-page devices-page--product devices-page--micro-grid"
       id="P-FO-PROD-040000P"
     >
-      <DevicesMicroGridHero title={bind.title} description={bind.description} />
+      <DevicesMicroGridHero
+        title={bind.title}
+        description={bind.description}
+        contactHref={contactHref}
+      />
       <DevicesProductNavScope
         navItems={filterSwNavItems(microGridNavItems, showDownloads)}
       >
@@ -371,6 +388,7 @@ function SmartFactoryDetail({
   productCodes,
   techHubCopy,
   highlights,
+  contactHref,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
   const showDownloads = downloads.totalElements > 0;
@@ -391,7 +409,11 @@ function SmartFactoryDetail({
       className="devices-page devices-page--product devices-page--smart-factory"
       id="P-FO-PROD-040000P"
     >
-      <DevicesSmartFactoryHero title={bind.title} description={bind.description} />
+      <DevicesSmartFactoryHero
+        title={bind.title}
+        description={bind.description}
+        contactHref={contactHref}
+      />
       <DevicesProductNavScope
         navItems={filterSwNavItems(smartFactoryNavItems, showDownloads)}
       >
@@ -453,9 +475,11 @@ function SmartFactoryDetail({
 export default async function SwProductDetail({
   slug,
   row,
+  categoryId,
 }: {
   slug: string;
   row: Record<string, unknown> | null;
+  categoryId?: number;
 }) {
   const productId = row ? Number(row._id) : null;
   const productCode = row ? String(row["product.product_code"] ?? "").trim() : "";
@@ -473,6 +497,11 @@ export default async function SwProductDetail({
     productId ? fetchProductInsights(productId) : Promise.resolve([]),
   ]);
   const techHubCopy = buildSwProductTechHubBannerCopy(lv2Name);
+  const contactHref = withProductInquiryContext(
+    "/support/contact-us",
+    categoryId,
+    productId,
+  );
 
   switch (slug) {
     case "scada":
@@ -484,6 +513,7 @@ export default async function SwProductDetail({
           productCodes={productCodes}
           techHubCopy={techHubCopy}
           highlights={highlights}
+          contactHref={contactHref}
         />
       );
     case "xems":
@@ -495,6 +525,7 @@ export default async function SwProductDetail({
           productCodes={productCodes}
           techHubCopy={techHubCopy}
           highlights={highlights}
+          contactHref={contactHref}
         />
       );
     case "micro-grid":
@@ -506,6 +537,7 @@ export default async function SwProductDetail({
           productCodes={productCodes}
           techHubCopy={techHubCopy}
           highlights={highlights}
+          contactHref={contactHref}
         />
       );
     case "smart-factory":
@@ -517,9 +549,10 @@ export default async function SwProductDetail({
           productCodes={productCodes}
           techHubCopy={techHubCopy}
           highlights={highlights}
+          contactHref={contactHref}
         />
       );
     default:
-      return <GenericProductDetail row={row} />;
+      return <GenericProductDetail row={row} categoryId={categoryId} />;
   }
 }

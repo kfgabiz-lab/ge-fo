@@ -21,6 +21,7 @@ import {
   fetchProductManagerEmail,
 } from "../../data/productsSystemsData";
 import { fetchProductInsights } from "@/data/highlightNews";
+import { withProductInquiryContext } from "@/lib/navigation/categoryContext";
 import { productDownloadsDefaultDocTypes } from "@/data/support/downloadCenterContent";
 import {
   buildHwProductTechHubBannerCopy,
@@ -31,8 +32,10 @@ import "@/assets/css/devices-product-detail.css";
 
 export default async function GenericProductDetail({
   row,
+  categoryId,
 }: {
   row: Record<string, unknown> | null;
+  categoryId?: number;
 }) {
   const { detail, productId } = buildHwProductDetail(row, productTemplateDetail);
   const productCode = row ? String(row["product.product_code"] ?? "").trim() : "";
@@ -60,6 +63,11 @@ export default async function GenericProductDetail({
 
   const { lv2Name, otherProducts } = lv2Context;
   const heroDetail = { ...detail, category: lv2Name };
+  const inquiryHref = withProductInquiryContext(
+    detail.expertBannerHref ?? "/support/contact-us",
+    categoryId,
+    productId,
+  );
   const otherProductsTitle = lv2Name ? `Explore the ${lv2Name} Products` : undefined;
 
   const showKeyFeatures = detail.keyFeatures.length > 0;
@@ -78,7 +86,11 @@ export default async function GenericProductDetail({
 
   return (
     <main className="devices-page devices-page--product" id="Page_devices_product">
-      <DevicesProductHero product={heroDetail} showDownloads={showDownloads} />
+      <DevicesProductHero
+        product={heroDetail}
+        showDownloads={showDownloads}
+        contactHref={inquiryHref}
+      />
       <DevicesProductNavScope navItems={visibleNavItems}>
         {showKeyFeatures ? (
           <DevicesProductFeaturesSection
@@ -88,7 +100,7 @@ export default async function GenericProductDetail({
         ) : null}
         <CommonBanner02
           variant="expert"
-          linkHref={detail.expertBannerHref}
+          linkHref={inquiryHref}
           linkExternal={detail.expertBannerExternal}
           contactEmail={managerEmail}
           backgroundSrc={detail.configuratorBannerBg}

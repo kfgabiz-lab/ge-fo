@@ -5,9 +5,11 @@ import { renderMultilineText } from "../../lib/renderMultilineText";
 export default function DevicesMicroGridHero({
   title = microGridHero.title,
   description = microGridHero.description,
+  contactHref = "/support/contact-us",
 }: {
   title?: string;
   description?: string;
+  contactHref?: string;
 }) {
   return (
     <section className="devices_software_hero" id="product-top">
@@ -27,7 +29,7 @@ export default function DevicesMicroGridHero({
           {renderMultilineText(description)}
         </p>
         <div className="devices_software_hero__btns">
-          <Link href="/support/contact-us" className="btn-base btn-lv01 btn-lv01--solid">
+          <Link href={contactHref} className="btn-base btn-lv01 btn-lv01--solid">
             Contact Us
           </Link>
         </div>

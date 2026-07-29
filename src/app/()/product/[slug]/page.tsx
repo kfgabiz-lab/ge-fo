@@ -13,9 +13,8 @@ export default async function ProductDetailRoutePage({
 }: ProductPageProps) {
   const { slug } = await params;
   const { category } = await searchParams;
+  const categoryId = parseCategoryContext(category);
 
-  const row = await fetchProductBySlug(slug, {
-    categoryId: parseCategoryContext(category),
-  });
-  return <ProductDetailRouter slug={slug} row={row} />;
+  const row = await fetchProductBySlug(slug, { categoryId });
+  return <ProductDetailRouter slug={slug} row={row} categoryId={categoryId} />;
 }

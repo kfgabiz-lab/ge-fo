@@ -319,40 +319,52 @@ async function fetchProductDetailById(
   }
 }
 
+function findProductIdInRows(
+  rows: DevicesTreeRow[],
+  slug: string,
+  categoryId?: number,
+): number | null {
+  const matched = rows.find(
+    (row) =>
+      row.depth === "3" &&
+      row.productSlug === slug &&
+      row.productId != null &&
+      (categoryId === undefined || row.parentId === String(categoryId)),
+  );
+  return matched?.productId ?? null;
+}
+
 async function resolveProductIdInCategory(
   slug: string,
   categoryId: number,
 ): Promise<number | null> {
-  const rows = await fetchDevicesTreeRows();
-  const matched = rows.find(
-    (row) =>
-      row.depth === "3" &&
-      row.parentId === String(categoryId) &&
-      row.productSlug === slug &&
-      row.productId != null,
-  );
-  return matched?.productId ?? null;
+  return findProductIdInRows(await fetchDevicesTreeRows(), slug, categoryId);
+}
+
+async function resolveProductIdBySlug(slug: string): Promise<number | null> {
+  return findProductIdInRows(await fetchDevicesTreeRows(), slug);
 }
 
 export async function fetchProductBySlug(
   slug: string,
   opts?: { categoryId?: number },
 ): Promise<Record<string, unknown> | null> {
-  if (opts?.categoryId !== undefined) {
-    const productId = await resolveProductIdInCategory(slug, opts.categoryId);
-    if (productId != null) {
-      const row = await fetchProductDetailById(productId);
-      if (row && row["seo.slug"] === slug) return row;
-    }
+  const productIdInCategory =
+    opts?.categoryId !== undefined
+      ? await resolveProductIdInCategory(slug, opts.categoryId)
+      : null;
+  const productId = productIdInCategory ?? (await resolveProductIdBySlug(slug));
+  if (productId != null) {
+    const row = await fetchProductDetailById(productId);
+    if (row && row["seo.slug"] === slug) return row;
   }
   return fetchProductDetailBySlug(slug);
 }
 
 async function resolveLv2IdOfProductSlug(slug: string): Promise<number | null> {
-  const row = await fetchProductDetailBySlug(slug);
-  const productId = row ? Number(row._id) : Number.NaN;
-  if (!Number.isInteger(productId)) return null;
   const rows = await fetchDevicesTreeRows();
+  const productId = findProductIdInRows(rows, slug);
+  if (productId == null) return null;
   const matched = rows.find(
     (r) => r.depth === "3" && r.productId === productId && r.parentId,
   );
