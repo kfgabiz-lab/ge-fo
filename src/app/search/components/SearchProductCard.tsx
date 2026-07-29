@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { SearchProductItem } from "@/data/search/searchAllContent";
 import { PRODUCTS_SYSTEMS_PLACEHOLDER } from "@/app/()/products-systems/data/productsSystemsData";
 import {
+  includesSearchHighlight,
   renderInlineTextHighlight,
   renderTitleTextHighlight,
 } from "./renderSearchTextHighlight";
@@ -41,7 +42,7 @@ export default function SearchProductCard({ item, searchTerm }: SearchProductCar
             ))}
           </h3>
           <p className="search_all__product-desc">
-            {highlight && item.description.includes(highlight)
+            {highlight && includesSearchHighlight(item.description, highlight)
               ? renderInlineTextHighlight(
                   item.description,
                   highlight,

@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { SearchPageItem } from "@/data/search/searchAllContent";
 import {
+  includesSearchHighlight,
   renderInlineTextHighlight,
   renderTitleTextHighlight,
 } from "./renderSearchTextHighlight";
@@ -33,7 +34,7 @@ function renderTitleSuffix(text: string, searchHighlightSuffix: boolean) {
 
 function renderPageTitle(item: SearchPageItem, highlight: string | undefined) {
   const titleBody =
-    highlight && item.title.includes(highlight)
+    highlight && includesSearchHighlight(item.title, highlight)
       ? renderTitleTextHighlight(
           item.title,
           highlight,
@@ -80,28 +81,44 @@ export default function SearchPageListItem({
   variant = "compact",
 }: SearchPageListItemProps) {
   const highlight = item.highlight;
-  const descContainsHighlight =
-    highlight !== undefined && item.description.includes(highlight);
+  const descContainsHighlight = includesSearchHighlight(
+    item.description,
+    highlight,
+  );
 
   const showDescHighlight = descContainsHighlight;
 
+  const content = (
+    <div className="search_page__content">
+      <div className="search_page__head">
+        {/* 카테고리 값이 없는 소스(page-search)는 카테고리 줄을 렌더하지 않는다 — 없는 문구를 임의로 만들지 않기 위함 */}
+        {item.category ? (
+          <p className="search_page__cat">{item.category}</p>
+        ) : null}
+        {renderTitle(item, highlight, variant)}
+      </div>
+      <p className="search_page__desc">
+        {showDescHighlight && highlight
+          ? renderInlineTextHighlight(
+              item.description,
+              highlight,
+              "search_page__desc-mark",
+            )
+          : item.description}
+      </p>
+    </div>
+  );
+
+  // 이동 대상 URL 이 없는 항목(page-search 결과)은 클릭 불가 항목으로 렌더한다.
+  // href="" 는 Next 에서 현재 URL 로 해석돼 불필요한 이동이 발생하므로 Link 로 감싸지 않는다.
+  // className/내부 구조는 링크 항목과 동일하게 유지한다(스타일 변경 없음).
+  if (!item.href) {
+    return <div className={className}>{content}</div>;
+  }
+
   return (
     <Link href={item.href} prefetch={false} className={className}>
-      <div className="search_page__content">
-        <div className="search_page__head">
-          <p className="search_page__cat">{item.category}</p>
-          {renderTitle(item, highlight, variant)}
-        </div>
-        <p className="search_page__desc">
-          {showDescHighlight && highlight
-            ? renderInlineTextHighlight(
-                item.description,
-                highlight,
-                "search_page__desc-mark",
-              )
-            : item.description}
-        </p>
-      </div>
+      {content}
     </Link>
   );
 }

@@ -106,6 +106,7 @@ function PasswordField({
   onChange,
   fieldClassName = "",
   error = false,
+  errorMessage,
 }: {
   id: string;
   label: string;
@@ -114,6 +115,7 @@ function PasswordField({
   onChange: (value: string) => void;
   fieldClassName?: string;
   error?: boolean;
+  errorMessage?: string;
 }) {
   const [visible, setVisible] = useState(false);
 
@@ -131,6 +133,7 @@ function PasswordField({
         placeholder={placeholder}
         required
         error={error}
+        helperText={errorMessage}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         slotProps={{
@@ -197,6 +200,8 @@ export default function ContactUsForm() {
   const [description, setDescription] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  // Confirm Password가 Password와 다를 때 alert + 인풋 하단 메시지 노출용
+  const [passwordMismatch, setPasswordMismatch] = useState(false);
   // 동의 체크 상태 — 데이터 파일 기본값(defaultChecked)으로 초기화
   const [consent, setConsent] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(
@@ -364,6 +369,14 @@ export default function ContactUsForm() {
       alert("Please complete all required fields.");
       return;
     }
+
+    // Password/Confirm Password 불일치 확인 (둘 다 입력된 상태에서만 판정)
+    if (password !== confirmPassword) {
+      setPasswordMismatch(true);
+      alert(contactUsFormCopy.confirmPasswordMismatch);
+      return;
+    }
+    setPasswordMismatch(false);
 
     setSubmitting(true);
 
@@ -654,6 +667,7 @@ export default function ContactUsForm() {
                   if (errors.password) {
                     setErrors((prev) => ({ ...prev, password: undefined }));
                   }
+                  if (passwordMismatch) setPasswordMismatch(false);
                 }}
                 error={Boolean(errors.password)}
                 fieldClassName="support_contact_form__field--password"
@@ -668,8 +682,14 @@ export default function ContactUsForm() {
                   if (errors.confirmPassword) {
                     setErrors((prev) => ({ ...prev, confirmPassword: undefined }));
                   }
+                  if (passwordMismatch) setPasswordMismatch(false);
                 }}
-                error={Boolean(errors.confirmPassword)}
+                error={Boolean(errors.confirmPassword) || passwordMismatch}
+                errorMessage={
+                  passwordMismatch
+                    ? contactUsFormCopy.confirmPasswordMismatch
+                    : undefined
+                }
                 fieldClassName="support_contact_form__field--confirm-password"
               />
             </div>

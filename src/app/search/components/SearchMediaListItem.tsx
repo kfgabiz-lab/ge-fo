@@ -1,6 +1,10 @@
 import Link from "next/link";
 import type { SearchMediaItem } from "@/data/search/searchAllContent";
-import { renderInlineTextHighlight, renderTitleTextHighlight } from "./renderSearchTextHighlight";
+import {
+  includesSearchHighlight,
+  renderInlineTextHighlight,
+  renderTitleTextHighlight,
+} from "./renderSearchTextHighlight";
 
 type SearchMediaListItemProps = {
   item: SearchMediaItem;
@@ -15,8 +19,10 @@ export default function SearchMediaListItem({
   variant = "compact",
 }: SearchMediaListItemProps) {
   const highlight = item.highlight;
-  const descContainsHighlight =
-    highlight !== undefined && Boolean(item.description?.includes(highlight));
+  const descContainsHighlight = includesSearchHighlight(
+    item.description,
+    highlight,
+  );
 
   const showDescHighlight = descContainsHighlight;
 
@@ -71,7 +77,13 @@ export default function SearchMediaListItem({
               : "search_all__media-thumb"
           }
         >
-          <img src={item.image} alt="" loading="lazy" decoding="async" />
+          {/* 썸네일 없음(폴백 이미지도 없는 소스 = Tech Hub)일 때 src 미설정 — 빈 문자열 src 로 인한 재다운로드 경고 방지(TechHubVideoCard 와 동일 처리) */}
+          <img
+            src={item.image || undefined}
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <div className="search_all__media-content">{body}</div>
       </Link>

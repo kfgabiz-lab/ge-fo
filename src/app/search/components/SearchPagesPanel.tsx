@@ -1,26 +1,62 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import SearchPageList from "./SearchPageList";
 import SearchPagesFilterPanel from "./SearchPagesFilterPanel";
 import { SearchPagesFilterProvider } from "./SearchPagesFilterProvider";
+import { searchPagesPage } from "@/data/search/searchPagesContent";
 import {
-  getSearchPagesPageItems,
-  searchPagesPage,
-} from "@/data/search/searchPagesContent";
+  EMPTY_SEARCH_PAGES_RESULT,
+  fetchSearchPages,
+  type SearchPagesResult,
+} from "@/data/search/searchPagesData";
+
+// Pages 탭 페이지 크기(퍼블리싱 기준 10건)
+const { pageSize: PAGE_SIZE } = searchPagesPage;
 
 function SearchPagesPanelContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
-  const { totalResults, pageSize } = searchPagesPage;
-  const totalPages = Math.max(1, Math.ceil(totalResults / pageSize));
-
-  const pageItems = useMemo(
-    () => getSearchPagesPageItems(currentPage, pageSize),
-    [currentPage, pageSize],
+  const [result, setResult] = useState<SearchPagesResult>(
+    EMPTY_SEARCH_PAGES_RESULT,
   );
+
+  // 검색어(q)는 URL ?q= 에서 읽는다(All 탭/다른 탭과 동일 소스).
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") ?? "";
+
+  const pageItems = result.items;
+  const totalResults = result.totalElements;
+  const totalPages = Math.max(1, result.totalPages);
+
+  // 검색어 변경 시 1페이지로(최초 실행 제외).
+  // 좌측 필터(Document Type)는 대응 컬럼이 없어 이번 라운드 API 미연동 — 결과에 영향을 주지 않는다.
+  const firstResetRef = useRef(true);
+  useEffect(() => {
+    if (firstResetRef.current) {
+      firstResetRef.current = false;
+      return;
+    }
+    setCurrentPage(1);
+  }, [query]);
+
+  // 실검색(검색어/페이지 변경 시). 실패 시 빈 결과 폴백은 헬퍼가 처리.
+  useEffect(() => {
+    let alive = true;
+    void fetchSearchPages(query, {
+      // 화면 페이지는 1-based, API page 는 0-based.
+      page: currentPage - 1,
+      size: PAGE_SIZE,
+    }).then((res) => {
+      if (alive) setResult(res);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [query, currentPage]);
 
   return (
     <section className="search_pages devices_product_downloads" id="search-pages">

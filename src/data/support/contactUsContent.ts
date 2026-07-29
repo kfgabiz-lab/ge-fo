@@ -118,6 +118,7 @@ export const contactUsFormCopy = {
   passwordPlaceholder: "Enter Password",
   confirmPassword: "Confirm Password",
   confirmPasswordPlaceholder: "Enter Password Confirm",
+  confirmPasswordMismatch: "Passwords do not match.",
   sendLabel: "Send",
   sendLabelMobile: "LIST",
   sendingLabel: "Sending...",
