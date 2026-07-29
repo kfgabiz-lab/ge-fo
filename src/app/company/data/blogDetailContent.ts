@@ -27,7 +27,6 @@ export const blogDetailTailParagraphs = [
   "However, most of the control panel problems stem from a handful of recurring causes. By recognizing these common issues early and applying structured control panel troubleshooting tips, operators can minimize downtime and avoid expensive repairs.",
 ];
 
-/** Figma 4831:57188 — article bottom tags */
 export const blogDetailTags = [
   "#MCCB",
   "#Switches",

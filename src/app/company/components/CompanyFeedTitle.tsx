@@ -1,4 +1,3 @@
-// 공통 피드 타이틀 (Press/Articles). Events는 variant="press"로 재사용하며 heading/description만 override
 type CompanyFeedTitleVariant = "press" | "articles";
 
 const titleDefaults: Record<CompanyFeedTitleVariant, { heading: string; description: string }> = {

@@ -4,10 +4,8 @@ import Link from "next/link";
 import type { TrainingCardItem } from "../data/trainingData";
 import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
 
-// 미디어 미등록 시 카드 폴백 이미지
 const CARD_FALLBACK_IMAGE = "/img/services/engineering-training/course-01.jpg";
 
-// Training 강의 카드. 상세 링크(id 기반)는 variant별 detailHref 주입.
 export default function TrainingCard({
   course,
   detailHref,
@@ -16,18 +14,14 @@ export default function TrainingCard({
   detailHref: string;
 }) {
   return (
-    // data-slugkey="id": 상세 링크 href는 id(curriculum PK) 기반으로 파생
     <Link
       href={detailHref}
       className="support_service_training_card"
       data-slugkey="id"
       data-slugkey-attr="href"
-      // 소프트 이동 대비: 클릭 즉시 실 코스 제목을 seed → 코스상세 브레드크럼 current 무플래시.
-      // (이미 보유한 props 사용, 추가 조회 없음)
       onClick={() => seedBreadcrumbTitle(detailHref, course.title)}
     >
       <div className="support_service_training_card__media">
-        {/* image: curriculum.image 파일id 배열 첫번째 → /api/v1/fo/page-files/{id} */}
         <img
           loading="lazy"
           decoding="async"
@@ -38,7 +32,6 @@ export default function TrainingCard({
         />
       </div>
       <div className="support_service_training_card__body">
-        {/* product_category: PRODUCTCATEGORY 코드(P=Power/A=Automation) → 라벨 변환 결과 */}
         <p
           className="support_service_training_card__category"
           data-slugkey="product_category"

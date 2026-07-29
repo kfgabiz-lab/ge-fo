@@ -35,9 +35,8 @@ import {
 } from "../data/contactUsData";
 import ContactUsTermsModal from "./ContactUsTermsModal";
 
-// 동의 항목 id(데이터 파일 contactUsConsentItems 기준) → 제출 플래그 매핑용 상수
-const CONSENT_PRIVACY_ID = "personal-info"; // 개인정보 수집·이용 동의(필수) → privacyConsentFlag
-const CONSENT_MARKETING_ID = "newsletter"; // 마케팅 수신 동의 → marketingOptInFlag
+const CONSENT_PRIVACY_ID = "personal-info";
+const CONSENT_MARKETING_ID = "newsletter";
 
 function renderSelectValue(label: string) {
   return (
@@ -47,13 +46,10 @@ function renderSelectValue(label: string) {
   );
 }
 
-// devices-tree 행의 rowId → parentId 매칭/셀렉트 value 용 문자열 키.
 function rowKey(row: DevicesTreeRow): string {
   return row.rowId != null ? String(row.rowId) : "";
 }
 
-// Send 클릭 시 빈 값인 필수 텍스트/셀렉트 필드에 에러 표시용 맵
-// (체크박스·라디오는 대상 아님 — 텍스트/셀렉트 8개만)
 type ContactFieldErrors = {
   email?: boolean;
   firstName?: boolean;
@@ -65,13 +61,12 @@ type ContactFieldErrors = {
   confirmPassword?: boolean;
 };
 
-// 제품 카테고리 cascading 셀렉트 한 단계의 렌더 설정.
 type CategoryLevelConfig = {
   id: string;
-  placeholder: string; // 미선택 시 표시 라벨(Lv1/Lv2/Lv3 Category)
+  placeholder: string;
   ariaLabel: string;
-  value: string; // 선택된 rowId(문자열)
-  options: { value: string; label: string }[]; // value=rowId, label=표시명
+  value: string;
+  options: { value: string; label: string }[];
   disabled: boolean;
   onChange: (value: string) => void;
 };
@@ -178,15 +173,11 @@ export default function ContactUsForm() {
   const sendLabel = isMobile
     ? contactUsFormCopy.sendLabelMobile
     : contactUsFormCopy.sendLabel;
-  // 공통코드 API(GET /api/v1/fo/codes/{groupCode})로 로딩하는 옵션 목록
   const [inquiryTypes, setInquiryTypes] = useState<CodeItem[]>([]);
   const [countries, setCountries] = useState<CodeItem[]>([]);
 
-  // 폼 입력 상태 (제출 시 값을 모으기 위해 전부 제어 컴포넌트로 관리)
-  const [inquiryType, setInquiryType] = useState(""); // 선택된 문의유형 code(대문자)
-  // 제품 카테고리 원본 데이터(devices-tree flat 행) — GNB 메가메뉴와 동일 엔드포인트 재사용
+  const [inquiryType, setInquiryType] = useState("");
   const [deviceRows, setDeviceRows] = useState<DevicesTreeRow[]>([]);
-  // 제품 카테고리 lv1/lv2/lv3 선택값 — 각 단계에서 선택한 행의 rowId(문자열, 선택 항목)
   const [categoryIds, setCategoryIds] = useState<{
     lv1: string;
     lv2: string;
@@ -196,33 +187,27 @@ export default function ContactUsForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const [country, setCountry] = useState(""); // 선택된 국가 code(대문자, 예: US)
+  const [country, setCountry] = useState("");
   const [description, setDescription] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  // Confirm Password가 Password와 다를 때 alert + 인풋 하단 메시지 노출용
   const [passwordMismatch, setPasswordMismatch] = useState(false);
-  // 동의 체크 상태 — 데이터 파일 기본값(defaultChecked)으로 초기화
   const [consent, setConsent] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(
       contactUsConsentItems.map((item) => [item.id, item.defaultChecked]),
     ),
   );
   const [termsModalOpen, setTermsModalOpen] = useState(false);
-  // Send 클릭 시 빈 값인 필수 텍스트/셀렉트 필드 에러 표시 상태
   const [errors, setErrors] = useState<ContactFieldErrors>({});
 
-  // 제출 진행 상태 — 성공/실패 모두 퍼블리싱대로 별도 안내 문구 없음(성공만 alert()로 안내)
   const [submitting, setSubmitting] = useState(false);
 
-  // 마운트 시 문의유형/국가 옵션을 공통코드 API로 조회 (warranty-policy의 alive 가드 패턴)
   useEffect(() => {
     let alive = true;
     fetchInquiryTypes()
       .then((codes) => {
         if (!alive) return;
         setInquiryTypes(codes);
-        // 원래 UX(첫 라디오 선택) 유지 — 첫 코드로 초기 선택
         if (codes.length > 0) setInquiryType((prev) => prev || codes[0].code);
       })
       .catch(() => {
@@ -240,7 +225,6 @@ export default function ContactUsForm() {
     };
   }, []);
 
-  // 마운트 시 제품 카테고리(devices-tree) 실데이터 조회. 실패 시 빈 배열 폴백 → 옵션 없음 상태로 표시.
   useEffect(() => {
     let alive = true;
     fetchDevicesTreeRows()
@@ -255,7 +239,6 @@ export default function ContactUsForm() {
     };
   }, []);
 
-  // Lv1(depth1) → Lv2(depth2, 상위 rowId 일치) → Lv3(depth3, 상위 rowId 일치) cascading 옵션 파생
   const lv1Rows = deviceRows.filter((row) => row.depth === "1");
   const lv2Rows = deviceRows.filter(
     (row) => row.depth === "2" && row.parentId === categoryIds.lv1,
@@ -264,7 +247,6 @@ export default function ContactUsForm() {
     (row) => row.depth === "3" && row.parentId === categoryIds.lv2,
   );
 
-  // 제품 카테고리 3단 셀렉트 렌더 설정 — 상위 변경 시 하위 선택 초기화(일반 cascading 관행)
   const categoryLevels: CategoryLevelConfig[] = [
     {
       id: contactUsCategoryLevels[0].id,
@@ -306,7 +288,6 @@ export default function ContactUsForm() {
     },
   ];
 
-  // 단일 카테고리 셀렉트 렌더 — value=rowId, renderValue 는 옵션에서 라벨을 역조회해 표시
   function renderCategorySelect(config: CategoryLevelConfig) {
     return (
       <GuideSelect
@@ -335,12 +316,10 @@ export default function ContactUsForm() {
     );
   }
 
-  // 제출 처리 — 폼 상태를 ContactUsInquiryRequest로 조립해 POST
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitting) return;
 
-    // 빈 값인 텍스트/셀렉트 필드(8개)를 찾아 에러 표시 상태로 반영
     const nextErrors: ContactFieldErrors = {
       email: email.trim() === "",
       firstName: firstName.trim() === "",
@@ -353,7 +332,6 @@ export default function ContactUsForm() {
     };
     setErrors(nextErrors);
 
-    // 필수 항목 누락 확인
     const requiredFilled =
       inquiryType.trim() !== "" &&
       email.trim() !== "" &&
@@ -370,7 +348,6 @@ export default function ContactUsForm() {
       return;
     }
 
-    // Password/Confirm Password 불일치 확인 (둘 다 입력된 상태에서만 판정)
     if (password !== confirmPassword) {
       setPasswordMismatch(true);
       alert(contactUsFormCopy.confirmPasswordMismatch);
@@ -380,7 +357,6 @@ export default function ContactUsForm() {
 
     setSubmitting(true);
 
-    // 필수 필드 + 선택 카테고리를 스펙에 맞게 조립 (교차검증/코드검증은 BE에 위임)
     const payload: ContactUsInquiryRequest = {
       type: inquiryType,
       email,
@@ -394,7 +370,6 @@ export default function ContactUsForm() {
       marketingOptInFlag: Boolean(consent[CONSENT_MARKETING_ID]),
       privacyConsentFlag: Boolean(consent[CONSENT_PRIVACY_ID]),
     };
-    // 제품 카테고리는 선택 항목 — 선택된 레벨의 라벨을 "카테고리1 | 카테고리2 | 카테고리3" 형태로 결합해 전송
     const lv1Row = lv1Rows.find((row) => rowKey(row) === categoryIds.lv1);
     const lv2Row = lv2Rows.find((row) => rowKey(row) === categoryIds.lv2);
     const lv3Row = lv3Rows.find((row) => rowKey(row) === categoryIds.lv3);
@@ -406,17 +381,14 @@ export default function ContactUsForm() {
     if (categoryLabels.length > 0) {
       payload.productCategory = categoryLabels.join(" | ");
     }
-    // Lv3(제품)의 product-data PK — BE가 담당자 이메일 조회에 사용
     if (lv3Row?.productId != null) {
       payload.productId = lv3Row.productId;
     }
 
     try {
       await submitContactUs(payload);
-      // 성공은 alert()로 안내(퍼블리싱엔 없는 문구, 사용자 지정 내용)
       alert(contactUsFormCopy.submitSuccess);
     } catch {
-      // 실패 시 퍼블리싱대로 별도 안내 없음
     } finally {
       setSubmitting(false);
     }

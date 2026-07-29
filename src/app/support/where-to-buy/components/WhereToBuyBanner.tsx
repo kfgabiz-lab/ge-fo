@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { whereToBuyBanner } from "@/data/support/whereToBuyContent";
 
-/** Figma 5752:47255 — ## 02_Banner */
 export default function WhereToBuyBanner() {
   const { backgroundImage, backgroundImageMobile, title, description, ctaLabel, ctaHref } =
     whereToBuyBanner;

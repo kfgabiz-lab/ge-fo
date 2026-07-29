@@ -15,51 +15,38 @@ import {
 import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
 
-// 미디어 미등록 시 폴백 이미지(퍼블리싱 정적 이미지 재사용)
 const FEATURED_FALLBACK_IMAGE = "/img/company/articles/hero.png";
 const LIST_FALLBACK_IMAGE = "/img/company/articles/list_01.png";
 
-// Articles 목록: articles-data slug 실데이터 연동(공용 CompanyFeed 컴포넌트 재사용, press와 동일 패턴)
-// - Featured = 정렬된 목록의 1번째 글, 리스트는 featured 제외
-// - 카테고리 필터 없음(articles-data엔 category 필드 자체가 없음, press와 동일)
 export default function CompanyArticlesListPage() {
-  // 현재 페이지(0-based, API)
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  // 현재 페이지 목록 원본
   const [rows, setRows] = useState<ArticlesRow[]>([]);
-  // 목록 조회 1회 이상 완료 여부 — 초기 렌더(rows=[])에서 "결과 없음"이 깜빡이는 것 방지
   const [loaded, setLoaded] = useState(false);
-  // Featured(목록 1번째 글) — page 0 조회 때만 갱신하여 페이지 이동 시 고정
   const [featuredRow, setFeaturedRow] = useState<ArticlesRow | null>(null);
-  // 툴바(검색/정렬/월/연도) 상태 — articles-data.md 4절 B/C/D
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
-  // 연도 필터 옵션: 2025 ~ 올해(내림차순) — "use client"라 런타임 계산 안전
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from(
     { length: currentYear - 2025 + 1 },
     (_, i) => String(currentYear - i),
   );
 
-  // 목록 조회: 페이지/검색/정렬/월/연도 변경 시
   useEffect(() => {
     let alive = true;
     fetchData({
       slug: "articles-data",
       page: pageIndex,
       size: ARTICLES_LIST_SIZE,
-      // Featured 카드 설명(description)을 본문(content)에서 추출하므로 content 필드는 응답에 포함되어야 함(exclude 미사용)
       where: {
         ...ARTICLES_STATUS_WHERE,
         ...(search ? { "title|content": search } : {}),
         ...(month ? { month_publish_dttm: month } : {}),
         ...(year ? { year_publish_dttm: year } : {}),
       },
-      // 정렬 분기(latest=미지정은 sort 생략하여 BE 기본 created_at DESC 유지)
       sort:
         sort === "oldest"
           ? "createdAt,asc"
@@ -74,7 +61,6 @@ export default function CompanyArticlesListPage() {
         if (!alive) return;
         setRows(res.content);
         setTotalPages(res.totalPages || 1);
-        // Featured 는 정렬된 목록의 1번째 글(page 0 조회 때만 갱신)
         if (pageIndex === 0) {
           setFeaturedRow(res.content[0] ?? null);
         }
@@ -90,7 +76,6 @@ export default function CompanyArticlesListPage() {
     };
   }, [pageIndex, search, sort, month, year]);
 
-  // Featured 카드(단건) → CompanyFeedFeatured props 형태로 가공
   const featured = useMemo(() => {
     if (!featuredRow) return null;
     const card = toArticlesCard(featuredRow);
@@ -103,7 +88,6 @@ export default function CompanyArticlesListPage() {
     };
   }, [featuredRow]);
 
-  // 리스트 카드(다건) → CompanyFeedListItem 형태로 가공(featured 로 쓴 항목 제외)
   const listItems = useMemo<CompanyFeedListItem[]>(
     () =>
       rows
@@ -121,12 +105,10 @@ export default function CompanyArticlesListPage() {
     [rows, featuredRow],
   );
 
-  // PageNumbering(1-based) → API(0-based)
   const handlePageChange = (page: number) => {
     setPageIndex(Math.max(0, page - 1));
   };
 
-  // 검색/정렬/월/연도 변경 시 첫 페이지로 이동 후 재조회(press와 동일 패턴)
   const handleSearchSubmit = (value: string) => {
     setSearch(value);
     setPageIndex(0);
@@ -160,8 +142,6 @@ export default function CompanyArticlesListPage() {
       <CompanyFeedListSection
         variant="articles"
         items={listItems}
-        // 조회 완료 후 결과 0건일 때만 "검색 결과 없음"(CompanyFeedEmpty) 표시
-        // (Featured가 목록 1번째 글이라 rows 기준 — rows>0이면 Featured가 렌더되므로 결과 없음이 아님)
         empty={loaded && rows.length === 0}
         currentPage={pageIndex + 1}
         totalPages={totalPages}

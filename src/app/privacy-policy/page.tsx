@@ -9,7 +9,6 @@ export const metadata: Metadata = {
     "This Privacy Notice explains how LS Electric America collects and uses your personal information in connection with its websites, applications, products, services, events, and experiences.",
 };
 
-/** P-FO-COMMON-030000P — Figma PC 8113:132101 · MO 8113:132293 */
 export default function PrivacyPolicyPage() {
   return (
     <main

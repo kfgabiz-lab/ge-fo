@@ -19,7 +19,6 @@ export default function MarketsWhy({
       <div className="inner">
         <div className="markets_why__head">
           <h2 className="section_tit">Why LS ELECTRIC?</h2>
-          {/* <p className="section_desc">{description}</p> */}
         </div>
         <div className="markets_why__list">
           {items.map((item) => (

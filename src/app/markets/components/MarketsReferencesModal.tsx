@@ -16,7 +16,6 @@ type MarketsReferencesModalProps = {
   item?: ReferenceItem | null;
   items?: ReferenceItem[];
   onClose: () => void;
-  /** Section guide preview — in-flow layout without fixed overlay */
   embedded?: boolean;
 };
 
@@ -99,14 +98,12 @@ export default function MarketsReferencesModal({
     swiperRef.current?.slideNext();
   }, []);
 
-  // 이전 레퍼런스로 순환 이동 (첫 항목이면 마지막으로)
   const handlePrevReference = useCallback(() => {
     setReferenceIndex((current) =>
       current > 0 ? current - 1 : referenceItems.length - 1,
     );
   }, [referenceItems.length]);
 
-  // 다음 레퍼런스로 순환 이동 (마지막 항목이면 처음으로)
   const handleNextReference = useCallback(() => {
     setReferenceIndex((current) =>
       current < referenceItems.length - 1 ? current + 1 : 0,
@@ -263,7 +260,6 @@ export default function MarketsReferencesModal({
           </div>
         </div>
       </div>
-      {/* 레퍼런스가 2개 이상일 때만 이전/다음 전환 버튼 노출 */}
       {isMultiReference ? (
         <div
           className="markets_references_modal__reference-nav"

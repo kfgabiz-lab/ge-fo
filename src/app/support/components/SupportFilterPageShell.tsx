@@ -48,7 +48,6 @@ export type SupportFilterPageShellProps = {
   empty?: boolean;
   pageId: string;
   initialQuery?: string;
-  /** 초기 체크할 카테고리 코드(LV2). tech-hub 변형에서만 사용(제품상세 배너의 프리필터 진입). */
   initialCategories?: string[];
 };
 

@@ -13,15 +13,12 @@ export type CompanyCoreValue = {
   icon: string;
 };
 
-/** Figma 5885:143363 (PC emblem) · 5876:29969 (MO emblem) — America · LS ELECTRIC 공통 */
 export const companyMission = {
   title: "Mission & Vision",
   description:
     "Innovating at the intersection of energy, automation, and digital intelligence.",
   bgImage: `${IMG}/mission-bg.png`,
-  /** Figma 5885:150717 (MO wave bg) */
   bgImageMo: `${IMG}/mission-bg-mo.png`,
-  /** Figma 5970:104376 — Futuring Smart Energy */
   missionLogo: `${IMG}/mission-logo.svg`,
   missionText:
     "LS ELECTRIC, which has been pioneering the power and automation industries for the past 40 years, now offers smart convergence solutions by combining ICT and DC technologies.",

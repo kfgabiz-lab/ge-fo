@@ -14,11 +14,8 @@ import "swiper/css/effect-fade";
 
 const AUTOPLAY_DELAY_MS = 4000;
 
-// 업로드 미디어 스트리밍 엔드포인트(fo 오리진 상대경로 → next.config rewrites 로 bo-api:8080 프록시)
 const PAGE_FILE_SRC = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-// 기존 정적 목업 — 이미지(image) 실데이터 URL 변환 로직이 이번 범위 밖이라
-// 이미지는 이 목업을 index 순환으로 유지하고, 조회 0건 시 전체 폴백으로도 사용한다.
 const MOCK_BANNER_SLIDES = [
   {
     id: "banner-1",
@@ -51,12 +48,8 @@ interface BannerSwiperProps {
 }
 
 export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
-  // 실데이터(banner-data) 기반 슬라이드 구성.
-  //  - item.mediaId 가 있으면: 업로드 미디어 스트리밍 엔드포인트(/api/v1/fo/page-files/{mediaId})를 이미지 src 로 사용.
-  //  - item.mediaId 가 없으면(null): 기존 정적 목업 이미지를 index 순환으로 유지.
-  //  - 링크/텍스트(url/mainTitle/subTitle)는 항상 실데이터로 교체.
   const bannerSlides = useMemo(() => {
-    if (bannerItems.length === 0) return MOCK_BANNER_SLIDES; // 조회 0건 시 목업 폴백
+    if (bannerItems.length === 0) return MOCK_BANNER_SLIDES;
     return bannerItems.map((item, index) => {
       const mock = MOCK_BANNER_SLIDES[index % MOCK_BANNER_SLIDES.length];
       return {
@@ -65,7 +58,6 @@ export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
         img: item.mediaId != null ? PAGE_FILE_SRC(item.mediaId) : mock.img,
         alt: item.mainTitle || mock.alt,
         tit: item.mainTitle || mock.tit,
-        // 서브타이틀은 목업 폴백 없음 — 실데이터가 빈 값이면 빈 값 그대로 노출한다.
         txt: item.subTitle,
       };
     });

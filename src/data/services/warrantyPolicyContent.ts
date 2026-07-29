@@ -20,7 +20,6 @@ export type WarrantyApplyRow = {
   contactHref: string;
 };
 
-// fo는 basePath가 없어 ls-publish의 "/pub" 접두어 제거
 const IMG = "/img/services/warranty-policy";
 
 export const warrantyPolicyPage = {

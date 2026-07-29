@@ -1,4 +1,3 @@
-/** GNB 메가 메뉴 패널 DOM id — nav id와 1:1 */
 export const GNB_MEGA_PANEL_ID = {
   devices: "gnb-mega-panel-devices",
   markets: "gnb-mega-panel-markets",

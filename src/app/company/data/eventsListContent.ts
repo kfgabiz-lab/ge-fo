@@ -29,7 +29,6 @@ export type EventsPastItem = {
   href: string;
 };
 
-/** Featured carousel — desktop: 2 cards per Swiper slide (slidesPerView/Group: 2) */
 export const eventsFeaturedItems: EventsFeaturedItem[] = [
   {
     id: "featured-1",

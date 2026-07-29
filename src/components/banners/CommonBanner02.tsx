@@ -12,9 +12,7 @@ type CommonBanner02Props = {
   linkLabel?: string;
   linkExternal?: boolean;
   contactEmail?: string;
-  /** When false, only the CTA links — the panel stays a static block */
   linkWrapPanel?: boolean;
-  /** Panel background — default is shared banner art; product pages may override */
   backgroundSrc?: string;
   backgroundSrcMo?: string;
   sectionId?: string;

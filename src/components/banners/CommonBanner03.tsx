@@ -5,7 +5,6 @@ type CommonBanner03Props = {
   titleTop?: string;
   title?: string;
   description?: string[];
-  /** 본문 아래 건수 문구(예: "7 Electronic Motor Protection Relay Video Tutorials Available"). 미전달 시 미렌더 */
   countText?: string;
   linkHref?: string;
   linkLabel?: string;
@@ -53,7 +52,6 @@ function BannerLink({
   );
 }
 
-// 배너 본문(텍스트 + CTA) — 링크형/비링크형 두 분기가 같은 내용을 렌더하므로 한 곳에서만 정의한다.
 function BannerBody({
   titleTop,
   title,
@@ -77,7 +75,6 @@ function BannerBody({
             <p key={line}>{line}</p>
           ))}
         </div>
-        {/* 건수 문구 — 값이 있을 때만 노출(기획서 product.png: 본문과 CTA 사이) */}
         {countText ? (
           <p className="common_banner_03__count">{countText}</p>
         ) : null}

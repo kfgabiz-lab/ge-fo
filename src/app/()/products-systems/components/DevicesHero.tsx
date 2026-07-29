@@ -10,7 +10,6 @@ type DevicesHeroProps = {
   description?: string;
   showCta?: boolean;
   withProducts?: boolean;
-  /** category-data depth2 카드 목록(motor-control). 미지정 시 DevicesProducts 정적 기본값 사용 */
   products?: DevicesProductItem[];
 };
 
@@ -27,8 +26,6 @@ export default function DevicesHero({
     >
       <div className="devices_hero" aria-hidden="true" />
       <div className="inner">
-        {/* data-slug: category-data (단건 — 카테고리 lv1 히어로 인트로, depth1 레코드) · where=category.depth=1 AND 해당 페이지 카테고리 코드
-            depth1 레코드에는 이미지 필드 없음(정상) — 히어로에 이미지 미사용 */}
         <div className="devices_hero__inner" data-slug="category-data">
           <h1 className="devices_hero__tit" data-slugkey="category.title">{title}</h1>
           <p className="devices_hero__desc" data-slugkey="device_systems.description">{description}</p>

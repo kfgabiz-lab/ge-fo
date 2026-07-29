@@ -12,7 +12,6 @@ function renderWhyBlockHead(block: HvdcWhyBlock) {
   );
 }
 
-// imageOnly=true면 카드 본문(제목/설명)을 렌더하지 않고 비주얼만 노출한다(구 SoftwareHighlights 동작).
 function renderWhyBlockCards(block: HvdcWhyBlock, imageOnly: boolean) {
   return (
     <div className="devices_product_why__cards">
@@ -38,7 +37,6 @@ function renderWhyBlockCards(block: HvdcWhyBlock, imageOnly: boolean) {
 type DevicesProductWhyProps = {
   title: string;
   blocks: HvdcWhyBlock[];
-  // imageOnly=true: 카드 비주얼만 노출 + 헤드 영역을 __head 래퍼로 감싸고 description 노출(--image-only 변형).
   imageOnly?: boolean;
   description?: string;
 };

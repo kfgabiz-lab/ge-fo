@@ -20,7 +20,6 @@ import CommonModal from "@/components/common/CommonModal";
 type CookiePreferencesModalProps = {
   open: boolean;
   onClose?: () => void;
-  /** Section guide preview — in-flow layout without fixed overlay */
   embedded?: boolean;
 };
 
@@ -35,7 +34,6 @@ function persistPreferences(
       JSON.stringify(preferences),
     );
   } catch {
-    /* Ignore quota and private-mode storage failures. */
   }
 }
 
@@ -48,7 +46,6 @@ function getAllPreferences(value: boolean): CookiePreferences {
   ) as CookiePreferences;
 }
 
-/** P-FO-COMMON-040000M · Figma 7334:130670 — Cookie Settings detail */
 export default function CookiePreferencesModal({
   open,
   onClose,

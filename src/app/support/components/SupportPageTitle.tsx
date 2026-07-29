@@ -4,14 +4,11 @@ export type SupportPageTitleSpacing = "default" | "with-bottom";
 
 export type SupportPageTitleProps = {
   id: string;
-  /** Section guide registry alias (e.g. support_tech_hub_title) */
   rootClass: string;
   title: string | readonly string[];
   description: string;
   spacing?: SupportPageTitleSpacing;
-  /** Mobile section horizontal inset (Connect Portal, Where to Buy) */
   mobileInset?: boolean;
-  /** Where to Buy mobile bottom spacing */
   variant?: "where-to-buy";
   children?: ReactNode;
 };

@@ -14,7 +14,6 @@ export default function DownloadCenterFilterPanel({
   variant = "sidebar",
 }: DownloadCenterFilterPanelProps) {
   const filter = useDownloadCenterFilter();
-  // 카테고리는 category-data fetch 결과(코드 기반 LV1>LV2 + 건수). Document Type(secondary)은 doctype-counts 실카운트 반영.
   const { categories, documentTypes } = useDownloadCenterQuery();
 
   return (

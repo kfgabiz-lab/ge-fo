@@ -1,4 +1,3 @@
-/** Privacy Policy page — Figma 8113:132101 · P-FO-COMMON-030000P */
 
 export const privacyPolicyPage = {
   title: "Privacy Policy",

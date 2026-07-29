@@ -15,46 +15,32 @@ import {
 import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
 
-// 미디어 미등록 시 폴백 이미지(퍼블리싱 정적 이미지 재사용)
 const FEATURED_FALLBACK_IMAGE = "/img/company/press/hero.png";
 const LIST_FALLBACK_IMAGE = "/img/company/press/list_01.png";
 
-// Press 목록: press-data slug 실데이터 연동(공용 CompanyFeed 컴포넌트 재사용)
-// - Featured = 전역 최신 게시글 1건(목록 브랜치 size=1 재사용, 검색/필터 무관 고정)
-// - 리스트는 BE ne_id로 Featured 항목을 제외(클라이언트 수동 필터 제거)
-// - 카테고리 필터 없음(press-data엔 category 필드 자체가 없음)
 export default function CompanyPressListPage() {
-  // 현재 페이지(0-based, API)
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  // 현재 페이지 목록 원본
   const [rows, setRows] = useState<PressRow[]>([]);
-  // 목록 조회 1회 이상 완료 여부 — 초기 렌더(rows=[])에서 "결과 없음"이 깜빡이는 것 방지
   const [loaded, setLoaded] = useState(false);
-  // Featured(전역 최신 게시글) — 마운트 시 1회 조회하여 페이지 이동/필터 변경과 무관하게 고정
   const [featuredRow, setFeaturedRow] = useState<PressRow | null>(null);
-  // 툴바(검색/정렬/월/연도) 상태 — 설계문서 9절 B/C/D
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
-  // 연도 필터 옵션: 2018 ~ 올해(내림차순) — "use client"라 런타임 계산 안전
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from(
     { length: currentYear - 2017 + 1 },
     (_, i) => String(currentYear - i),
   );
 
-  // Featured 조회: 마운트 시 1회(전역 최신 게시글 1건 고정) — 목록 브랜치 재사용(size=1, 등록일 최신순)
   useEffect(() => {
     let alive = true;
     fetchData({
       slug: "press-data",
       size: 1,
-      // 등록일(글 저장 시각) 기준 최신 1건 — 목록 툴바 oldest("createdAt,asc")와 동일 필드/반대 방향
       sort: "createdAt,desc",
-      // Featured 카드 설명(description)을 본문(content)에서 추출하므로 content 필드는 응답에 포함되어야 함(exclude 미사용)
       where: { ...PRESS_STATUS_WHERE },
       리턴함수: (rows) => rows,
     })
@@ -69,7 +55,6 @@ export default function CompanyPressListPage() {
     };
   }, []);
 
-  // 목록 조회: 페이지/검색/정렬/월/연도/Featured id 변경 시(Featured 로딩 후 재조회하여 제외 반영)
   useEffect(() => {
     let alive = true;
     fetchData({
@@ -81,10 +66,8 @@ export default function CompanyPressListPage() {
         ...(search ? { "title|content": search } : {}),
         ...(month ? { month_publish_dttm: month } : {}),
         ...(year ? { year_publish_dttm: year } : {}),
-        // Featured 항목 제외(넘어온 경우에만) — BE ne_id 부정일치
         ...(featuredRow?.id != null ? { ne_id: String(featuredRow.id) } : {}),
       },
-      // 정렬 분기(latest=미지정은 sort 생략하여 BE 기본 created_at DESC 유지)
       sort:
         sort === "oldest"
           ? "createdAt,asc"
@@ -111,7 +94,6 @@ export default function CompanyPressListPage() {
     };
   }, [pageIndex, search, sort, month, year, featuredRow?.id]);
 
-  // Featured 카드(단건) → CompanyFeedFeatured props 형태로 가공
   const featured = useMemo(() => {
     if (!featuredRow) return null;
     const card = toPressCard(featuredRow);
@@ -124,7 +106,6 @@ export default function CompanyPressListPage() {
     };
   }, [featuredRow]);
 
-  // 리스트 카드(다건) → CompanyFeedListItem 형태로 가공(Featured 제외는 BE ne_id가 처리)
   const listItems = useMemo<CompanyFeedListItem[]>(
     () =>
       rows.map((row) => {
@@ -140,12 +121,10 @@ export default function CompanyPressListPage() {
     [rows],
   );
 
-  // PageNumbering(1-based) → API(0-based)
   const handlePageChange = (page: number) => {
     setPageIndex(Math.max(0, page - 1));
   };
 
-  // 검색/정렬/월 변경 시 첫 페이지로 이동 후 재조회(blog 카테고리 필터와 동일 패턴)
   const handleSearchSubmit = (value: string) => {
     setSearch(value);
     setPageIndex(0);
@@ -179,7 +158,6 @@ export default function CompanyPressListPage() {
       <CompanyFeedListSection
         variant="press"
         items={listItems}
-        // 조회 완료 후 결과 0건일 때만 "검색 결과 없음"(CompanyFeedEmpty) 표시
         empty={loaded && rows.length === 0}
         currentPage={pageIndex + 1}
         totalPages={totalPages}

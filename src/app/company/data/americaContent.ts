@@ -14,7 +14,6 @@ export type AmericaShapingHighlight = {
 export type AmericaShapingBlock = {
   id: string;
   image: string;
-  /** 있으면 img 대신 자동재생 영상 */
   video?: string;
   titleLines: string[];
   location: string;
@@ -52,11 +51,9 @@ export type AmericaLocationGroup = {
 export type AmericaLeaderItem = {
   id: string;
   image: string;
-  /** 모바일 전용 초상 (없으면 image 사용) */
   imageMobile?: string;
   role: string;
   name: string;
-  /** 피처드 카드 서명 이미지 */
   signature?: string;
 };
 
@@ -197,7 +194,6 @@ export const americaBusiness = {
 };
 
 export const americaCareersBanner = {
-  /** Figma 5876:29880 (MO) · PC banner-bg.png */
   bgImage: `${IMG}/banner-bg.png`,
   bgImageMo: `${IMG}/banner-bg-mo.png`,
   title: "Imagineers Dedicated to the Future of Smart Energy",
@@ -333,7 +329,6 @@ export const americaLeaders = {
   title: "Meet Our Leaders",
   description:
     "Connecting accomplished executives and business leaders who shape industries and create lasting value.",
-  /** Figma — 상단 우측 피처드 (2열 폭) */
   featured: {
     id: "charlie-lee",
     image: `${IMG}/leader-featured.png`,
@@ -406,12 +401,6 @@ export const americaFollow = {
       href: "https://www.instagram.com/lselectric_official",
       icon: `${IMG}/follow-insta.svg`,
     },
-    // {
-    //   id: "facebook",
-    //   label: "FACEBOOK",
-    //   href: "https://www.facebook.com/lselectricofficial",
-    //   icon: `${IMG}/follow-facebook.svg`,
-    // },
     {
       id: "linkedin",
       label: "LINKEDIN",

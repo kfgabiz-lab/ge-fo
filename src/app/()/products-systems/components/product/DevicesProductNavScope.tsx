@@ -6,7 +6,6 @@ type DevicesProductNavScopeProps = {
   navItems?: readonly ProductNavItem[];
 };
 
-/** Key Feature(#product-key-feature) 이하 구간에서만 사이드 네비 sticky */
 export default function DevicesProductNavScope({
   children,
   navItems,

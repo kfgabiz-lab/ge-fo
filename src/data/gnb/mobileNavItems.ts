@@ -70,11 +70,6 @@ function getDepth4Products(item: GnbMegaDepth3): GnbMegaProduct[] {
   return [];
 }
 
-/**
- * depth2 목록 생성.
- * grid 레이아웃(markets)은 pub의 하드코딩 정렬 배열을 쓰지 않고
- * 전달받은 megaMenu.items 순서(= API sortOrder 순)를 그대로 사용한다.
- */
 export function getMobileDepth2Items(navItem: GnbNavItem): GnbMobileDepth2Item[] {
   const megaMenu = navItem.megaMenu;
   if (!megaMenu) return [];
@@ -132,7 +127,6 @@ export function getMobileDepth2Sections(
   }));
 }
 
-/** navItems(= resolve된 GNB 목록)에서 navId로 항목 조회 */
 export function findGnbNavItem(navItems: GnbNavItem[], navId: string) {
   return navItems.find((item) => item.id === navId);
 }

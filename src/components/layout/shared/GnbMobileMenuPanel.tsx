@@ -25,7 +25,6 @@ type MobileMenuLevel = "depth1" | "depth2" | "depth3" | "depth4";
 type GnbMobileMenuPanelProps = {
   isOpen: boolean;
   onClose: () => void;
-  /** GnbMenu에서 전달하는 GNB 항목 목록 (정적/API 소스 무관하게 주입) */
   navItems: GnbNavItem[];
 };
 

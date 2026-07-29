@@ -7,7 +7,6 @@ type TechHubVideoCardProps = {
 };
 
 export default function TechHubVideoCard({ item }: TechHubVideoCardProps) {
-  // 썸네일: contents_file 에 영상 파일이 없으므로 video_url 의 YouTube id → 표준 썸네일 URL 파생(기존 공통함수 재사용).
   const videoId = item.videoUrl ? getYoutubeIdFromUrl(item.videoUrl) : "";
   const poster = videoId ? getYoutubePosterSrc(videoId) : undefined;
   const viewHref = `/support/tech-hub/view/${item.id}`;

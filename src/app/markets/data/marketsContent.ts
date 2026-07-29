@@ -16,7 +16,6 @@ export type BenefitItem = {
   reverse?: boolean;
 };
 
-/** `section.markets_benefits` 공통 이미지 (`public/img/markets/benefits`) */
 export const marketsBenefitImages = {
   benefit01: "/img/markets/benefits/benefit_01.jpg",
   benefit02: "/img/markets/benefits/benefit_02.jpg",
@@ -30,7 +29,6 @@ export const marketsBenefitImages = {
   benefit10: "/img/markets/benefits/benefit_10.jpg",
 } as const;
 
-/** Commercial & Residential 페이지 히어로 (기본 마켓 페이지, MarketsHero key-visual) */
 export const commercialResidentialHero = {
   subtitle: "Smart & Sustainable Building Infrastructure",
   title: "Commercial & Residential",
@@ -58,7 +56,6 @@ export type ReferenceKeyInfoRow = {
 };
 
 export type ReferenceModalContent = {
-  /** 모달 헤더 타이틀 (미지정 시 카드 title) */
   modalTitle?: string;
   images: string[];
   overview: string[];
@@ -84,9 +81,7 @@ export type ProductItem = {
   image: string;
   title: string;
   category: string;
-  /** type1 (lg) — `badges` 미사용 시 호환 */
   badge?: boolean;
-  /** 1: type1 (lg) · 2: type2 (sm) */
   badges?: 1 | 2;
 };
 

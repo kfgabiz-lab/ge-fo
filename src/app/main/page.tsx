@@ -12,7 +12,6 @@ import IconCards from "./components/IconCards";
 import "@/assets/css/main.css";
 
 export default async function MainPage() {
-  // press/blog/articles 통합 최신 3건(실패 시 빈 배열 → 섹션 자연 숨김)
   const highlightNewsItems = await fetchMainHighlightNews();
   return (
     <main className="main-page" id="Page_main">

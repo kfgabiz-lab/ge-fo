@@ -1,43 +1,25 @@
-// Company Articles(slug: articles-data) 데이터 조회 헬퍼 + 타입
-// - 설계 문서: fo/docs/dev/company/articles-data.md
-// - 규칙 근거: docs/ge_guide/fo/fo-api연동가이드.md (컴포넌트 직접 fetch 금지, fetchApi 경유)
-// - pressData.ts와 완전히 동일 패턴(articles-data엔 press와 마찬가지로 category/hashtag 필드가 없음)
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 import { LIST_DESCRIPTION_MAX_LENGTH, stripHtmlText } from "@/lib/stripHtmlText";
 
-// 목록 페이지당 개수(설계 4절: size=10 페이지네이션)
 export const ARTICLES_LIST_SIZE = 10;
 
-// 업로드 미디어 스트리밍 엔드포인트(articlesForm.image[0] → page-files)
 export const articlesImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-// 상세 페이지 라우트(id 기반 동적 라우트)
 export const articlesDetailHref = (id: number) => `/company/articles/detail/${id}`;
 
-// ---------------- 응답 원본 타입 ----------------
-
-// page-data 응답 1건. flattenPageDataItem(fo/src/lib/pageData.ts)에 그대로 넘길 수 있는 형태.
-// articlesForm 필드(title/content/isVisible/publishDttm/image)는 flatten 후 root에서 접근한다.
 export type ArticlesRow = PageDataItem;
-
-// ---------------- 화면 카드 바인딩용(가공 완료) ----------------
 
 export interface ArticlesCardItem {
   id: number;
   title: string;
-  description: string; // 본문(articles.content) HTML에서 태그 제거 + 150자 컷(폴백 없음)
-  date: string; // publishDttm → formatDisplayDate로 변환된 표시용 값("Mon D, YYYY")
-  rawDate: string; // publish_dttm 원본 값("YYYY-MM-DD") — 정렬 전용(하이라이트 병합 등), 화면 표시엔 date 사용
-  imageSrc: string | null; // 미디어 없으면 null → 호출부에서 정적 폴백
+  description: string;
+  date: string;
+  rawDate: string;
+  imageSrc: string | null;
 }
 
-// ---------------- 순수 가공 헬퍼 ----------------
-
-// 원본 행 → 카드 항목
 export function toArticlesCard(item: ArticlesRow): ArticlesCardItem {
-  // flattenPageDataItem: articles/seo 섹션 간 키 충돌 없음 → title/publish_dttm/image/content 전부 root로 flat 병합됨
-  // (라이브 응답 실측: dataJson.articles.content 에만 content 키가 존재 → root "content"로 접근 가능)
   const row = flattenPageDataItem(item);
   const imageArr = row.image;
   const mediaId =
@@ -46,19 +28,13 @@ export function toArticlesCard(item: ArticlesRow): ArticlesCardItem {
   return {
     id: item.id,
     title: (row.title as string) ?? "",
-    // 본문(content) 리치텍스트 → HTML 태그 제거 후 150자 컷("..." 부착).
-    // ⚠️ 폴백 없음 — content가 비면 빈 문자열(meta_description으로 대체하지 않는다)
     description: stripHtmlText(row.content as string | undefined, LIST_DESCRIPTION_MAX_LENGTH),
-    // 신규(publish_dttm)/구(publishDttm) 스키마 모두 지원 — 신규 우선. 표시용 "Mon D, YYYY" 포맷 변환
     date: formatDisplayDate(publishDttm),
     rawDate: publishDttm,
     imageSrc: mediaId != null ? articlesImageSrc(mediaId) : null,
   };
 }
 
-// ---------------- 게시상태 게이트(공통 where 조각) ----------------
-
-// 공개 + 게시일 도래(BO 게시상태 판정식과 동일, press-data.md 9-A와 동일 조건) — 목록/상세/인접 공통.
 export const ARTICLES_STATUS_WHERE: Record<string, string> = {
   condexpr_status: "is_visible=001,publish_dttm<=today()?'게시':'미게시'",
   condval_status: "게시",

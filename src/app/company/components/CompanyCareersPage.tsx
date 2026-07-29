@@ -45,12 +45,8 @@ function CareersTitleSection() {
 
 function CareersJobCard({ job }: { job: CareersJob }) {
   return (
-    // data-slug-item: 채용공고 1건(반복 단위). 상위 grid의 data-slug="careers-data" 반복 아이템.
     <li className="company-careers-jobs__card" data-slug-item>
-      {/* 채용 직무명 → careers.title (단일 섹션이라 flatten 후 root의 title로 접근) */}
       <h3 className="company-careers-jobs__card-title" data-slugkey="title">{job.title}</h3>
-      {/* 직무 설명 → careers.description (textarea 원본 단일 문자열).
-          사용자 확정 지시대로 불릿 리스트 파싱 없이 줄바꿈만 유지(white-space: pre-line)해 그대로 렌더. */}
       <p className="company-careers-jobs__card-desc" data-slugkey="description">
         {job.description}
       </p>
@@ -59,7 +55,6 @@ function CareersJobCard({ job }: { job: CareersJob }) {
 }
 
 function CareersJobsSection() {
-  // careers-data slug 공개 채용공고 목록(정렬 포함)을 클라이언트에서 1회 조회
   const [jobs, setJobs] = useState<CareersJob[]>([]);
 
   useEffect(() => {
@@ -80,8 +75,6 @@ function CareersJobsSection() {
     <section className="company-careers-jobs">
       <div className="inner company-careers-jobs__inner">
         <h2 className="company-careers-jobs__title">{careersJobsSection.title}</h2>
-        {/* data-slug="careers-data"(활성 PAGE_DATA slug) 다건 반복 컨테이너.
-            공개(careers.is_visible=001) 항목만, careers.sort 오름차순(동률 시 updatedAt 최신순) 정렬. */}
         <ul
           className="company-careers-jobs__grid"
           data-slug="careers-data"

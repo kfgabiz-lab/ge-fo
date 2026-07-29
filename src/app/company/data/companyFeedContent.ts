@@ -9,8 +9,6 @@ import {
   articlesListPager,
 } from "@/app/company/data/articlesListContent";
 
-// 공통 피드 리스트 아이템 타입 (Press/Articles 동일 구조)
-// href: 항목별 상세 링크(선택). 미지정 시 Grid의 detailHref 폴백 사용(기존 Articles 동작 유지)
 export type CompanyFeedListItem = {
   id: string;
   title: string;
@@ -19,10 +17,8 @@ export type CompanyFeedListItem = {
   href?: string;
 };
 
-// 공통 피드 variant (Press/Articles)
 export type CompanyFeedVariant = "press" | "articles";
 
-// Featured 카드 데이터 타입
 export type CompanyFeedFeaturedData = {
   title: string;
   description: string;
@@ -38,7 +34,6 @@ type CompanyFeedContentEntry = {
   pageId: string;
 };
 
-// variant별 콘텐츠/기본 pageId 매핑 (기존 개별 Page 컴포넌트의 기본값을 그대로 이관)
 export const companyFeedContent: Record<CompanyFeedVariant, CompanyFeedContentEntry> = {
   press: {
     featured: pressFeatured,

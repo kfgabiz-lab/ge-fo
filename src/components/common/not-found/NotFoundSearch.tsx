@@ -10,7 +10,6 @@ import {
 import { logSearchKeyword } from "@/data/search/searchKeywordData";
 
 type NotFoundSearchProps = {
-  /** 서버(NotFoundPage)에서 조회한 인기 검색어(source=UNIFIED_SEARCH). 폴백 없음 — 비어 있으면 태그 영역 미노출. */
   popularKeywords?: string[];
 };
 
@@ -28,7 +27,6 @@ export default function NotFoundSearch({
     router.push(buildNotFoundSearchHref(nextQuery));
   };
 
-  // 폼 제출(Enter/검색버튼) — 사용자가 직접 입력해서 실행한 검색만 집계 대상(fire-and-forget).
   const submitQuery = (nextQuery: string) => {
     void logSearchKeyword("UNIFIED_SEARCH", nextQuery);
     navigateToQuery(nextQuery);

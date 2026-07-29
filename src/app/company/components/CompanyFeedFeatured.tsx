@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { CompanyFeedVariant } from "@/app/company/data/companyFeedContent";
 
-// 공통 피드 Featured 카드 (Press/Articles). class 접두어만 variant로 분기
 type CompanyFeedFeaturedProps = {
   variant: CompanyFeedVariant;
   title: string;

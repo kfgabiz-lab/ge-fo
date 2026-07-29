@@ -3,8 +3,6 @@ import type { TrainingVariant } from "@/app/services/training/data/trainingConte
 export type EngineeringTrainingAgendaRow = {
   id: string;
   number: string;
-  // 교육일("YYYY-MM-DD", training_schedule[].date 원본 앞 10자리).
-  // Agenda 를 Session 1/Session 2 로 나누는 그룹 키. 값이 없을 수도 있어 빈 문자열 허용.
   date: string;
   time: string;
   title: string;
@@ -14,9 +12,9 @@ export type EngineeringTrainingAgendaRow = {
 
 export type EngineeringTrainingSessionEvent = {
   title: string;
-  startIso: string; // 세션 원본 날짜("YYYY-MM-DD")
-  timeFrom?: string; // "HH:MM"
-  timeTo?: string; // "HH:MM"
+  startIso: string;
+  timeFrom?: string;
+  timeTo?: string;
   location?: string;
   description?: string;
 };
@@ -26,23 +24,17 @@ export type EngineeringTrainingSessionDetail = {
   sessionId: string;
   category: string;
   title: string;
-  // 부모 커리큘럼 제목(_fetchedRel8.curriculum.title). 세션상세 → 코스상세 소프트 이동 시
-  // 브레드크럼 current 를 실 코스 제목으로 미리 seed 하기 위해 뷰모델에 노출(추가 조회 없음).
   courseTitle?: string;
   breadcrumbCurrent: string;
-  // 세션 본문(BO 관리자 WYSIWYG HTML, curriculum_detail2.content). 빈 문자열이면 본문 섹션/탭 비노출.
   content: string;
   agenda: EngineeringTrainingAgendaRow[];
-  // Agenda Trainer 컬럼 노출 여부(모든 행 trainer 빈값이면 false → 컬럼 전체 비노출). 뷰모델에서 계산.
   showTrainerColumn: boolean;
   positionOptions: string[];
   calendar: {
     googleLabel: string;
     icalLabel: string;
   };
-  // Add to Calendar(Google/iCal) 생성용 원본 이벤트 데이터(뷰모델에서 주입)
   event?: EngineeringTrainingSessionEvent;
-  // 카운트다운 기준(curriculum_detail2.register_period_to, 원본 문자열)
   countdownTo?: string;
   sidebar: {
     date: string;
@@ -277,7 +269,6 @@ export const engineeringTrainingSessionAssets = {
 export type EngineeringTrainingSessionMetaIconKey =
   keyof typeof engineeringTrainingSessionAssets.metaIcons;
 
-// 공유 아이콘 목록 — 기획(curri_det3.png DC3)은 트위터(X)/링크드인/이메일 3종만 명시.
 export const engineeringTrainingSessionShareLinks = [
   {
     id: "x",
@@ -302,7 +293,6 @@ export const engineeringTrainingSessionShareLinks = [
   },
 ] as const;
 
-// 세션 탭 id 목록(타입 파생용). 라벨은 variant/조건에 따라 buildSessionTabs 에서 동적 구성.
 export const engineeringTrainingSessionTabIds = [
   "training",
   "agenda",
@@ -312,22 +302,17 @@ export const engineeringTrainingSessionTabIds = [
 export type EngineeringTrainingSessionTabId =
   (typeof engineeringTrainingSessionTabIds)[number];
 
-// 세션 탭(id + 라벨) 런타임 표현
 export type EngineeringTrainingSessionTab = {
   id: EngineeringTrainingSessionTabId;
   label: string;
 };
 
-// training 탭 라벨을 variant 별로 동적화(중복 방지 위해 한 곳에만 정의)
 const TRAINING_TAB_LABELS: Record<TrainingVariant, string> = {
   sales: "Sales Training",
   engineering: "Engineering Training",
   service: "Service Training",
 };
 
-// 세션 탭 목록 동적 구성:
-// - training 탭은 본문(content)이 있을 때만 노출(variant별 라벨).
-// - agenda / registration 은 항상 노출.
 export function buildSessionTabs(
   variant: TrainingVariant,
   hasContent: boolean,
@@ -352,8 +337,6 @@ export const engineeringTrainingSessionParams = Object.values(
   engineeringTrainingSessionDetails,
 ).map(({ courseId, sessionId }) => ({ courseId, sessionId }));
 
-// 등록 폼 제출 버튼 카피
-// 기획(curri_det3.png DESCRIPTION 11번 "REGISTER CTA") 기준 라벨.
 export const engineeringTrainingSessionFormCopy = {
   submitLabel: "REGISTER",
 } as const;

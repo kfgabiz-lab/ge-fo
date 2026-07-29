@@ -26,7 +26,6 @@ export type AffiliateAmericaItem = {
   headquarters: string;
 };
 
-/** Figma 5565:134319 — affiliate rows */
 export const affiliateList: AffiliateAmericaItem[] = [
   {
     id: "ls-energy-solutions",

@@ -7,9 +7,7 @@ import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 type DevicesExploreAllToolbarProps = {
   showDiscontinued: boolean;
   onToggle: () => void;
-  /** devices-tree 공개 depth1 목록(Lv1 옵션, 서버에서 조회해 상위에서 주입) */
   lv1Categories: { id: string; label: string }[];
-  /** 선택된 Lv1의 공개 Lv2 옵션(cascading) */
   lv2Categories: { id: string; label: string }[];
   selectedLv1: string;
   selectedLv2: string;

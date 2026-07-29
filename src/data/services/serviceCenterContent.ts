@@ -117,15 +117,6 @@ export const serviceCenterPage = {
           "Reliable field support for troubleshooting, repair, and system stabilization, delivered by experienced engineers in coordination with LS ELECTRIC.",
         image: "/img/services/service-center/offering-03.jpg",
       },
-      // {
-      //   id: "offering-04",
-      //   number: "04",
-      //   title: "On-Site Field Service",
-      //   titleLines: ["On-Site", "Field Service"],
-      //   description:
-      //     "Qualified field engineers deliver hands-on troubleshooting, repair, and replacement services wherever your operations are located.",
-      //   image: "/img/services/service-center/offering-04.jpg",
-      // },
     ],
   },
   serviceFlow: {

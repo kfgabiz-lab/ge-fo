@@ -18,7 +18,6 @@ import {
 } from "@/data/search/searchAllProductsData";
 import { searchAllListClasses } from "./searchAllListClasses";
 
-// Products 탭은 10개 단위 페이징.
 const PAGE_SIZE = 10;
 
 function SearchProductsPanelContent() {
@@ -28,14 +27,11 @@ function SearchProductsPanelContent() {
     total: 0,
     items: [],
   });
-  // 최초 응답 도착 여부. 도착 전에는 Empty State 를 띄우지 않는다(로딩 중 깜빡임 방지).
   const [loaded, setLoaded] = useState(false);
 
-  // 검색어(q)는 URL ?q= 에서 읽는다(All 탭과 동일 소스).
   const searchParams = useSearchParams();
   const query = searchParams.get("q") ?? "";
 
-  // 선택된 Lv2 category-data row_id 목록(Lv1 체크 시 하위 리프가 전개됨). 정렬해 안정 의존성 키로 사용.
   const { getSelectedCategoryValues } = useSearchProductsFilter();
   const selectedCategories = getSelectedCategoryValues("category");
   const categoriesKey = [...selectedCategories].sort().join(",");
@@ -43,10 +39,8 @@ function SearchProductsPanelContent() {
   const pageItems = result.items;
   const totalResults = result.total;
   const totalPages = Math.max(1, Math.ceil(totalResults / PAGE_SIZE));
-  // 응답이 도착한 뒤 0건일 때만 공통 Empty State 를 노출한다.
   const isEmptyResult = loaded && pageItems.length === 0;
 
-  // 검색어/필터 변경 시 1페이지로(최초 실행 제외).
   const firstResetRef = useRef(true);
   useEffect(() => {
     if (firstResetRef.current) {
@@ -56,7 +50,6 @@ function SearchProductsPanelContent() {
     setCurrentPage(1);
   }, [query, categoriesKey]);
 
-  // 실검색(검색어/선택 카테고리/페이지 변경 시). 실패 시 빈 결과 폴백은 헬퍼가 처리.
   useEffect(() => {
     let alive = true;
     void fetchSearchAllProducts(query, {
@@ -71,7 +64,6 @@ function SearchProductsPanelContent() {
     return () => {
       alive = false;
     };
-    // selectedCategories 는 categoriesKey 로 대표(매 렌더 새 배열이라 직접 의존 불가).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, categoriesKey, currentPage]);
 

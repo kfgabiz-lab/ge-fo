@@ -53,7 +53,6 @@ function GlobalMenuItem({ region }: { region: GnbGlobalRegion }) {
   );
 }
 
-/** Figma 5683:60868 · 4288:54296 — #gnb-global-menu */
 export default function GnbGlobalMenu({ isOpen }: GnbGlobalMenuProps) {
   return (
     <div

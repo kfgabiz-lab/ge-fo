@@ -20,7 +20,6 @@ type GnbSearchPanelProps = {
   onNavigate?: () => void;
 };
 
-/** Figma 4288:54315 — #gnb-search-panel (body portal) */
 export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,8 +29,6 @@ export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelPro
   const keywordsRequestedRef = useRef(false);
   const hasQuery = query.length > 0;
 
-  // 인기 검색어 = 통합검색 랭킹(source=UNIFIED_SEARCH). 폴백 없음 — 집계 데이터가 없으면 태그 영역 미노출.
-  // 태그 클릭(<Link>)은 사용자의 직접 입력이 아니므로 집계 로깅 없이 이동만 한다(기획 결정).
   const popularTags: readonly GnbSearchTag[] = popularKeywords.map((label) => ({
     label,
     href: buildSearchAllHref(label),
@@ -41,7 +38,6 @@ export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelPro
     setCanPortal(true);
   }, []);
 
-  // GNB 검색 패널은 모든 페이지에 상시 마운트되므로, 실제로 열렸을 때 1회만 인기검색어를 조회한다.
   useEffect(() => {
     if (!isOpen || keywordsRequestedRef.current) return;
     keywordsRequestedRef.current = true;
@@ -55,13 +51,11 @@ export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelPro
     };
   }, [isOpen]);
 
-  // 열릴 때 검색 입력에 포커스
   useEffect(() => {
     if (!isOpen) return;
     inputRef.current?.focus({ preventScroll: true });
   }, [isOpen]);
 
-  // 닫힐 때 검색어 초기화
   useEffect(() => {
     if (isOpen) return;
     setQuery("");
@@ -83,7 +77,6 @@ export default function GnbSearchPanel({ isOpen, onNavigate }: GnbSearchPanelPro
           role="search"
           onSubmit={(event) => {
             event.preventDefault();
-            // 사용자가 직접 입력해서 실행한 검색만 인기검색어 집계 대상(fire-and-forget, 실패해도 이동엔 영향 없음).
             void logSearchKeyword("UNIFIED_SEARCH", query);
             router.push(buildSearchAllHref(query));
             onNavigate?.();

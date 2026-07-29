@@ -12,11 +12,8 @@ import {
 type ContactUsViewResponseModalProps = {
   open: boolean;
   onClose: () => void;
-  /** 조회 성공 시 상세 데이터를 전달 — 부모가 상세 팝업을 열도록 함 */
   onSuccess?: (detail: ContactUsDetailResponse) => void;
-  /** Section guide preview — in-flow layout without fixed overlay */
   embedded?: boolean;
-  /** Figma 5565:128558 — show validation errors on open */
   showErrorsOnOpen?: boolean;
 };
 
@@ -102,7 +99,6 @@ export default function ContactUsViewResponseModal({
       });
       onSuccess?.(detail);
     } catch {
-      // 접수번호/비밀번호 불일치 등 — BE가 404로 응답
       setErrors({
         inquiryNumber: contactUsViewResponseModal.fieldError,
         password: contactUsViewResponseModal.fieldError,

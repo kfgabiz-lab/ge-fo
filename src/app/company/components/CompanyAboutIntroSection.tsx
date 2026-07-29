@@ -7,19 +7,13 @@ type CompanyAboutIntroCta = {
 
 type CompanyAboutIntroSectionProps = {
   heroImage: string;
-  /** 있으면 PC/MO 이미지 분리 (`--pc` / `--mo`) */
   heroImageMobile?: string;
   headlineLines: string[];
   paragraphs: string[];
-  /** Figma hero object-position — Affiliate 등 */
   heroImagePosition?: "center bottom";
-  /** headline max-width 970px (Affiliate · America) */
   headlineSize?: "wide";
-  /** section padding-bottom 축소 (Affiliate) */
   paddingBottom?: "compact";
-  /** 하단 통계 밴드 (America) */
   withStats?: boolean;
-  /** 외부 링크 CTA (ESG 등) */
   cta?: CompanyAboutIntroCta;
   children?: ReactNode;
 };

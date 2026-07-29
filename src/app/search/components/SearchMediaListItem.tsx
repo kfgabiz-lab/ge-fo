@@ -12,7 +12,6 @@ type SearchMediaListItemProps = {
   variant?: "compact" | "card";
 };
 
-/** Figma 6430:106510 (card · All) · 6430:112136 (card · Media tab) — Media list item */
 export default function SearchMediaListItem({
   item,
   className,
@@ -77,7 +76,6 @@ export default function SearchMediaListItem({
               : "search_all__media-thumb"
           }
         >
-          {/* 썸네일 없음(폴백 이미지도 없는 소스 = Tech Hub)일 때 src 미설정 — 빈 문자열 src 로 인한 재다운로드 경고 방지(TechHubVideoCard 와 동일 처리) */}
           <img
             src={item.image || undefined}
             alt=""

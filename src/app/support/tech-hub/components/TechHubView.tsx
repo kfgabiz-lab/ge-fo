@@ -13,7 +13,6 @@ type TechHubViewProps = {
   detail: TechHubDetail;
 };
 
-// video_url → YouTube 포스터 URL(썸네일). 파싱 실패 시 undefined.
 function posterOf(videoUrl: string | null): string | undefined {
   if (!videoUrl) return undefined;
   const id = getYoutubeIdFromUrl(videoUrl);
@@ -24,7 +23,6 @@ export default function TechHubView({ detail }: TechHubViewProps) {
   const chapters = detail.chapters;
   const isSeries = detail.versionCount >= 2;
 
-  // 현재 재생 중인 챕터(버전) — 다버전이면 사이드바 클릭으로 클라이언트 전환(페이지 이동 없음). 기본 = Chapter 1.
   const [currentVersionId, setCurrentVersionId] = useState<number | null>(
     chapters[0]?.versionId ?? null,
   );

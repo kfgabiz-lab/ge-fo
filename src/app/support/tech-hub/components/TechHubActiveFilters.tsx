@@ -2,8 +2,6 @@
 
 import { useTechHubFilter } from "./TechHubFilterProvider";
 
-// 선택된 필터(LV1/LV2 카테고리) 태그 — Download Center 와 동일 마크업/CSS(support_download_active-filters) 재사용.
-// 개별 X 로 해제, 전체 Reset. (검색어는 검색창의 clear 로 해제하므로 태그 대상 아님.)
 export default function TechHubActiveFilters() {
   const { activeChips, toggleFilter, clearAll } = useTechHubFilter();
 

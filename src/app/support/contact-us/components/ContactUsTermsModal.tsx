@@ -5,7 +5,6 @@ import PrivacyPolicyModal from "@/components/modals/PrivacyPolicyModal";
 type ContactUsTermsModalProps = {
   open: boolean;
   onClose: () => void;
-  /** Section guide preview — in-flow layout without fixed overlay */
   embedded?: boolean;
 };
 

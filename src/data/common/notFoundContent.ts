@@ -10,7 +10,6 @@ export type NotFoundHelpfulLink = {
   external?: boolean;
 };
 
-/** Figma 7334:130743 — P-FO-COMMON-010000P · 404 Not found */
 export const notFoundPage = {
   title: "We couldn't connect you to that page.",
   description:

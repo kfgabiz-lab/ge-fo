@@ -3,7 +3,6 @@
 import GnbMegaItemLink from "@/components/layout/shared/gnb-mega/GnbMegaItemLink";
 import type { GnbMegaSimplePanelStateProps } from "@/components/layout/shared/gnb-mega/types";
 
-/** Figma 17660:104944 — #gnb-mega-panel-markets */
 export default function GnbMarketsMegaPanel({
   title,
   menu,

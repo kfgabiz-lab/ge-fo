@@ -1,6 +1,5 @@
 import type { MarketsSolutionBlock } from "./marketsSolutionsPanelTypes";
 
-/** Figma 5841:92618 — Public Infrastructure Solutions */
 export const publicInfrastructureSolutionsIntro = {
   title: "Public Infrastructure Solutions",
   description:

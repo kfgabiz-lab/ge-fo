@@ -40,7 +40,6 @@ import {
   type SearchTabId,
 } from "@/data/search/searchAllContent";
 
-// 검색 카운트 표기: 99 이하는 그대로, 100 이상은 "99+".
 function formatSearchCount(count: number): string {
   return count > 99 ? "99+" : String(count);
 }
@@ -77,10 +76,8 @@ type SearchAllTabContentProps = {
 export default function SearchAllTabContent({
   initialTab = "all",
 }: SearchAllTabContentProps) {
-  // 검색어(q)는 Hero 와 동일하게 URL ?q= 에서 읽는다.
   const searchParams = useSearchParams();
   const query = searchParams.get("q") ?? "";
-  // 상단 탭은 URL ?tab= 으로도 지정할 수 있다(All 탭 Media 섹션의 Explore 이동 등).
   const tabParam = searchParams.get("tab");
 
   const [activeTab, setActiveTab] = useState<SearchTabId>(
@@ -89,16 +86,11 @@ export default function SearchAllTabContent({
   const [aiExpanded, setAiExpanded] = useState(false);
   const isAllTab = activeTab === "all";
 
-  // 같은 /search 라우트 내 이동(?tab= 변경)은 컴포넌트를 재마운트하지 않으므로 파라미터 변화를 반영한다.
   useEffect(() => {
     const next = toSearchTabId(tabParam);
     if (next) setActiveTab(next);
   }, [tabParam]);
 
-  // 탭 버튼 클릭 시 상태와 URL(?tab=)을 함께 맞춘다(All 은 기본값이므로 파라미터 제거).
-  // URL 을 갱신하지 않으면 "?tab=media 상태 → All 탭 버튼 클릭 → Media 섹션 Explore 클릭" 순서에서
-  // 이동 대상 href 가 현재 URL 과 같아져(?tab=media) 탭이 전환되지 않는다.
-  // 히스토리를 늘리지 않도록 replace + 스크롤 유지.
   const router = useRouter();
   const pathname = usePathname();
   const handleTabClick = useCallback(
@@ -114,28 +106,22 @@ export default function SearchAllTabContent({
     },
     [pathname, router, searchParams],
   );
-  // Product 섹션 = 신규 검색 API 실연동(total: 탭/헤더 카운트, items: 카드). 실패 시 빈 결과.
   const [productResult, setProductResult] = useState<SearchAllProductsResult>({
     total: 0,
     items: [],
   });
-  // Documents 섹션 = 신규 검색 API 실연동(total: 탭/헤더 카운트, items: 카드). 실패 시 빈 결과.
   const [documentResult, setDocumentResult] = useState<SearchAllDocumentsResult>(
     {
       total: 0,
       items: [],
     },
   );
-  // Media 섹션 = media-search API 실연동. 한 번의 호출 결과로 탭 라벨 카운트/섹션 헤더 카운트/카드를 모두 채운다.
   const [mediaResult, setMediaResult] = useState<SearchMediaResult>(
     EMPTY_SEARCH_MEDIA_RESULT,
   );
-  // Pages 섹션 = page-search API 실연동. 한 번의 호출 결과로 탭 라벨 카운트/섹션 헤더 카운트/목록을 모두 채운다.
   const [pagesResult, setPagesResult] = useState<SearchPagesResult>(
     EMPTY_SEARCH_PAGES_RESULT,
   );
-  // 4개 섹션 각각의 최초 응답 도착 여부. 전부 도착하기 전에는 Empty State 를 띄우지 않는다
-  // (모든 결과의 초기값이 0건이라 로딩 중에 Empty State 가 깜빡이는 것을 막는다).
   const [loaded, setLoaded] = useState({
     products: false,
     documents: false,
@@ -143,7 +129,6 @@ export default function SearchAllTabContent({
     pages: false,
   });
 
-  // 검색어가 바뀌면 로딩 상태를 초기화한다(아래 fetch 이펙트보다 먼저 선언되어야 순서가 보장된다).
   useEffect(() => {
     setLoaded({
       products: false,
@@ -167,7 +152,6 @@ export default function SearchAllTabContent({
 
   useEffect(() => {
     let alive = true;
-    // 기획서 "최대 10개" — limit 10.
     void fetchSearchAllDocuments(query, 10).then((result) => {
       if (!alive) return;
       setDocumentResult(result);
@@ -180,8 +164,6 @@ export default function SearchAllTabContent({
 
   useEffect(() => {
     let alive = true;
-    // 퍼블리싱 Media 섹션 카드 4개 기준 — size 4(소스 필터 없이 4종 전체).
-    // totalElements 는 size 와 무관한 전체 건수라 탭/헤더 카운트로 그대로 재사용한다(카운트 전용 추가 호출 없음).
     void fetchSearchMedia(query, { size: 4 }).then((result) => {
       if (!alive) return;
       setMediaResult(result);
@@ -194,8 +176,6 @@ export default function SearchAllTabContent({
 
   useEffect(() => {
     let alive = true;
-    // 퍼블리싱 Pages 섹션 목록 4건 기준 — size 4.
-    // totalElements 는 size 와 무관한 전체 건수라 탭/헤더 카운트로 그대로 재사용한다(카운트 전용 추가 호출 없음).
     void fetchSearchPages(query, { size: 4 }).then((result) => {
       if (!alive) return;
       setPagesResult(result);
@@ -206,8 +186,6 @@ export default function SearchAllTabContent({
     };
   }, [query]);
 
-  // All 탭은 섹션 4개가 모두 0건일 때만 Empty State 를 노출한다
-  // (한 섹션이라도 결과가 있으면 기존 정책대로 빈 섹션만 숨긴다).
   const isAllTabEmpty =
     loaded.products &&
     loaded.documents &&
@@ -224,7 +202,6 @@ export default function SearchAllTabContent({
         <div className="search_all__tabs" role="tablist" aria-label="Search results">
           {searchAllTabs.map((tab) => {
             const isActive = activeTab === tab.id;
-            // All 탭만 목업 카운트 유지. Products/Documents/Media/Pages 탭은 검색 API total 기반 + 99+ 임계 표기.
             const countLabel =
               tab.id === "all"
                 ? `${tab.count}+`
@@ -257,7 +234,6 @@ export default function SearchAllTabContent({
         {activeTab === "media" ? <SearchMediaPanel /> : null}
         {activeTab === "pages" ? <SearchPagesPanel /> : null}
 
-        {/* 결과가 하나도 없으면 AI 요약도 의미가 없으므로 감춘다(기획서 Empty State 화면 기준). */}
         {isAllTab && !isAllTabEmpty ? (
           <div className={aiExpanded ? "search_all__ai is-expanded" : "search_all__ai"}>
             <div className="search_all__ai-content">
@@ -301,7 +277,6 @@ export default function SearchAllTabContent({
           </div>
         ) : null}
 
-        {/* 이 화면 한정 예외: Product 검색결과 0건이면 섹션 자체 미표시(기획서 우선, 사용자 명시 결정). */}
         {isAllTab && productResult.items.length > 0 ? (
           <div className="search_all__section">
             <SearchSectionHead
@@ -317,7 +292,6 @@ export default function SearchAllTabContent({
           </div>
         ) : null}
 
-        {/* 이 화면 한정 예외: Documents 검색결과 0건이면 섹션 자체 미표시(기획서 우선, 사용자 명시 결정). */}
         {isAllTab && documentResult.items.length > 0 ? (
           <div className="search_all__section search_all__section--documents devices_product_downloads">
             <SearchSectionHead
@@ -333,26 +307,22 @@ export default function SearchAllTabContent({
           </div>
         ) : null}
 
-        {/* 이 화면 한정 예외: Media 검색결과 0건이면 섹션 자체 미표시(형제 섹션 Product/Documents 와 동일 정책). */}
         {isAllTab && mediaResult.items.length > 0 ? (
           <div className="search_all__section">
             <SearchSectionHead
               title="Media"
               count={formatSearchCount(mediaResult.totalElements)}
-              // Explore 클릭 시 다른 화면이 아니라 상단 Media 탭이 선택된 상태로 이동(기획 주석 #11). 검색어(q)는 유지.
               exploreHref={buildSearchTabHref(query, "media")}
             />
             <SearchMediaList items={mediaResult.items} variant="card" />
           </div>
         ) : null}
 
-        {/* 이 화면 한정 예외: Pages 검색결과 0건이면 섹션 자체 미표시(형제 섹션 Product/Documents/Media 와 동일 정책). */}
         {isAllTab && pagesResult.items.length > 0 ? (
           <div className="search_all__section">
             <SearchSectionHead
               title="Pages"
               count={formatSearchCount(pagesResult.totalElements)}
-              // Pages 도 Media 와 같이 전용 화면이 없어 상단 Pages 탭으로 전환한다(기획 주석 #11). 검색어(q)는 유지.
               exploreHref={buildSearchTabHref(query, "pages")}
             />
             <SearchPageList
@@ -364,7 +334,6 @@ export default function SearchAllTabContent({
           </div>
         ) : null}
 
-        {/* All 탭 4개 섹션이 모두 0건일 때의 공통 Empty State(LSEA-FO-SEARCH-102). */}
         {isAllTab && isAllTabEmpty ? <SearchEmptyResult /> : null}
       </div>
     </section>

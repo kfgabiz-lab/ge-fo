@@ -68,9 +68,6 @@ export const contactUsModalsHub = {
 export type ContactUsModalsHubModalId =
   (typeof contactUsModalsHub.buttons)[number]["id"];
 
-// 문의유형(INQUIRY_TYPE)/국가(COUNTRY) 옵션은 하드코딩을 제거하고
-// 공통코드 API(GET /api/v1/fo/codes/{groupCode})로 로딩한다.
-// 조회/제출 헬퍼: fo/src/app/support/contact-us/data/contactUsData.ts
 
 export const contactUsTechnicalInquiry = {
   label: "Technical Inquiry",

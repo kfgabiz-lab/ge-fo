@@ -38,7 +38,6 @@ const cardImagesById: Record<string, Pick<CardItem, "image" | "imageAlt">> = {
   },
 };
 
-/** main_cards 표시 순서 (행 우선) */
 const mainCardOrder = [
   "data-center",
   "power-grid",

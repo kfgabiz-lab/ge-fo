@@ -4,7 +4,6 @@ export type FooterAffiliateOption = {
   href: string;
 };
 
-/** Footer — LSE Affiliated & Subsidiaries (opens in new tab) */
 export const footerAffiliateOptions: FooterAffiliateOption[] = [
   { value: "ls-group", label: "LS Group", href: "https://www.lsholdings.com/en" },
   {

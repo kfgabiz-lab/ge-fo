@@ -3,8 +3,6 @@ import type {
   DownloadFilterOption,
 } from "@/data/support/downloadCenterContent";
 
-// ⚠️ 이 파일의 카테고리/문서유형 정적 데이터는 범위 밖 Documents 탭(searchDocumentsContent.ts)이
-//    재사용한다. Products 탭 실데이터 전환 후에도 Documents 의존 때문에 유지한다.
 
 export const searchProductCategories: DownloadCategoryOption[] = [
   {

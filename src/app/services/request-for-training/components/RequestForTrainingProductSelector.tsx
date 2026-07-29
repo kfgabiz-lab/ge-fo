@@ -25,7 +25,6 @@ import {
   type RequestForTrainingSelectedProduct,
 } from "./RequestForTrainingProvider";
 
-/** 카테고리 타입은 Provider(step4) 에서 관리하므로 타입도 Provider 정의를 그대로 사용 */
 type TrainingCategoryType = RequestForTrainingCategoryType;
 
 type CategoryTypeOption = { id: TrainingCategoryType; label: string };
@@ -65,15 +64,12 @@ export default function RequestForTrainingProductSelector() {
   const formId = useId();
   const { fields } = requestForTrainingStep4Copy;
   const { step4, setStep4Field } = useRequestForTrainingForm();
-  // items(평면 행)는 이 화면에서 쓰지 않지만 타입 충족을 위해 초기값에 빈 배열로 둔다.
   const [tree, setTree] = useState<TrainingProductTree>({
     power: [],
     automation: [],
     items: [],
   });
   const [categoryTypeOptions, setCategoryTypeOptions] = useState<CategoryTypeOption[]>([]);
-  // 드롭다운 선택 위치는 로컬 state 가 아니라 Provider(step4) 보관 →
-  // sessionStorage 에 함께 저장되어 Step3 왕복 후에도 복원된다.
   const categoryType = step4.productCategoryType;
   const groupId = step4.productGroupId;
 
@@ -108,7 +104,6 @@ export default function RequestForTrainingProductSelector() {
 
   function handleCategoryTypeChange(nextType: TrainingCategoryType) {
     setStep4Field("productCategoryType", nextType);
-    // 카테고리가 바뀌면 하위 그룹 선택은 초기화
     setStep4Field("productGroupId", "");
   }
 

@@ -10,9 +10,7 @@ const MAIN_TOP_THRESHOLD = 80;
 
 type MainHeaderProps = {
   showBreadcrumbNav?: boolean;
-  /** 서버 레이아웃에서 조회한 GNB 트리 데이터 */
   gnbMenuData?: FoGnbMenuApiNode[];
-  /** 서버 레이아웃에서 조회한 Products & Systems 메가메뉴(category-data 기반) */
   devicesMegaMenu?: GnbDevicesMegaMenu | null;
 };
 

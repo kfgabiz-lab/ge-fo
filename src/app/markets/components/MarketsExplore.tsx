@@ -20,7 +20,6 @@ type MarketsExploreProps = {
   tabs?: IndustryTab[];
   defaultTabId?: string;
   sectionDesc?: string;
-  /** 5탭 등 긴 라벨 — 가로 스크롤 */
   layout?: "default" | "wide-tabs";
 };
 

@@ -3,8 +3,6 @@
 import type { ReactNode } from "react";
 import { useTableSwipeHint } from "@/hooks/useTableSwipeHint";
 
-// Training 세션 상세 - Agenda 테이블 가로 스크롤/스와이프 힌트 (ls-publish SessionDetailTableScroll 이관)
-// 스크롤/스와이프 감지 로직은 공통 훅 useTableSwipeHint로 승격, 마크업/클래스는 세션 상세 고유.
 export default function TrainingSessionDetailTableScroll({
   children,
 }: {

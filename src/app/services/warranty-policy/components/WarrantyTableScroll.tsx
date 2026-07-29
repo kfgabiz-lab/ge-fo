@@ -5,9 +5,7 @@ import { useTableSwipeHint } from "@/hooks/useTableSwipeHint";
 
 type WarrantyTableScrollProps = {
   children: ReactNode;
-  /** Show mobile swipe hint overlay (Figma 6880:144915) */
   withSwipe?: boolean;
-  /** Sticky first column + edge shadow (Figma 6880:144576) */
   stickyFirstCol?: boolean;
 };
 
@@ -16,7 +14,6 @@ export default function WarrantyTableScroll({
   withSwipe = false,
   stickyFirstCol = false,
 }: WarrantyTableScrollProps) {
-  // 스크롤/스와이프 감지 로직은 공통 훅으로 승격, withSwipe=false면 힌트 미표시
   const { scrollRef, swipeHidden } = useTableSwipeHint(withSwipe);
 
   return (

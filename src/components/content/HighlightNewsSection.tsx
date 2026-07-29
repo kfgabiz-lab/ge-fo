@@ -4,13 +4,9 @@ import type { HighlightNewsItem, HighlightNewsVariant } from "@/types/highlightN
 export type { HighlightNewsItem, HighlightNewsVariant };
 
 export type HighlightNewsSectionProps = {
-  /** 스타일 변형 (main / markets) */
   variant: HighlightNewsVariant;
-  /** 섹션 제목 — 페이지·API마다 다르게 전달 */
   title: string;
-  /** 카드 목록 — 페이지·API·CMS 등 외부 데이터 주입 */
   items: HighlightNewsItem[];
-  /** section 요소 id (앵커·a11y) */
   sectionId?: string;
   className?: string;
 };

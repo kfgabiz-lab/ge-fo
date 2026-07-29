@@ -1,4 +1,3 @@
-/** Figma 5584:53170 · P-FO-COMP-080000P — Articles list */
 export type ArticlesListItem = {
   id: string;
   title: string;

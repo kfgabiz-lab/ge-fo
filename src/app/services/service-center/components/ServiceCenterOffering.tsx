@@ -16,7 +16,6 @@ const PREVIEW_SPACE_BETWEEN = 24;
 const OFFERING_SLIDE_SPEED = 400;
 const CAN_LOOP_PREVIEW = SLIDE_COUNT > PREVIEW_SLIDES_PER_VIEW;
 
-/** Preview images are offset +1 from main; swiper indexes stay in sync. */
 const previewSlides = offering.slides.map(
   (_, index) => offering.slides[(index + 1) % SLIDE_COUNT],
 );
@@ -27,7 +26,6 @@ function modIndex(index: number) {
   return ((index % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT;
 }
 
-/** Move preview exactly one step, or snap instantly — never scroll through multiple slides. */
 function movePreviewOneShot(
   preview: SwiperType,
   targetIndex: number,
@@ -166,7 +164,6 @@ export default function ServiceCenterOffering() {
       return;
     }
 
-    // Multi-step pagination: snap both together (no multi-slide scroll)
     syncSourceRef.current = "preview";
     main.slideToLoop(index, 0);
     if (preview) {

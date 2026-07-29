@@ -25,7 +25,6 @@ function SearchDocumentsPanelContent() {
     () => getSearchDocumentPageItems(currentPage, pageSize),
     [currentPage, pageSize],
   );
-  // 결과 0건이면 목록/페이지네이션 대신 공통 Empty State 를 노출한다.
   const isEmptyResult = pageItems.length === 0;
 
   return (

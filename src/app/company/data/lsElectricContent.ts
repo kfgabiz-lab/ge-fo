@@ -76,7 +76,6 @@ export const lsElectricHighlights = {
   title: "2025 Highlights",
   ctaLabel: "View IR infomation",
   ctaHref: "https://www.ls-electric.com/en/company/investor-relations/overview.do",
-  /** Figma 4717:55986 (PC) · 5876:31376 (MO) */
   bgImage: `${IMG}/highlights-bg.jpg`,
   bgImageMo: `${IMG}/highlights-bg-mo.jpg`,
   footnote: "*Financial figures in 2025",

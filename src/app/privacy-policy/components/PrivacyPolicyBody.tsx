@@ -22,7 +22,6 @@ export default function PrivacyPolicyBody() {
     <section className="common_privacy_policy" id="privacy-policy-body">
       <div className="inner">
         <div className="common_privacy_policy__toolbar">
-          {/* /guide/components #dropdown — Select_50px · 200px */}
           <FormControl className="guide_field guide_field--h50 guide_field--w200">
             <GuideSelect
               value={version}

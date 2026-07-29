@@ -36,21 +36,14 @@ import {
   submitTrainingRegistration,
 } from "../data/trainingRegistrationData";
 
-// Training 세션 상세 - 등록 폼(실제 제출 연동). Contact Us 폼의 컨트롤드 입력/errors/제출 패턴 이식.
-// 주소 자동완성은 WhereToBuySearch 의 디바운스+바깥클릭닫기+listbox 패턴 이식.
-
-// 주소 자동완성 조회 최소 입력 길이 / 디바운스 지연(ms) — WhereToBuySearch 와 동일 값
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
-// 제출 성공 안내 문구(퍼블리싱엔 없는 문구 — 성공 시에만 alert 로 안내)
 const SUBMIT_SUCCESS_MESSAGE =
   "Your registration has been submitted successfully.";
 
-// 이메일 형식 검증(값이 있어도 형식이 아니면 에러) — BE @Email 거부 전에 화면에서 먼저 차단
 const EMAIL_FORMAT_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Send 클릭 시 빈 값인 필수 텍스트 필드 에러 표시용 맵(체크박스/셀렉트는 대상 아님)
 type SessionFieldErrors = {
   studentName?: boolean;
   email?: boolean;
@@ -91,13 +84,10 @@ export default function TrainingSessionDetailForm({
 }) {
   const formId = useId();
   const eventDateDisplay = session.sidebar.eventDateToAttend;
-  // 전송값: 세션 시작일("yyyy-MM-dd"). 표시값과 달리 서버 파싱용 원본 문자열.
   const eventDateValue = session.event?.startIso ?? "";
-  // FK 컬럼 매핑: route 의 courseId=커리큘럼 page_data.id, sessionId=회차 page_data.id
   const curriculumId = Number(session.courseId);
   const sessionId = Number(session.sessionId);
 
-  // 폼 입력 상태(전부 제어 컴포넌트)
   const [studentName, setStudentName] = useState("");
   const [email, setEmail] = useState("");
   const [jobTitle, setJobTitle] = useState("");
@@ -109,32 +99,25 @@ export default function TrainingSessionDetailForm({
   const [city, setCity] = useState("");
   const [stateProvince, setStateProvince] = useState("");
   const [zipCode, setZipCode] = useState("");
-  const [typeOfBusiness, setTypeOfBusiness] = useState(""); // BUSINESSTYPE 코드값(001/002/003)
+  const [typeOfBusiness, setTypeOfBusiness] = useState("");
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [errors, setErrors] = useState<SessionFieldErrors>({});
-  // 약관 상세 팝업(View Full Terms) 노출 여부
   const [termsModalOpen, setTermsModalOpen] = useState(false);
 
-  // Type of Business 옵션(공통코드 API)
   const [businessTypes, setBusinessTypes] = useState<CodeItem[]>([]);
 
-  // reCAPTCHA 토큰/위젯 참조
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
-  // 주소 자동완성 후보/드롭다운 상태
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  // 후보 선택으로 인한 setStreetAddress 재조회 1회 억제
   const suppressFetchRef = useRef(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const streetWrapRef = useRef<HTMLDivElement>(null);
 
-  // 제출 진행 상태
   const [submitting, setSubmitting] = useState(false);
 
-  // 마운트 시 비즈니스 유형 옵션 조회(실패 시 빈 배열 폴백 → 옵션 없음)
   useEffect(() => {
     let alive = true;
     fetchBusinessTypes()
@@ -149,7 +132,6 @@ export default function TrainingSessionDetailForm({
     };
   }, []);
 
-  // 도로명 입력 변화 시 디바운스 후 자동완성 후보 조회(WhereToBuySearch 패턴)
   useEffect(() => {
     if (suppressFetchRef.current) {
       suppressFetchRef.current = false;
@@ -185,7 +167,6 @@ export default function TrainingSessionDetailForm({
     };
   }, [streetAddress]);
 
-  // 바깥 클릭 시 드롭다운 닫기(WhereToBuySearch 패턴)
   useEffect(() => {
     if (!showSuggestions) return;
     function handlePointerDown(event: MouseEvent) {
@@ -200,7 +181,6 @@ export default function TrainingSessionDetailForm({
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [showSuggestions]);
 
-  // 자동완성 후보 선택 → 도로명 채움 + City/State/ZIP 자동 채움(실패 시 조용히 스킵)
   async function selectSuggestion(suggestion: PlaceSuggestion) {
     suppressFetchRef.current = true;
     setStreetAddress(suggestion.description);
@@ -209,7 +189,6 @@ export default function TrainingSessionDetailForm({
     try {
       const address = await fetchPlaceAddress(suggestion.placeId);
       if (address) {
-        // street 파싱값이 있으면 그것으로 정규화(없으면 선택한 description 유지)
         if (address.street) {
           suppressFetchRef.current = true;
           setStreetAddress(address.street);
@@ -219,21 +198,17 @@ export default function TrainingSessionDetailForm({
         if (address.zip) setZipCode(address.zip);
       }
     } catch {
-      // 주소 파싱 실패 시 자동채움 스킵 — 수동 입력 유지
     }
   }
 
-  // 필수 텍스트 필드 변경 시 에러 표시 해제
   function clearError(key: keyof SessionFieldErrors) {
     setErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev));
   }
 
-  // 제출 처리 — 필수/형식 검증 → reCAPTCHA 토큰 확인 → POST
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitting) return;
 
-    // 빈 값/형식 오류인 필수 텍스트 필드 에러 표시(이메일은 값이 있어도 형식 검증)
     const emailValid =
       email.trim() !== "" && EMAIL_FORMAT_REGEX.test(email.trim());
     const nextErrors: SessionFieldErrors = {
@@ -254,7 +229,6 @@ export default function TrainingSessionDetailForm({
       eventDateValue.trim() !== "" &&
       privacyConsent;
     if (!requiredFilled) {
-      // 이메일만 형식 오류인 경우 전용 문구, 그 외(빈값 등)는 Contact Us 동일 문구 패턴
       alert(
         email.trim() !== "" && !emailValid
           ? "Please enter a valid email address."
@@ -263,7 +237,6 @@ export default function TrainingSessionDetailForm({
       return;
     }
 
-    // reCAPTCHA 토큰 없으면 차단
     if (!recaptchaToken) {
       alert("Please complete the reCAPTCHA verification.");
       return;
@@ -283,7 +256,6 @@ export default function TrainingSessionDetailForm({
       privacyConsentFlag: privacyConsent,
       recaptchaToken,
     };
-    // 선택 필드는 값 있을 때만 포함
     if (streetAddress.trim()) payload.streetAddress = streetAddress.trim();
     if (address2.trim()) payload.address2 = address2.trim();
     if (apartment.trim()) payload.apartment = apartment.trim();
@@ -294,12 +266,9 @@ export default function TrainingSessionDetailForm({
 
     try {
       await submitTrainingRegistration(payload);
-      // 성공만 alert 로 안내(Contact Us 패턴)
       alert(SUBMIT_SUCCESS_MESSAGE);
     } catch {
-      // 실패 시 별도 안내 없음(Contact Us 패턴)
     } finally {
-      // reCAPTCHA 토큰은 1회성 — 재제출 대비 리셋
       recaptchaRef.current?.reset();
       setRecaptchaToken(null);
       setSubmitting(false);
@@ -327,7 +296,6 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.studentName)}
               value={studentName}
               onChange={(event) => {
-                // DC10: 영문만 입력 가능 / 최대 100자
                 setStudentName(filterLetters(event.target.value, 100));
                 clearError("studentName");
               }}
@@ -346,7 +314,6 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.email)}
               value={email}
               onChange={(event) => {
-                // DC10: 영문/숫자/특수문자(이메일 허용문자)만 입력 가능
                 setEmail(filterEmail(event.target.value, 255));
                 clearError("email");
               }}
@@ -367,7 +334,6 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.jobTitle)}
               value={jobTitle}
               onChange={(event) => {
-                // DC10: 영문만 입력 가능 / 최대 100자
                 setJobTitle(filterLetters(event.target.value, 100));
                 clearError("jobTitle");
               }}
@@ -387,8 +353,6 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.phone)}
               value={phone}
               onChange={(event) => {
-                // DC10: 숫자만 입력 가능 / 지역코드3+국번3+가입자번호4 = 10자리 제한
-                // (자동 하이픈 포맷팅 없이 숫자만 남긴다)
                 setPhone(filterPhoneDigits(event.target.value));
                 clearError("phone");
               }}
@@ -409,7 +373,6 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.companyName)}
               value={companyName}
               onChange={(event) => {
-                // DC10: 영문만 입력 가능 / 최대 100자
                 setCompanyName(filterLetters(event.target.value, 100));
                 clearError("companyName");
               }}
@@ -472,7 +435,6 @@ export default function TrainingSessionDetailForm({
                       <button
                         type="button"
                         className="support_service_training_session_detail__suggestion-button"
-                        // input blur 전에 선택 확정되도록 mousedown 에서 처리
                         onMouseDown={(event) => {
                           event.preventDefault();
                           void selectSuggestion(suggestion);
@@ -510,7 +472,6 @@ export default function TrainingSessionDetailForm({
               placeholder="Apartment, suite, etc"
               value={apartment}
               onChange={(event) => {
-                // DC10: 영문만 입력 가능 / 최대 100자
                 setApartment(filterLetters(event.target.value, 100));
               }}
               slotProps={{ htmlInput: { maxLength: 100 } }}
@@ -635,8 +596,6 @@ export default function TrainingSessionDetailForm({
                 />
                 <span>Consent to Collection and Use of Personal Information</span>
               </label>
-              {/* DC10: View Full Terms 선택 시 약관 상세 팝업 호출(공통 PrivacyPolicyModal).
-                  폼 내부이므로 type="button" 으로 제출 방지. */}
               <button
                 type="button"
                 className="support_service_training_session_detail__terms-link"

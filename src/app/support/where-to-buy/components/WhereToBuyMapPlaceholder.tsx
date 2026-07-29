@@ -2,7 +2,6 @@ type WhereToBuyMapPlaceholderProps = {
   ariaLabel: string;
 };
 
-/** Figma 6561:74391 — mobile map gray placeholder */
 export default function WhereToBuyMapPlaceholder({
   ariaLabel,
 }: WhereToBuyMapPlaceholderProps) {

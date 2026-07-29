@@ -8,7 +8,6 @@ type CookieSettingPageClientProps = {
   initialDialog?: "banner" | "preferences";
 };
 
-/** P-FO-COMMON-020000P / 040000M — modal-only preview flow */
 export default function CookieSettingPageClient({
   initialDialog = "banner",
 }: CookieSettingPageClientProps) {

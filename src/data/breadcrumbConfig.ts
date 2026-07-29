@@ -3,12 +3,6 @@ import {
   softwareProductHrefs,
 } from "@/data/gnb/mega/devices";
 
-/**
- * Training 상세/세션 경로의 variant(코스 계열)별 "목록" 라벨 매핑.
- * sales/engineering/service 3종. 이 라벨은 상위(목록) 크럼용 정적 값이다.
- * 코스 상세(1뎁스)의 마지막 항목(current)만은 services 레이아웃이 SSR 시점에 조회한 실 코스 제목으로
- *   렌더된다(HeaderBreadcrumb serverOverride). 아래 정적 "Curriculum Detail" 은 그 조회가 없을 때의 폴백이다.
- */
 const TRAINING_VARIANT_LABELS: Record<string, string> = {
   sales: "Sales Training",
   engineering: "Engineering Training",
@@ -23,7 +17,6 @@ export type BreadcrumbCrumb = {
 export type BreadcrumbConfig = {
   crumbs: BreadcrumbCrumb[];
   current: string;
-  /** 경로 텍스트 없이 홈 아이콘만 — Figma Explore All (4701:82591) */
   homeOnly?: boolean;
 };
 
@@ -68,8 +61,6 @@ const configs: Record<string, BreadcrumbConfig> = {
     current: "",
     homeOnly: true,
   },
-  // 카테고리 L01-15(LV)·L05-04(Automation) 둘 다 seo.slug가 "variable-frequency-drive"로
-  // 중복 등록돼 있어(첫 건 렌더링 정책) 신규 URL 키 하나로 통합.
   "/product-range/variable-frequency-drive": {
     crumbs: [
       { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
@@ -156,8 +147,6 @@ const configs: Record<string, BreadcrumbConfig> = {
     ],
     current: "Smart Factory",
   },
-  // depth3(제품 상세) — SW 제품은 depth2 항목만 있고 depth3가 빠져 브레드크럼이 안 뜨던 문제 보완.
-  // HW의 /product/metasol-ms 패턴을 그대로 따름(depth2 라벨 + 제품 라벨을 crumbs에 포함).
   "/product/scada": {
     crumbs: [
       { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
@@ -370,12 +359,6 @@ const configs: Record<string, BreadcrumbConfig> = {
 };
 
 export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
-  // Training 세션 상세(2뎁스): /services/{variant}-training/{courseId}/{sessionId}
-  // — 코스(1뎁스)보다 먼저 검사(세그먼트 수가 더 많으므로 우선 매칭).
-  // courseId(숫자)·sessionId(UUID)는 동적이라 blog/press 상세처럼 제네릭 고정 라벨 사용.
-  // 중간 "코스로 돌아가기" 크럼의 "Curriculum Detail" 은 실 코스 제목 조회 실패 시의 폴백 라벨이다.
-  //   정상 경로에서는 services 레이아웃이 SSR 시점에 조회한 실 코스 제목을 HeaderBreadcrumb serverOverride(crumb)
-  //   로 내려, 이 크럼(href=`${listHref}/${courseId}`) 라벨을 실 제목으로 덮어쓴다(SSR 최초 HTML 부터 반영).
   const sessionMatch = pathname.match(
     /^\/services\/(sales|engineering|service)-training\/([^/]+)\/([^/]+)$/,
   );
@@ -396,10 +379,6 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     };
   }
 
-  // Training 코스 상세(1뎁스): /services/{variant}-training/{courseId}
-  // current 의 "Curriculum Detail" 은 실 코스 제목 조회 실패 시의 폴백 라벨이다.
-  // 정상 경로에서는 services 레이아웃이 SSR 시점에 조회한 실 코스 제목을 HeaderBreadcrumb serverOverride 로
-  //   내려 이 값을 덮어쓴다(SSR 최초 HTML 부터 실 제목 → 클라이언트 텍스트 교체 없음).
   const detailMatch = pathname.match(
     /^\/services\/(sales|engineering|service)-training\/([^/]+)$/,
   );
@@ -418,9 +397,6 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     };
   }
 
-  // Training 목록(진입점): /services/{variant}-training
-  // — sales/engineering/service 3종 모두 동일 구조. 특정 variant 하드코딩 대신
-  //   상세/세션과 같은 정규식 패턴으로 통일(current 만 variant 라벨로 분기).
   const listMatch = pathname.match(
     /^\/services\/(sales|engineering|service)-training$/,
   );
@@ -432,22 +408,18 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     };
   }
 
-  // 블로그 상세는 id 기반 동적 라우트(/company/blog/detail/{id}) — 고정 경로와 동일한 breadcrumb 사용
   if (/^\/company\/blog\/detail\/[^/]+$/.test(pathname)) {
     return configs["/company/blog/detail"];
   }
 
-  // 프레스 상세도 id 기반 동적 라우트(/company/press/detail/{id}) — 고정 경로와 동일한 breadcrumb 사용
   if (/^\/company\/press\/detail\/[^/]+$/.test(pathname)) {
     return configs["/company/press/detail"];
   }
 
-  // 아티클 상세도 id 기반 동적 라우트(/company/articles/detail/{id}) — 고정 경로와 동일한 breadcrumb 사용
   if (/^\/company\/articles\/detail\/[^/]+$/.test(pathname)) {
     return configs["/company/articles/detail"];
   }
 
-  // 이벤트 상세도 id 기반 동적 라우트(/company/events/detail/{id}) — 고정 경로와 동일한 breadcrumb 사용
   if (/^\/company\/events\/detail\/[^/]+$/.test(pathname)) {
     return configs["/company/events/detail"];
   }
@@ -460,7 +432,6 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
   );
 }
 
-/** breadcrumb 경로 라벨 (crumbs + current). homeOnly·미등록 경로는 빈 배열 */
 export function getBreadcrumbTrail(pathname: string): string[] {
   const config = getBreadcrumbConfig(pathname);
   if (config.homeOnly) {

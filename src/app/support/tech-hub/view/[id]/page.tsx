@@ -4,7 +4,6 @@ import { fetchTechHubContentDetail } from "@/data/support/techHubData";
 import "@/assets/css/devices-product-detail.css";
 import "@/assets/css/support.css";
 
-// Tech Hub 콘텐츠 상세(콘텐츠별 동적 라우트). masterId 로 상세 조회 → 미존재/미노출(BE 404)이면 notFound().
 type TechHubViewPageProps = {
   params: Promise<{ id: string }>;
 };

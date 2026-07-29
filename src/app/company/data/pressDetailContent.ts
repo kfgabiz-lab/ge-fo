@@ -3,19 +3,16 @@ export const pressDetailTitle =
 
 export const pressDetailDate = "Dec 9, 2025";
 
-/** Optional Venue · Dates header (events-style press variant) */
 export const pressDetailMeta = {
   venue: "Las Vegas",
   dates: "Feb 02, 2026~ Feb 04, 2026",
 };
 
-/** press 상세 hero 폴백 이미지 — 등록 이미지가 없을 때만 사용 */
 export const pressDetailHero = {
   src: "/img/company/press/detail_hero.png",
   alt: "ELECS KOREA 2026 exhibition booth",
 };
 
-/** Figma 3525:39831 — devices_product_video__player 패턴 */
 export const pressDetailYoutube = {
   videoId: "WtQN9rcdI-0",
   title: "LS ELECTRIC MCCB Line Introduction (ENG)",

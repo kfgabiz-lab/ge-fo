@@ -5,7 +5,6 @@ export const connectPortalPage = {
   description:
     "An all-in-one eSales platform for product discovery, ordering, shipping, and customer inquiries.",
   video: {
-    /** Figma 3670:31186 — LS ELECTRIC MCCB Line Introduction (ENG) */
     youtubeVideoId: "73F6r_x5J2Y",
     poster: "/img/support/connect-portal/hero-video.jpg",
     title: "Connect Portal — Main Page Overview",

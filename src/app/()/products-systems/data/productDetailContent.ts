@@ -19,27 +19,18 @@ export type ProductKeyFeature = {
 export type ProductDownloadFile = {
   name: string;
   size: string;
-  /** Copy Link clipboard target */
   url: string;
 };
 
-/** Dummy download base — `url` 미지정 시 사용 */
 export const PRODUCT_DOWNLOAD_LINK_BASE =
   "https://www.ls-electric.com/download" as const;
 
 type ProductDownloadFileInput = {
   name: string;
   size: string;
-  /** 생략 시 더미 URL 자동 생성. 하드코딩하려면 직접 입력 */
   url?: string;
 };
 
-/**
- * Download 파일 데이터.
- * @example
- * productDownloadFile({ name: "a.pdf", size: "1MB", url: "https://www.ls-electric.com/download/a.pdf" })
- * productDownloadFile({ name: "a.pdf", size: "1MB", url: "https://example.com/a.pdf" })
- */
 export function productDownloadFile({
   name,
   size,
@@ -63,14 +54,9 @@ export type ProductDownloadItem = {
   versions?: string[];
   files: ProductDownloadFile[];
   description?: ProductDownloadDescription;
-  /** Search results — title/file name highlight (inline or suffix) */
   highlight?: string;
 };
 
-// 다운로드센터 공통 최신 목록(DownloadCenterItem[]) → 제품상세 Downloads 섹션이 요구하는 ProductDownloadItem[] 변환.
-// - files는 sortKey가 가장 큰(최신) 버전의 파일만 매핑한다. version/versions는 전체 버전명 기준.
-// - files의 url은 filePath를 fetchDownloadCenterFileUrl로 조회한 실제 다운로드 URL(파일별 병렬 조회).
-// - GenericProductDetail(HW)과 SwProductDetail(SW 4종) 양쪽에서 공유한다(중복 작성 금지).
 export async function mapDownloadCenterItemsToProductDownloads(
   items: DownloadCenterItem[],
 ): Promise<ProductDownloadItem[]> {
@@ -103,16 +89,8 @@ export async function mapDownloadCenterItemsToProductDownloads(
   );
 }
 
-// 제품상세 Downloads 섹션 페이지 크기.
-// 기획서(fo/docs/dev/products-systems/product.png DESCRIPTION 20번) "리스트에 최대 5개 데이터 출력 /
-// 5개 초과 시 페이징처리" 에 명시된 값이다. Download Center(support, 12개)와 다른 화면 전용 값이라
-// 공유 상수를 쓰지 않고 여기서 별도로 정의한다.
 export const PRODUCT_DOWNLOADS_PAGE_SIZE = 5;
 
-// 제품상세 Downloads 섹션 "Sort by" 옵션.
-// 기획서(fo/docs/dev/products-systems/product.png DESCRIPTION 21번)가 지정한 4종 그대로이며,
-// 표시 순서도 기획서 나열 순서를 따른다. PC 드롭다운(DevicesProductDownloads)과
-// 모바일 정렬 시트(DevicesProductDownloadsMobileControls)가 같은 목록을 공유한다(중복 정의 금지).
 export const productDownloadsSortOptions = [
   { value: "doctype", label: "Document Type" },
   { value: "newest", label: "Most Recent" },
@@ -120,10 +98,8 @@ export const productDownloadsSortOptions = [
   { value: "title_desc", label: "Z to A" },
 ] as const satisfies ReadonlyArray<{ value: DownloadCenterSort; label: string }>;
 
-// 기본 선택값 — 기획서 "Default 정렬순서 : Document Type".
 export const PRODUCT_DOWNLOADS_DEFAULT_SORT: DownloadCenterSort = "doctype";
 
-// 정렬 코드 → 표시 라벨. 드롭다운 renderValue / 모바일 트리거 라벨이 공유한다.
 export function productDownloadsSortLabel(sort: DownloadCenterSort): string {
   return (
     productDownloadsSortOptions.find((option) => option.value === sort)?.label ??
@@ -131,25 +107,12 @@ export function productDownloadsSortLabel(sort: DownloadCenterSort): string {
   );
 }
 
-// 제품상세 Downloads 섹션 1페이지 조회 결과.
 export type ProductDownloadsPage = {
   items: ProductDownloadItem[];
-  /** 필터 조건 전체 건수(현재 페이지 건수 아님) — "Showing x-y of N results" 의 N */
   totalElements: number;
-  /** 최소 1(0건이어도 페이저는 1페이지로 표시) */
   totalPages: number;
 };
 
-// 제품상세 Downloads 섹션 페이지 조회(SSR 초기 렌더 / 클라이언트 페이지 이동 공용).
-// - 페이징은 BE(download-center/contents)에 위임한다. 전체 목록을 받아 클라이언트에서 잘라내지 않는다
-//   (기획서 페이저가 68페이지까지 그려진 대용량 목록이라 전량 조회가 성립하지 않는다).
-// - page 는 UI 기준 1-based. BE 는 0-based 라 여기서 변환한다.
-// - 정렬도 BE 위임이다. 기본값(doctype)은 SSR 초기 렌더와 클라이언트 초기 상태가 반드시 같아야 하므로
-//   여기 기본 인자 한 곳에서만 정한다(호출부에서 각자 지정하지 말 것).
-// - GenericProductDetail(HW) / SwProductDetail(SW 4종) / DevicesProductDownloads(클라이언트) 세 곳이
-//   같은 조건으로 조회해야 하므로 조회+변환을 이 함수 한 곳에만 둔다(중복 작성 금지).
-// - productCodes: 현재 제품과 연계된 파일만 노출하기 위한 제품코드 필터(기획서 DESCRIPTION 18번).
-//   BE(download-center/contents)의 productCodes 파라미터(CSV)로 위임한다.
 export async function fetchProductDownloadsPage({
   docTypes,
   productCodes,
@@ -157,15 +120,10 @@ export async function fetchProductDownloadsPage({
   sort = PRODUCT_DOWNLOADS_DEFAULT_SORT,
 }: {
   docTypes: string[];
-  /** 연계 제품코드(product.product_code). 제품코드를 못 구하면 빈 배열로 넘긴다. */
   productCodes: string[];
   page?: number;
   sort?: DownloadCenterSort;
 }): Promise<ProductDownloadsPage> {
-  // ⚠️ 제품코드가 하나도 없으면 BE 를 호출하지 않고 즉시 빈 페이지를 돌려준다.
-  //    BE 는 productCodes 가 비면 "필터 없음"으로 보고 전체 목록을 반환하는데,
-  //    기획서 18번("현재 제품과 연계된 파일만 출력") 기준에서 제품코드를 못 구한 상황은
-  //    "연계 파일 0건"이지 "전체 노출"이 아니다. 호출을 생략해야 무관한 전체 목록 노출을 막을 수 있다.
   if (productCodes.length === 0) {
     return { items: [], totalElements: 0, totalPages: 1 };
   }
@@ -190,15 +148,11 @@ export type ProductOtherItem = {
   href: string;
   image: string;
   title: string;
-  /** Figma subtitle — e.g. category line under title */
   subtitle?: string;
-  /** 단일 뱃지 (badge1, 80px) — `badges` 미사용 시 호환 */
   badge?: boolean;
-  /** 1: type1 (80px) · 2: type2 (72px) — 각 1개 뱃지 */
   badges?: 1 | 2;
 };
 
-/** @deprecated H100 Plus uses per-item subtitles (Figma 4288:43708) */
 export const metasolMsOtherProductsSubtitle =
   "Metasol Contactor & Overload Relay";
 
@@ -208,21 +162,17 @@ export type ProductDetail = {
   series: string;
   subtitle: string;
   description: string;
-  /** 실이미지 없으면 null — 렌더 쪽에서 이미지 영역 자체를 생략한다(플레이스홀더 미사용) */
   image: string | null;
   specs: ProductSpec[];
   keyFeatures: ProductKeyFeature[];
-  /** product_etc.line_up 리치텍스트 HTML(그대로 렌더). 정적 템플릿은 빈 문자열 */
   lineUp: string;
   downloads: ProductDownloadItem[];
   otherProducts: ProductOtherItem[];
   youtubeVideoId: string;
-  /** product.awards — "01"이면 iF Design Awards 수상. 히어로 로고/문구(8번) 조건부 노출용. 정적 템플릿은 미설정(undefined) */
   awards?: string;
   parentHref: string;
   parentLabel: string;
   configuratorHref?: string;
-  /** product_etc.connect_portal — configuratorHref와 동일 값이지만 Help 카드(help-1) CTA 링크로 별도 노출한다 */
   connectPortal?: string;
   configuratorExternal?: boolean;
   configuratorBannerBg?: string;
@@ -231,7 +181,6 @@ export type ProductDetail = {
   expertContactEmail?: string;
 };
 
-/** Figma 6843:64936 — H100 Plus Key Features */
 const h100PlusKeyFeatures: ProductKeyFeature[] = [
   {
     id: "kf-1",
@@ -307,7 +256,6 @@ const sharedDownloads: ProductDownloadItem[] = [
   },
 ];
 
-/** Figma 5841:132459 — downloads list (5 items) */
 const metasolMsDownloads: ProductDownloadItem[] = [
   {
     id: "dl-1",
@@ -371,7 +319,6 @@ const metasolMsDownloads: ProductDownloadItem[] = [
   },
 ];
 
-/** Figma 6788:8339 — Metasol MS Key Features */
 const metasolMsKeyFeatures: ProductKeyFeature[] = [
   {
     id: "kf-1",
@@ -399,7 +346,6 @@ const metasolMsKeyFeatures: ProductKeyFeature[] = [
   },
 ];
 
-/** Figma 6788:8339 — Metasol MS product detail */
 export const metasolMsDetail: ProductDetail = {
   slug: "metasol-ms",
   parentHref: "/products-category/lv-products-and-systems",
@@ -446,7 +392,6 @@ export const metasolMsFaqItems = [
   },
 ];
 
-/** Figma 6843:64936 — H100 Plus product detail */
 export const h100PlusDetail: ProductDetail = {
   slug: "h100_plus",
   parentHref: "/product-range/variable-frequency-drive",
@@ -479,7 +424,6 @@ export const h100PlusDetail: ProductDetail = {
 
 export const h100PlusFaqItems = metasolMsFaqItems;
 
-/** Product detail page template — copied from H100 Plus (`/motor-control/h100_plus`) */
 export const productTemplateDetail: ProductDetail = {
   ...h100PlusDetail,
   slug: "template",
@@ -530,7 +474,6 @@ export const productTemplateDetail: ProductDetail = {
 
 export const productTemplateFaqItems = h100PlusFaqItems;
 
-/** Figma 6788:7460 — Susol UL ACB Key Features */
 const susolUlSmartMccbKeyFeatures: ProductKeyFeature[] = [
   {
     id: "kf-1",
@@ -558,7 +501,6 @@ const susolUlSmartMccbKeyFeatures: ProductKeyFeature[] = [
   },
 ];
 
-/** Figma 6788:7460 — Susol UL ACB product detail (route: susol-ul-smart-mccb) */
 export const susolUlSmartMccbDetail: ProductDetail = {
   slug: "susol-ul-smart-mccb",
   parentHref: "/products-category/lv-products-and-systems",
@@ -615,7 +557,6 @@ export const productDetailNavItems = [
   { id: "product-help", label: "Help" },
 ] as const;
 
-/** Figma 6788:8339 — Metasol MS (no Other Products) */
 export const metasolMsNavItems = [
   { id: "product-key-feature", label: "Key Features" },
   { id: "product-lineup", label: "Lineup" },
@@ -625,7 +566,6 @@ export const metasolMsNavItems = [
   { id: "product-help", label: "Help" },
 ] as const;
 
-/** Figma 6843:64936 — H100 Plus (no Other Products) */
 export const h100PlusNavItems = [
   { id: "product-key-feature", label: "Key Features" },
   { id: "product-lineup", label: "Lineup" },
@@ -635,7 +575,6 @@ export const h100PlusNavItems = [
   { id: "product-help", label: "Help" },
 ] as const;
 
-/** Figma 6788:7460 — Susol UL ACB (no Video / Other Products) */
 export const susolUlSmartMccbNavItems = [
   { id: "product-key-feature", label: "Key Features" },
   { id: "product-lineup", label: "Lineup" },

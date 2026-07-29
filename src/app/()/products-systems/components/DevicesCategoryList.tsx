@@ -13,7 +13,6 @@ type DevicesCategoryIntro = {
 type DevicesCategoryListProps = {
   intro: DevicesCategoryIntro;
   products: DevicesCategoryProduct[];
-  /** split: intro left + list right (VFD) · stacked: intro top + 2-col grid (LV Automation) */
   layout?: "split" | "stacked";
 };
 
@@ -24,8 +23,6 @@ function CategoryProductCard({
   item: DevicesCategoryProduct;
   loading?: "eager" | "lazy";
 }) {
-  // 기획서 9번 Design Awards 배지 — 퍼블리싱 표준 패턴(DevicesProducts/MarketsProducts/DevicesProductOtherProducts)과 동일:
-  // 카드 루트에 type 클래스, 이미지 래퍼 첫 자식에 공용 ProductAwardBadge. 판정도 공용 getProductBadgeType 재사용.
   const badgeType = getProductBadgeType(item);
 
   return (
@@ -35,7 +32,6 @@ function CategoryProductCard({
     >
       <div className="devices_category__item-img">
         {badgeType ? <ProductAwardBadge dataSlugKey="product.awards" /> : null}
-        {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환. 없으면 src 빈값으로 브라우저 기본 깨진 이미지 표시(레이아웃 유지) */}
         <img loading={loading} decoding="async" src={item.image ?? undefined} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>
       <div className="devices_category__item-body">
@@ -43,7 +39,6 @@ function CategoryProductCard({
           <h2 className="devices_category__item-tit" data-slugkey="product.product_name">{item.title}</h2>
           <p className="devices_category__item-desc" data-slugkey="product_info.info_description">{item.description}</p>
         </div>
-        {/* href는 하위 카테고리/제품 상세 라우트로 이동하는 정적 라우팅 → 데이터 필드 아님(정적 유지) */}
         <Link href={item.href} className="btn-base btn-lv03 btn-lv03--solid">
           View Detail
         </Link>
@@ -67,11 +62,9 @@ function CategoryProductCardStacked({
   item: DevicesCategoryProduct;
   loading?: "eager" | "lazy";
 }) {
-  // 기획서 9번 Design Awards 배지 — split 카드와 동일한 퍼블리싱 표준 패턴 적용
   const badgeType = getProductBadgeType(item);
 
   return (
-    // href는 하위 카테고리/제품 상세 라우트로 이동하는 정적 라우팅 → 데이터 필드 아님(정적 유지)
     <Link
       href={item.href}
       className={badgeType ? `devices_category__item ${badgeType}` : "devices_category__item"}
@@ -79,7 +72,6 @@ function CategoryProductCardStacked({
     >
       <div className="devices_category__item-img">
         {badgeType ? <ProductAwardBadge dataSlugKey="product.awards" /> : null}
-        {/* product_info.image = 파일ID 배열 → FE에서 /api/v1/fo/page-files/{id} 프록시 변환. 없으면 src 빈값으로 브라우저 기본 깨진 이미지 표시(레이아웃 유지) */}
         <img loading={loading} decoding="async" src={item.image ?? undefined} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>
       <div className="devices_category__item-body">
@@ -101,11 +93,8 @@ export default function DevicesCategoryList({
   if (layout === "stacked") {
     return (
       <section className="devices_category devices_category--stacked">
-        {/* data-slug: category-data (단건 — 카테고리 인트로, depth1 레코드)
-            where=category.depth=1 AND 해당 페이지 카테고리 코드 · orderBy 없음(단건) */}
         <div className="inner devices_category__header" data-slug="category-data">
           {intro.parentHref ? (
-            // parentLabel/parentHref = 상위(부모 메뉴/route) 브레드크럼 → category-data 대응 필드 없음(정적 유지)
             <Link href={intro.parentHref} className="devices_category__parent">
               {intro.parentLabel}
             </Link>
@@ -116,11 +105,6 @@ export default function DevicesCategoryList({
           <p className="devices_category__desc" data-slugkey="device_systems.description">{intro.description}</p>
         </div>
         <div className="devices_category__grid-wrap">
-          {/* 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
-              data-slug: product-data (다건 — Lv2 랜딩 제품 카드).
-              소스: GET /api/v1/fo/categories/{lv2Id}/products — 해당 Lv2 하위 depth3 연결행이 가리키는 제품 중
-              product.is_visible=001 AND product.order_status=01, 연결행 sortOrder ASC(동률 시 제품 id ASC).
-              (구 조건이던 product_code 접두사 클라이언트 필터는 폐기) */}
           <div className="inner devices_category__grid" data-slug="product-data" data-slug-repeat="true">
             {chunkProducts(products, 2).map((row, rowIndex) => (
               <div key={row.map((item) => item.id).join("-")} className="devices_category__grid-row">
@@ -128,7 +112,6 @@ export default function DevicesCategoryList({
                   item={row[0]}
                   loading={rowIndex === 0 ? "eager" : "lazy"}
                 />
-                {/* 2026-07-22: 홀수 개(행에 item 1개)일 때 grid-divider 미렌더 */}
                 {row[1] ? (
                   <>
                     <div className="devices_category__grid-divider" aria-hidden="true" />
@@ -151,11 +134,8 @@ export default function DevicesCategoryList({
       <div className="devices_category__layout">
         <div className="devices_category__intro">
           <div className="devices_category__intro-bg" aria-hidden="true" />
-          {/* data-slug: category-data (단건 — 카테고리 인트로, depth1 레코드)
-              where=category.depth=1 AND 해당 페이지 카테고리 코드 · orderBy 없음(단건) */}
           <div className="inner devices_category__intro-inner" data-slug="category-data">
             {intro.parentHref ? (
-              // parentLabel/parentHref = 상위(부모 메뉴/route) 브레드크럼 → category-data 대응 필드 없음(정적 유지)
               <Link href={intro.parentHref} className="devices_category__parent">
                 {intro.parentLabel}
               </Link>
@@ -167,10 +147,6 @@ export default function DevicesCategoryList({
           </div>
         </div>
         <div className="devices_category__list">
-          {/* 이 카드 목록은 하위 카테고리가 아니라 제품(product-data)이다.
-              data-slug: product-data (다건 — VFD 등 Lv2 랜딩 제품 카드). split 레이아웃도 stacked 와 동일 소스를 쓴다.
-              소스: GET /api/v1/fo/categories/{lv2Id}/products — 맵핑된 depth3 연결행 기준, 공개+판매중 필터, 연결행 sortOrder ASC.
-              (구 조건이던 product_code 접두사 클라이언트 필터는 폐기) */}
           <div className="devices_category__list-inner" data-slug="product-data" data-slug-repeat="true">
             {products.map((item, index) => (
               <CategoryProductCard

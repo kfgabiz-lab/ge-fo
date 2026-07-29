@@ -72,7 +72,6 @@ function scrollToSection(id: string) {
   requestAnimationFrame(step);
 }
 
-// 페이지 최상단(top 0)으로 스크롤 — content 비어 session-training 앵커가 없을 때 Agenda 탭 클릭 처리용.
 function scrollToTop() {
   const immediate = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const lenis = getLenisInstance();
@@ -88,20 +87,12 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: immediate ? "auto" : "smooth" });
 }
 
-// Agenda 를 교육일(date) 기준으로 묶은 그룹 1개.
-// - 기획(curri_det3.png DESCRIPTION 우측 1번): "회차가 많은 경우 Session 1, Session 2 등으로 구분 노출"
-// - 그룹 순서는 뷰모델 정렬(date → time_from 오름차순)을 그대로 따르므로 첫 등장 순 = 날짜 오름차순.
 type AgendaGroup = {
   date: string;
-  label: string; // "Session 1" / "Session 2" ...
+  label: string; 
   rows: EngineeringTrainingAgendaRow[];
 };
 
-// 정렬된 agenda 행 → 교육일 기준 그룹 배열.
-// - TrainingDetailSchedule 의 날짜 그룹핑(groupedSessions)과 동일한 "첫 등장 순서 유지 + Map 인덱스" 패턴.
-// - date 가 비어있는 행들도 하나의 그룹(키 "")으로 묶어 순서를 잃지 않게 한다.
-// - No(number)는 목업(curri_det2.png)대로 세션 그룹마다 1부터 다시 채번한다.
-//   (뷰모델/정적 샘플의 통짜 연속 채번을 이 시점에 그룹 기준으로 덮어쓴다)
 function toAgendaGroups(rows: EngineeringTrainingAgendaRow[]): AgendaGroup[] {
   const groups: AgendaGroup[] = [];
   const indexByDate = new Map<string, number>();
@@ -132,9 +123,7 @@ export default function TrainingSessionDetail({
   session: EngineeringTrainingSessionDetail;
   variant: TrainingVariant;
 }) {
-  // 본문(content) 유무 — 탭 노출/본문 섹션 노출/Agenda 탭 스크롤 분기의 단일 기준
   const hasContent = session.content.trim().length > 0;
-  // 세션 탭 목록: variant(라벨) + content 유무(training 탭 노출)로 동적 구성
   const tabs = useMemo(
     () => buildSessionTabs(variant, hasContent),
     [variant, hasContent],
@@ -142,16 +131,12 @@ export default function TrainingSessionDetail({
   const [activeTab, setActiveTab] = useState<EngineeringTrainingSessionTabId>(
     tabs[0].id,
   );
-  // 공유 링크에 주입할 현재 페이지 URL(마운트 후 window 접근 → SSR/CSR 안전)
   const [shareUrl, setShareUrl] = useState("");
 
-  // Agenda 교육일 그룹. 그룹이 2개 이상일 때만 "Session N" 구분 헤더를 노출한다
-  // (기획 문구가 "회차가 많은 경우" 조건이므로 단일 교육일이면 기존 표기 그대로 유지).
   const agendaGroups = useMemo(() => toAgendaGroups(session.agenda), [
     session.agenda,
   ]);
   const showAgendaSessions = agendaGroups.length > 1;
-  // 스케줄이 0건이어도 Agenda 제목/표 컨테이너는 유지해야 하므로 빈 그룹 1개로 대체해 렌더한다.
   const agendaRenderGroups: AgendaGroup[] =
     agendaGroups.length > 0
       ? agendaGroups
@@ -161,9 +146,6 @@ export default function TrainingSessionDetail({
     setShareUrl(window.location.href);
   }, []);
 
-  // 세션상세 → 코스상세 소프트 이동(중간 "코스로 돌아가기" 크럼 클릭) 대비:
-  // 코스상세 경로에 실 코스 제목을 미리 seed 해두면, 재진입 시 코스상세 current 가 무플래시로 실 제목이 된다.
-  // (courseTitle 은 이미 조회된 부모 커리큘럼 값 — 추가 네트워크 없음)
   useEffect(() => {
     seedBreadcrumbTitle(
       `/services/${variant}-training/${session.courseId}`,
@@ -176,7 +158,6 @@ export default function TrainingSessionDetail({
     scrollToSection("session-registration");
   }, []);
 
-  // Add to Calendar 이벤트: 세션 뷰모델 event(원본 날짜/시간) 사용
   const calendarEvent: CalendarEvent | null =
     session.event && hasValidEventDate(session.event) ? session.event : null;
 
@@ -197,10 +178,8 @@ export default function TrainingSessionDetail({
   useEffect(() => {
     const onScroll = () => {
       const offset = window.scrollY + SESSION_TAB_SCROLL_OFFSET;
-      // 기본 활성 탭 = 현재 노출된 첫 탭(content 없으면 training 탭이 없으므로 tabs[0])
       let current: EngineeringTrainingSessionTabId = tabs[0].id;
 
-      // 삭제된 앵커(session-training 등)를 참조하지 않도록 노출된 탭만 순회
       for (const tab of tabs) {
         const element = document.getElementById(`session-${tab.id}`);
         if (element && element.offsetTop <= offset) {
@@ -226,14 +205,12 @@ export default function TrainingSessionDetail({
                 <header className="support_service_training_session_detail__head">
           <div className="support_service_training_session_detail__title-row">
             <div className="support_service_training_session_detail__title-wrap">
-              {/* 카테고리: 부모 curriculum.product_category(P/A) 코드 → 라벨 (코스레벨, _fetchedRel8) */}
               <p
                 className="support_service_training_session_detail__category"
                 data-slugkey="_fetchedRel8.curriculum.product_category"
               >
                 {session.category}
               </p>
-              {/* 회차 제목: 이 행의 curriculum_detail2.title (부모 curriculum.title 아님) */}
               <h1
                 className="support_service_training_session_detail__title"
                 data-slugkey="curriculum_detail2.title"
@@ -299,7 +276,6 @@ export default function TrainingSessionDetail({
                     }`}
                     onClick={() => {
                       setActiveTab(tab.id);
-                      // content 없어 session-training 앵커가 없을 때, Agenda 는 최상단 섹션이므로 page top 0 으로 스크롤
                       if (tab.id === "agenda" && !hasContent) {
                         scrollToTop();
                       } else {
@@ -319,10 +295,6 @@ export default function TrainingSessionDetail({
               })}
             </nav>
 
-            {/* 세션 본문: curriculum_detail2.content(WYSIWYG HTML) 단일 블록.
-                신뢰경계 = BO 관리자 입력·동일 오리진 → company blog/press/articles/events 및
-                products GenericProductDetail 선례대로 sanitize 없이 dangerouslySetInnerHTML 직접 렌더.
-                content 비어있으면 섹션(및 training 탭) 전체 비노출. */}
             {hasContent ? (
               <div
                 id="session-training"
@@ -342,16 +314,6 @@ export default function TrainingSessionDetail({
               id="session-agenda"
               className="support_service_training_session_detail__block support_service_training_session_detail__block--agenda"
             >
-              {/* Agenda = 이 회차 행의 training_schedule 배열 반복(단건 main 내부 중첩 다건).
-                  목업(curri_det2.png)대로 세션(교육일)마다 "제목 + 독립 표"를 통째로 반복 렌더하고,
-                  No 는 세션마다 1부터 다시 시작한다(toAgendaGroups 에서 재채번).
-                  No 는 화면 채번이라 미태깅, Time 은 time_from~time_to 두 필드 조합이라 미태깅(STEP6 조합).
-
-                  ⚠️ 한 그룹 = 제목(h2) + 표(PC) + 타임라인(MO) 를 이 반복 하나에서 함께 렌더한다.
-                  표/타임라인은 CSS 로 서로 반대 브레이크포인트에서만 노출되는데(PC: agenda-list 숨김,
-                  MO: table-viewport 숨김), 타임라인만 반복 밖으로 빼면 모바일에서 표가 사라진 자리에
-                  제목(h2)만 그룹 수만큼 연달아 쌓이고 타임라인은 맨 끝에 한 번만 나와 제목이 중복된다.
-                  그룹 구분을 h2 가 전담하므로 타임라인 내부의 "Session N" 라벨 항목도 두지 않는다. */}
               {agendaRenderGroups.map((group) => (
                 <Fragment key={group.date || group.label}>
                   <h2 className="support_service_training_session_detail__block-tit">
@@ -364,7 +326,6 @@ export default function TrainingSessionDetail({
                           <th scope="col">No</th>
                           <th scope="col">Time</th>
                           <th scope="col">Contents</th>
-                          {/* Trainer 컬럼: 모든 행 trainer 빈값이면 비노출(뷰모델 showTrainerColumn) */}
                           {session.showTrainerColumn ? (
                             <th scope="col">Trainer</th>
                           ) : null}
@@ -399,8 +360,6 @@ export default function TrainingSessionDetail({
                       </tbody>
                     </table>
                   </TrainingSessionDetailTableScroll>
-                  {/* Mobile timeline — Figma 8007:107681 (모바일에서 바로 위 테이블 대신 노출).
-                      그룹 구분은 위 h2 가 담당하므로 타임라인 안에는 세션 라벨을 넣지 않는다. */}
                   <ol className="support_service_training_session_detail__agenda-list">
                     {group.rows.map((row) => (
                       <li

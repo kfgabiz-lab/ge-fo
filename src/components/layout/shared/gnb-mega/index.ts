@@ -18,10 +18,6 @@ type GnbMegaPanelComponentProps =
   | GnbMegaDevicesPanelProps
   | GnbMegaSimplePanelStateProps;
 
-/**
- * 메가메뉴 데이터 형태(devices/grid/sections)로 렌더 컴포넌트를 고른다.
- * 고정 navId 목록에 의존하지 않음 — sections형은 루트 메뉴 개수와 무관하게 이 컴포넌트 하나를 공유한다.
- */
 export function getGnbMegaPanelComponent(
   menu: GnbMegaMenu,
 ): ComponentType<GnbMegaPanelComponentProps> {

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { emptyStateIconSrc } from "@/data/commonAssets";
 
-// 공통 피드 Empty 상태 (Press/Articles/Blog). 마크업 동일, class 접두어만 variant로 분기
 type CompanyFeedEmptyVariant = "press" | "articles" | "blog";
 
 type CompanyFeedEmptyProps = {

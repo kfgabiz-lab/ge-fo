@@ -27,7 +27,6 @@ export default function RequestForTrainingStepGuard({
   const { step1, step2, step3, isRestored } = useRequestForTrainingForm();
 
   useEffect(() => {
-    // sessionStorage 복원 전에는 초기값 기준으로 오탐 리다이렉트가 발생할 수 있어 대기한다.
     if (!isRestored) return;
 
     const currentIndex = STEP_ORDER.indexOf(pathname as (typeof STEP_ORDER)[number]);

@@ -12,10 +12,8 @@ import { requestForTrainingStep4Copy } from "@/data/services/requestForTrainingC
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
 
-/** dc 항목3: comments 는 "문자 수"가 아니라 UTF-8 "byte 수" 기준 2000byte 까지 입력 가능 */
 const COMMENTS_MAX_BYTES = 2000;
 
-/** 코드포인트 1개가 UTF-8 로 차지하는 byte 수 */
 function utf8ByteSize(codePoint: number): number {
   if (codePoint <= 0x7f) return 1;
   if (codePoint <= 0x7ff) return 2;
@@ -23,10 +21,6 @@ function utf8ByteSize(codePoint: number): number {
   return 4;
 }
 
-/**
- * UTF-8 2000byte 를 넘지 않도록 자른다.
- * for...of 는 코드포인트 단위로 순회하므로 이모지 등 서로게이트 페어가 반쪽만 남지 않는다.
- */
 function filterComments(value: string): string {
   let bytes = 0;
   let cut = 0;

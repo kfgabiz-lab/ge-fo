@@ -15,13 +15,10 @@ type DownloadCenterSearchProps = {
 export default function DownloadCenterSearch({
   initialQuery = "",
 }: DownloadCenterSearchProps) {
-  // 입력값은 로컬 상태로 두고, Search 버튼/Enter/인기검색어 클릭 시에만 공유 컨텍스트(query)에 커밋 → 키 입력마다 재조회하지 않는다.
   const { setQuery: commitQuery, popularKeywords } = useDownloadCenterQuery();
   const [query, setQuery] = useState(initialQuery);
   const [isMobile, setIsMobile] = useState(false);
   const hasQuery = query.length > 0;
-
-  // 인기 검색어 = 실집계(source=DOWNLOAD_CENTER). 폴백 없음 — 집계 데이터가 없으면 태그 영역 미노출.
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 780px)");
@@ -35,7 +32,6 @@ export default function DownloadCenterSearch({
     ? downloadCenterPage.searchPlaceholderMobile
     : downloadCenterPage.searchPlaceholder;
 
-  // Search 버튼/Enter — 사용자가 직접 입력해서 실행한 검색만 인기검색어 집계 대상(fire-and-forget, 실패해도 검색엔 영향 없음).
   const commit = () => {
     const trimmed = query.trim();
     void logSearchKeyword("DOWNLOAD_CENTER", trimmed);
@@ -45,7 +41,6 @@ export default function DownloadCenterSearch({
     setQuery("");
     commitQuery("");
   };
-  // 인기검색어 태그 클릭 — 미리 정해진 값이라 사용자의 직접 입력이 아님 → 집계 로깅하지 않는다(기획 결정).
   const selectTag = (tag: string) => {
     setQuery(tag);
     commitQuery(tag);

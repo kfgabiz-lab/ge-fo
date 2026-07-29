@@ -1,4 +1,3 @@
-/** Figma 5535:94070 — Commercial & Residential Solutions */
 export const commercialSolutionsIntro = {
   title: "Smart Energy & Facility Management Solutions",
   description:

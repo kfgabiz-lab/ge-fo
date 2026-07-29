@@ -47,7 +47,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // 서버 프로세스 생애주기 동안 1회만 조회(모듈 전역 캐싱) — 이후 요청은 캐시된 값을 그대로 사용.
   await loadSiteSettings();
 
   return (

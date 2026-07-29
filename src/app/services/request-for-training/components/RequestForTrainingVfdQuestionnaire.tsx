@@ -18,7 +18,6 @@ export default function RequestForTrainingVfdQuestionnaire() {
   const { fields } = requestForTrainingStep4Copy;
   const { step4, setStep4Field } = useRequestForTrainingForm();
 
-  // 체크박스 3그룹 옵션은 공통코드 API에서 조회(이 컴포넌트는 VFD 제품 선택 시에만 마운트됨)
   const [codeOptions, setCodeOptions] = useState<RequestForTrainingStep4Options>(
     emptyRequestForTrainingStep4Options,
   );

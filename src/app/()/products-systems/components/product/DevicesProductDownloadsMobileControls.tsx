@@ -13,7 +13,6 @@ import type { DownloadCenterSort } from "@/data/support/downloadCenterData";
 const MOBILE_MAX_WIDTH_QUERY = "(max-width: 780px)";
 
 type DevicesProductDownloadsMobileControlsProps = {
-  /** 정렬 상태는 PC 드롭다운과 공유해야 하므로 부모(DevicesProductDownloads)가 소유한다. */
   sort: DownloadCenterSort;
   onSortChange: (sort: DownloadCenterSort) => void;
 };

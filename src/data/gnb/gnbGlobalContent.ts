@@ -4,7 +4,6 @@ export type GnbGlobalRegion = {
   href: string;
 };
 
-/** Figma 5683:60868 · 4288:54296 — GNB global region menu */
 export const gnbGlobalActiveRegionId = "america";
 
 export const gnbGlobalRegions: GnbGlobalRegion[] = [

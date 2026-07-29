@@ -10,7 +10,6 @@ type SearchMediaListProps = {
   variant?: "compact" | "card";
 };
 
-/** Figma 6430:106510 (card · All) · 6430:112128 (card · Media tab) — Media list */
 export default function SearchMediaList({
   items,
   listClassName = "search_all__media",

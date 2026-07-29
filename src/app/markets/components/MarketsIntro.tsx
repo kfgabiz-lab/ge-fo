@@ -3,7 +3,6 @@ import { Fragment } from "react";
 type MarketsIntroProps = {
   titleLines?: string[];
   text?: string;
-  /** 여러 단락 intro (Power Grid 등) — `text`보다 우선 */
   paragraphs?: string[];
 };
 
@@ -20,7 +19,6 @@ export default function MarketsIntro({
   return (
     <section className="markets_intro">
       <div className="inner">
-        {/* 대상 markets.css의 .markets_intro__tit는 flex-column이므로 span 래퍼 없이 직접 자식으로 렌더 */}
         <h2 className="markets_intro__tit">
           {titleLines.map((line, index) => (
             <Fragment key={line}>

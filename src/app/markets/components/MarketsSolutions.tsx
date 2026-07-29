@@ -8,7 +8,6 @@ import {
 } from "../data/marketsSolutions";
 import type { SolutionProduct, SolutionZone } from "../data/marketsSolutions";
 
-// 패널 페이드 아웃 지속 시간(ms)
 const PANEL_FADE_MS = 450;
 
 const MAP_BG_PC = "/img/markets/solutions/bg_datacenter.png";
@@ -70,9 +69,7 @@ function ZonePanelBody({
 }
 
 export default function MarketsSolutions() {
-  // 현재 열려 있는 존 id (null이면 닫힘)
   const [activeId, setActiveId] = useState<string | null>(null);
-  // 페이드 아웃 동안 잔상으로 보여줄 존 id
   const [displayZoneId, setDisplayZoneId] = useState<string | null>(null);
   const isPanelOpen = activeId !== null;
 
@@ -91,7 +88,6 @@ export default function MarketsSolutions() {
     [],
   );
 
-  // 모바일 아코디언 노출 순서에 맞춘 존 목록
   const mobileZones = useMemo(
     () =>
       marketsSolutionMobileOrder
@@ -105,7 +101,6 @@ export default function MarketsSolutions() {
     return zoneById.get(displayZoneId) ?? marketsSolutionZones[0];
   }, [displayZoneId, zoneById]);
 
-  // 동일 존 재클릭 시 닫기, 아니면 해당 존 열기
   const toggleZone = (zoneId: string) => {
     setActiveId((current) => (current === zoneId ? null : zoneId));
   };

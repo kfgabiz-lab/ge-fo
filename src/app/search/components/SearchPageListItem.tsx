@@ -74,7 +74,6 @@ function renderTitle(
   );
 }
 
-/** Figma 6430:106469 (compact · All) · 6430:112540 (pages tab) — Pages list item */
 export default function SearchPageListItem({
   item,
   className,
@@ -91,7 +90,6 @@ export default function SearchPageListItem({
   const content = (
     <div className="search_page__content">
       <div className="search_page__head">
-        {/* 카테고리 값이 없는 소스(page-search)는 카테고리 줄을 렌더하지 않는다 — 없는 문구를 임의로 만들지 않기 위함 */}
         {item.category ? (
           <p className="search_page__cat">{item.category}</p>
         ) : null}
@@ -109,9 +107,6 @@ export default function SearchPageListItem({
     </div>
   );
 
-  // 이동 대상 URL 이 없는 예외 항목은 클릭 불가 항목으로 렌더한다(방어용 분기).
-  // href="" 는 Next 에서 현재 URL 로 해석돼 불필요한 이동이 발생하므로 Link 로 감싸지 않는다.
-  // className/내부 구조는 링크 항목과 동일하게 유지한다(스타일 변경 없음).
   if (!item.href) {
     return <div className={className}>{content}</div>;
   }

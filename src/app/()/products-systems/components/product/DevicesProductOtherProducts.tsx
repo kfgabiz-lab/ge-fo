@@ -201,8 +201,6 @@ export default function DevicesProductOtherProducts({
                       <div className="devices_product_other__img-wrap">
                         {badgeType ? <ProductAwardBadge /> : null}
                         <div className="devices_product_other__img-area">
-                          {/* 이미지 미입력(동적 제품) 시 빈 문자열 src는 브라우저 재다운로드 경고를 유발하므로
-                              DevicesProductHero와 동일하게 undefined로 넘긴다(카드는 그대로 노출, 이미지만 비움). */}
                           <img loading="lazy" decoding="async" src={item.image || undefined} alt={item.title} />
                         </div>
                       </div>

@@ -14,7 +14,6 @@ import { Select, type SelectProps } from "@mui/material";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export type GuideSelectProps = SelectProps & {
-  /** 모바일(780px 이하)에서 OS 네이티브 select 사용. 기본 true */
   useNativeOnMobile?: boolean;
 };
 
@@ -175,8 +174,6 @@ export default function GuideSelect({
     if (!open) return;
 
     const handleScroll = (event: Event) => {
-      // 페이지 자체 스크롤(target === document)일 때만 메뉴를 닫는다.
-      // 드롭다운 메뉴 목록 내부의 휠 스크롤은 target이 메뉴 리스트 DOM 요소이므로 무시한다.
       if (event.target !== document) return;
       closeMenu({} as SyntheticEvent);
     };

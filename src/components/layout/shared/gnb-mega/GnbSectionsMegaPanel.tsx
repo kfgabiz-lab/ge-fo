@@ -4,7 +4,6 @@ import GnbMegaItemLink from "@/components/layout/shared/gnb-mega/GnbMegaItemLink
 import type { GnbMegaSimplePanelStateProps } from "@/components/layout/shared/gnb-mega/types";
 import type { GnbSimpleMegaSection } from "@/data/gnb";
 
-/** sections 레이아웃(3번째 이후 루트 메뉴) 공용 패널 — Services/Support/Company가 쓰던 동일 구조를 하나로 통합 */
 export default function GnbSectionsMegaPanel({
   title,
   menu,

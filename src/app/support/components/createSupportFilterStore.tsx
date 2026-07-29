@@ -15,19 +15,6 @@ import type {
   DownloadFilterOption,
 } from "@/data/support/downloadCenterContent";
 
-/**
- * Download Center / Tech Hub 필터 상태 공통 스토어 팩토리.
- * 두 페이지의 체크박스 필터 로직(카테고리 중첩 + 평면 2차 섹션)이 완전히 동일하여,
- * 데이터·prefix·라벨만 config로 주입받아 Provider/Boundary/useFilter 훅을 생성한다.
- *
- * ⚠️ 2026-07-25 동적 카테고리 지원 확장:
- * - 기존: config.categories(정적) 로 모듈 로드 시 레지스트리/맵을 굳혔다(Download Center 방식).
- * - 확장: Provider 가 categories prop 을 받으면 그 값을 우선 사용(Tech Hub 는 category-data fetch 결과를 주입).
- *   레지스트리/맵/초기상태 계산을 Provider 내부 useMemo 로 옮겨, 동적 카테고리가 나중에 도착해도 재구성한다.
- * - 하위호환: Download Center 는 categories prop 없이 그대로 사용 → config.categories(정적) 로 동작(동작 불변).
- */
-
-/** 활성 필터 칩 (그룹/값은 페이지별 라벨이므로 문자열로 일반화) */
 export type SupportFilterActiveChip = {
   id: string;
   group: string;
@@ -40,45 +27,28 @@ export type SupportFilterContextValue = {
   clearSection: (section: string) => void;
   clearAll: () => void;
   activeChips: SupportFilterActiveChip[];
-  /**
-   * 특정 섹션에서 체크된 "리프" 카테고리 옵션 id(코드) 목록.
-   * 동적 카테고리(예: Tech Hub LV2 코드)로 API 필터할 때 사용한다.
-   * (부모 카테고리 선택 시 자식 리프 코드들이 모두 포함된다. Download Center 는 미사용.)
-   */
   getSelectedCategoryValues: (section: string) => string[];
 };
 
 export type SupportFilterStoreConfig = {
-  /** 컨텍스트 디버깅용 이름 */
   displayName: string;
-  /** 카테고리(중첩 지원) 섹션 */
   categoryIdPrefix: string;
   categoryGroup: string;
   categorySection: string;
-  /** 정적 기본 카테고리(하위호환). Provider 의 categories prop 이 있으면 그 값이 우선. */
   categories: DownloadCategoryOption[];
-  /** 두 번째 평면 섹션(문서유형 / 인증 등) */
   secondaryIdPrefix: string;
   secondaryGroup: string;
   secondarySection: string;
   secondaryOptions: DownloadFilterOption[];
-  /**
-   * 데이터의 defaultChecked 로 표현할 수 없는 페이지별 추가 기본 체크 id(선택).
-   * 예: Search Documents 탭의 Figma 기본 활성 필터(특정 카테고리/문서유형 조합).
-   * 정적 데이터(searchProductCategories 등)를 다른 탭과 공유해 defaultChecked 를 못 넣는 경우 사용.
-   * 미지정 시 기존 동작 그대로(하위호환) — Download Center / Tech Hub 는 사용하지 않음.
-   */
   extraDefaultCheckedIds?: string[];
 };
 
 type FilterMeta = {
   id: string;
-  /** prefix 를 뗀 원본 옵션 id(카테고리 코드 등) */
   optionId: string;
   label: string;
   group: string;
   section: string;
-  /** 리프 여부 — 자식이 없는 카테고리/2차옵션은 true, 자식을 가진 부모 카테고리는 false */
   isLeaf: boolean;
 };
 
@@ -90,14 +60,11 @@ type CategoryMaps = {
 export type SupportFilterStore = {
   Provider: (props: {
     children: ReactNode;
-    /** 동적 카테고리(있으면 config.categories 대신 사용) */
     categories?: DownloadCategoryOption[];
   }) => React.ReactElement;
   Boundary: (props: { children: ReactNode }) => ReactNode;
   useFilter: () => SupportFilterContextValue;
 };
-
-// ---------------- 순수 빌더(categories 를 인자로 받아 Provider 내부에서 memo) ----------------
 
 function buildFilterRegistry(
   categories: DownloadCategoryOption[],
@@ -221,12 +188,10 @@ function buildInitialChecked(
     }
   }
 
-  // 페이지별 추가 기본 체크(선택) — 데이터 defaultChecked 로 표현 불가한 Figma 기본 활성 필터.
   if (config.extraDefaultCheckedIds?.length) {
     for (const id of config.extraDefaultCheckedIds) {
       checked[id] = true;
     }
-    // 자식 카테고리가 켜졌을 수 있으므로 부모 카테고리 체크 상태를 재동기화.
     for (const option of categories) {
       syncCategoryParentState(
         checked,
@@ -264,7 +229,6 @@ export function createSupportFilterStore(
     children: ReactNode;
     categories?: DownloadCategoryOption[];
   }) {
-    // 동적 카테고리 우선(Tech Hub), 없으면 정적 config.categories(Download Center 하위호환)
     const categories = propCategories ?? config.categories;
 
     const registry = useMemo(
@@ -280,8 +244,6 @@ export function createSupportFilterStore(
       buildInitialChecked(categories, config, registry, childrenMap),
     );
 
-    // 동적 카테고리가 나중에 도착/변경되면 checked 를 재구성한다.
-    // (기존 체크값은 살아남는 id 에 한해 보존, 없어진 id 제거, 새 id 추가)
     const signature = useMemo(
       () => registry.map((m) => m.id).join("|"),
       [registry],
@@ -347,7 +309,7 @@ export function createSupportFilterStore(
           .filter((meta) => {
             if (!checked[meta.id]) return false;
             const parentId = parentMap.get(meta.id);
-            if (parentId && checked[parentId]) return false; // 부모 선택 시 자식 칩 숨김
+            if (parentId && checked[parentId]) return false;
             return true;
           })
           .map((meta) => ({ id: meta.id, group: meta.group, value: meta.label })),

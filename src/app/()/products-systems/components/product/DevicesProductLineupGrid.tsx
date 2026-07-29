@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 
 type DevicesProductLineupGridProps = {
   modifier: "type1" | "type2";
-  /** type1: mccb · spec(Figma 6788:7576) · metasol(Figma 6788:8458) */
   layout?: "mccb" | "spec" | "metasol";
   children: ReactNode;
 };

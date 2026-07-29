@@ -12,7 +12,6 @@ import { useModalDismiss } from "@/lib/useModalDismiss";
 type CookieSettingsModalProps = {
   open: boolean;
   onClose?: () => void;
-  /** Section guide preview — in-flow, no fixed overlay */
   embedded?: boolean;
   onSettings?: () => void;
 };
@@ -21,11 +20,9 @@ function persistConsent(value: CookieConsentValue) {
   try {
     window.localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, value);
   } catch {
-    /* ignore quota / private mode */
   }
 }
 
-/** Figma 7334:130893 (PC) · 7334:131063 (MO) — Cookie Settings banner */
 export default function CookieSettingsModal({
   open,
   onClose,

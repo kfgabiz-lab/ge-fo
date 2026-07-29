@@ -110,11 +110,6 @@ export interface DownloadCenterDocTypeCount {
   count: number;
 }
 
-/**
- * 문서 유형(Document type)별 건수 조회.
- * productCodes 를 넘기면 해당 제품코드들(OR 조건)에 매칭되는 건수만 집계한다.
- * 넘기지 않으면(또는 빈 배열이면) 파라미터를 생략해 Download Center 전체 집계와 동일하게 동작한다.
- */
 export async function fetchDownloadCenterDocTypeCounts(
   productCodes?: string[],
 ): Promise<DownloadCenterDocTypeCount[]> {

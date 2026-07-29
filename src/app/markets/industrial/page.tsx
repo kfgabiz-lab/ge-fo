@@ -26,7 +26,6 @@ import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsIndustrialPage() {
-  // Industrial FAQ(markets=005) + 하이라이트 뉴스(자기 market=005 포함 press/blog/articles 통합 최신 3건) 병렬 조회
   const [faqItems, highlightNewsItems] = await Promise.all([
     fetchMarketsFaqItems(MARKETS_FAQ_CODE.industrial),
     fetchMarketHighlightNews(MARKETS_FAQ_CODE.industrial),

@@ -1,8 +1,3 @@
-// SW(소프트웨어) 제품상세 렌더러 — product-data의 page_type === "SW" 제품 4종(scada/xems/micro-grid/smart-factory)을
-// seo.slug로 분기해 각 전용 구성으로 렌더한다. HW 제네릭 상세(GenericProductDetail)와 완전히 분리된 별도 컴포넌트.
-// ⚠️ 이 컴포넌트는 ls-publish의 software/{scada,xems,micro-grid,smart-factory}/page.tsx 4개를 원본 마크업/구성 그대로 이식한 것이다.
-//    (정적 데이터 이식 단계 — data-slug 동적 바인딩은 후속 #FO데이터바인딩 단계에서 처리)
-// 미등록 slug(page_type=SW인데 아래 4개가 아닌 경우)는 기존 GenericProductDetail로 폴백해 화면 깨짐을 방지한다.
 import HighlightNewsSection from "@/components/content/HighlightNewsSection";
 import CommonBanner04 from "@/components/banners/CommonBanner04";
 import CommonFaq, { type CommonFaqEntry } from "@/components/faq/CommonFaq";
@@ -80,13 +75,8 @@ import {
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
-// page_type === "SW" 이면서 전용 구성을 가진 slug 목록. 라우터에서 등록 여부 판별에 재사용한다.
-// 정의 위치는 데이터 계층(productsSystemsData)이다 — 제품 단건 조회(fetchProductDetailBySlug)가
-// 같은 목록을 봐야 하는데, 데이터 모듈이 이 컴포넌트를 import 하면 순환 참조가 생기기 때문.
-// 기존 import 경로(이 파일에서 가져다 쓰는 코드)를 유지하기 위해 그대로 재수출한다.
 export { SW_PRODUCT_SLUGS } from "../../data/productsSystemsData";
 
-// 공통 FAQ 설명 문구(4개 SW 페이지 원본 공통)
 const swFaqDescription = (
   <>
     Find quick answers to common questions about installation, troubleshooting, and
@@ -97,26 +87,14 @@ const swFaqDescription = (
   </>
 );
 
-// 각 SW 제품상세 함수 공통 prop — 라우트에서 조회한 product-data row + 동적 조회한 FAQ + 제품 연계 다운로드 목록.
 type SwDetailProps = {
   row: Record<string, unknown> | null;
   dbFaq: CommonFaqEntry[];
-  /**
-   * 제품 연계 다운로드 1페이지. 문서유형 조건이 필터 기본 체크값(전체 6종)과 같으므로
-   * totalElements 가 곧 전체 연계 건수 = Downloads 섹션 노출 판정 기준(기획서 18번)이다.
-   */
   downloads: ProductDownloadsPage;
-  /** Downloads 클라이언트 재조회(필터/정렬/페이지)에도 동일 조건을 유지하기 위한 제품코드 */
   productCodes: string[];
-  /**
-   * Tech Hub 배너(CommonBanner03) 문구 — SW 전용 포맷(고정 타이틀 "Video Tutorials" + 본문만 Lv2명 치환, 건수 없음).
-   * 영상 건수와 무관하게 적용되며, 배너 노출조건은 기존 그대로(SW 는 항상 렌더)다.
-   */
   techHubCopy: ProductTechHubBannerCopy;
 };
 
-// 기획서 18번: 현재 제품과 연계된 다운로드 파일이 0건이면 Downloads 섹션과 사이드 네비 항목을 함께 숨긴다.
-// 네비 원본 배열(hvdcNavItems 등)은 다른 화면도 참조할 수 있으므로 원본을 수정하지 않고 여기서 걸러 넘긴다.
 function filterSwNavItems<T extends { readonly id: string }>(
   navItems: readonly T[],
   showDownloads: boolean,
@@ -126,24 +104,18 @@ function filterSwNavItems<T extends { readonly id: string }>(
   );
 }
 
-// row → Hero/Overview 바인딩 값 추출(필드별 fallback).
-// 빈 문자열이면 undefined로 반환 → Hero 컴포넌트의 정적 default가 유지되게 한다.
-// Key Features는 variant(list/desc)가 제품마다 달라 각 Detail에서 변환한다.
 function bindSwDetail(row: Record<string, unknown> | null) {
   const data = row ? mapHwProductData(row) : null;
   const infoDesc = row ? String(row["product_info.info_description"] ?? "") : "";
   return {
     title: data?.name || undefined,
     description: data?.description || undefined,
-    // key_feature1~4 추출 결과(빈 값은 mapHwProductData가 이미 filter). 비어있으면 각 Detail에서 정적 폴백.
     keyFeatures: data?.keyFeatures ?? [],
     infoDesc,
-    // Help 카드(help-1) CTA 링크 — product_etc.connect_portal
     connectPortal: data?.connectPortal,
   };
 }
 
-// scada(seo.slug=scada, 데이터=hvdcContent) — 정적 구성 유지 + Hero/Overview/KeyFeatures/FAQ만 실데이터 바인딩(필드별 fallback)
 function ScadaDetail({
   row,
   dbFaq,
@@ -152,10 +124,7 @@ function ScadaDetail({
   techHubCopy,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
-  // 기획서 18번: 연계 파일이 1건 이상일 때만 Downloads 섹션·네비를 노출한다.
-  // downloads 는 문서유형 전체(필터 기본 체크값) 조건으로 조회된 목록이라 totalElements 가 전체 연계 건수다.
   const showDownloads = downloads.totalElements > 0;
-  // Key Features(list variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
       ? bind.keyFeatures.map((f, i) => ({
@@ -230,7 +199,6 @@ function ScadaDetail({
   );
 }
 
-// xems(seo.slug=xems, 데이터=xemsContent) — 정적 구성 유지 + Hero/Overview/KeyFeatures/FAQ만 실데이터 바인딩(필드별 fallback)
 function XemsDetail({
   row,
   dbFaq,
@@ -239,10 +207,7 @@ function XemsDetail({
   techHubCopy,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
-  // 기획서 18번: 연계 파일이 1건 이상일 때만 Downloads 섹션·네비를 노출한다.
-  // downloads 는 문서유형 전체(필터 기본 체크값) 조건으로 조회된 목록이라 totalElements 가 전체 연계 건수다.
   const showDownloads = downloads.totalElements > 0;
-  // Key Features(desc variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
       ? bind.keyFeatures.map((f, i) => ({
@@ -314,7 +279,6 @@ function XemsDetail({
   );
 }
 
-// micro-grid(seo.slug=micro-grid, 데이터=microGridContent) — 정적 구성 유지 + Hero/Overview/KeyFeatures/FAQ만 실데이터 바인딩(필드별 fallback)
 function MicroGridDetail({
   row,
   dbFaq,
@@ -323,10 +287,7 @@ function MicroGridDetail({
   techHubCopy,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
-  // 기획서 18번: 연계 파일이 1건 이상일 때만 Downloads 섹션·네비를 노출한다.
-  // downloads 는 문서유형 전체(필터 기본 체크값) 조건으로 조회된 목록이라 totalElements 가 전체 연계 건수다.
   const showDownloads = downloads.totalElements > 0;
-  // Key Features(list variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
       ? bind.keyFeatures.map((f, i) => ({
@@ -398,7 +359,6 @@ function MicroGridDetail({
   );
 }
 
-// smart-factory(seo.slug=smart-factory, 데이터=smartFactoryContent) — 정적 구성 유지 + Hero/Overview/KeyFeatures/FAQ만 실데이터 바인딩(필드별 fallback)
 function SmartFactoryDetail({
   row,
   dbFaq,
@@ -407,10 +367,7 @@ function SmartFactoryDetail({
   techHubCopy,
 }: SwDetailProps) {
   const bind = bindSwDetail(row);
-  // 기획서 18번: 연계 파일이 1건 이상일 때만 Downloads 섹션·네비를 노출한다.
-  // downloads 는 문서유형 전체(필터 기본 체크값) 조건으로 조회된 목록이라 totalElements 가 전체 연계 건수다.
   const showDownloads = downloads.totalElements > 0;
-  // Key Features(list variant): DB key_feature가 있으면 변환, 없으면 정적 benefits 유지
   const featureItems =
     bind.keyFeatures.length > 0
       ? bind.keyFeatures.map((f, i) => ({
@@ -487,10 +444,6 @@ function SmartFactoryDetail({
   );
 }
 
-// slug 분기. 등록되지 않은 slug는 기존 제네릭 제품상세로 폴백(화면 깨짐 방지).
-// row는 폴백 시 GenericProductDetail로 그대로 전달한다.
-// 제품 FAQ는 GenericProductDetail(HW)과 동일하게 fetchProductFaqItems(productId)로 동적 조회하고,
-// 결과가 비어 있으면 각 Detail에서 정적 FAQ로 폴백한다(필드별 fallback 원칙).
 export default async function SwProductDetail({
   slug,
   row,
@@ -499,20 +452,8 @@ export default async function SwProductDetail({
   row: Record<string, unknown> | null;
 }) {
   const productId = row ? Number(row._id) : null;
-  // Downloads 필터용 제품코드(기획서 18번) — 다운로드센터 콘텐츠의 category_l3_id 가 product.product_code 체계다.
-  // row 가 없거나 코드가 비면 빈 배열 → fetchProductDownloadsPage 가 조회 없이 빈 결과를 반환한다(전체 목록 노출 방지).
   const productCode = row ? String(row["product.product_code"] ?? "").trim() : "";
   const productCodes = productCode ? [productCode] : [];
-  // Downloads는 현재 제품과 연계된 파일만 담은 1페이지(5건). 아래 slug 분기에서 실제로 렌더되는 Detail은
-  // 하나뿐이라 여기서 한 번만 조회해 넘긴다.
-  // HW 제품상세(GenericProductDetail)와 동일하게 문서유형 기본 체크(productDownloadsDefaultDocTypes = 전체 6종)
-  // 조건으로 조회해 SSR 결과와 DevicesProductDownloads 필터 초기 체크 상태를 맞춘다.
-  // 기본값이 전체 유형이라 이 조회 하나가 섹션 노출 판정(18번)도 겸한다(별도 게이트 카운트 조회 불필요).
-  // 2페이지 이후는 DevicesProductDownloads 가 클라이언트에서 같은 헬퍼로 재조회한다.
-  // Tech Hub 배너 문구용 Lv2 이름(기획서 software.png: 본문에만 Lv2명 치환).
-  // ⚠️ 영상 건수와 무관하게 문구를 맞춰야 하므로 Tech Hub 콘텐츠 조회(fetchProductTechHubBanner)가 아니라
-  //    Lv2 이름만 얻는 경량 헬퍼를 쓴다. 0건이면 null 을 반환하는 전자로는 SW 요건을 만족할 수 없다.
-  // 아래 default 분기(미등록 slug)는 GenericProductDetail 이 스스로 조회하므로 SW 4종일 때만 호출한다.
   const isSwSlug = (SW_PRODUCT_SLUGS as readonly string[]).includes(slug);
   const [dbFaq, downloads, lv2Name] = await Promise.all([
     productId ? fetchProductFaqItems(productId) : Promise.resolve([]),

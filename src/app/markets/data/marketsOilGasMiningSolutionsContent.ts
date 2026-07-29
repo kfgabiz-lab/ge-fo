@@ -1,4 +1,3 @@
-/** Figma 5633:85749 — Oil & Gas Mining Solutions */
 import type { MarketsSolutionBlock } from "./marketsSolutionsPanelTypes";
 
 export const oilGasMiningSolutionsIntro = {

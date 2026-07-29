@@ -12,7 +12,6 @@ export function getLenisInstance() {
   return lenisInstance;
 }
 
-/** Lenis root 스크롤 또는 네이티브 scrollY */
 export function getWindowScrollY() {
   if (lenisInstance) {
     return lenisInstance.scroll;
@@ -44,7 +43,6 @@ export function scrollWindowTo(
   });
 }
 
-/** 메가 메뉴 오픈 전 레이아웃 변화가 scrollY를 바꾸지 않도록 동기 잠금 */
 export function lockPageScroll(scrollY: number) {
   lenisInstance?.stop();
 
@@ -60,7 +58,6 @@ export function lockPageScroll(scrollY: number) {
   document.body.style.height = `${docHeight}px`;
 }
 
-/** body fixed 해제 후 Lenis·네이티브 스크롤 위치 복원 */
 export function unlockPageScroll(scrollY: number) {
   document.documentElement.classList.remove(MEGA_SCROLL_LOCK_CLASS);
   document.documentElement.style.height = "";

@@ -18,7 +18,6 @@ export default function SearchAllHero() {
   const qParam = searchParams.get("q");
   const [draft, setDraft] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  // 인기 검색어 = 실집계(source=UNIFIED_SEARCH). 폴백 없음 — 집계 데이터가 없으면 태그 미노출(정적 배열 사용 금지).
   const [popularKeywords, setPopularKeywords] = useState<string[]>([]);
 
   const query =
@@ -29,7 +28,6 @@ export default function SearchAllHero() {
     setDraft(null);
   }, [searchParams]);
 
-  // "use client" 컴포넌트라 useEffect 에서 1회만 인기검색어 조회(검색어 유무와 무관하게 계속 노출).
   useEffect(() => {
     let alive = true;
     void fetchPopularKeywords("UNIFIED_SEARCH").then((list) => {
@@ -65,7 +63,6 @@ export default function SearchAllHero() {
           role="search"
           onSubmit={(event) => {
             event.preventDefault();
-            // 사용자가 직접 입력해서 실행한 검색만 인기검색어 집계 대상(fire-and-forget, 실패해도 이동엔 영향 없음).
             void logSearchKeyword("UNIFIED_SEARCH", query);
             navigateToQuery(query);
           }}

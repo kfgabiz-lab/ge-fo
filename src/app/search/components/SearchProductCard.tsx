@@ -9,11 +9,9 @@ import {
 
 type SearchProductCardProps = {
   item: SearchProductItem;
-  // 검색어(있을 때만 title/description 에 강조 적용). Products 탭은 미전달 → 강조 없음(기존 동작 유지).
   searchTerm?: string;
 };
 
-/** Figma 6430:106958 (All) · 6430:108246 / 6571:104661 (Products) — product card */
 export default function SearchProductCard({ item, searchTerm }: SearchProductCardProps) {
   const highlight = searchTerm?.trim() ? searchTerm.trim() : undefined;
   return (

@@ -10,7 +10,6 @@ type SearchPageListProps = {
   variant?: "compact" | "pages";
 };
 
-/** Figma 6430:106470 (compact) · 6430:112540 (pages) — Pages list */
 export default function SearchPageList({
   items,
   listClassName,

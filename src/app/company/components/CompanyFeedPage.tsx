@@ -9,7 +9,6 @@ import {
 } from "@/app/company/data/companyFeedContent";
 import "@/assets/css/company.css";
 
-// 공통 피드 리스트 페이지 (Press/Articles). variant로 콘텐츠/class 접두어/pageId 분기
 type CompanyFeedPageProps = {
   variant: CompanyFeedVariant;
   empty?: boolean;

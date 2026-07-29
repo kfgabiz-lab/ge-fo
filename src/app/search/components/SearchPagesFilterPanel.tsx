@@ -11,10 +11,6 @@ import { useSearchPagesFilter } from "./SearchPagesFilterProvider";
 type SearchPagesFilterPanelProps = {
   variant?: "sidebar" | "modal";
   sidebarClassName?: string;
-  /**
-   * 분류별 검색 건수(필터 옵션 id 기준). 검색 응답 sectionCounts 에서 만들어 주입한다.
-   * 미지정(최초 로딩 전)이면 count 표기를 생략한다.
-   */
   counts?: Record<string, number>;
 };
 

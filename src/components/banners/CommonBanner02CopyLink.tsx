@@ -13,7 +13,6 @@ export default function CommonBanner02CopyLink({
     try {
       await navigator.clipboard.writeText(value);
     } catch {
-      /* clipboard unavailable */
     }
   };
 

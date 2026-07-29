@@ -5,7 +5,6 @@ import { useInView } from "@/hooks/useInView";
 import { formatStatNumber, parseNumericStatValue } from "@/lib/statNumber";
 import type { LsElectricGlobalStat, LsElectricHighlightStat } from "../data/lsElectricContent";
 
-// 카운트업 통계 진입 감지 여백(하단 15% 앞당김) — 기존 useInViewOnce 동작 유지
 const STATS_ROOT_MARGIN = "0px 0px 15% 0px";
 
 function HighlightStatValue({

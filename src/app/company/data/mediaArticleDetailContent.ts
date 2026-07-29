@@ -1,4 +1,3 @@
-/** Figma 5565:134289 · Articles detail (PC) · tags 5565:134296 */
 export const mediaArticleDetailHero = {
   src: "/img/company/articles/hero.png",
   alt: "Control panel troubleshooting article cover",

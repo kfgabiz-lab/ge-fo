@@ -1,6 +1,5 @@
 const DEFAULT_THROTTLE_MS = 100;
 
-/** scroll 이벤트를 rAF + 시간 쓰로틀로 묶어 GNB 상태 갱신 빈도를 제한 */
 export function createThrottledScrollHandler(
   handler: () => void,
   throttleMs = DEFAULT_THROTTLE_MS,
@@ -61,7 +60,6 @@ export function createThrottledScrollHandler(
 
 export type ThrottledScrollHandler = ReturnType<typeof createThrottledScrollHandler>;
 
-/** scroll 이벤트를 rAF로 묶어 is-at-top 등 즉시 반영이 필요한 상태에 사용 */
 export function createRafScrollHandler(handler: () => void) {
   let rafId = 0;
 

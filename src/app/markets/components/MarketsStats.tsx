@@ -26,7 +26,6 @@ function MarketsStatValue({ item, isActive, delay }: MarketsStatValueProps) {
   const displayValue = parsed
     ? formatStatNumber(count, parsed.useComma, parsed.decimalPlaces)
     : item.value;
-  // 원본 값이 "+"로 끝나면(별도 valueSuffix가 없을 때) 인라인 "+" 접미사로 표시
   const inlinePlusSuffix =
     !item.valueSuffix && item.value.trim().endsWith("+") ? "+" : null;
 
@@ -46,7 +45,6 @@ function MarketsStatValue({ item, isActive, delay }: MarketsStatValueProps) {
 }
 
 export default function MarketsStats({ items }: MarketsStatsProps) {
-  // 최초 1회 진입 감지(fo 공통 useInView, 임계값 0.18은 pub useInViewOnce 기준과 동일)
   const { ref: panelRef, isInView } = useInView<HTMLDivElement>(0.18);
 
   return (

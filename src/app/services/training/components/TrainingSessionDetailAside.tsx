@@ -5,7 +5,6 @@ import { engineeringTrainingSessionAssets } from "@/data/services/engineeringTra
 import TrainingSessionCountdown from "./TrainingSessionCountdown";
 import TrainingSessionLocationMap from "./TrainingSessionLocationMap";
 
-// Training 세션 상세 - 우측(PC)/상단(MO) 사이드바 (ls-publish SessionDetailAside 이관)
 function SessionMetaLabel({
   icon,
   children,
@@ -45,7 +44,6 @@ export default function TrainingSessionDetailAside({
         <div className="support_service_training_session_detail__meta-grid">
           <div className="support_service_training_session_detail__meta-row">
             <div className="support_service_training_session_detail__meta-item">
-              {/* DATE: 이 회차 행의 curriculum_detail2.training_date_from (회차 시작일 → STEP6 포맷) */}
               <SessionMetaLabel icon={metaIcons.date}>DATE</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
@@ -55,7 +53,6 @@ export default function TrainingSessionDetailAside({
               </p>
             </div>
             <div className="support_service_training_session_detail__meta-item">
-              {/* DURATION: 이 회차 행의 curriculum_detail2.duration (STEP6 "N Hours" 포맷) */}
               <SessionMetaLabel icon={metaIcons.duration}>DURATION</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
@@ -68,7 +65,6 @@ export default function TrainingSessionDetailAside({
 
           <div className="support_service_training_session_detail__meta-row">
             <div className="support_service_training_session_detail__meta-item">
-              {/* Training Type: 이 회차 행의 curriculum_detail1.training_type 코드 → 라벨 (STEP6) */}
               <SessionMetaLabel icon={metaIcons.trainingType}>
                 Training Type
               </SessionMetaLabel>
@@ -80,7 +76,6 @@ export default function TrainingSessionDetailAside({
               </p>
             </div>
             <div className="support_service_training_session_detail__meta-item">
-              {/* CLASS SIZE: 이 회차 행의 curriculum_detail2.capacity */}
               <SessionMetaLabel icon={metaIcons.classSize}>CLASS SIZE</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
@@ -97,33 +92,23 @@ export default function TrainingSessionDetailAside({
             <SessionMetaLabel icon={metaIcons.location}>
               LOCATION INFORMATION
             </SessionMetaLabel>
-            {/* 장소명(location.name): curriculum_detail2 에 대응 필드 없음(STEP4 확정).
-                뷰모델에서 빈값으로 채워 미표시 — address 라인만 노출, 미태깅 */}
             <p className="support_service_training_session_detail__meta-value">
               {sidebar.location.name}
             </p>
           </div>
           <ul className="support_service_training_session_detail__meta-bullets">
-            {/* 주소/전화/이메일: 이 회차 행의 curriculum_detail2.address / phone / email.
-                주소는 Virtual 단독 등으로 빈값이면 뷰모델에서 ""로 게이트됨 → 빈 li 노출 금지(라인 자체 미렌더).
-                전화번호는 뷰모델에서 공통 함수(formatPhoneDisplay)로 미국식 3-3-4 포맷 적용됨 → 여기서 재가공하지 않는다. */}
             {sidebar.location.address.trim() ? (
               <li data-slugkey="curriculum_detail2.address">{sidebar.location.address}</li>
             ) : null}
             <li data-slugkey="curriculum_detail2.phone">{sidebar.location.phone}</li>
             <li data-slugkey="curriculum_detail2.email">{sidebar.location.email}</li>
           </ul>
-          {/* 지도: 주소 라인이 실제 노출되는 조건(주소 비어있지 않음)과 일치시켜 렌더.
-              주소 빈값(Virtual 단독 등)이면 지도 컴포넌트가 자체적으로 null 반환(미노출). */}
           {sidebar.location.address.trim() ? (
             <TrainingSessionLocationMap address={sidebar.location.address} />
           ) : null}
         </div>
 
         <div className="support_service_training_session_detail__meta-item support_service_training_session_detail__meta-item--products">
-          {/* PRODUCTS COVERED: 연결제품(power_list + automation_list = category-data depth3 연결행 PK)을
-              전용 엔드포인트(/training/product-tree) 평면 행으로 제품명 해석 후 join 문자열로 렌더.
-              다중소스 합산이라 단일 slugKey 미태깅(trainingDetailData.extractProductNames) */}
           <SessionMetaLabel icon={metaIcons.products}>
             PRODUCTS COVERED
           </SessionMetaLabel>

@@ -7,7 +7,6 @@ export const metadata: Metadata = {
     "Choose which optional cookies LS ELECTRIC may use while you browse the website.",
 };
 
-/** P-FO-COMMON-040000M — Figma 7334:130670 · Cookie Settings detail */
 export default function CookiePreferencesRoutePage() {
   return <CookiePreferencesPageClient />;
 }

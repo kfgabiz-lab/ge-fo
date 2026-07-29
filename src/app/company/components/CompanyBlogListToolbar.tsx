@@ -12,10 +12,8 @@ import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import { guideSearchFieldMobileSlotProps } from "@/components/form/guideFieldMobileProps";
 import GuideSelect from "@/components/form/GuideSelect";
 
-// 카테고리 옵션(BLOGCATEGORY 코드 목록)
 type ToolbarCategory = { code: string; name: string };
 
-// 정렬 옵션(최신/오래된순 + 제목 A-Z/Z-A). value는 데이터 헬퍼 sort 파라미터와 동일
 const SORT_OPTIONS = [
   { value: "latest", label: "Latest" },
   { value: "oldest", label: "Oldest" },
@@ -25,14 +23,13 @@ const SORT_OPTIONS = [
 
 type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 
-// Select value(unknown) → 허용된 정렬값으로 좁히기(미허용 시 latest 폴백)
 function toSortValue(raw: unknown): SortValue {
   return SORT_OPTIONS.some((o) => o.value === raw) ? (raw as SortValue) : "latest";
 }
 
 type CompanyBlogListToolbarProps = {
   categories?: ToolbarCategory[];
-  selectedCategory?: string; // 선택된 코드값("" = 전체)
+  selectedCategory?: string;
   onCategoryChange?: (code: string) => void;
   searchValue?: string;
   onSearchSubmit?: (value: string) => void;
@@ -49,7 +46,6 @@ export default function CompanyBlogListToolbar({
   sortValue = "latest",
   onSortChange,
 }: CompanyBlogListToolbarProps) {
-  // 검색어는 제출(Enter 또는 검색 아이콘 클릭) 시에만 상위로 전달 — 타이핑마다 재조회하지 않음
   const [searchDraft, setSearchDraft] = useState(searchValue);
   const submitSearch = () => onSearchSubmit?.(searchDraft.trim());
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {

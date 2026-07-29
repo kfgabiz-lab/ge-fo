@@ -1,10 +1,8 @@
 import type Lenis from "lenis";
 import { getLenisInstance, scrollWindowTo } from "@/lib/lenisScroll";
 
-/** GNB + sticky sub-nav clearance — mobile / no side nav fallback */
 export const PRODUCT_SECTION_SCROLL_OFFSET_PX = 200;
 
-/** Product nav scroll — 100ms (GNB 전환과 동기) */
 export const PRODUCT_SECTION_SCROLL_DURATION = 0.1;
 
 const PAGE_BOTTOM_THRESHOLD_PX = 80;
@@ -19,12 +17,10 @@ function prefersReducedMotion() {
 type ScrollToProductSectionOptions = {
   updateHash?: boolean;
   onComplete?: () => void;
-  /** Reserved — alignment uses `.devices_product_nav` top, not the clicked row */
   navLink?: HTMLElement | null;
 };
 
 export type ResolveActiveProductSectionOptions = {
-  /** Negative when scrolling up */
   scrollDelta?: number;
 };
 
@@ -99,10 +95,6 @@ function resolveProductSectionScrollTarget(sectionId: string) {
   return section;
 }
 
-/**
- * Side nav alignment line — `.devices_product_nav` top (sticky nav box).
- * `.section_tit` scroll target aligns to this viewport Y.
- */
 export function getProductNavAlignmentLine(
   _sectionId?: string,
   _navLink?: HTMLElement | null,
@@ -161,10 +153,6 @@ function getProductSectionScrollTop(
   );
 }
 
-/**
- * Scroll to a product section.
- * Side nav — `.section_tit` top aligns with `.devices_product_nav` top.
- */
 export function scrollToProductSection(
   sectionId: string,
   options: ScrollToProductSectionOptions = {},

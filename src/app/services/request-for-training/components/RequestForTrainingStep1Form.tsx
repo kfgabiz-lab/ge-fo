@@ -24,7 +24,6 @@ import type { RequestForTrainingStep1Errors } from "./RequestForTrainingStep1";
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
-// 이 화면 고유의 입력 최대 길이(필터 로직은 @/lib/formInputFilters 공통 함수 사용)
 const LETTERS_MAX = 200;
 const EMAIL_MAX = 50;
 

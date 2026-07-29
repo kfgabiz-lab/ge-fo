@@ -22,8 +22,6 @@ const DEFAULT_CHECKED_DOC_TYPES = new Set<string>(
   productDownloadsDefaultDocTypes,
 );
 
-// 실카운트가 도착하기 전에는 정적 샘플 건수(count: 100)를 노출하지 않는다.
-// count 가 undefined 면 라벨에 "(n)" 자체가 렌더되지 않는다.
 const DOC_TYPES_PENDING: DownloadFilterOption[] = downloadDocumentTypes.map(
   (option) =>
     DOC_TYPE_API_CODES.has(option.id) ? { ...option, count: undefined } : option,
@@ -49,7 +47,6 @@ type DevicesProductDownloadsFilterContextValue = {
   toggleFilter: (id: string, checked: boolean) => void;
   clearSection: () => void;
   selectedDocTypes: string[];
-  /** 문서 유형 목록 + 실제 검색결과 건수(도착 전에는 count undefined) */
   documentTypes: DownloadFilterOption[];
 };
 
@@ -101,7 +98,6 @@ export function DevicesProductDownloadsFilterProvider({
 
   const productCodeKey = [...productCodes].sort().join(",");
 
-  // 이 제품(productCodes)에 해당하는 문서 유형별 실제 건수를 조회해 필터 라벨에 반영한다.
   useEffect(() => {
     let alive = true;
     const codes = productCodeKey ? productCodeKey.split(",") : [];

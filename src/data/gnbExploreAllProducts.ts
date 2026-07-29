@@ -1,4 +1,3 @@
-// 카테고리 컨텍스트(?category=) 부착 — GNB 링크 생성부(fromCategoryData.ts)와 동일한 공용 헬퍼.
 import { withCategoryContext } from "@/lib/navigation/categoryContext";
 
 export const EXPLORE_ALL_PRODUCTS_PATH = "/products-systems/explore-all";
@@ -9,8 +8,6 @@ export type GnbExploreProduct = {
   href: string;
   discontinued?: boolean;
   lv1Id?: string;
-  // 이 제품이 매핑된 "공개 Lv2"(devices-tree depth3 junction의 parentId, visibleLv2 교집합) rowId 목록.
-  // Explore All 페이지의 Lv1/Lv2 셀렉트 필터(OR 다중매핑)에 사용. 정적 폴백 데이터에는 없음.
   lv2Ids?: string[];
 };
 
@@ -86,7 +83,6 @@ function product(label: string, href?: string): GnbExploreProduct {
   };
 }
 
-/** Figma 4701:82590 — Explore All Products A–Z index */
 export const gnbExploreAllProducts: GnbExploreProduct[] = [
   "BK-Series_DIN SPD(UL)",
   "BK-Series_UL Type",
@@ -158,8 +154,6 @@ export const gnbExploreAllProducts: GnbExploreProduct[] = [
   "XGT",
 ].map((label) => product(label));
 
-// 제품명(label) → 상세 정적 라우팅 href. product-data 로 목록을 대체할 때 각 제품의 href 를 파생하는 데 사용.
-// 매핑에 없으면 devices-systems 진입 라우트로 폴백(데이터 필드 아님, 정적 라우팅).
 export function resolveExploreHref(label: string): string {
   const normalized = label.replace(/\n/g, " ");
   return (
@@ -169,16 +163,6 @@ export function resolveExploreHref(label: string): string {
   );
 }
 
-// resolveExploreHref 결과가 /product/{slug} 형태면 그 제품이 속한 Lv2 카테고리 컨텍스트를 붙인다.
-//
-// ⚠️ 컨텍스트는 "목록에 뜬 제품"이 아니라 "링크가 가리키는 제품(slug)" 기준으로 붙여야 한다.
-//    productHrefMap 은 동일성 매핑이 아니라 "가장 가까운 상세 페이지"로 보내는 표라서
-//    (DMPi·GMP·IMP·MMP·Susol UL ACB 가 모두 /product/metasol-ms 로 간다) 목록 제품의 카테고리를
-//    붙이면 링크 대상과 무관한 값이 실린다.
-//
-// lv2IdBySlug: 제품 slug → 그 제품이 속한 공개 Lv2 id(devices-tree depth3 연결행의 parentId).
-//   호출부(explore-all 페이지)가 이미 조회해 둔 devices-tree 로 만들어 넘긴다(추가 조회 없음).
-//   매핑이 없으면 withCategoryContext 가 href 를 그대로 돌려주므로 기존 동작과 동일하다.
 export function withExploreProductCategory(
   href: string,
   lv2IdBySlug: ReadonlyMap<string, string>,

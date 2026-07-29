@@ -5,7 +5,6 @@ import { products, type ProductItem } from "../data/marketsContent";
 
 type MarketsProductsProps = {
   items?: ProductItem[];
-  /** type2 배지만 표시 (type1·badge 제외) */
   badgesType2Only?: boolean;
 };
 

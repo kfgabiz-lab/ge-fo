@@ -11,7 +11,6 @@ import GuideSelect from "@/components/form/GuideSelect";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import type { EventsPastItem } from "@/app/company/data/eventsListContent";
 
-// 정렬 옵션(최신/오래된순 + 제목 A-Z/Z-A). value는 데이터 헬퍼 sort 파라미터와 동일
 const SORT_OPTIONS = [
   { value: "latest", label: "Latest" },
   { value: "oldest", label: "Oldest" },
@@ -21,7 +20,6 @@ const SORT_OPTIONS = [
 
 type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 
-// Select value(unknown) → 허용된 정렬값으로 좁히기(미허용 시 latest 폴백)
 function toSortValue(raw: unknown): SortValue {
   return SORT_OPTIONS.some((o) => o.value === raw) ? (raw as SortValue) : "latest";
 }
@@ -31,7 +29,6 @@ type CompanyEventsPastSectionProps = {
   currentPage?: number;
   totalPages?: number;
   onPageChange?: (page: number) => void;
-  // 정렬 — optional(값+핸들러 짝). 미지정 시 비연동 장식 UI 유지(press/blog 툴바와 동일 원칙)
   sortValue?: SortValue;
   onSortChange?: (value: SortValue) => void;
 };

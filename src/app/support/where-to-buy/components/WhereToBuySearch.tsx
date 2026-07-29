@@ -15,30 +15,17 @@ import {
   type PlaceSuggestion,
 } from "@/lib/geo/places";
 
-// 자동완성 조회 최소 입력 길이 / 디바운스 지연(ms)
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
-/**
- * 검색좌표 출처.
- * - "device": 브라우저 위치 권한을 허용받아 얻은 실제 사용자 위치("use my location")
- * - "address": 주소 입력/자동완성 지오코딩 결과
- * 기획서 항목9(길찾기 출발지)에서 "현 위치를 가져올 수 있는 경우"를 판별하는 데 쓰인다.
- */
 export type WhereToBuyLocateSource = "device" | "address";
 
 type WhereToBuySearchProps = {
   initialQuery?: string;
-  /** Figma 5752:47215 — left column search inside contents */
   embedded?: boolean;
-  /**
-   * 검색좌표 확정 콜백. 지오코딩/내위치로 얻은 좌표를 상위(Contents)로 올린다.
-   * null 이면 검색 해제(전체 목록 복귀). 두 번째 인자로 좌표 출처를 함께 전달한다.
-   */
   onLocate?: (coord: GeoCoord | null, source: WhereToBuyLocateSource) => void;
 };
 
-// 위치 획득 실패 사유별 사용자 알림 문구
 function geolocationMessage(error: unknown): string {
   if (error instanceof BrowserLocationError) {
     switch (error.reason) {
@@ -62,21 +49,15 @@ export default function WhereToBuySearch({
 }: WhereToBuySearchProps) {
   const [query, setQuery] = useState(initialQuery);
   const [busy, setBusy] = useState(false);
-  // 주소 자동완성 후보 목록 + 드롭다운 표시 여부
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const hasQuery = query.length > 0;
 
-  // 후보 선택/검색확정 직후 setQuery 로 인한 재조회를 1회 억제하는 플래그
   const suppressFetchRef = useRef(false);
-  // 디바운스 타이머
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // 바깥 클릭 감지용 컨테이너 참조
   const fieldWrapRef = useRef<HTMLDivElement>(null);
 
-  // 입력 변화 시 디바운스 후 자동완성 후보 조회
   useEffect(() => {
-    // 후보 선택/검색확정으로 인한 setQuery 는 재조회하지 않는다.
     if (suppressFetchRef.current) {
       suppressFetchRef.current = false;
       return;
@@ -99,7 +80,6 @@ export default function WhereToBuySearch({
           setShowSuggestions(list.length > 0);
         })
         .catch(() => {
-          // 조회 실패(자동완성 불가) 시 조용히 드롭다운만 숨기고 Enter/버튼 지오코딩 폴백에 맡긴다.
           setSuggestions([]);
           setShowSuggestions(false);
         });
@@ -112,7 +92,6 @@ export default function WhereToBuySearch({
     };
   }, [query]);
 
-  // 바깥 클릭 시 드롭다운 닫기
   useEffect(() => {
     if (!showSuggestions) return;
     function handlePointerDown(event: MouseEvent) {
@@ -127,7 +106,6 @@ export default function WhereToBuySearch({
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [showSuggestions]);
 
-  // 입력 문자열 → 좌표 지오코딩 후 상위로 전달(자동완성 없이 직접 입력·제출하는 폴백 경로)
   async function runSearch() {
     const trimmed = query.trim();
     if (!trimmed || busy) return;
@@ -149,10 +127,8 @@ export default function WhereToBuySearch({
     }
   }
 
-  // 자동완성 후보 선택 → placeId 로 좌표 확정 + 검색창을 선택 주소로 갱신
   async function selectSuggestion(suggestion: PlaceSuggestion) {
     if (busy) return;
-    // 아래 setQuery 로 인한 재조회 억제
     suppressFetchRef.current = true;
     setQuery(suggestion.description);
     setSuggestions([]);
@@ -174,7 +150,6 @@ export default function WhereToBuySearch({
     }
   }
 
-  // 검색 해제 → 전체 목록 복귀
   function clearSearch() {
     suppressFetchRef.current = true;
     setQuery("");
@@ -183,8 +158,6 @@ export default function WhereToBuySearch({
     onLocate?.(null, "address");
   }
 
-  // 내 위치 사용 → geolocation 좌표를 검색좌표와 동일 파이프라인에 태움
-  // (출처를 "device" 로 알려 상위가 길찾기 출발지로 재사용할 수 있게 한다)
   async function useMyLocation() {
     if (busy) return;
     setBusy(true);
@@ -210,7 +183,6 @@ export default function WhereToBuySearch({
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           onKeyDown={(event) => {
-            // 엔터 제출 — 폼 요소 추가 없이 입력창에서 바로 검색
             if (event.key === "Enter") {
               event.preventDefault();
               void runSearch();
@@ -279,7 +251,6 @@ export default function WhereToBuySearch({
                 <button
                   type="button"
                   className="support_where_to_buy_search__suggestion-button"
-                  // onMouseDown: input blur 전에 선택이 확정되도록 mousedown 에서 처리
                   onMouseDown={(event) => {
                     event.preventDefault();
                     void selectSuggestion(suggestion);

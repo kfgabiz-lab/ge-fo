@@ -34,7 +34,6 @@ const YOUTUBE_MIN_PLAY_MS = 3000;
 const SWIPER_START_DELAY_MS = 600;
 const YOUTUBE_PLAYER_PLAYING = 1;
 
-// 업로드 미디어 스트리밍 엔드포인트(fo 오리진 상대경로 → next.config rewrites 로 bo-api:8080 프록시)
 const PAGE_FILE_SRC = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
 type VideoSource = {
@@ -126,10 +125,6 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
   const [autoplayProgress, setAutoplayProgress] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
 
-  // 실데이터(heroItems) 기반 슬라이드 구성 — 목업(mainSlides) 폴백 없음, 값이 없으면 그 부분/항목을 비운다.
-  //  - item.mediaId 가 없으면: 표시할 미디어가 없으므로 해당 슬라이드 자체를 제외한다.
-  //  - item.mediaId 가 있으면: mediaMimeType(Content-Type)으로 영상/이미지를 구분해 렌더링.
-  //  - 타이틀/버튼/서브타이틀은 값이 있는 그대로만 반영, 조회 0건이면 slides 도 빈 배열.
   const slides = useMemo<MainSlide[]>(() => {
     return heroItems
       .filter((item): item is HeroItem & { mediaId: number } => item.mediaId != null)
@@ -159,7 +154,6 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
       });
   }, [heroItems]);
 
-  // 콜백들이 최신 slides 를 참조하도록 ref 로 보관(콜백 의존성 배열 변경 최소화 목적)
   const slidesRef = useRef<MainSlide[]>(slides);
   slidesRef.current = slides;
 

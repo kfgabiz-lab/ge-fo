@@ -7,7 +7,6 @@ import { emptyStateIconSrc } from "@/data/commonAssets";
 export { type DownloadCategoryOption, type DownloadFilterOption };
 
 export const techHubPage = {
-  /** Figma 6858:158687 PC one line · 6858:160491 MO wraps via max-width */
   title: "Tech Hub",
   description: "Access Manuals, Tutorials, and Support Resources",
   searchPlaceholder: "Find products, solutions, or resources for your business",
@@ -19,7 +18,6 @@ export const techHubPage = {
   pageSize: 12,
 } as const;
 
-/** Figma 3670:30917 — Tech Hub / No Data */
 export const techHubNoDataSearchQuery = "" as const;
 
 export const techHubEmptyContent = {
@@ -30,7 +28,6 @@ export const techHubEmptyContent = {
   viewAllHref: "/support/tech-hub",
 } as const;
 
-/** Figma 3670:30813 — Certification filter */
 export const techHubCertifications: DownloadFilterOption[] = [
   { id: "ul", label: "UL", count: 100 },
   { id: "iec", label: "IEC", count: 100 },
@@ -149,7 +146,6 @@ export const techHubProductCategories: DownloadCategoryOption[] = [
   { id: "software", label: "Software", count: 0 },
 ];
 
-/** Figma 3670:31687 — Tech Hub View */
 export type TechHubSeriesItem = {
   id: string;
   chapter: string;

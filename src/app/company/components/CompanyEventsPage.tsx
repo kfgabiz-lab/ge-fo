@@ -18,7 +18,6 @@ import type {
 } from "@/app/company/data/eventsListContent";
 import "@/assets/css/company.css";
 
-// 미디어 미등록 시 폴백 이미지(퍼블리싱 정적 이미지 재사용)
 const FEATURED_FALLBACK_IMAGE = "/img/company/events/featured_01.png";
 const PAST_FALLBACK_IMAGE = "/img/company/events/past_01.png";
 
@@ -26,7 +25,6 @@ type CompanyEventsPageProps = {
   pageId?: string;
 };
 
-// Events: events-data slug 실데이터 연동. Featured(이번달+이전달 전체)/Calendar(예정, 월별)/Past(지난, 검색·정렬·월·연도)
 export default function CompanyEventsPage({
   pageId = "Page_company_events",
 }: CompanyEventsPageProps) {
@@ -38,7 +36,6 @@ export default function CompanyEventsPage({
   const [pastTotalPages, setPastTotalPages] = useState(1);
   const [pastSort, setPastSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
 
-  // Featured/Calendar는 필터 없이 최초 1회 조회
   useEffect(() => {
     let alive = true;
     fetchData(eventsFeaturedQuery(FEATURED_FALLBACK_IMAGE))
@@ -60,7 +57,6 @@ export default function CompanyEventsPage({
     };
   }, []);
 
-  // Past: 페이지/검색/정렬/월/연도 변경 시 재조회
   useEffect(() => {
     let alive = true;
     fetchData(

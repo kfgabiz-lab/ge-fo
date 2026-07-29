@@ -38,14 +38,6 @@ export default function MarketsReferences({
               <div className="txt_area">
                 <h3 className="tit">{item.title}</h3>
                 <p className="txt">{item.description}</p>
-                {/* 퍼블과 동일하게 references 내용 수정
-                <p className="location">
-                  {item.location}
-                  <span className="location_sep" aria-hidden="true">
-                    |
-                  </span>
-                  {item.country}
-                </p> */}
               </div>
             </button>
           ))}

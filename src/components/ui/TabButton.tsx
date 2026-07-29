@@ -1,4 +1,3 @@
-// data-* 속성 전달을 위한 타입 (data-slug-item, data-slugkey 등 마크업 태깅용)
 type DataAttributes = {
   [key: `data-${string}`]: string | boolean | undefined;
 };
@@ -17,7 +16,7 @@ export default function TabButton({
   isActive,
   controls,
   onSelect,
-  ...rest // data-* 속성을 내부 실제 button 엘리먼트로 forward
+  ...rest
 }: TabButtonProps) {
   return (
     <button

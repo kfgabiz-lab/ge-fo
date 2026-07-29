@@ -7,28 +7,16 @@ import { useModalDismiss } from "@/lib/useModalDismiss";
 type CommonModalProps = {
   open: boolean;
   onClose?: () => void;
-  /** 섹션 가이드 프리뷰 — fixed 오버레이 없이 in-flow 배치 */
   embedded?: boolean;
-  /** aria-labelledby 연결용 id (caller의 useId 값) */
   titleId: string;
   title: ReactNode;
-  /** 루트 식별 클래스 (예: privacy_policy_modal / cookie_preferences_modal) */
   className?: string;
-  /** dim(배경) 버튼 aria-label */
   dimLabel?: string;
-  /** common_modal__foot에 추가할 클래스 */
   footerClassName?: string;
-  /** 푸터 버튼 영역 (없으면 푸터 미출력) */
   footer?: ReactNode;
-  /** 모달 본문 (common_modal__body 내부 콘텐츠) */
   children: ReactNode;
 };
 
-/**
- * common_modal 마크업 뼈대(오버레이 + dim + 패널 + 헤더/본문/푸터)와
- * 포커스 트랩·ESC/스크롤잠금 동작을 공통 제공하는 셸 컴포넌트.
- * 제목/본문/푸터 등 콘텐츠는 props와 children으로 주입한다.
- */
 export default function CommonModal({
   open,
   onClose,

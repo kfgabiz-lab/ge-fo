@@ -9,17 +9,13 @@ import type {
   DownloadCenterVersion,
 } from "@/data/support/downloadCenterData";
 
-/** Figma 6430:111072 — Search Documents tab + filter */
 export const searchDocumentsPage = {
   totalResults: 2658,
   pageSize: 10,
 } as const;
 
-// Documents 탭은 정적 데모라 URL 검색어(q)가 없다. 퍼블리싱 원본에서 제목/파일명에 강조되던
-// 데모 키워드를 카드 searchTerm 으로 고정 전달해 강조 표기를 유지한다(실데이터 연동은 범위 밖).
 export const searchDocumentsDemoKeyword = "DC Device";
 
-/** Figma 6571:104998 — default active filter chips (demo; driven by filter provider) */
 export const searchDocumentActiveFilterDefaults = [
   { id: "search-document-category-mccb-susol-ul", group: "Category", value: "Susol UL MCCB" },
   { id: "search-document-type-catalogs", group: "Types", value: "Catalog" },
@@ -30,8 +26,6 @@ export const searchDocumentCategories = searchProductCategories;
 
 export const searchDocumentTypes: DownloadFilterOption[] = searchProductDocumentTypes;
 
-// 목업 파일 1건 생성. 실 API(DownloadCenterFile) 와 동일 shape.
-// - filePath 는 목업이라 null(다운로드/Copy Link 는 로컬 CTP 미연동과 동일하게 no-op).
 function mockDownloadFile(
   fileId: number,
   fileName: string,
@@ -48,7 +42,6 @@ function mockDownloadFile(
   };
 }
 
-// 단일 버전(파일 묶음) 생성. sortKey 클수록 최신(실 API 규칙과 동일).
 function mockVersion(
   versionId: number,
   versionName: string,
@@ -70,7 +63,6 @@ const manualFiles: DownloadCenterFile[] = [
   mockDownloadFile(6, "Metasol MS_MC-800a_500-800A_3P_2D CAD.pdf", "5.23MB"),
 ];
 
-// 다버전(V38.0 / V37.0). 첫 버전(sortKey 큰 쪽)이 최신.
 function multiVersion(files: DownloadCenterFile[]): DownloadCenterVersion[] {
   return [
     mockVersion(380, "V38.0", 2, files),
@@ -78,7 +70,6 @@ function multiVersion(files: DownloadCenterFile[]): DownloadCenterVersion[] {
   ];
 }
 
-/** Figma 6430:111082 · 111083 · 111085 — document card templates */
 const documentTemplates: DownloadCenterItem[] = [
   {
     id: 1,
@@ -112,7 +103,6 @@ const documentTemplates: DownloadCenterItem[] = [
   },
 ];
 
-/** Figma 6430:111072 — page 1 accordion order */
 const searchDocumentsFirstPageTemplateIndices = [0, 1, 0, 2, 0, 0, 0, 1, 0, 0] as const;
 
 const documentPool: DownloadCenterItem[] = searchDocumentsFirstPageTemplateIndices.map(

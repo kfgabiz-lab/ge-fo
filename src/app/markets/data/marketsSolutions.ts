@@ -9,19 +9,15 @@ export type SolutionProduct = {
 export type SolutionZone = {
   id: string;
   label: string;
-  /** MO 아코디언 / Figma 라벨이 PC와 다를 때 사용 */
   mobileLabel?: string;
-  /** 1920×978 맵 기준 위치 (Figma PC) */
   mapX: number;
   mapY: number;
-  /** 375×280 맵 기준 위치 (Figma MO) — percent */
   mobileMapX?: number;
   mobileMapY?: number;
   description: string;
   products?: SolutionProduct[];
 };
 
-/** Figma 5966:63794 — 모바일 아코디언 순서 */
 export const marketsSolutionMobileOrder = [
   "A",
   "B",
@@ -51,7 +47,6 @@ const productImg = {
   dcProducts:
     "/img/devices-systems/products/iec-dc-acb-and-switch-disconnector.webp",
   eHouse: "/img/devices-systems/products/e-house.webp",
-  /** SCADA — 더미 유지 */
   scada: "/img/markets/solutions/product_scada.png",
   fallback: "/img/main/product_01.jpg",
 } as const;
@@ -96,7 +91,6 @@ export const marketsSolutionZones: SolutionZone[] = [
       "The operational brain of the facility. Advanced SCADA software monitors and optimizes the entire power infrastructure.",
     products: [
       solutionProduct("a-scada", "SCADA", productImg.scada),
-      // solutionProduct("a-hmi", "HMI Workstation"),
     ],
   },
   {
@@ -108,11 +102,6 @@ export const marketsSolutionZones: SolutionZone[] = [
     mobileMapY: 60.7,
     description:
       "Houses emergency diesel generators to ensure continuous data center operation during unexpected utility power outages.",
-    // products: [
-    //   solutionProduct("b-diesel-gen", "Diesel Generator Set"),
-    //   solutionProduct("b-ats", "Automatic Transfer Switch"),
-    //   solutionProduct("b-paralleling", "Paralleling Switchgear"),
-    // ],
   },
   {
     id: "C",
@@ -149,7 +138,6 @@ export const marketsSolutionZones: SolutionZone[] = [
         productImg.loadInterrupter,
       ),
       solutionProduct("c-vcb", "Susol UL VCB", productImg.susolVcb),
-      // solutionProduct("c-acb", "Susol UL ACB"),
       solutionProduct("c-mccb", "Susol UL MCCB", productImg.susolMccb),
       solutionProduct("c-dc", "DC Products", productImg.dcProducts),
     ],
@@ -165,7 +153,6 @@ export const marketsSolutionZones: SolutionZone[] = [
       "A scalable, pre-fabricated power solution. Our integrated E-House delivers fast deployment and space efficiency.",
     products: [
       solutionProduct("d-ehouse", "E-House", productImg.eHouse),
-      // solutionProduct("d-skid", "Modular Power Skid"),
     ],
   },
   {
@@ -179,7 +166,6 @@ export const marketsSolutionZones: SolutionZone[] = [
       "The mission-critical white space. Our highly reliable UL67 Panelboards ensure uninterrupted power to server racks.",
     products: [
       solutionProduct("f-ul67", "UL67 Panelboard", productImg.ul67Panelboard),
-      // solutionProduct("f-busway", "Busway Distribution"),
     ],
   },
   {
@@ -209,12 +195,6 @@ export const marketsSolutionZones: SolutionZone[] = [
     mobileMapY: 57.1,
     description:
       "Provides seamless, instantaneous backup power to prevent data loss and bridge the gap until generators activate.",
-    // products: [
-    //   solutionProduct("h-ups", "UPS Module"),
-    //   solutionProduct("h-battery", "Battery Cabinet"),
-    //   solutionProduct("h-static-switch", "Static Transfer Switch"),
-    //   solutionProduct("h-pdu", "PDU"),
-    // ],
   },
   {
     id: "I",
@@ -225,11 +205,6 @@ export const marketsSolutionZones: SolutionZone[] = [
     mobileMapY: 48.6,
     description:
       "Stores renewable energy to reduce peak loads and provide backup power, maximizing data center energy flexibility.",
-    // products: [
-    //   solutionProduct("i-battery-rack", "Battery Rack"),
-    //   solutionProduct("i-pcs", "Power Conversion System"),
-    //   solutionProduct("i-ems", "Energy Management System"),
-    // ],
   },
   {
     id: "J",
@@ -241,13 +216,6 @@ export const marketsSolutionZones: SolutionZone[] = [
     mobileMapY: 41.4,
     description:
       "Contains advanced cooling systems and chillers essential for maintaining optimal temperatures for critical servers.",
-    // products: [
-    //   solutionProduct("j-chiller", "Chiller Unit"),
-    //   solutionProduct("j-crah", "CRAH"),
-    //   solutionProduct("j-cooling-tower", "Cooling Tower"),
-    //   solutionProduct("j-pump", "Pump Skid"),
-    //   solutionProduct("j-controls", "HVAC Controls"),
-    // ],
   },
 ];
 

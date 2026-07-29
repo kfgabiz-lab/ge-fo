@@ -1,4 +1,3 @@
-/** Figma 7334:130871 / 7334:130893 — Cookie Settings banner */
 export const cookieSettingsModal = {
   title: "Cookie Settings",
   description:
@@ -23,7 +22,6 @@ export type CookiePreferenceId =
 
 export type CookiePreferences = Record<CookiePreferenceId, boolean>;
 
-/** Figma 7334:130670 — P-FO-COMMON-040000M Cookie Settings detail */
 export const cookiePreferencesModal = {
   title: "Cookie Settings",
   description:

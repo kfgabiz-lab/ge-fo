@@ -23,16 +23,12 @@ export default async function CompanyBlogDetailPage({
   params,
 }: CompanyBlogDetailPageProps) {
   const { id } = await params;
-  // BO 미리보기 진입 여부(ge_preview 쿠키 → BE 재검증). 이 slug+id 조합에 한해서만 true.
   const preview = await isPreviewActive("blog-data", id);
 
-  // 상세 단건 + 카테고리 라벨 + 인접글(이전/다음) 병렬 조회(wall-clock 1 round-trip)
-  // - pager는 신규 adjacent 엔드포인트가 이웃을 직접 반환(FE 목록 index 계산 폐기)
   const [detail, categories, adjacent] = await Promise.all([
     fetchData({
       slug: "blog-data",
       id,
-      // 미리보기 모드면 공개여부 게이트 해제(비공개 글도 조회)
       where: preview ? {} : { ...BLOG_STATUS_WHERE },
       리턴함수: (x) => x,
     }),
@@ -43,13 +39,10 @@ export default async function CompanyBlogDetailPage({
       adjacent: true,
       sortField: "createdAt",
       titleField: "blog.title",
-      where: { ...BLOG_STATUS_WHERE }, // 인접글은 게이트 유지 — 실제 공개된 글 기준
+      where: { ...BLOG_STATUS_WHERE },
     }),
   ]);
 
-  // 존재하지 않거나 비공개(isVisible!=001) 글이어도 404로 바꾸지 않고 레이아웃 유지 + 빈 상태로 렌더.
-  // detail=null이면 flattenPageDataItem이 TypeError → row를 빈 객체로 폴백(모든 필드 접근 undefined→빈값).
-  // flattenPageDataItem: blogForm/seo 섹션 간 키 충돌 없음 → title/category/hashtag/publishDttm/image/content가 root로 flat 병합됨
   const row: Record<string, unknown> = detail ? flattenPageDataItem(detail) : {};
   const categoryMap = toCategoryMap(categories);
   const categoryCode = (row.category as string) ?? "";
@@ -57,7 +50,6 @@ export default async function CompanyBlogDetailPage({
   const tags = splitHashtag(row.hashtag as string | undefined);
   const contentHtml = (row.content as string) ?? "";
 
-  // hero 이미지: blogForm.image[0] → page-files, 미등록 시 정적 폴백
   const imageArr = row.image;
   const mediaId =
     Array.isArray(imageArr) && imageArr.length > 0 ? (imageArr[0] as number) : null;
@@ -66,7 +58,6 @@ export default async function CompanyBlogDetailPage({
       ? { src: blogImageSrc(mediaId), alt: (row.title as string) ?? "" }
       : blogDetailHero;
 
-  // pager: adjacent 엔드포인트 응답 {prev, next}(id/title)를 그대로 매핑, id→상세 href 변환만 수행
   const prev = adjacent.prev
     ? { href: blogDetailHref(adjacent.prev.id), title: adjacent.prev.title }
     : undefined;
@@ -90,17 +81,13 @@ export default async function CompanyBlogDetailPage({
       next={next}
       listHref="/company/blog"
     >
-      {/* data-slug: 블로그 상세 단건 레코드 (목록과 동일 slug, id로 조회). */}
-      {/* category/title/date/heroImage/pager 는 CompanyArticleDetail props 로 전달(공용 컴포넌트 내부 렌더). */}
       <div data-slug="blog-data">
-        {/* content: 에디터 리치텍스트 HTML 단일 필드(blogForm.content) */}
         <div
           className={articleDetailClass("body")}
           data-slugkey="content"
           dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
 
-        {/* tags: 해시태그 배열 필드(hashtag split) */}
         <div className={articleDetailClass("tags")} data-slugkey="tags">
           <div className="company-blog__tags">
             {tags.map((tag, tagIndex) => (

@@ -4,7 +4,6 @@ type WhereToBuyMapPopupProps = {
   location: WhereToBuyLocation;
 };
 
-/** Figma 4713:82324 — map marker info popup */
 export default function WhereToBuyMapPopup({ location }: WhereToBuyMapPopupProps) {
   return (
     <div

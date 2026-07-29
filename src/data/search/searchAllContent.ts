@@ -16,11 +16,6 @@ export function buildSearchAllHref(query?: string): string {
     : `${SEARCH_ALL_PATH}?q=`;
 }
 
-/**
- * 통합검색 화면 내 탭 이동 href.
- * 현재 검색어(q)를 유지한 채 ?tab= 만 덧붙인다(예: /search?q=relay&tab=media).
- * SearchAllTabContent 가 ?tab= 값을 읽어 상단 탭을 해당 탭으로 맞춘다.
- */
 export function buildSearchTabHref(
   query: string,
   tab: Exclude<SearchTabId, "all">,
@@ -74,7 +69,6 @@ export type SearchMediaItem = {
   title: string;
   description?: string;
   highlight?: string;
-  /** Optional search metadata — rendering follows where `highlight` appears in title/description text. */
   highlightPlacement?: "title" | "description";
   variant?: "default" | "video";
 };
@@ -84,9 +78,7 @@ export type SearchPageItem = {
   href: string;
   category: string;
   title: string;
-  /** Title suffix after `I` — rendered with `search_page__mark`. */
   mark?: string;
-  /** Search term — bold in description (and inline in title when present in `title`). */
   highlight?: string;
   description: string;
 };
@@ -200,15 +192,6 @@ export const searchAllDocuments: ProductDownloadItem[] = [
   },
 ];
 
-// searchAllMedia(퍼블리싱 목업 4건)는 All 탭 Media 섹션이 media-search API 실연동으로 전환되면서 제거됨.
-// Media 카드 데이터는 @/data/search/searchMediaData 의 fetchSearchMedia 가 생성한다(SearchMediaItem 타입은 계속 사용).
-
-// searchAllPages(퍼블리싱 목업 4건)는 All 탭 Pages 섹션이 page-search API 실연동으로 전환되면서 제거됨.
-// Pages 항목 데이터는 @/data/search/searchPagesData 의 fetchSearchPages 가 생성한다(SearchPageItem 타입은 계속 사용).
-
-// All 탭 섹션별 Explore 이동 대상(다른 화면으로 나가는 고정 링크).
-// Media/Pages 섹션은 전용 화면이 없어 다른 화면이 아니라 상단 해당 탭으로 전환되므로(기획 주석 #11)
-// 여기 두지 않고 buildSearchTabHref(query, "media" | "pages") 로 검색어를 유지한 href 를 만든다.
 export const searchSectionExploreLinks: Record<
   "products" | "documents",
   string
@@ -217,10 +200,6 @@ export const searchSectionExploreLinks: Record<
   documents: "/support/download-center",
 };
 
-/**
- * 통합검색 공통 Empty State 문구(LSEA-FO-SEARCH-102).
- * All/Products/Documents/Media/Pages 5개 탭이 결과 0건일 때 동일하게 사용한다.
- */
 export const searchEmptyResult = {
   title: "We could not find any results",
   notes: [
@@ -229,7 +208,6 @@ export const searchEmptyResult = {
     "Search is not case sensitive — 'acs 600' and 'ACS 600' return identical results.",
     "Wildcard searches are not supported. Please enter the full term instead. (e.g. 'transformer' instead of 'transf*')",
   ],
-  // 마지막 안내는 문장 중간에 Contact Us 링크가 들어가므로 앞/링크/뒤로 나눠 둔다.
   contactNote: {
     before: "If you are unable to find the required information, please visit our ",
     linkLabel: "Contact Us",
@@ -238,7 +216,6 @@ export const searchEmptyResult = {
   },
 } as const;
 
-/** ?tab= 파라미터 값 검증 — searchAllTabs 에 정의된 탭이면 해당 id, 아니면 undefined. */
 export function toSearchTabId(value: string | null): SearchTabId | undefined {
   return searchAllTabs.find((tab) => tab.id === value)?.id;
 }

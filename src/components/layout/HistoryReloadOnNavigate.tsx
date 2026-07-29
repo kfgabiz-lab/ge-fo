@@ -43,12 +43,6 @@ function runHardNavigation() {
   window.location.replace(window.location.href);
 }
 
-/**
- * 동일 출처 링크: location.href 전체 로드 (soft route 비활성).
- * 앞/뒤로: prod 200ms 후 replace / dev 즉시 reload.
- * `/` 페이지 인덱스: 히스토리·bfcache 복귀 시 reload (DataGrid).
- * `/guide/*`: soft route 유지 (reload 생략).
- */
 function isHashOnlyNavigation(target: URL, current: URL) {
   return (
     target.pathname === current.pathname &&

@@ -42,18 +42,13 @@ export type GnbMenuVariant = "main" | "markets";
 type GnbMenuProps = {
   variant?: GnbMenuVariant;
   logoHref?: string;
-  /** 서버 레이아웃에서 GET /api/v1/fo/menus/gnb 로 조회한 GNB 트리(markets/services/support/company override용) */
   gnbMenuData?: FoGnbMenuApiNode[];
-  /** 서버 레이아웃에서 fetchDevicesMegaMenu()로 조회한 Products & Systems 메가메뉴(category-data/product-data 기반) */
   devicesMegaMenu?: GnbDevicesMegaMenu | null;
-  /** SubHeader / MainHeader에서 스크롤 상태를 넘기면 내부 scroll 리스너 비활성 */
   isAtTop?: boolean;
   isHeaderHidden?: boolean;
   isHeaderRevealed?: boolean;
   onRevealHeader?: () => void;
-  /** breadcrumb를 header 내부에 렌더 */
   breadcrumb?: ReactNode;
-  /** main GNB에서 breadcrumb_nav(경로) 표시 — 기본 숨김, markets 서브 등에서 사용 */
   showBreadcrumbNav?: boolean;
   onMegaOpenChange?: (open: boolean) => void;
   onMobileMenuOpenChange?: (open: boolean) => void;
@@ -69,7 +64,6 @@ function getDefaultMegaState(
   const menu = nav?.megaMenu;
 
   if (menu && isDevicesMegaMenu(menu)) {
-    // 현재 경로와 일치하는 depth3(있으면) → 그 카테고리를 기본 열림 상태로 사용(하드코딩 매핑 없이 실데이터 href로 직접 탐색)
     for (const category of menu.categories) {
       const matchedDepth3 = category.children.find(
         (depth3) => depth3.href && pathname.startsWith(depth3.href),
@@ -194,7 +188,6 @@ export default function GnbMenu({
   onSearchOpenChange,
 }: GnbMenuProps) {
   const pathname = usePathname();
-  // devices는 category-data 기반 devicesMegaMenu로, markets/services/support/company는 API 데이터로 override
   const navItems = useMemo(
     () => resolveGnbNavItems(gnbMenuData, devicesMegaMenu),
     [gnbMenuData, devicesMegaMenu],
@@ -552,7 +545,6 @@ export default function GnbMenu({
         return;
       }
 
-      /* 레이아웃 변화·미세 스크롤 무시 — 실제 페이지 스크롤만 닫기 */
       if (Math.abs(getWindowScrollY() - megaOpenScrollYRef.current) < 8) {
         return;
       }

@@ -101,13 +101,7 @@ function sortOrderValue(sortOrder: string): number {
   return Number.isNaN(n) ? Number.POSITIVE_INFINITY : n;
 }
 
-// ---------------- BO 미리보기(비공개 배너 1건 병합) ----------------
 
-// 미리보기 대상 배너 1건을 게시상태 게이트(is_visible/게시기간) 없이 조회한다.
-// - getPreviewBannerId가 토큰 검증을 통과시킨 recordId일 때만 호출되므로,
-//   토큰이 지정한 그 1건 외의 비공개 배너는 절대 함께 조회되지 않는다.
-// - where를 넘기지 않는 것이 곧 게이트 해제(상세 미리보기의 `preview ? {} : STATUS_WHERE`와 동일 원리).
-// - HERO/INFORMATION 두 소비처가 같은 렌더에서 병렬 호출하므로 react cache로 요청당 1회만 실행.
 const fetchPreviewBannerRow = cache(
   async (): Promise<Record<string, unknown> | null> => {
     const recordId = await getPreviewBannerId();
@@ -119,8 +113,6 @@ const fetchPreviewBannerRow = cache(
   },
 );
 
-// 미리보기 대상 배너가 지정한 노출 영역(HERO/INFORMATION)의 것인지 판별한다.
-// 영역이 다르면 병합하지 않는다 — 공지 배너가 히어로 슬라이드에 섞이는 오노출 방지.
 function isPreviewRowForPosition(
   row: Record<string, unknown> | null,
   position: string,
@@ -145,8 +137,6 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
     fetchPreviewBannerRow(),
   ]);
 
-  // 목록 조회 조건은 그대로 유지하고, 미리보기 대상 1건만 결과 배열에 덧붙인다.
-  // 대상이 이미 공개 상태라 목록에 포함돼 있으면 _id로 중복 제거(슬라이드 2개로 늘어나지 않도록).
   const rows = [...(res.content ?? [])];
   if (isPreviewRowForPosition(previewRow, BANNER_POSITION_HERO)) {
     const alreadyListed = rows.some((row) => row._id === previewRow._id);
@@ -169,7 +159,6 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
     };
   });
 
-  // 기존 정렬 로직을 그대로 태운다 → 병합된 미리보기 배너도 원래 sort_order 자리에 자연스럽게 배치된다.
   items.sort((a, b) => {
     const av = sortOrderValue(a.sortOrder);
     const bv = sortOrderValue(b.sortOrder);
@@ -208,8 +197,6 @@ export async function fetchNoticeItem(): Promise<NoticeItem | null> {
     fetchPreviewBannerRow(),
   ]);
 
-  // 공지 영역은 1건만 노출되는 슬롯이라 "병합"이 아니라 "치환"이어야 한다.
-  // (뒤에 덧붙이면 화면에 아예 보이지 않아 미리보기 목적을 달성하지 못함)
   const row = isPreviewRowForPosition(previewRow, BANNER_POSITION_INFORMATION)
     ? previewRow
     : bannerRes.content?.[0];

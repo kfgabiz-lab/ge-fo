@@ -14,9 +14,7 @@ const DEFAULT_TOP_THRESHOLD = 8;
 export type HeaderMode = "full" | "hidden" | "revealed";
 
 type UseHeaderScrollOptions = {
-  /** 스크롤 이하 구간에서 투명(최상단) 상태 — main: 80 */
   topThreshold?: number;
-  /** false면 모바일처럼 GNB 숨김 없이 full / revealed만 사용 */
   hideGnbOnScroll?: boolean;
 };
 
@@ -103,7 +101,6 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
     };
   }, [topThreshold, updateScrollState]);
 
-  /* 메가·모바일 메뉴 오픈 중(body scroll lock)에는 scrollY가 0으로 보이므로 isAtTop 갱신 생략 */
   useEffect(() => {
     if (!hideGnbOnScroll) return;
     updateScrollState();

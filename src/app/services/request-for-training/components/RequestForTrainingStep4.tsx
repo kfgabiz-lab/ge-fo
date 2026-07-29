@@ -92,8 +92,6 @@ export default function RequestForTrainingStep4() {
       });
       alert(SUCCESS_ALERT);
     } catch (error) {
-      // 제출 실패(서버 오류) 문구는 기획서(dc)에 규정이 없어 사용자 알림을 띄우지 않는다.
-      // 필수값 미충족 alert 를 재사용하면 "필수값 누락"으로 잘못 안내되므로 콘솔 로그만 남긴다.
       console.error("[request-for-training] submit failed", error);
     } finally {
       setSubmitting(false);

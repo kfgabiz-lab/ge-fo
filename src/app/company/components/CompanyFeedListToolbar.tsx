@@ -13,13 +13,11 @@ import GuideSelect from "@/components/form/GuideSelect";
 import { guideSearchFieldMobileSlotProps } from "@/components/form/guideFieldMobileProps";
 import type { CompanyFeedVariant } from "@/app/company/data/companyFeedContent";
 
-// variant별 aria-label 텍스트 (기존 개별 툴바의 라벨을 그대로 이관)
 const toolbarLabels: Record<CompanyFeedVariant, { capital: string; lower: string }> = {
   press: { capital: "Press", lower: "press" },
   articles: { capital: "Articles", lower: "articles" },
 };
 
-// 게시월 옵션(1~12월, 값은 BE month_ 파라미터 형식인 "01"~"12") — 전체 12개월 원본
 const ALL_MONTH_OPTIONS = [
   { value: "01", label: "January" },
   { value: "02", label: "February" },
@@ -35,15 +33,12 @@ const ALL_MONTH_OPTIONS = [
   { value: "12", label: "December" },
 ];
 
-// month 옵션 미전달 시 기본값: Jun~Oct(06~10) 5개월
 const DEFAULT_MONTH_OPTIONS = ALL_MONTH_OPTIONS.filter(
   (m) => m.value >= "06" && m.value <= "10",
 );
 
-// year 옵션 미전달 시 방어용 fallback: 현재 연도 1개(실제로는 press/articles 페이지에서 항상 전달)
 const DEFAULT_YEAR_OPTIONS = [String(new Date().getFullYear())];
 
-// 정렬 옵션(최신/오래된순 + 제목 A-Z/Z-A). value는 데이터 헬퍼 sort 파라미터와 동일
 const SORT_OPTIONS = [
   { value: "latest", label: "Latest" },
   { value: "oldest", label: "Oldest" },
@@ -53,19 +48,15 @@ const SORT_OPTIONS = [
 
 type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 
-// Select value(unknown) → 허용된 정렬값으로 좁히기(미허용 시 latest 폴백)
 function toSortValue(raw: unknown): SortValue {
   return SORT_OPTIONS.some((o) => o.value === raw) ? (raw as SortValue) : "latest";
 }
 
-// 공통 피드 리스트 툴바 (Press/Articles). Month/Year/Search/Sort 필터 동일 구조
-// - month/year/search/sort는 전부 optional(값+핸들러 짝) — 안 넘기면 기존처럼 비연동 장식 UI로 동작(articles 하위호환)
-// - monthOptions/yearOptions 미전달 시 기본값(month: Jun~Oct, year: 현재연도) 사용
 type CompanyFeedListToolbarProps = {
   variant: CompanyFeedVariant;
-  monthValue?: string; // "" | "01"~"12"
+  monthValue?: string;
   onMonthChange?: (value: string) => void;
-  yearValue?: string; // "" | "YYYY"
+  yearValue?: string;
   onYearChange?: (value: string) => void;
   monthOptions?: { value: string; label: string }[];
   yearOptions?: string[];
@@ -90,7 +81,6 @@ export default function CompanyFeedListToolbar({
 }: CompanyFeedListToolbarProps) {
   const label = toolbarLabels[variant];
   const prefix = `company-${variant}-list`;
-  // 검색어는 제출(Enter 또는 검색 아이콘 클릭) 시에만 상위로 전달 — 타이핑마다 재조회하지 않음
   const [searchDraft, setSearchDraft] = useState(searchValue);
   const submitSearch = () => onSearchSubmit?.(searchDraft.trim());
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {

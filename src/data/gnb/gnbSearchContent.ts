@@ -6,7 +6,6 @@ export type GnbSearchTag = {
   href: string;
 };
 
-/** Figma 4288:54315 — GNB search overlay */
 export const gnbSearchContent = {
   searchPlaceholder: downloadCenterPage.searchPlaceholder,
   popularSearchLabel: downloadCenterPage.popularSearchLabel,

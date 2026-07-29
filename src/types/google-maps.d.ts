@@ -1,5 +1,4 @@
 declare namespace google.maps {
-  // loading=async 방식에서 필요한 라이브러리를 명시적으로 로드하는 공식 API
   function importLibrary(library: string): Promise<unknown>;
 
   class Map {
@@ -10,13 +9,11 @@ declare namespace google.maps {
     panTo(latLng: LatLngLiteral): void;
     fitBounds(bounds: LatLngBounds): void;
     addListener(event: string, handler: () => void): MapsEventListener;
-    // 현재 지도 뷰포트/카메라 조회("이 지역에서 검색" 영역필터 + 뷰 복원용)
     getBounds(): LatLngBounds | undefined;
     getCenter(): LatLng | undefined;
     getZoom(): number | undefined;
   }
 
-  // addListener 반환값 — 리스너 해제용
   interface MapsEventListener {
     remove(): void;
   }
@@ -29,7 +26,6 @@ declare namespace google.maps {
 
   class LatLngBounds {
     extend(latLng: LatLngLiteral): void;
-    // 영역(bounds) 조회 — 북동/남서 모서리 및 포함여부 판정
     getNorthEast(): LatLng;
     getSouthWest(): LatLng;
     contains(latLng: LatLngLiteral): boolean;
@@ -39,22 +35,18 @@ declare namespace google.maps {
     constructor(width: number, height: number);
   }
 
-  // ---- Circle (core "maps" 라이브러리 포함) — Where to Buy 반경 오버레이용 ----
-  // 인스턴스를 재생성하지 않고 setCenter/setRadius/setVisible 로 갱신하는 용도만 선언한다.
   class Circle {
     constructor(opts: CircleOptions);
     setMap(map: Map | null): void;
     setCenter(center: LatLngLiteral): void;
     setRadius(radius: number): void;
     setVisible(visible: boolean): void;
-    // 원에 외접하는 사각영역(fitBounds 로 원 전체를 화면에 맞출 때 사용)
     getBounds(): LatLngBounds | null;
   }
 
   interface CircleOptions {
     map?: Map;
     center?: LatLngLiteral;
-    /** 미터 단위 반경 */
     radius?: number;
     clickable?: boolean;
     visible?: boolean;
@@ -66,7 +58,6 @@ declare namespace google.maps {
     zIndex?: number;
   }
 
-  // ---- OverlayView (importLibrary("maps") 로 로드) — 마커 화면 픽셀좌표 계산용 ----
   class OverlayView {
     setMap(map: Map | null): void;
     getProjection(): MapCanvasProjection | null;
@@ -75,15 +66,11 @@ declare namespace google.maps {
     onRemove?: () => void;
   }
 
-  // OverlayView.getProjection() 이 제공하는 좌표 변환기
   interface MapCanvasProjection {
-    // 지도 컨테이너(map div) 좌상단 기준 픽셀 좌표
     fromLatLngToContainerPixel(latLng: LatLng): Point | null;
-    // 지도 내부 오버레이 div 기준 픽셀 좌표
     fromLatLngToDivPixel(latLng: LatLng): Point | null;
   }
 
-  // ---- Geocoding (importLibrary("geocoding") 로 로드) ----
   class Geocoder {
     geocode(
       request: GeocoderRequest,
@@ -100,7 +87,6 @@ declare namespace google.maps {
     lng(): number;
   }
 
-  // Geocoding 응답 상태 코드
   type GeocoderStatus =
     | "OK"
     | "ZERO_RESULTS"
@@ -112,7 +98,6 @@ declare namespace google.maps {
 
   interface GeocoderRequest {
     address?: string;
-    // placeId 로 지오코딩(Places 자동완성 후보 → 좌표 확정용)
     placeId?: string;
   }
 
@@ -120,7 +105,6 @@ declare namespace google.maps {
     location: LatLng;
   }
 
-  // 지오코딩 결과의 주소 구성요소(도로명/도시/주/우편번호 파싱용)
   interface GeocoderAddressComponent {
     long_name: string;
     short_name: string;
@@ -130,7 +114,6 @@ declare namespace google.maps {
   interface GeocoderResult {
     geometry: GeocoderGeometry;
     formatted_address?: string;
-    // placeId 지오코딩 시 주소 컴포넌트(등록 폼 City/State/ZIP 자동 채움용)
     address_components: GeocoderAddressComponent[];
   }
 
@@ -140,9 +123,7 @@ declare namespace google.maps {
     y: number;
   }
 
-  // ---- Places (importLibrary("places") 로 로드) — 주소 자동완성 ----
   namespace places {
-    // 신규 웹컴포넌트가 아닌 클래식 자동완성 서비스(직접 드롭다운 UI 구성용)
     class AutocompleteService {
       getPlacePredictions(
         request: AutocompletionRequest,
