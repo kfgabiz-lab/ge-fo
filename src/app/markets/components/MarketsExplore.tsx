@@ -83,6 +83,20 @@ export default function MarketsExplore({
           <div className="markets_explore__txt">
             <h3 className="markets_explore__panel_tit">{renderTitleWithBreaks(active.title)}</h3>
             <p className="markets_explore__panel_desc">{active.description}</p>
+            {active.cta ? (
+              <a
+                href={active.cta.href}
+                className="btn-base btn-lv03 btn-lv03--solid markets_explore__cta"
+                {...(active.cta.external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+              >
+                {active.cta.label}
+                {active.cta.external ? (
+                  <span className="icon_external-18" aria-hidden="true" />
+                ) : null}
+              </a>
+            ) : null}
           </div>
           <div className="markets_explore__img">
             <img

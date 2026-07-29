@@ -4,6 +4,12 @@ export type IndustryTab = {
   title: string;
   description: string;
   image: string;
+  /** Explore 패널 CTA (예: power-grid BESS · Visit LS Energy Solutions) */
+  cta?: {
+    label: string;
+    href: string;
+    external?: boolean;
+  };
 };
 
 export type BenefitItem = {
@@ -35,9 +41,9 @@ export const commercialResidentialHero = {
   titleLines: ["Commercial", "& Residential"],
   heroImage: "/img/markets/commercial-residential/hero/hero.jpg",
   secondaryCta: {
-    label: "Go to Connect Portal",
+    label: "Get the Whitepaper",
     href: "",
-    icon: "link" as const,
+    icon: "download" as const,
   },
 };
 

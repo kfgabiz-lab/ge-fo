@@ -48,6 +48,11 @@ export const powerGridIndustryTabs: IndustryTab[] = [
     description:
       "LS ELECTRIC provides high-performance BESS solutions with optimized power conversion systems (PCS) and reliable electrical infrastructure. Our solutions improve grid stability, support peak shaving, and enhance renewable energy utilization, backed by safe system design and efficient energy management capabilities.",
     image: "/img/markets/power-grid/explore/img_bess.jpg",
+    cta: {
+      label: "Visit LS Energy Solutions",
+      href: "https://www.ls-es.com",
+      external: true,
+    },
   },
   {
     id: "utilities",

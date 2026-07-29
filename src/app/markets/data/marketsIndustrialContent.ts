@@ -1,6 +1,5 @@
 import type { MarketStatItem } from "./marketsDataCenterContent";
 import {
-  marketsBenefitImages,
   type BenefitItem,
   type IndustryTab,
   type ProductItem,
@@ -182,7 +181,7 @@ export const industrialBenefits: BenefitItem[] = [
       "High-performance PLCs, drives, and automation systems enable faster, more precise operations, improving overall production efficiency.",
     capabilities:
       "Optimizing production performance through high-speed PLCs, precision drives, and integrated automation systems, enabling faster cycle times and synchronized operations",
-    image: marketsBenefitImages.benefit05,
+    image: "/img/markets/industrial/benefits/benefit_01.jpg",
   },
   {
     id: "ind-b2",
@@ -192,7 +191,7 @@ export const industrialBenefits: BenefitItem[] = [
       "Robust power and control solutions ensure stable operations, minimizing downtime and supporting continuous production.",
     capabilities:
       "Stable and continuous operations with robust power distribution, protection systems, and condition monitoring for proactive fault prevention",
-    image: marketsBenefitImages.benefit06,
+    image: "/img/markets/industrial/benefits/benefit_02.jpg",
     reverse: true,
   },
   {
@@ -203,7 +202,7 @@ export const industrialBenefits: BenefitItem[] = [
       "Advanced energy management and optimized system control help reduce energy consumption and operational costs.",
     capabilities:
       "Reduced energy consumption and operational costs by implementing high-efficiency drives, energy monitoring systems, and optimized power management",
-    image: marketsBenefitImages.benefit09,
+    image: "/img/markets/industrial/benefits/benefit_03.jpg",
   },
   {
     id: "ind-b4",
@@ -213,7 +212,7 @@ export const industrialBenefits: BenefitItem[] = [
       "Seamless integration with smart factory and digital platforms enables data-driven decision-making and flexible system expansion.",
     capabilities:
       "Data-driven operations and future-ready expansion through smart factory solutions, seamless system integration, and scalable digital platforms",
-    image: marketsBenefitImages.benefit10,
+    image: "/img/markets/industrial/benefits/benefit_04.jpg",
     reverse: true,
   },
 ];

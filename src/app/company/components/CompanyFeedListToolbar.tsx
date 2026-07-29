@@ -82,7 +82,13 @@ export default function CompanyFeedListToolbar({
   const label = toolbarLabels[variant];
   const prefix = `company-${variant}-list`;
   const [searchDraft, setSearchDraft] = useState(searchValue);
+  const hasQuery = searchDraft.length > 0;
   const submitSearch = () => onSearchSubmit?.(searchDraft.trim());
+  // 검색어 초기화 — 입력값과 적용된 검색 조건을 함께 비운다
+  const clearSearch = () => {
+    setSearchDraft("");
+    onSearchSubmit?.("");
+  };
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") submitSearch();
   };
@@ -147,7 +153,9 @@ export default function CompanyFeedListToolbar({
       </FormControl>
 
       <TextField
-        className="guide_field guide_field--search"
+        className={`guide_field guide_field--search${
+          hasQuery ? " guide_field--search-filled" : ""
+        }`}
         placeholder="Search"
         aria-label={`Search ${label.lower}`}
         value={searchDraft}
@@ -158,6 +166,25 @@ export default function CompanyFeedListToolbar({
           input: {
             endAdornment: (
               <InputAdornment position="end" className="guide_field__search-adorn">
+                {hasQuery ? (
+                  <button
+                    type="button"
+                    className="guide_field__search-clear"
+                    aria-label="Clear search"
+                    onClick={clearSearch}
+                  >
+                    <span className="guide_field__search-clear-icon" aria-hidden>
+                      <img
+                        loading="lazy"
+                        decoding="async"
+                        src="/ico/ico_clear_12_black.svg"
+                        alt=""
+                        width={10}
+                        height={10}
+                      />
+                    </span>
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   className="guide_field__search-icon-button"

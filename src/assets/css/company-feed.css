@@ -1136,6 +1136,60 @@ section.company-blog-list .company-blog-list__toolbar .guide_field__select-value
   text-overflow: ellipsis;
 }
 
+/* Figma 7311:194983 - Search / 280px filled . clear 18px + search 18px . gap 12 */
+section.company-press-list .guide_field--search .guide_field__search-adorn,
+section.company-articles-list .guide_field--search .guide_field__search-adorn,
+section.company-blog-list .guide_field--search .guide_field__search-adorn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+section.company-press-list .guide_field--search .guide_field__search-clear,
+section.company-articles-list .guide_field--search .guide_field__search-clear,
+section.company-blog-list .guide_field--search .guide_field__search-clear {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-bg);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+section.company-press-list .guide_field--search .guide_field__search-clear:hover,
+section.company-articles-list .guide_field--search .guide_field__search-clear:hover,
+section.company-blog-list .guide_field--search .guide_field__search-clear:hover {
+  background: #f5f7fa;
+  border-color: #ccc;
+}
+
+section.company-press-list .guide_field--search .guide_field__search-clear-icon,
+section.company-articles-list .guide_field--search .guide_field__search-clear-icon,
+section.company-blog-list .guide_field--search .guide_field__search-clear-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+}
+
+section.company-press-list .guide_field--search .guide_field__search-clear-icon img,
+section.company-articles-list .guide_field--search .guide_field__search-clear-icon img,
+section.company-blog-list .guide_field--search .guide_field__search-clear-icon img {
+  display: block;
+  width: 10px;
+  height: 10px;
+}
+
 section.company-press-list .guide_field--search .guide_field__search-icon-button,
 section.company-articles-list .guide_field--search .guide_field__search-icon-button,
 section.company-blog-list .guide_field--search .guide_field__search-icon-button {

@@ -2925,7 +2925,7 @@ section.company-blog-list .company-blog-list__content:hover .company-blog-list__
     flex-direction: column;
     gap: 30px;
     flex-shrink: 0;
-    width: 660px;
+    width: 776px;
   }
 
   section.company-america-shaping .company-america-shaping__highlight-row {
@@ -2935,7 +2935,7 @@ section.company-blog-list .company-blog-list__content:hover .company-blog-list__
   }
 
   section.company-america-shaping .company-america-shaping__highlight {
-    width: 310px;
+    width: 368px;
   }
 
   section.company-america-shaping .company-america-shaping__highlight-tit {

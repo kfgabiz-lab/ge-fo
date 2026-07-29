@@ -1339,6 +1339,19 @@ section.main_notic .txt:before {
   }
 }
 
+/* what_we_do — tablet typography */
+@media (min-width: 781px) and (max-width: 1439px) {
+  section.what_we_do__inner .txt_area .tit {
+    font-size: 36px;
+    line-height: 46px;
+  }
+
+  section.what_we_do__inner .txt_area .txt {
+    font-size: 20px;
+    line-height: 30px;
+  }
+}
+
 @media (max-width: 780px) {
   section.main_visual {
     position: relative;

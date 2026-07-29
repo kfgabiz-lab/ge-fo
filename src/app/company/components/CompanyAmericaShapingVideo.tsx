@@ -38,7 +38,6 @@ export default function CompanyAmericaShapingVideo({
       muted
       loop
       playsInline
-      controls
       preload="metadata"
       poster={poster}
     >

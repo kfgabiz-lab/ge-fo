@@ -47,7 +47,9 @@ export default function MarketsReferences({
       <MarketsReferencesModal
         open={Boolean(activeItem)}
         item={activeItem}
+        items={items}
         onClose={() => setActiveItem(null)}
+        onActiveItemChange={setActiveItem}
       />
     </section>
   );

@@ -146,15 +146,15 @@ export const americaShaping = {
         },
         {
           title: "On-Demand Capacity",
-          desc: "Drastically reducing lead times and strengthening local supply resilience for Western markets",
+          desc: "Drastically reducing lead times and strengthening local supply resilience for U.S. power markets",
         },
         {
           title: "Custom Engineering",
           desc: "Tailored system integration designed to accelerate massive infrastructure expansion across North America",
         },
         {
-          title: "Dual-Hub Synergy",
-          desc: "Redundant manufacturing bases in Utah and Texas ensure uninterrupted production and rapid continental shipping",
+          title: "Market Responsiveness",
+          desc: "Enhancing delivery speed and responsiveness for North American customers",
         },
       ],
     },

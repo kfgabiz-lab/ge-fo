@@ -47,7 +47,13 @@ export default function CompanyBlogListToolbar({
   onSortChange,
 }: CompanyBlogListToolbarProps) {
   const [searchDraft, setSearchDraft] = useState(searchValue);
+  const hasQuery = searchDraft.length > 0;
   const submitSearch = () => onSearchSubmit?.(searchDraft.trim());
+  // 검색어 초기화 — 입력값과 적용된 검색 조건을 함께 비운다
+  const clearSearch = () => {
+    setSearchDraft("");
+    onSearchSubmit?.("");
+  };
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") submitSearch();
   };
@@ -85,7 +91,9 @@ export default function CompanyBlogListToolbar({
       </FormControl>
 
       <TextField
-        className="guide_field guide_field--search"
+        className={`guide_field guide_field--search${
+          hasQuery ? " guide_field--search-filled" : ""
+        }`}
         placeholder="Search"
         aria-label="Search blog"
         value={searchDraft}
@@ -96,6 +104,25 @@ export default function CompanyBlogListToolbar({
           input: {
             endAdornment: (
               <InputAdornment position="end" className="guide_field__search-adorn">
+                {hasQuery ? (
+                  <button
+                    type="button"
+                    className="guide_field__search-clear"
+                    aria-label="Clear search"
+                    onClick={clearSearch}
+                  >
+                    <span className="guide_field__search-clear-icon" aria-hidden>
+                      <img
+                        loading="lazy"
+                        decoding="async"
+                        src="/ico/ico_clear_12_black.svg"
+                        alt=""
+                        width={10}
+                        height={10}
+                      />
+                    </span>
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   className="guide_field__search-icon-button"

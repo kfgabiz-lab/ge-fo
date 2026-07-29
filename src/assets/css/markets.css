@@ -610,6 +610,11 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     white-space: pre-line;
   }
 
+  /* Figma 8300:135392 — BESS CTA · btn-lv03 solid + external 14 */
+  section.markets_explore .markets_explore__cta {
+    margin-top: 40px;
+  }
+
   section.markets_explore .markets_explore__img {
     aspect-ratio: 586 / 640;
     overflow: hidden;
@@ -2073,6 +2078,10 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     line-height: 23px;
     color: #666;
     white-space: pre-line;
+  }
+
+  section.markets_explore .markets_explore__cta {
+    margin-top: 24px;
   }
 
   section.markets_explore .markets_explore__img {
@@ -3775,17 +3784,37 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   z-index: 100;
 }
 
+/* Figma 8278:118949 — Rolling 50px on dark (Default / Hover / Disabled) */
 .markets_references_modal__reference-nav-btn {
   position: absolute;
   top: 50%;
-  width: 50px;
-  height: 50px;
-  border: 1px solid rgb(255 255 255 / 35%);
-  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--btn-rolling-50);
+  height: var(--btn-rolling-50);
+  padding: 0;
+  border: 1px solid #fff;
+  border-radius: 50%;
   background: transparent;
   transform: translateY(-50%);
   pointer-events: auto;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.markets_references_modal__reference-nav-btn:hover:not(.is-disabled) {
+  background: #fff;
+  border-color: #fff;
+}
+
+.markets_references_modal__reference-nav-btn.is-disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
 }
 
 .markets_references_modal__reference-nav-btn--prev {
@@ -3800,8 +3829,13 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   display: block;
   width: 18px;
   height: 18px;
-  margin: 0 auto;
   background: url("/ico/ico_arrow_righ_24_white.svg") center / contain no-repeat;
+  transition: filter 0.2s ease;
+}
+
+.markets_references_modal__reference-nav-btn:hover:not(.is-disabled)
+  .markets_references_modal__reference-nav-icon {
+  filter: brightness(0);
 }
 
 .markets_references_modal__reference-nav-btn--prev
@@ -3809,13 +3843,10 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   transform: rotate(180deg);
 }
 
+/* Tablet · narrow desktop — side prev/next 없음 (여유 공간 부족) */
 @media (max-width: 1440px) {
-  .markets_references_modal__reference-nav-btn--prev {
-    left: 10px;
-  }
-
-  .markets_references_modal__reference-nav-btn--next {
-    right: 10px;
+  .markets_references_modal__reference-nav {
+    display: none;
   }
 }
 
@@ -3828,6 +3859,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   .markets_references_modal.common_modal .common_modal__panel {
     max-width: 1200px;
     max-height: min(800px, calc(100vh - 48px));
+    height: 700px;
   }
 
   .markets_references_modal.common_modal .common_modal__head {

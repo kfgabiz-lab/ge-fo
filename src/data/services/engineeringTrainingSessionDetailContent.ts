@@ -338,5 +338,5 @@ export const engineeringTrainingSessionParams = Object.values(
 ).map(({ courseId, sessionId }) => ({ courseId, sessionId }));
 
 export const engineeringTrainingSessionFormCopy = {
-  submitLabel: "REGISTER",
+  submitLabel: "Register",
 } as const;

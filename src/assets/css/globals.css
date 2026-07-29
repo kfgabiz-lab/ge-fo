@@ -298,6 +298,15 @@ section .btn-lv03--line:hover .icon_download {
   opacity: 0.85;
 }
 
+section .btn-lv03--solid .icon_external-18 {
+  display: block;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  background: url("/ico/ico_external_14.svg") center / contain no-repeat;
+  filter: brightness(0) invert(1);
+}
+
 /* Btn 30px Line (Figma Btn / 30px / Line) */
 section .btn-line-30 {
   display: inline-flex;
@@ -1968,6 +1977,18 @@ section.devices_product_downloads .guide_field--search .guide_field__search-icon
   display: block;
   width: 18px;
   height: 18px;
+}
+
+/* 브라우저 기본 search clear 숨김 (커스텀 clear 사용) */
+.guide_field--search input[type="search"]::-webkit-search-cancel-button,
+.guide_field--search input[type="search"]::-webkit-search-decoration,
+.gnb_search__field input[type="search"]::-webkit-search-cancel-button,
+.gnb_search__field input[type="search"]::-webkit-search-decoration,
+.search_all_hero__field input[type="search"]::-webkit-search-cancel-button,
+.search_all_hero__field input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }
 section.component-guide .guide_field .MuiSelect-select,
 section.devices_product_downloads .guide_field .MuiSelect-select , section.support_download_contents .guide_field .MuiSelect-select , section.support_download_search .guide_field .MuiSelect-select , section.support_where_to_buy_contents .guide_field .MuiSelect-select , section.support_where_to_buy_search .guide_field .MuiSelect-select , section.support_contact_form .guide_field .MuiSelect-select, section.support_service_training_curriculum .guide_field .MuiSelect-select , section.support_service_training_detail_schedule .guide_field .MuiSelect-select , section.support_service_training_session_detail .guide_field .MuiSelect-select , section.support_service_training_request .guide_field .MuiSelect-select, section.devices_explore .guide_field .MuiSelect-select, section.common_privacy_policy .guide_field .MuiSelect-select , section.company-blog-list .guide_field .MuiSelect-select , section.company-press-list .guide_field .MuiSelect-select , section.company-articles-list .guide_field .MuiSelect-select , section.company-events-past .guide_field .MuiSelect-select {
