@@ -5,10 +5,17 @@ import { useState } from "react";
 import DevicesProductDownloadsCopyLink from "@/app/()/products-systems/components/product/DevicesProductDownloadsCopyLink";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
-import {
-  fetchDownloadCenterFileUrl,
-  type DownloadCenterItem,
+import type {
+  DownloadCenterFile,
+  DownloadCenterItem,
 } from "@/data/support/downloadCenterData";
+
+function resolveDownloadTarget(file: DownloadCenterFile): string {
+  const src = file.sourceFilePath ?? "";
+  if (src.startsWith("//")) return "https:" + src;
+  if (src.startsWith("http")) return src;
+  return file.filePath ?? "";
+}
 
 function formatDownloadDate(date: string | null): string {
   if (!date) return "";
@@ -35,13 +42,10 @@ export default function DownloadCenterCard({ item }: DownloadCenterCardProps) {
   const files = selectedVersion?.files ?? [];
   const showVersionSelect = versions.length > 1;
 
-  const handleDownload = async (filePath: string | null) => {
-    try {
-      const url = await fetchDownloadCenterFileUrl(filePath);
-      if (url && typeof window !== "undefined") {
-        window.open(url, "_blank", "noopener,noreferrer");
-      }
-    } catch {
+  const handleDownload = (file: DownloadCenterFile) => {
+    const url = resolveDownloadTarget(file);
+    if (url && typeof window !== "undefined") {
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -131,12 +135,12 @@ export default function DownloadCenterCard({ item }: DownloadCenterCardProps) {
                   <div className="devices_product_downloads__file-actions">
                     <DevicesProductDownloadsCopyLink
                       className="devices_product_downloads__file-btn--line"
-                      resolveUrl={() => fetchDownloadCenterFileUrl(file.filePath)}
+                      resolveUrl={async () => resolveDownloadTarget(file)}
                     />
                     <button
                       type="button"
                       className="devices_product_downloads__file-btn devices_product_downloads__file-btn--download"
-                      onClick={() => handleDownload(file.filePath)}
+                      onClick={() => handleDownload(file)}
                     >
                       Download
                       <span

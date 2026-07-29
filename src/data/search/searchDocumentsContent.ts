@@ -39,6 +39,7 @@ function mockDownloadFile(
     fileSizeText,
     sourceSystem: null,
     filePath: null,
+    sourceFilePath: null,
   };
 }
 

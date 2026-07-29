@@ -13,6 +13,7 @@ export interface DownloadCenterFile {
   fileSizeText: string | null;
   sourceSystem: string | null;
   filePath: string | null;
+  sourceFilePath: string | null;
 }
 
 export interface DownloadCenterVersion {
