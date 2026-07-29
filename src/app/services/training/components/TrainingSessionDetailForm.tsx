@@ -509,7 +509,10 @@ export default function TrainingSessionDetailForm({
               className="guide_field guide_field--h50 support_service_training_session_detail__input"
               placeholder="Apartment, suite, etc"
               value={apartment}
-              onChange={(event) => setApartment(event.target.value)}
+              onChange={(event) => {
+                // DC10: 영문만 입력 가능 / 최대 100자
+                setApartment(filterLetters(event.target.value, 100));
+              }}
               slotProps={{ htmlInput: { maxLength: 100 } }}
             />
           </div>
