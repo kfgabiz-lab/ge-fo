@@ -4,7 +4,7 @@ import { fetchTrainingCategories, toCategoryMap } from "../data/trainingData";
 import {
   fetchTrainingCurriculum,
   fetchTrainingDetailRows,
-  fetchTrainingProductNameMap,
+  fetchTrainingProductNameMaps,
   fetchTrainingTypeCodes,
   isCurriculumVisible,
   toTrainingSessionDetail,
@@ -21,13 +21,13 @@ export default async function TrainingSessionPage({
   courseId: string;
   sessionId: string;
 }) {
-  const [rows, curriculum, categoryCodes, trainingTypeCodes, productNameMap] =
+  const [rows, curriculum, categoryCodes, trainingTypeCodes, productNameMaps] =
     await Promise.all([
       fetchTrainingDetailRows(courseId),
       fetchTrainingCurriculum(courseId),
       fetchTrainingCategories(),
       fetchTrainingTypeCodes(),
-      fetchTrainingProductNameMap(),
+      fetchTrainingProductNameMaps(),
     ]);
 
   if (!curriculum || !isCurriculumVisible(curriculum)) {
@@ -44,7 +44,7 @@ export default async function TrainingSessionPage({
     curriculum,
     categoryMap,
     trainingTypeMap,
-    productNameMap,
+    productNameMaps,
   );
   if (!session) {
     notFound();

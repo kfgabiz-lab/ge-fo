@@ -8,7 +8,8 @@ import type { PageDataItem } from "@/lib/pageData";
 import {
   fetchTrainingProductTree,
   resolveTrainingProductNames,
-  toTrainingProductNameMap,
+  toTrainingProductNameMaps,
+  type TrainingProductNameMaps,
 } from "@/lib/training/trainingProductTree";
 import {
   engineeringTrainingDetails,
@@ -122,11 +123,12 @@ const MONTH_ABBR = [
 
 function extractProductNames(
   json: CurrDtlDataJson,
-  nameMap: Map<number, string>,
+  nameMaps: TrainingProductNameMaps,
 ): string[] {
   return resolveTrainingProductNames(
-    [...(json.power_list ?? []), ...(json.automation_list ?? [])],
-    nameMap,
+    json.power_list ?? [],
+    json.automation_list ?? [],
+    nameMaps,
   );
 }
 
@@ -248,7 +250,7 @@ export function toTrainingCourseDetail(
   curriculum: ParentCurriculum,
   categoryMap: Map<string, string>,
   trainingTypeMap: Map<string, string>,
-  productNameMap: Map<number, string>,
+  productNameMaps: TrainingProductNameMaps,
 ): EngineeringTrainingDetail {
   const valid: ParsedRow[] = rows
     .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
@@ -263,7 +265,7 @@ export function toTrainingCourseDetail(
     mediaId != null ? trainingImageSrc(mediaId) : STATIC_COURSE_BASE.heroImage;
 
   const sessions: EngineeringTrainingSession[] = valid.map(({ raw, json }) =>
-    toCourseCard(raw, json, trainingTypeMap, productNameMap),
+    toCourseCard(raw, json, trainingTypeMap, productNameMaps),
   );
 
   return {
@@ -285,7 +287,7 @@ function toCourseCard(
   raw: PageDataItem,
   json: CurrDtlDataJson,
   trainingTypeMap: Map<string, string>,
-  productNameMap: Map<number, string>,
+  productNameMaps: TrainingProductNameMaps,
 ): EngineeringTrainingSession {
   const d1 = json.curriculum_detail1 ?? {};
   const d2 = json.curriculum_detail2 ?? {};
@@ -303,7 +305,7 @@ function toCourseCard(
     location: showAddress
       ? [d2.address_detail, d2.address].filter(Boolean).join(", ") || undefined
       : undefined,
-    productsCovered: extractProductNames(json, productNameMap).join(", "),
+    productsCovered: extractProductNames(json, productNameMaps).join(", "),
     typeCodes,
   };
 }
@@ -315,7 +317,7 @@ export function toTrainingSessionDetail(
   curriculum: ParentCurriculum,
   categoryMap: Map<string, string>,
   trainingTypeMap: Map<string, string>,
-  productNameMap: Map<number, string>,
+  productNameMaps: TrainingProductNameMaps,
 ): EngineeringTrainingSessionDetail | null {
   const matched = rows
     .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
@@ -330,7 +332,7 @@ export function toTrainingSessionDetail(
 
   const categoryLabel = codeLabel(categoryMap, curriculum.product_category);
   const trainingTypeLabel = trainingTypeLabels(d1.training_type, trainingTypeMap);
-  const productsCovered = extractProductNames(json, productNameMap).join(", ");
+  const productsCovered = extractProductNames(json, productNameMaps).join(", ");
   const dateDisplay = formatDisplayDate(d2.training_date_from ?? "");
   const showAddress = shouldShowAddress(d1.training_type);
   const addressFull = showAddress
@@ -427,11 +429,9 @@ export async function fetchTrainingCurriculum(
   return { ...curriculum, id: Number(raw.id) };
 }
 
-export async function fetchTrainingProductNameMap(): Promise<
-  Map<number, string>
-> {
+export async function fetchTrainingProductNameMaps(): Promise<TrainingProductNameMaps> {
   const tree = await fetchTrainingProductTree();
-  return toTrainingProductNameMap(tree.items);
+  return toTrainingProductNameMaps(tree.items);
 }
 
 export async function fetchTrainingCourseTitle(
