@@ -64,13 +64,13 @@ export default function DevicesProductHero({
               <p className="devices_product_hero__subtitle">{product.subtitle}</p>
             ) : null}
           </div>
-          <p className="devices_product_hero__desc" data-slugkey="product.product_description">{product.description}</p>
+          <p className="devices_product_hero__desc" data-slugkey="product_info.info_description">{product.description}</p>
           <hr className="devices_product_hero__line" />
           <dl className="devices_product_hero__specs">
             {product.specs.map((spec, index) => (
               <div key={spec.label} className="devices_product_hero__spec-row">
-                <dt data-slugkey={`product_spec.spec${index + 1}_title`}>{spec.label}</dt>
-                <dd data-slugkey={`product_spec.spec${index + 1}_content`}>{spec.value}</dd>
+                <dt data-slugkey={`product_spec${index + 1}.spec${index + 1}_title`}>{spec.label}</dt>
+                <dd data-slugkey={`product_spec${index + 1}.spec${index + 1}_content`}>{spec.value}</dd>
               </div>
             ))}
           </dl>

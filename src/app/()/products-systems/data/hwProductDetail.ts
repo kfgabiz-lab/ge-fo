@@ -12,7 +12,7 @@ export function buildHwProductDetail(
   const detail: ProductDetail = {
     ...base,
     series: data.name,
-    description: data.description,
+    description: (row["product_info.info_description"] as string) ?? "",
     image: data.image,
     specs: data.specs.map((s) => ({ label: s.title, value: s.content })),
     keyFeatures: data.keyFeatures.map((f, i) => ({

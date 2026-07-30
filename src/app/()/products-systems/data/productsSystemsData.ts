@@ -409,10 +409,10 @@ export interface HwProductData {
 
 export function mapHwProductData(row: Record<string, unknown>): HwProductData {
   const str = (key: string) => (row[key] as string) ?? "";
-  const specs = [1, 2, 3]
+  const specs = [1, 2, 3, 4]
     .map((n) => ({
-      title: str(`product_spec.spec${n}_title`),
-      content: str(`product_spec.spec${n}_content`),
+      title: str(`product_spec${n}.spec${n}_title`),
+      content: str(`product_spec${n}.spec${n}_content`),
     }))
     .filter((s) => s.title || s.content);
   const keyFeatures = [1, 2, 3, 4]
