@@ -15,7 +15,7 @@ export default function MarketsProducts({
   return (
     <section className="markets_products">
       <div className="inner">
-        <h2 className="section_tit">Relavant Products</h2>
+        <h2 className="section_tit">Relevant Products</h2>
         <div className="markets_products__grid">
           {items.map((item) => {
             const badgeType = badgesType2Only
