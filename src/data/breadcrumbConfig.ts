@@ -47,7 +47,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/products-category/lv-products-and-systems": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
     ],
     current: "LV Products and Systems",
   },
@@ -63,7 +63,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/product-range/variable-frequency-drive": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
         href: "/products-category/lv-products-and-systems",
@@ -73,7 +73,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/product/metasol-ms": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
         href: "/products-category/lv-products-and-systems",
@@ -87,7 +87,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/product/h100-plus": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
         href: "/products-category/lv-products-and-systems",
@@ -101,7 +101,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/product/susol-ul-smart-mccb": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
         href: "/products-category/lv-products-and-systems",
@@ -115,41 +115,41 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/products-category/software": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
     ],
     current: "Software",
   },
   [softwareProductHrefs.scada]: {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       { label: "Software", href: SOFTWARE_HREF },
     ],
     current: "SCADA",
   },
   [softwareProductHrefs.xems]: {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       { label: "Software", href: SOFTWARE_HREF },
     ],
     current: "xEMS",
   },
   [softwareProductHrefs.microGrid]: {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       { label: "Software", href: SOFTWARE_HREF },
     ],
     current: "Micro Grid",
   },
   [softwareProductHrefs.smartFactory]: {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       { label: "Software", href: SOFTWARE_HREF },
     ],
     current: "Smart Factory",
   },
   "/product/scada": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       { label: "Software", href: SOFTWARE_HREF },
       { label: "SCADA", href: softwareProductHrefs.scada },
     ],
@@ -157,7 +157,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/product/xems": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       { label: "Software", href: SOFTWARE_HREF },
       { label: "xEMS", href: softwareProductHrefs.xems },
     ],
@@ -165,7 +165,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/product/micro-grid": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       { label: "Software", href: SOFTWARE_HREF },
       { label: "Micro Grid", href: softwareProductHrefs.microGrid },
     ],
@@ -173,7 +173,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/product/smart-factory": {
     crumbs: [
-      { label: "Products & Systems", href: "/products-category/lv-products-and-systems" },
+      { label: "Products & Systems" },
       { label: "Software", href: SOFTWARE_HREF },
       { label: "Smart Factory", href: softwareProductHrefs.smartFactory },
     ],

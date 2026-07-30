@@ -13,6 +13,7 @@ export interface DevicesTreeRow {
   productTitle: string | null;
   productDescription: string | null;
   productImage: string | null;
+  productOrderStatus: string | null;
 }
 
 export async function fetchDevicesTreeRows(): Promise<DevicesTreeRow[]> {

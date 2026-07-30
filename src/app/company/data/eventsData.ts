@@ -8,7 +8,7 @@ import type {
   EventsPastItem,
 } from "@/app/company/data/eventsListContent";
 
-export const EVENTS_PAST_SIZE = 10;
+export const EVENTS_PAST_SIZE = 9;
 
 export const eventsImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 export const eventsDetailHref = (id: number) => `/company/events/detail/${id}`;

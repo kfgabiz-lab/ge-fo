@@ -1,19 +1,32 @@
 import CommonBanner04 from "@/components/banners/CommonBanner04";
 import DevicesExploreAll from "../components/DevicesExploreAll";
-import {
-  resolveExploreHref,
-  withExploreProductCategory,
-  type GnbExploreProduct,
-} from "@/data/gnbExploreAllProducts";
-import { fetchAllProductNames } from "../data/productsSystemsData";
+import type { GnbExploreProduct } from "@/data/gnbExploreAllProducts";
 import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
+import { withCategoryContext } from "@/lib/navigation/categoryContext";
 import "@/assets/css/devices-systems.css";
 
+const MULTI_CATEGORY_PREFERRED_LV2_IDS: readonly string[] = ["587"];
+
+const DISCONTINUED_ORDER_STATUS = "99";
+
+function resolvePrimaryLv2Id(lv2Ids: string[]): string | undefined {
+  if (lv2Ids.length <= 1) return lv2Ids[0];
+  return (
+    MULTI_CATEGORY_PREFERRED_LV2_IDS.find((id) => lv2Ids.includes(id)) ??
+    lv2Ids[0]
+  );
+}
+
+type ExploreProductSource = {
+  productId: number;
+  title: string;
+  slug: string;
+  orderStatus: string;
+  lv2Ids: string[];
+};
+
 export default async function ExploreAllProductsPage() {
-  const [products, deviceRows] = await Promise.all([
-    fetchAllProductNames(),
-    fetchDevicesTreeRows(),
-  ]);
+  const deviceRows = await fetchDevicesTreeRows();
 
   const visibleLv1Ids = new Set(
     deviceRows.filter((r) => r.depth === "1").map((r) => String(r.rowId)),
@@ -22,20 +35,44 @@ export default async function ExploreAllProductsPage() {
     (r) => r.depth === "2" && r.parentId != null && visibleLv1Ids.has(r.parentId),
   );
   const visibleLv2Ids = new Set(visibleLv2Rows.map((r) => String(r.rowId)));
-  const productLv2Map = new Map<number, Set<string>>();
+
+  const productSources = new Map<number, ExploreProductSource>();
   for (const r of deviceRows) {
-    if (r.depth !== "3" || r.productId == null || r.parentId == null) continue;
-    const set = productLv2Map.get(r.productId) ?? new Set<string>();
-    set.add(r.parentId);
-    productLv2Map.set(r.productId, set);
+    if (r.depth !== "3") continue;
+    if (r.productId == null || r.parentId == null) continue;
+    if (!visibleLv2Ids.has(r.parentId)) continue;
+    if (!r.productTitle) continue;
+
+    const existing = productSources.get(r.productId);
+    if (existing) {
+      if (!existing.lv2Ids.includes(r.parentId)) {
+        existing.lv2Ids.push(r.parentId);
+      }
+      continue;
+    }
+    productSources.set(r.productId, {
+      productId: r.productId,
+      title: r.productTitle,
+      slug: r.productSlug ?? "",
+      orderStatus: r.productOrderStatus ?? "",
+      lv2Ids: [r.parentId],
+    });
   }
 
-  const lv2IdBySlug = new Map<string, string>();
-  for (const r of deviceRows) {
-    if (r.depth !== "3" || !r.productSlug || r.parentId == null) continue;
-    if (!visibleLv2Ids.has(r.parentId)) continue;
-    if (!lv2IdBySlug.has(r.productSlug)) lv2IdBySlug.set(r.productSlug, r.parentId);
-  }
+  const exploreProducts: GnbExploreProduct[] = [...productSources.values()].map(
+    (source) => ({
+      id: String(source.productId),
+      label: source.title,
+      href: source.slug
+        ? withCategoryContext(
+            `/product/${source.slug}`,
+            resolvePrimaryLv2Id(source.lv2Ids),
+          )
+        : "#",
+      discontinued: source.orderStatus === DISCONTINUED_ORDER_STATUS,
+      lv2Ids: source.lv2Ids,
+    }),
+  );
 
   const lv1Categories = deviceRows
     .filter((r) => r.depth === "1")
@@ -48,29 +85,6 @@ export default async function ExploreAllProductsPage() {
       label: r.categoryTitle ?? "",
     });
   }
-
-  const exploreProducts: GnbExploreProduct[] | undefined =
-    products.length > 0
-      ? products
-          .map((p) => {
-            const mapped = productLv2Map.get(p.id);
-            const lv2Ids = mapped
-              ? [...mapped].filter((id) => visibleLv2Ids.has(id))
-              : [];
-            return { p, lv2Ids };
-          })
-          .filter(({ lv2Ids }) => lv2Ids.length > 0)
-          .map(({ p, lv2Ids }) => ({
-            id: String(p.id),
-            label: p.name,
-            href: withExploreProductCategory(
-              resolveExploreHref(p.name),
-              lv2IdBySlug,
-            ),
-            discontinued: p.orderStatus === "99",
-            lv2Ids,
-          }))
-      : undefined;
 
   return (
     <main className="devices-page" id="Page_devices_explore_all">

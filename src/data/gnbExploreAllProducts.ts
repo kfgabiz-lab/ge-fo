@@ -1,5 +1,3 @@
-import { withCategoryContext } from "@/lib/navigation/categoryContext";
-
 export const EXPLORE_ALL_PRODUCTS_PATH = "/products-systems/explore-all";
 
 export type GnbExploreProduct = {
@@ -7,7 +5,6 @@ export type GnbExploreProduct = {
   label: string;
   href: string;
   discontinued?: boolean;
-  lv1Id?: string;
   lv2Ids?: string[];
 };
 
@@ -15,162 +12,6 @@ export type GnbExploreLetterGroup = {
   letter: string;
   items: GnbExploreProduct[];
 };
-
-const productHrefMap: Record<string, string> = {
-  DMPi: "/product/metasol-ms",
-  GMP: "/product/metasol-ms",
-  HVDC: "/product/scada",
-  "H100 Plus": "/product/h100-plus",
-  IMP: "/product/metasol-ms",
-  "Metasol MS": "/product/metasol-ms",
-  MMP: "/product/metasol-ms",
-  SCADA: "/product/scada",
-  "Diagnosis System": "/product/smart-factory",
-  "Micro Grid": "/product/micro-grid",
-  "Smart Factory": "/product/smart-factory",
-  xEMS: "/product/xems",
-  "Susol UL ACB": "/product/metasol-ms",
-  "Susol UL MCCB": "/product/susol-ul-smart-mccb",
-};
-
-const lv1IdMap: Record<string, string> = {
-  "Cast Resin Transformer": "mv",
-  "Dead Tank Circuit Breaker": "hv",
-  "Diagnosis System": "software",
-  FACTS: "hv",
-  GIS: "hv",
-  "HVDC": "hv",
-  "Metal Clad Switchgear": "mv",
-  "Metal Enclosed Load Interrupter\nSwitchgear": "mv",
-  "Micro Grid": "software",
-  "Motion Controllers": "automation",
-  "MV Fuse": "mv",
-  "MV MCC": "mv",
-  "Padmount Switchgear": "mv",
-  "Padmount Transformer": "mv",
-  "PHOX Servo Drives": "automation",
-  "Power Transformer": "hv",
-  "Servo Motors": "automation",
-  "SMART I/O": "automation",
-  "Smart Factory": "software",
-  xEMS: "software",
-  XGB: "automation",
-  XGT: "automation",
-};
-
-const discontinuedLabels = new Set(["BK-Series_DIN SPD(UL)"]);
-
-function slugify(label: string): string {
-  return label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-function product(label: string, href?: string): GnbExploreProduct {
-  const normalized = label.replace(/\n/g, " ");
-  const lv1Id =
-    lv1IdMap[label] ??
-    (normalized.startsWith("DC ") ? "dc" : undefined) ??
-    "lv";
-
-  return {
-    id: slugify(label),
-    label,
-    href: href ?? productHrefMap[normalized] ?? productHrefMap[label] ?? "/products-category/lv-products-and-systems",
-    discontinued: discontinuedLabels.has(label),
-    lv1Id,
-  };
-}
-
-export const gnbExploreAllProducts: GnbExploreProduct[] = [
-  "BK-Series_DIN SPD(UL)",
-  "BK-Series_UL Type",
-  "Cast Resin Transformer",
-  "DC Magnetic Contactor",
-  "DC MCB(Miniature Circuit Breaker)",
-  "DC MCCB/Disconnect(Up to 600A)",
-  "DC Relay",
-  "DC Surge Protective Device(UL1449)",
-  "Dead Tank Circuit Breaker",
-  "Diagnosis System",
-  "DMPi",
-  "E House",
-  "eXP2",
-  "FACTS",
-  "G100",
-  "GFCI",
-  "GIS",
-  "GMP",
-  "H100 Plus",
-  "HVDC",
-  "IEC DC ACB & Switch-Disconnector",
-  "IMP",
-  "iS7",
-  "iX7M Servo Drives",
-  "iX7NH Servo Drives",
-  "iXP3",
-  "L7NH Servo Drives",
-  "L7P Servo Drives",
-  "Load Interrupter Switch",
-  "L-Series_UL Type",
-  "LV MCC",
-  "LXP",
-  "M100",
-  "Metal Clad Switchgear",
-  "Metal Enclosed Load Interrupter\nSwitchgear",
-  "Metasol MS",
-  "Micro Grid",
-  "Mini MS",
-  "MMP",
-  "MMS",
-  "Motion Controllers",
-  "MV Fuse",
-  "MV MCC",
-  "Padmount Switchgear",
-  "Padmount Transformer",
-  "PHOX Servo Drives",
-  "Power Transformer",
-  "Remote Power Panel",
-  "S100",
-  "SAFETY",
-  "SCADA",
-  "Secondary Unit Substation",
-  "Servo Motors",
-  "SMART I/O",
-  "SP100",
-  "Susol UL ACB",
-  "Susol UL MCCB",
-  "Susol UL VCB",
-  "Thermal Overload Relay",
-  "UL DC Compact Switch-Disconnector",
-  "UL DC Switch-Disconnector",
-  "UL SPD",
-  "UL1558 Switchgear",
-  "UL67 Panelboard",
-  "UL891 Switchboard",
-  "xEMS",
-  "XGB",
-  "XGT",
-].map((label) => product(label));
-
-export function resolveExploreHref(label: string): string {
-  const normalized = label.replace(/\n/g, " ");
-  return (
-    productHrefMap[normalized] ??
-    productHrefMap[label] ??
-    "/products-category/lv-products-and-systems"
-  );
-}
-
-export function withExploreProductCategory(
-  href: string,
-  lv2IdBySlug: ReadonlyMap<string, string>,
-): string {
-  const matched = href.match(/^\/product\/([^/?#]+)$/);
-  if (!matched) return href;
-  return withCategoryContext(href, lv2IdBySlug.get(matched[1]));
-}
 
 function getFirstLetter(label: string): string {
   const match = label.replace(/^\s+/, "").match(/[A-Za-z]/);
