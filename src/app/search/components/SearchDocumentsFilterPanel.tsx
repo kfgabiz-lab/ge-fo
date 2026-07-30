@@ -7,10 +7,9 @@ import {
   DevicesProductDownloadsFilterSection,
 } from "@/app/()/products-systems/components/product/DevicesProductDownloadsFilterParts";
 import {
-  searchDocumentCategories,
-  searchDocumentTypes,
-} from "@/data/search/searchDocumentsContent";
-import { useSearchDocumentsFilter } from "./SearchDocumentsFilterProvider";
+  useSearchDocumentsFilter,
+  useSearchDocumentsFilterOptions,
+} from "./SearchDocumentsFilterProvider";
 
 type SearchDocumentsFilterPanelProps = {
   variant?: "sidebar" | "modal";
@@ -22,6 +21,7 @@ export default function SearchDocumentsFilterPanel({
   sidebarClassName,
 }: SearchDocumentsFilterPanelProps) {
   const { isChecked, toggleFilter, clearSection } = useSearchDocumentsFilter();
+  const { categories, documentTypes } = useSearchDocumentsFilterOptions();
 
   const productCategorySection = (
     <DevicesProductDownloadsFilterSection
@@ -29,7 +29,7 @@ export default function SearchDocumentsFilterPanel({
       compactHead={variant === "modal"}
       onRefresh={() => clearSection("category")}
     >
-      {searchDocumentCategories.map((option) => (
+      {categories.map((option) => (
         <DevicesProductDownloadsCategoryFilterRow
           key={option.id}
           option={option}
@@ -48,7 +48,7 @@ export default function SearchDocumentsFilterPanel({
       compactHead={variant === "modal"}
       onRefresh={() => clearSection("document")}
     >
-      {searchDocumentTypes.map((option) => {
+      {documentTypes.map((option) => {
         const filterId = `search-document-type-${option.id}`;
 
         return (

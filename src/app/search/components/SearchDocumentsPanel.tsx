@@ -1,31 +1,87 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import SearchDocumentsActiveFilters from "./SearchDocumentsActiveFilters";
 import SearchDocumentsCard from "./SearchDocumentsCard";
 import SearchDocumentsFilterPanel from "./SearchDocumentsFilterPanel";
 import SearchEmptyResult from "./SearchEmptyResult";
-import { SearchDocumentsFilterProvider } from "./SearchDocumentsFilterProvider";
 import {
-  getSearchDocumentPageItems,
-  searchDocumentsDemoKeyword,
-  searchDocumentsPage,
-} from "@/data/search/searchDocumentsContent";
+  SearchDocumentsFilterProvider,
+  useSearchDocumentsFilter,
+} from "./SearchDocumentsFilterProvider";
+import { searchDocumentsPage } from "@/data/search/searchDocumentsContent";
+import { downloadDocTypeCodes } from "@/data/support/downloadCenterContent";
+import {
+  fetchDownloadCenterContents,
+  type DownloadCenterItem,
+} from "@/data/support/downloadCenterData";
 import { searchAllListClasses } from "./searchAllListClasses";
+
+const { pageSize: PAGE_SIZE } = searchDocumentsPage;
+
+const VALID_DOC_TYPE_CODES = new Set<string>(downloadDocTypeCodes);
 
 function SearchDocumentsPanelContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
-  const { totalResults, pageSize } = searchDocumentsPage;
-  const totalPages = Math.max(1, Math.ceil(totalResults / pageSize));
+  const [items, setItems] = useState<DownloadCenterItem[]>([]);
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loaded, setLoaded] = useState(false);
 
-  const pageItems = useMemo(
-    () => getSearchDocumentPageItems(currentPage, pageSize),
-    [currentPage, pageSize],
+  const searchParams = useSearchParams();
+  const query = (searchParams.get("q") ?? "").trim();
+
+  const { getSelectedCategoryValues } = useSearchDocumentsFilter();
+  const selectedCategories = getSelectedCategoryValues("category");
+  const categoryKey = [...selectedCategories].sort().join(",");
+  const selectedDocTypes = getSelectedCategoryValues("document").filter((code) =>
+    VALID_DOC_TYPE_CODES.has(code),
   );
-  const isEmptyResult = pageItems.length === 0;
+  const docTypeKey = [...selectedDocTypes].sort().join(",");
+
+  const isEmptyResult = loaded && items.length === 0;
+
+  const firstResetRef = useRef(true);
+  useEffect(() => {
+    if (firstResetRef.current) {
+      firstResetRef.current = false;
+      return;
+    }
+    setCurrentPage(1);
+  }, [query, categoryKey, docTypeKey]);
+
+  useEffect(() => {
+    if (!query) {
+      setItems([]);
+      setTotalElements(0);
+      setTotalPages(1);
+      setLoaded(true);
+      return;
+    }
+
+    let alive = true;
+    void fetchDownloadCenterContents({
+      q: query,
+      categories: selectedCategories,
+      docTypes: selectedDocTypes,
+      page: currentPage - 1,
+      size: PAGE_SIZE,
+    }).then((res) => {
+      if (!alive) return;
+      setItems(res.content);
+      setTotalElements(res.totalElements);
+      setTotalPages(Math.max(1, res.totalPages));
+      setLoaded(true);
+    });
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, categoryKey, docTypeKey, currentPage]);
 
   return (
     <section
@@ -64,22 +120,19 @@ function SearchDocumentsPanelContent() {
 
             <div className="search_documents__results">
               <p className="search_documents__count">
-                Total <strong>{totalResults.toLocaleString()}</strong>
+                Total <strong>{totalElements.toLocaleString()}</strong>
               </p>
 
               {isEmptyResult ? (
                 <SearchEmptyResult />
               ) : (
                 <ul className="search_documents__list">
-                  {pageItems.map((item, index) => (
+                  {items.map((item, index) => (
                     <li
                       key={`${item.id}-${currentPage}-${index}`}
                       className={searchAllListClasses.item}
                     >
-                      <SearchDocumentsCard
-                        item={item}
-                        searchTerm={searchDocumentsDemoKeyword}
-                      />
+                      <SearchDocumentsCard item={item} searchTerm={query} />
                     </li>
                   ))}
                 </ul>

@@ -40,15 +40,14 @@ export type SearchTabId = "all" | "products" | "documents" | "media" | "pages";
 export type SearchTab = {
   id: SearchTabId;
   label: string;
-  count: number;
 };
 
 export const searchAllTabs: SearchTab[] = [
-  { id: "all", label: "All", count: 99 },
-  { id: "products", label: "Products", count: 60 },
-  { id: "documents", label: "Documents", count: 20 },
-  { id: "media", label: "Media", count: 10 },
-  { id: "pages", label: "Pages", count: 16 },
+  { id: "all", label: "All" },
+  { id: "products", label: "Products" },
+  { id: "documents", label: "Documents" },
+  { id: "media", label: "Media" },
+  { id: "pages", label: "Pages" },
 ];
 
 export type SearchProductItem = {
@@ -191,14 +190,6 @@ export const searchAllDocuments: ProductDownloadItem[] = [
     files: [productDownloadFile({ name: "[HVDC_and_FACTS]_EN_C84602-02-201905.pdf", size: "4.62MB", url: "https://www.ls-electric.com/download/%5BHVDC_and_FACTS%5D_EN_C84602-02-201905.pdf" })],
   },
 ];
-
-export const searchSectionExploreLinks: Record<
-  "products" | "documents",
-  string
-> = {
-  products: "/products-systems/explore-all",
-  documents: "/support/download-center",
-};
 
 export const searchEmptyResult = {
   title: "We could not find any results",

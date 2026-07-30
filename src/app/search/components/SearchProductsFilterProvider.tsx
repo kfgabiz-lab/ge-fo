@@ -10,7 +10,6 @@ import {
 } from "react";
 import { createSupportFilterStore } from "@/app/support/components/createSupportFilterStore";
 import type { DownloadCategoryOption } from "@/data/support/downloadCenterContent";
-import { searchProductDocumentTypes } from "@/data/search/searchProductsContent";
 import { fetchSearchProductCategoryTree } from "@/data/search/searchAllProductsData";
 
 const store = createSupportFilterStore({
@@ -22,7 +21,7 @@ const store = createSupportFilterStore({
   secondaryIdPrefix: "search-product-doc",
   secondaryGroup: "Types",
   secondarySection: "document",
-  secondaryOptions: searchProductDocumentTypes,
+  secondaryOptions: [],
 });
 
 export const useSearchProductsFilter = store.useFilter;

@@ -35,7 +35,6 @@ import {
   searchAllAiSummary,
   searchAllPage,
   searchAllTabs,
-  searchSectionExploreLinks,
   toSearchTabId,
   type SearchTabId,
 } from "@/data/search/searchAllContent";
@@ -152,7 +151,7 @@ export default function SearchAllTabContent({
 
   useEffect(() => {
     let alive = true;
-    void fetchSearchAllDocuments(query, 10).then((result) => {
+    void fetchSearchAllDocuments(query, 4).then((result) => {
       if (!alive) return;
       setDocumentResult(result);
       setLoaded((prev) => ({ ...prev, documents: true }));
@@ -186,11 +185,17 @@ export default function SearchAllTabContent({
     };
   }, [query]);
 
+  const isAllLoaded =
+    loaded.products && loaded.documents && loaded.media && loaded.pages;
+
+  const allTotal =
+    productResult.total +
+    documentResult.total +
+    mediaResult.totalElements +
+    pagesResult.totalElements;
+
   const isAllTabEmpty =
-    loaded.products &&
-    loaded.documents &&
-    loaded.media &&
-    loaded.pages &&
+    isAllLoaded &&
     productResult.items.length === 0 &&
     documentResult.items.length === 0 &&
     mediaResult.items.length === 0 &&
@@ -204,7 +209,9 @@ export default function SearchAllTabContent({
             const isActive = activeTab === tab.id;
             const countLabel =
               tab.id === "all"
-                ? `${tab.count}+`
+                ? isAllLoaded
+                  ? formatSearchCount(allTotal)
+                  : "–"
                 : tab.id === "products"
                   ? formatSearchCount(productResult.total)
                   : tab.id === "documents"
@@ -213,7 +220,7 @@ export default function SearchAllTabContent({
                       ? formatSearchCount(mediaResult.totalElements)
                       : tab.id === "pages"
                         ? formatSearchCount(pagesResult.totalElements)
-                        : String(tab.count);
+                        : "";
             return (
               <button
                 key={tab.id}
@@ -282,7 +289,7 @@ export default function SearchAllTabContent({
             <SearchSectionHead
               title="Product"
               count={formatSearchCount(productResult.total)}
-              exploreHref={searchSectionExploreLinks.products}
+              exploreHref={buildSearchTabHref(query, "products")}
             />
             <div className="search_all__products">
               {productResult.items.map((item) => (
@@ -297,7 +304,7 @@ export default function SearchAllTabContent({
             <SearchSectionHead
               title="Documents"
               count={formatSearchCount(documentResult.total)}
-              exploreHref={searchSectionExploreLinks.documents}
+              exploreHref={buildSearchTabHref(query, "documents")}
             />
             <div className="search_all__documents-grid">
               {documentResult.items.map((item) => (

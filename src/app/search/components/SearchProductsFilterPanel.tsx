@@ -3,10 +3,8 @@
 import DevicesProductDownloadsFilter from "@/app/()/products-systems/components/product/DevicesProductDownloadsFilter";
 import {
   DevicesProductDownloadsCategoryFilterRow,
-  DevicesProductDownloadsFilterCheckRow,
   DevicesProductDownloadsFilterSection,
 } from "@/app/()/products-systems/components/product/DevicesProductDownloadsFilterParts";
-import { searchProductDocumentTypes } from "@/data/search/searchProductsContent";
 import {
   useSearchProductsCategories,
   useSearchProductsFilter,
@@ -42,37 +40,10 @@ export default function SearchProductsFilterPanel({
     </DevicesProductDownloadsFilterSection>
   );
 
-  const documentTypeSection = (
-    <DevicesProductDownloadsFilterSection
-      title="Document Type"
-      variant={variant === "sidebar" ? "document" : undefined}
-      compactHead={variant === "modal"}
-      onRefresh={() => clearSection("document")}
-    >
-      {searchProductDocumentTypes.map((option) => {
-        const filterId = `search-product-doc-${option.id}`;
-
-        return (
-          <DevicesProductDownloadsFilterCheckRow
-            key={option.id}
-            id={filterId}
-            label={option.label}
-            count={option.count}
-            defaultChecked={option.defaultChecked}
-            checked={isChecked(filterId)}
-            onCheckedChange={(checked) => toggleFilter(filterId, checked)}
-          />
-        );
-      })}
-    </DevicesProductDownloadsFilterSection>
-  );
-
   if (variant === "modal") {
     return (
       <div className="support_download_filter-modal__panel">
         {productCategorySection}
-        <hr className="support_download_filter-modal__divider" aria-hidden />
-        {documentTypeSection}
       </div>
     );
   }
@@ -80,7 +51,6 @@ export default function SearchProductsFilterPanel({
   return (
     <DevicesProductDownloadsFilter className={sidebarClassName}>
       {productCategorySection}
-      {documentTypeSection}
     </DevicesProductDownloadsFilter>
   );
 }
