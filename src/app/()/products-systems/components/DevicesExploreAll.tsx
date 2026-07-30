@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import DevicesExploreAllToolbar from "./DevicesExploreAllToolbar";
 import {
   chunkLetterGroups,
-  gnbExploreAllProducts,
   groupExploreProductsByLetter,
   type GnbExploreLetterGroup,
   type GnbExploreProduct,
@@ -35,6 +34,8 @@ function ExploreLetterColumn({ group }: { group: GnbExploreLetterGroup }) {
                 href={item.href}
                 prefetch={false}
                 className="devices_explore__link devices_explore__link--discontinued"
+                aria-disabled="true"
+                onClick={(event) => event.preventDefault()}
               >
                 <span className="devices_explore__link-text" data-slugkey="product.product_name">
                   {renderProductLabel(item.label, item.id)}
@@ -67,7 +68,7 @@ export default function DevicesExploreAll({
   const [showDiscontinued, setShowDiscontinued] = useState(true);
   const [selectedLv1, setSelectedLv1] = useState("");
   const [selectedLv2, setSelectedLv2] = useState("");
-  const source = productsData ?? gnbExploreAllProducts;
+  const source = productsData ?? [];
 
   const lv2Categories = selectedLv1 ? lv2CategoriesByLv1[selectedLv1] ?? [] : [];
 

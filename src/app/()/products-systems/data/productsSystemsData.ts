@@ -462,33 +462,6 @@ export async function fetchProductFaqItems(
   }
 }
 
-export interface ProductNameItem {
-  id: number;
-  name: string;
-  orderStatus: string;
-}
-
-export async function fetchAllProductNames(): Promise<ProductNameItem[]> {
-  try {
-    const res = await fetchData<Record<string, unknown>>({
-      slug: "product-data",
-      where: { "eq_product.is_visible": "001" },
-      sort: "product.product_name,asc",
-      unpaged: true,
-      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
-    });
-    return res.content
-      .map((row) => ({
-        id: Number(row._id),
-        name: (row["product.product_name"] as string) ?? "",
-        orderStatus: (row["product.order_status"] as string) ?? "",
-      }))
-      .filter((p) => p.name);
-  } catch {
-    return [];
-  }
-}
-
 async function fetchProductAwardsMap(): Promise<Map<number, string>> {
   const map = new Map<number, string>();
   try {

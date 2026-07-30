@@ -47,7 +47,6 @@ type HeaderBreadcrumbProps = {
 
 const PRODUCTS_ROOT_CRUMB: BreadcrumbCrumb = {
   label: "Products & Systems",
-  href: "/products-category/lv-products-and-systems",
 };
 
 function toProductList(

@@ -4,7 +4,7 @@ import { fetchTrainingCategories, toCategoryMap } from "../data/trainingData";
 import {
   fetchTrainingCurriculum,
   fetchTrainingDetailRows,
-  fetchTrainingProductNameMap,
+  fetchTrainingProductNameMaps,
   fetchTrainingTypeCodes,
   isCurriculumVisible,
   toTrainingCourseDetail,
@@ -20,13 +20,13 @@ export default async function TrainingDetailPage({
   variant: TrainingVariant;
   courseId: string;
 }) {
-  const [rows, curriculum, categoryCodes, trainingTypeCodes, productNameMap] =
+  const [rows, curriculum, categoryCodes, trainingTypeCodes, productNameMaps] =
     await Promise.all([
       fetchTrainingDetailRows(courseId),
       fetchTrainingCurriculum(courseId),
       fetchTrainingCategories(),
       fetchTrainingTypeCodes(),
-      fetchTrainingProductNameMap(),
+      fetchTrainingProductNameMaps(),
     ]);
 
   if (!curriculum || !isCurriculumVisible(curriculum)) {
@@ -42,7 +42,7 @@ export default async function TrainingDetailPage({
     curriculum,
     categoryMap,
     trainingTypeMap,
-    productNameMap,
+    productNameMaps,
   );
 
   const hrefPrefix = `/services/${variant}-training`;

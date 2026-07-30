@@ -1176,7 +1176,6 @@ html.is-mega-open-scroll-lock body {
 
 .gnb_menu_wrap .logo img {
   display: block;
-  height: 24px;
   width: auto;
   transition: filter 0.3s ease;
 }

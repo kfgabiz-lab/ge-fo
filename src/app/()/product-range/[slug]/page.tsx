@@ -15,8 +15,6 @@ import {
 import { fetchCategoryInsightsLv2 } from "@/data/highlightNews";
 import "@/assets/css/devices-systems.css";
 
-const LANDING_HREF = "/products-category/lv-products-and-systems";
-
 type ProductRangePageProps = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ category?: string }>;
@@ -36,7 +34,6 @@ export default async function ProductRangeRoutePage({
     const highlightItems = await fetchCategoryInsightsLv2(category.id);
     const intro = {
       parentLabel: "Products & Systems",
-      parentHref: LANDING_HREF,
       title: category.title,
       description: category.description,
     };

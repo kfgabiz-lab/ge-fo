@@ -1594,6 +1594,7 @@ section.devices_explore .guide_field .MuiSelect-icon.MuiSelect-iconOpen {
     justify-content: space-between;
     gap: 12px;
     color: #888;
+    cursor: not-allowed;
   }
 
   section.devices_explore .devices_explore__link-text {
@@ -1825,6 +1826,7 @@ section.devices_explore .guide_field .MuiSelect-icon.MuiSelect-iconOpen {
     justify-content: space-between;
     gap: 12px;
     color: #888;
+    cursor: not-allowed;
   }
 
   section.devices_explore .devices_explore__status {

@@ -9,7 +9,7 @@ export const gnbNavItems: GnbNavItem[] = [
   {
     id: "devices",
     label: "Products & Systems",
-    href: "/products-category/lv-products-and-systems",
+    href: "",
     megaMenu: { type: "devices", panelId: GNB_MEGA_PANEL_ID.devices, categories: [] },
   },
   {
