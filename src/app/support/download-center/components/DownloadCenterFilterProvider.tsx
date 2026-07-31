@@ -10,24 +10,15 @@ import {
 } from "react";
 import { createSupportFilterStore } from "@/app/support/components/createSupportFilterStore";
 import {
-  downloadDocTypeCodes,
-  downloadDocumentTypes,
   type DownloadCategoryOption,
   type DownloadFilterOption,
 } from "@/data/support/downloadCenterContent";
 import {
   fetchDownloadCenterCategoryTree,
-  fetchDownloadCenterDocTypeCounts,
+  fetchDownloadDocTypeFilters,
   type DownloadCenterSort,
 } from "@/data/support/downloadCenterData";
 import { fetchPopularKeywords } from "@/data/search/searchKeywordData";
-
-const DOC_TYPE_API_CODES = new Set<string>(downloadDocTypeCodes);
-
-const DOC_TYPES_PENDING: DownloadFilterOption[] = downloadDocumentTypes.map(
-  (opt) =>
-    DOC_TYPE_API_CODES.has(opt.id) ? { ...opt, count: undefined } : opt,
-);
 
 const store = createSupportFilterStore({
   displayName: "DownloadCenter",
@@ -38,7 +29,7 @@ const store = createSupportFilterStore({
   secondaryIdPrefix: "dc-doc",
   secondaryGroup: "Types",
   secondarySection: "document",
-  secondaryOptions: downloadDocumentTypes,
+  secondaryOptions: [],
 });
 
 export const DownloadCenterFilterBoundary = store.Boundary;
@@ -77,8 +68,7 @@ export function DownloadCenterFilterProvider({
 }) {
   const [categories, setCategories] = useState<DownloadCategoryOption[]>([]);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
-  const [documentTypes, setDocumentTypes] =
-    useState<DownloadFilterOption[]>(DOC_TYPES_PENDING);
+  const [documentTypes, setDocumentTypes] = useState<DownloadFilterOption[]>([]);
   const [popularKeywords, setPopularKeywords] = useState<string[]>([]);
   const [query, setQueryState] = useState("");
   const [page, setPage] = useState(1);
@@ -101,14 +91,9 @@ export function DownloadCenterFilterProvider({
 
   useEffect(() => {
     let alive = true;
-    fetchDownloadCenterDocTypeCounts().then((counts) => {
+    fetchDownloadDocTypeFilters().then((options) => {
       if (!alive) return;
-      const countMap = new Map(counts.map((c) => [c.docType, c.count]));
-      setDocumentTypes(
-        downloadDocumentTypes.map((opt) =>
-          countMap.has(opt.id) ? { ...opt, count: countMap.get(opt.id) } : opt,
-        ),
-      );
+      setDocumentTypes(options);
     });
     return () => {
       alive = false;
@@ -161,7 +146,9 @@ export function DownloadCenterFilterProvider({
 
   return (
     <DownloadCenterQueryContext.Provider value={queryValue}>
-      <store.Provider categories={categories}>{children}</store.Provider>
+      <store.Provider categories={categories} secondaryOptions={documentTypes}>
+        {children}
+      </store.Provider>
     </DownloadCenterQueryContext.Provider>
   );
 }

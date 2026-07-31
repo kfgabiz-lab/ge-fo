@@ -124,19 +124,6 @@ export const downloadProductCategories: DownloadCategoryOption[] = [
   { id: "software-cat", label: "Software", count: 30, hasArrow: true },
 ];
 
-export const downloadDocumentTypes: DownloadFilterOption[] = [
-  { id: "C", label: "Catalogs", count: 100 },
-  { id: "M", label: "Manuals", count: 100 },
-  { id: "D", label: "Drawings", count: 100 },
-  { id: "R", label: "Certificates", count: 100 },
-  { id: "S", label: "Software", count: 100 },
-  { id: "O", label: "Tech Data", count: 100 },
-];
-
-export const downloadDocTypeCodes = ["C", "M", "D", "S", "R", "O"] as const;
-
-export const productDownloadsDefaultDocTypes: string[] = [...downloadDocTypeCodes];
-
 const downloadVersions = ["V38.0", "V37.0", "V36.0"];
 
 export const downloadCenterItems: DownloadCenterItem[] = [

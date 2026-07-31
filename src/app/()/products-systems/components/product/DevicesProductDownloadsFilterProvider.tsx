@@ -9,34 +9,21 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import {
-  downloadDocTypeCodes,
-  downloadDocumentTypes,
-  productDownloadsDefaultDocTypes,
-  type DownloadFilterOption,
-} from "@/data/support/downloadCenterContent";
-import { fetchDownloadCenterDocTypeCounts } from "@/data/support/downloadCenterData";
-
-const DOC_TYPE_API_CODES = new Set<string>(downloadDocTypeCodes);
-const DEFAULT_CHECKED_DOC_TYPES = new Set<string>(
-  productDownloadsDefaultDocTypes,
-);
-
-const DOC_TYPES_PENDING: DownloadFilterOption[] = downloadDocumentTypes.map(
-  (option) =>
-    DOC_TYPE_API_CODES.has(option.id) ? { ...option, count: undefined } : option,
-);
+import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
+import { fetchDownloadDocTypeFilters } from "@/data/support/downloadCenterData";
 
 function buildFilterId(optionId: string) {
   return `pd-doc-${optionId}`;
 }
 
-function buildInitialChecked(): Record<string, boolean> {
+function buildCheckedState(
+  options: DownloadFilterOption[],
+  resolve: (optionId: string) => boolean,
+): Record<string, boolean> {
   const checked: Record<string, boolean> = {};
 
-  for (const option of downloadDocumentTypes) {
-    checked[buildFilterId(option.id)] =
-      DEFAULT_CHECKED_DOC_TYPES.has(option.id) || Boolean(option.defaultChecked);
+  for (const option of options) {
+    checked[buildFilterId(option.id)] = resolve(option.id);
   }
 
   return checked;
@@ -68,9 +55,11 @@ export function useDevicesProductDownloadsFilter() {
 export function DevicesProductDownloadsFilterBoundary({
   children,
   productCodes = [],
+  docTypeOptions = [],
 }: {
   children: ReactNode;
   productCodes?: string[];
+  docTypeOptions?: DownloadFilterOption[];
 }) {
   const context = useContext(DevicesProductDownloadsFilterContext);
 
@@ -79,7 +68,10 @@ export function DevicesProductDownloadsFilterBoundary({
   }
 
   return (
-    <DevicesProductDownloadsFilterProvider productCodes={productCodes}>
+    <DevicesProductDownloadsFilterProvider
+      productCodes={productCodes}
+      docTypeOptions={docTypeOptions}
+    >
       {children}
     </DevicesProductDownloadsFilterProvider>
   );
@@ -88,30 +80,35 @@ export function DevicesProductDownloadsFilterBoundary({
 export function DevicesProductDownloadsFilterProvider({
   children,
   productCodes = [],
+  docTypeOptions = [],
 }: {
   children: ReactNode;
   productCodes?: string[];
+  docTypeOptions?: DownloadFilterOption[];
 }) {
-  const [checked, setChecked] = useState(buildInitialChecked);
   const [documentTypes, setDocumentTypes] =
-    useState<DownloadFilterOption[]>(DOC_TYPES_PENDING);
+    useState<DownloadFilterOption[]>(docTypeOptions);
+  const [checked, setChecked] = useState(() =>
+    buildCheckedState(docTypeOptions, () => true),
+  );
 
   const productCodeKey = [...productCodes].sort().join(",");
 
   useEffect(() => {
     let alive = true;
     const codes = productCodeKey ? productCodeKey.split(",") : [];
-    fetchDownloadCenterDocTypeCounts(codes).then((counts) => {
-      if (!alive) return;
-      const countMap = new Map(counts.map((c) => [c.docType, c.count]));
-      setDocumentTypes(
-        downloadDocumentTypes.map((option) =>
-          DOC_TYPE_API_CODES.has(option.id)
-            ? { ...option, count: countMap.get(option.id) ?? 0 }
-            : option,
-        ),
-      );
-    });
+    fetchDownloadDocTypeFilters({ productCodes: codes, fallbackCount: 0 }).then(
+      (options) => {
+        if (!alive) return;
+        setDocumentTypes(options);
+        setChecked((current) =>
+          buildCheckedState(
+            options,
+            (optionId) => current[buildFilterId(optionId)] ?? true,
+          ),
+        );
+      },
+    );
     return () => {
       alive = false;
     };
@@ -124,26 +121,18 @@ export function DevicesProductDownloadsFilterProvider({
   }, []);
 
   const clearSection = useCallback(() => {
-    setChecked((current) => {
-      const next = { ...current };
-
-      for (const option of downloadDocumentTypes) {
-        next[buildFilterId(option.id)] = false;
-      }
-
-      return next;
-    });
-  }, []);
+    setChecked((current) => ({
+      ...current,
+      ...buildCheckedState(documentTypes, () => false),
+    }));
+  }, [documentTypes]);
 
   const selectedDocTypes = useMemo(
     () =>
-      downloadDocumentTypes
-        .filter(
-          (option) =>
-            DOC_TYPE_API_CODES.has(option.id) && checked[buildFilterId(option.id)],
-        )
+      documentTypes
+        .filter((option) => checked[buildFilterId(option.id)])
         .map((option) => option.id),
-    [checked],
+    [checked, documentTypes],
   );
 
   const value = useMemo(

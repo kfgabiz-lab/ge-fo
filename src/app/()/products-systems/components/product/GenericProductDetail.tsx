@@ -12,7 +12,7 @@ import DevicesProductOtherProducts from "./DevicesProductOtherProducts";
 import {
   productDetailNavItems,
   productTemplateDetail,
-  fetchProductDownloadsPage,
+  fetchProductDownloadsInitialData,
 } from "../../data/productDetailContent";
 import { buildHwProductDetail } from "../../data/hwProductDetail";
 import {
@@ -22,7 +22,6 @@ import {
 } from "../../data/productsSystemsData";
 import { fetchProductInsights } from "@/data/highlightNews";
 import { withProductInquiryContext } from "@/lib/navigation/categoryContext";
-import { productDownloadsDefaultDocTypes } from "@/data/support/downloadCenterContent";
 import {
   buildHwProductTechHubBannerCopy,
   fetchProductTechHubBanner,
@@ -45,7 +44,7 @@ export default async function GenericProductDetail({
     lv2Context,
     managerEmail,
     insights,
-    downloadsPage,
+    downloadsData,
     techHubBanner,
   ] = await Promise.all([
     productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
@@ -54,12 +53,11 @@ export default async function GenericProductDetail({
       : Promise.resolve({ lv2Name: "", otherProducts: [] }),
     productId ? fetchProductManagerEmail(productId) : Promise.resolve(""),
     productId ? fetchProductInsights(productId) : Promise.resolve([]),
-    fetchProductDownloadsPage({
-      docTypes: productDownloadsDefaultDocTypes,
-      productCodes,
-    }),
+    fetchProductDownloadsInitialData(productCodes),
     productId ? fetchProductTechHubBanner(productId) : Promise.resolve(null),
   ]);
+
+  const { docTypeOptions, page: downloadsPage } = downloadsData;
 
   const { lv2Name, otherProducts } = lv2Context;
   const heroDetail = { ...detail, category: lv2Name };
@@ -143,6 +141,7 @@ export default async function GenericProductDetail({
           <DevicesProductDownloads
             initial={downloadsPage}
             productCodes={productCodes}
+            docTypeOptions={docTypeOptions}
           />
         ) : null}
         {techHubBanner ? (

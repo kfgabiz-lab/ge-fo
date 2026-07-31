@@ -3,7 +3,10 @@ import {
   fetchTopCategories,
   fetchCategoryChildren,
 } from "@/app/()/products-systems/data/productsSystemsData";
-import type { DownloadCategoryOption } from "@/data/support/downloadCenterContent";
+import type {
+  DownloadCategoryOption,
+  DownloadFilterOption,
+} from "@/data/support/downloadCenterContent";
 
 export interface DownloadCenterFile {
   fileId: number | null;
@@ -53,6 +56,7 @@ export type DownloadCenterSort =
 export interface DownloadCenterContentsParams {
   q?: string;
   categories?: string[];
+  parentCategories?: string[];
   docTypes?: string[];
   productCodes?: string[];
   sort?: DownloadCenterSort;
@@ -69,6 +73,9 @@ export async function fetchDownloadCenterContents(
   if (params.q && params.q.trim()) sp.set("q", params.q.trim());
   if (params.categories && params.categories.length > 0) {
     sp.set("categories", params.categories.join(","));
+  }
+  if (params.parentCategories && params.parentCategories.length > 0) {
+    sp.set("parentCategories", params.parentCategories.join(","));
   }
   if (params.docTypes && params.docTypes.length > 0) {
     sp.set("docTypes", params.docTypes.join(","));
@@ -89,7 +96,8 @@ export async function fetchDownloadCenterContents(
 }
 
 export interface DownloadCenterCategoryCount {
-  categoryL2Id: string;
+  categoryL1Id: string | null;
+  categoryL2Id: string | null;
   count: number;
 }
 
@@ -130,6 +138,37 @@ export async function fetchDownloadCenterDocTypeCounts(
   }
 }
 
+export interface DownloadDocTypeCode {
+  code: string;
+  name: string;
+}
+
+export async function fetchDownloadDocTypes(): Promise<DownloadFilterOption[]> {
+  try {
+    const codes = await fetchApi<DownloadDocTypeCode[]>(
+      `/api/v1/fo/codes/DOC_TYPE`,
+    );
+    return (codes ?? []).map((item) => ({ id: item.code, label: item.name }));
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchDownloadDocTypeFilters(options?: {
+  productCodes?: string[];
+  fallbackCount?: number;
+}): Promise<DownloadFilterOption[]> {
+  const [docTypes, counts] = await Promise.all([
+    fetchDownloadDocTypes(),
+    fetchDownloadCenterDocTypeCounts(options?.productCodes),
+  ]);
+  const countMap = new Map(counts.map((c) => [c.docType, c.count]));
+  return docTypes.map((docType) => ({
+    ...docType,
+    count: countMap.get(docType.id) ?? options?.fallbackCount,
+  }));
+}
+
 export async function fetchDownloadCenterCategoryTree(): Promise<
   DownloadCategoryOption[]
 > {
@@ -138,7 +177,16 @@ export async function fetchDownloadCenterCategoryTree(): Promise<
       fetchTopCategories(),
       fetchDownloadCenterCategoryCounts(),
     ]);
-    const countMap = new Map(counts.map((c) => [c.categoryL2Id, c.count]));
+    const countMap = new Map(
+      counts
+        .filter((c) => c.categoryL2Id)
+        .map((c) => [c.categoryL2Id as string, c.count]),
+    );
+    const parentOnlyCountMap = new Map(
+      counts
+        .filter((c) => !c.categoryL2Id && c.categoryL1Id)
+        .map((c) => [c.categoryL1Id as string, c.count]),
+    );
 
     const options = await Promise.all(
       tops.map(async (top) => {
@@ -148,7 +196,9 @@ export async function fetchDownloadCenterCategoryTree(): Promise<
           label: child.title,
           count: countMap.get(child.code) ?? 0,
         }));
-        const total = nested.reduce((sum, n) => sum + (n.count ?? 0), 0);
+        const total =
+          nested.reduce((sum, n) => sum + (n.count ?? 0), 0) +
+          (parentOnlyCountMap.get(top.code) ?? 0);
         return {
           id: top.code,
           label: top.title,

@@ -22,18 +22,24 @@ import {
   type ProductDownloadsPage,
 } from "../../data/productDetailContent";
 import type { DownloadCenterSort } from "@/data/support/downloadCenterData";
+import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
 
 type DevicesProductDownloadsProps = {
   initial: ProductDownloadsPage;
   productCodes: string[];
+  docTypeOptions?: DownloadFilterOption[];
 };
 
 export default function DevicesProductDownloads({
   initial,
   productCodes,
+  docTypeOptions = [],
 }: DevicesProductDownloadsProps) {
   return (
-    <DevicesProductDownloadsFilterBoundary productCodes={productCodes}>
+    <DevicesProductDownloadsFilterBoundary
+      productCodes={productCodes}
+      docTypeOptions={docTypeOptions}
+    >
       <DevicesProductDownloadsBody
         initial={initial}
         productCodes={productCodes}

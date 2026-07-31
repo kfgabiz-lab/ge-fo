@@ -5,17 +5,11 @@ import { useState } from "react";
 import DevicesProductDownloadsCopyLink from "@/app/()/products-systems/components/product/DevicesProductDownloadsCopyLink";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
-import type {
-  DownloadCenterFile,
-  DownloadCenterItem,
+import {
+  fetchDownloadCenterFileUrl,
+  type DownloadCenterFile,
+  type DownloadCenterItem,
 } from "@/data/support/downloadCenterData";
-
-function resolveDownloadTarget(file: DownloadCenterFile): string {
-  const src = file.sourceFilePath ?? "";
-  if (src.startsWith("//")) return "https:" + src;
-  if (src.startsWith("http")) return src;
-  return file.filePath ?? "";
-}
 
 function formatDownloadDate(date: string | null): string {
   if (!date) return "";
@@ -42,10 +36,13 @@ export default function DownloadCenterCard({ item }: DownloadCenterCardProps) {
   const files = selectedVersion?.files ?? [];
   const showVersionSelect = versions.length > 1;
 
-  const handleDownload = (file: DownloadCenterFile) => {
-    const url = resolveDownloadTarget(file);
-    if (url && typeof window !== "undefined") {
-      window.open(url, "_blank", "noopener,noreferrer");
+  const handleDownload = async (file: DownloadCenterFile) => {
+    try {
+      const url = await fetchDownloadCenterFileUrl(file.filePath);
+      if (url && typeof window !== "undefined") {
+        window.open(url, "_blank", "noopener,noreferrer");
+      }
+    } catch {
     }
   };
 
@@ -135,7 +132,7 @@ export default function DownloadCenterCard({ item }: DownloadCenterCardProps) {
                   <div className="devices_product_downloads__file-actions">
                     <DevicesProductDownloadsCopyLink
                       className="devices_product_downloads__file-btn--line"
-                      resolveUrl={async () => resolveDownloadTarget(file)}
+                      resolveUrl={() => fetchDownloadCenterFileUrl(file.filePath)}
                     />
                     <button
                       type="button"

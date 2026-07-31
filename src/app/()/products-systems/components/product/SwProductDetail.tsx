@@ -23,10 +23,10 @@ import { fetchProductInsights } from "@/data/highlightNews/highlightNewsData";
 import { withProductInquiryContext } from "@/lib/navigation/categoryContext";
 import type { HighlightNewsItem } from "@/types/highlightNews";
 import {
-  fetchProductDownloadsPage,
+  fetchProductDownloadsInitialData,
   type ProductDownloadsPage,
 } from "../../data/productDetailContent";
-import { productDownloadsDefaultDocTypes } from "@/data/support/downloadCenterContent";
+import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
 import {
   hvdcApplicationsSection,
   hvdcBenefitsSection,
@@ -67,6 +67,7 @@ type SwDetailProps = {
   row: Record<string, unknown> | null;
   dbFaq: CommonFaqEntry[];
   downloads: ProductDownloadsPage;
+  docTypeOptions: DownloadFilterOption[];
   productCodes: string[];
   techHubCopy: ProductTechHubBannerCopy;
   highlights: HighlightNewsItem[];
@@ -92,6 +93,7 @@ function swShellCommonProps(
 ) {
   return {
     downloads: props.downloads,
+    docTypeOptions: props.docTypeOptions,
     productCodes: props.productCodes,
     techHubCopy: props.techHubCopy,
     highlights: props.highlights,
@@ -289,12 +291,9 @@ export default async function SwProductDetail({
   const productCode = row ? String(row["product.product_code"] ?? "").trim() : "";
   const productCodes = productCode ? [productCode] : [];
   const isSwSlug = (SW_PRODUCT_SLUGS as readonly string[]).includes(slug);
-  const [dbFaq, downloads, lv2Name, highlights] = await Promise.all([
+  const [dbFaq, downloadsData, lv2Name, highlights] = await Promise.all([
     productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
-    fetchProductDownloadsPage({
-      docTypes: productDownloadsDefaultDocTypes,
-      productCodes,
-    }),
+    fetchProductDownloadsInitialData(productCodes),
     isSwSlug && productId
       ? fetchProductLv2Name(productId)
       : Promise.resolve(""),
@@ -316,7 +315,8 @@ export default async function SwProductDetail({
     <Detail
       row={row}
       dbFaq={dbFaq}
-      downloads={downloads}
+      downloads={downloadsData.page}
+      docTypeOptions={downloadsData.docTypeOptions}
       productCodes={productCodes}
       techHubCopy={techHubCopy}
       highlights={highlights}

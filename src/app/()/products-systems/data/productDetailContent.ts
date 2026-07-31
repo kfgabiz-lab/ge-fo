@@ -1,9 +1,11 @@
 import {
   fetchDownloadCenterContents,
   fetchDownloadCenterFileUrl,
+  fetchDownloadDocTypes,
   type DownloadCenterItem,
   type DownloadCenterSort,
 } from "@/data/support/downloadCenterData";
+import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
 
 export type ProductSpec = {
   label: string;
@@ -141,6 +143,23 @@ export async function fetchProductDownloadsPage({
     totalElements: res.totalElements,
     totalPages: Math.max(1, res.totalPages),
   };
+}
+
+export type ProductDownloadsInitialData = {
+  docTypeOptions: DownloadFilterOption[];
+  page: ProductDownloadsPage;
+};
+
+export async function fetchProductDownloadsInitialData(
+  productCodes: string[],
+): Promise<ProductDownloadsInitialData> {
+  const docTypeOptions = await fetchDownloadDocTypes();
+  const page = await fetchProductDownloadsPage({
+    docTypes: docTypeOptions.map((option) => option.id),
+    productCodes,
+  });
+
+  return { docTypeOptions, page };
 }
 
 export type ProductOtherItem = {

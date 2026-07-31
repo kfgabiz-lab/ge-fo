@@ -13,7 +13,6 @@ import {
   useSearchDocumentsFilter,
 } from "./SearchDocumentsFilterProvider";
 import { searchDocumentsPage } from "@/data/search/searchDocumentsContent";
-import { downloadDocTypeCodes } from "@/data/support/downloadCenterContent";
 import {
   fetchDownloadCenterContents,
   type DownloadCenterItem,
@@ -21,8 +20,6 @@ import {
 import { searchAllListClasses } from "./searchAllListClasses";
 
 const { pageSize: PAGE_SIZE } = searchDocumentsPage;
-
-const VALID_DOC_TYPE_CODES = new Set<string>(downloadDocTypeCodes);
 
 function SearchDocumentsPanelContent() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,12 +32,13 @@ function SearchDocumentsPanelContent() {
   const searchParams = useSearchParams();
   const query = (searchParams.get("q") ?? "").trim();
 
-  const { getSelectedCategoryValues } = useSearchDocumentsFilter();
+  const { getSelectedCategoryValues, getSelectedCategoryParentValues } =
+    useSearchDocumentsFilter();
   const selectedCategories = getSelectedCategoryValues("category");
   const categoryKey = [...selectedCategories].sort().join(",");
-  const selectedDocTypes = getSelectedCategoryValues("document").filter((code) =>
-    VALID_DOC_TYPE_CODES.has(code),
-  );
+  const selectedCategoryParentCodes = getSelectedCategoryParentValues("category");
+  const parentCategoryKey = [...selectedCategoryParentCodes].sort().join(",");
+  const selectedDocTypes = getSelectedCategoryValues("document");
   const docTypeKey = [...selectedDocTypes].sort().join(",");
 
   const isEmptyResult = loaded && items.length === 0;
@@ -52,7 +50,7 @@ function SearchDocumentsPanelContent() {
       return;
     }
     setCurrentPage(1);
-  }, [query, categoryKey, docTypeKey]);
+  }, [query, categoryKey, parentCategoryKey, docTypeKey]);
 
   useEffect(() => {
     if (!query) {
@@ -67,6 +65,7 @@ function SearchDocumentsPanelContent() {
     void fetchDownloadCenterContents({
       q: query,
       categories: selectedCategories,
+      parentCategories: selectedCategoryParentCodes,
       docTypes: selectedDocTypes,
       page: currentPage - 1,
       size: PAGE_SIZE,
@@ -81,7 +80,7 @@ function SearchDocumentsPanelContent() {
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, categoryKey, docTypeKey, currentPage]);
+  }, [query, categoryKey, parentCategoryKey, docTypeKey, currentPage]);
 
   return (
     <section

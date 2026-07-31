@@ -30,14 +30,31 @@ import SearchMediaPanel from "./SearchMediaPanel";
 import SearchPageList from "./SearchPageList";
 import SearchPagesPanel from "./SearchPagesPanel";
 import SearchProductsPanel from "./SearchProductsPanel";
+// import {
+//   buildSearchTabHref,
+//   // searchAllAiSummary,
+//   searchAllPage,
+//   searchAllTabs,
+//   toSearchTabId,
+//   type SearchTabId,
+// } from "@/data/search/searchAllContent";
+
 import {
   buildSearchTabHref,
-  searchAllAiSummary,
   searchAllPage,
   searchAllTabs,
   toSearchTabId,
   type SearchTabId,
 } from "@/data/search/searchAllContent";
+
+import {
+  fetchChatbotStream,
+} from "@/data/search/searchChatbotData";
+
+import {
+  fetchIntegratedSearch,
+} from "@/data/search/searchIntegratedData";
+
 
 function formatSearchCount(count: number): string {
   return count > 99 ? "99+" : String(count);
@@ -83,7 +100,12 @@ export default function SearchAllTabContent({
     () => toSearchTabId(tabParam) ?? initialTab,
   );
   const [aiExpanded, setAiExpanded] = useState(false);
+
+  const [aiAnswer, setAiAnswer] = useState("");
+  const [chatbotKeyword, setChatbotKeyword] = useState("");
   const isAllTab = activeTab === "all";
+
+
 
   useEffect(() => {
     const next = toSearchTabId(tabParam);
@@ -185,6 +207,152 @@ export default function SearchAllTabContent({
     };
   }, [query]);
 
+  useEffect(() => {
+    setLoaded({
+      products: false,
+      documents: false,
+      media: false,
+      pages: false,
+    });
+  }, [query]);
+
+  useEffect(() => {
+    const trimmedQuery = query.trim();
+
+    if (!trimmedQuery) {
+      setAiAnswer("");
+      setChatbotKeyword("");
+      return;
+    }
+
+    const controller = new AbortController();
+
+    setAiAnswer("");
+    setChatbotKeyword("");
+
+    void fetchChatbotStream(
+        trimmedQuery,
+        {
+          /*
+           * 첫 번째 response.keyword 이벤트
+           */
+          onKeyword: (keywordEvent) => {
+            const keyword =
+                keywordEvent.keyword?.trim();
+
+            if (!keyword) {
+              console.warn(
+                  "[CHATBOT KEYWORD EMPTY]",
+                  keywordEvent,
+              );
+
+              return;
+            }
+
+            console.log(
+                "[CHATBOT KEYWORD RECEIVED]",
+                keyword,
+                new Date().toISOString(),
+                performance.now(),
+            );
+
+            setChatbotKeyword(keyword);
+
+            console.log(
+                "[INTEGRATION SEARCH START]",
+                keyword,
+                new Date().toISOString(),
+                performance.now(),
+            );
+
+            /*
+             * keyword를 받으면 통합검색 API 별도 호출
+             */
+            void fetchIntegratedSearch(
+                keyword,
+                "all",
+                "1",
+                controller.signal,
+            )
+                .then((result) => {
+                  console.log(
+                      "[INTEGRATION SEARCH RESPONSE]",
+                      result,
+                      new Date().toISOString(),
+                      performance.now(),
+                  );
+                })
+                .catch((error: unknown) => {
+                  /*
+                   * query가 바뀌어 요청을 취소한 경우는 오류로 출력하지 않음
+                   */
+                  if (
+                      error instanceof DOMException &&
+                      error.name === "AbortError"
+                  ) {
+                    return;
+                  }
+
+                  console.error(
+                      "[INTEGRATION SEARCH ERROR]",
+                      error,
+                  );
+                });
+          },
+
+          /*
+           * 챗봇 AI 답변 누적
+           */
+          onChunk: (chunkEvent) => {
+            if (!chunkEvent.chunk) {
+              return;
+            }
+            console.log(
+                "[CHATBOT CHUNK RECEIVED]",
+                chunkEvent.chunk,
+                new Date().toISOString(),
+                performance.now(),
+            );
+
+            setAiAnswer(
+                previous =>
+                    previous + chunkEvent.chunk,
+            );
+          },
+
+          onCompleted: (completedEvent) => {
+            console.log(
+                "[CHATBOT COMPLETED]",
+                completedEvent,
+                new Date().toISOString(),
+                performance.now(),
+            );
+          },
+        },
+        controller.signal,
+    ).catch((error: unknown) => {
+      if (
+          error instanceof DOMException &&
+          error.name === "AbortError"
+      ) {
+        return;
+      }
+
+      console.error(
+          "[CHATBOT STREAM ERROR]",
+          error,
+      );
+    });
+
+    /*
+     * q가 바뀌거나 컴포넌트가 사라지면
+     * 이전 SSE와 통합검색 요청을 취소한다.
+     */
+    return () => {
+      controller.abort();
+    };
+  }, [query]);
+
   const isAllLoaded =
     loaded.products && loaded.documents && loaded.media && loaded.pages;
 
@@ -257,14 +425,29 @@ export default function SearchAllTabContent({
                 <h2 className="search_all__ai-tit">{searchAllPage.aiTitle}</h2>
                 <p className="search_all__ai-note">{searchAllPage.aiDisclaimer}</p>
               </div>
-              <div className="search_all__ai-body">
+              {/*<div className="search_all__ai-body">*/}
+              {/*  <ul className="search_all__ai-list">*/}
+              {/*    {searchAllAiSummary.map((line, index) => (*/}
+              {/*      <li key={`ai-${index}`}>*/}
+              {/*        <span className="search_all__ai-bullet" aria-hidden />*/}
+              {/*        <span className="search_all__ai-list-text">{line}</span>*/}
+              {/*      </li>*/}
+              {/*    ))}*/}
+              {/*  </ul>*/}
+              {/*</div>*/}
+              <div className="search_all__ai-list">
                 <ul className="search_all__ai-list">
-                  {searchAllAiSummary.map((line, index) => (
-                    <li key={`ai-${index}`}>
-                      <span className="search_all__ai-bullet" aria-hidden />
-                      <span className="search_all__ai-list-text">{line}</span>
-                    </li>
-                  ))}
+                  <li>
+                {aiAnswer ? (
+                    <span className="search_all__ai-list-text">
+                      {aiAnswer}
+                    </span>
+                ) : (
+                    <span className="search_all__ai-list-text">
+                      AI response waiting...
+                    </span>
+                )}
+                  </li>
                 </ul>
               </div>
             </div>
