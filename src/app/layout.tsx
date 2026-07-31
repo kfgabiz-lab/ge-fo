@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 
 import HistoryReloadOnNavigate from "@/components/layout/HistoryReloadOnNavigate";
 import LenisScrollProvider from "@/components/layout/LenisScrollProvider";
@@ -40,6 +41,10 @@ export const metadata: Metadata = {
     images: ["https://www.ls-electric.com/assets/img/common/logo3.png"],
     site: "@lselectricglobal",
   },
+  other: {
+    // 대림 EUEM(최종사용자경험 모니터링) same-origin 클라이언트 IP/세션 조회 엔드포인트
+    "euem-endpoint": "/apps/daelimEUEM_responser",
+  },
 };
 
 export default async function RootLayout({
@@ -52,6 +57,8 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Script src="/apps/daelimEUEM_begin.js" strategy="beforeInteractive" />
+        <Script src="/js/daelimEUEM_run.js" strategy="beforeInteractive" />
         <LenisScrollProvider>
           {children}
           <SiteLocaleSync locale={SITE_LOCALE} />
