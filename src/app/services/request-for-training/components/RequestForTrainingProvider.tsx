@@ -145,6 +145,8 @@ export type RequestForTrainingStep4Values = {
   productCategoryType: RequestForTrainingCategoryType | "";
   productGroupId: string;
   selectedProducts: RequestForTrainingSelectedProduct[];
+  curriculumId: number | null;
+  sessionId: number | null;
   jobTitles: string[];
   studentInvolvement: string[];
   vfdUnderstanding: "Yes" | "No" | "";
@@ -160,6 +162,8 @@ const STEP4_INITIAL: RequestForTrainingStep4Values = {
   productCategoryType: "",
   productGroupId: "",
   selectedProducts: [],
+  curriculumId: null,
+  sessionId: null,
   jobTitles: [],
   studentInvolvement: [],
   vfdUnderstanding: "",

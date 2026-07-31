@@ -181,6 +181,17 @@ export const requestForTrainingStep4Copy = {
       hint: "*Select all that apply.",
       required: true,
     },
+    relatedCurriculum: {
+      label: "Is there an existing curriculum related to your request? (Optional)",
+      curriculumPlaceholder: "Select a curriculum",
+      sessionPlaceholder: "Select a session",
+      nonePlaceholder: "None",
+      emptyHint:
+        "There is no existing curriculum matching the products you selected. You can continue without selecting one.",
+      sessionEmptyHint:
+        "This curriculum has no scheduled session available. You can continue without selecting one.",
+      required: false,
+    },
     jobTitles: {
       label: "What are the job titles of the students that will be trained?",
       required: true,

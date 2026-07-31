@@ -196,9 +196,25 @@ export async function fetchTrainingByCategoryIds(params: {
   size: number;
 }): Promise<{ content: TrainingRow[]; totalPages: number }> {
   const { categoryIds, variant, page, size } = params;
+  return fetchCurriculumByCategoryIds({
+    categoryIds,
+    trainingCourse: TRAINING_COURSE_BY_VARIANT[variant],
+    page,
+    size,
+  });
+}
+
+export async function fetchCurriculumByCategoryIds(params: {
+  categoryIds: number[];
+  trainingCourse?: string;
+  page: number;
+  size: number;
+}): Promise<{ content: TrainingRow[]; totalPages: number }> {
+  const { categoryIds, trainingCourse, page, size } = params;
+  if (categoryIds.length === 0) return { content: [], totalPages: 0 };
   const sp = new URLSearchParams();
   sp.set("categoryIds", categoryIds.join(","));
-  sp.set("trainingCourse", TRAINING_COURSE_BY_VARIANT[variant]);
+  if (trainingCourse) sp.set("trainingCourse", trainingCourse);
   sp.set("page", String(page));
   sp.set("size", String(size));
   sp.set("sort", "createdAt,desc");

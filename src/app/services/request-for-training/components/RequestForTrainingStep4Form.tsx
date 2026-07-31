@@ -1,6 +1,7 @@
 "use client";
 
 import RequestForTrainingConsentSection from "./RequestForTrainingConsentSection";
+import RequestForTrainingCurriculumSelector from "./RequestForTrainingCurriculumSelector";
 import RequestForTrainingProductSelector from "./RequestForTrainingProductSelector";
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
 import RequestForTrainingQuestionnaireIntro from "./RequestForTrainingQuestionnaireIntro";
@@ -25,6 +26,7 @@ export default function RequestForTrainingStep4Form() {
         >
           <div className="support_service_training_request__form-grid">
             <RequestForTrainingProductSelector />
+            <RequestForTrainingCurriculumSelector />
             {hasVfdProduct ? <RequestForTrainingVfdQuestionnaire /> : null}
             <RequestForTrainingConsentSection />
           </div>

@@ -333,6 +333,29 @@ export default function TrainingCurriculum({
                     position="end"
                     className="guide_field__search-adorn"
                   >
+                    {hasQuery ? (
+                      <button
+                        type="button"
+                        className="guide_field__search-clear"
+                        aria-label="Clear search"
+                        onClick={() => {
+                          setQuery("");
+                          setSearchTerm("");
+                          setPageIndex(0);
+                        }}
+                      >
+                        <span className="guide_field__search-clear-icon" aria-hidden>
+                          <img
+                            src="/ico/ico_clear_12_black.svg"
+                            alt=""
+                            width={10}
+                            height={10}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </span>
+                      </button>
+                    ) : null}
                     <button
                       type="button"
                       className="guide_field__search-icon-button"

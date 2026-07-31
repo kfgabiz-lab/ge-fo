@@ -82,6 +82,8 @@ export default function RequestForTrainingStep4() {
         contactPerson: step3.contactPerson,
         contactDetails: step3.contactDetails,
         selectedProducts: step4.selectedProducts,
+        curriculumId: step4.curriculumId ?? undefined,
+        sessionId: step4.sessionId ?? undefined,
         jobTitles: step4.jobTitles,
         studentInvolvement: step4.studentInvolvement,
         vfdUnderstanding: step4.vfdUnderstanding,
