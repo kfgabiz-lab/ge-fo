@@ -14,7 +14,6 @@ import {
   useDownloadCenterQuery,
 } from "./DownloadCenterFilterProvider";
 import DownloadCenterFilterPanel from "./DownloadCenterFilterPanel";
-import { downloadDocTypeCodes } from "@/data/support/downloadCenterContent";
 import {
   fetchDownloadCenterContents,
   type DownloadCenterItem,
@@ -31,8 +30,6 @@ const SORT_LABELS: Record<DownloadCenterSort, string> = {
   title: "Title A-Z",
   title_desc: "Title Z-A",
 };
-
-const VALID_DOC_TYPE_CODES = new Set<string>(downloadDocTypeCodes);
 
 type DownloadCenterContentsProps = {
   empty?: boolean;
@@ -52,13 +49,14 @@ function DownloadCenterContentsBody({
   empty = false,
 }: DownloadCenterContentsProps) {
   const { query, page, setPage, sort, setSort } = useDownloadCenterQuery();
-  const { getSelectedCategoryValues } = useDownloadCenterFilter();
+  const { getSelectedCategoryValues, getSelectedCategoryParentValues } =
+    useDownloadCenterFilter();
 
   const selectedCategoryCodes = getSelectedCategoryValues("category");
   const categoryKey = [...selectedCategoryCodes].sort().join(",");
-  const selectedDocTypes = getSelectedCategoryValues("document").filter((c) =>
-    VALID_DOC_TYPE_CODES.has(c),
-  );
+  const selectedCategoryParentCodes = getSelectedCategoryParentValues("category");
+  const parentCategoryKey = [...selectedCategoryParentCodes].sort().join(",");
+  const selectedDocTypes = getSelectedCategoryValues("document");
   const docTypeKey = [...selectedDocTypes].sort().join(",");
 
   const [items, setItems] = useState<DownloadCenterItem[]>([]);
@@ -74,7 +72,7 @@ function DownloadCenterContentsBody({
     }
     setPage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, categoryKey, docTypeKey, sort]);
+  }, [query, categoryKey, parentCategoryKey, docTypeKey, sort]);
 
   useEffect(() => {
     if (empty) {
@@ -89,6 +87,7 @@ function DownloadCenterContentsBody({
     fetchDownloadCenterContents({
       q: query,
       categories: selectedCategoryCodes,
+      parentCategories: selectedCategoryParentCodes,
       docTypes: selectedDocTypes,
       sort,
       page: page - 1,
@@ -107,7 +106,7 @@ function DownloadCenterContentsBody({
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, categoryKey, docTypeKey, sort, page, empty]);
+  }, [query, categoryKey, parentCategoryKey, docTypeKey, sort, page, empty]);
 
   const isEmptyResult = !loading && items.length === 0;
   const showEmpty = empty || isEmptyResult;

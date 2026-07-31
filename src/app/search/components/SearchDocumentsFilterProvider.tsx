@@ -10,21 +10,13 @@ import {
 } from "react";
 import { createSupportFilterStore } from "@/app/support/components/createSupportFilterStore";
 import {
-  downloadDocTypeCodes,
-  downloadDocumentTypes,
   type DownloadCategoryOption,
   type DownloadFilterOption,
 } from "@/data/support/downloadCenterContent";
 import {
   fetchDownloadCenterCategoryTree,
-  fetchDownloadCenterDocTypeCounts,
+  fetchDownloadDocTypeFilters,
 } from "@/data/support/downloadCenterData";
-
-const DOC_TYPE_API_CODES = new Set<string>(downloadDocTypeCodes);
-
-const DOC_TYPES_PENDING: DownloadFilterOption[] = downloadDocumentTypes.map(
-  (opt) => (DOC_TYPE_API_CODES.has(opt.id) ? { ...opt, count: undefined } : opt),
-);
 
 const store = createSupportFilterStore({
   displayName: "SearchDocuments",
@@ -35,7 +27,7 @@ const store = createSupportFilterStore({
   secondaryIdPrefix: "search-document-type",
   secondaryGroup: "Types",
   secondarySection: "document",
-  secondaryOptions: downloadDocumentTypes,
+  secondaryOptions: [],
 });
 
 export const useSearchDocumentsFilter = store.useFilter;
@@ -64,8 +56,7 @@ export function SearchDocumentsFilterProvider({
   children: ReactNode;
 }) {
   const [categories, setCategories] = useState<DownloadCategoryOption[]>([]);
-  const [documentTypes, setDocumentTypes] =
-    useState<DownloadFilterOption[]>(DOC_TYPES_PENDING);
+  const [documentTypes, setDocumentTypes] = useState<DownloadFilterOption[]>([]);
 
   useEffect(() => {
     let alive = true;
@@ -79,14 +70,9 @@ export function SearchDocumentsFilterProvider({
 
   useEffect(() => {
     let alive = true;
-    fetchDownloadCenterDocTypeCounts().then((counts) => {
+    fetchDownloadDocTypeFilters().then((options) => {
       if (!alive) return;
-      const countMap = new Map(counts.map((c) => [c.docType, c.count]));
-      setDocumentTypes(
-        downloadDocumentTypes.map((opt) =>
-          countMap.has(opt.id) ? { ...opt, count: countMap.get(opt.id) } : opt,
-        ),
-      );
+      setDocumentTypes(options);
     });
     return () => {
       alive = false;
@@ -100,7 +86,9 @@ export function SearchDocumentsFilterProvider({
 
   return (
     <SearchDocumentsFilterOptionsContext.Provider value={value}>
-      <store.Provider categories={categories}>{children}</store.Provider>
+      <store.Provider categories={categories} secondaryOptions={documentTypes}>
+        {children}
+      </store.Provider>
     </SearchDocumentsFilterOptionsContext.Provider>
   );
 }

@@ -28,6 +28,7 @@ export type SupportFilterContextValue = {
   clearAll: () => void;
   activeChips: SupportFilterActiveChip[];
   getSelectedCategoryValues: (section: string) => string[];
+  getSelectedCategoryParentValues: (section: string) => string[];
 };
 
 export type SupportFilterStoreConfig = {
@@ -50,6 +51,7 @@ type FilterMeta = {
   group: string;
   section: string;
   isLeaf: boolean;
+  isCategoryParent: boolean;
 };
 
 type CategoryMaps = {
@@ -61,6 +63,7 @@ export type SupportFilterStore = {
   Provider: (props: {
     children: ReactNode;
     categories?: DownloadCategoryOption[];
+    secondaryOptions?: DownloadFilterOption[];
   }) => React.ReactElement;
   Boundary: (props: { children: ReactNode }) => ReactNode;
   useFilter: () => SupportFilterContextValue;
@@ -69,6 +72,7 @@ export type SupportFilterStore = {
 function buildFilterRegistry(
   categories: DownloadCategoryOption[],
   config: SupportFilterStoreConfig,
+  secondaryOptions: DownloadFilterOption[],
 ): FilterMeta[] {
   const {
     categoryIdPrefix,
@@ -77,7 +81,6 @@ function buildFilterRegistry(
     secondaryIdPrefix,
     secondaryGroup,
     secondarySection,
-    secondaryOptions,
   } = config;
   const registry: FilterMeta[] = [];
 
@@ -90,6 +93,7 @@ function buildFilterRegistry(
       group: categoryGroup,
       section: categorySection,
       isLeaf: !hasNested,
+      isCategoryParent: true,
     });
 
     for (const nested of option.nested ?? []) {
@@ -100,6 +104,7 @@ function buildFilterRegistry(
         group: categoryGroup,
         section: categorySection,
         isLeaf: true,
+        isCategoryParent: false,
       });
     }
   }
@@ -112,6 +117,7 @@ function buildFilterRegistry(
       group: secondaryGroup,
       section: secondarySection,
       isLeaf: true,
+      isCategoryParent: false,
     });
   }
 
@@ -156,8 +162,9 @@ function buildInitialChecked(
   config: SupportFilterStoreConfig,
   registry: FilterMeta[],
   childrenMap: Map<string, string[]>,
+  secondaryOptions: DownloadFilterOption[],
 ): Record<string, boolean> {
-  const { categoryIdPrefix, secondaryIdPrefix, secondaryOptions } = config;
+  const { categoryIdPrefix, secondaryIdPrefix } = config;
   const checked: Record<string, boolean> = {};
 
   for (const meta of registry) checked[meta.id] = false;
@@ -225,15 +232,18 @@ export function createSupportFilterStore(
   function Provider({
     children,
     categories: propCategories,
+    secondaryOptions: propSecondaryOptions,
   }: {
     children: ReactNode;
     categories?: DownloadCategoryOption[];
+    secondaryOptions?: DownloadFilterOption[];
   }) {
     const categories = propCategories ?? config.categories;
+    const secondaryOptions = propSecondaryOptions ?? config.secondaryOptions;
 
     const registry = useMemo(
-      () => buildFilterRegistry(categories, config),
-      [categories],
+      () => buildFilterRegistry(categories, config, secondaryOptions),
+      [categories, secondaryOptions],
     );
     const { childrenMap, parentMap } = useMemo(
       () => buildCategoryMaps(categories, config),
@@ -241,7 +251,13 @@ export function createSupportFilterStore(
     );
 
     const [checked, setChecked] = useState<Record<string, boolean>>(() =>
-      buildInitialChecked(categories, config, registry, childrenMap),
+      buildInitialChecked(
+        categories,
+        config,
+        registry,
+        childrenMap,
+        secondaryOptions,
+      ),
     );
 
     const signature = useMemo(
@@ -253,13 +269,19 @@ export function createSupportFilterStore(
       if (prevSignature.current === signature) return;
       prevSignature.current = signature;
       setChecked((current) => {
-        const base = buildInitialChecked(categories, config, registry, childrenMap);
+        const base = buildInitialChecked(
+          categories,
+          config,
+          registry,
+          childrenMap,
+          secondaryOptions,
+        );
         for (const id of Object.keys(base)) {
           if (current[id] !== undefined) base[id] = current[id];
         }
         return base;
       });
-    }, [signature, categories, registry, childrenMap]);
+    }, [signature, categories, registry, childrenMap, secondaryOptions]);
 
     const isChecked = useCallback(
       (id: string) => Boolean(checked[id]),
@@ -326,6 +348,17 @@ export function createSupportFilterStore(
       [registry, checked],
     );
 
+    const getSelectedCategoryParentValues = useCallback(
+      (section: string) =>
+        registry
+          .filter(
+            (meta) =>
+              meta.section === section && meta.isCategoryParent && checked[meta.id],
+          )
+          .map((meta) => meta.optionId),
+      [registry, checked],
+    );
+
     const value = useMemo(
       () => ({
         isChecked,
@@ -334,12 +367,14 @@ export function createSupportFilterStore(
         clearAll,
         activeChips,
         getSelectedCategoryValues,
+        getSelectedCategoryParentValues,
       }),
       [
         activeChips,
         clearAll,
         clearSection,
         getSelectedCategoryValues,
+        getSelectedCategoryParentValues,
         isChecked,
         toggleFilter,
       ],

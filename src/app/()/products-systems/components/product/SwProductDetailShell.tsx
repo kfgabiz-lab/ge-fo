@@ -19,6 +19,7 @@ import DevicesSoftwareOverview, {
   type SoftwareOverviewData,
 } from "./DevicesSoftwareOverview";
 import type { ProductDownloadsPage } from "../../data/productDetailContent";
+import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
 import type { ProductTechHubBannerCopy } from "@/data/support/techHubData";
 import type { HighlightNewsItem } from "@/types/highlightNews";
 import {
@@ -59,6 +60,7 @@ export type SwProductDetailShellProps = {
   applicationsSlot: ReactNode;
   whySlot: ReactNode;
   downloads: ProductDownloadsPage;
+  docTypeOptions?: DownloadFilterOption[];
   productCodes: string[];
   techHubCopy: ProductTechHubBannerCopy;
   highlights: HighlightNewsItem[];
@@ -85,6 +87,7 @@ export default function SwProductDetailShell({
   applicationsSlot,
   whySlot,
   downloads,
+  docTypeOptions = [],
   productCodes,
   techHubCopy,
   highlights,
@@ -120,6 +123,7 @@ export default function SwProductDetailShell({
           <DevicesProductDownloads
             initial={downloads}
             productCodes={productCodes}
+            docTypeOptions={docTypeOptions}
           />
         ) : null}
         <CommonBanner03 {...techHubCopy} />
