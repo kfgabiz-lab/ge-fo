@@ -127,14 +127,14 @@ export default function GuideSelect({
   const isOpenControlled = openProp !== undefined;
   const [openUncontrolled, setOpenUncontrolled] = useState(false);
   const open = isOpenControlled ? openProp : openUncontrolled;
-  const resolvedValue =
-    value !== undefined ? value : displayEmpty ? "" : undefined;
   const valueProps =
-    resolvedValue !== undefined
-      ? { value: resolvedValue }
+    value !== undefined
+      ? { value }
       : defaultValue !== undefined
         ? { defaultValue }
-        : {};
+        : displayEmpty
+          ? { defaultValue: "" }
+          : {};
 
   useEffect(() => {
     setMounted(true);
@@ -192,7 +192,13 @@ export default function GuideSelect({
         : "";
 
     return (
-      <Select native displayEmpty={displayEmpty} {...rest} {...valueProps}>
+      <Select
+        key="guide-select-native"
+        native
+        displayEmpty={displayEmpty}
+        {...rest}
+        {...valueProps}
+      >
         {displayEmpty ? <option value="">{placeholderText}</option> : null}
         {convertMenuItemsToOptions(children)}
       </Select>
@@ -201,6 +207,7 @@ export default function GuideSelect({
 
   return (
     <Select
+      key="guide-select-custom"
       {...rest}
       {...valueProps}
       displayEmpty={displayEmpty}

@@ -8,6 +8,7 @@ import { A11y } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import SwiperBarControls from "@/components/swiper/SwiperBarControls";
 import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
+import { getWindowScrollY, lockPageScroll, unlockPageScroll } from "@/lib/lenisScroll";
 import type { ReferenceItem } from "../data/marketsContent";
 import "swiper/css";
 
@@ -63,12 +64,12 @@ export default function MarketsReferencesModal({
       if (event.key === "Escape") onClose();
     };
 
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const scrollY = getWindowScrollY();
+    lockPageScroll(scrollY);
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.body.style.overflow = prevOverflow;
+      unlockPageScroll(scrollY);
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [embedded, onClose, open]);

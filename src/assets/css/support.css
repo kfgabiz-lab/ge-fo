@@ -895,11 +895,16 @@
     border: 1px solid rgb(15 31 69 / 30%);
     border-radius: 4px;
     cursor: pointer;
-    transition: border-color 0.2s ease;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
   }
 
   section.support_download_search .support_download_search__tag:hover {
-    border-color: var(--color-primary);
+    border-color: #0f1f45;
+    background: #0f1f45;
+    color: #fff;
   }
 
   /* Support — Download Center · Tech Hub contents (list + no-data 공통) */
@@ -1098,6 +1103,15 @@
     list-style: none;
   }
 
+  section.devices_product_downloads
+    .devices_product_downloads__filter-stack.support_download_filter--pc
+    .devices_product_downloads__filter
+    .devices_product_downloads__filter-list--nested
+    .devices_product_downloads__filter-list--nested {
+    gap: 16px;
+    margin-top: 16px;
+  }
+
   section.devices_product_downloads .devices_product_downloads__filter-stack.support_download_filter--pc .devices_product_downloads__filter .devices_product_downloads__check-row {
     display: flex;
     align-items: flex-start;
@@ -1108,7 +1122,7 @@
 
   section.devices_product_downloads .devices_product_downloads__filter-stack.support_download_filter--pc .devices_product_downloads__filter .devices_product_downloads__category-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
     width: 100%;
@@ -1123,13 +1137,14 @@
     flex-shrink: 0;
     width: 14px;
     height: 14px;
+    margin-top: 5px;
     padding: 0;
-    background: url("/ico/ico_down_16.svg") center / contain no-repeat;
+    background: url("/ico/ico_down_16.svg")  no-repeat;
+    background-position: center 4px;
     border: none;
     cursor: pointer;
     transform: rotate(0deg);
     transition: transform 0.25s ease;
-    background-position: 0 3px;
   }
 
   section.devices_product_downloads .devices_product_downloads__filter-stack.support_download_filter--pc .devices_product_downloads__filter .devices_product_downloads__filter-arrow--14.is-open {
@@ -1147,20 +1162,20 @@
   }
 
   section.devices_product_downloads .devices_product_downloads__filter-stack.support_download_filter--pc .devices_product_downloads__filter .devices_product_downloads__check-label {
-    display: inline-flex;
     flex: 1;
-    align-items: flex-start;
-    gap: 0;
     min-width: 0;
-    max-width: none;
+    max-width: 276px;
+    display: block;
     padding: 0;
     border: none;
     background: none;
     font: inherit;
     font-size: 16px;
+    font-weight: 400;
     line-height: 24px;
     color: #222;
     text-align: left;
+    word-break: break-word;
     cursor: pointer;
   }
 
@@ -1170,8 +1185,8 @@
   }
 
   section.devices_product_downloads .devices_product_downloads__filter-stack.support_download_filter--pc .devices_product_downloads__filter .devices_product_downloads__check-label-count {
-    flex-shrink: 0;
     color: #666;
+    margin-left: 4px;
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__search-row {

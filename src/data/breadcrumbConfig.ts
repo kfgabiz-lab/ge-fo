@@ -58,8 +58,7 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/search": {
     crumbs: [],
-    current: "",
-    homeOnly: true,
+    current: "Search",
   },
   "/product-range/variable-frequency-drive": {
     crumbs: [
@@ -108,7 +107,7 @@ const configs: Record<string, BreadcrumbConfig> = {
       },
       {
         label: "Molded Case Circuit Breaker",
-        href: "/products-category/lv-products-and-systems",
+        href: "/product-range/molded-case-circuit-breaker",
       },
     ],
     current: "Susol UL Smart MCCB",

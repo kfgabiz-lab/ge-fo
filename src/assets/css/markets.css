@@ -3555,6 +3555,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
+  overscroll-behavior: contain;
   animation: markets-references-modal-fade-in 0.35s ease forwards;
 }
 
@@ -3567,6 +3568,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   min-height: 0;
   padding: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .markets_references_modal__body {

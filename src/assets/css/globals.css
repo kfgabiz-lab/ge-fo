@@ -1431,11 +1431,8 @@ section .swiper_type_01_nav,
 section .products_swipers_nav {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-section .products_swipers_nav {
   gap: 20px;
+  flex-shrink: 0;
 }
 
 /* Page numbering ??Figma 994:2611 */
@@ -1925,7 +1922,11 @@ section.devices_product_downloads .guide_field--search .MuiOutlinedInput-input ,
 }
 section.component-guide .guide_field--search .guide_field__search-adorn,
 section.devices_product_downloads .guide_field--search .guide_field__search-adorn , section.support_download_contents .guide_field--search .guide_field__search-adorn , section.support_download_search .guide_field--search .guide_field__search-adorn , section.support_where_to_buy_contents .guide_field--search .guide_field__search-adorn , section.support_where_to_buy_search .guide_field--search .guide_field__search-adorn, section.support_service_training_curriculum .guide_field--search .guide_field__search-adorn , section.support_service_training_detail_schedule .guide_field--search .guide_field__search-adorn , section.support_service_training_session_detail .guide_field--search .guide_field__search-adorn , section.support_service_training_request .guide_field--search .guide_field__search-adorn, section.devices_explore .guide_field--search .guide_field__search-adorn, section.common_privacy_policy .guide_field--search .guide_field__search-adorn {
+  display: flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
   height: auto;
   max-height: none;
   margin: 0;
