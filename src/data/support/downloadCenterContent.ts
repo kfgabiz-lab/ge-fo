@@ -16,7 +16,7 @@ export const downloadCenterPage = {
   searchPlaceholder: "Find products, solutions, or resources for your business",
   searchPlaceholderMobile: "Find products, solutions, or...",
   popularSearchLabel: "Popular Keywords :",
-  popularSearchLabelMobile: "Popular Search :",
+  popularSearchLabelMobile: "Popular Keywords :",
   filterByLabel: "Filter by",
   sortByLabel: "Sort by",
   applyLabel: "Apply",
@@ -46,7 +46,7 @@ export type DownloadFilterOption = {
 export type DownloadCategoryOption = DownloadFilterOption & {
   hasArrow?: boolean;
   defaultExpanded?: boolean;
-  nested?: DownloadFilterOption[];
+  nested?: DownloadCategoryOption[];
 };
 
 export type DownloadActiveFilterChip = {

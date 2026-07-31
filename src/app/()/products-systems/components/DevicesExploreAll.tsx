@@ -30,18 +30,16 @@ function ExploreLetterColumn({ group }: { group: GnbExploreLetterGroup }) {
         {group.items.map((item) => (
           <li key={item.id} data-slug-item>
             {item.discontinued ? (
-              <Link
-                href={item.href}
-                prefetch={false}
+              <span
                 className="devices_explore__link devices_explore__link--discontinued"
+                role="link"
                 aria-disabled="true"
-                onClick={(event) => event.preventDefault()}
               >
                 <span className="devices_explore__link-text" data-slugkey="product.product_name">
                   {renderProductLabel(item.label, item.id)}
                 </span>
                 <span className="devices_explore__status" aria-hidden />
-              </Link>
+              </span>
             ) : (
               <Link href={item.href} prefetch={false} className="devices_explore__link" data-slugkey="product.product_name">
                 {renderProductLabel(item.label, item.id)}

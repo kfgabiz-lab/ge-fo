@@ -104,17 +104,24 @@ export function DevicesProductDownloadsCategoryFilterRow({
     Boolean(option.nested?.length && option.defaultExpanded),
   );
   const parentId = `${idPrefix}-${option.id}`;
-  const nestedIds =
-    option.nested?.map((nested) => `${idPrefix}-${nested.id}`) ?? [];
-  const checkedNestedCount = nestedIds.filter((nestedId) =>
-    isChecked?.(nestedId),
+
+  const collectDescendantIds = (options: DownloadCategoryOption[]): string[] =>
+    options.flatMap((nested) => [
+      `${idPrefix}-${nested.id}`,
+      ...collectDescendantIds(nested.nested ?? []),
+    ]);
+
+  const descendantIds = collectDescendantIds(option.nested ?? []);
+  const checkedDescendantCount = descendantIds.filter((descendantId) =>
+    isChecked?.(descendantId),
   ).length;
   const parentChecked = isChecked?.(parentId) ?? false;
   const parentIndeterminate =
     Boolean(isChecked) &&
-    nestedIds.length > 0 &&
-    checkedNestedCount > 0 &&
-    checkedNestedCount < nestedIds.length;
+    descendantIds.length > 0 &&
+    checkedDescendantCount > 0 &&
+    checkedDescendantCount < descendantIds.length &&
+    !parentChecked;
   const isManaged = Boolean(isChecked && onToggle);
 
   return (
@@ -151,6 +158,20 @@ export function DevicesProductDownloadsCategoryFilterRow({
         <ul className="devices_product_downloads__filter-list devices_product_downloads__filter-list--nested">
           {option.nested.map((nested) => {
             const nestedId = `${idPrefix}-${nested.id}`;
+            const isBranch =
+              Boolean(nested.nested?.length) || Boolean(nested.hasArrow);
+
+            if (isBranch) {
+              return (
+                <DevicesProductDownloadsCategoryFilterRow
+                  key={nested.id}
+                  option={nested}
+                  idPrefix={idPrefix}
+                  isChecked={isChecked}
+                  onToggle={onToggle}
+                />
+              );
+            }
 
             return (
               <DevicesProductDownloadsFilterCheckRow

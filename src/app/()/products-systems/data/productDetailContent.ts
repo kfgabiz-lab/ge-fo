@@ -348,7 +348,7 @@ const metasolMsKeyFeatures: ProductKeyFeature[] = [
 
 export const metasolMsDetail: ProductDetail = {
   slug: "metasol-ms",
-  parentHref: "/products-category/lv-products-and-systems",
+  parentHref: "/product-range/magnetic-contactor",
   parentLabel: "Magnetic Contactor",
   category: "Magnetic Contactor",
   series: "Metasol MS",
@@ -503,7 +503,7 @@ const susolUlSmartMccbKeyFeatures: ProductKeyFeature[] = [
 
 export const susolUlSmartMccbDetail: ProductDetail = {
   slug: "susol-ul-smart-mccb",
-  parentHref: "/products-category/lv-products-and-systems",
+  parentHref: "/product-range/air-circuit-breaker-power-circuit-breaker",
   parentLabel: "Air Circuit Breaker / Power Circuit Breaker",
   category: "Air Circuit Breaker / Power Circuit Breaker",
   series: "Susol UL ACB",

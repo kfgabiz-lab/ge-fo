@@ -173,7 +173,6 @@ export const hvdcFaqItems = [
 
 export const hvSystemIntro = {
   parentLabel: "Products & Systems",
-  parentHref: "/products-category/lv-products-and-systems",
   title: "Software",
   description: hvdcHero.description,
 };
