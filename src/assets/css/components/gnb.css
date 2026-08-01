@@ -2419,21 +2419,31 @@ html.is-mega-open-scroll-lock body {
   border-bottom: 1px solid rgb(34 34 34 / 10%);
 }
 
-/* GNB search — body portal, fixed 오버레이 — Figma 4288:54315 (#gnb-search-panel) */
+/* GNB search — body portal, fixed 오버레이 — Figma 7334:131967 (#gnb-search-panel PC) */
+.gnb_search_dim {
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  padding: 0;
+  border: none;
+  background: rgb(0 0 0 / 50%);
+  cursor: pointer;
+}
+
 #gnb-search-panel.gnb_search {
   position: fixed;
   top: 80px;
   right: 0;
   left: 0;
-  z-index: 1001;
+  z-index: 9999;
   width: 100%;
-  height: 316px;
+  min-height: 316px;
+  height: auto;
   margin: 0;
   background: #fff;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: none;
 }
 
 #gnb-search-panel.gnb_search.is-open {
@@ -2447,7 +2457,7 @@ html.is-mega-open-scroll-lock body {
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 75px  0;
+  padding: 80px 0 0;
 }
 
 .gnb_search__form {
@@ -2462,14 +2472,16 @@ html.is-mega-open-scroll-lock body {
   height: 80px;
   min-height: 80px;
   max-height: 80px;
-  padding: 0 25px 0 30px;
-  gap: 12px;
+  padding: 0 30px;
+  gap: 14px;
   border-radius: 4px;
   background: #f5f5f5;
 }
 
-.gnb_search__field .MuiOutlinedInput-root fieldset {
-  border: none;
+.gnb_search__field .MuiOutlinedInput-root fieldset,
+.gnb_search__field .MuiOutlinedInput-root:hover fieldset,
+.gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border: 1px solid #9535ff !important;
 }
 
 .gnb_search__field .MuiOutlinedInput-input {
@@ -2485,34 +2497,81 @@ html.is-mega-open-scroll-lock body {
   font-size: 24px;
   line-height: 34px;
   letter-spacing: -0.01em;
-  color: rgb(34 34 34 / 25%);
+  color: #888;
   opacity: 1;
+}
+
+.gnb_search__mark {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  max-height: none;
+}
+
+.gnb_search__mark.MuiInputAdornment-root {
+  margin: 0;
+}
+
+.gnb_search__mark-icon {
+  display: block;
+  width: 32px;
+  height: 36px;
 }
 
 .gnb_search__adorn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 24px;
   height: 100%;
   margin: 0;
 }
 
+/* Figma 7334:132034 — Btn / 30px / FilterClear */
 .gnb_search__clear {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   padding: 0;
-  border: none;
-  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: #fff;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.gnb_search__clear:hover {
+  background: #f5f7fa;
+  border-color: #ccc;
 }
 
 .gnb_search__clear-icon {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 12px;
+  height: 12px;
+}
+
+.gnb_search__clear-icon-pc {
+  display: block;
+  width: 12px;
+  height: 12px;
+}
+
+.gnb_search__clear-icon-mo {
+  display: none;
+  width: 24px;
+  height: 24px;
 }
 
 .gnb_search__field .guide_field__search-icon-button {
@@ -2527,11 +2586,21 @@ html.is-mega-open-scroll-lock body {
   cursor: pointer;
 }
 
+.gnb_search__search-icon--mo {
+  display: none;
+}
+
+.gnb_search__search-icon--pc {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+
 .gnb_search__popular {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 14px;
+  gap: 14px;
   margin-top: 24px;
 }
 
@@ -2542,13 +2611,24 @@ html.is-mega-open-scroll-lock body {
   color: #888;
 }
 
+.gnb_search__popular-label--mo {
+  display: none;
+}
+
 .gnb_search__tags {
-  display: flex;
   flex-wrap: wrap;
   gap: 5px;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.gnb_search__tags--pc {
+  display: flex;
+}
+
+.gnb_search__tags--mo {
+  display: none;
 }
 
 .gnb_search__tag {
@@ -2577,6 +2657,196 @@ html.is-mega-open-scroll-lock body {
   border-color: #0f1f45;
   background: #0f1f45;
   color: #fff;
+}
+
+/* GNB search mobile — Figma 7334:131884 · 7334:131899 (filled) */
+@media (max-width: 780px) {
+  /* Figma 7334:131856 — header/search는 밝게 유지하고 페이지 영역만 50% dim */
+  .main_header.is-search-open,
+  .gnb_menu_wrap.is-search-open {
+    z-index: 10000;
+  }
+
+  .gnb_search_dim {
+    z-index: 1;
+  }
+
+  #gnb-search-panel.gnb_search {
+    top: 60px;
+    z-index: 9999;
+    height: auto;
+  }
+
+  #gnb-search-panel .gnb_search__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: none;
+    padding: 40px 20px;
+  }
+
+  .gnb_search__field .MuiOutlinedInput-root {
+    height: 60px;
+    min-height: 60px;
+    max-height: 60px;
+    padding: 0 20px;
+    gap: 8px;
+    border-radius: 4px;
+    background: #f5f5f5;
+  }
+
+  .gnb_search__field .MuiOutlinedInput-root fieldset,
+  .gnb_search__field .MuiOutlinedInput-root:hover fieldset,
+  .gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+    border: 1px solid #9535ff !important;
+  }
+
+  .gnb_search__field .MuiOutlinedInput-input {
+    height: 60px;
+    padding: 0;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0;
+    color: #222;
+  }
+
+  .gnb_search__field .MuiOutlinedInput-input::placeholder {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0;
+    color: #888;
+    opacity: 1;
+  }
+
+  .gnb_search__mark {
+    width: 24px;
+    height: 28px;
+  }
+
+  .gnb_search__mark-icon {
+    width: 24px;
+    height: 28px;
+  }
+
+  /* Figma 7334:131929 — clear 24px · gap 14px to search */
+  .gnb_search__adorn {
+    gap: 14px;
+  }
+
+  .gnb_search__clear {
+    min-width: 24px;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    background: transparent;
+    transition: none;
+  }
+
+  .gnb_search__clear:hover {
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .gnb_search__clear-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .gnb_search__clear-icon-pc {
+    display: none;
+  }
+
+  .gnb_search__clear-icon-mo {
+    display: block;
+  }
+
+  .gnb_search__field .guide_field__search-icon-button {
+    width: 20px;
+    height: 20px;
+  }
+
+  .gnb_search__search-icon--pc {
+    display: none;
+  }
+
+  .gnb_search__search-icon--mo {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  .gnb_search__popular {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 0;
+  }
+
+  .gnb_search__popular-label--pc,
+  .gnb_search__tags--pc {
+    display: none;
+  }
+
+  .gnb_search__popular-label--mo {
+    display: block;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #888;
+  }
+
+  .gnb_search__tags--mo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 8px;
+    width: 100%;
+  }
+
+  .gnb_search__tag {
+    min-height: 31px;
+    padding: 6px 16px;
+    font-size: 13px;
+    line-height: 19px;
+  }
+
+  /* 모바일 GNB 60px — Figma 7334:131941 */
+  .main_header__gnb-row {
+    height: 60px;
+  }
+
+  .main_header__inner {
+    height: 60px;
+    min-height: 60px;
+  }
+
+  .main_header.is-search-open.is-gnb-hidden .main_header__gnb-row,
+  .main_header.is-mega-open.is-gnb-hidden .main_header__gnb-row {
+    height: 60px;
+  }
+
+  .main_header-wrap:not(.is-at-top)::after {
+    height: 60px;
+  }
+
+  .main_header.is-top .icon_menu span {
+    background: #fff;
+  }
+
+  .main_header.is-search-open .icon_menu span,
+  .main_header.is-search-open.is-top .icon_menu span,
+  .main_header.is-mega-open.is-top .icon_menu span {
+    background: #0f1f45;
+  }
+
+  .main_header.is-search-open .main_header__btn-search,
+  .main_header.is-search-open.is-top .main_header__btn-search {
+    background-image: url("/ico/ico_search_24.svg");
+  }
+
+  .main_header.is-search-open .main_header__btn-search.is-close,
+  .main_header.is-search-open.is-top .main_header__btn-search.is-close {
+    background-image: url("/ico/ico_close_24.svg");
+  }
 }
 
 .gnb_menu_wrap .btn_global {

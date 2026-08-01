@@ -24,6 +24,8 @@ type WhereToBuySearchProps = {
   initialQuery?: string;
   embedded?: boolean;
   onLocate?: (coord: GeoCoord | null, source: WhereToBuyLocateSource) => void;
+  onTextFallback?: (query: string) => void;
+  onReset?: () => void;
 };
 
 function geolocationMessage(error: unknown): string {
@@ -46,6 +48,8 @@ export default function WhereToBuySearch({
   initialQuery = "",
   embedded = false,
   onLocate,
+  onTextFallback,
+  onReset,
 }: WhereToBuySearchProps) {
   const [query, setQuery] = useState(initialQuery);
   const [busy, setBusy] = useState(false);
@@ -55,6 +59,7 @@ export default function WhereToBuySearch({
 
   const suppressFetchRef = useRef(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const suggestionsRequestIdRef = useRef(0);
   const fieldWrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,12 +79,15 @@ export default function WhereToBuySearch({
       clearTimeout(debounceRef.current);
     }
     debounceRef.current = setTimeout(() => {
+      const requestId = ++suggestionsRequestIdRef.current;
       fetchPlaceSuggestions(trimmed)
         .then((list) => {
+          if (suggestionsRequestIdRef.current !== requestId) return;
           setSuggestions(list);
           setShowSuggestions(list.length > 0);
         })
         .catch(() => {
+          if (suggestionsRequestIdRef.current !== requestId) return;
           setSuggestions([]);
           setShowSuggestions(false);
         });
@@ -108,7 +116,15 @@ export default function WhereToBuySearch({
 
   async function runSearch() {
     const trimmed = query.trim();
-    if (!trimmed || busy) return;
+    if (busy) return;
+    if (!trimmed) {
+      onReset?.();
+      return;
+    }
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    suggestionsRequestIdRef.current += 1;
     setShowSuggestions(false);
     setBusy(true);
     try {
@@ -116,9 +132,7 @@ export default function WhereToBuySearch({
       if (coord) {
         onLocate?.(coord, "address");
       } else {
-        window.alert(
-          "We couldn't find that location. Please check the city, state, or ZIP and try again.",
-        );
+        onTextFallback?.(trimmed);
       }
     } catch {
       window.alert("Location search is temporarily unavailable. Please try again.");
@@ -129,6 +143,10 @@ export default function WhereToBuySearch({
 
   async function selectSuggestion(suggestion: PlaceSuggestion) {
     if (busy) return;
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    suggestionsRequestIdRef.current += 1;
     suppressFetchRef.current = true;
     setQuery(suggestion.description);
     setSuggestions([]);
@@ -138,10 +156,6 @@ export default function WhereToBuySearch({
       const coord = await geocodePlaceId(suggestion.placeId);
       if (coord) {
         onLocate?.(coord, "address");
-      } else {
-        window.alert(
-          "We couldn't find that location. Please check the city, state, or ZIP and try again.",
-        );
       }
     } catch {
       window.alert("Location search is temporarily unavailable. Please try again.");

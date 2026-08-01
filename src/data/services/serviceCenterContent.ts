@@ -1,6 +1,6 @@
 import type { CommonFaqEntry } from "@/components/faq/CommonFaq";
 
-export const GICS_REQUEST_URL = "https://gics.ls-electric.com/public/index.do";
+export const GICS_REQUEST_URL = "https://gics.ls-electric.com/loginForm.do?lang=ko";
 
 export const serviceCenterPage = {
   title: "Service Center",
@@ -51,7 +51,7 @@ export const serviceCenterPage = {
         description:
           "Enhance your product knowledge with instructor-led training programs.",
         icon: "/img/services/service-center/icon-training.svg",
-        href: "/services/engineering-training",
+        href: "https://gics.ls-electric.com/loginForm.do?lang=ko",
         external: false,
       },
       {
@@ -117,6 +117,15 @@ export const serviceCenterPage = {
           "Reliable field support for troubleshooting, repair, and system stabilization, delivered by experienced engineers in coordination with LS ELECTRIC.",
         image: "/img/services/service-center/offering-03.jpg",
       },
+      // {
+      //   id: "offering-04",
+      //   number: "04",
+      //   title: "On-Site Field Service",
+      //   titleLines: ["On-Site", "Field Service"],
+      //   description:
+      //     "Qualified field engineers deliver hands-on troubleshooting, repair, and replacement services wherever your operations are located.",
+      //   image: "/img/services/service-center/offering-04.jpg",
+      // },
     ],
   },
   serviceFlow: {
@@ -212,6 +221,46 @@ export const serviceCenterPage = {
         subtitle: "Access Integrated Digital Resources",
         description:
           "View your service history and access relevant information to support ongoing operations.",
+      },
+    ],
+  },
+  help: {
+    title: "Get the Support You Need, Fast",
+    description:
+      "Connect with our experts, configure your ideal system, and find the nearest partners—all in one place.",
+    cards: [
+      {
+        id: "request-service",
+        title: "Request for Service & Support",
+        description:
+          "Submit a request for technical support, maintenance, or field service.",
+        cta: "Request for Service",
+        ctaIcon: "arrow" as const,
+        href: GICS_REQUEST_URL,
+        external: true,
+        image: "/img/services/service-center/help-01.jpg",
+      },
+      {
+        id: "warranty",
+        title: "Warranty & Coverage",
+        description:
+          "Submit a request for technical support, maintenance, or field service.",
+        cta: "Check Warranty",
+        ctaIcon: "link" as const,
+        href: GICS_REQUEST_URL,
+        external: true,
+        image: "/img/services/service-center/help-02.jpg",
+      },
+      {
+        id: "contact",
+        title: "Contact Us",
+        description:
+          "Submit a request for technical support, maintenance, or field service.",
+        cta: "Contact Us",
+        ctaIcon: "link" as const,
+        href: "/support/contact-us",
+        external: false,
+        image: "/img/services/service-center/help-03.jpg",
       },
     ],
   },

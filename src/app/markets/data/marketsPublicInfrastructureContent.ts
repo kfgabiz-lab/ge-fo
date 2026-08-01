@@ -1,5 +1,4 @@
 import {
-  marketsBenefitImages,
   type BenefitItem,
   type IndustryTab,
   type ProductItem,
@@ -155,7 +154,7 @@ export const publicInfrastructureBenefits: BenefitItem[] = [
       "Ensure stable, 24/7 operation of essential public services through high-reliability power distribution and diagnostic technologies.",
     capabilities:
       "Advanced UL-listed switchgear and IED-based Substation Automation (SA) that enables complete automation of power monitoring and control for mission-critical facilities like international airports.",
-    image: marketsBenefitImages.benefit01,
+    image: "/img/markets/public-infrastructure/benefits/benefit_01.jpg",
   },
   {
     id: "pi-b2",
@@ -165,7 +164,7 @@ export const publicInfrastructureBenefits: BenefitItem[] = [
       "Support long-term community growth and modernization with flexible, modular electrical systems.",
     capabilities:
       "Open communication protocols (Modbus, Ethernet) and modular hardware design that simplify integration with existing and future infrastructure.",
-    image: marketsBenefitImages.benefit04,
+    image: "/img/markets/public-infrastructure/benefits/benefit_02.jpg",
     reverse: true,
   },
   {
@@ -176,7 +175,7 @@ export const publicInfrastructureBenefits: BenefitItem[] = [
       "Prioritize public safety and ensure compliance with strict North American industry standards.",
     capabilities:
       "UL-listed Arc-Resistant equipment and intelligent Susol Smart MCCB units that provide precision metering and equipment maintenance diagnostics.",
-    image: marketsBenefitImages.benefit05,
+    image: "/img/markets/public-infrastructure/benefits/benefit_03.jpg",
   },
   {
     id: "pi-b4",
@@ -186,7 +185,7 @@ export const publicInfrastructureBenefits: BenefitItem[] = [
       "Reduce the financial burden on public budgets through data-driven energy optimization and smart management.",
     capabilities:
       "IEC 61850 compliant systems and GridSol CARE cloud-based monitoring that minimize energy waste while lowering operational and maintenance costs through real-time data.",
-    image: marketsBenefitImages.benefit09,
+    image: "/img/markets/public-infrastructure/benefits/benefit_04.jpg",
     reverse: true,
   },
 ];

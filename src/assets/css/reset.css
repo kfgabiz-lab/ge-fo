@@ -11,14 +11,16 @@
 }
 
 html {
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 
 img,
@@ -54,6 +56,22 @@ a {
   text-decoration: none;
 }
 
+/* iOS Safari data detectors (phone/date/address) inject links with inline styles */
+a[x-apple-data-detectors],
+a[x-apple-data-detectors]:hover,
+a[x-apple-data-detectors]:active,
+a[x-apple-data-detectors]:focus,
+a[x-apple-data-detectors="true"],
+a[x-apple-data-detectors-type] {
+  color: inherit !important;
+  text-decoration: none !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  font-family: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+}
+
 ul,
 ol {
   list-style: none;
@@ -62,6 +80,16 @@ ol {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+/* iOS Safari font boosting — 표 셀 글자만 키우는 현상 차단 */
+th,
+td {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  max-height: 999999px;
 }
 
 p,

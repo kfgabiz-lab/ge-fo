@@ -52,7 +52,7 @@ export const supportMegaMenu: GnbSimpleMegaMenu = {
           description: "Information hub for power products",
           href: "https://gics.ls-electric.com/public/knowledgeBasePopup.do",
           external: true,
-          externalIcon: false,
+          externalIcon: true,
         },
         {
           id: "Knowledge-Base-Automation",
@@ -60,7 +60,7 @@ export const supportMegaMenu: GnbSimpleMegaMenu = {
           description: "Information hub for automation products",
           href: "https://sol.ls-electric.com/us/en/community/blog",
           external: true,
-          externalIcon: false,
+          externalIcon: true,
         },
         {
           id: "product-match",
@@ -80,7 +80,7 @@ export const supportMegaMenu: GnbSimpleMegaMenu = {
           id: "request-service",
           title: "Request for Service",
           description: "Submit a support request online.",
-          href: "https://gics.ls-electric.com/public/index.do",
+          href: "https://gics.ls-electric.com/loginForm.do?lang=ko",
           external: true,
         },
       ],

@@ -8,13 +8,8 @@ import type {
   EngineeringTrainingDetail,
   EngineeringTrainingSession,
 } from "@/data/services/engineeringTrainingDetailContent";
+import { toCategoryOptions, type CodeItem } from "../data/trainingData";
 import TrainingDetailSession from "./TrainingDetailSession";
-
-const TYPE_OPTIONS = [
-  { value: "", label: "All" },
-  { value: "001", label: "In-Person" },
-  { value: "002", label: "Virtual" },
-];
 
 const MONTH_OPTIONS = [
   { value: "", label: "All" },
@@ -28,11 +23,18 @@ const MONTH_OPTIONS = [
 export default function TrainingDetailSchedule({
   detail,
   hrefPrefix,
+  trainingTypeCodes,
 }: {
   detail: EngineeringTrainingDetail;
   hrefPrefix: string;
+  trainingTypeCodes: CodeItem[];
 }) {
   const { trainingTypeFilter, monthFilter, sessions } = detail.schedule;
+
+  const typeOptions = useMemo(
+    () => toCategoryOptions(trainingTypeCodes),
+    [trainingTypeCodes],
+  );
 
   const [typeValue, setTypeValue] = useState("");
   const [monthValue, setMonthValue] = useState("");
@@ -41,8 +43,10 @@ export default function TrainingDetailSchedule({
     () =>
       sessions.filter((s) => {
         if (typeValue && !(s.typeCodes ?? []).includes(typeValue)) return false;
-        if (monthValue && (s.isoDate ?? "").slice(5, 7) !== monthValue) {
-          return false;
+        if (monthValue) {
+          const fromMonth = (s.isoDate ?? "").slice(5, 7);
+          const toMonth = (s.isoDateTo ?? "").slice(5, 7);
+          if (fromMonth !== monthValue && toMonth !== monthValue) return false;
         }
         return true;
       }),
@@ -66,10 +70,12 @@ export default function TrainingDetailSchedule({
     return groups;
   }, [filteredSessions]);
 
-  const typeLabel =
-    TYPE_OPTIONS.find((o) => o.value === typeValue)?.label ?? "All";
-  const monthLabel =
-    MONTH_OPTIONS.find((o) => o.value === monthValue)?.label ?? "All";
+  const typeDisplayLabel = typeValue
+    ? (typeOptions.find((o) => o.value === typeValue)?.label ?? trainingTypeFilter.label)
+    : trainingTypeFilter.label;
+  const monthDisplayLabel = monthValue
+    ? (MONTH_OPTIONS.find((o) => o.value === monthValue)?.label ?? monthFilter.label)
+    : monthFilter.label;
 
   return (
     <section
@@ -88,13 +94,13 @@ export default function TrainingDetailSchedule({
               renderValue={() => (
                 <span
                   className="guide_field__select-value"
-                  title={`${trainingTypeFilter.label}: ${typeLabel}`}
+                  title={typeDisplayLabel}
                 >
-                  {`${trainingTypeFilter.label}: ${typeLabel}`}
+                  {typeDisplayLabel}
                 </span>
               )}
             >
-              {TYPE_OPTIONS.map((option) => (
+              {typeOptions.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
@@ -112,9 +118,9 @@ export default function TrainingDetailSchedule({
               renderValue={() => (
                 <span
                   className="guide_field__select-value"
-                  title={`${monthFilter.label}: ${monthLabel}`}
+                  title={monthDisplayLabel}
                 >
-                  {`${monthFilter.label}: ${monthLabel}`}
+                  {monthDisplayLabel}
                 </span>
               )}
             >

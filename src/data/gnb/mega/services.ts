@@ -26,7 +26,7 @@ export const servicesMegaMenu: GnbSimpleMegaMenu = {
           id: "request-for-service",
           title: "Request for Service",
           description: "Submit a service request online.",
-          href: "https://gics.ls-electric.com/public/index.do",
+          href: "https://gics.ls-electric.com/loginForm.do?lang=ko",
           external: true,
         },
       ],

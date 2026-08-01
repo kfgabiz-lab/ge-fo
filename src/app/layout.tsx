@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 
 import HistoryReloadOnNavigate from "@/components/layout/HistoryReloadOnNavigate";
@@ -12,10 +12,21 @@ import "../assets/css/fonts.css";
 import "../assets/css/globals.css";
 import "../assets/css/components/product-award-badge.css";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "LS ELECTRIC | Smart Energy Global Leader",
   description:
     "LS ELECTRIC is starting a new chapter to bring smart energy to light everywhere around the world. We deliver safe, clean energy and innovative solutions for a sustainable future.",
+  formatDetection: {
+    telephone: false,
+    date: false,
+    address: false,
+    email: false,
+  },
   openGraph: {
     title: "LS ELECTRIC | Smart Energy Global Leader",
     description:

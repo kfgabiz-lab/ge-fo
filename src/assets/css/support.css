@@ -3830,6 +3830,7 @@
   section.support_where_to_buy_contents .support_where_to_buy_map {
     position: relative;
     overflow: hidden;
+    overscroll-behavior: contain;
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_map__canvas {
@@ -3906,7 +3907,7 @@
     background: #fff;
     box-shadow: 0 20px 15px rgb(0 0 0 / 8%);
     pointer-events: auto;
-    transform: translateY(calc(-100% - 8px));
+    transform: translateY(calc(-100% - 42px));
     opacity: 0;
     transition: opacity 0.25s ease;
   }

@@ -36,21 +36,22 @@ export const whereToBuyPage = {
   viewMapLabel: "View Map",
   totalResults: 2658,
   mapPinImage: "/img/support/where-to-buy/pin.svg",
-  mapBrandPinImage: "/img/support/where-to-buy/pin-brand.svg",
+  mapBrandPinImage: "/img/support/where-to-buy/pin-brand.png",
   mapDefaultCenter: { lat: whereToBuyHq.lat, lng: whereToBuyHq.lng },
   mapDefaultZoom: 9,
-  mapActiveZoom: 12,
 } as const;
 
 export const whereToBuyDistanceOptions = [
-  { value: "500mi", label: "500mi" },
-  { value: "250mi", label: "250mi" },
-  { value: "100mi", label: "100mi" },
-  { value: "50mi", label: "50mi" },
-  { value: "25mi", label: "25mi" },
-  { value: "10mi", label: "10mi" },
   { value: "5mi", label: "5mi" },
+  { value: "10mi", label: "10mi" },
+  { value: "25mi", label: "25mi" },
+  { value: "50mi", label: "50mi" },
+  { value: "100mi", label: "100mi" },
+  { value: "250mi", label: "250mi" },
+  { value: "500mi", label: "500mi" },
 ] as const;
+
+export const whereToBuyDefaultDistance = "500mi";
 
 export const whereToBuyFilterLabels = {
   distance: "Distance",
@@ -170,6 +171,19 @@ export function filterLocationsByRadius(
     .map((entry) => entry.location);
 }
 
+
+export function filterLocationsByText(
+  locations: WhereToBuyLocation[],
+  query: string,
+): WhereToBuyLocation[] {
+  const needle = query.trim().toLowerCase();
+  if (!needle) {
+    return [];
+  }
+  return locations.filter((location) =>
+    location.address.toLowerCase().includes(needle),
+  );
+}
 
 export type WhereToBuyBoundsLiteral = {
   north: number;

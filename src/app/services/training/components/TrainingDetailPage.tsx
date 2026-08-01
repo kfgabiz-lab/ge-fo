@@ -53,7 +53,11 @@ export default async function TrainingDetailPage({
       id="P-FO-SERV-030100P"
     >
       <TrainingDetailHero detail={detail} />
-      <TrainingDetailSchedule detail={detail} hrefPrefix={hrefPrefix} />
+      <TrainingDetailSchedule
+        detail={detail}
+        hrefPrefix={hrefPrefix}
+        trainingTypeCodes={trainingTypeCodes}
+      />
     </main>
   );
 }

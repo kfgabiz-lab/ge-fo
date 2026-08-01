@@ -8,6 +8,7 @@ export type EngineeringTrainingSession = {
   location?: string;
   productsCovered: string;
   isoDate?: string;
+  isoDateTo?: string;
   typeCodes?: string[];
 };
 

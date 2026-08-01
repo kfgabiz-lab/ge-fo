@@ -135,7 +135,7 @@ function extractProductNames(
 function computeClosesLabel(registerPeriodTo?: string): string {
   const ymd = parseYmd(registerPeriodTo);
   if (!ymd) return "";
-  const now = new Date();
+  const now = siteToday();
   const endUtc = Date.UTC(ymd.y, ymd.m - 1, ymd.d);
   const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
   const days = Math.ceil((endUtc - todayUtc) / 86_400_000);
@@ -162,12 +162,12 @@ function formatSessionDateRange(from?: string, to?: string): string {
       return `${MONTH_ABBR[f.m]} ${f.d}, ${f.y}`;
     }
     if (f.y === t.y && f.m === t.m) {
-      return `${MONTH_ABBR[f.m]} ${f.d}–${t.d}, ${f.y}`;
+      return `${MONTH_ABBR[f.m]} ${f.d}-${t.d}, ${f.y}`;
     }
     if (f.y === t.y) {
-      return `${MONTH_ABBR[f.m]} ${f.d} – ${MONTH_ABBR[t.m]} ${t.d}, ${f.y}`;
+      return `${MONTH_ABBR[f.m]} ${f.d} - ${MONTH_ABBR[t.m]} ${t.d}, ${f.y}`;
     }
-    return `${MONTH_ABBR[f.m]} ${f.d}, ${f.y} – ${MONTH_ABBR[t.m]} ${t.d}, ${t.y}`;
+    return `${MONTH_ABBR[f.m]} ${f.d}, ${f.y} - ${MONTH_ABBR[t.m]} ${t.d}, ${t.y}`;
   }
   const only = f ?? t;
   if (!only) return "";
@@ -229,6 +229,29 @@ function formatDurationHours(value: unknown): string {
   return `${s} Hours`;
 }
 
+function formatDurationCovered(value: unknown): string {
+  const hours = formatDurationHours(value);
+  if (!hours) return "";
+  return `Duration: ${hours}`;
+}
+
+function formatTrainingTypeCovered(
+  csv: string | undefined,
+  map: Map<string, string>,
+): string {
+  const joined = splitTypeCodes(csv)
+    .map((code) => map.get(code) ?? code)
+    .join(" | ");
+  if (!joined) return "";
+  return `Training Type: ${joined}`;
+}
+
+function formatProductsCovered(names: string[]): string {
+  const joined = names.join(", ");
+  if (!joined) return "";
+  return `PRODUCTS COVERED: ${joined}`;
+}
+
 function codeLabel(map: Map<string, string>, code: string | undefined): string {
   const key = code ?? "";
   return map.get(key) ?? key;
@@ -261,8 +284,7 @@ export function toTrainingCourseDetail(
   const imageArr = curriculum.image;
   const mediaId =
     Array.isArray(imageArr) && imageArr.length > 0 ? Number(imageArr[0]) : null;
-  const heroImage =
-    mediaId != null ? trainingImageSrc(mediaId) : STATIC_COURSE_BASE.heroImage;
+  const heroImage = mediaId != null ? trainingImageSrc(mediaId) : "";
 
   const sessions: EngineeringTrainingSession[] = valid.map(({ raw, json }) =>
     toCourseCard(raw, json, trainingTypeMap, productNameMaps),
@@ -298,14 +320,17 @@ function toCourseCard(
     id: String(raw.id), 
     date: formatSessionDateRange(d2.training_date_from, d2.training_date_to),
     isoDate: (d2.training_date_from ?? "").slice(0, 10),
+    isoDateTo: (d2.training_date_to ?? "").slice(0, 10),
     title: d2.title ?? "",
     closesLabel: computeClosesLabel(d2.register_period_to),
-    trainingType: trainingTypeLabels(d1.training_type, trainingTypeMap),
-    duration: formatDurationHours(d2.duration),
+    trainingType: formatTrainingTypeCovered(d1.training_type, trainingTypeMap),
+    duration: formatDurationCovered(d2.duration),
     location: showAddress
       ? [d2.address_detail, d2.address].filter(Boolean).join(", ") || undefined
       : undefined,
-    productsCovered: extractProductNames(json, productNameMaps).join(", "),
+    productsCovered: formatProductsCovered(
+      extractProductNames(json, productNameMaps),
+    ),
     typeCodes,
   };
 }

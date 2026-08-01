@@ -16,6 +16,8 @@ type WhereToBuyControlsProps = {
   radiusValue: string;
   onRadiusChange: (value: string) => void;
   onLocate: (coord: GeoCoord | null, source: WhereToBuyLocateSource) => void;
+  onTextFallback: (query: string) => void;
+  onReset: () => void;
 };
 
 function renderSelectValue(label: string) {
@@ -30,10 +32,17 @@ export default function WhereToBuyControls({
   radiusValue,
   onRadiusChange,
   onLocate,
+  onTextFallback,
+  onReset,
 }: WhereToBuyControlsProps) {
   return (
     <div className="support_where_to_buy_contents__controls">
-      <WhereToBuySearch embedded onLocate={onLocate} />
+      <WhereToBuySearch
+        embedded
+        onLocate={onLocate}
+        onTextFallback={onTextFallback}
+        onReset={onReset}
+      />
       <div className="support_where_to_buy_contents__filters">
         <FormControl className="guide_field">
           <GuideSelect

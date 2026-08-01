@@ -1461,7 +1461,7 @@ section.main_notic .txt:before {
     .sl_dim {
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: linear-gradient(#00000026 0%, rgb(0 0 0 / 55%) 100%);
       pointer-events: none;
       z-index: 1;
     }
@@ -1469,7 +1469,7 @@ section.main_notic .txt:before {
     .sl_dim::after {
       position: absolute;
       inset: 0;
-      background: rgba(0, 6, 30, 0.4);
+      /* background: rgba(0, 6, 30, 0.4); */
       mix-blend-mode: hard-light;
       content: "";
       pointer-events: none;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type {
   WhereToBuyBoundsLiteral,
   WhereToBuyLocation,
@@ -21,13 +21,13 @@ import {
 } from "@/lib/googleMaps/loadGoogleMaps";
 import WhereToBuyMapPlaceholder from "./WhereToBuyMapPlaceholder";
 
-export type PopupPixel = { x: number; y: number };
+type PopupPixel = { x: number; y: number };
 
 type WhereToBuyMapProps = {
   locations: WhereToBuyLocation[];
   activeLocation?: WhereToBuyLocation;
   onLocationSelect?: (locationId: string) => void;
-  onPopupPositionChange?: (pos: PopupPixel | null) => void;
+  popupAnchorRef?: React.RefObject<HTMLDivElement | null>;
   isFiltered?: boolean;
   boundsMode?: boolean;
   onSearchArea?: (bounds: WhereToBuyBoundsLiteral) => void;
@@ -47,7 +47,7 @@ export default function WhereToBuyMap({
   locations,
   activeLocation,
   onLocationSelect,
-  onPopupPositionChange,
+  popupAnchorRef,
   isFiltered = false,
   boundsMode = false,
   onSearchArea,
@@ -67,20 +67,29 @@ export default function WhereToBuyMap({
   const overlayRef = useRef<google.maps.OverlayView | null>(null);
   const popupPositionRafIdRef = useRef<number | null>(null);
   const activeLocationRef = useRef<WhereToBuyLocation | undefined>(activeLocation);
-  const onPopupPositionChangeRef = useRef(onPopupPositionChange);
+  const popupAnchorRefHolder = useRef(popupAnchorRef);
+  const lastPopupPosRef = useRef<PopupPixel | null>(null);
   const onSearchAreaRef = useRef(onSearchArea);
   const [showAreaButton, setShowAreaButton] = useState(false);
+  const showAreaButtonRef = useRef(false);
   const suppressUserMoveRef = useRef(false);
+  const pendingPopupRevealRef = useRef(false);
   const prevLocationsRef = useRef<WhereToBuyLocation[] | null>(null);
   const [mapReady, setMapReady] = useState(false);
   const [mapError, setMapError] = useState(false);
 
   activeLocationRef.current = activeLocation;
-  onPopupPositionChangeRef.current = onPopupPositionChange;
+  popupAnchorRefHolder.current = popupAnchorRef;
   onSearchAreaRef.current = onSearchArea;
   radiusOriginRef.current = radiusOrigin;
   radiusMilesRef.current = radiusMiles;
   boundsModeRef.current = boundsMode;
+
+  const updateShowAreaButton = (next: boolean) => {
+    if (showAreaButtonRef.current === next) return;
+    showAreaButtonRef.current = next;
+    setShowAreaButton(next);
+  };
 
   const handleSearchArea = () => {
     const map = mapRef.current;
@@ -95,17 +104,31 @@ export default function WhereToBuyMap({
       east: ne.lng(),
       west: sw.lng(),
     });
-    setShowAreaButton(false);
+    updateShowAreaButton(false);
+  };
+
+  const clearPopupPositionRef = useRef<() => void>(() => {});
+  clearPopupPositionRef.current = () => {
+    const el = popupAnchorRefHolder.current?.current;
+    if (el && lastPopupPosRef.current !== null) {
+      el.style.left = "";
+      el.style.top = "";
+    }
+    lastPopupPosRef.current = null;
   };
 
   const updatePopupPositionRef = useRef<() => void>(() => {});
   updatePopupPositionRef.current = () => {
+    const el = popupAnchorRefHolder.current?.current;
+    if (!el) {
+      lastPopupPosRef.current = null;
+      return;
+    }
     const map = mapRef.current;
     const overlay = overlayRef.current;
     const loc = activeLocationRef.current;
-    const notify = onPopupPositionChangeRef.current;
     if (!map || !overlay || !loc || !hasValidCoords(loc) || !window.google?.maps) {
-      notify?.(null);
+      clearPopupPositionRef.current();
       return;
     }
     const projection = overlay.getProjection();
@@ -115,9 +138,16 @@ export default function WhereToBuyMap({
     const point = projection.fromLatLngToContainerPixel(
       new window.google.maps.LatLng(loc.lat, loc.lng),
     );
-    if (point) {
-      notify?.({ x: point.x, y: point.y });
+    if (!point) {
+      return;
     }
+    const last = lastPopupPosRef.current;
+    if (last && last.x === point.x && last.y === point.y) {
+      return;
+    }
+    lastPopupPosRef.current = { x: point.x, y: point.y };
+    el.style.left = `${point.x}px`;
+    el.style.top = `${point.y}px`;
   };
 
   const drawMarkersRef = useRef<() => void>(() => {});
@@ -159,7 +189,7 @@ export default function WhereToBuyMap({
 
   useEffect(() => {
     if (usePlaceholder || !apiKey || !mapCanvasRef.current) {
-      onPopupPositionChangeRef.current?.(null);
+      clearPopupPositionRef.current();
       return;
     }
 
@@ -234,7 +264,13 @@ export default function WhereToBuyMap({
         };
 
         listeners = [
-          map.addListener("idle", () => updatePopupPositionRef.current()),
+          map.addListener("idle", () => {
+            updatePopupPositionRef.current();
+            if (pendingPopupRevealRef.current) {
+              pendingPopupRevealRef.current = false;
+              popupAnchorRefHolder.current?.current?.classList.add("is-visible");
+            }
+          }),
           map.addListener("bounds_changed", scheduleUpdatePopupPosition),
           map.addListener("center_changed", scheduleUpdatePopupPosition),
           map.addListener("zoom_changed", () => updatePopupPositionRef.current()),
@@ -248,14 +284,14 @@ export default function WhereToBuyMap({
 
         listeners.push(
           map.addListener("dragend", () => {
-            setShowAreaButton(true);
+            updateShowAreaButton(true);
           }),
         );
 
         listeners.push(
           map.addListener("zoom_changed", () => {
             if (suppressUserMoveRef.current) return;
-            setShowAreaButton(true);
+            updateShowAreaButton(true);
           }),
         );
 
@@ -285,6 +321,9 @@ export default function WhereToBuyMap({
       circleRef.current = null;
       mapRef.current = null;
       prevLocationsRef.current = null;
+      lastPopupPosRef.current = null;
+      showAreaButtonRef.current = false;
+      setShowAreaButton(false);
       setMapReady(false);
     };
   }, [apiKey, usePlaceholder]);
@@ -297,8 +336,14 @@ export default function WhereToBuyMap({
       return;
     }
     drawMarkersRef.current();
-    updatePopupPositionRef.current();
   }, [locations, activeLocation, mapReady, usePlaceholder]);
+
+  useLayoutEffect(() => {
+    if (usePlaceholder || !mapReady) {
+      return;
+    }
+    updatePopupPositionRef.current();
+  }, [activeLocation, mapReady, usePlaceholder]);
 
   useEffect(() => {
     if (usePlaceholder) {
@@ -331,7 +376,7 @@ export default function WhereToBuyMap({
     prevLocationsRef.current = locations;
 
     if (locationsChanged) {
-      setShowAreaButton(false);
+      updateShowAreaButton(false);
     }
 
     const mappable = locations.filter(hasValidCoords);
@@ -345,20 +390,36 @@ export default function WhereToBuyMap({
       return;
     }
 
-    if (isFiltered && mappable.length > 1 && locationsChanged) {
-      suppressUserMoveRef.current = true;
-      const bounds = new maps.LatLngBounds();
-      mappable.forEach((location) => {
-        bounds.extend({ lat: location.lat, lng: location.lng });
-      });
-      map.fitBounds(bounds);
+    if (isFiltered && locationsChanged) {
+      if (mappable.length >= 1) {
+        suppressUserMoveRef.current = true;
+        const bounds = new maps.LatLngBounds();
+        if (!boundsMode) {
+          bounds.extend(radiusOriginRef.current);
+        }
+        mappable.forEach((location) => {
+          bounds.extend({ lat: location.lat, lng: location.lng });
+        });
+        map.fitBounds(bounds);
+      } else if (!boundsMode) {
+        const circleBounds = circleRef.current?.getBounds();
+        if (circleBounds) {
+          suppressUserMoveRef.current = true;
+          map.fitBounds(circleBounds);
+        }
+      }
     }
 
     const skipAutoPan = boundsMode && locationsChanged;
-    if (!skipAutoPan && activeLocation && hasValidCoords(activeLocation)) {
-      suppressUserMoveRef.current = true;
-      map.panTo({ lat: activeLocation.lat, lng: activeLocation.lng });
-      map.setZoom(whereToBuyPage.mapActiveZoom);
+    if (activeLocation && hasValidCoords(activeLocation)) {
+      if (skipAutoPan) {
+        popupAnchorRefHolder.current?.current?.classList.add("is-visible");
+      } else {
+        suppressUserMoveRef.current = true;
+        popupAnchorRefHolder.current?.current?.classList.remove("is-visible");
+        pendingPopupRevealRef.current = true;
+        map.panTo({ lat: activeLocation.lat, lng: activeLocation.lng });
+      }
     }
   }, [
     locations,
@@ -395,6 +456,7 @@ export default function WhereToBuyMap({
         style={mapFillStyle}
         role="application"
         aria-label={`Map showing distributor locations near ${activeLocation?.name ?? ""}`}
+        data-lenis-prevent-wheel
       />
       {/* 사용자가 지도를 이동/줌한 뒤에만 노출 — 클릭 시 현재 영역 기준으로 목록을 갈아끼운다 */}
       {mapReady && showAreaButton ? (

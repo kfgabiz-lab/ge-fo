@@ -75,7 +75,7 @@ export const lsElectricIntro = {
 export const lsElectricHighlights = {
   title: "2025 Highlights",
   ctaLabel: "View IR infomation",
-  ctaHref: "https://www.ls-electric.com/en/company/investor-relations/overview.do",
+  ctaHref: "https://www.ls-electric.com/about-us/investor-relations/ir-materials",
   bgImage: `${IMG}/highlights-bg.jpg`,
   bgImageMo: `${IMG}/highlights-bg-mo.jpg`,
   footnote: "*Financial figures in 2025",

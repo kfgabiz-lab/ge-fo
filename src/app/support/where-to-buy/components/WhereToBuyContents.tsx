@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import WhereToBuyControls from "./WhereToBuyControls";
 import WhereToBuyEmpty from "./WhereToBuyEmpty";
 import WhereToBuyLocationCard from "./WhereToBuyLocationCard";
-import WhereToBuyMap, { type PopupPixel } from "./WhereToBuyMap";
+import WhereToBuyMap from "./WhereToBuyMap";
 import WhereToBuyMapPopup from "./WhereToBuyMapPopup";
 import type { WhereToBuyLocateSource } from "./WhereToBuySearch";
 import WhereToBuyViewToggle, {
@@ -14,8 +14,9 @@ import {
   fetchWhereToBuyLocations,
   filterLocationsByBounds,
   filterLocationsByRadius,
+  filterLocationsByText,
   parseDistanceMiles,
-  whereToBuyDistanceOptions,
+  whereToBuyDefaultDistance,
   whereToBuyPage,
   type WhereToBuyBoundsLiteral,
   type WhereToBuyLocation,
@@ -34,13 +35,16 @@ export default function WhereToBuyContents({
   const [searchCoord, setSearchCoord] = useState<GeoCoord | null>(null);
   const [myLocation, setMyLocation] = useState<GeoCoord | null>(null);
   const [radiusValue, setRadiusValue] = useState<string>(
-    whereToBuyDistanceOptions[0].value,
+    whereToBuyDefaultDistance,
   );
   const [boundsFilter, setBoundsFilter] = useState<WhereToBuyBoundsLiteral | null>(
     null,
   );
+  const [textSearchResults, setTextSearchResults] = useState<
+    WhereToBuyLocation[] | null
+  >(null);
   const [activeId, setActiveId] = useState<string>("");
-  const [popupPos, setPopupPos] = useState<PopupPixel | null>(null);
+  const popupAnchorRef = useRef<HTMLDivElement>(null);
   const [refreshSpin, setRefreshSpin] = useState(false);
   const [mobileView, setMobileView] = useState<WhereToBuyMobileView>(
     noDataPage ? "list" : "map",
@@ -77,49 +81,76 @@ export default function WhereToBuyContents({
     if (boundsFilter) {
       return filterLocationsByBounds(locations, boundsFilter);
     }
+    if (textSearchResults) {
+      return textSearchResults;
+    }
     return filterLocationsByRadius(locations, radiusOrigin, radiusMiles);
-  }, [locations, radiusOrigin, radiusMiles, boundsFilter]);
+  }, [locations, radiusOrigin, radiusMiles, boundsFilter, textSearchResults]);
 
   const handleLocate = (
     coord: GeoCoord | null,
     source: WhereToBuyLocateSource,
   ) => {
     setBoundsFilter(null);
+    setTextSearchResults(null);
     setSearchCoord(coord);
     if (source === "device" && coord) {
       setMyLocation(coord);
     }
   };
 
+  const handleTextFallback = (query: string) => {
+    const matches = filterLocationsByText(locations, query);
+    if (matches.length === 0) {
+      return;
+    }
+    setBoundsFilter(null);
+    setSearchCoord(null);
+    setTextSearchResults(matches);
+  };
+
+  const handleReset = () => {
+    setBoundsFilter(null);
+    setTextSearchResults(null);
+    setSearchCoord(null);
+    setRadiusValue(whereToBuyDefaultDistance);
+  };
+
   const handleRefresh = () => {
     setRefreshSpin(true);
-    setRadiusValue(whereToBuyDistanceOptions[0].value);
+    setTextSearchResults(null);
+    setRadiusValue(whereToBuyDefaultDistance);
   };
 
   const handleRadiusChange = (value: string) => {
     setBoundsFilter(null);
+    setTextSearchResults(null);
     setRadiusValue(value);
   };
 
   const handleSearchArea = (bounds: WhereToBuyBoundsLiteral) => {
     setBoundsFilter(bounds);
+    setTextSearchResults(null);
     setSearchCoord(null);
-    setRadiusValue(whereToBuyDistanceOptions[0].value);
+    setRadiusValue(whereToBuyDefaultDistance);
+  };
+
+  const handleMarkerSelect = (id: string) => {
+    setActiveId((current) => (current === id ? "" : id));
   };
 
   const isFiltered =
-    searchCoord !== null || radiusValue !== whereToBuyDistanceOptions[0].value;
+    searchCoord !== null ||
+    textSearchResults !== null ||
+    radiusValue !== whereToBuyDefaultDistance;
 
   useEffect(() => {
     setActiveId((current) =>
-      filtered.some((item) => item.id === current)
-        ? current
-        : (filtered[0]?.id ?? ""),
+      current && filtered.some((item) => item.id === current) ? current : "",
     );
   }, [filtered]);
 
-  const activeLocation =
-    filtered.find((item) => item.id === activeId) ?? filtered[0];
+  const activeLocation = filtered.find((item) => item.id === activeId);
   const hasResults = filtered.length > 0;
 
   return (
@@ -135,6 +166,8 @@ export default function WhereToBuyContents({
             radiusValue={radiusValue}
             onRadiusChange={handleRadiusChange}
             onLocate={handleLocate}
+            onTextFallback={handleTextFallback}
+            onReset={handleReset}
           />
 
           {/* 기획서 항목8 — Total 개수 + 새로고침 버튼은 결과 0건이어도 항상 노출한다(리스트/Empty만 분기) */}
@@ -189,22 +222,18 @@ export default function WhereToBuyContents({
           <WhereToBuyMap
             locations={filtered}
             activeLocation={activeLocation}
-            onLocationSelect={setActiveId}
-            onPopupPositionChange={setPopupPos}
+            onLocationSelect={handleMarkerSelect}
+            popupAnchorRef={popupAnchorRef}
             isFiltered={isFiltered}
-            boundsMode={boundsFilter !== null}
+            boundsMode={boundsFilter !== null || textSearchResults !== null}
             onSearchArea={handleSearchArea}
             radiusOrigin={radiusOrigin}
             radiusMiles={radiusMiles}
           />
           {activeLocation ? (
             <div
-              className="support_where_to_buy_map__popup-anchor support_where_to_buy_map__popup-anchor--sample support_where_to_buy_map__popup-anchor--mobile"
-              style={
-                popupPos
-                  ? { left: `${popupPos.x}px`, top: `${popupPos.y}px` }
-                  : undefined
-              }
+              ref={popupAnchorRef}
+              className="support_where_to_buy_map__popup-anchor support_where_to_buy_map__popup-anchor--mobile"
             >
               <WhereToBuyMapPopup location={activeLocation} />
             </div>
