@@ -12,6 +12,7 @@ import {
   type PlaceSuggestion,
 } from "@/lib/geo/places";
 import {
+  filterDigitsOnly,
   filterEmail,
   filterLetters,
   filterPhoneDigits,
@@ -25,7 +26,7 @@ const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
 const LETTERS_MAX = 200;
-const EMAIL_MAX = 50;
+const EMAIL_MAX = 254;
 
 function FieldError({ message }: { message: string }) {
   return (
@@ -398,7 +399,7 @@ export default function RequestForTrainingStep1Form({
                   value={step1.zip}
                   error={Boolean(errors.zip)}
                   onChange={(event) => {
-                    setStep1Field("zip", event.target.value);
+                    setStep1Field("zip", filterDigitsOnly(event.target.value));
                     onClearError("zip");
                   }}
                 />

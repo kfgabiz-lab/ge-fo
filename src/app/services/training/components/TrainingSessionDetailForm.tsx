@@ -50,6 +50,8 @@ type SessionFieldErrors = {
   jobTitle?: boolean;
   phone?: boolean;
   companyName?: boolean;
+  privacyConsent?: boolean;
+  recaptcha?: boolean;
 };
 
 function SessionFieldLabel({
@@ -211,12 +213,15 @@ export default function TrainingSessionDetailForm({
 
     const emailValid =
       email.trim() !== "" && EMAIL_FORMAT_REGEX.test(email.trim());
+    const recaptchaValid = Boolean(recaptchaToken);
     const nextErrors: SessionFieldErrors = {
       studentName: studentName.trim() === "",
       email: !emailValid,
       jobTitle: jobTitle.trim() === "",
       phone: phone.trim() === "",
       companyName: companyName.trim() === "",
+      privacyConsent: !privacyConsent,
+      recaptcha: !recaptchaValid,
     };
     setErrors(nextErrors);
 
@@ -585,10 +590,13 @@ export default function TrainingSessionDetailForm({
             <div className="support_service_training_session_detail__consent">
               <label className="support_service_training_session_detail__consent-label">
                 <Checkbox
-                  className="guide_checkbox"
+                  className={`guide_checkbox${errors.privacyConsent ? " guide_checkbox--error" : ""}`}
                   disableRipple
                   checked={privacyConsent}
-                  onChange={(event) => setPrivacyConsent(event.target.checked)}
+                  onChange={(event) => {
+                    setPrivacyConsent(event.target.checked);
+                    clearError("privacyConsent");
+                  }}
                   icon={<GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />}
                   checkedIcon={
                     <GuideCheckboxIcon checked {...guideCheckboxIconsContactConsent} />
@@ -604,6 +612,9 @@ export default function TrainingSessionDetailForm({
                 View Full Terms
               </button>
             </div>
+            {errors.privacyConsent ? (
+              <p className="guide_checkbox__error">This field is required.</p>
+            ) : null}
           </div>
         </div>
 
@@ -612,9 +623,17 @@ export default function TrainingSessionDetailForm({
             <ReCAPTCHA
               ref={recaptchaRef}
               sitekey={recaptchaSiteKey}
-              onChange={(token) => setRecaptchaToken(token)}
+              onChange={(token) => {
+                setRecaptchaToken(token);
+                clearError("recaptcha");
+              }}
               onExpired={() => setRecaptchaToken(null)}
             />
+            {errors.recaptcha ? (
+              <p className="guide_checkbox__error">
+                Please complete the reCAPTCHA verification.
+              </p>
+            ) : null}
           </div>
         ) : null}
       </div>
@@ -622,7 +641,7 @@ export default function TrainingSessionDetailForm({
       <button
         type="submit"
         className="btn-base btn-lv01 btn-lv01--solid support_service_training_session_detail__submit"
-        disabled={submitting}
+        disabled={submitting || session.closesLabel === "Closed"}
       >
         {engineeringTrainingSessionFormCopy.submitLabel}
       </button>

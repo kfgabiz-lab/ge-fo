@@ -159,7 +159,9 @@ export default function TrainingSessionDetail({
   }, []);
 
   const calendarEvent: CalendarEvent | null =
-    session.event && hasValidEventDate(session.event) ? session.event : null;
+    session.event && hasValidEventDate(session.event)
+      ? { ...session.event, url: shareUrl || undefined }
+      : null;
 
   const handleGoogleCalendar = useCallback(() => {
     if (!calendarEvent) return;

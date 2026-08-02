@@ -12,12 +12,12 @@ import type { SoftwareOverviewData } from "./DevicesSoftwareOverview";
 import {
   mapHwProductData,
   fetchProductFaqItems,
-  fetchProductLv2Name,
+  fetchSwRelevantProducts,
   SW_PRODUCT_SLUGS,
 } from "../../data/productsSystemsData";
 import {
-  buildSwProductTechHubBannerCopy,
-  type ProductTechHubBannerCopy,
+  fetchProductTechHubBanner,
+  type ProductTechHubBanner,
 } from "@/data/support/techHubData";
 import { fetchProductInsights } from "@/data/highlightNews/highlightNewsData";
 import { withProductInquiryContext } from "@/lib/navigation/categoryContext";
@@ -25,6 +25,7 @@ import type { HighlightNewsItem } from "@/types/highlightNews";
 import {
   fetchProductDownloadsInitialData,
   type ProductDownloadsPage,
+  type ProductOtherItem,
 } from "../../data/productDetailContent";
 import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
 import {
@@ -69,9 +70,10 @@ type SwDetailProps = {
   downloads: ProductDownloadsPage;
   docTypeOptions: DownloadFilterOption[];
   productCodes: string[];
-  techHubCopy: ProductTechHubBannerCopy;
+  techHubBanner: ProductTechHubBanner | null;
   highlights: HighlightNewsItem[];
   contactHref: string;
+  otherProducts: ProductOtherItem[];
 };
 
 function bindSwDetail(row: Record<string, unknown> | null) {
@@ -95,10 +97,11 @@ function swShellCommonProps(
     downloads: props.downloads,
     docTypeOptions: props.docTypeOptions,
     productCodes: props.productCodes,
-    techHubCopy: props.techHubCopy,
+    techHubBanner: props.techHubBanner,
     highlights: props.highlights,
     faqItems: props.dbFaq.length > 0 ? props.dbFaq : fallbackFaq,
     connectPortalHref: bind.connectPortal,
+    otherProducts: props.otherProducts,
   };
 }
 
@@ -291,15 +294,16 @@ export default async function SwProductDetail({
   const productCode = row ? String(row["product.product_code"] ?? "").trim() : "";
   const productCodes = productCode ? [productCode] : [];
   const isSwSlug = (SW_PRODUCT_SLUGS as readonly string[]).includes(slug);
-  const [dbFaq, downloadsData, lv2Name, highlights] = await Promise.all([
-    productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
-    fetchProductDownloadsInitialData(productCodes),
-    isSwSlug && productId
-      ? fetchProductLv2Name(productId)
-      : Promise.resolve(""),
-    productId ? fetchProductInsights(productId) : Promise.resolve([]),
-  ]);
-  const techHubCopy = buildSwProductTechHubBannerCopy(lv2Name);
+  const [dbFaq, downloadsData, techHubBanner, highlights, otherProducts] =
+    await Promise.all([
+      productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
+      fetchProductDownloadsInitialData(productCodes),
+      isSwSlug && productId
+        ? fetchProductTechHubBanner(productId, categoryId)
+        : Promise.resolve(null),
+      productId ? fetchProductInsights(productId) : Promise.resolve([]),
+      fetchSwRelevantProducts(slug),
+    ]);
   const contactHref = withProductInquiryContext(
     "/support/contact-us",
     categoryId,
@@ -318,9 +322,10 @@ export default async function SwProductDetail({
       downloads={downloadsData.page}
       docTypeOptions={downloadsData.docTypeOptions}
       productCodes={productCodes}
-      techHubCopy={techHubCopy}
+      techHubBanner={techHubBanner}
       highlights={highlights}
       contactHref={contactHref}
+      otherProducts={otherProducts}
     />
   );
 }

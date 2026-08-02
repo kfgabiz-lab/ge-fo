@@ -361,6 +361,26 @@ export async function fetchProductBySlug(
   return fetchProductDetailBySlug(slug);
 }
 
+export interface ProductSeoRow {
+  metaTitle: string;
+  metaDescription: string;
+}
+
+function toProductSeoRow(row: Record<string, unknown>): ProductSeoRow {
+  return {
+    metaTitle: (row["seo.meta_title"] as string) ?? "",
+    metaDescription: (row["seo.meta_description"] as string) ?? "",
+  };
+}
+
+export async function fetchProductSeoBySlug(
+  slug: string,
+  opts?: { categoryId?: number },
+): Promise<ProductSeoRow | null> {
+  const row = await fetchProductBySlug(slug, opts);
+  return row ? toProductSeoRow(row) : null;
+}
+
 async function resolveLv2IdOfProductSlug(slug: string): Promise<number | null> {
   const rows = await fetchDevicesTreeRows();
   const productId = findProductIdInRows(rows, slug);
@@ -522,16 +542,42 @@ function pickLv2NameFromTreeRows(
   );
 }
 
-export async function fetchProductLv2Name(
-  currentProductId: number,
-): Promise<string> {
+const SW_RELEVANT_LV2_IDS: Record<string, readonly number[]> = {
+  scada: [604, 605],
+  xems: [604, 605],
+  "micro-grid": [604, 605],
+  "smart-factory": [604, 605, 606, 607, 608, 609],
+};
+
+export async function fetchSwRelevantProducts(
+  slug: string,
+): Promise<ProductOtherItem[]> {
+  const targetLv2Ids = SW_RELEVANT_LV2_IDS[slug];
+  if (!targetLv2Ids) return [];
   try {
     const rows = await fetchDevicesTreeRows();
-    const myLv2 = collectProductLv2Ids(rows, currentProductId);
-    if (myLv2.size === 0) return "";
-    return pickLv2NameFromTreeRows(rows, myLv2);
+    const targetLv2 = new Set(targetLv2Ids.map(String));
+    const seen = new Set<number>();
+    const items: ProductOtherItem[] = [];
+    for (const r of rows) {
+      if (r.depth !== "3" || r.productId == null) continue;
+      if (r.parentId == null || !targetLv2.has(r.parentId)) continue;
+      if (seen.has(r.productId)) continue;
+      seen.add(r.productId);
+      items.push({
+        id: r.productSlug || `product-${r.productId}`,
+        href: withCategoryContext(
+          r.productSlug ? `/product/${r.productSlug}` : "",
+          r.parentId,
+        ),
+        image: resolveImageUrlFromJsonText(r.productImage) ?? "",
+        title: r.productTitle ?? "",
+        subtitle: r.productDescription ?? "",
+      });
+    }
+    return items;
   } catch {
-    return "";
+    return [];
   }
 }
 

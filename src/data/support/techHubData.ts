@@ -186,9 +186,9 @@ export function buildHwProductTechHubBannerCopy(
 }
 
 export function buildSwProductTechHubBannerCopy(
-  lv2Name: string,
+  banner: ProductTechHubBanner,
 ): ProductTechHubBannerCopy {
-  const name = lv2Name.trim();
+  const name = banner.lv2Name.trim();
   return {
     title: "Video Tutorials",
     description: name
@@ -201,16 +201,23 @@ export function buildSwProductTechHubBannerCopy(
 
 export async function fetchProductTechHubBanner(
   productId: number,
+  categoryId?: number,
 ): Promise<ProductTechHubBanner | null> {
   try {
     const treeRows = await fetchDevicesTreeRows();
-    const lv2Ids = new Set(
+    const mappedLv2Ids = new Set(
       treeRows
         .filter((r) => r.depth === "3" && r.productId === productId)
         .map((r) => r.parentId)
         .filter((p): p is string => p != null && p !== ""),
     );
-    if (lv2Ids.size === 0) return null;
+    if (mappedLv2Ids.size === 0) return null;
+
+    const currentLv2Id = categoryId != null ? String(categoryId) : "";
+    const lv2Ids =
+      mappedLv2Ids.size > 1 && currentLv2Id && mappedLv2Ids.has(currentLv2Id)
+        ? new Set([currentLv2Id])
+        : mappedLv2Ids;
 
     const categoryRes = await fetchData<Record<string, unknown>>({
       slug: "category-data",

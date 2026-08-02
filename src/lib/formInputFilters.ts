@@ -12,3 +12,7 @@ export function filterPhoneDigits(value: string): string {
 export function filterEmail(value: string, maxLength: number): string {
   return value.replace(/[^A-Za-z0-9._@-]/g, "").slice(0, maxLength);
 }
+
+export function filterDigitsOnly(value: string): string {
+  return value.replace(/[^0-9]/g, "");
+}

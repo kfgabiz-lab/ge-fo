@@ -51,10 +51,6 @@ import {
   fetchChatbotStream,
 } from "@/data/search/searchChatbotData";
 
-import {
-  fetchIntegratedSearch,
-} from "@/data/search/searchIntegratedData";
-
 
 function formatSearchCount(count: number): string {
   return count > 99 ? "99+" : String(count);
@@ -257,47 +253,6 @@ export default function SearchAllTabContent({
             );
 
             setChatbotKeyword(keyword);
-
-            console.log(
-                "[INTEGRATION SEARCH START]",
-                keyword,
-                new Date().toISOString(),
-                performance.now(),
-            );
-
-            /*
-             * keyword를 받으면 통합검색 API 별도 호출
-             */
-            void fetchIntegratedSearch(
-                keyword,
-                "all",
-                "1",
-                controller.signal,
-            )
-                .then((result) => {
-                  console.log(
-                      "[INTEGRATION SEARCH RESPONSE]",
-                      result,
-                      new Date().toISOString(),
-                      performance.now(),
-                  );
-                })
-                .catch((error: unknown) => {
-                  /*
-                   * query가 바뀌어 요청을 취소한 경우는 오류로 출력하지 않음
-                   */
-                  if (
-                      error instanceof DOMException &&
-                      error.name === "AbortError"
-                  ) {
-                    return;
-                  }
-
-                  console.error(
-                      "[INTEGRATION SEARCH ERROR]",
-                      error,
-                  );
-                });
           },
 
           /*

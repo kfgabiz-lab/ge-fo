@@ -145,8 +145,6 @@ export type RequestForTrainingStep4Values = {
   productCategoryType: RequestForTrainingCategoryType | "";
   productGroupId: string;
   selectedProducts: RequestForTrainingSelectedProduct[];
-  curriculumId: number | null;
-  sessionId: number | null;
   jobTitles: string[];
   studentInvolvement: string[];
   vfdUnderstanding: "Yes" | "No" | "";
@@ -162,11 +160,9 @@ const STEP4_INITIAL: RequestForTrainingStep4Values = {
   productCategoryType: "",
   productGroupId: "",
   selectedProducts: [],
-  curriculumId: null,
-  sessionId: null,
   jobTitles: [],
   studentInvolvement: [],
-  vfdUnderstanding: "",
+  vfdUnderstanding: "Yes",
   vfdUnderstandingTopics: [],
   comments: "",
   consentChecked: false,
@@ -197,6 +193,7 @@ type RequestForTrainingFormContextValue = {
     value: RequestForTrainingStep4Values[K],
   ) => void;
   isRestored: boolean;
+  resetForm: () => void;
 };
 
 const RequestForTrainingFormContext =
@@ -301,6 +298,17 @@ export function RequestForTrainingProvider({
     [],
   );
 
+  const resetForm = useCallback(() => {
+    setStep1(STEP1_INITIAL);
+    setStep2(createStep2Initial(todayStr));
+    setStep3(STEP3_INITIAL);
+    setStep4(STEP4_INITIAL);
+    try {
+      window.sessionStorage.removeItem(STORAGE_KEY);
+    } catch {
+    }
+  }, [todayStr]);
+
   const value = useMemo(
     () => ({
       step1,
@@ -312,6 +320,7 @@ export function RequestForTrainingProvider({
       step4,
       setStep4Field,
       isRestored,
+      resetForm,
     }),
     [
       step1,
@@ -323,6 +332,7 @@ export function RequestForTrainingProvider({
       step4,
       setStep4Field,
       isRestored,
+      resetForm,
     ],
   );
 

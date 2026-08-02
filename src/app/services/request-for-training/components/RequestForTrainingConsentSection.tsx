@@ -9,6 +9,7 @@ import {
 } from "@/components/form/GuideFieldIcons";
 import ContactUsTermsModal from "@/app/support/contact-us/components/ContactUsTermsModal";
 import { requestForTrainingStep4Copy } from "@/data/services/requestForTrainingContent";
+import RequestForTrainingFieldError from "./RequestForTrainingFieldError";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
 
@@ -37,7 +38,18 @@ function filterComments(value: string): string {
   return value;
 }
 
-export default function RequestForTrainingConsentSection() {
+export type RequestForTrainingConsentErrors = {
+  consent?: boolean;
+  recaptcha?: boolean;
+};
+
+export default function RequestForTrainingConsentSection({
+  errors = {},
+  onClearError,
+}: {
+  errors?: RequestForTrainingConsentErrors;
+  onClearError?: (key: keyof RequestForTrainingConsentErrors) => void;
+} = {}) {
   const formId = useId();
   const { fields } = requestForTrainingStep4Copy;
   const { step4, setStep4Field } = useRequestForTrainingForm();
@@ -67,15 +79,23 @@ export default function RequestForTrainingConsentSection() {
 
       <hr className="support_service_training_request__form-divider" />
 
-      <div className="support_service_training_request__consent">
+      <div
+        className={[
+          "support_service_training_request__consent",
+          errors.consent ? "support_service_training_request__field--error" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <label className="support_service_training_request__consent-label">
           <Checkbox
             className="guide_checkbox support_service_training_request__checkbox"
             disableRipple
             checked={step4.consentChecked}
-            onChange={(event) =>
-              setStep4Field("consentChecked", event.target.checked)
-            }
+            onChange={(event) => {
+              setStep4Field("consentChecked", event.target.checked);
+              onClearError?.("consent");
+            }}
             icon={<GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />}
             checkedIcon={
               <GuideCheckboxIcon checked {...guideCheckboxIconsContactConsent} />
@@ -90,16 +110,32 @@ export default function RequestForTrainingConsentSection() {
         >
           {fields.consent.termsLabel}
         </button>
+        {errors.consent ? (
+          <RequestForTrainingFieldError message="Please agree to the collection and use of your personal information." />
+        ) : null}
       </div>
 
       {recaptchaSiteKey ? (
-        <div className="support_service_training_request__recaptcha-box">
+        <div
+          className={[
+            "support_service_training_request__recaptcha-box",
+            errors.recaptcha ? "support_service_training_request__field--error" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
           <ReCAPTCHA
             ref={recaptchaRef}
             sitekey={recaptchaSiteKey}
-            onChange={(token) => setStep4Field("recaptchaToken", token ?? "")}
+            onChange={(token) => {
+              setStep4Field("recaptchaToken", token ?? "");
+              onClearError?.("recaptcha");
+            }}
             onExpired={() => setStep4Field("recaptchaToken", "")}
           />
+          {errors.recaptcha ? (
+            <RequestForTrainingFieldError message="Please complete the reCAPTCHA verification." />
+          ) : null}
         </div>
       ) : null}
 

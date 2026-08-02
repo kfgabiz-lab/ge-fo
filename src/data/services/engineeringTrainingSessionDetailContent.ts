@@ -17,6 +17,10 @@ export type EngineeringTrainingSessionEvent = {
   timeTo?: string;
   location?: string;
   description?: string;
+  organizerName?: string;
+  organizerEmail?: string;
+  categories?: string;
+  attachUrl?: string;
 };
 
 export type EngineeringTrainingSessionDetail = {
@@ -26,10 +30,10 @@ export type EngineeringTrainingSessionDetail = {
   title: string;
   courseTitle?: string;
   breadcrumbCurrent: string;
+  closesLabel?: string;
   content: string;
   agenda: EngineeringTrainingAgendaRow[];
   showTrainerColumn: boolean;
-  positionOptions: string[];
   calendar: {
     googleLabel: string;
     icalLabel: string;
@@ -53,199 +57,12 @@ export type EngineeringTrainingSessionDetail = {
   };
 };
 
-const AGENDA_INTRO =
-  "Introducing LS ELECTRIC, a global electrical solutions provider and electrical component manufacturer of UL, ANSI, and IEC products.";
-
-const SHARED_AGENDA: EngineeringTrainingAgendaRow[] = [
-  {
-    id: "agenda-01",
-    number: "1",
-    date: "",
-    time: "09:10~09:30",
-    title: "LS ELECTRIC Introduction",
-    description: AGENDA_INTRO,
-    trainer: "Byron Black",
-  },
-  {
-    id: "agenda-02",
-    number: "2",
-    date: "",
-    time: "09:30~10:45",
-    title: "MV, LV BREAKER: VCB, ACB, MCCB",
-    description: AGENDA_INTRO,
-    trainer: "Byron Black",
-  },
-  {
-    id: "agenda-03",
-    number: "3",
-    date: "",
-    time: "10:45~12:00",
-    title: "MV, LV SWITCH GEAR",
-    description: AGENDA_INTRO,
-    trainer: "Clarke Arnold",
-  },
-  {
-    id: "agenda-04",
-    number: "4",
-    date: "",
-    time: "12:00~13:00",
-    title: "Lunch Time",
-  },
-  {
-    id: "agenda-05",
-    number: "5",
-    date: "",
-    time: "13:00~14:00",
-    title: "CAST RESIN TRANSFORMER",
-    description: AGENDA_INTRO,
-    trainer: "Clarke Arnold",
-  },
-  {
-    id: "agenda-06",
-    number: "6",
-    date: "",
-    time: "14:00~14:20",
-    title: "Factory Line Tour",
-    description: AGENDA_INTRO,
-    trainer: "Clarke Arnold",
-  },
-  {
-    id: "agenda-07",
-    number: "7",
-    date: "",
-    time: "14:20~15:00",
-    title: "Circuit breaker & SWGR handling practice",
-    description: AGENDA_INTRO,
-    trainer: "Byron Black",
-  },
-];
-
-const SHARED_SIDEBAR_LOCATION = {
-  name: "LS ELECTRIC America Lincolnshire",
-  address: "625 Heathrow Dr, Lincolnshire IL 60069, USA",
-  phone: "800-891-2941",
-  email: "automation_support.us@lselectricamerica.com",
-};
-
-const SHARED_PRODUCTS =
-  "Miniature Circuit Breaker, Molded Case Circuit Breaker, Air Circuit Breaker, Vacuum Circuit Breaker";
-
-const SESSION_TITLE = "Hands-on Breaker Training: MCCB · ACB · VCB";
-
-export const engineeringTrainingSessionDetails: Record<
-  string,
-  EngineeringTrainingSessionDetail
-> = {
-  "breaker-training/jan-10-2026": {
-    courseId: "breaker-training",
-    sessionId: "jan-10-2026",
-    category: "POWER",
-    title: SESSION_TITLE,
-    breadcrumbCurrent: "Jan 10, 2026",
-    content: "",
-    agenda: SHARED_AGENDA,
-    showTrainerColumn: true,
-    positionOptions: ["Rep", "Engineer", "Manager", "Other"],
-    calendar: {
-      googleLabel: "Google Calender",
-      icalLabel: "iCal / Outlook",
-    },
-    sidebar: {
-      date: "Jan 10, 2026",
-      eventDateToAttend: "01/10/26",
-      duration: "12 Hours",
-      classSize: "1-20",
-      location: SHARED_SIDEBAR_LOCATION,
-      productsCovered: SHARED_PRODUCTS,
-      trainingType: "In-Person",
-      registerLabel: "Scroll to Downloads",
-    },
-  },
-  "breaker-training/mar-12-2026": {
-    courseId: "breaker-training",
-    sessionId: "mar-12-2026",
-    category: "POWER",
-    title: SESSION_TITLE,
-    breadcrumbCurrent: "Mar 12, 2026",
-    content: "",
-    agenda: SHARED_AGENDA,
-    showTrainerColumn: true,
-    positionOptions: ["Rep", "Engineer", "Manager", "Other"],
-    calendar: {
-      googleLabel: "Google Calender",
-      icalLabel: "iCal / Outlook",
-    },
-    sidebar: {
-      date: "Mar 12, 2026",
-      eventDateToAttend: "03/12/26",
-      duration: "12 Hours",
-      classSize: "1-20",
-      location: SHARED_SIDEBAR_LOCATION,
-      productsCovered: SHARED_PRODUCTS,
-      trainingType: "In-Person",
-      registerLabel: "Scroll to Downloads",
-    },
-  },
-  "breaker-training/jul-14-2026": {
-    courseId: "breaker-training",
-    sessionId: "jul-14-2026",
-    category: "POWER",
-    title: SESSION_TITLE,
-    breadcrumbCurrent: "Jul 14, 2026",
-    content: "",
-    agenda: SHARED_AGENDA,
-    showTrainerColumn: true,
-    positionOptions: ["Rep", "Engineer", "Manager", "Other"],
-    calendar: {
-      googleLabel: "Google Calender",
-      icalLabel: "iCal / Outlook",
-    },
-    sidebar: {
-      date: "Jul 14, 2026",
-      eventDateToAttend: "07/14/26",
-      duration: "6 Hours",
-      classSize: "1-20",
-      location: SHARED_SIDEBAR_LOCATION,
-      productsCovered: SHARED_PRODUCTS,
-      trainingType: "In-Person",
-      registerLabel: "Scroll to Downloads",
-    },
-  },
-  "breaker-training/dec-8-2026": {
-    courseId: "breaker-training",
-    sessionId: "dec-8-2026",
-    category: "POWER",
-    title: SESSION_TITLE,
-    breadcrumbCurrent: "Dec 8, 2026",
-    content: "",
-    agenda: SHARED_AGENDA,
-    showTrainerColumn: true,
-    positionOptions: ["Rep", "Engineer", "Manager", "Other"],
-    calendar: {
-      googleLabel: "Google Calender",
-      icalLabel: "iCal / Outlook",
-    },
-    sidebar: {
-      date: "Dec 8, 2026",
-      eventDateToAttend: "12/08/26",
-      duration: "12 Hours",
-      classSize: "1-20",
-      location: SHARED_SIDEBAR_LOCATION,
-      productsCovered: SHARED_PRODUCTS,
-      trainingType: "In-Person",
-      registerLabel: "Scroll to Downloads",
-    },
-  },
-};
-
 const IMG = "/img/services/engineering-training";
 const ICO = "/ico";
 
-export const engineeringTrainingSessionCountdownDisplay = {
-  days: 365,
-  hours: 24,
-  minutes: 60,
-  seconds: 60,
+export const engineeringTrainingSessionCalendarLabels = {
+  googleLabel: "Google Calendar",
+  icalLabel: "iCal / Outlook",
 } as const;
 
 export const engineeringTrainingSessionAssets = {
@@ -326,17 +143,7 @@ export function buildSessionTabs(
   return tabs;
 }
 
-export function getEngineeringTrainingSessionDetail(
-  courseId: string,
-  sessionId: string,
-) {
-  return engineeringTrainingSessionDetails[`${courseId}/${sessionId}`] ?? null;
-}
-
-export const engineeringTrainingSessionParams = Object.values(
-  engineeringTrainingSessionDetails,
-).map(({ courseId, sessionId }) => ({ courseId, sessionId }));
-
 export const engineeringTrainingSessionFormCopy = {
   submitLabel: "Register",
+  scrollToRegisterLabel: "Scroll to Registration",
 } as const;

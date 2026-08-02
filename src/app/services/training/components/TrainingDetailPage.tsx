@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 import type { TrainingVariant } from "../data/trainingContent";
 import { fetchTrainingCategories, toCategoryMap } from "../data/trainingData";
 import {
+  fetchProductNamesForRows,
   fetchTrainingCurriculum,
   fetchTrainingDetailRows,
-  fetchTrainingProductNameMaps,
   fetchTrainingTypeCodes,
   isCurriculumVisible,
   toTrainingCourseDetail,
@@ -20,19 +20,19 @@ export default async function TrainingDetailPage({
   variant: TrainingVariant;
   courseId: string;
 }) {
-  const [rows, curriculum, categoryCodes, trainingTypeCodes, productNameMaps] =
+  const [rows, curriculum, categoryCodes, trainingTypeCodes] =
     await Promise.all([
       fetchTrainingDetailRows(courseId),
       fetchTrainingCurriculum(courseId),
       fetchTrainingCategories(),
       fetchTrainingTypeCodes(),
-      fetchTrainingProductNameMaps(),
     ]);
 
   if (!curriculum || !isCurriculumVisible(curriculum)) {
     notFound();
   }
 
+  const productNameMap = await fetchProductNamesForRows(rows);
   const categoryMap = toCategoryMap(categoryCodes);
   const trainingTypeMap = toCategoryMap(trainingTypeCodes);
 
@@ -42,7 +42,7 @@ export default async function TrainingDetailPage({
     curriculum,
     categoryMap,
     trainingTypeMap,
-    productNameMaps,
+    productNameMap,
   );
 
   const hrefPrefix = `/services/${variant}-training`;

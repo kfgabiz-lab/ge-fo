@@ -6,6 +6,7 @@ import {
   GuideCheckboxIcon,
   guideCheckboxIconsContactConsent,
 } from "@/components/form/GuideFieldIcons";
+import RequestForTrainingFieldError from "./RequestForTrainingFieldError";
 
 type RequestForTrainingCheckboxGroupProps = {
   legend: string;
@@ -15,6 +16,8 @@ type RequestForTrainingCheckboxGroupProps = {
   onChange: (nextSelected: string[]) => void;
   hint?: string;
   layout?: "wrap" | "rows";
+  error?: boolean;
+  errorMessage?: string;
 };
 
 export default function RequestForTrainingCheckboxGroup({
@@ -25,6 +28,8 @@ export default function RequestForTrainingCheckboxGroup({
   onChange,
   hint = "*Select all that apply.",
   layout = "wrap",
+  error = false,
+  errorMessage = "Please select at least one option.",
 }: RequestForTrainingCheckboxGroupProps) {
   const groupId = useId();
 
@@ -41,7 +46,7 @@ export default function RequestForTrainingCheckboxGroup({
     <fieldset
       className={`support_service_training_request__checkbox-group support_service_training_request__checkbox-group--${layout}${
         legend ? "" : " support_service_training_request__checkbox-group--no-legend"
-      }`}
+      }${error ? " support_service_training_request__field--error" : ""}`}
       aria-labelledby={legend ? groupId : undefined}
       aria-label={legend ? undefined : "Product options"}
     >
@@ -89,6 +94,7 @@ export default function RequestForTrainingCheckboxGroup({
       {hint ? (
         <p className="support_service_training_request__field-hint">{hint}</p>
       ) : null}
+      {error ? <RequestForTrainingFieldError message={errorMessage} /> : null}
     </fieldset>
   );
 }

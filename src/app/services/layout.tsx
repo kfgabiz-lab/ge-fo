@@ -9,10 +9,16 @@ const TRAINING_DETAIL_PATH_RE =
   /^\/services\/(?:sales|engineering|service)-training\/([^/]+)$/;
 const TRAINING_SESSION_PATH_RE =
   /^\/services\/(sales|engineering|service)-training\/([^/]+)\/[^/]+$/;
+const TRAINING_REQUEST_PATH_RE =
+  /^\/services\/request-for-training(\/step-(2|3|4)(-type_01)?)?$/;
 
 async function resolveBreadcrumbOverride(): Promise<BreadcrumbServerOverride> {
   const pathname = (await headers()).get("x-pathname");
   if (!pathname) return null;
+
+  if (TRAINING_REQUEST_PATH_RE.test(pathname)) {
+    return { pathname, current: "Training Request" };
+  }
 
   const sessionMatch = pathname.match(TRAINING_SESSION_PATH_RE);
   if (sessionMatch) {

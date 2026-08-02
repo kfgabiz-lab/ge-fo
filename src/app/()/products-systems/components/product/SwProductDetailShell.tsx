@@ -18,13 +18,18 @@ import DevicesSoftwareHero, {
 import DevicesSoftwareOverview, {
   type SoftwareOverviewData,
 } from "./DevicesSoftwareOverview";
-import type { ProductDownloadsPage } from "../../data/productDetailContent";
+import type {
+  ProductDownloadsPage,
+  ProductOtherItem,
+} from "../../data/productDetailContent";
 import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
-import type { ProductTechHubBannerCopy } from "@/data/support/techHubData";
+import {
+  buildSwProductTechHubBannerCopy,
+  type ProductTechHubBanner,
+} from "@/data/support/techHubData";
 import type { HighlightNewsItem } from "@/types/highlightNews";
 import {
   SW_PRODUCT_NAV_ITEMS,
-  SW_PRODUCT_OTHER_PRODUCTS,
   SW_PRODUCT_OTHER_PRODUCTS_TITLE,
 } from "../../data/swProductCommon";
 
@@ -62,19 +67,23 @@ export type SwProductDetailShellProps = {
   downloads: ProductDownloadsPage;
   docTypeOptions?: DownloadFilterOption[];
   productCodes: string[];
-  techHubCopy: ProductTechHubBannerCopy;
+  techHubBanner: ProductTechHubBanner | null;
   highlights: HighlightNewsItem[];
   faqItems: CommonFaqEntry[];
   connectPortalHref?: string;
+  otherProducts: ProductOtherItem[];
 };
 
 function filterSwNavItems<T extends { readonly id: string }>(
   navItems: readonly T[],
   showDownloads: boolean,
+  showOtherProducts: boolean,
 ): T[] {
-  return navItems.filter(
-    (item) => showDownloads || item.id !== "product-downloads",
-  );
+  return navItems.filter((item) => {
+    if (item.id === "product-downloads") return showDownloads;
+    if (item.id === "product-other") return showOtherProducts;
+    return true;
+  });
 }
 
 export default function SwProductDetailShell({
@@ -89,17 +98,23 @@ export default function SwProductDetailShell({
   downloads,
   docTypeOptions = [],
   productCodes,
-  techHubCopy,
+  techHubBanner,
   highlights,
   faqItems,
   connectPortalHref,
+  otherProducts,
 }: SwProductDetailShellProps) {
   const showDownloads = downloads.totalElements > 0;
+  const showOtherProducts = otherProducts.length > 0;
   return (
     <main className={pageClassName} id={pageId}>
       <DevicesSoftwareHero {...hero} />
       <DevicesProductNavScope
-        navItems={filterSwNavItems(SW_PRODUCT_NAV_ITEMS, showDownloads)}
+        navItems={filterSwNavItems(
+          SW_PRODUCT_NAV_ITEMS,
+          showDownloads,
+          showOtherProducts,
+        )}
       >
         <DevicesSoftwareOverview data={overview} imageMode={overviewImageMode} />
         {features.variant === "list" ? (
@@ -126,10 +141,16 @@ export default function SwProductDetailShell({
             docTypeOptions={docTypeOptions}
           />
         ) : null}
-        <CommonBanner03 {...techHubCopy} />
+        {techHubBanner ? (
+          <CommonBanner03
+            linkHref={techHubBanner.href}
+            imageSrc={techHubBanner.posterSrc ?? undefined}
+            {...buildSwProductTechHubBannerCopy(techHubBanner)}
+          />
+        ) : null}
         <DevicesProductOtherProducts
           title={SW_PRODUCT_OTHER_PRODUCTS_TITLE}
-          items={SW_PRODUCT_OTHER_PRODUCTS}
+          items={otherProducts}
         />
         <div id="product-markets">
           <DevicesMarkets />

@@ -20,8 +20,8 @@ export async function generateMetadata({
   const { slug } = await params;
   const category = await fetchCategoryBySlug(slug, { depth: 1 });
   return {
-    title: category?.metaTitle || undefined,
-    description: category?.metaDescription || undefined,
+    title: category?.metaTitle ?? "",
+    description: category?.metaDescription ?? "",
   };
 }
 

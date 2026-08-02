@@ -18,6 +18,7 @@ import {
   type TrainingProductNode,
   type TrainingProductTree,
 } from "@/lib/training/trainingProductTree";
+import RequestForTrainingFieldError from "./RequestForTrainingFieldError";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import {
   useRequestForTrainingForm,
@@ -60,10 +61,16 @@ function otherId(groupId: number): number {
   return -groupId;
 }
 
-export default function RequestForTrainingProductSelector() {
+export default function RequestForTrainingProductSelector({
+  error = false,
+  onClearError,
+}: {
+  error?: boolean;
+  onClearError?: () => void;
+} = {}) {
   const formId = useId();
   const { fields } = requestForTrainingStep4Copy;
-  const { step4, setStep4Field } = useRequestForTrainingForm();
+  const { step1, step4, setStep4Field } = useRequestForTrainingForm();
   const [tree, setTree] = useState<TrainingProductTree>({
     power: [],
     automation: [],
@@ -72,10 +79,11 @@ export default function RequestForTrainingProductSelector() {
   const [categoryTypeOptions, setCategoryTypeOptions] = useState<CategoryTypeOption[]>([]);
   const categoryType = step4.productCategoryType;
   const groupId = step4.productGroupId;
+  const isEngineeringTrack = step1.trainingTrack === "engineering";
 
   useEffect(() => {
     let alive = true;
-    fetchTrainingProductTree().then((result) => {
+    fetchTrainingProductTree(true).then((result) => {
       if (alive) setTree(result);
     });
     return () => {
@@ -94,6 +102,13 @@ export default function RequestForTrainingProductSelector() {
       alive = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!isEngineeringTrack && categoryType !== "power") {
+      setStep4Field("productCategoryType", "power");
+      setStep4Field("productGroupId", "");
+    }
+  }, [isEngineeringTrack, categoryType, setStep4Field]);
 
   const groups: TrainingProductNode[] = categoryType ? tree[categoryType] : [];
 
@@ -123,6 +138,7 @@ export default function RequestForTrainingProductSelector() {
       groupTitle,
     };
     setStep4Field("selectedProducts", [...step4.selectedProducts, next]);
+    onClearError?.();
   }
 
   function removeTag(id: number) {
@@ -136,7 +152,15 @@ export default function RequestForTrainingProductSelector() {
   const products = selectedGroup?.products ?? [];
 
   return (
-    <div className="support_service_training_request__field support_service_training_request__field--products">
+    <div
+      className={[
+        "support_service_training_request__field",
+        "support_service_training_request__field--products",
+        error ? "support_service_training_request__field--error" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <RequestForTrainingFieldLabel
         htmlFor={`${formId}-product-category`}
         required={fields.products.required}
@@ -151,6 +175,7 @@ export default function RequestForTrainingProductSelector() {
           onChange={(event) =>
             handleCategoryTypeChange(event.target.value as TrainingCategoryType)
           }
+          disabled={!isEngineeringTrack}
           displayEmpty
           IconComponent={GuideSelectIcon}
           inputProps={{ "aria-label": "Product category", id: `${formId}-product-category` }}
@@ -294,6 +319,10 @@ export default function RequestForTrainingProductSelector() {
             ))}
           </div>
         </div>
+      ) : null}
+
+      {error ? (
+        <RequestForTrainingFieldError message="Please select at least one product." />
       ) : null}
     </div>
   );

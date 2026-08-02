@@ -41,8 +41,6 @@ export interface TrainingRequestSubmitPayload {
   contactDetails: string;
 
   selectedProducts: TrainingRequestProduct[];
-  curriculumId?: number;
-  sessionId?: number;
   jobTitles: string[];
   studentInvolvement: string[];
   vfdUnderstanding: string;

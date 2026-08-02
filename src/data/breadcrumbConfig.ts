@@ -325,35 +325,35 @@ const configs: Record<string, BreadcrumbConfig> = {
       { label: "Services" },
       { label: "Training" },
     ],
-    current: "Request for Training",
+    current: "Training Request",
   },
   "/services/request-for-training/step-2": {
     crumbs: [
       { label: "Services" },
       { label: "Training" },
     ],
-    current: "Request for Training",
+    current: "Training Request",
   },
   "/services/request-for-training/step-3": {
     crumbs: [
       { label: "Services" },
       { label: "Training" },
     ],
-    current: "Request for Training",
+    current: "Training Request",
   },
   "/services/request-for-training/step-4": {
     crumbs: [
       { label: "Services" },
       { label: "Training" },
     ],
-    current: "Request for Training",
+    current: "Training Request",
   },
   "/services/request-for-training/step-4-type_01": {
     crumbs: [
       { label: "Services" },
       { label: "Training" },
     ],
-    current: "Request for Training",
+    current: "Training Request",
   },
   // 약관관리 breadcrumb config 추가
    "/privacy-policy": {

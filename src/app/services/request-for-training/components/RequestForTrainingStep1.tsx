@@ -44,7 +44,6 @@ export default function RequestForTrainingStep1() {
     setErrors(nextErrors);
 
     if (!isStep1Complete(step1)) {
-      alert("Please complete all required fields.");
       return;
     }
 

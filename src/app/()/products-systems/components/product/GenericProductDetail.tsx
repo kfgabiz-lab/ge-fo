@@ -54,7 +54,9 @@ export default async function GenericProductDetail({
     productId ? fetchProductManagerEmail(productId) : Promise.resolve(""),
     productId ? fetchProductInsights(productId) : Promise.resolve([]),
     fetchProductDownloadsInitialData(productCodes),
-    productId ? fetchProductTechHubBanner(productId) : Promise.resolve(null),
+    productId
+      ? fetchProductTechHubBanner(productId, categoryId)
+      : Promise.resolve(null),
   ]);
 
   const { docTypeOptions, page: downloadsPage } = downloadsData;

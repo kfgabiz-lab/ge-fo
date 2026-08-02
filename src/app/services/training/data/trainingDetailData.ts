@@ -5,19 +5,15 @@ import { formatDisplayDate } from "@/lib/formatDate";
 import { formatPhoneDisplay } from "@/lib/formatPhone";
 import { siteToday } from "@/lib/siteTime";
 import type { PageDataItem } from "@/lib/pageData";
-import {
-  fetchTrainingProductTree,
-  resolveTrainingProductNames,
-  toTrainingProductNameMaps,
-  type TrainingProductNameMaps,
-} from "@/lib/training/trainingProductTree";
+import { fetchProductNamesByIds } from "@/lib/training/trainingProductTree";
 import {
   engineeringTrainingDetails,
   type EngineeringTrainingDetail,
   type EngineeringTrainingSession,
 } from "@/data/services/engineeringTrainingDetailContent";
 import {
-  engineeringTrainingSessionDetails,
+  engineeringTrainingSessionCalendarLabels,
+  engineeringTrainingSessionFormCopy,
   type EngineeringTrainingAgendaRow,
   type EngineeringTrainingSessionDetail,
 } from "@/data/services/engineeringTrainingSessionDetailContent";
@@ -102,8 +98,8 @@ interface ParsedRow {
 }
 
 const STATIC_COURSE_BASE = engineeringTrainingDetails["breaker-training"];
-const STATIC_SESSION_BASE =
-  engineeringTrainingSessionDetails["breaker-training/jan-10-2026"];
+
+const ICS_ORGANIZER_NAME = "LESA Technical Services";
 
 const MONTH_ABBR = [
   "",
@@ -123,13 +119,19 @@ const MONTH_ABBR = [
 
 function extractProductNames(
   json: CurrDtlDataJson,
-  nameMaps: TrainingProductNameMaps,
+  nameMap: Map<number, string>,
 ): string[] {
-  return resolveTrainingProductNames(
-    json.power_list ?? [],
-    json.automation_list ?? [],
-    nameMaps,
-  );
+  const ids = [...(json.power_list ?? []), ...(json.automation_list ?? [])];
+  const out: string[] = [];
+  const seen = new Set<number>();
+  for (const raw of ids) {
+    const id = Number(raw);
+    if (!Number.isFinite(id) || seen.has(id)) continue;
+    seen.add(id);
+    const name = nameMap.get(id);
+    if (name) out.push(name);
+  }
+  return out;
 }
 
 function computeClosesLabel(registerPeriodTo?: string): string {
@@ -273,7 +275,7 @@ export function toTrainingCourseDetail(
   curriculum: ParentCurriculum,
   categoryMap: Map<string, string>,
   trainingTypeMap: Map<string, string>,
-  productNameMaps: TrainingProductNameMaps,
+  productNameMap: Map<number, string>,
 ): EngineeringTrainingDetail {
   const valid: ParsedRow[] = rows
     .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
@@ -287,7 +289,7 @@ export function toTrainingCourseDetail(
   const heroImage = mediaId != null ? trainingImageSrc(mediaId) : "";
 
   const sessions: EngineeringTrainingSession[] = valid.map(({ raw, json }) =>
-    toCourseCard(raw, json, trainingTypeMap, productNameMaps),
+    toCourseCard(raw, json, trainingTypeMap, productNameMap),
   );
 
   return {
@@ -309,7 +311,7 @@ function toCourseCard(
   raw: PageDataItem,
   json: CurrDtlDataJson,
   trainingTypeMap: Map<string, string>,
-  productNameMaps: TrainingProductNameMaps,
+  productNameMap: Map<number, string>,
 ): EngineeringTrainingSession {
   const d1 = json.curriculum_detail1 ?? {};
   const d2 = json.curriculum_detail2 ?? {};
@@ -329,7 +331,7 @@ function toCourseCard(
       ? [d2.address_detail, d2.address].filter(Boolean).join(", ") || undefined
       : undefined,
     productsCovered: formatProductsCovered(
-      extractProductNames(json, productNameMaps),
+      extractProductNames(json, productNameMap),
     ),
     typeCodes,
   };
@@ -342,7 +344,7 @@ export function toTrainingSessionDetail(
   curriculum: ParentCurriculum,
   categoryMap: Map<string, string>,
   trainingTypeMap: Map<string, string>,
-  productNameMaps: TrainingProductNameMaps,
+  productNameMap: Map<number, string>,
 ): EngineeringTrainingSessionDetail | null {
   const matched = rows
     .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
@@ -357,7 +359,7 @@ export function toTrainingSessionDetail(
 
   const categoryLabel = codeLabel(categoryMap, curriculum.product_category);
   const trainingTypeLabel = trainingTypeLabels(d1.training_type, trainingTypeMap);
-  const productsCovered = extractProductNames(json, productNameMaps).join(", ");
+  const productsCovered = extractProductNames(json, productNameMap).join(", ");
   const dateDisplay = formatDisplayDate(d2.training_date_from ?? "");
   const showAddress = shouldShowAddress(d1.training_type);
   const addressFull = showAddress
@@ -388,17 +390,26 @@ export function toTrainingSessionDetail(
   const firstSch = scheduleSorted[0];
   const lastSch = scheduleSorted[scheduleSorted.length - 1];
 
+  const heroImageArr = curriculum.image;
+  const heroMediaId =
+    Array.isArray(heroImageArr) && heroImageArr.length > 0
+      ? Number(heroImageArr[0])
+      : null;
+  const attachUrl =
+    heroMediaId != null ? `${SITE_URL}${trainingImageSrc(heroMediaId)}` : undefined;
+
   return {
-    ...STATIC_SESSION_BASE, 
     courseId,
     sessionId,
     category: categoryLabel,
     title: d2.title ?? "",
     courseTitle: curriculum.title ?? undefined,
     breadcrumbCurrent: dateDisplay,
+    closesLabel: computeClosesLabel(d2.register_period_to),
     content: d2.content ?? "",
     agenda,
     showTrainerColumn,
+    calendar: engineeringTrainingSessionCalendarLabels,
     event: {
       title: d2.title ?? "",
       startIso: (d2.training_date_from ?? "").slice(0, 10),
@@ -406,10 +417,13 @@ export function toTrainingSessionDetail(
       timeTo: lastSch?.time_to || firstSch?.time_from || undefined,
       location: addressFull || undefined,
       description: firstSch?.description || undefined,
+      organizerName: d2.email ? ICS_ORGANIZER_NAME : undefined,
+      organizerEmail: d2.email || undefined,
+      categories: curriculum.title || undefined,
+      attachUrl,
     },
     countdownTo: d2.register_period_to || undefined,
     sidebar: {
-      ...STATIC_SESSION_BASE.sidebar, 
       date: dateDisplay,
       eventDateToAttend: dateDisplay,
       duration: formatDurationHours(d2.duration),
@@ -422,6 +436,7 @@ export function toTrainingSessionDetail(
       },
       productsCovered,
       trainingType: trainingTypeLabel,
+      registerLabel: engineeringTrainingSessionFormCopy.scrollToRegisterLabel,
     },
   };
 }
@@ -454,9 +469,18 @@ export async function fetchTrainingCurriculum(
   return { ...curriculum, id: Number(raw.id) };
 }
 
-export async function fetchTrainingProductNameMaps(): Promise<TrainingProductNameMaps> {
-  const tree = await fetchTrainingProductTree();
-  return toTrainingProductNameMaps(tree.items);
+export async function fetchProductNamesForRows(
+  rows: PageDataItem[],
+): Promise<Map<number, string>> {
+  const ids = new Set<number>();
+  for (const raw of rows) {
+    const json = (raw.dataJson ?? {}) as CurrDtlDataJson;
+    for (const v of [...(json.power_list ?? []), ...(json.automation_list ?? [])]) {
+      const id = Number(v);
+      if (Number.isFinite(id)) ids.add(id);
+    }
+  }
+  return fetchProductNamesByIds(Array.from(ids));
 }
 
 export async function fetchTrainingCourseTitle(

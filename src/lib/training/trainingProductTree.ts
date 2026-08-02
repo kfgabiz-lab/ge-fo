@@ -30,10 +30,14 @@ export interface TrainingProductTree {
 
 const EMPTY_TREE: TrainingProductTree = { power: [], automation: [], items: [] };
 
-export async function fetchTrainingProductTree(): Promise<TrainingProductTree> {
+export async function fetchTrainingProductTree(
+  activeOnly = false,
+): Promise<TrainingProductTree> {
   try {
     const res = await fetchApi<TrainingProductTree>(
-      "/api/v1/fo/training/product-tree",
+      activeOnly
+        ? "/api/v1/fo/training/product-tree?activeOnly=true"
+        : "/api/v1/fo/training/product-tree",
     );
     return {
       power: res.power ?? [],
@@ -45,60 +49,17 @@ export async function fetchTrainingProductTree(): Promise<TrainingProductTree> {
   }
 }
 
-export interface TrainingProductNameMaps {
-  power: Map<number, string>;
-  automation: Map<number, string>;
-}
-
-export const EMPTY_TRAINING_PRODUCT_NAME_MAPS: TrainingProductNameMaps = {
-  power: new Map<number, string>(),
-  automation: new Map<number, string>(),
-};
-
-function putName(map: Map<number, string>, rawId: unknown, rawName: unknown) {
-  const id = Number(rawId);
-  if (!Number.isFinite(id) || id <= 0) return;
-  const name = String(rawName ?? "").trim();
-  if (!name) return;
-  if (!map.has(id)) map.set(id, name);
-}
-
-export function toTrainingProductNameMaps(
-  items: TrainingProductTreeItem[],
-): TrainingProductNameMaps {
-  const power = new Map<number, string>();
-  const automation = new Map<number, string>();
-  for (const item of items ?? []) {
-    putName(power, item?.lv2Id, item?.lv2Title);
-    putName(automation, item?.categoryId, item?.productName);
-  }
-  return { power, automation };
-}
-
-export function resolveTrainingProductNames(
-  powerIds: unknown[],
-  automationIds: unknown[],
-  nameMaps: TrainingProductNameMaps,
-): string[] {
-  const out: string[] = [];
-  const seen = new Set<string>();
-  const collect = (
-    ids: unknown[],
-    kind: "power" | "automation",
-    map: Map<number, string>,
-  ) => {
-    for (const raw of ids ?? []) {
-      const id = Number(raw);
-      if (!Number.isFinite(id)) continue;
-      const name = map.get(id);
-      if (!name) continue;
-      const key = `${kind}:${name}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      out.push(name);
-    }
-  };
-  collect(powerIds, "power", nameMaps?.power ?? new Map());
-  collect(automationIds, "automation", nameMaps?.automation ?? new Map());
-  return out;
+/**
+ * currDtlMgmt-data의 power_list/automation_list id 목록으로 표시명을 직접 조회한다.
+ * has_training/depth 등 아무 조건도 보지 않는 category-data 직접조회 API를 그대로 사용 —
+ * BO 멀티셀렉트가 category.title/product.product_name을 그대로 보여주는 것과 동일한 방식.
+ */
+export async function fetchProductNamesByIds(
+  ids: number[],
+): Promise<Map<number, string>> {
+  if (ids.length === 0) return new Map();
+  const res = await fetchApi<Record<string, string>>(
+    `/api/v1/fo/training/product-names?ids=${ids.join(",")}`,
+  );
+  return new Map(Object.entries(res).map(([id, name]) => [Number(id), name]));
 }

@@ -33,7 +33,6 @@ export default function RequestForTrainingStep3() {
     setErrors(nextErrors);
 
     if (!isStep3Complete(step3)) {
-      alert("Please complete all required fields.");
       return;
     }
 

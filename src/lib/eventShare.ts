@@ -25,6 +25,11 @@ export interface CalendarEvent {
   timeTo?: string;
   location?: string;
   description?: string;
+  url?: string;
+  organizerName?: string;
+  organizerEmail?: string;
+  categories?: string;
+  attachUrl?: string;
 }
 
 function toCompact(dateIso: string, time?: string): string {
@@ -113,6 +118,12 @@ export function buildIcsContent(ev: CalendarEvent): string {
     `SUMMARY:${escapeIcs(ev.title)}`,
     ev.location ? `LOCATION:${escapeIcs(ev.location)}` : "",
     ev.description ? `DESCRIPTION:${escapeIcs(ev.description)}` : "",
+    ev.url ? `URL:${ev.url}` : "",
+    ev.organizerEmail
+      ? `ORGANIZER${ev.organizerName ? `;CN=${escapeIcs(ev.organizerName)}` : ""}:MAILTO:${ev.organizerEmail}`
+      : "",
+    ev.categories ? `CATEGORIES:${escapeIcs(ev.categories)}` : "",
+    ev.attachUrl ? `ATTACH:${ev.attachUrl}` : "",
     "END:VEVENT",
     "END:VCALENDAR",
   ].filter(Boolean);

@@ -92,9 +92,11 @@ export default function TrainingSessionDetailAside({
             <SessionMetaLabel icon={metaIcons.location}>
               LOCATION INFORMATION
             </SessionMetaLabel>
-            <p className="support_service_training_session_detail__meta-value">
-              {sidebar.location.name}
-            </p>
+            {sidebar.location.name.trim() ? (
+              <p className="support_service_training_session_detail__meta-value">
+                {sidebar.location.name}
+              </p>
+            ) : null}
           </div>
           <ul className="support_service_training_session_detail__meta-bullets">
             {sidebar.location.address.trim() ? (
@@ -121,6 +123,7 @@ export default function TrainingSessionDetailAside({
           type="button"
           className="btn-base btn-lv01 btn-lv01--line support_service_training_session_detail__register"
           onClick={onRegister}
+          disabled={session.closesLabel === "Closed"}
         >
           <span>{sidebar.registerLabel}</span>
           <img

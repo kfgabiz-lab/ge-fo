@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   requestForTrainingNavCopy,
@@ -13,16 +14,23 @@ import {
   isStep3Complete,
   useRequestForTrainingForm,
 } from "./RequestForTrainingProvider";
-import RequestForTrainingStep4Form from "./RequestForTrainingStep4Form";
+import RequestForTrainingStep4Form, {
+  type RequestForTrainingStep4Errors,
+} from "./RequestForTrainingStep4Form";
 
 const VFD_GROUP_TITLE = "Variable Frequency Drive";
 
-const REQUIRED_ALERT = "Please complete all required fields.";
 const SUCCESS_ALERT = "Your training request has been submitted.";
 
 export default function RequestForTrainingStep4() {
-  const { step1, step2, step3, step4 } = useRequestForTrainingForm();
+  const router = useRouter();
+  const { step1, step2, step3, step4, resetForm } = useRequestForTrainingForm();
   const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState<RequestForTrainingStep4Errors>({});
+
+  function clearError(key: keyof RequestForTrainingStep4Errors) {
+    setErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev));
+  }
 
   async function handleSubmit() {
     if (submitting) return;
@@ -34,6 +42,16 @@ export default function RequestForTrainingStep4() {
     const hasVfdProduct = step4.selectedProducts.some(
       (product) => product.type === "A" && product.groupTitle === VFD_GROUP_TITLE,
     );
+    const nextErrors: RequestForTrainingStep4Errors = {
+      products: step4.selectedProducts.length === 0,
+      jobTitles: hasVfdProduct && step4.jobTitles.length === 0,
+      studentInvolvement: hasVfdProduct && step4.studentInvolvement.length === 0,
+      vfdUnderstanding: hasVfdProduct && step4.vfdUnderstanding === "",
+      consent: !step4.consentChecked,
+      recaptcha: step4.recaptchaToken.trim() === "",
+    };
+    setErrors(nextErrors);
+
     const vfdFilled =
       !hasVfdProduct ||
       (step4.jobTitles.length > 0 &&
@@ -46,7 +64,6 @@ export default function RequestForTrainingStep4() {
       step4.recaptchaToken.trim() !== "";
 
     if (!step1Filled || !step2Filled || !step3Filled || !step4Filled) {
-      alert(REQUIRED_ALERT);
       return;
     }
 
@@ -82,8 +99,6 @@ export default function RequestForTrainingStep4() {
         contactPerson: step3.contactPerson,
         contactDetails: step3.contactDetails,
         selectedProducts: step4.selectedProducts,
-        curriculumId: step4.curriculumId ?? undefined,
-        sessionId: step4.sessionId ?? undefined,
         jobTitles: step4.jobTitles,
         studentInvolvement: step4.studentInvolvement,
         vfdUnderstanding: step4.vfdUnderstanding,
@@ -93,6 +108,8 @@ export default function RequestForTrainingStep4() {
         recaptchaToken: step4.recaptchaToken,
       });
       alert(SUCCESS_ALERT);
+      resetForm();
+      router.push(requestForTrainingRoutes.step1);
     } catch (error) {
       console.error("[request-for-training] submit failed", error);
     } finally {
@@ -107,7 +124,7 @@ export default function RequestForTrainingStep4() {
       submitLabel={requestForTrainingNavCopy.submitLabel}
       onNextClick={handleSubmit}
     >
-      <RequestForTrainingStep4Form />
+      <RequestForTrainingStep4Form errors={errors} onClearError={clearError} />
     </RequestForTraining>
   );
 }

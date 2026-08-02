@@ -172,9 +172,6 @@ export type ProductOtherItem = {
   badges?: 1 | 2;
 };
 
-export const metasolMsOtherProductsSubtitle =
-  "Metasol Contactor & Overload Relay";
-
 export type ProductDetail = {
   slug: string;
   category: string;
