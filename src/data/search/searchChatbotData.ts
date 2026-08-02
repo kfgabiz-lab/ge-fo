@@ -19,9 +19,6 @@ type ChatbotStreamCallbacks = {
     onCompleted?: (data: unknown) => void;
 };
 
-/**
- * 챗봇 POST SSE 호출
- */
 export async function fetchChatbotStream(
     query: string,
     callbacks: ChatbotStreamCallbacks,
@@ -83,9 +80,6 @@ export async function fetchChatbotStream(
             const eventBlocks =
                 buffer.split(/\r?\n\r?\n/);
 
-            /*
-             * 마지막 블록은 아직 완성되지 않았을 수 있으므로 보관
-             */
             buffer = eventBlocks.pop() ?? "";
 
             for (const eventBlock of eventBlocks) {
@@ -117,9 +111,6 @@ function handleSseEventBlock(
     const dataLines: string[] = [];
 
     for (const line of eventBlock.split(/\r?\n/)) {
-        /*
-         * heartbeat 또는 SSE 주석
-         */
         if (line.startsWith(":")) {
             continue;
         }
@@ -175,25 +166,7 @@ function handleSseEventBlock(
                 );
                 break;
             }
-
-            default: {
-                console.log(
-                    "[CHATBOT UNKNOWN EVENT]",
-                    {
-                        eventName,
-                        rawData,
-                    },
-                );
-            }
         }
-    } catch (error) {
-        console.error(
-            "[CHATBOT SSE PARSE ERROR]",
-            {
-                eventName,
-                rawData,
-                error,
-            },
-        );
+    } catch {
     }
 }

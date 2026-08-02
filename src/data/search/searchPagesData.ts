@@ -106,6 +106,7 @@ export async function fetchSearchPages(
 ): Promise<SearchPagesResult> {
   const { sections = [], page = 0, size = 10 } = options;
   const q = query.trim();
+  if (!q && sections.length === 0) return EMPTY_SEARCH_PAGES_RESULT;
 
   try {
     const params = new URLSearchParams();

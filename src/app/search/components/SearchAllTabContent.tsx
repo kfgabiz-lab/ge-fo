@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   fetchSearchAllProducts,
   type SearchAllProductsResult,
@@ -25,19 +25,12 @@ import SearchDocumentsCard from "./SearchDocumentsCard";
 import SearchEmptyResult from "./SearchEmptyResult";
 import SearchProductCard from "./SearchProductCard";
 import SearchDocumentsPanel from "./SearchDocumentsPanel";
+import { SearchDocumentsFilterProvider } from "./SearchDocumentsFilterProvider";
 import SearchMediaList from "./SearchMediaList";
 import SearchMediaPanel from "./SearchMediaPanel";
 import SearchPageList from "./SearchPageList";
 import SearchPagesPanel from "./SearchPagesPanel";
 import SearchProductsPanel from "./SearchProductsPanel";
-// import {
-//   buildSearchTabHref,
-//   // searchAllAiSummary,
-//   searchAllPage,
-//   searchAllTabs,
-//   toSearchTabId,
-//   type SearchTabId,
-// } from "@/data/search/searchAllContent";
 
 import {
   buildSearchTabHref,
@@ -100,6 +93,13 @@ export default function SearchAllTabContent({
   const [aiAnswer, setAiAnswer] = useState("");
   const [chatbotKeyword, setChatbotKeyword] = useState("");
   const isAllTab = activeTab === "all";
+  const [documentsFilterMounted, setDocumentsFilterMounted] = useState(
+    () => activeTab === "documents",
+  );
+
+  useEffect(() => {
+    if (activeTab === "documents") setDocumentsFilterMounted(true);
+  }, [activeTab]);
 
 
 
@@ -155,53 +155,139 @@ export default function SearchAllTabContent({
     });
   }, [query]);
 
+  const previewQueryRef = useRef<{
+    products: string | null;
+    documents: string | null;
+    media: string | null;
+    pages: string | null;
+  }>({ products: null, documents: null, media: null, pages: null });
+
+  const [panelFiltered, setPanelFiltered] = useState({
+    products: false,
+    documents: false,
+    media: false,
+    pages: false,
+  });
+
+  const skipProductsPreview = activeTab === "products" && !panelFiltered.products;
+  const skipDocumentsPreview =
+    activeTab === "documents" && !panelFiltered.documents;
+  const skipMediaPreview = activeTab === "media" && !panelFiltered.media;
+  const skipPagesPreview = activeTab === "pages" && !panelFiltered.pages;
+
+  const handleProductsFiltered = useCallback((filtered: boolean) => {
+    setPanelFiltered((prev) =>
+      prev.products === filtered ? prev : { ...prev, products: filtered },
+    );
+  }, []);
+
+  const handleDocumentsFiltered = useCallback((filtered: boolean) => {
+    setPanelFiltered((prev) =>
+      prev.documents === filtered ? prev : { ...prev, documents: filtered },
+    );
+  }, []);
+
+  const handleMediaFiltered = useCallback((filtered: boolean) => {
+    setPanelFiltered((prev) =>
+      prev.media === filtered ? prev : { ...prev, media: filtered },
+    );
+  }, []);
+
+  const handlePagesFiltered = useCallback((filtered: boolean) => {
+    setPanelFiltered((prev) =>
+      prev.pages === filtered ? prev : { ...prev, pages: filtered },
+    );
+  }, []);
+
+  const handleProductsTotal = useCallback((total: number, filtered: boolean) => {
+    if (filtered) return;
+    setProductResult((prev) => (prev.total === total ? prev : { ...prev, total }));
+    setLoaded((prev) => (prev.products ? prev : { ...prev, products: true }));
+  }, []);
+
+  const handleDocumentsTotal = useCallback((total: number, filtered: boolean) => {
+    if (filtered) return;
+    setDocumentResult((prev) =>
+      prev.total === total ? prev : { ...prev, total },
+    );
+    setLoaded((prev) => (prev.documents ? prev : { ...prev, documents: true }));
+  }, []);
+
+  const handleMediaTotal = useCallback((total: number, filtered: boolean) => {
+    if (filtered) return;
+    setMediaResult((prev) =>
+      prev.totalElements === total ? prev : { ...prev, totalElements: total },
+    );
+    setLoaded((prev) => (prev.media ? prev : { ...prev, media: true }));
+  }, []);
+
+  const handlePagesTotal = useCallback((total: number, filtered: boolean) => {
+    if (filtered) return;
+    setPagesResult((prev) =>
+      prev.totalElements === total ? prev : { ...prev, totalElements: total },
+    );
+    setLoaded((prev) => (prev.pages ? prev : { ...prev, pages: true }));
+  }, []);
+
   useEffect(() => {
+    if (skipProductsPreview) return;
+    if (previewQueryRef.current.products === query) return;
     let alive = true;
     void fetchSearchAllProducts(query, { limit: 4 }).then((result) => {
       if (!alive) return;
+      previewQueryRef.current.products = query;
       setProductResult(result);
       setLoaded((prev) => ({ ...prev, products: true }));
     });
     return () => {
       alive = false;
     };
-  }, [query]);
+  }, [query, skipProductsPreview]);
 
   useEffect(() => {
+    if (skipDocumentsPreview) return;
+    if (previewQueryRef.current.documents === query) return;
     let alive = true;
     void fetchSearchAllDocuments(query, 4).then((result) => {
       if (!alive) return;
+      previewQueryRef.current.documents = query;
       setDocumentResult(result);
       setLoaded((prev) => ({ ...prev, documents: true }));
     });
     return () => {
       alive = false;
     };
-  }, [query]);
+  }, [query, skipDocumentsPreview]);
 
   useEffect(() => {
+    if (skipMediaPreview) return;
+    if (previewQueryRef.current.media === query) return;
     let alive = true;
     void fetchSearchMedia(query, { size: 4 }).then((result) => {
       if (!alive) return;
+      previewQueryRef.current.media = query;
       setMediaResult(result);
       setLoaded((prev) => ({ ...prev, media: true }));
     });
     return () => {
       alive = false;
     };
-  }, [query]);
+  }, [query, skipMediaPreview]);
 
   useEffect(() => {
+    if (skipPagesPreview) return;
+    if (previewQueryRef.current.pages === query) return;
     let alive = true;
     void fetchSearchPages(query, { size: 4 }).then((result) => {
       if (!alive) return;
+      previewQueryRef.current.pages = query;
       setPagesResult(result);
       setLoaded((prev) => ({ ...prev, pages: true }));
     });
     return () => {
       alive = false;
     };
-  }, [query]);
+  }, [query, skipPagesPreview]);
 
   useEffect(() => {
     setLoaded({
@@ -229,45 +315,21 @@ export default function SearchAllTabContent({
     void fetchChatbotStream(
         trimmedQuery,
         {
-          /*
-           * 첫 번째 response.keyword 이벤트
-           */
           onKeyword: (keywordEvent) => {
             const keyword =
                 keywordEvent.keyword?.trim();
 
             if (!keyword) {
-              console.warn(
-                  "[CHATBOT KEYWORD EMPTY]",
-                  keywordEvent,
-              );
-
               return;
             }
-
-            console.log(
-                "[CHATBOT KEYWORD RECEIVED]",
-                keyword,
-                new Date().toISOString(),
-                performance.now(),
-            );
 
             setChatbotKeyword(keyword);
           },
 
-          /*
-           * 챗봇 AI 답변 누적
-           */
           onChunk: (chunkEvent) => {
             if (!chunkEvent.chunk) {
               return;
             }
-            console.log(
-                "[CHATBOT CHUNK RECEIVED]",
-                chunkEvent.chunk,
-                new Date().toISOString(),
-                performance.now(),
-            );
 
             setAiAnswer(
                 previous =>
@@ -275,14 +337,7 @@ export default function SearchAllTabContent({
             );
           },
 
-          onCompleted: (completedEvent) => {
-            console.log(
-                "[CHATBOT COMPLETED]",
-                completedEvent,
-                new Date().toISOString(),
-                performance.now(),
-            );
-          },
+          onCompleted: () => {},
         },
         controller.signal,
     ).catch((error: unknown) => {
@@ -292,17 +347,8 @@ export default function SearchAllTabContent({
       ) {
         return;
       }
-
-      console.error(
-          "[CHATBOT STREAM ERROR]",
-          error,
-      );
     });
 
-    /*
-     * q가 바뀌거나 컴포넌트가 사라지면
-     * 이전 SSE와 통합검색 요청을 취소한다.
-     */
     return () => {
       controller.abort();
     };
@@ -359,10 +405,34 @@ export default function SearchAllTabContent({
           })}
         </div>
 
-        {activeTab === "products" ? <SearchProductsPanel /> : null}
-        {activeTab === "documents" ? <SearchDocumentsPanel /> : null}
-        {activeTab === "media" ? <SearchMediaPanel /> : null}
-        {activeTab === "pages" ? <SearchPagesPanel /> : null}
+        {activeTab === "products" ? (
+          <SearchProductsPanel
+            onTotalChange={handleProductsTotal}
+            onFilteredChange={handleProductsFiltered}
+          />
+        ) : null}
+        {documentsFilterMounted ? (
+          <SearchDocumentsFilterProvider>
+            {activeTab === "documents" ? (
+              <SearchDocumentsPanel
+                onTotalChange={handleDocumentsTotal}
+                onFilteredChange={handleDocumentsFiltered}
+              />
+            ) : null}
+          </SearchDocumentsFilterProvider>
+        ) : null}
+        {activeTab === "media" ? (
+          <SearchMediaPanel
+            onTotalChange={handleMediaTotal}
+            onFilteredChange={handleMediaFiltered}
+          />
+        ) : null}
+        {activeTab === "pages" ? (
+          <SearchPagesPanel
+            onTotalChange={handlePagesTotal}
+            onFilteredChange={handlePagesFiltered}
+          />
+        ) : null}
 
         {isAllTab && !isAllTabEmpty ? (
           <div className={aiExpanded ? "search_all__ai is-expanded" : "search_all__ai"}>
@@ -380,16 +450,6 @@ export default function SearchAllTabContent({
                 <h2 className="search_all__ai-tit">{searchAllPage.aiTitle}</h2>
                 <p className="search_all__ai-note">{searchAllPage.aiDisclaimer}</p>
               </div>
-              {/*<div className="search_all__ai-body">*/}
-              {/*  <ul className="search_all__ai-list">*/}
-              {/*    {searchAllAiSummary.map((line, index) => (*/}
-              {/*      <li key={`ai-${index}`}>*/}
-              {/*        <span className="search_all__ai-bullet" aria-hidden />*/}
-              {/*        <span className="search_all__ai-list-text">{line}</span>*/}
-              {/*      </li>*/}
-              {/*    ))}*/}
-              {/*  </ul>*/}
-              {/*</div>*/}
               <div className="search_all__ai-list">
                 <ul className="search_all__ai-list">
                   <li>

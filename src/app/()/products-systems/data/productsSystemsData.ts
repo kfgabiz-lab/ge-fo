@@ -131,6 +131,50 @@ export async function fetchCategoryChildren(
   }
 }
 
+export async function fetchCategoryChildrenBatch(
+  parentIds: number[],
+): Promise<Map<number, CategoryChild[]>> {
+  const grouped = new Map<number, CategoryChild[]>();
+  for (const parentId of parentIds) grouped.set(parentId, []);
+  if (parentIds.length === 0) return grouped;
+
+  try {
+    const res = await fetchData<Record<string, unknown>>({
+      slug: "category-data",
+      where: { "in_category.parentId": parentIds.join(",") },
+      unpaged: true,
+      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
+    });
+
+    const buckets = new Map<number, Array<CategoryChild & { sortOrder: number }>>();
+    for (const row of res.content) {
+      const parentId = Number(row["category.parentId"]);
+      if (!grouped.has(parentId)) continue;
+      const bucket = buckets.get(parentId) ?? [];
+      bucket.push({
+        id: Number(row._id),
+        code: String(row["category.code"] ?? ""),
+        title: (row["category.title"] as string) ?? "",
+        image: resolveFirstImageUrl(row["device_systems.image"]),
+        slug: (row["seo.slug"] as string) ?? "",
+        sortOrder: Number(row["sortOrder"] ?? 0),
+      });
+      buckets.set(parentId, bucket);
+    }
+
+    for (const [parentId, bucket] of buckets) {
+      bucket.sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
+      grouped.set(
+        parentId,
+        bucket.map(({ sortOrder: _sortOrder, ...rest }) => rest),
+      );
+    }
+    return grouped;
+  } catch {
+    return grouped;
+  }
+}
+
 interface CategoryLv2Row {
   id: number;
   title: string;

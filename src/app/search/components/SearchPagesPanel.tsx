@@ -19,7 +19,15 @@ import {
 
 const { pageSize: PAGE_SIZE } = searchPagesPage;
 
-function SearchPagesPanelContent() {
+type SearchPanelTotalProps = {
+  onTotalChange?: (total: number, filtered: boolean) => void;
+  onFilteredChange?: (filtered: boolean) => void;
+};
+
+function SearchPagesPanelContent({
+  onTotalChange,
+  onFilteredChange,
+}: SearchPanelTotalProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
   const [result, setResult] = useState<SearchPagesResult>({
@@ -37,6 +45,8 @@ function SearchPagesPanelContent() {
   const selectedSections = getSelectedCategoryValues("document");
   const sectionsKey = [...selectedSections].sort().join(",");
 
+  const isFiltered = sectionsKey !== "";
+
   const pageItems = result.items;
   const totalResults = result.totalElements;
   const totalPages = Math.max(1, result.totalPages);
@@ -52,6 +62,10 @@ function SearchPagesPanelContent() {
   }, [query, sectionsKey]);
 
   useEffect(() => {
+    onFilteredChange?.(isFiltered);
+  }, [isFiltered, onFilteredChange]);
+
+  useEffect(() => {
     let alive = true;
     void fetchSearchPages(query, {
       sections: selectedSections,
@@ -61,6 +75,7 @@ function SearchPagesPanelContent() {
       if (!alive) return;
       setResult(res);
       setLoaded(true);
+      onTotalChange?.(res.totalElements, isFiltered);
     });
     return () => {
       alive = false;
@@ -140,10 +155,16 @@ function SearchPagesPanelContent() {
   );
 }
 
-export default function SearchPagesPanel() {
+export default function SearchPagesPanel({
+  onTotalChange,
+  onFilteredChange,
+}: SearchPanelTotalProps) {
   return (
     <SearchPagesFilterProvider>
-      <SearchPagesPanelContent />
+      <SearchPagesPanelContent
+        onTotalChange={onTotalChange}
+        onFilteredChange={onFilteredChange}
+      />
     </SearchPagesFilterProvider>
   );
 }

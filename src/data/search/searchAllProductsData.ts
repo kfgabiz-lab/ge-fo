@@ -95,7 +95,27 @@ export async function fetchSearchAllProducts(
 }
 
 
-function buildProductCategoryTree(rows: DevicesTreeRow[]): DownloadCategoryOption[] {
+export interface ProductCategoryCount {
+  categoryL2Id: string;
+  count: number;
+}
+
+export async function fetchProductCategoryCounts(): Promise<
+  ProductCategoryCount[]
+> {
+  try {
+    return await fetchApi<ProductCategoryCount[]>(
+      `/api/v1/fo/products/category-counts`,
+    );
+  } catch {
+    return [];
+  }
+}
+
+function buildProductCategoryTree(
+  rows: DevicesTreeRow[],
+  countMap: Map<string, number>,
+): DownloadCategoryOption[] {
   const toSort = (v: string | null) => (v == null ? 0 : Number(v) || 0);
 
   const lv1Rows = rows
@@ -114,12 +134,14 @@ function buildProductCategoryTree(rows: DevicesTreeRow[]): DownloadCategoryOptio
       .map((lv2) => ({
         id: String(lv2.rowId),
         label: lv2.categoryTitle ?? "",
+        count: countMap.get(String(lv2.rowId)) ?? 0,
       }));
 
     return {
       id: String(lv1.rowId),
       label: lv1.categoryTitle ?? "",
       hasArrow: nested.length > 0,
+      count: nested.reduce((sum, n) => sum + (n.count ?? 0), 0),
       nested,
     } satisfies DownloadCategoryOption;
   });
@@ -128,6 +150,10 @@ function buildProductCategoryTree(rows: DevicesTreeRow[]): DownloadCategoryOptio
 export async function fetchSearchProductCategoryTree(): Promise<
   DownloadCategoryOption[]
 > {
-  const rows = await fetchDevicesTreeRows();
-  return buildProductCategoryTree(rows);
+  const [rows, counts] = await Promise.all([
+    fetchDevicesTreeRows(),
+    fetchProductCategoryCounts(),
+  ]);
+  const countMap = new Map(counts.map((c) => [c.categoryL2Id, c.count]));
+  return buildProductCategoryTree(rows, countMap);
 }

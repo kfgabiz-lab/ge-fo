@@ -19,7 +19,15 @@ import {
 
 const { pageSize: PAGE_SIZE } = searchMediaPage;
 
-function SearchMediaPanelContent() {
+type SearchPanelTotalProps = {
+  onTotalChange?: (total: number, filtered: boolean) => void;
+  onFilteredChange?: (filtered: boolean) => void;
+};
+
+function SearchMediaPanelContent({
+  onTotalChange,
+  onFilteredChange,
+}: SearchPanelTotalProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
   const [result, setResult] = useState<SearchMediaResult>({
@@ -37,6 +45,8 @@ function SearchMediaPanelContent() {
   const selectedSources = getSelectedCategoryValues("document");
   const sourcesKey = [...selectedSources].sort().join(",");
 
+  const isFiltered = sourcesKey !== "";
+
   const pageItems = result.items;
   const totalResults = result.totalElements;
   const totalPages = Math.max(1, result.totalPages);
@@ -52,6 +62,10 @@ function SearchMediaPanelContent() {
   }, [query, sourcesKey]);
 
   useEffect(() => {
+    onFilteredChange?.(isFiltered);
+  }, [isFiltered, onFilteredChange]);
+
+  useEffect(() => {
     let alive = true;
     void fetchSearchMedia(query, {
       sources: selectedSources,
@@ -61,6 +75,7 @@ function SearchMediaPanelContent() {
       if (!alive) return;
       setResult(res);
       setLoaded(true);
+      onTotalChange?.(res.totalElements, isFiltered);
     });
     return () => {
       alive = false;
@@ -135,10 +150,16 @@ function SearchMediaPanelContent() {
   );
 }
 
-export default function SearchMediaPanel() {
+export default function SearchMediaPanel({
+  onTotalChange,
+  onFilteredChange,
+}: SearchPanelTotalProps) {
   return (
     <SearchMediaFilterProvider>
-      <SearchMediaPanelContent />
+      <SearchMediaPanelContent
+        onTotalChange={onTotalChange}
+        onFilteredChange={onFilteredChange}
+      />
     </SearchMediaFilterProvider>
   );
 }

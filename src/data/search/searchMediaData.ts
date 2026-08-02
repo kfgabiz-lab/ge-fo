@@ -137,6 +137,7 @@ export async function fetchSearchMedia(
 ): Promise<SearchMediaResult> {
   const { sources = [], page = 0, size = 10 } = options;
   const q = query.trim();
+  if (!q && sources.length === 0) return EMPTY_SEARCH_MEDIA_RESULT;
 
   try {
     const params = new URLSearchParams();

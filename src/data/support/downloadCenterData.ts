@@ -1,7 +1,7 @@
 import { fetchApi, fetchApiText } from "@/lib/api";
 import {
   fetchTopCategories,
-  fetchCategoryChildren,
+  fetchCategoryChildrenBatch,
 } from "@/app/()/products-systems/data/productsSystemsData";
 import type {
   DownloadCategoryOption,
@@ -188,26 +188,28 @@ export async function fetchDownloadCenterCategoryTree(): Promise<
         .map((c) => [c.categoryL1Id as string, c.count]),
     );
 
-    const options = await Promise.all(
-      tops.map(async (top) => {
-        const children = await fetchCategoryChildren(top.id);
-        const nested = children.map((child) => ({
-          id: child.code,
-          label: child.title,
-          count: countMap.get(child.code) ?? 0,
-        }));
-        const total =
-          nested.reduce((sum, n) => sum + (n.count ?? 0), 0) +
-          (parentOnlyCountMap.get(top.code) ?? 0);
-        return {
-          id: top.code,
-          label: top.title,
-          hasArrow: nested.length > 0,
-          count: total,
-          nested,
-        } satisfies DownloadCategoryOption;
-      }),
+    const childrenByParentId = await fetchCategoryChildrenBatch(
+      tops.map((top) => top.id),
     );
+
+    const options = tops.map((top) => {
+      const children = childrenByParentId.get(top.id) ?? [];
+      const nested = children.map((child) => ({
+        id: child.code,
+        label: child.title,
+        count: countMap.get(child.code) ?? 0,
+      }));
+      const total =
+        nested.reduce((sum, n) => sum + (n.count ?? 0), 0) +
+        (parentOnlyCountMap.get(top.code) ?? 0);
+      return {
+        id: top.code,
+        label: top.title,
+        hasArrow: nested.length > 0,
+        count: total,
+        nested,
+      } satisfies DownloadCategoryOption;
+    });
     return options;
   } catch {
     return [];

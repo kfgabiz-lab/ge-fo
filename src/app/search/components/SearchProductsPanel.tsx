@@ -20,7 +20,15 @@ import { searchAllListClasses } from "./searchAllListClasses";
 
 const PAGE_SIZE = 10;
 
-function SearchProductsPanelContent() {
+type SearchPanelTotalProps = {
+  onTotalChange?: (total: number, filtered: boolean) => void;
+  onFilteredChange?: (filtered: boolean) => void;
+};
+
+function SearchProductsPanelContent({
+  onTotalChange,
+  onFilteredChange,
+}: SearchPanelTotalProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
   const [result, setResult] = useState<SearchAllProductsResult>({
@@ -35,6 +43,8 @@ function SearchProductsPanelContent() {
   const { getSelectedCategoryValues } = useSearchProductsFilter();
   const selectedCategories = getSelectedCategoryValues("category");
   const categoriesKey = [...selectedCategories].sort().join(",");
+
+  const isFiltered = categoriesKey !== "";
 
   const pageItems = result.items;
   const totalResults = result.total;
@@ -51,6 +61,10 @@ function SearchProductsPanelContent() {
   }, [query, categoriesKey]);
 
   useEffect(() => {
+    onFilteredChange?.(isFiltered);
+  }, [isFiltered, onFilteredChange]);
+
+  useEffect(() => {
     let alive = true;
     void fetchSearchAllProducts(query, {
       categories: selectedCategories,
@@ -60,6 +74,7 @@ function SearchProductsPanelContent() {
       if (!alive) return;
       setResult(res);
       setLoaded(true);
+      onTotalChange?.(res.total, isFiltered);
     });
     return () => {
       alive = false;
@@ -147,10 +162,16 @@ function SearchProductsPanelContent() {
   );
 }
 
-export default function SearchProductsPanel() {
+export default function SearchProductsPanel({
+  onTotalChange,
+  onFilteredChange,
+}: SearchPanelTotalProps) {
   return (
     <SearchProductsFilterProvider>
-      <SearchProductsPanelContent />
+      <SearchProductsPanelContent
+        onTotalChange={onTotalChange}
+        onFilteredChange={onFilteredChange}
+      />
     </SearchProductsFilterProvider>
   );
 }

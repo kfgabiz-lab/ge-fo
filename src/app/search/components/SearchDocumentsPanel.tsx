@@ -8,10 +8,7 @@ import SearchDocumentsActiveFilters from "./SearchDocumentsActiveFilters";
 import SearchDocumentsCard from "./SearchDocumentsCard";
 import SearchDocumentsFilterPanel from "./SearchDocumentsFilterPanel";
 import SearchEmptyResult from "./SearchEmptyResult";
-import {
-  SearchDocumentsFilterProvider,
-  useSearchDocumentsFilter,
-} from "./SearchDocumentsFilterProvider";
+import { useSearchDocumentsFilter } from "./SearchDocumentsFilterProvider";
 import { searchDocumentsPage } from "@/data/search/searchDocumentsContent";
 import {
   fetchDownloadCenterContents,
@@ -21,7 +18,15 @@ import { searchAllListClasses } from "./searchAllListClasses";
 
 const { pageSize: PAGE_SIZE } = searchDocumentsPage;
 
-function SearchDocumentsPanelContent() {
+type SearchPanelTotalProps = {
+  onTotalChange?: (total: number, filtered: boolean) => void;
+  onFilteredChange?: (filtered: boolean) => void;
+};
+
+export default function SearchDocumentsPanel({
+  onTotalChange,
+  onFilteredChange,
+}: SearchPanelTotalProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
   const [items, setItems] = useState<DownloadCenterItem[]>([]);
@@ -41,6 +46,9 @@ function SearchDocumentsPanelContent() {
   const selectedDocTypes = getSelectedCategoryValues("document");
   const docTypeKey = [...selectedDocTypes].sort().join(",");
 
+  const isFiltered =
+    categoryKey !== "" || parentCategoryKey !== "" || docTypeKey !== "";
+
   const isEmptyResult = loaded && items.length === 0;
 
   const firstResetRef = useRef(true);
@@ -53,11 +61,16 @@ function SearchDocumentsPanelContent() {
   }, [query, categoryKey, parentCategoryKey, docTypeKey]);
 
   useEffect(() => {
+    onFilteredChange?.(isFiltered);
+  }, [isFiltered, onFilteredChange]);
+
+  useEffect(() => {
     if (!query) {
       setItems([]);
       setTotalElements(0);
       setTotalPages(1);
       setLoaded(true);
+      onTotalChange?.(0, isFiltered);
       return;
     }
 
@@ -75,6 +88,7 @@ function SearchDocumentsPanelContent() {
       setTotalElements(res.totalElements);
       setTotalPages(Math.max(1, res.totalPages));
       setLoaded(true);
+      onTotalChange?.(res.totalElements, isFiltered);
     });
     return () => {
       alive = false;
@@ -159,13 +173,5 @@ function SearchDocumentsPanelContent() {
         <SearchDocumentsFilterPanel variant="modal" />
       </SupportFilterModal>
     </section>
-  );
-}
-
-export default function SearchDocumentsPanel() {
-  return (
-    <SearchDocumentsFilterProvider>
-      <SearchDocumentsPanelContent />
-    </SearchDocumentsFilterProvider>
   );
 }
