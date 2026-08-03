@@ -15,18 +15,22 @@ import {
   publicInfrastructureHero,
   publicInfrastructureIndustryTabs,
   publicInfrastructureIntro,
-  publicInfrastructureProducts,
   publicInfrastructureReferences,
   publicInfrastructureWhyItems,
 } from "../data/marketsPublicInfrastructureContent";
 import { publicInfrastructureSolutionsPanel } from "../data/marketsPublicInfrastructureSolutionsPanel";
 import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
+import {
+  fetchMarketProducts,
+  MARKETS_PRODUCTS_NAME,
+} from "../data/marketsProductsData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsPublicInfrastructurePage() {
-  const [faqItems, highlightNewsItems] = await Promise.all([
+  const [faqItems, highlightNewsItems, productItems] = await Promise.all([
     fetchMarketsFaqItems(MARKETS_FAQ_CODE.publicInfrastructure),
     fetchMarketHighlightNews(MARKETS_FAQ_CODE.publicInfrastructure),
+    fetchMarketProducts(MARKETS_PRODUCTS_NAME.publicInfrastructure),
   ]);
 
   return (
@@ -49,7 +53,7 @@ export default async function MarketsPublicInfrastructurePage() {
       <MarketsBenefits items={publicInfrastructureBenefits} />
       <MarketsSolutionsPanel {...publicInfrastructureSolutionsPanel} />
       <MarketsWhy items={publicInfrastructureWhyItems} />
-      <MarketsProducts items={publicInfrastructureProducts} badgesType2Only />
+      <MarketsProducts items={productItems} badgesType2Only />
       <CommonBanner01 />
       <HighlightNewsSection
         variant="markets"

@@ -15,18 +15,22 @@ import {
   oilGasMiningHero,
   oilGasMiningIndustryTabs,
   oilGasMiningIntro,
-  oilGasMiningProducts,
   oilGasMiningReferences,
   oilGasMiningWhyItems,
 } from "../data/marketsOilGasMiningContent";
 import { oilGasMiningSolutionsPanel } from "../data/marketsOilGasMiningSolutionsPanel";
 import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
+import {
+  fetchMarketProducts,
+  MARKETS_PRODUCTS_NAME,
+} from "../data/marketsProductsData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsOilGasMiningPage() {
-  const [faqItems, highlightNewsItems] = await Promise.all([
+  const [faqItems, highlightNewsItems, productItems] = await Promise.all([
     fetchMarketsFaqItems(MARKETS_FAQ_CODE.oilGasMining),
     fetchMarketHighlightNews(MARKETS_FAQ_CODE.oilGasMining),
+    fetchMarketProducts(MARKETS_PRODUCTS_NAME.oilGasMining),
   ]);
 
   return (
@@ -49,7 +53,7 @@ export default async function MarketsOilGasMiningPage() {
       <MarketsBenefits items={oilGasMiningBenefits} />
       <MarketsSolutionsPanel {...oilGasMiningSolutionsPanel} />
       <MarketsWhy items={oilGasMiningWhyItems} />
-      <MarketsProducts items={oilGasMiningProducts} badgesType2Only />
+      <MarketsProducts items={productItems} badgesType2Only />
       <CommonBanner01 />
       <HighlightNewsSection
         variant="markets"

@@ -23,7 +23,7 @@ export function resolveFirstImageUrl(value: unknown): string | null {
   return null;
 }
 
-function resolveImageUrlFromJsonText(value: string | null): string | null {
+export function resolveImageUrlFromJsonText(value: string | null): string | null {
   if (!value) return null;
   try {
     return resolveFirstImageUrl(JSON.parse(value));
@@ -586,40 +586,29 @@ function pickLv2NameFromTreeRows(
   );
 }
 
-const SW_RELEVANT_LV2_IDS: Record<string, readonly number[]> = {
-  scada: [604, 605],
-  xems: [604, 605],
-  "micro-grid": [604, 605],
-  "smart-factory": [604, 605, 606, 607, 608, 609],
-};
+interface SwRelevantProductRow {
+  id: number;
+  title: string | null;
+  slug: string | null;
+  image: string | null;
+  awards: string | null;
+}
 
 export async function fetchSwRelevantProducts(
   slug: string,
 ): Promise<ProductOtherItem[]> {
-  const targetLv2Ids = SW_RELEVANT_LV2_IDS[slug];
-  if (!targetLv2Ids) return [];
   try {
-    const rows = await fetchDevicesTreeRows();
-    const targetLv2 = new Set(targetLv2Ids.map(String));
-    const seen = new Set<number>();
-    const items: ProductOtherItem[] = [];
-    for (const r of rows) {
-      if (r.depth !== "3" || r.productId == null) continue;
-      if (r.parentId == null || !targetLv2.has(r.parentId)) continue;
-      if (seen.has(r.productId)) continue;
-      seen.add(r.productId);
-      items.push({
-        id: r.productSlug || `product-${r.productId}`,
-        href: withCategoryContext(
-          r.productSlug ? `/product/${r.productSlug}` : "",
-          r.parentId,
-        ),
-        image: resolveImageUrlFromJsonText(r.productImage) ?? "",
-        title: r.productTitle ?? "",
-        subtitle: r.productDescription ?? "",
-      });
-    }
-    return items;
+    const rows = await fetchApi<SwRelevantProductRow[]>(
+      `/api/v1/fo/products/${slug}/relevant-products`,
+    );
+    return rows.map((r) => ({
+      id: r.slug || `product-${r.id}`,
+      href: r.slug ? `/product/${r.slug}` : "",
+      image: resolveImageUrlFromJsonText(r.image) ?? "",
+      title: r.title ?? "",
+      subtitle: "",
+      badge: r.awards === "01",
+    }));
   } catch {
     return [];
   }

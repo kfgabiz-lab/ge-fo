@@ -16,7 +16,6 @@ import {
   powerGridHero,
   powerGridIndustryTabs,
   powerGridIntro,
-  powerGridProducts,
   powerGridReferences,
   powerGridSmartGridOperation,
   powerGridSmartGridUseCases,
@@ -24,12 +23,17 @@ import {
   powerGridWhyItems,
 } from "../data/marketsPowerGridContent";
 import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
+import {
+  fetchMarketProducts,
+  MARKETS_PRODUCTS_NAME,
+} from "../data/marketsProductsData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsPowerGridPage() {
-  const [faqItems, highlightNewsItems] = await Promise.all([
+  const [faqItems, highlightNewsItems, productItems] = await Promise.all([
     fetchMarketsFaqItems(MARKETS_FAQ_CODE.powerGrid),
     fetchMarketHighlightNews(MARKETS_FAQ_CODE.powerGrid),
+    fetchMarketProducts(MARKETS_PRODUCTS_NAME.powerGrid),
   ]);
 
   return (
@@ -56,7 +60,7 @@ export default async function MarketsPowerGridPage() {
         operationItems={powerGridSmartGridOperation}
       />
       <MarketsWhy items={powerGridWhyItems} />
-      <MarketsProducts items={powerGridProducts} badgesType2Only />
+      <MarketsProducts items={productItems} badgesType2Only />
       <CommonBanner01 />
       <HighlightNewsSection
         variant="markets"

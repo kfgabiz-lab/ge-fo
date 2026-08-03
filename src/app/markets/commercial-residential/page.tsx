@@ -16,18 +16,22 @@ import { commercialResidentialHero } from "../data/marketsContent";
 import {
   commercialResidentialBenefits,
   commercialResidentialIntro,
-  commercialResidentialProducts,
   commercialResidentialReferences,
   commercialResidentialStats,
   commercialResidentialWhyItems,
 } from "../data/marketsCommercialResidentialContent";
 import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
+import {
+  fetchMarketProducts,
+  MARKETS_PRODUCTS_NAME,
+} from "../data/marketsProductsData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsCommercialResidentialPage() {
-  const [faqItems, highlightNewsItems] = await Promise.all([
+  const [faqItems, highlightNewsItems, productItems] = await Promise.all([
     fetchMarketsFaqItems(MARKETS_FAQ_CODE.commercialResidential),
     fetchMarketHighlightNews(MARKETS_FAQ_CODE.commercialResidential),
+    fetchMarketProducts(MARKETS_PRODUCTS_NAME.commercialResidential),
   ]);
 
   return (
@@ -52,7 +56,7 @@ export default async function MarketsCommercialResidentialPage() {
       <MarketsBenefits items={commercialResidentialBenefits} />
       <MarketsSolutionsPanel {...commercialSolutionsPanel} />
       <MarketsWhy items={commercialResidentialWhyItems} />
-      <MarketsProducts items={commercialResidentialProducts} badgesType2Only />
+      <MarketsProducts items={productItems} badgesType2Only />
       <CommonBanner01 />
       <HighlightNewsSection
         variant="markets"

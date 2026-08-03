@@ -17,18 +17,22 @@ import {
   industrialHero,
   industrialIndustryTabs,
   industrialIntro,
-  industrialProducts,
   industrialReferences,
   industrialStats,
   industrialWhyItems,
 } from "../data/marketsIndustrialContent";
 import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
+import {
+  fetchMarketProducts,
+  MARKETS_PRODUCTS_NAME,
+} from "../data/marketsProductsData";
 import "@/assets/css/markets.css";
 
 export default async function MarketsIndustrialPage() {
-  const [faqItems, highlightNewsItems] = await Promise.all([
+  const [faqItems, highlightNewsItems, productItems] = await Promise.all([
     fetchMarketsFaqItems(MARKETS_FAQ_CODE.industrial),
     fetchMarketHighlightNews(MARKETS_FAQ_CODE.industrial),
+    fetchMarketProducts(MARKETS_PRODUCTS_NAME.industrial),
   ]);
 
   return (
@@ -49,7 +53,7 @@ export default async function MarketsIndustrialPage() {
       <MarketsBenefits items={industrialBenefits} />
       <MarketsSolutionsPanel {...industrialSolutionsPanel} />
       <MarketsWhy items={industrialWhyItems} />
-      <MarketsProducts items={industrialProducts} badgesType2Only />
+      <MarketsProducts items={productItems} badgesType2Only />
       <CommonBanner01 />
       <HighlightNewsSection
         variant="markets"
