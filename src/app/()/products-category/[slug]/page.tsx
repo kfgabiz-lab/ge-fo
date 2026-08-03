@@ -32,12 +32,12 @@ export default async function ProductsCategoryRoutePage({
 
   const category = await fetchCategoryBySlug(slug, { depth: 1 });
 
-  const products = category
-    ? await fetchVisibleLv2Categories(category.id)
-    : [];
-  const highlightItems = category
-    ? await fetchCategoryInsights(category.id)
-    : [];
+  const [products, highlightItems] = category
+    ? await Promise.all([
+        fetchVisibleLv2Categories(category.id),
+        fetchCategoryInsights(category.id),
+      ])
+    : [[], []];
 
   return (
     <main className="devices-page" id="Page_products_category">

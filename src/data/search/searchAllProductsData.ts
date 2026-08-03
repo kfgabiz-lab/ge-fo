@@ -9,6 +9,8 @@ interface ProductSearchApiItem {
   productDescription: string | null;
   image: string | null;
   slug: string | null;
+  category: string | null;
+  highlight: string | null;
 }
 
 interface ProductSearchApiResponse {
@@ -19,31 +21,6 @@ interface ProductSearchApiResponse {
 export interface SearchAllProductsResult {
   total: number;
   items: SearchProductItem[];
-}
-
-function buildCategoryPath(
-  rows: DevicesTreeRow[],
-  productId: number,
-): { category: string; highlight: string } {
-  const depth3 = rows.find((r) => r.depth === "3" && r.productId === productId);
-  if (!depth3 || depth3.parentId == null) return { category: "", highlight: "" };
-
-  const lv2 = rows.find(
-    (r) => r.depth === "2" && r.rowId != null && String(r.rowId) === depth3.parentId,
-  );
-  if (!lv2) return { category: "", highlight: "" };
-
-  const highlight = lv2.categoryTitle ?? "";
-
-  let category = "";
-  if (lv2.parentId != null) {
-    const lv1 = rows.find(
-      (r) => r.depth === "1" && r.rowId != null && String(r.rowId) === lv2.parentId,
-    );
-    category = lv1?.categoryTitle ?? "";
-  }
-
-  return { category, highlight };
 }
 
 export interface SearchProductsQueryOptions {
@@ -67,26 +44,20 @@ export async function fetchSearchAllProducts(
     params.set("offset", String(offset));
     params.set("limit", String(limit));
 
-    const [res, rows] = await Promise.all([
-      fetchApi<ProductSearchApiResponse>(
-        `/api/v1/fo/products/search?${params.toString()}`,
-      ),
-      fetchDevicesTreeRows(),
-    ]);
+    const res = await fetchApi<ProductSearchApiResponse>(
+      `/api/v1/fo/products/search?${params.toString()}`,
+    );
 
     const apiItems = Array.isArray(res?.items) ? res.items : [];
-    const items: SearchProductItem[] = apiItems.map((it) => {
-      const { category, highlight } = buildCategoryPath(rows, it.id);
-      return {
-        id: String(it.id),
-        href: it.slug ? `/product/${it.slug}` : "",
-        image: it.image ?? "",
-        category,
-        highlight,
-        title: it.productName ?? "",
-        description: it.productDescription ?? "",
-      };
-    });
+    const items: SearchProductItem[] = apiItems.map((it) => ({
+      id: String(it.id),
+      href: it.slug ? `/product/${it.slug}` : "",
+      image: it.image ?? "",
+      category: it.category ?? "",
+      highlight: it.highlight ?? "",
+      title: it.productName ?? "",
+      description: it.productDescription ?? "",
+    }));
 
     return { total: typeof res?.total === "number" ? res.total : 0, items };
   } catch {

@@ -2,25 +2,31 @@
 
 import { InputAdornment, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   buildNotFoundSearchHref,
   notFoundPage,
 } from "@/data/common/notFoundContent";
-import { logSearchKeyword } from "@/data/search/searchKeywordData";
+import {
+  fetchPopularKeywords,
+  logSearchKeyword,
+} from "@/data/search/searchKeywordData";
 
-type NotFoundSearchProps = {
-  popularKeywords?: string[];
-};
-
-export default function NotFoundSearch({
-  popularKeywords = [],
-}: NotFoundSearchProps) {
+export default function NotFoundSearch() {
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const [popularTags, setPopularTags] = useState<readonly string[]>([]);
   const hasQuery = query.length > 0;
 
-  const popularTags: readonly string[] = popularKeywords;
+  useEffect(() => {
+    let cancelled = false;
+    fetchPopularKeywords("UNIFIED_SEARCH").then((keywords) => {
+      if (!cancelled) setPopularTags(keywords);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const navigateToQuery = (nextQuery: string) => {
     setQuery(nextQuery);
