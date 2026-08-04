@@ -1,7 +1,7 @@
 "use client";
 
 import { InputAdornment, TextField } from "@mui/material";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   buildSearchAllHref,
@@ -13,7 +13,6 @@ import {
 } from "@/data/search/searchKeywordData";
 
 export default function SearchAllHero() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const qParam = searchParams.get("q");
   const initialQuery =
@@ -51,8 +50,7 @@ export default function SearchAllHero() {
     : searchAllPage.searchPlaceholder;
 
   const navigateToQuery = (nextQuery: string) => {
-    setQuery(nextQuery);
-    router.push(buildSearchAllHref(nextQuery));
+    window.location.href = buildSearchAllHref(nextQuery);
   };
 
   return (

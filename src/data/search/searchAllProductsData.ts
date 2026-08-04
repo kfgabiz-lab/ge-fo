@@ -71,12 +71,16 @@ export interface ProductCategoryCount {
   count: number;
 }
 
-export async function fetchProductCategoryCounts(): Promise<
-  ProductCategoryCount[]
-> {
+export async function fetchProductCategoryCounts(
+  query = "",
+): Promise<ProductCategoryCount[]> {
   try {
+    const params = new URLSearchParams();
+    const q = query.trim();
+    if (q) params.set("q", q);
+    const qs = params.toString();
     return await fetchApi<ProductCategoryCount[]>(
-      `/api/v1/fo/products/category-counts`,
+      `/api/v1/fo/products/category-counts${qs ? `?${qs}` : ""}`,
     );
   } catch {
     return [];
@@ -118,12 +122,12 @@ function buildProductCategoryTree(
   });
 }
 
-export async function fetchSearchProductCategoryTree(): Promise<
-  DownloadCategoryOption[]
-> {
+export async function fetchSearchProductCategoryTree(
+  query = "",
+): Promise<DownloadCategoryOption[]> {
   const [rows, counts] = await Promise.all([
     fetchDevicesTreeRows(),
-    fetchProductCategoryCounts(),
+    fetchProductCategoryCounts(query),
   ]);
   const countMap = new Map(counts.map((c) => [c.categoryL2Id, c.count]));
   return buildProductCategoryTree(rows, countMap);

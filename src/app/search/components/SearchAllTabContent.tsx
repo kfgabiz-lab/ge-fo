@@ -10,6 +10,7 @@ import {
   type SearchAllProductsResult,
 } from "@/data/search/searchAllProductsData";
 import {
+  fetchSearchAllDocuments,
   fetchSearchAllDocumentsByKeyword,
   type SearchAllDocumentsResult,
 } from "@/data/search/searchAllDocumentsData";
@@ -94,6 +95,7 @@ export default function SearchAllTabContent({
 
   const [aiAnswer, setAiAnswer] = useState("");
   const [chatbotKeyword, setChatbotKeyword] = useState("");
+  const [chatbotSettled, setChatbotSettled] = useState(false);
   const isAllTab = activeTab === "all";
   const [documentsFilterMounted, setDocumentsFilterMounted] = useState(
     () => activeTab === "documents",
@@ -248,19 +250,28 @@ export default function SearchAllTabContent({
 
   useEffect(() => {
     if (skipDocumentsPreview) return;
-    if (!chatbotKeyword) return;
-    if (previewQueryRef.current.documents === chatbotKeyword) return;
+
+    const useFallback = !chatbotKeyword && chatbotSettled;
+    if (!chatbotKeyword && !useFallback) return;
+
+    const cacheKey = chatbotKeyword || `__query__:${query}`;
+    if (previewQueryRef.current.documents === cacheKey) return;
+
     let alive = true;
-    void fetchSearchAllDocumentsByKeyword(chatbotKeyword, 4).then((result) => {
+    const request = chatbotKeyword
+      ? fetchSearchAllDocumentsByKeyword(chatbotKeyword, 4)
+      : fetchSearchAllDocuments(query, 4);
+
+    void request.then((result) => {
       if (!alive) return;
-      previewQueryRef.current.documents = chatbotKeyword;
+      previewQueryRef.current.documents = cacheKey;
       setDocumentResult(result);
       setLoaded((prev) => ({ ...prev, documents: true }));
     });
     return () => {
       alive = false;
     };
-  }, [chatbotKeyword, skipDocumentsPreview]);
+  }, [chatbotKeyword, chatbotSettled, query, skipDocumentsPreview]);
 
   useEffect(() => {
     if (skipMediaPreview) return;
@@ -307,6 +318,7 @@ export default function SearchAllTabContent({
     if (!trimmedQuery) {
       setAiAnswer("");
       setChatbotKeyword("");
+      setChatbotSettled(true);
       return;
     }
 
@@ -314,6 +326,7 @@ export default function SearchAllTabContent({
 
     setAiAnswer("");
     setChatbotKeyword("");
+    setChatbotSettled(false);
 
     void fetchChatbotStream(
         trimmedQuery,
@@ -344,7 +357,9 @@ export default function SearchAllTabContent({
             );
           },
 
-          onCompleted: () => {},
+          onCompleted: () => {
+            setChatbotSettled(true);
+          },
         },
         controller.signal,
     ).catch((error: unknown) => {
@@ -354,6 +369,7 @@ export default function SearchAllTabContent({
       ) {
         return;
       }
+      setChatbotSettled(true);
     });
 
     return () => {
@@ -387,7 +403,7 @@ export default function SearchAllTabContent({
               tab.id === "all"
                 ? isAllLoaded
                   ? formatSearchCount(allTotal)
-                  : "–"
+                  : "0"
                 : tab.id === "products"
                   ? formatSearchCount(productResult.total)
                   : tab.id === "documents"
