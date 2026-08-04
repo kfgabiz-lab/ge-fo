@@ -120,11 +120,13 @@ export async function fetchProductDownloadsPage({
   productCodes,
   page = 1,
   sort = PRODUCT_DOWNLOADS_DEFAULT_SORT,
+  q,
 }: {
   docTypes: string[];
   productCodes: string[];
   page?: number;
   sort?: DownloadCenterSort;
+  q?: string;
 }): Promise<ProductDownloadsPage> {
   if (productCodes.length === 0) {
     return { items: [], totalElements: 0, totalPages: 1 };
@@ -134,6 +136,7 @@ export async function fetchProductDownloadsPage({
     docTypes,
     productCodes,
     sort,
+    q,
     page: Math.max(0, page - 1),
     size: PRODUCT_DOWNLOADS_PAGE_SIZE,
   });

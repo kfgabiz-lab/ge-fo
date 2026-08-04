@@ -71,6 +71,7 @@ export type SwProductDetailShellProps = {
   highlights: HighlightNewsItem[];
   faqItems: CommonFaqEntry[];
   connectPortalHref?: string;
+  contactHref?: string;
   otherProducts: ProductOtherItem[];
 };
 
@@ -102,6 +103,7 @@ export default function SwProductDetailShell({
   highlights,
   faqItems,
   connectPortalHref,
+  contactHref,
   otherProducts,
 }: SwProductDetailShellProps) {
   const showDownloads = downloads.totalElements > 0;
@@ -161,7 +163,7 @@ export default function SwProductDetailShell({
           connectPortalHref={connectPortalHref}
         />
       </DevicesProductNavScope>
-      <CommonBanner04 />
+      <CommonBanner04 linkHref={contactHref} />
       <HighlightNewsSection
         variant="markets"
         title="Highlights"
