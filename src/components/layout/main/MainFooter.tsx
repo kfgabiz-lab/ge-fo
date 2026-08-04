@@ -19,8 +19,8 @@ const EMAIL_FORMAT_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const interestOptions = [
   { value: "LV & MV Power Solutions", defaultChecked: false },
-  { value: "Grid & Utility Infrastructure", defaultChecked: true },
-  { value: "Automation & Industrial Control", defaultChecked: true },
+  { value: "Grid & Utility Infrastructure", defaultChecked: false },
+  { value: "Automation & Industrial Control", defaultChecked: false },
 ] as const;
 
 const legalLinks = [
