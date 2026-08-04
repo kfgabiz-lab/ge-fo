@@ -36,6 +36,6 @@ export function toArticlesCard(item: ArticlesRow): ArticlesCardItem {
 }
 
 export const ARTICLES_STATUS_WHERE: Record<string, string> = {
-  condexpr_status: "is_visible=001,publish_dttm<=today()?'게시':'미게시'",
+  condexpr_status: "is_visible=001,publish_dttm<=now()?'게시':'미게시'",
   condval_status: "게시",
 };

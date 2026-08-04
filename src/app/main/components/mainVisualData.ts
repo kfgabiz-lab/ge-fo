@@ -130,9 +130,11 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
       where: {
         eq_banner_position: BANNER_POSITION_HERO,
         eq_is_visible: "001",
+        drs_post_period: "in_range",
       },
       sort: "banner.sort_order,asc",
       size: 100,
+      datetimeRange: true,
     }),
     fetchPreviewBannerRow(),
   ]);

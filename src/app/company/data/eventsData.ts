@@ -15,7 +15,10 @@ export const eventsDetailHref = (id: number) => `/company/events/detail/${id}`;
 
 export type EventsRow = PageDataItem;
 
-const EVENTS_VISIBLE_WHERE: Record<string, string> = { eq_is_visible: "001" };
+const EVENTS_VISIBLE_WHERE: Record<string, string> = {
+  condexpr_status: "is_visible=001,publish_dttm<=now()?'게시':'미게시'",
+  condval_status: "게시",
+};
 
 const EVENTS_PAST_WHERE: Record<string, string> = {
   condexpr_upcoming: "period_to>=today()?'upcoming':'past'",
