@@ -29,9 +29,9 @@ export async function fetchChatbotStream(
     if (!trimmedQuery) {
         return;
     }
-
+    const baseUrl = window.location.origin;
     const response = await fetch(
-        "http://localhost:8080/api/v1/fo/search/chatbot",
+        `${baseUrl}/api/v1/fo/search/chatbot`,
         {
             method: "POST",
             headers: {
