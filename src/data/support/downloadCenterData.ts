@@ -95,6 +95,48 @@ export async function fetchDownloadCenterContents(
   }
 }
 
+export interface DownloadCenterContentsByKeywordParams {
+  keyword?: string;
+  categories?: string[];
+  parentCategories?: string[];
+  docTypes?: string[];
+  productCodes?: string[];
+  page?: number;
+  size?: number;
+}
+
+export async function fetchDownloadCenterContentsByKeyword(
+  params: DownloadCenterContentsByKeywordParams,
+): Promise<DownloadCenterContentsPage> {
+  const page = params.page ?? 0;
+  const size = params.size ?? 12;
+  const sp = new URLSearchParams();
+  if (params.keyword && params.keyword.trim()) {
+    sp.set("keyword", params.keyword.trim());
+  }
+  if (params.categories && params.categories.length > 0) {
+    sp.set("categories", params.categories.join(","));
+  }
+  if (params.parentCategories && params.parentCategories.length > 0) {
+    sp.set("parentCategories", params.parentCategories.join(","));
+  }
+  if (params.docTypes && params.docTypes.length > 0) {
+    sp.set("docTypes", params.docTypes.join(","));
+  }
+  if (params.productCodes && params.productCodes.length > 0) {
+    sp.set("productCodes", params.productCodes.join(","));
+  }
+  sp.set("page", String(page));
+  sp.set("size", String(size));
+  try {
+    return await fetchApi<DownloadCenterContentsPage>(
+      `/api/v1/fo/download-center/keyword-contents?${sp.toString()}`,
+    );
+  } catch {
+    return { content: [], totalElements: 0, totalPages: 0, page, size };
+  }
+}
+
 export interface DownloadCenterCategoryCount {
   categoryL1Id: string | null;
   categoryL2Id: string | null;

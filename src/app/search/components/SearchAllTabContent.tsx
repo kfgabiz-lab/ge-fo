@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   fetchSearchAllProducts,
   type SearchAllProductsResult,
 } from "@/data/search/searchAllProductsData";
 import {
-  fetchSearchAllDocuments,
+  fetchSearchAllDocumentsByKeyword,
   type SearchAllDocumentsResult,
 } from "@/data/search/searchAllDocumentsData";
 import {
@@ -246,18 +248,19 @@ export default function SearchAllTabContent({
 
   useEffect(() => {
     if (skipDocumentsPreview) return;
-    if (previewQueryRef.current.documents === query) return;
+    if (!chatbotKeyword) return;
+    if (previewQueryRef.current.documents === chatbotKeyword) return;
     let alive = true;
-    void fetchSearchAllDocuments(query, 4).then((result) => {
+    void fetchSearchAllDocumentsByKeyword(chatbotKeyword, 4).then((result) => {
       if (!alive) return;
-      previewQueryRef.current.documents = query;
+      previewQueryRef.current.documents = chatbotKeyword;
       setDocumentResult(result);
       setLoaded((prev) => ({ ...prev, documents: true }));
     });
     return () => {
       alive = false;
     };
-  }, [query, skipDocumentsPreview]);
+  }, [chatbotKeyword, skipDocumentsPreview]);
 
   useEffect(() => {
     if (skipMediaPreview) return;
@@ -323,7 +326,11 @@ export default function SearchAllTabContent({
               return;
             }
 
-            setChatbotKeyword(keyword);
+            const relatedKeywords = Array.isArray(keywordEvent.related_keywords)
+                ? keywordEvent.related_keywords.filter(Boolean)
+                : [];
+
+            setChatbotKeyword([keyword, ...relatedKeywords].join(","));
           },
 
           onChunk: (chunkEvent) => {
@@ -415,6 +422,7 @@ export default function SearchAllTabContent({
           <SearchDocumentsFilterProvider>
             {activeTab === "documents" ? (
               <SearchDocumentsPanel
+                keyword={chatbotKeyword}
                 onTotalChange={handleDocumentsTotal}
                 onFilteredChange={handleDocumentsFiltered}
               />
@@ -455,7 +463,9 @@ export default function SearchAllTabContent({
                   <li>
                 {aiAnswer ? (
                     <span className="search_all__ai-list-text">
-                      {aiAnswer}
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {aiAnswer}
+                      </ReactMarkdown>
                     </span>
                 ) : (
                     <span className="search_all__ai-list-text">
@@ -491,7 +501,7 @@ export default function SearchAllTabContent({
             />
             <div className="search_all__products">
               {productResult.items.map((item) => (
-                <SearchProductCard key={item.id} item={item} searchTerm={query} />
+                <SearchProductCard key={item.id} item={item} />
               ))}
             </div>
           </div>

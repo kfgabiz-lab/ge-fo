@@ -11,7 +11,7 @@ import SearchEmptyResult from "./SearchEmptyResult";
 import { useSearchDocumentsFilter } from "./SearchDocumentsFilterProvider";
 import { searchDocumentsPage } from "@/data/search/searchDocumentsContent";
 import {
-  fetchDownloadCenterContents,
+  fetchDownloadCenterContentsByKeyword,
   type DownloadCenterItem,
 } from "@/data/support/downloadCenterData";
 import { searchAllListClasses } from "./searchAllListClasses";
@@ -19,11 +19,13 @@ import { searchAllListClasses } from "./searchAllListClasses";
 const { pageSize: PAGE_SIZE } = searchDocumentsPage;
 
 type SearchPanelTotalProps = {
+  keyword: string;
   onTotalChange?: (total: number, filtered: boolean) => void;
   onFilteredChange?: (filtered: boolean) => void;
 };
 
 export default function SearchDocumentsPanel({
+  keyword,
   onTotalChange,
   onFilteredChange,
 }: SearchPanelTotalProps) {
@@ -58,14 +60,14 @@ export default function SearchDocumentsPanel({
       return;
     }
     setCurrentPage(1);
-  }, [query, categoryKey, parentCategoryKey, docTypeKey]);
+  }, [keyword, categoryKey, parentCategoryKey, docTypeKey]);
 
   useEffect(() => {
     onFilteredChange?.(isFiltered);
   }, [isFiltered, onFilteredChange]);
 
   useEffect(() => {
-    if (!query) {
+    if (!keyword) {
       setItems([]);
       setTotalElements(0);
       setTotalPages(1);
@@ -75,8 +77,8 @@ export default function SearchDocumentsPanel({
     }
 
     let alive = true;
-    void fetchDownloadCenterContents({
-      q: query,
+    void fetchDownloadCenterContentsByKeyword({
+      keyword,
       categories: selectedCategories,
       parentCategories: selectedCategoryParentCodes,
       docTypes: selectedDocTypes,
@@ -94,7 +96,7 @@ export default function SearchDocumentsPanel({
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, categoryKey, parentCategoryKey, docTypeKey, currentPage]);
+  }, [keyword, categoryKey, parentCategoryKey, docTypeKey, currentPage]);
 
   return (
     <section

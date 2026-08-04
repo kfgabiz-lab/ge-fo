@@ -130,7 +130,7 @@ function SearchProductsPanelContent({
                         key={`${item.id}-${currentPage}-${index}`}
                         className={searchAllListClasses.item}
                       >
-                        <SearchProductCard item={item} searchTerm={query} />
+                        <SearchProductCard item={item} />
                       </li>
                     ))}
                   </ul>

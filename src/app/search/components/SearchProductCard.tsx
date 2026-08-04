@@ -1,19 +1,12 @@
 import Link from "next/link";
 import type { SearchProductItem } from "@/data/search/searchAllContent";
 import { PRODUCTS_SYSTEMS_PLACEHOLDER } from "@/app/()/products-systems/data/productsSystemsData";
-import {
-  includesSearchHighlight,
-  renderInlineTextHighlight,
-  renderTitleTextHighlight,
-} from "./renderSearchTextHighlight";
 
 type SearchProductCardProps = {
   item: SearchProductItem;
-  searchTerm?: string;
 };
 
-export default function SearchProductCard({ item, searchTerm }: SearchProductCardProps) {
-  const highlight = searchTerm?.trim() ? searchTerm.trim() : undefined;
+export default function SearchProductCard({ item }: SearchProductCardProps) {
   return (
     <Link href={item.href} prefetch={false} className="search_all__product">
       <div className="search_all__product-img">
@@ -35,19 +28,11 @@ export default function SearchProductCard({ item, searchTerm }: SearchProductCar
             {item.title.split("\n").map((line, lineIndex) => (
               <span key={`${item.id}-tit-${lineIndex}`}>
                 {lineIndex > 0 ? <br /> : null}
-                {renderTitleTextHighlight(line, highlight, "search_all__mark")}
+                {line}
               </span>
             ))}
           </h3>
-          <p className="search_all__product-desc">
-            {highlight && includesSearchHighlight(item.description, highlight)
-              ? renderInlineTextHighlight(
-                  item.description,
-                  highlight,
-                  "search_all__mark",
-                )
-              : item.description}
-          </p>
+          <p className="search_all__product-desc">{item.description}</p>
         </div>
       </div>
     </Link>
