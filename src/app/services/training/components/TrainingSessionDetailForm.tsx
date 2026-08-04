@@ -641,7 +641,11 @@ export default function TrainingSessionDetailForm({
       <button
         type="submit"
         className="btn-base btn-lv01 btn-lv01--solid support_service_training_session_detail__submit"
-        disabled={submitting || session.closesLabel === "Closed"}
+        disabled={
+          submitting ||
+          session.closesLabel === "Closed" ||
+          session.registrationNotYetOpen
+        }
       >
         {engineeringTrainingSessionFormCopy.submitLabel}
       </button>

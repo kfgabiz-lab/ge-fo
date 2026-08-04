@@ -51,7 +51,8 @@ interface CurriculumDetail2 {
   country_code?: string;
   phone?: string;
   email?: string;
-  register_period_to?: string; 
+  register_period_from?: string;
+  register_period_to?: string;
   training_date_from?: string; 
   training_date_to?: string; 
   content?: string; 
@@ -144,6 +145,15 @@ function computeClosesLabel(registerPeriodTo?: string): string {
   if (days < 0) return "Closed";
   if (days === 0) return "Closes today";
   return `Closes in ${days} ${days === 1 ? "day" : "days"}`;
+}
+
+function isRegistrationNotYetOpen(registerPeriodFrom?: string): boolean {
+  const ymd = parseYmd(registerPeriodFrom);
+  if (!ymd) return false;
+  const now = siteToday();
+  const startUtc = Date.UTC(ymd.y, ymd.m - 1, ymd.d);
+  const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return todayUtc < startUtc;
 }
 
 function parseYmd(dateStr?: string): { y: number; m: number; d: number } | null {
@@ -406,6 +416,7 @@ export function toTrainingSessionDetail(
     courseTitle: curriculum.title ?? undefined,
     breadcrumbCurrent: dateDisplay,
     closesLabel: computeClosesLabel(d2.register_period_to),
+    registrationNotYetOpen: isRegistrationNotYetOpen(d2.register_period_from),
     content: d2.content ?? "",
     agenda,
     showTrainerColumn,
@@ -514,6 +525,12 @@ function buildOgMetadata(
       title,
       description,
       ...(image ? { images: [{ url: image }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(image ? { images: [image] } : {}),
     },
   };
 }

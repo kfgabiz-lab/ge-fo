@@ -31,6 +31,7 @@ export type EngineeringTrainingSessionDetail = {
   courseTitle?: string;
   breadcrumbCurrent: string;
   closesLabel?: string;
+  registrationNotYetOpen?: boolean;
   content: string;
   agenda: EngineeringTrainingAgendaRow[];
   showTrainerColumn: boolean;

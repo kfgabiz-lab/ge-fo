@@ -110,15 +110,11 @@ export default async function GenericProductDetail({
           <div className="inner">
             <h2 className="section_tit">Lineup</h2>
             <div
+              className="devices_product_lineup__grids"
               data-slug="product-data"
               data-slugkey="product_etc.line_up"
               dangerouslySetInnerHTML={{ __html: detail.lineUp }}
             />
-          </div>
-        </section>
-        ) : null}
-        <section className="devices_product_lineup">
-          <div className="inner">
             <div className="devices_product_lineup__footer">
               <div className="devices_product_lineup__note">
                 <p>Explore all available configurations effortlessly.</p>
@@ -139,6 +135,7 @@ export default async function GenericProductDetail({
             </div>
           </div>
         </section>
+        ) : null}
         {showDownloads ? (
           <DevicesProductDownloads
             initial={downloadsPage}

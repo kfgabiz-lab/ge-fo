@@ -123,7 +123,9 @@ export default function TrainingSessionDetailAside({
           type="button"
           className="btn-base btn-lv01 btn-lv01--line support_service_training_session_detail__register"
           onClick={onRegister}
-          disabled={session.closesLabel === "Closed"}
+          disabled={
+            session.closesLabel === "Closed" || session.registrationNotYetOpen
+          }
         >
           <span>{sidebar.registerLabel}</span>
           <img

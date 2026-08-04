@@ -224,31 +224,44 @@ export default function TrainingSessionDetail({
               className="support_service_training_session_detail__share"
               aria-label="Share"
             >
-              {engineeringTrainingSessionShareLinks.map((link) => (
-                <li key={link.id}>
-                  <a
-                    href={
-                      shareUrl
-                        ? buildShareHref(link.id, shareUrl, session.title)
-                        : link.href
-                    }
-                    className="support_service_training_session_detail__share-link"
-                    aria-label={link.label}
-                    {...(link.external
-                      ? { target: "_blank", rel: "noopener noreferrer" }
-                      : {})}
-                  >
-                    <img
-                      src={link.icon}
-                      alt=""
-                      width={20}
-                      height={20}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                </li>
-              ))}
+              {engineeringTrainingSessionShareLinks.map((link) => {
+                const href = shareUrl
+                  ? buildShareHref(link.id, shareUrl, session.title)
+                  : link.href;
+                return (
+                  <li key={link.id}>
+                    <a
+                      href={href}
+                      className="support_service_training_session_detail__share-link"
+                      aria-label={link.label}
+                      {...(link.external
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
+                      {...(link.id === "x"
+                        ? {
+                            onClick: (event: React.MouseEvent<HTMLAnchorElement>) => {
+                              event.preventDefault();
+                              window.open(
+                                href,
+                                "",
+                                "menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=500",
+                              );
+                            },
+                          }
+                        : {})}
+                    >
+                      <img
+                        src={link.icon}
+                        alt=""
+                        width={20}
+                        height={20}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
           <hr className="support_service_training_session_detail__divider" />
