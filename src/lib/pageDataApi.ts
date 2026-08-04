@@ -1,5 +1,6 @@
 import { fetchApi } from "@/lib/api";
 import { commonData, commonEachData, type PageDataItem } from "@/lib/pageData";
+import { notFound } from "next/navigation";
 
 
 export interface AdjacentNeighbor {
@@ -132,7 +133,8 @@ export async function fetchData(params: {
         ? (리턴함수 as (raw: PageDataItem) => unknown)(raw)
         : commonData(raw);
     } catch (e) {
-      if (e instanceof Error && e.message.includes("실패: 404")) return null;
+      if (e instanceof Error && e.message.includes("실패: 404")) notFound()
+      // if (e instanceof Error && e.message.includes("실패: 404")) return null;
       throw e;
     }
   }
