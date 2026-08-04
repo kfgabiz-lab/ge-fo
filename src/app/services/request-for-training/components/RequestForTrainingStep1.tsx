@@ -39,7 +39,7 @@ export default function RequestForTrainingStep1() {
       state: step1.state.trim() === "",
       zip: step1.zip.trim() === "",
       phone: step1.phone.length !== 10,
-      email: step1.email.trim() === "",
+      email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(step1.email.trim()),
     };
     setErrors(nextErrors);
 

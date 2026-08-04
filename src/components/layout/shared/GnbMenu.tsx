@@ -193,6 +193,8 @@ export default function GnbMenu({
     [gnbMenuData, devicesMegaMenu],
   );
   const isMain = variant === "main";
+  const logoIsH1 = pathname === "/main";
+  const LogoTag = logoIsH1 ? "h1" : "div";
   const hasBreadcrumb = Boolean(breadcrumb);
   const isScrollControlled =
     isAtTopProp !== undefined && isHeaderHiddenProp !== undefined;
@@ -684,7 +686,7 @@ export default function GnbMenu({
         <div className={rowClassName}>
           <div className="main_header__inner">
             {!isPanel ? (
-              <h1 className="main_header__logo">
+              <LogoTag className="main_header__logo">
                 <Link href={logoHref} prefetch={false} onClick={handleGnbLinkClick}>
                   <img loading="eager" decoding="async"
                     src="/img/logo_white.svg"
@@ -698,7 +700,7 @@ export default function GnbMenu({
                     className="main_header__logo-img main_header__logo-img--dark"
                   />
                 </Link>
-              </h1>
+              </LogoTag>
             ) : (
               <div className="gnb_mobile_global-slot">
                 <GnbMobileGlobalSelect />
@@ -812,11 +814,11 @@ export default function GnbMenu({
       <div className={rowClassName}>
         <div className="gnb_menu_inner">
           {!isPanel ? (
-            <h1 className="logo">
+            <div className="logo">
               <Link href={logoHref} prefetch={false} onClick={handleGnbLinkClick}>
                 <img loading="eager" decoding="async" src="/img/logo.svg" alt="LS ELECTRIC" />
               </Link>
-            </h1>
+            </div>
           ) : (
             <div className="gnb_mobile_global-slot">
               <GnbMobileGlobalSelect />

@@ -6,6 +6,7 @@ import {
   getYoutubeIdFromUrl,
   getYoutubePosterSrc,
 } from "@/lib/youtubeEmbed";
+import { formatDisplayDate } from "@/lib/formatDate";
 import TechHubViewPlayer from "./TechHubViewPlayer";
 import type { TechHubDetail } from "@/data/support/techHubData";
 
@@ -51,7 +52,7 @@ export default function TechHubView({ detail }: TechHubViewProps) {
             </div>
             {detail.sourceUpdatedAt ? (
               <p className="support_tech_hub_view__date">
-                {detail.sourceUpdatedAt}
+                {formatDisplayDate(detail.sourceUpdatedAt)}
               </p>
             ) : null}
           </div>

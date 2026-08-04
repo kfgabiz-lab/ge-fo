@@ -3819,6 +3819,7 @@
     position: relative;
     min-height: 900px;
     background: #eee;
+    overflow: hidden;
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_contents__map-col>.support_where_to_buy_map {

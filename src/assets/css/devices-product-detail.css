@@ -2930,6 +2930,8 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.devices_product_lineup .devices_product_lineup__grid-viewport {
     position: relative;
+    max-width: 100%;
+    min-width: 0;
   }
 
   section.devices_product_lineup .devices_product_lineup__grid-scroll {
@@ -4273,6 +4275,7 @@ section.devices_product_lineup .devices_product_lineup__grids--h100-plus {
 }
 
 section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__grid,
+section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__grid--type1,
 section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__grid--type2 {
   margin-bottom: 0;
   width: 100%;

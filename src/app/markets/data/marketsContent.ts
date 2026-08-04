@@ -4,11 +4,14 @@ export type IndustryTab = {
   title: string;
   description: string;
   image: string;
-  /** Explore 패널 CTA (예: power-grid BESS · Visit LS Energy Solutions) */
+  /** Explore panel CTA (예: power-grid BESS · Contact + Copy Email) */
   cta?: {
-    label: string;
-    href: string;
-    external?: boolean;
+    title: string;
+    email: string;
+    /** PC — Figma 8549:104555 */
+    copyLabel?: string;
+    /** MO — Figma 8549:100751 */
+    copyLabelMobile?: string;
   };
 };
 

@@ -110,7 +110,7 @@ export function isStep1Complete(step1: RequestForTrainingStep1Values): boolean {
     step1.state.trim() !== "" &&
     step1.zip.trim() !== "" &&
     step1.phone.length === 10 &&
-    step1.email.trim() !== ""
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(step1.email.trim())
   );
 }
 

@@ -433,7 +433,14 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     border-left: none;
   }
 
+  section.markets_stats .markets_stats__head {
+    margin: 0 0 14px;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
   section.markets_stats .markets_stats__label {
+    display: block;
     margin: 0 0 4px;
     font-size: 16px;
     font-weight: 500;
@@ -442,10 +449,11 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_stats .markets_stats__headline {
-    margin-bottom: 14px;
+    display: block;
   }
 
   section.markets_stats .markets_stats__value {
+    display: block;
     margin: 0;
     font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 42px;
@@ -471,10 +479,12 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_stats .markets_stats__sublabel {
+    display: block;
     margin: 2px 0 0;
     font-size: 16px;
     line-height: 24px;
     color: #888;
+    font-weight: 400;
   }
 
   section.markets_stats .markets_stats__desc {
@@ -610,9 +620,39 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     white-space: pre-line;
   }
 
-  /* Figma 8300:135392 — BESS CTA · btn-lv03 solid + external 14 */
+  /* Figma 8549:104555 — BESS contact + Copy Email (btn-line-30) */
   section.markets_explore .markets_explore__cta {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
     margin-top: 40px;
+    align-items: flex-start;
+  }
+
+  section.markets_explore .markets_explore__cta_tit {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 28px;
+    color: #222;
+  }
+
+  section.markets_explore .markets_explore__cta_row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  section.markets_explore .markets_explore__cta_email {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #222;
+  }
+
+  section.markets_explore .markets_explore__cta_copy-mo {
+    display: none;
   }
 
   section.markets_explore .markets_explore__img {
@@ -1894,12 +1934,18 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
 
   section.markets_stats .markets_stats__grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 0;
   }
 
   section.markets_stats .markets_stats__col {
-    padding: 0;
+    padding: 0 20px 0 0;
     border: none;
+  }
+
+  section.markets_stats .markets_stats__col + .markets_stats__col {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #ddd;
   }
 
   section.markets_stats .markets_stats__col:first-child {
@@ -1907,42 +1953,51 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     border-top: none;
   }
 
+  section.markets_stats .markets_stats__head {
+    margin: 0 0 12px;
+  }
+
   section.markets_stats .markets_stats__label {
+    display: block;
     margin-bottom: 2px;
     font-size: 15px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 23px;
     color: #e60040;
   }
 
   section.markets_stats .markets_stats__headline {
-    margin-bottom: 12px;
+    display: block;
   }
 
   section.markets_stats .markets_stats__value {
+    display: block;
     font-size: 28px;
-    line-height: 36px;
+    line-height: 38px;
     letter-spacing: -0.02em;
+    font-weight: 700;
   }
 
   section.markets_stats .markets_stats__value-unit,
   section.markets_stats .markets_stats__value-suffix {
     font-size: 28px;
-    line-height: 36px;
+    line-height: 38px;
   }
 
   section.markets_stats .markets_stats__sublabel {
-    margin-top: 2px;
+    display: block;
+    margin-top: 0;
     font-size: 15px;
     line-height: 23px;
     color: #888;
+    font-weight: 400;
   }
 
   section.markets_stats .markets_stats__desc {
     font-size: 15px;
     line-height: 23px;
     color: #222;
-    padding-right: 20px;
+    padding-right: 0;
   }
 
   /* Intro */
@@ -2080,8 +2135,44 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     white-space: pre-line;
   }
 
+  /* Figma 8549:100751 — BESS contact stacked · Copy Link */
   section.markets_explore .markets_explore__cta {
-    margin-top: 24px;
+    gap: 10px;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  section.markets_explore .markets_explore__cta_tit {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+  }
+
+  section.markets_explore .markets_explore__cta_row {
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+    display: flex;
+  }
+
+  section.markets_explore .markets_explore__cta_email {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  section.markets_explore .markets_explore__cta_copy {
+    height: 32px;
+    min-height: 32px;
+    padding: 8px 18px;
+  }
+
+  section.markets_explore .markets_explore__cta_copy-pc {
+    display: none;
+  }
+
+  section.markets_explore .markets_explore__cta_copy-mo {
+    display: inline;
   }
 
   section.markets_explore .markets_explore__img {

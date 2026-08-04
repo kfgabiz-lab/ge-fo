@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import CommonBanner02CopyLink from "@/components/banners/CommonBanner02CopyLink";
 import { industryTabs, type IndustryTab } from "../data/marketsContent";
 
 function renderTitleWithBreaks(title: string) {
@@ -84,18 +85,31 @@ export default function MarketsExplore({
             <h3 className="markets_explore__panel_tit">{renderTitleWithBreaks(active.title)}</h3>
             <p className="markets_explore__panel_desc">{active.description}</p>
             {active.cta ? (
-              <a
-                href={active.cta.href}
-                className="btn-base btn-lv03 btn-lv03--solid markets_explore__cta"
-                {...(active.cta.external
-                  ? { target: "_blank", rel: "noopener noreferrer" }
-                  : {})}
-              >
-                {active.cta.label}
-                {active.cta.external ? (
-                  <span className="icon_external-18" aria-hidden="true" />
-                ) : null}
-              </a>
+              <div className="markets_explore__cta">
+                <p className="markets_explore__cta_tit">{active.cta.title}</p>
+                <div className="markets_explore__cta_row">
+                  <span className="markets_explore__cta_email">{active.cta.email}</span>
+                  <CommonBanner02CopyLink
+                    value={active.cta.email}
+                    variant="default"
+                    className="markets_explore__cta_copy"
+                    label={
+                      active.cta.copyLabelMobile ? (
+                        <>
+                          <span className="markets_explore__cta_copy-pc">
+                            {active.cta.copyLabel ?? "Copy Email"}
+                          </span>
+                          <span className="markets_explore__cta_copy-mo">
+                            {active.cta.copyLabelMobile}
+                          </span>
+                        </>
+                      ) : (
+                        (active.cta.copyLabel ?? "Copy Email")
+                      )
+                    }
+                  />
+                </div>
+              </div>
             ) : null}
           </div>
           <div className="markets_explore__img">

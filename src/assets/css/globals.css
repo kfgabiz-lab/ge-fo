@@ -330,7 +330,7 @@ section .btn-line-30 {
   padding: 8px 14px;
   font-size: 13px;
   font-weight: 400;
-  line-height: 1;
+  line-height: 14px;
   color: var(--color-primary, #0f1f45);
   background: #fff;
   border: 1px solid rgb(15 31 69 / 30%);

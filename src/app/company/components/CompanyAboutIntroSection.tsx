@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 
 type CompanyAboutIntroCta = {
   label: string;
@@ -67,33 +67,39 @@ export default function CompanyAboutIntroSection({
         </div>
         <div className="company-about-intro__text">
           <h2 className="company-about-intro__headline">
-            {headlineLines.map((line) => (
-              <span key={line}>{line}</span>
+            {headlineLines.map((line, index) => (
+              <Fragment key={line}>
+                {index > 0 ? <br /> : null}
+                {line}
+              </Fragment>
             ))}
           </h2>
-          <div className="company-about-intro__body">
-            {paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+          <p className="company-about-intro__body">
+            {paragraphs.map((paragraph, index) => (
+              <Fragment key={paragraph.slice(0, 48)}>
+                {index > 0 ? <br /> : null}
+                {paragraph}
+              </Fragment>
             ))}
-            {cta ? (
-              <a
-                href={cta.href}
-                className="btn-base btn-lv01 btn-lv01--solid company-about-intro__cta"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span>{cta.label}</span>
-                <img
-                  src="/ico/ico_link.svg"
-                  alt=""
-                  width={18}
-                  height={18}
-                  className="company-about-intro__cta-icon"
-                  aria-hidden
-                />
-              </a>
-            ) : null}
-          </div>
+          </p>
+          {cta ? (
+            <a
+              href={cta.href}
+              className="btn-base btn-lv01 btn-lv01--solid company-about-intro__cta"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>{cta.label}</span>
+              <img
+                src="/ico/ico_link.svg"
+                alt=""
+                width={18}
+                height={18}
+                className="company-about-intro__cta-icon"
+                aria-hidden
+              />
+            </a>
+          ) : null}
         </div>
         {children}
       </div>

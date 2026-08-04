@@ -14,7 +14,7 @@ const SESSION_COUNT_MAX = 200;
 const STUDENT_COUNT_MAX = 18;
 
 function filterLettersAndDigits(value: string): string {
-  return value.replace(/[^A-Za-z0-9]/g, "").slice(0, SESSION_COUNT_MAX);
+  return value.replace(/[^A-Za-z0-9 ]/g, "").slice(0, SESSION_COUNT_MAX);
 }
 
 function filterDigitsOnly(value: string): string {
