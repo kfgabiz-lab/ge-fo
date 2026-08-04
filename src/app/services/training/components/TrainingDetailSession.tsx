@@ -11,19 +11,17 @@ export default function TrainingDetailSession({
   courseId,
   session,
   hrefPrefix,
-  showDate,
 }: {
   courseId: string;
   session: EngineeringTrainingSession;
   hrefPrefix: string;
-  showDate: boolean;
 }) {
   const sessionHref = `${hrefPrefix}/${courseId}/${session.id}`;
 
   return (
     <li className="support_service_training_detail_schedule__item" data-slug-item>
       <p className="support_service_training_detail_schedule__date">
-        {showDate ? session.date : ""}
+        {session.date}
       </p>
       <article
         className={[

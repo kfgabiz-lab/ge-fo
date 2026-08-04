@@ -4,10 +4,7 @@ import { FormControl, MenuItem } from "@mui/material";
 import { useMemo, useState } from "react";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
-import type {
-  EngineeringTrainingDetail,
-  EngineeringTrainingSession,
-} from "@/data/services/engineeringTrainingDetailContent";
+import type { EngineeringTrainingDetail } from "@/data/services/engineeringTrainingDetailContent";
 import { toCategoryOptions, type CodeItem } from "../data/trainingData";
 import TrainingDetailSession from "./TrainingDetailSession";
 
@@ -52,23 +49,6 @@ export default function TrainingDetailSchedule({
       }),
     [sessions, typeValue, monthValue],
   );
-
-  const groupedSessions = useMemo(() => {
-    const groups: { date: string; sessions: EngineeringTrainingSession[] }[] =
-      [];
-    const indexByDate = new Map<string, number>();
-    for (const session of filteredSessions) {
-      const key = session.date ?? "";
-      const existing = indexByDate.get(key);
-      if (existing === undefined) {
-        indexByDate.set(key, groups.length);
-        groups.push({ date: key, sessions: [session] });
-      } else {
-        groups[existing].sessions.push(session);
-      }
-    }
-    return groups;
-  }, [filteredSessions]);
 
   const typeDisplayLabel = typeValue
     ? (typeOptions.find((o) => o.value === typeValue)?.label ?? trainingTypeFilter.label)
@@ -138,17 +118,14 @@ export default function TrainingDetailSchedule({
           data-slug="currDtlMgmt-data"
           data-slug-repeat="true"
         >
-          {groupedSessions.map((group) =>
-            group.sessions.map((session, indexInGroup) => (
-              <TrainingDetailSession
-                key={session.id}
-                courseId={detail.courseId}
-                session={session}
-                hrefPrefix={hrefPrefix}
-                showDate={indexInGroup === 0}
-              />
-            )),
-          )}
+          {filteredSessions.map((session) => (
+            <TrainingDetailSession
+              key={session.id}
+              courseId={detail.courseId}
+              session={session}
+              hrefPrefix={hrefPrefix}
+            />
+          ))}
         </ul>
       </div>
     </section>
