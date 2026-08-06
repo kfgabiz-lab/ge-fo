@@ -130,13 +130,13 @@ export const esgPolicies = {
       id: "iso-9001",
       name: "Quality Management System",
       standard: "ISO 9001",
-      downloadHref: "#",
+      downloadHref: "/docs/ISO9001.pdf",
     },
     {
       id: "iso-27001",
       name: "Information Security Management System",
       standard: "ISO 27001",
-      downloadHref: "#",
+      downloadHref: "/docs/ISO27001.pdf",
     },
   ] satisfies EsgPolicyItem[],
 };

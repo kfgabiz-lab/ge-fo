@@ -19,7 +19,7 @@ export const pressItems: PressListItem[] = [
     id: "press-01",
     title: "LS ELECTRIC to shake up the industry in the era of a ‘Supercycle’",
     date: "Apr 20, 2026",
-    image: "/img/company/press/list_01.png",
+    image: "/img/devices/product/list_no_data.svg",
   },
   {
     id: "press-02",

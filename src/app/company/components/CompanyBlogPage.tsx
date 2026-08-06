@@ -21,14 +21,12 @@ import {
 } from "@/app/company/data/blogData";
 import { useFeaturedFeed } from "@/hooks/useFeaturedFeed";
 import { fetchData } from "@/lib/pageDataApi";
+import { handleImageFallback } from "@/lib/imageFallback";
 import PageNumbering from "@/components/pagination/PageNumbering";
+import HashtagLink from "@/components/ui/HashtagLink";
 import "@/assets/css/company.css";
 
 const LIST_FALLBACK_IMAGE = "/img/company/blog/list_01.jpg";
-
-function BlogTag({ label }: { label: string }) {
-  return <div className="company-blog__tag">{label}</div>;
-}
 
 type CompanyBlogPageProps = {
   empty?: boolean;
@@ -158,47 +156,54 @@ export default function CompanyBlogPage({
         <img src={blogHeroBgImage} alt="" className="company-blog-top__bg" />
         <div className="inner">
           {featured ? (
-            <Link
-              href={blogDetailHref(featured.id)}
-              className="company-blog-featured__card"
-              data-slug="blog-data"
-              data-slugkey="id"
-              data-slugkey-attr="href"
-              prefetch={false}
-            >
-              <div className="company-blog-featured__image">
+            <div className="company-blog-featured__card" data-slug="blog-data">
+              <Link
+                href={blogDetailHref(featured.id)}
+                className="company-blog-featured__image"
+                data-slugkey="id"
+                data-slugkey-attr="href"
+                prefetch={false}
+              >
                 <img
                   src={featured.imageSrc ?? blogHeroMainImage}
                   alt={featured.title}
                   data-slugkey="image"
                   data-slugkey-attr="src"
+                  onError={handleImageFallback}
                 />
-              </div>
+              </Link>
               <div className="company-blog-featured__content">
-                <p className="company-blog-featured__category" data-slugkey="category">
-                  {featured.categoryLabel}
-                </p>
-                <h2 className="company-blog-featured__title" data-slugkey="title">
-                  {featured.title}
-                </h2>
-                <p className="company-blog-featured__desc" data-slugkey="description">
-                  {featured.description}
-                </p>
-                <p className="company-blog-featured__date" data-slugkey="date">
-                  {featured.date}
-                </p>
+                <Link
+                  href={blogDetailHref(featured.id)}
+                  className="company-blog-featured__text"
+                  data-slugkey="id"
+                  data-slugkey-attr="href"
+                  prefetch={false}
+                >
+                  <p className="company-blog-featured__category" data-slugkey="category">
+                    {featured.categoryLabel}
+                  </p>
+                  <h2 className="company-blog-featured__title" data-slugkey="title">
+                    {featured.title}
+                  </h2>
+                  <p className="company-blog-featured__desc" data-slugkey="description">
+                    {featured.description}
+                  </p>
+                  <p className="company-blog-featured__date" data-slugkey="date">
+                    {featured.date}
+                  </p>
+                </Link>
                 <div className="company-blog-featured__tags" data-slugkey="tags">
                   {featured.tags.map((tag, tagIndex) => (
-                    <div
+                    <HashtagLink
                       key={`${tag}-${tagIndex}`}
+                      tag={tag}
                       className="company-blog-featured__tag"
-                    >
-                      {tag}
-                    </div>
+                    />
                   ))}
                 </div>
               </div>
-            </Link>
+            </div>
           ) : null}
         </div>
       </section>
@@ -246,39 +251,43 @@ export default function CompanyBlogPage({
                                 alt={item.title}
                                 data-slugkey="image"
                                 data-slugkey-attr="src"
+                                onError={handleImageFallback}
                               />
                             </Link>
                           </div>
-                          <Link
-                            href={blogDetailHref(item.id)}
-                            className="company-blog-list__content"
-                            data-slugkey="id"
-                            data-slugkey-attr="href"
-                            prefetch={false}
-                          >
-                            <p className="company-blog__category" data-slugkey="category">
-                              {item.categoryLabel}
-                            </p>
-                            <h3 className="company-blog-list__title" data-slugkey="title">
-                              {item.title}
-                            </h3>
-                            <p className="company-blog-list__desc" data-slugkey="description">
-                              {item.description}
-                            </p>
-                            <p className="company-blog__date" data-slugkey="date">
-                              {item.date}
-                            </p>
+                          <div className="company-blog-list__content">
+                            <Link
+                              href={blogDetailHref(item.id)}
+                              className="company-blog-list__content-link"
+                              data-slugkey="id"
+                              data-slugkey-attr="href"
+                              prefetch={false}
+                            >
+                              <p className="company-blog__category" data-slugkey="category">
+                                {item.categoryLabel}
+                              </p>
+                              <h3 className="company-blog-list__title" data-slugkey="title">
+                                {item.title}
+                              </h3>
+                              <p className="company-blog-list__desc" data-slugkey="description">
+                                {item.description}
+                              </p>
+                              <p className="company-blog__date" data-slugkey="date">
+                                {item.date}
+                              </p>
+                            </Link>
                             <div className="company-blog-list__tags-row">
                               <div className="company-blog__tags" data-slugkey="tags">
                                 {item.tags.map((tag, tagIndex) => (
-                                  <BlogTag
+                                  <HashtagLink
                                     key={`${item.id}-${tag}-${tagIndex}`}
-                                    label={tag}
+                                    tag={tag}
+                                    className="company-blog__tag"
                                   />
                                 ))}
                               </div>
                             </div>
-                          </Link>
+                          </div>
                         </div>
                       </div>
                     </li>

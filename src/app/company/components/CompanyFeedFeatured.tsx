@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CompanyFeedVariant } from "@/app/company/data/companyFeedContent";
+import { handleImageFallback } from "@/lib/imageFallback";
 
 type CompanyFeedFeaturedProps = {
   variant: CompanyFeedVariant;
@@ -25,7 +26,7 @@ export default function CompanyFeedFeatured({
       <div className="inner">
         <Link href={href} className={`${prefix}__card`} prefetch={false}>
           <div className={`${prefix}__image`}>
-            <img src={image} alt={title} />
+            <img src={image} alt={title} onError={handleImageFallback} />
           </div>
           <div className={`${prefix}__content`}>
             <div className={`${prefix}__text`}>

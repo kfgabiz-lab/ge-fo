@@ -16,6 +16,8 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 import type { EventsFeaturedItem } from "@/app/company/data/eventsListContent";
 
+import { handleImageFallback } from "@/lib/imageFallback";
+
 import "swiper/css";
 
 
@@ -65,7 +67,7 @@ function FeaturedCard({ item }: { item: EventsFeaturedItem }) {
 
       <div className="company-events-featured__image">
 
-        <img src={item.image} alt={item.title} />
+        <img src={item.image} alt={item.title} onError={handleImageFallback} />
 
       </div>
 

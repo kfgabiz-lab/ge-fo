@@ -3,6 +3,7 @@ import type {
   CompanyFeedListItem,
   CompanyFeedVariant,
 } from "@/app/company/data/companyFeedContent";
+import { handleImageFallback } from "@/lib/imageFallback";
 
 type CompanyFeedListGridProps = {
   variant: CompanyFeedVariant;
@@ -23,7 +24,7 @@ export default function CompanyFeedListGrid({
         <li key={item.id} className={`${prefix}__item`}>
           <Link href={item.href ?? detailHref} className={`${prefix}__card`} prefetch={false}>
             <div className={`${prefix}__image`}>
-              <img src={item.image} alt={item.title} />
+              <img src={item.image} alt={item.title} onError={handleImageFallback} />
             </div>
             <div className={`${prefix}__content`}>
               <h3 className={`${prefix}__title`}>{item.title}</h3>
