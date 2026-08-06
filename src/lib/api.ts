@@ -2,6 +2,8 @@
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3002";
 
+export const SITE_ID = process.env.NEXT_PUBLIC_SITE_ID || "1";
+
 const SERVER_API_BASE =
   process.env.API_PROXY_TARGET || "http://localhost:8080";
 
@@ -14,7 +16,7 @@ export async function fetchApi<T>(
 
   const headers = new Headers(init?.headers);
   if (!headers.has("X-Site-Id")) {
-    headers.set("X-Site-Id", "1");
+    headers.set("X-Site-Id", SITE_ID);
   }
 
   const cache = init?.cache ?? "no-store";
@@ -39,7 +41,7 @@ export async function fetchApiText(
 
   const headers = new Headers(init?.headers);
   if (!headers.has("X-Site-Id")) {
-    headers.set("X-Site-Id", "1");
+    headers.set("X-Site-Id", SITE_ID);
   }
 
   const cache = init?.cache ?? "no-store";

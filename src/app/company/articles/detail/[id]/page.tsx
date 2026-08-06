@@ -7,14 +7,33 @@ import {
   articlesImageSrc,
 } from "@/app/company/data/articlesData";
 import { fetchData } from "@/lib/pageDataApi";
+import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import { isPreviewActive } from "@/lib/previewMode";
+import type { Metadata, ResolvingMetadata } from "next";
 import "@/assets/css/company.css";
 
 type CompanyArticlesDetailPageProps = {
   params: Promise<{ id: string }>;
 };
+
+export async function generateMetadata(
+  { params }: CompanyArticlesDetailPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { id } = await params;
+  const preview = await isPreviewActive("articles-data", id);
+
+  return buildPageDataSeoMetadata(
+    {
+      slug: "articles-data",
+      id,
+      where: preview ? {} : { ...ARTICLES_STATUS_WHERE },
+    },
+    parent,
+  );
+}
 
 export default async function CompanyArticlesDetailPage({
   params,
