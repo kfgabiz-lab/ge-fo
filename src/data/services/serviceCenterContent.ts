@@ -51,7 +51,7 @@ export const serviceCenterPage = {
         description:
           "Enhance your product knowledge with instructor-led training programs.",
         icon: "/img/services/service-center/icon-training.svg",
-        href: "https://gics.ls-electric.com/loginForm.do?lang=ko",
+        href: "/services/request-for-training",
         external: false,
       },
       {
@@ -144,7 +144,7 @@ export const serviceCenterPage = {
       pin: "/img/services/service-center/service-flow-icon-pin.svg",
       check: "/img/services/service-center/service-flow-icon-check.svg",
       checkEnd: "/img/services/service-center/service-flow-icon-check-end.svg",
-      endDot: "/img/services/service-center/service-flow-icon-dot.svg",
+      endDot: "/img/services/service-center/service-flow-end-dot.svg",
     },
     steps: [
       {
@@ -196,7 +196,7 @@ export const serviceCenterPage = {
     ctaLabel: "Go to G-ICS",
     ctaHref: GICS_REQUEST_URL,
     image: "/img/services/service-center/g-ics-hero.jpg",
-    imageAlt: "Technician using G-ICS on a tablet at an electrical control panel",
+    imageAlt: "LS ELECTRIC technicians reviewing equipment plans on site",
     features: [
       {
         id: "simpler",
