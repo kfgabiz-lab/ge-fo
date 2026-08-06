@@ -35,11 +35,7 @@ export default function DevicesSoftwareOverview({
           <h2 className="devices_software_overview__title">
             {renderMultilineText(data.title)}
           </h2>
-          <p
-            className="devices_software_overview__desc"
-            data-slug="product-data"
-            data-slugkey="product_info.info_description"
-          >
+          <p className="devices_software_overview__desc">
             {renderMultilineText(data.description)}
           </p>
         </div>
