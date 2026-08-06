@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { fetchApi } from "@/lib/api";
+import { fetchApi, SITE_ID } from "@/lib/api";
 import { pickField } from "@/lib/pageData";
 import { fetchData } from "@/lib/pageDataApi";
 import { getPreviewBannerId } from "@/lib/previewMode";
@@ -29,7 +29,7 @@ async function fetchMediaMimeType(mediaId: number): Promise<string | null> {
   try {
     const res = await fetch(`${base}${PAGE_FILE_ENDPOINT(mediaId)}`, {
       method: "HEAD",
-      headers: { "X-Site-Id": "1" },
+      headers: { "X-Site-Id": SITE_ID },
       cache: "no-store",
     });
     if (!res.ok) return null;

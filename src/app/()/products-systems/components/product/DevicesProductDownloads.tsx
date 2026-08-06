@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
 import PageNumbering from "@/components/pagination/PageNumbering";
+import { formatDisplayDate } from "@/lib/formatDate";
 import DevicesProductDownloadsCopyLink from "./DevicesProductDownloadsCopyLink";
 import DevicesProductDownloadsDocumentFilter from "./DevicesProductDownloadsDocumentFilter";
 import DevicesProductDownloadsFilter from "./DevicesProductDownloadsFilter";
@@ -63,6 +64,12 @@ function DevicesProductDownloadsBody({
   const [sort, setSort] = useState<DownloadCenterSort>(
     PRODUCT_DOWNLOADS_DEFAULT_SORT,
   );
+  const [keyword, setKeyword] = useState("");
+  const [appliedKeyword, setAppliedKeyword] = useState("");
+
+  const commitSearch = () => {
+    setAppliedKeyword(keyword.trim());
+  };
 
   const firstResetRef = useRef(true);
   useEffect(() => {
@@ -71,7 +78,7 @@ function DevicesProductDownloadsBody({
       return;
     }
     setCurrentPage(1);
-  }, [docTypeKey, sort]);
+  }, [docTypeKey, sort, appliedKeyword]);
 
   const skipFirstFetchRef = useRef(true);
   useEffect(() => {
@@ -86,6 +93,7 @@ function DevicesProductDownloadsBody({
       productCodes,
       page: currentPage,
       sort,
+      q: appliedKeyword,
     }).then((page) => {
       if (!alive) return;
       setItems(page.items);
@@ -97,7 +105,7 @@ function DevicesProductDownloadsBody({
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [docTypeKey, productCodeKey, sort, currentPage]);
+  }, [docTypeKey, productCodeKey, sort, currentPage, appliedKeyword]);
 
   const showingStart =
     items.length === 0 ? 0 : (currentPage - 1) * PRODUCT_DOWNLOADS_PAGE_SIZE + 1;
@@ -155,6 +163,11 @@ function DevicesProductDownloadsBody({
                   className="guide_field guide_field--search"
                   placeholder=""
                   aria-label="key word downloads"
+                  value={keyword}
+                  onChange={(event) => setKeyword(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") commitSearch();
+                  }}
                   slotProps={{
                     input: {
                       endAdornment: (
@@ -166,6 +179,7 @@ function DevicesProductDownloadsBody({
                             type="button"
                             className="guide_field__search-icon-button"
                             aria-label="Search"
+                            onClick={commitSearch}
                           >
                             <img
                               loading="lazy"
@@ -200,7 +214,7 @@ function DevicesProductDownloadsBody({
                             className="devices_product_downloads__date"
                             dateTime={item.date}
                           >
-                            {item.date}
+                            {formatDisplayDate(item.date)}
                           </time>
                         ) : null}
                       </div>

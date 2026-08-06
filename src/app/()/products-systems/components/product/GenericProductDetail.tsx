@@ -168,7 +168,11 @@ export default async function GenericProductDetail({
           connectPortalHref={detail.connectPortal}
         />
       </DevicesProductNavScope>
-      <DevicesPageFooter faqItems={faqItems} highlightItems={insights} />
+      <DevicesPageFooter
+        faqItems={faqItems}
+        highlightItems={insights}
+        bannerLinkHref={inquiryHref}
+      />
     </main>
   );
 }

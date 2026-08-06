@@ -8,14 +8,26 @@ import {
   eventsImageSrc,
 } from "@/app/company/data/eventsData";
 import { fetchData } from "@/lib/pageDataApi";
+import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDateRange } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import { isPreviewActive } from "@/lib/previewMode";
+import type { Metadata, ResolvingMetadata } from "next";
 import "@/assets/css/company.css";
 
 type CompanyEventsDetailPageProps = {
   params: Promise<{ id: string }>;
 };
+
+export async function generateMetadata(
+  { params }: CompanyEventsDetailPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const { id } = await params;
+  const preview = await isPreviewActive("events-data", id);
+
+  return buildPageDataSeoMetadata(eventsDetailQuery(id, { preview }), parent);
+}
 
 export default async function CompanyEventsDetailPage({
   params,

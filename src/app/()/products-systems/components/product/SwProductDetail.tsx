@@ -101,6 +101,7 @@ function swShellCommonProps(
     highlights: props.highlights,
     faqItems: props.dbFaq.length > 0 ? props.dbFaq : fallbackFaq,
     connectPortalHref: bind.connectPortal,
+    contactHref: props.contactHref,
     otherProducts: props.otherProducts,
   };
 }

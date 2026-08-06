@@ -400,14 +400,6 @@ export function toTrainingSessionDetail(
   const firstSch = scheduleSorted[0];
   const lastSch = scheduleSorted[scheduleSorted.length - 1];
 
-  const heroImageArr = curriculum.image;
-  const heroMediaId =
-    Array.isArray(heroImageArr) && heroImageArr.length > 0
-      ? Number(heroImageArr[0])
-      : null;
-  const attachUrl =
-    heroMediaId != null ? `${SITE_URL}${trainingImageSrc(heroMediaId)}` : undefined;
-
   return {
     courseId,
     sessionId,
@@ -427,11 +419,10 @@ export function toTrainingSessionDetail(
       timeFrom: firstSch?.time_from || undefined,
       timeTo: lastSch?.time_to || firstSch?.time_from || undefined,
       location: addressFull || undefined,
-      description: firstSch?.description || undefined,
+      description: d2.content || undefined,
       organizerName: d2.email ? ICS_ORGANIZER_NAME : undefined,
       organizerEmail: d2.email || undefined,
       categories: curriculum.title || undefined,
-      attachUrl,
     },
     countdownTo: d2.register_period_to || undefined,
     sidebar: {
