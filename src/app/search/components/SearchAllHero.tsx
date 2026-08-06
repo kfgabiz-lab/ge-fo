@@ -7,10 +7,7 @@ import {
   buildSearchAllHref,
   searchAllPage,
 } from "@/data/search/searchAllContent";
-import {
-  fetchPopularKeywords,
-  logSearchKeyword,
-} from "@/data/search/searchKeywordData";
+import { fetchPopularKeywords } from "@/data/search/searchKeywordData";
 
 export default function SearchAllHero() {
   const searchParams = useSearchParams();
@@ -61,7 +58,6 @@ export default function SearchAllHero() {
           role="search"
           onSubmit={(event) => {
             event.preventDefault();
-            void logSearchKeyword("UNIFIED_SEARCH", query);
             navigateToQuery(query);
           }}
         >

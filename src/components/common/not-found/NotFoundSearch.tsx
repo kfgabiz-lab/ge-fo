@@ -7,10 +7,7 @@ import {
   buildNotFoundSearchHref,
   notFoundPage,
 } from "@/data/common/notFoundContent";
-import {
-  fetchPopularKeywords,
-  logSearchKeyword,
-} from "@/data/search/searchKeywordData";
+import { fetchPopularKeywords } from "@/data/search/searchKeywordData";
 
 export default function NotFoundSearch() {
   const router = useRouter();
@@ -33,11 +30,6 @@ export default function NotFoundSearch() {
     router.push(buildNotFoundSearchHref(nextQuery));
   };
 
-  const submitQuery = (nextQuery: string) => {
-    void logSearchKeyword("UNIFIED_SEARCH", nextQuery);
-    navigateToQuery(nextQuery);
-  };
-
   return (
     <section className="common_404_search" id="common-404-search">
       <div className="inner">
@@ -46,7 +38,7 @@ export default function NotFoundSearch() {
           role="search"
           onSubmit={(event) => {
             event.preventDefault();
-            submitQuery(query);
+            navigateToQuery(query);
           }}
         >
           <TextField

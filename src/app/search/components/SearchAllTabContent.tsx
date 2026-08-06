@@ -49,6 +49,7 @@ import {
 import {
   fetchChatbotStream,
 } from "@/data/search/searchChatbotData";
+import { logSearchKeyword } from "@/data/search/searchKeywordData";
 
 
 function formatSearchCount(count: number): string {
@@ -339,6 +340,7 @@ export default function SearchAllTabContent({
                 : [];
 
             setChatbotKeyword([keyword, ...relatedKeywords].join(","));
+            void logSearchKeyword("UNIFIED_SEARCH", keyword);
           },
 
           onChunk: (chunkEvent) => {

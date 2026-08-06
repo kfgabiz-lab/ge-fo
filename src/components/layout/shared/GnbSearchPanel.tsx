@@ -6,10 +6,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { gnbSearchContent, type GnbSearchTag } from "@/data/gnb/gnbSearchContent";
 import { buildSearchAllHref } from "@/data/search/searchAllContent";
-import {
-  fetchPopularKeywords,
-  logSearchKeyword,
-} from "@/data/search/searchKeywordData";
+import { fetchPopularKeywords } from "@/data/search/searchKeywordData";
 
 type GnbSearchPanelProps = {
   isOpen: boolean;
@@ -142,7 +139,6 @@ export default function GnbSearchPanel({
             role="search"
             onSubmit={(event) => {
               event.preventDefault();
-              void logSearchKeyword("UNIFIED_SEARCH", query);
               router.push(buildSearchAllHref(query));
               onNavigate?.();
             }}

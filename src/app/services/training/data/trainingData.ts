@@ -81,16 +81,18 @@ export function toTrainingCard(
 }
 
 export interface TrainingCategoryNode {
-  id: number; 
-  depth1Title: string; 
-  depth2Title: string; 
-  productType: string; 
-  productName: string; 
+  id: number;
+  lv2Id: number;
+  depth1Title: string;
+  depth2Title: string;
+  productType: string;
+  productName: string;
 }
 
 function toCategoryNode(item: TrainingProductTreeItem): TrainingCategoryNode {
   return {
     id: Number(item.categoryId ?? 0),
+    lv2Id: Number(item.lv2Id ?? 0),
     depth1Title: item.lv1Title ?? "",
     depth2Title: item.lv2Title ?? "",
     productType: item.productType ?? "",
@@ -167,7 +169,8 @@ export function resolveCategoryIds(
     }
     return true;
   });
-  return Array.from(new Set(matched.map((n) => n.id).filter((id) => id > 0)));
+  const ids = matched.map((n) => (category === "P" ? n.lv2Id : n.id));
+  return Array.from(new Set(ids.filter((id) => id > 0)));
 }
 
 export async function fetchTrainingCategories(): Promise<CodeItem[]> {
@@ -177,7 +180,7 @@ export async function fetchTrainingCategories(): Promise<CodeItem[]> {
 export async function fetchTrainingCategoryNodes(): Promise<
   TrainingCategoryNode[]
 > {
-  const tree = await fetchTrainingProductTree();
+  const tree = await fetchTrainingProductTree(true);
   return tree.items.map(toCategoryNode).filter((n) => n.id > 0);
 }
 
@@ -192,13 +195,17 @@ export interface TrainingByCategoryResponse {
 export async function fetchTrainingByCategoryIds(params: {
   categoryIds: number[];
   variant: TrainingVariant;
+  productCategory: string;
+  keyword?: string;
   page: number;
   size: number;
 }): Promise<{ content: TrainingRow[]; totalPages: number }> {
-  const { categoryIds, variant, page, size } = params;
+  const { categoryIds, variant, productCategory, keyword, page, size } = params;
   return fetchCurriculumByCategoryIds({
     categoryIds,
     trainingCourse: TRAINING_COURSE_BY_VARIANT[variant],
+    productCategory,
+    keyword,
     page,
     size,
   });
@@ -207,14 +214,19 @@ export async function fetchTrainingByCategoryIds(params: {
 export async function fetchCurriculumByCategoryIds(params: {
   categoryIds: number[];
   trainingCourse?: string;
+  productCategory: string;
+  keyword?: string;
   page: number;
   size: number;
 }): Promise<{ content: TrainingRow[]; totalPages: number }> {
-  const { categoryIds, trainingCourse, page, size } = params;
+  const { categoryIds, trainingCourse, productCategory, keyword, page, size } =
+    params;
   if (categoryIds.length === 0) return { content: [], totalPages: 0 };
   const sp = new URLSearchParams();
   sp.set("categoryIds", categoryIds.join(","));
   if (trainingCourse) sp.set("trainingCourse", trainingCourse);
+  sp.set("productCategory", productCategory);
+  if (keyword) sp.set("q", keyword);
   sp.set("page", String(page));
   sp.set("size", String(size));
   sp.set("sort", "createdAt,desc");
