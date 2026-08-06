@@ -7,11 +7,22 @@ export default function GnbMarketsMegaPanel({
   title,
   menu,
   onItemClick,
+  onClose,
 }: GnbMegaSimplePanelStateProps) {
   const items = menu.layout === "grid" ? menu.items : [];
 
   return (
     <div className="gnb_mega__inner gnb_mega__inner--grid">
+      {onClose ? (
+        <button
+          type="button"
+          className="gnb_mega__close"
+          aria-label="메뉴 닫기"
+          onClick={onClose}
+        >
+          <span className="ir">close menu</span>
+        </button>
+      ) : null}
       <div className="gnb_mega__head">
         <h2 className="gnb_mega__tit">{title}</h2>
       </div>

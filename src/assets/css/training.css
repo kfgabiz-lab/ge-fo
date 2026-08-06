@@ -234,6 +234,11 @@
   }
 
   .support_service_training_card__desc {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
     margin: 0;
     font-size: 16px;
     line-height: 24px;
@@ -373,25 +378,28 @@
 
   section.support_service_training_detail_schedule .support_service_training_detail_session {
     position: relative;
+    display: flex;
     flex: 1 1 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
     width: 100%;
     max-width: 1130px;
     min-width: 0;
-    height: 242px;
+    height: auto;
+    padding: 30px 40px;
     background: #fff;
     border: 1px solid #ddd;
     box-sizing: border-box;
   }
 
-  section.support_service_training_detail_schedule
-    .support_service_training_detail_session.support_service_training_detail_session--in-person {
-    height: 278px;
-  }
-
   .support_service_training_detail_session__tag {
-    position: absolute;
-    top: 30px;
-    left: 40px;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    max-width: 100%;
     padding: 2px 10px;
     border-radius: 4px;
     background: #e60040;
@@ -402,17 +410,19 @@
   }
 
   .support_service_training_detail_session__main {
-    display: contents;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    min-width: 0;
   }
 
   .support_service_training_detail_session__body {
-    position: absolute;
-    top: 66px;
-    left: 40px;
     display: flex;
     flex-direction: column;
     gap: 6px;
-    width: min(1010px, calc(100% - 80px));
+    width: 100%;
+    max-width: 1010px;
   }
 
   .support_service_training_detail_session__title {
@@ -432,13 +442,11 @@
   }
 
   .support_service_training_detail_session__meta {
-    position: absolute;
-    top: 150px;
-    left: 40px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: min(648px, calc(100% - 80px));
+    width: 100%;
+    max-width: 648px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -1240,7 +1248,7 @@
     display: none;
   }
 
-  /* Request for Training — Step 1 (Figma 5601:125956 · P-FO-SERV-040000T_step_01) */
+  /* Training Request — Step 1 (Figma 5601:125956 · P-FO-SERV-040000T_step_01) */
 
   .support-page--request-for-training section.company-about-title .inner,
   .support-page--request-for-training section.support_service_training_request .inner {
@@ -1800,6 +1808,7 @@
     flex-wrap: wrap;
     gap: 16px 30px;
     align-items: center;
+    margin-bottom: 16px;
   }
 
   section.support_service_training_request .support_service_training_request__checkbox-label {
@@ -3556,7 +3565,7 @@
     background: #f5f5f5;
   }
 
-  /* Request for Training — mobile (Figma 6880:147273) */
+  /* Training Request — mobile (Figma 6880:147273) */
   .support-page--request-for-training section.company-about-title .inner,
   .support-page--request-for-training section.support_service_training_request .inner {
     padding-left: var(--inner-padding-x-mobile);
@@ -4247,7 +4256,7 @@
   }
 }
 
-/* Session detail / Request for Training — phone only: form-row--2 / address 1열 */
+/* Session detail / Training Request — phone only: form-row--2 / address 1열 */
 @media (max-width: 639px) {
   section.support_service_training_session_detail .support_service_training_session_detail__form-row--2,
   section.support_service_training_session_detail .support_service_training_session_detail__form-row--address {

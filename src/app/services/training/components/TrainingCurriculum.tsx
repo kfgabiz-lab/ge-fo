@@ -146,7 +146,6 @@ export default function TrainingCurriculum({
       fetchTrainingByCategoryIds({
         categoryIds: ids,
         variant,
-        productCategory: categoryValue,
         keyword: searchTerm,
         page: pageIndex,
         size: TRAINING_LIST_SIZE,

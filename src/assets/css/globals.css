@@ -66,27 +66,34 @@ html *::-webkit-scrollbar-thumb {
   border-radius: 2px;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #888 #e8e8e8;
-}
-
+/* WebKit/Blink — scrollbar-* 를 쓰면 ::-webkit-scrollbar* 가 무시되어 Windows 화살표 버튼이 남음 */
 *::-webkit-scrollbar {
   width: 3px;
 }
 
-*::-webkit-scrollbar-track {
-  background: #e8e8e8;
-  border-radius: 2px;
+*::-webkit-scrollbar-button {
+  display: none;
+}
+
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track-piece {
+  background-color: #e8e8e8;
+  border: none;
+  border-radius: 0;
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 2px;
+  background-color: #888;
+  border: none;
+  border-radius: 3px;
 }
 
-*::-webkit-scrollbar-thumb:hover {
-  background: #666;
+/* Firefox 등 webkit 미지원 브라우저만 표준 속성 사용 */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #e8e8e8;
+  }
 }
 
 html,
@@ -2717,8 +2724,13 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #888 #e8e8e8;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .common_modal__body {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #e8e8e8;
+  }
 }
 
 .common_modal__foot {
@@ -3129,12 +3141,24 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
     padding: 20px 24px 24px;
     font-size: 15px;
     line-height: 23px;
-    scrollbar-width: thin;
-    scrollbar-color: #888 transparent;
+    overscroll-behavior: contain;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    .cookie_preferences_modal .common_modal__body {
+      scrollbar-width: thin;
+      scrollbar-color: #888 #e8e8e8;
+    }
   }
 
   .cookie_preferences_modal .common_modal__body::-webkit-scrollbar {
     width: 3px;
+  }
+
+  .cookie_preferences_modal .common_modal__body::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   .cookie_preferences_modal .common_modal__body::-webkit-scrollbar-track {

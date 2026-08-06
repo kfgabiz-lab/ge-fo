@@ -85,7 +85,6 @@ export interface TrainingCategoryNode {
   lv2Id: number;
   depth1Title: string;
   depth2Title: string;
-  productType: string;
   productName: string;
 }
 
@@ -95,16 +94,8 @@ function toCategoryNode(item: TrainingProductTreeItem): TrainingCategoryNode {
     lv2Id: Number(item.lv2Id ?? 0),
     depth1Title: item.lv1Title ?? "",
     depth2Title: item.lv2Title ?? "",
-    productType: item.productType ?? "",
     productName: item.productName ?? "",
   };
-}
-
-function gateNodes(
-  nodes: TrainingCategoryNode[],
-  productType: string,
-): TrainingCategoryNode[] {
-  return nodes.filter((n) => n.productType === productType);
 }
 
 function distinctOptions(values: string[]): TrainingFilterOption[] {
@@ -123,10 +114,10 @@ export function toLvCategoryOptions(
   category: string,
 ): TrainingFilterOption[] {
   if (category === "P") {
-    return distinctOptions(gateNodes(nodes, "P").map((n) => n.depth1Title));
+    return distinctOptions(nodes.map((n) => n.depth1Title));
   }
   if (category === "A") {
-    return distinctOptions(gateNodes(nodes, "A").map((n) => n.depth2Title));
+    return distinctOptions(nodes.map((n) => n.depth2Title));
   }
   return [];
 }
@@ -137,16 +128,12 @@ export function toSubCategoryOptions(
   lvValue: string,
 ): TrainingFilterOption[] {
   if (category === "P") {
-    const gated = gateNodes(nodes, "P").filter(
-      (n) => !lvValue || n.depth1Title === lvValue,
-    );
-    return distinctOptions(gated.map((n) => n.depth2Title));
+    const matched = nodes.filter((n) => !lvValue || n.depth1Title === lvValue);
+    return distinctOptions(matched.map((n) => n.depth2Title));
   }
   if (category === "A") {
-    const gated = gateNodes(nodes, "A").filter(
-      (n) => !lvValue || n.depth2Title === lvValue,
-    );
-    return distinctOptions(gated.map((n) => n.productName));
+    const matched = nodes.filter((n) => !lvValue || n.depth2Title === lvValue);
+    return distinctOptions(matched.map((n) => n.productName));
   }
   return [];
 }
@@ -158,8 +145,7 @@ export function resolveCategoryIds(
   subValue: string,
 ): number[] {
   if (category !== "P" && category !== "A") return [];
-  const gated = gateNodes(nodes, category);
-  const matched = gated.filter((n) => {
+  const matched = nodes.filter((n) => {
     if (category === "P") {
       if (lvValue && n.depth1Title !== lvValue) return false;
       if (subValue && n.depth2Title !== subValue) return false;
@@ -195,16 +181,14 @@ export interface TrainingByCategoryResponse {
 export async function fetchTrainingByCategoryIds(params: {
   categoryIds: number[];
   variant: TrainingVariant;
-  productCategory: string;
   keyword?: string;
   page: number;
   size: number;
 }): Promise<{ content: TrainingRow[]; totalPages: number }> {
-  const { categoryIds, variant, productCategory, keyword, page, size } = params;
+  const { categoryIds, variant, keyword, page, size } = params;
   return fetchCurriculumByCategoryIds({
     categoryIds,
     trainingCourse: TRAINING_COURSE_BY_VARIANT[variant],
-    productCategory,
     keyword,
     page,
     size,
@@ -214,18 +198,15 @@ export async function fetchTrainingByCategoryIds(params: {
 export async function fetchCurriculumByCategoryIds(params: {
   categoryIds: number[];
   trainingCourse?: string;
-  productCategory: string;
   keyword?: string;
   page: number;
   size: number;
 }): Promise<{ content: TrainingRow[]; totalPages: number }> {
-  const { categoryIds, trainingCourse, productCategory, keyword, page, size } =
-    params;
+  const { categoryIds, trainingCourse, keyword, page, size } = params;
   if (categoryIds.length === 0) return { content: [], totalPages: 0 };
   const sp = new URLSearchParams();
   sp.set("categoryIds", categoryIds.join(","));
   if (trainingCourse) sp.set("trainingCourse", trainingCourse);
-  sp.set("productCategory", productCategory);
   if (keyword) sp.set("q", keyword);
   sp.set("page", String(page));
   sp.set("size", String(size));

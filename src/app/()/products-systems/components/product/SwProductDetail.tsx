@@ -8,7 +8,6 @@ import GenericProductDetail from "./GenericProductDetail";
 import SwProductDetailShell, {
   type SwProductFeaturesConfig,
 } from "./SwProductDetailShell";
-import type { SoftwareOverviewData } from "./DevicesSoftwareOverview";
 import {
   mapHwProductData,
   fetchProductFaqItems,
@@ -81,9 +80,8 @@ function bindSwDetail(row: Record<string, unknown> | null) {
   const infoDesc = row ? String(row["product_info.info_description"] ?? "") : "";
   return {
     title: data?.name || undefined,
-    description: data?.description || undefined,
+    description: infoDesc || undefined,
     keyFeatures: data?.keyFeatures ?? [],
-    infoDesc,
     connectPortal: data?.connectPortal,
   };
 }
@@ -104,13 +102,6 @@ function swShellCommonProps(
     contactHref: props.contactHref,
     otherProducts: props.otherProducts,
   };
-}
-
-function resolveSwOverview(
-  overview: SoftwareOverviewData,
-  infoDesc: string,
-): SoftwareOverviewData {
-  return infoDesc ? { ...overview, description: infoDesc } : overview;
 }
 
 function resolveSwFeatures(
@@ -146,7 +137,7 @@ function ScadaDetail(props: SwDetailProps) {
         showTagline: true,
         contactHref: props.contactHref,
       }}
-      overview={resolveSwOverview(hvdcOverview, bind.infoDesc)}
+      overview={hvdcOverview}
       overviewImageMode="img"
       features={resolveSwFeatures(bind.keyFeatures, {
         variant: "list",
@@ -182,7 +173,7 @@ function XemsDetail(props: SwDetailProps) {
         description: bind.description ?? xemsHero.description,
         contactHref: props.contactHref,
       }}
-      overview={resolveSwOverview(xemsOverview, bind.infoDesc)}
+      overview={xemsOverview}
       overviewImageMode="bg"
       features={resolveSwFeatures(bind.keyFeatures, {
         variant: "desc",
@@ -214,7 +205,7 @@ function MicroGridDetail(props: SwDetailProps) {
         multilineDescription: true,
         contactHref: props.contactHref,
       }}
-      overview={resolveSwOverview(microGridOverview, bind.infoDesc)}
+      overview={microGridOverview}
       overviewImageMode="bg"
       features={resolveSwFeatures(bind.keyFeatures, {
         variant: "list",
@@ -245,7 +236,7 @@ function SmartFactoryDetail(props: SwDetailProps) {
         description: bind.description ?? smartFactoryHero.description,
         contactHref: props.contactHref,
       }}
-      overview={resolveSwOverview(smartFactoryOverview, bind.infoDesc)}
+      overview={smartFactoryOverview}
       overviewImageMode="bg"
       features={resolveSwFeatures(bind.keyFeatures, {
         variant: "list",

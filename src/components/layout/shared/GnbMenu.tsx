@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GNB_CLOSE_EVENT } from "@/lib/navigation/gnbCloseEvent";
@@ -16,7 +16,6 @@ import {
   getGnbMegaPanelComponent,
   getMegaPanelClassName,
 } from "@/components/layout/shared/gnb-mega";
-import GnbMegaCloseButton from "@/components/layout/shared/gnb-mega/GnbMegaCloseButton";
 import GnbGlobalTrigger, {
   GnbGlobalTriggerMainContent,
   GnbGlobalTriggerSubContent,
@@ -399,6 +398,19 @@ export default function GnbMenu({
     closeAllGnbMenus();
   }, [closeAllGnbMenus]);
 
+  /** /main 에서만 로고 클릭 → 클라이언트 라우팅 대신 하드 리프레시 */
+  const handleLogoClick = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      handleGnbLinkClick();
+      if (pathname !== "/main") {
+        return;
+      }
+      event.preventDefault();
+      window.location.reload();
+    },
+    [handleGnbLinkClick, pathname],
+  );
+
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => {
       const next = !prev;
@@ -652,7 +664,7 @@ export default function GnbMenu({
           <div className="main_header__inner">
             {!isPanel ? (
               <LogoTag className="main_header__logo">
-                <Link href={logoHref} prefetch={false} onClick={handleGnbLinkClick}>
+                <Link href={logoHref} prefetch={false} onClick={handleLogoClick}>
                   <img loading="eager" decoding="async"
                     src="/img/logo_white.svg"
                     alt=""
@@ -917,7 +929,6 @@ export default function GnbMenu({
         aria-label={`${activeNav?.label ?? ""} menu`}
         className={getMegaPanelClassName(megaMenu, isPanelOpen)}
       >
-        {activeNavId === "devices" ? <GnbMegaCloseButton onClose={closeMega} /> : null}
         {isDevicesMegaMenu(megaMenu) ? (
           <PanelComponent
             categories={megaMenu.categories}
@@ -926,12 +937,14 @@ export default function GnbMenu({
             onCategoryChange={setActiveCategoryId}
             onDepth3Change={setActiveDepth3Id}
             onLinkClick={handleGnbLinkClick}
+            onClose={closeMega}
           />
         ) : (
           <PanelComponent
             title={activeNav?.label ?? ""}
             menu={megaMenu}
             onItemClick={handleGnbLinkClick}
+            onClose={closeMega}
           />
         )}
       </div>

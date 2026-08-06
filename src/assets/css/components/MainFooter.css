@@ -403,7 +403,12 @@
   /* overflow-y: auto; */
   overscroll-behavior: contain;
   box-sizing: border-box;
-  scrollbar-width: thin;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .main_footer_02__affiliate .main_footer__select-menu--affiliate {
+    scrollbar-width: thin;
+  }
 }
 
 .main_footer_02__affiliate-trigger {

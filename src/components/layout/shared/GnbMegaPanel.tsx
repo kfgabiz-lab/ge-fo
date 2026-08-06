@@ -13,6 +13,7 @@ type GnbMegaPanelProps = {
   onCategoryChange: (categoryId: string) => void;
   onDepth3Change: (depth3Id: string) => void;
   onLinkClick?: () => void;
+  onClose?: () => void;
 };
 
 const DEPTH_HOVER_DELAY_MS = 50;
@@ -61,7 +62,7 @@ function ProductCard({
         <p className="gnb_mega__product-sub">{product.subtitle}</p>
       </div>
       <div className="gnb_mega__product-img">
-        <img loading="lazy" decoding="async" src={product.image ?? undefined} alt="" />
+        <img loading="eager" decoding="async" src={product.image ?? undefined} alt="" />
       </div>
     </Link>
   );
@@ -74,6 +75,7 @@ export default function GnbMegaPanel({
   onCategoryChange,
   onDepth3Change,
   onLinkClick,
+  onClose,
 }: GnbMegaPanelProps) {
   const router = useRouter();
   const depth2HoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
@@ -154,13 +156,26 @@ export default function GnbMegaPanel({
     findDepth3(categories, activeCategory.id, activeDepth3Id) ??
     activeCategory.children[0];
   const depth4Products = activeDepth3 ? getDepth4Products(activeDepth3) : [];
-  const showDepth4Intro = Boolean(
-    activeDepth3?.panelTitle || activeDepth3?.description?.length,
-  );
-  const showDepth4Column = depth4Products.length > 0 || showDepth4Intro;
+  const isDepth3AsLinks = Boolean(activeCategory.depth3AsLinks);
+  const showDepth4Intro =
+    !isDepth3AsLinks &&
+    Boolean(activeDepth3?.panelTitle || activeDepth3?.description?.length);
+  const showDepth4Column =
+    isDepth3AsLinks || depth4Products.length > 0 || showDepth4Intro;
 
   return (
     <div className="gnb_mega__inner">
+      {onClose ? (
+        <button
+          type="button"
+          className="gnb_mega__close"
+          aria-label="메뉴 닫기"
+          onClick={onClose}
+        >
+          <span className="ir">close menu</span>
+        </button>
+      ) : null}
+
       <div className="gnb_mega__col gnb_mega__col--depth2">
         <div className="gnb_mega__depth2-body">
           <ul className="gnb_mega__depth2-list">
@@ -212,7 +227,13 @@ export default function GnbMegaPanel({
         </div>
       </div>
 
-      <div className="gnb_mega__col gnb_mega__col--depth3">
+      <div
+        className={
+          isDepth3AsLinks
+            ? "gnb_mega__col gnb_mega__col--depth3 is-links"
+            : "gnb_mega__col gnb_mega__col--depth3"
+        }
+      >
         <div className="gnb_mega__depth3-scroll">
           <ul className="gnb_mega__depth3-list">
             {activeCategory.children.map((item) => (
@@ -230,12 +251,22 @@ export default function GnbMegaPanel({
                   onFocus={() => onDepth3Change(item.id)}
                   onClick={(event) => navigateFromMegaLink(event, item.href)}
                 >
-                  {item.label.split("\n").map((line, index) => (
-                    <span key={`${item.id}-${index}`}>
-                      {index > 0 ? <br /> : null}
-                      {line}
+                  <span className="gnb_mega__depth3-btn-label">
+                    {item.label.split("\n").map((line, index) => (
+                      <span key={`${item.id}-${index}`}>
+                        {index > 0 ? <br /> : null}
+                        {line}
+                      </span>
+                    ))}
+                  </span>
+                  {isDepth3AsLinks ? (
+                    <span className="gnb_mega__depth3-btn-arrow" aria-hidden>
+                      <span
+                        className="gnb_mega__depth3-btn-arrow-icon"
+                        aria-hidden
+                      />
                     </span>
-                  ))}
+                  ) : null}
                 </Link>
               </li>
             ))}
@@ -244,20 +275,28 @@ export default function GnbMegaPanel({
       </div>
 
       {activeDepth3 && showDepth4Column ? (
-        <div className="gnb_mega__col gnb_mega__col--depth4">
-          {showDepth4Intro ? (
+        <div
+          className={
+            isDepth3AsLinks
+              ? "gnb_mega__col gnb_mega__col--depth4 is-empty"
+              : "gnb_mega__col gnb_mega__col--depth4"
+          }
+        >
+          {!isDepth3AsLinks && showDepth4Intro ? (
             <div className="gnb_mega__depth4-intro">
-              <Link
-                href={activeDepth3.href}
-                prefetch={false}
-                className="gnb_mega__depth4-head"
-                onClick={onLinkClick}
-              >
-                <h3 className="gnb_mega__depth4-tit">{activeDepth3.panelTitle}</h3>
-                <span className="gnb_mega__depth4-arrow" aria-hidden>
-                  <span className="gnb_mega__depth4-arrow-icon" aria-hidden />
-                </span>
-              </Link>
+              <div className="gnb_mega__depth4-top">
+                <Link
+                  href={activeDepth3.href}
+                  prefetch={false}
+                  className="gnb_mega__depth4-head"
+                  onClick={onLinkClick}
+                >
+                  <h3 className="gnb_mega__depth4-tit">{activeDepth3.panelTitle}</h3>
+                  <span className="gnb_mega__depth4-arrow" aria-hidden>
+                    <span className="gnb_mega__depth4-arrow-icon" aria-hidden />
+                  </span>
+                </Link>
+              </div>
               {activeDepth3.description?.length ? (
                 <div className="gnb_mega__depth4-desc">
                   <p>
@@ -272,7 +311,7 @@ export default function GnbMegaPanel({
               ) : null}
             </div>
           ) : null}
-          {depth4Products.length > 0 ? (
+          {!isDepth3AsLinks && depth4Products.length > 0 ? (
             <div className="gnb_mega__products">
               {depth4Products.map((product) => (
                 <ProductCard

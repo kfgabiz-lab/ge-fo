@@ -161,18 +161,17 @@
   opacity: 1;
 }
 
-/* SubHeader GNB 표시 — home 기본 #888, hover #666 (service-center 등) */
+/* SubHeader GNB 표시 — home 기본 #888, hover #222 */
 .gnb_menu_wrap.sub_header:not(.is-gnb-hidden) .sub_breadcrumb .breadcrumb_home {
   background: url("/ico/ico_home.svg") no-repeat center / contain;
   filter: none;
   opacity: 1;
   -webkit-mask: none;
   mask: none;
-  transition: filter 0.2s ease;
 }
 
 .gnb_menu_wrap.sub_header:not(.is-gnb-hidden) .sub_breadcrumb .breadcrumb_home:hover {
-  filter: brightness(0.75); /* #888 → #666 */
+  background-image: url("/ico/ico_home_222.svg");
 }
 
 .sub_breadcrumb .breadcrumb_links {
@@ -374,16 +373,16 @@ header.main_header.is-invert.is-gnb-hidden .sub_breadcrumb .icon_external{
     color: var(--color-primary);
   }
 
-  .gnb_menu_wrap.sub_header.is-top .icon_menu span {
-    background: var(--color-primary);
+  .gnb_menu_wrap.sub_header.is-top .icon_menu {
+    background-image: url("/ico/ico_menu_24_mo.svg");
   }
 
   .gnb_menu_wrap.sub_header.is-invert .gnb_nav_list .link {
     color: #222;
   }
 
-  .gnb_menu_wrap.sub_header.is-invert .icon_menu span {
-    background: var(--color-primary, #0f1f45);
+  .gnb_menu_wrap.sub_header.is-invert .icon_menu {
+    background-image: url("/ico/ico_menu_24_mo.svg");
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -475,12 +474,12 @@ header.main_header.is-invert.is-gnb-hidden .sub_breadcrumb .icon_external{
     color: var(--color-primary);
   }
 
-  .gnb_menu_wrap.sub_header.is-top .icon_menu span {
-    background: var(--color-primary);
+  .gnb_menu_wrap.sub_header.is-top .icon_menu {
+    background-image: url("/ico/ico_menu_24_mo.svg");
   }
 
-  .gnb_menu_wrap.sub_header.is-invert .icon_menu span {
-    background: var(--color-primary, #0f1f45);
+  .gnb_menu_wrap.sub_header.is-invert .icon_menu {
+    background-image: url("/ico/ico_menu_24_mo.svg");
   }
 }
 
@@ -515,7 +514,7 @@ color: #fff;
 }
 
 .main_header.is-invert.main_header--breadcrumb-nav:not(.is-gnb-hidden) .sub_breadcrumb .breadcrumb_home:hover {
-  filter: brightness(0.75); /* #888 → #666 */
+  background-image: url(/ico/ico_home_222.svg);
 }
 
 .main_header.main_header--breadcrumb-nav .sub_breadcrumb .inner {
@@ -784,6 +783,10 @@ color: #fff;
   background: #fff;
 }
 
+.main_header.is-top .icon_menu {
+  background-image: url("/ico/ico_menu_24_white_mo.svg");
+}
+
 .main_header.is-invert {
   background: #fff;
   border-bottom: none;
@@ -850,6 +853,14 @@ color: #fff;
 .main_header.is-search-open.is-top .main_header__icon-menu span,
 .main_header.is-search-open.is-invert .main_header__icon-menu span {
   background: var(--color-primary, #0f1f45);
+}
+
+/* Figma 7334:131899 / 8793:234602 — search open 시 햄버거 #222 */
+.main_header.is-mega-open.is-top .icon_menu,
+.main_header.is-search-open .icon_menu,
+.main_header.is-search-open.is-top .icon_menu,
+.main_header.is-search-open.is-invert .icon_menu {
+  background-image: url("/ico/ico_menu_24_mo.svg");
 }
 
 .main_header.is-mega-open.is-gnb-hidden .main_header__gnb-row,
@@ -1230,8 +1241,8 @@ color: #fff;
   color: #0f1f45;
 }
 
-.gnb_menu_wrap.is-invert .icon_menu span {
-  background: #0f1f45;
+.gnb_menu_wrap.is-invert .icon_menu {
+  background-image: url("/ico/ico_menu_24_mo.svg");
 }
 
 .gnb_menu_wrap .gnb_nav_wrap {
@@ -1314,11 +1325,12 @@ color: #fff;
   filter: none;
 }
 
-.gnb_menu_wrap.is-mega-open.is-top .icon_menu span,
-.gnb_menu_wrap.is-mega-open.is-invert .icon_menu span,
-.gnb_menu_wrap.is-search-open.is-top .icon_menu span,
-.gnb_menu_wrap.is-search-open.is-invert .icon_menu span {
-  background: #0f1f45;
+.gnb_menu_wrap.is-mega-open.is-top .icon_menu,
+.gnb_menu_wrap.is-mega-open.is-invert .icon_menu,
+.gnb_menu_wrap.is-search-open .icon_menu,
+.gnb_menu_wrap.is-search-open.is-top .icon_menu,
+.gnb_menu_wrap.is-search-open.is-invert .icon_menu {
+  background-image: url("/ico/ico_menu_24_mo.svg");
 }
 
 /* 4depth mega menu — Figma 2769:34864, 2769:34951 */
@@ -1350,11 +1362,20 @@ color: #fff;
 }
 
 .gnb_mega--simple.gnb_mega--grid.is-mounted {
+  height: 316px;
+  max-height: 316px;
+}
+
+.gnb_mega--simple.gnb_mega--sections.is-mounted,
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--careers.is-mounted,
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--company.is-mounted {
   max-height: calc(100vh - 144px);
 }
 
-.gnb_mega--simple.gnb_mega--sections.is-mounted {
-  max-height: calc(100vh - 144px);
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--services.is-mounted,
+.gnb_mega--simple.gnb_mega--sections.gnb_mega--support.is-mounted {
+  height: 700px;
+  max-height: 700px;
 }
 
 .gnb_mega.is-open {
@@ -1530,18 +1551,33 @@ color: #fff;
   display: flex;
   align-items: stretch;
   width: 100%;
-  max-width: 1520px;
+  max-width: 1440px;
   height: auto;
   margin: 0 auto;
   box-sizing: border-box;
   background: #fff;
 }
 
+#gnb-mega-panel-careers .gnb_mega__inner--sections,
+#gnb-mega-panel-company .gnb_mega__inner--sections {
+  height: calc(100vh - 144px);
+  max-height: 700px;
+  min-height: 0;
+  overflow: hidden;
+}
+
 #gnb-mega-panel-markets .gnb_mega__head,
 #gnb-mega-panel-services .gnb_mega__head,
 #gnb-mega-panel-support .gnb_mega__head,
-#gnb-mega-panel-careers .gnb_mega__head,
 #gnb-mega-panel-company .gnb_mega__head {
+  flex: 0 0 185px;
+  width: 185px;
+  align-self: stretch;
+  box-sizing: border-box;
+  padding: 26px 0 0;
+}
+
+#gnb-mega-panel-careers .gnb_mega__head {
   flex: 0 0 220px;
   box-sizing: border-box;
   padding: 40px 24px 40px 40px;
@@ -1562,11 +1598,21 @@ color: #fff;
   word-break: break-word;
 }
 
+/* head|columns 구분선 — 패널 전체 높이 (Figma line_h) */
 #gnb-mega-panel-markets .gnb_mega__divider,
 #gnb-mega-panel-services .gnb_mega__divider,
 #gnb-mega-panel-support .gnb_mega__divider,
-#gnb-mega-panel-careers .gnb_mega__divider,
 #gnb-mega-panel-company .gnb_mega__divider {
+  flex: 0 0 1px;
+  align-self: stretch;
+  width: 1px;
+  min-width: 1px;
+  height: auto;
+  min-height: 100%;
+  background: #e8e8e8;
+}
+
+#gnb-mega-panel-careers .gnb_mega__divider {
   flex-shrink: 0;
   width: 1px;
   background: #e8e8e8;
@@ -1628,8 +1674,7 @@ color: #fff;
 #gnb-mega-panel-markets .gnb_mega__item-head:has(.gnb_mega__item-arrow),
 #gnb-mega-panel-services .gnb_mega__item-head:has(.gnb_mega__item-arrow),
 #gnb-mega-panel-support .gnb_mega__item-head:has(.gnb_mega__item-arrow),
-#gnb-mega-panel-careers .gnb_mega__item-head:has(.gnb_mega__item-arrow),
-#gnb-mega-panel-company .gnb_mega__item-head:has(.gnb_mega__item-arrow) {
+#gnb-mega-panel-careers .gnb_mega__item-head:has(.gnb_mega__item-arrow) {
   width: auto;
   max-width: 100%;
   align-items: center;
@@ -1653,7 +1698,6 @@ color: #fff;
   word-break: break-word;
 }
 
-#gnb-mega-panel-markets .gnb_mega__item-desc,
 #gnb-mega-panel-services .gnb_mega__item-desc,
 #gnb-mega-panel-support .gnb_mega__item-desc,
 #gnb-mega-panel-careers .gnb_mega__item-desc,
@@ -1679,6 +1723,12 @@ color: #fff;
 }
 
 #gnb-mega-panel-markets .gnb_mega__item-desc {
+  display: block;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #666;
   min-height: 40px;
 }
 
@@ -1733,51 +1783,114 @@ color: #fff;
 #gnb-mega-panel-support .gnb_mega__item:focus-visible .gnb_mega__item-external,
 #gnb-mega-panel-careers .gnb_mega__item:hover .gnb_mega__item-external,
 #gnb-mega-panel-careers .gnb_mega__item.is-active .gnb_mega__item-external,
-#gnb-mega-panel-careers .gnb_mega__item:focus-visible .gnb_mega__item-external,
-#gnb-mega-panel-company .gnb_mega__item:hover .gnb_mega__item-external,
-#gnb-mega-panel-company .gnb_mega__item.is-active .gnb_mega__item-external,
-#gnb-mega-panel-company .gnb_mega__item:focus-visible .gnb_mega__item-external {
+#gnb-mega-panel-careers .gnb_mega__item:focus-visible .gnb_mega__item-external {
   filter: brightness(0) invert(1);
 }
 
-/* Markets — Figma 17660:104944 (#gnb-mega-panel-markets) */
+/* Markets — Figma 8793:231598 (#gnb-mega-panel-markets)
+ * 1920 기준: head 185(240→425) · divider 1 · cells 404×140 · inner 1440 · panel 316
+ * close top 35 / right 0 (x:1656) · desc content 336 (Power Grid 316)
+ */
 #gnb-mega-panel-markets.gnb_mega--grid.is-mounted {
-  max-height: calc(100vh - 144px);
+  height: 316px;
+  max-height: 316px;
 }
 
 #gnb-mega-panel-markets .gnb_mega__inner--grid {
-  height: auto;
+  position: relative;
+  align-items: stretch;
+  height: 316px;
+  max-height: 316px;
+  max-width: 1440px;
 }
 
 #gnb-mega-panel-markets .gnb_mega__head {
-  padding-top: 26px;
-  padding-bottom: 30px;
+  flex: 0 0 185px;
+  width: 185px;
+  padding: 26px 0 0;
+}
+
+#gnb-mega-panel-markets .gnb_mega__tit {
+  max-width: 140px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.28px;
+  color: #0f1f45;
 }
 
 #gnb-mega-panel-markets .gnb_mega__grid {
   display: grid;
   flex: 0 0 auto;
-  align-self: stretch;
+  align-self: flex-start;
   grid-auto-flow: column;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: repeat(2, auto);
-  grid-auto-rows: auto;
-  height: auto;
+  grid-template-rows: repeat(2, 140px);
+  width: 100%;
+  max-width: 1212px;
+  height: 280px;
   min-width: 0;
   margin: 0;
   padding: 0;
   list-style: none;
+
 }
 
 #gnb-mega-panel-markets .gnb_mega__cell {
   min-width: 0;
+  width: 100%;
+  height: 140px;
   margin: 0;
   padding: 0;
 }
 
 #gnb-mega-panel-markets .gnb_mega__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  width: 100%;
+  height: 140px;
+  min-height: 140px;
+  max-height: 140px;
+  padding: 34px;
+  box-sizing: border-box;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item-head {
+  gap: 4px;
+  width: 100%;
+  max-width: 336px;
+  height: 26px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item-tit {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+#gnb-mega-panel-markets .gnb_mega__item-desc {
+  width: 100%;
+  max-width: 330px;
+  min-height: 40px;
   height: auto;
-  min-height: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+/* Power Grid desc — Figma text width 316 */
+#gnb-mega-panel-markets .gnb_mega__cell:nth-child(3) .gnb_mega__item-desc {
+  max-width: 316px;
+}
+
+#gnb-mega-panel-markets .gnb_mega__close {
+  top: 35px;
+  right: 0;
 }
 
 #gnb-mega-panel-markets .gnb_mega__item.is-disabled {
@@ -1789,61 +1902,90 @@ color: #fff;
   background: #fff;
 }
 
-@media (min-width: 1520px) {
+@media (min-width: 1440px) {
   #gnb-mega-panel-markets .gnb_mega__grid {
-    grid-template-columns: repeat(3, 433px);
-    grid-template-rows: repeat(2, auto);
+    flex: 0 0 1212px;
+    grid-template-columns: repeat(3, 404px);
+    width: 1212px;
+    max-width: 1212px;
+    height: 316px;
   }
 
-  #gnb-mega-panel-markets .gnb_mega__item-desc,
-  #gnb-mega-panel-services .gnb_mega__item-desc,
-  #gnb-mega-panel-support .gnb_mega__item-desc,
-  #gnb-mega-panel-careers .gnb_mega__item-desc,
-  #gnb-mega-panel-company .gnb_mega__item-desc {
+  #gnb-mega-panel-careers .gnb_mega__item-desc {
     max-width: 365px;
   }
 }
 
-/* Services — Figma 3670:14629 (#gnb-mega-panel-services) */
-#gnb-mega-panel-services .gnb_mega__head {
-  padding-top: 26px;
-  padding-bottom: 30px;
+/* Services — Figma 8793:231658 (#gnb-mega-panel-services)
+ * 1920 기준: panel 700 · head 185 · cols 404 · item pad 34 · gap 6 · label gap 10
+ * close top 35 / right 0 · desc 336 · Sales Training item 140 (2줄)
+ */
+#gnb-mega-panel-services.gnb_mega--sections.is-mounted {
+  height: 700px;
+  max-height: 700px;
 }
 
-/* Support — Figma 3670:14792 (#gnb-mega-panel-support) */
-#gnb-mega-panel-support .gnb_mega__head {
-  padding-top: 26px;
-  padding-bottom: 30px;
+#gnb-mega-panel-services .gnb_mega__inner--sections {
+  position: relative;
+  align-items: stretch;
+  height: 700px;
+  max-height: 700px;
+  max-width: 1440px;
+  overflow: hidden;
+}
+
+#gnb-mega-panel-services .gnb_mega__head {
+  flex: 0 0 185px;
+  width: 185px;
+  padding: 26px 0 0;
+}
+
+#gnb-mega-panel-services .gnb_mega__tit {
+  max-width: 140px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.28px;
+  color: #0f1f45;
 }
 
 #gnb-mega-panel-services .gnb_mega__columns,
 #gnb-mega-panel-support .gnb_mega__columns,
 #gnb-mega-panel-careers .gnb_mega__columns,
 #gnb-mega-panel-company .gnb_mega__columns {
+  display: grid;
   flex: 0 0 auto;
   align-self: stretch;
-  height: auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+  width: 100%;
+  max-width: 808px;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
+  overflow: visible;
 }
 
-#gnb-mega-panel-services .gnb_mega__col,
-#gnb-mega-panel-support .gnb_mega__col,
-#gnb-mega-panel-careers .gnb_mega__col,
-#gnb-mega-panel-company .gnb_mega__col {
+#gnb-mega-panel-services .gnb_mega__col {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
   min-width: 0;
+  min-height: 0;
+  height: 100%;
   margin: 0;
   padding: 34px 0 0;
+  overflow: visible;
+  box-sizing: border-box;
 }
-.gnb_mega__col +  .gnb_mega__col{
-  border-left: 1px solid #ebebeb;
+
+#gnb-mega-panel-services .gnb_mega__col + .gnb_mega__col {
+  border-left: 1px solid #e8e8e8;
 }
-#gnb-mega-panel-services .gnb_mega__col-label,
-#gnb-mega-panel-support .gnb_mega__col-label,
-#gnb-mega-panel-careers .gnb_mega__col-label,
-#gnb-mega-panel-company .gnb_mega__col-label {
+
+#gnb-mega-panel-services .gnb_mega__col-label {
   margin: 0;
   padding-left: 34px;
   font-size: 14px;
@@ -1852,27 +1994,66 @@ color: #fff;
   color: #0f1f45;
 }
 
-#gnb-mega-panel-services .gnb_mega__col-list,
-#gnb-mega-panel-support .gnb_mega__col-list,
-#gnb-mega-panel-careers .gnb_mega__col-list,
-#gnb-mega-panel-company .gnb_mega__col-list {
+#gnb-mega-panel-services .gnb_mega__col-list {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-width: 0;
 }
 
-#gnb-mega-panel-services .gnb_mega__item,
-#gnb-mega-panel-support .gnb_mega__item,
-#gnb-mega-panel-careers .gnb_mega__item,
-#gnb-mega-panel-company .gnb_mega__item {
-  min-height: 0;
+#gnb-mega-panel-services .gnb_mega__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 120px;
   height: auto;
+  padding: 34px;
+  box-sizing: border-box;
 }
 
-#gnb-mega-panel-services .gnb_mega__columns {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
+#gnb-mega-panel-services .gnb_mega__item-head {
+  gap: 4px;
+  width: 100%;
+  max-width: 365px;
+  min-height: 26px;
+}
+
+#gnb-mega-panel-services .gnb_mega__item-tit {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+#gnb-mega-panel-services .gnb_mega__item-desc {
+  width: 100%;
+  max-width: 336px;
+  min-height: 20px;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+#gnb-mega-panel-services .gnb_mega__item-arrow {
+  width: 18px;
+  height: 18px;
+}
+
+#gnb-mega-panel-services .gnb_mega__item-external {
+  width: 18px;
+  height: 18px;
+  background: url("/ico/ico_link.svg") no-repeat center / contain;
+  filter: none !important;
+}
+
+#gnb-mega-panel-services .gnb_mega__item:hover .gnb_mega__item-external,
+#gnb-mega-panel-services .gnb_mega__item.is-active .gnb_mega__item-external,
+#gnb-mega-panel-services .gnb_mega__item:focus-visible .gnb_mega__item-external {
+  filter: none !important;
+}
+
+#gnb-mega-panel-services .gnb_mega__close {
+  top: 35px;
+  right: 0;
 }
 
 #gnb-mega-panel-services .gnb_mega__columns .gnb_mega__item.is-disabled {
@@ -1884,10 +2065,151 @@ color: #fff;
   background: #fff;
 }
 
-@media (min-width: 1520px) {
+#gnb-mega-panel-careers .gnb_mega__columns {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1440px) {
   #gnb-mega-panel-services .gnb_mega__columns {
-    grid-template-columns: repeat(2, 433px);
+    flex: 0 0 808px;
+    grid-template-columns: repeat(2, 404px);
+    width: 808px;
+    max-width: 808px;
   }
+}
+
+@media (max-height: 844px) {
+  #gnb-mega-panel-services.gnb_mega--sections.is-mounted,
+  #gnb-mega-panel-services .gnb_mega__inner--sections {
+    height: calc(100vh - 144px);
+    max-height: calc(100vh - 144px);
+  }
+
+  #gnb-mega-panel-services .gnb_mega__col {
+    overflow: auto;
+  }
+}
+
+/* Support — Figma 8793:231827 (#gnb-mega-panel-support)
+ * 1920 기준: panel 700 · head 185 · 2 cols 404 (Training hidden) · item 120
+ * close top 35 / right 0 · desc 336 · Portals 전부 external link
+ */
+#gnb-mega-panel-support.gnb_mega--sections.is-mounted {
+  height: 700px;
+  max-height: 700px;
+}
+
+#gnb-mega-panel-support .gnb_mega__inner--sections {
+  position: relative;
+  align-items: stretch;
+  height: 700px;
+  max-height: 700px;
+  max-width: 1440px;
+  overflow: hidden;
+}
+
+#gnb-mega-panel-support .gnb_mega__head {
+  flex: 0 0 185px;
+  width: 185px;
+  padding: 26px 0 0;
+}
+
+#gnb-mega-panel-support .gnb_mega__tit {
+  max-width: 140px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.28px;
+  color: #0f1f45;
+}
+
+#gnb-mega-panel-support .gnb_mega__col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  margin: 0;
+  padding: 34px 0 0;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+#gnb-mega-panel-support .gnb_mega__col + .gnb_mega__col {
+  border-left: 1px solid #e8e8e8;
+}
+
+#gnb-mega-panel-support .gnb_mega__col-label {
+  margin: 0;
+  padding-left: 34px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #0f1f45;
+}
+
+#gnb-mega-panel-support .gnb_mega__col-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+#gnb-mega-panel-support .gnb_mega__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 120px;
+  height: auto;
+  padding: 34px;
+  box-sizing: border-box;
+}
+
+#gnb-mega-panel-support .gnb_mega__item-head {
+  gap: 4px;
+  width: 100%;
+  max-width: 336px;
+  min-height: 26px;
+}
+
+#gnb-mega-panel-support .gnb_mega__item-tit {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+#gnb-mega-panel-support .gnb_mega__item-desc {
+  width: 100%;
+  max-width: 336px;
+  min-height: 20px;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+#gnb-mega-panel-support .gnb_mega__item-arrow {
+  width: 18px;
+  height: 18px;
+}
+
+#gnb-mega-panel-support .gnb_mega__item-external {
+  width: 18px;
+  height: 18px;
+  background: url("/ico/ico_link.svg") no-repeat center / contain;
+  filter: none !important;
+}
+
+#gnb-mega-panel-support .gnb_mega__item:hover .gnb_mega__item-external,
+#gnb-mega-panel-support .gnb_mega__item.is-active .gnb_mega__item-external,
+#gnb-mega-panel-support .gnb_mega__item:focus-visible .gnb_mega__item-external {
+  filter: none !important;
+}
+
+#gnb-mega-panel-support .gnb_mega__close {
+  top: 35px;
+  right: 0;
 }
 
 #gnb-mega-panel-support .gnb_mega__columns .gnb_mega__item.is-disabled {
@@ -1899,19 +2221,74 @@ color: #fff;
   background: #fff;
 }
 
-#gnb-mega-panel-support .gnb_mega__columns {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
-}
-
-@media (min-width: 1520px) {
+@media (min-width: 1440px) {
   #gnb-mega-panel-support .gnb_mega__columns {
-    grid-template-columns: repeat(3, 433px);
+    flex: 0 0 808px;
+    grid-template-columns: repeat(2, 404px);
+    width: 808px;
+    max-width: 808px;
   }
 }
 
-/* Careers — Figma 2769:35857 (#gnb-mega-panel-careers) */
+@media (max-height: 844px) {
+  #gnb-mega-panel-support.gnb_mega--sections.is-mounted,
+  #gnb-mega-panel-support .gnb_mega__inner--sections {
+    height: calc(100vh - 144px);
+    max-height: calc(100vh - 144px);
+  }
+
+  #gnb-mega-panel-support .gnb_mega__col {
+    overflow: auto;
+  }
+}
+
+/* Careers — shared section columns */
+#gnb-mega-panel-careers .gnb_mega__columns {
+  flex: 1 1 auto;
+  align-self: stretch;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#gnb-mega-panel-careers .gnb_mega__col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 34px 0 0;
+  overflow: auto;
+}
+
+#gnb-mega-panel-careers .gnb_mega__col + .gnb_mega__col {
+  border-left: 1px solid #e8e8e8;
+}
+
+#gnb-mega-panel-careers .gnb_mega__col-label {
+  margin: 0;
+  padding-left: 34px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #0f1f45;
+}
+
+#gnb-mega-panel-careers .gnb_mega__col-list {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+#gnb-mega-panel-careers .gnb_mega__item {
+  min-height: 0;
+  height: auto;
+}
+
 #gnb-mega-panel-careers .gnb_mega__columns .gnb_mega__item.is-disabled {
   cursor: not-allowed;
 }
@@ -1924,6 +2301,7 @@ color: #fff;
 #gnb-mega-panel-careers .gnb_mega__columns {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   gap: 0;
 }
 
@@ -1933,10 +2311,152 @@ color: #fff;
   }
 }
 
-/* Company — Figma 3670:14673 (#gnb-mega-panel-company) */
+/* Company — Figma 8793:231732 (#gnb-mega-panel-company)
+ * 1920 기준: panel 700 · head 185 · 3 cols 404 · dividers at 425/830/1234
+ * close top 35 / right 0 · desc 336 · Search and Apply (8793:231743) external 우측
+ */
+#gnb-mega-panel-company.gnb_mega--sections.is-mounted {
+  height: 700px;
+  max-height: 700px;
+}
+
+#gnb-mega-panel-company .gnb_mega__inner--sections {
+  position: relative;
+  align-items: stretch;
+  height: 700px;
+  max-height: 700px;
+  max-width: 1440px;
+  overflow: hidden;
+}
+
 #gnb-mega-panel-company .gnb_mega__head {
-  padding-top: 26px;
-  padding-bottom: 30px;
+  flex: 0 0 185px;
+  width: 185px;
+  padding: 26px 0 0;
+}
+
+#gnb-mega-panel-company .gnb_mega__tit {
+  max-width: 140px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.28px;
+  color: #0f1f45;
+}
+
+#gnb-mega-panel-company .gnb_mega__columns {
+  display: grid;
+  flex: 0 0 auto;
+  align-self: stretch;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+  width: 100%;
+  max-width: 1212px;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
+}
+
+#gnb-mega-panel-company .gnb_mega__col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  margin: 0;
+  padding: 34px 0 0;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+#gnb-mega-panel-company .gnb_mega__col + .gnb_mega__col {
+  border-left: 1px solid #e8e8e8;
+}
+
+#gnb-mega-panel-company .gnb_mega__col-label {
+  margin: 0;
+  padding-left: 34px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #0f1f45;
+}
+
+#gnb-mega-panel-company .gnb_mega__col-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+#gnb-mega-panel-company .gnb_mega__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 120px;
+  height: auto;
+  padding: 34px;
+  box-sizing: border-box;
+}
+
+/* Figma 8793:231743 — Search and Apply: head 100% · 타이틀 flex · ico_link 우측 */
+#gnb-mega-panel-company .gnb_mega__item-head {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 336px;
+  min-height: 26px;
+}
+
+#gnb-mega-panel-company .gnb_mega__item-tit {
+  flex: 1 0 0;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+#gnb-mega-panel-company .gnb_mega__item-desc {
+  width: 100%;
+  max-width: 336px;
+  min-height: 20px;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+#gnb-mega-panel-company .gnb_mega__item-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+#gnb-mega-panel-company .gnb_mega__item-external {
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: url("/ico/ico_link.svg") no-repeat center / contain;
+  filter: none !important;
+}
+
+#gnb-mega-panel-company .gnb_mega__item:hover .gnb_mega__item-external,
+#gnb-mega-panel-company .gnb_mega__item.is-active .gnb_mega__item-external,
+#gnb-mega-panel-company .gnb_mega__item:focus-visible .gnb_mega__item-external {
+  filter: none !important;
+}
+
+#gnb-mega-panel-company .gnb_mega__close {
+  top: 35px;
+  right: 0;
 }
 
 #gnb-mega-panel-company .gnb_mega__columns .gnb_mega__item.is-disabled {
@@ -1948,23 +2468,111 @@ color: #fff;
   background: #fff;
 }
 
-#gnb-mega-panel-company .gnb_mega__columns {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
+@media (min-width: 1440px) {
+  #gnb-mega-panel-company .gnb_mega__columns {
+    flex: 0 0 1212px;
+    grid-template-columns: repeat(3, 404px);
+    width: 1212px;
+    max-width: 1212px;
+  }
 }
 
-@media (min-width: 1520px) {
-  #gnb-mega-panel-company .gnb_mega__columns {
-    grid-template-columns: repeat(3, 433px);
+@media (max-height: 844px) {
+  #gnb-mega-panel-company.gnb_mega--sections.is-mounted,
+  #gnb-mega-panel-company .gnb_mega__inner--sections {
+    height: calc(100vh - 144px);
+    max-height: calc(100vh - 144px);
+  }
+
+  #gnb-mega-panel-company .gnb_mega__col {
+    overflow: auto;
   }
 }
 
 @media (min-width: 1201px) and (max-width: 1519px) {
-  #gnb-mega-panel-markets .gnb_mega__inner--grid,
-  #gnb-mega-panel-services .gnb_mega__inner--sections,
-  #gnb-mega-panel-support .gnb_mega__inner--sections,
-  #gnb-mega-panel-careers .gnb_mega__inner--sections,
+  #gnb-mega-panel-careers .gnb_mega__inner--sections {
+    max-width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+
+  #gnb-mega-panel-careers .gnb_mega__head {
+    flex: 0 0 200px;
+    padding-left: 16px;
+  }
+
+  #gnb-mega-panel-careers .gnb_mega__columns {
+    min-width: 0;
+    max-width: calc(100vw - 200px);
+  }
+}
+
+/* Markets — Figma 고정폭(1440) 미만에서만 축소 */
+@media (min-width: 1201px) and (max-width: 1439px) {
+  #gnb-mega-panel-markets .gnb_mega__inner--grid {
+    max-width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+
+  #gnb-mega-panel-markets .gnb_mega__head {
+    flex: 0 0 185px;
+    width: 185px;
+    padding: 26px 0 0;
+  }
+
+  #gnb-mega-panel-markets .gnb_mega__grid {
+    min-width: 0;
+    max-width: calc(100% - 185px);
+  }
+}
+
+/* Services — Figma 고정폭(1440) 미만에서만 축소 */
+@media (min-width: 1201px) and (max-width: 1439px) {
+  #gnb-mega-panel-services .gnb_mega__inner--sections {
+    max-width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+
+  #gnb-mega-panel-services .gnb_mega__head {
+    flex: 0 0 185px;
+    width: 185px;
+    padding: 26px 0 0;
+  }
+
+  #gnb-mega-panel-services .gnb_mega__columns {
+    min-width: 0;
+    max-width: calc(100% - 185px);
+  }
+}
+
+/* Support — Figma 고정폭(1440) 미만에서만 축소 */
+@media (min-width: 1201px) and (max-width: 1439px) {
+  #gnb-mega-panel-support .gnb_mega__inner--sections {
+    max-width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+
+  #gnb-mega-panel-support .gnb_mega__head {
+    flex: 0 0 185px;
+    width: 185px;
+    padding: 26px 0 0;
+  }
+
+  #gnb-mega-panel-support .gnb_mega__columns {
+    min-width: 0;
+    max-width: calc(100% - 185px);
+  }
+}
+
+/* Company — Figma 고정폭(1440) 미만에서만 축소 */
+@media (min-width: 1201px) and (max-width: 1439px) {
   #gnb-mega-panel-company .gnb_mega__inner--sections {
     max-width: 100%;
     padding-left: 24px;
@@ -1972,22 +2580,15 @@ color: #fff;
     box-sizing: border-box;
   }
 
-  #gnb-mega-panel-markets .gnb_mega__head,
-  #gnb-mega-panel-services .gnb_mega__head,
-  #gnb-mega-panel-support .gnb_mega__head,
-  #gnb-mega-panel-careers .gnb_mega__head,
   #gnb-mega-panel-company .gnb_mega__head {
-    flex: 0 0 200px;
-    padding-left: 16px;
+    flex: 0 0 185px;
+    width: 185px;
+    padding: 26px 0 0;
   }
 
-  #gnb-mega-panel-markets .gnb_mega__grid,
-  #gnb-mega-panel-services .gnb_mega__columns,
-  #gnb-mega-panel-support .gnb_mega__columns,
-  #gnb-mega-panel-careers .gnb_mega__columns,
   #gnb-mega-panel-company .gnb_mega__columns {
     min-width: 0;
-    max-width: calc(100vw - 200px);
+    max-width: calc(100% - 185px);
   }
 }
 
@@ -2002,6 +2603,7 @@ color: #fff;
 }
 
 .gnb_mega__inner {
+  position: relative;
   display: flex;
   align-items: stretch;
   width: 100%;
@@ -2010,6 +2612,14 @@ color: #fff;
   max-height: calc(100vh - 144px);
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+/* Devices mega 닫기 — depth4와 무관, inner 기준 절대좌표 (Figma 8793:231438) */
+.gnb_mega__inner > .gnb_mega__close {
+  position: absolute;
+  top: 35px;
+  right: 0px;
+  z-index: 3;
 }
 
 /* depth 2 — 362px, active #0F1F45 */
@@ -2163,9 +2773,9 @@ color: #fff;
   justify-content: center;
   padding: 0 30px;
 }
-.gnb_mega__depth3-btn span{
-    white-space: normal;
-    text-wrap: balance;
+.gnb_mega__depth3-btn-label span {
+  white-space: normal;
+  text-wrap: balance;
 }
 
 .gnb_mega__depth3-btn:hover:not(.is-active) {
@@ -2179,7 +2789,58 @@ color: #fff;
   /* font-weight: 500; */
 }
 
-/* depth 4 — 764px content, gap 30px */
+/* Software — depth3 화살표 링크 리스트 (Figma 8793:231550) */
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 30px;
+  line-height: 24px;
+}
+
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn-label {
+  flex: 1;
+  min-width: 0;
+  max-width: 228px;
+}
+
+/* Arrow · Hover — depth4-arrow / btn-text-30 패턴 */
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn-arrow-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  background: url("/ico/ico_arrow_right_14.svg") center / contain no-repeat;
+  transition: filter 0.2s ease;
+}
+
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn:hover .gnb_mega__depth3-btn-arrow,
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn.is-hover .gnb_mega__depth3-btn-arrow {
+  background: var(--color-accent);
+}
+
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn:hover .gnb_mega__depth3-btn-arrow-icon,
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn.is-hover .gnb_mega__depth3-btn-arrow-icon {
+  filter: brightness(0) invert(1);
+}
+
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn:hover:not(.is-active),
+.gnb_mega__col--depth3.is-links .gnb_mega__depth3-btn.is-hover:not(.is-active) {
+  background: #f5f7fa;
+}
+
+/* depth 4 — 764px content, gap 30px · 컬럼 독립 스크롤 */
 .gnb_mega__col--depth4 {
   display: flex;
   flex: 1;
@@ -2190,12 +2851,22 @@ color: #fff;
   box-sizing: border-box;
   overflow: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
-  scrollbar-color: #ddd transparent;
+}
+
+/* Software — depth4 비움 (Figma 8793:231550) */
+.gnb_mega__col--depth4.is-empty {
+  padding: 0;
+  overflow: hidden;
 }
 
 .gnb_mega__col--depth4::-webkit-scrollbar {
   width: 3px;
+}
+
+.gnb_mega__col--depth4::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .gnb_mega__col--depth4::-webkit-scrollbar-thumb {
@@ -2203,12 +2874,45 @@ color: #fff;
   background: #ddd;
 }
 
+@supports not selector(::-webkit-scrollbar) {
+  #gnb-mega-panel-services .gnb_mega__col,
+  #gnb-mega-panel-support .gnb_mega__col,
+  #gnb-mega-panel-careers .gnb_mega__col,
+  #gnb-mega-panel-company .gnb_mega__col,
+  .gnb_mega__col--depth2,
+  .gnb_mega__col--depth3,
+  .gnb_mega__col--depth4 {
+    scrollbar-width: thin;
+    scrollbar-color: #ddd transparent;
+  }
+}
+
 .gnb_mega__depth4-intro {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 816px; /* Figma depth4 컬럼 816 · 타이틀 행 776(+left 40) */
   margin-bottom: 30px;
-  padding: 0 38px 0 40px;
+  padding: 0 0 0 40px;
+}
+
+.gnb_mega__depth4-top {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 34px;
+}
+
+.gnb_mega__close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent url("/ico/ico_close_mega_24.svg") center / contain no-repeat;
+  cursor: pointer;
 }
 
 .gnb_mega__close {
@@ -2256,6 +2960,7 @@ color: #fff;
   align-items: center;
   gap: 12px;
   width: fit-content;
+  min-width: 0;
   color: #222;
   text-decoration: none;
 }
@@ -2300,7 +3005,7 @@ color: #fff;
 }
 
 .gnb_mega__depth4-desc {
-  max-width: 854px;
+  max-width: 722px;
   font-size: 15px;
   line-height: 23px;
   color: #666;
@@ -2869,19 +3574,19 @@ color: #fff;
     height: 60px;
   }
 
-  .main_header.is-top .icon_menu span {
-    background: #fff;
+  .main_header.is-top .icon_menu {
+    background-image: url("/ico/ico_menu_24_white_mo.svg");
   }
 
-  .main_header.is-search-open .icon_menu span,
-  .main_header.is-search-open.is-top .icon_menu span,
-  .main_header.is-mega-open.is-top .icon_menu span {
-    background: #0f1f45;
+  .main_header.is-search-open .icon_menu,
+  .main_header.is-search-open.is-top .icon_menu,
+  .main_header.is-mega-open.is-top .icon_menu {
+    background-image: url("/ico/ico_menu_24_mo.svg");
   }
 
   .main_header.is-search-open .main_header__btn-search,
   .main_header.is-search-open.is-top .main_header__btn-search {
-    background-image: url("/ico/ico_search_24.svg");
+    background-image: url("/ico/ico_search_24_mo.svg");
   }
 
   .main_header.is-search-open .main_header__btn-search.is-close,
@@ -3029,19 +3734,15 @@ color: #fff;
 }
 
 :is(.gnb_menu_wrap, .main_header) .icon_menu {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
+  display: block;
+  flex-shrink: 0;
   width: 24px;
   height: 24px;
+  background: url("/ico/ico_menu_24_mo.svg") center / contain no-repeat;
 }
 
 :is(.gnb_menu_wrap, .main_header) .icon_menu span {
-  display: block;
-  width: 100%;
-  height: 2px;
-  transition: background-color 0.3s ease;
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3098,12 +3799,94 @@ color: #fff;
     align-items: center;
   }
 
-  .main_header.is-top .icon_menu span {
-    background: #fff;
+  /*
+   * Mobile GNB util icons — Figma
+   * 8793:234601 White (is-top) · 8793:234602 Black (invert) · 8793:234603 Menu open
+   */
+  .btn_area--mobile .btn_search,
+  .main_header__actions--mobile .main_header__btn-search {
+    width: 24px;
+    height: 24px;
+    background: url("/ico/ico_search_24_mo.svg") center / contain no-repeat;
   }
 
-  .main_header.is-invert .icon_menu span {
-    background: var(--color-primary, #0f1f45);
+  .btn_area--mobile .btn_search .icon_search,
+  .btn_area--mobile .btn_search.is-close .icon_search {
+    display: none;
+  }
+
+  .btn_area--mobile .btn_search.is-close,
+  .main_header__actions--mobile .main_header__btn-search.is-close {
+    background-image: url("/ico/ico_close_24.svg");
+  }
+
+  .btn_area--mobile .icon_menu,
+  .main_header__actions--mobile .icon_menu {
+    background-image: url("/ico/ico_menu_24_mo.svg");
+  }
+
+  .btn_area--mobile .gnb_mobile_close,
+  .main_header__actions--mobile .gnb_mobile_close {
+    background: transparent url("/ico/ico_close_24.svg") center / contain no-repeat;
+  }
+
+  /* Figma 8793:234601 — is-top white */
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+    .btn_area--mobile
+    .btn_search:not(.is-close),
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+    .main_header__actions--mobile
+    .main_header__btn-search:not(.is-close) {
+    background-image: url("/ico/ico_search_24_white_mo.svg");
+  }
+
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+    .btn_area--mobile
+    .icon_menu,
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+    .main_header__actions--mobile
+    .icon_menu {
+    background-image: url("/ico/ico_menu_24_white_mo.svg");
+  }
+
+  /* Figma 8793:234602 — invert / search·mega open → black */
+  .main_header.is-invert .btn_area--mobile .btn_search:not(.is-close),
+  .main_header.is-invert .main_header__actions--mobile .main_header__btn-search:not(.is-close),
+  .main_header.is-search-open .btn_area--mobile .btn_search:not(.is-close),
+  .main_header.is-search-open .main_header__actions--mobile .main_header__btn-search:not(.is-close),
+  .main_header.is-mega-open .btn_area--mobile .btn_search:not(.is-close),
+  .main_header.is-mega-open .main_header__actions--mobile .main_header__btn-search:not(.is-close) {
+    background-image: url("/ico/ico_search_24_mo.svg");
+  }
+
+  .main_header.is-invert .btn_area--mobile .icon_menu,
+  .main_header.is-invert .main_header__actions--mobile .icon_menu,
+  .main_header.is-search-open .btn_area--mobile .icon_menu,
+  .main_header.is-search-open .main_header__actions--mobile .icon_menu,
+  .main_header.is-mega-open .btn_area--mobile .icon_menu,
+  .main_header.is-mega-open .main_header__actions--mobile .icon_menu {
+    background-image: url("/ico/ico_menu_24_mo.svg");
+  }
+
+  .main_header.is-top .icon_menu {
+    background-image: url("/ico/ico_menu_24_white_mo.svg");
+  }
+
+  .main_header.is-invert .icon_menu {
+    background-image: url("/ico/ico_menu_24_mo.svg");
+  }
+
+  /* search/mega open — 햄버거 #222 (Figma 8793:234602 / 7334:131899) */
+  .main_header.is-search-open .icon_menu,
+  .main_header.is-search-open.is-top .icon_menu,
+  .main_header.is-mega-open.is-top .icon_menu {
+    background-image: url("/ico/ico_menu_24_mo.svg");
+  }
+
+  /* Figma 8793:234601 — 모바일 is-top 검색 (actions) */
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+    .main_header__btn-search:not(.is-close) {
+    background-image: url("/ico/ico_search_24_white_mo.svg");
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-slot {
@@ -3206,7 +3989,7 @@ color: #fff;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_shell .main_header__btn-search:not(.is-close) {
-    background: url("/ico/ico_search_24.svg") center / contain no-repeat;
+    background: url("/ico/ico_search_24_mo.svg") center / contain no-repeat;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_shell .main_header__btn-search.is-close {
@@ -3214,7 +3997,7 @@ color: #fff;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_shell .btn_search:not(.is-close) {
-    background: url("/ico/ico_search_24.svg") center / contain no-repeat;
+    background: url("/ico/ico_search_24_mo.svg") center / contain no-repeat;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_shell .btn_search.is-close {

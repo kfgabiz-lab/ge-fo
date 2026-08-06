@@ -21,6 +21,7 @@ export type GnbMegaDepth2 = {
   id: string;
   label: string;
   href?: string;
+  depth3AsLinks?: boolean;
   children: GnbMegaDepth3[];
 };
 

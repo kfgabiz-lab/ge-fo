@@ -2190,15 +2190,30 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-events-calendar .company-events-calendar__months {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 60px;
   }
 
   section.company-events-calendar .company-events-calendar__month {
+    position: relative;
     display: flex;
-    gap: 61px;
+    gap: 51px;
     align-items: flex-start;
+  }
+
+  /* Figma 6858:142952 — 월 아이콘 사이 세로 타임라인 (#0F1F45 / 20%) */
+  section.company-events-calendar .company-events-calendar__month:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: -60px;
+    z-index: 0;
+    width: 1px;
+    background: rgb(15 31 69 / 20%);
+    pointer-events: none;
   }
 
   section.company-events-calendar .company-events-calendar__month-label {
@@ -2206,9 +2221,13 @@ section.company-blog-list .company-blog__tag:hover {
     flex-shrink: 0;
     align-items: flex-start;
     gap: 10px;
+    width: 190px;
+    box-sizing: border-box;
   }
 
   section.company-events-calendar .company-events-calendar__month-icon {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2550,6 +2569,7 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-events-calendar .company-events-calendar__months {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -2557,10 +2577,23 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-events-calendar .company-events-calendar__month {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
+  }
+
+  section.company-events-calendar .company-events-calendar__month:not(:last-child)::before {
+    /* content: "";
+    position: absolute;
+    left: 14px;
+    top: 30px;
+    bottom: -40px;
+    z-index: 0;
+    width: 1px;
+    background: rgb(15 31 69 / 20%);
+    pointer-events: none; */
   }
 
   section.company-events-calendar .company-events-calendar__month-label {
@@ -2570,6 +2603,8 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-events-calendar .company-events-calendar__month-icon {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;

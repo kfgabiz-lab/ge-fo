@@ -2980,15 +2980,21 @@
     overflow-y: auto;
     list-style: none;
     overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: #888 #e8e8e8;
   }
 
   section.support_tech_hub_view .support_tech_hub_view__series-list::-webkit-scrollbar {
     width: 3px;
   }
 
-  section.support_tech_hub_view .support_tech_hub_view__series-list::-webkit-scrollbar-track {
+  section.support_tech_hub_view
+    .support_tech_hub_view__series-list::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  section.support_tech_hub_view
+    .support_tech_hub_view__series-list::-webkit-scrollbar-track {
     background: #e8e8e8;
     border-radius: 2px;
   }
@@ -2996,6 +3002,13 @@
   section.support_tech_hub_view .support_tech_hub_view__series-list::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 2px;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    section.support_tech_hub_view .support_tech_hub_view__series-list {
+      scrollbar-width: thin;
+      scrollbar-color: #888 #e8e8e8;
+    }
   }
 
   section.support_tech_hub_view .support_tech_hub_view__series-row {
@@ -3675,15 +3688,21 @@ section.support_where_to_buy_contents .support_where_to_buy_contents__map-brand-
     max-height: 860px;
     padding-right: 2px;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #888 #e8e8e8;
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_contents__list::-webkit-scrollbar {
     width: 3px;
   }
 
-  section.support_where_to_buy_contents .support_where_to_buy_contents__list::-webkit-scrollbar-track {
+  section.support_where_to_buy_contents
+    .support_where_to_buy_contents__list::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  section.support_where_to_buy_contents
+    .support_where_to_buy_contents__list::-webkit-scrollbar-track {
     background: #e8e8e8;
     border-radius: 2px;
   }
@@ -3691,6 +3710,13 @@ section.support_where_to_buy_contents .support_where_to_buy_contents__map-brand-
   section.support_where_to_buy_contents .support_where_to_buy_contents__list::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 2px;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    section.support_where_to_buy_contents .support_where_to_buy_contents__list {
+      scrollbar-width: thin;
+      scrollbar-color: #888 #e8e8e8;
+    }
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_card {
@@ -4261,10 +4287,14 @@ section.support_where_to_buy_banner .common_banner_02__link {
     width: 100%;
   }
 
-  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_search--embedded .support_where_to_buy_search__field .MuiOutlinedInput-root {
-    height: 60px;
-    min-height: 60px;
-    max-height: 60px;
+  section.support_where_to_buy_contents
+    .support_where_to_buy_contents__controls
+    .support_where_to_buy_search--embedded
+    .support_where_to_buy_search__field
+    .MuiOutlinedInput-root {
+    height: 50px;
+    min-height: 50px;
+    max-height: 50px;
     padding: 0 20px;
     border-radius: 4px;
     background: #f5f5f5;
@@ -4308,7 +4338,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
     line-height: 23px;
     color: #666;
     cursor: pointer;
-    margin-top: 14px;
+    margin-top: 12px;
     width: 100%;
     justify-content: end;
   }
@@ -6155,4 +6185,4 @@ section.support_where_to_buy_contents .support_where_to_buy_search__field-wrap {
   background: #f4f6fa;
   color: #0f1f45;
   outline: none;
-}
+}

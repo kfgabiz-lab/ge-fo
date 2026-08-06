@@ -2585,13 +2585,18 @@
   /* Figma 6880:144606 — scroll indicator under table (gap 30 · track #888 · thumb #222 · 2px) */
   .support_service_warranty_table-viewport--sticky .support_service_warranty_table-wrap {
     padding-bottom: 30px;
-    scrollbar-width: thin;
-    /* scrollbar-color: #222 #888; */
   }
 
   .support_service_warranty_table-viewport--sticky
     .support_service_warranty_table-wrap::-webkit-scrollbar {
     height: 2px;
+  }
+
+  .support_service_warranty_table-viewport--sticky
+    .support_service_warranty_table-wrap::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   .support_service_warranty_table-viewport--sticky
@@ -2602,6 +2607,12 @@
   .support_service_warranty_table-viewport--sticky
     .support_service_warranty_table-wrap::-webkit-scrollbar-thumb {
     background: #222;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    .support_service_warranty_table-viewport--sticky .support_service_warranty_table-wrap {
+      scrollbar-width: thin;
+    }
   }
 
   .support_service_warranty_notes {

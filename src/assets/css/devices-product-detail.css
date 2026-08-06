@@ -2940,13 +2940,17 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: #222 #888;
     padding-bottom: 30px;
   }
 
   section.devices_product_lineup .devices_product_lineup__grid-scroll::-webkit-scrollbar {
     height: 2px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__grid-scroll::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   section.devices_product_lineup .devices_product_lineup__grid-scroll::-webkit-scrollbar-track {
@@ -2955,6 +2959,13 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.devices_product_lineup .devices_product_lineup__grid-scroll::-webkit-scrollbar-thumb {
     background: #222;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    section.devices_product_lineup .devices_product_lineup__grid-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: #222 #888;
+    }
   }
 
   section.devices_product_lineup .devices_product_lineup__swipe {

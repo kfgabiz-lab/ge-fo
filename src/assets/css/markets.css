@@ -1463,8 +1463,6 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     padding: 0px 30px 30px;
     background: #fff;
     box-shadow: 0 20px 15px rgb(0 0 0 / 8%);
-    scrollbar-width: thin;
-    scrollbar-color: #ddd transparent;
     overflow: auto;
   }
 
@@ -1472,9 +1470,22 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     width: 3px;
   }
 
+  section.markets_solutions .markets_solutions__panel-card::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
   section.markets_solutions .markets_solutions__panel-card::-webkit-scrollbar-thumb {
     border-radius: 2px;
     background: #ddd;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    section.markets_solutions .markets_solutions__panel-card {
+      scrollbar-width: thin;
+      scrollbar-color: #ddd transparent;
+    }
   }
 
   section.markets_solutions .markets_solutions__panel-intro {
