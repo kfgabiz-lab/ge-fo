@@ -95,45 +95,27 @@ export async function fetchDownloadCenterContents(
   }
 }
 
-export interface DownloadCenterContentsByKeywordParams {
-  keyword?: string;
-  categories?: string[];
-  parentCategories?: string[];
-  docTypes?: string[];
-  productCodes?: string[];
-  page?: number;
-  size?: number;
+export interface DownloadCenterKeywordResult {
+  total: number;
+  items: DownloadCenterItem[];
 }
 
+/**
+ * FO 통합검색 — 챗봇 keyword로 매칭된 전체 문서 리스트를 페이징/필터 없이 한 번에 가져온다.
+ * All탭(4건)/Documents탭(10건씩) 슬라이싱과 카테고리/문서유형 필터는 호출부(SearchAllTabContent/
+ * SearchDocumentsPanel)가 이 결과를 받아 클라이언트에서 처리한다(재요청 없음).
+ */
 export async function fetchDownloadCenterContentsByKeyword(
-  params: DownloadCenterContentsByKeywordParams,
-): Promise<DownloadCenterContentsPage> {
-  const page = params.page ?? 0;
-  const size = params.size ?? 12;
-  const sp = new URLSearchParams();
-  if (params.keyword && params.keyword.trim()) {
-    sp.set("keyword", params.keyword.trim());
-  }
-  if (params.categories && params.categories.length > 0) {
-    sp.set("categories", params.categories.join(","));
-  }
-  if (params.parentCategories && params.parentCategories.length > 0) {
-    sp.set("parentCategories", params.parentCategories.join(","));
-  }
-  if (params.docTypes && params.docTypes.length > 0) {
-    sp.set("docTypes", params.docTypes.join(","));
-  }
-  if (params.productCodes && params.productCodes.length > 0) {
-    sp.set("productCodes", params.productCodes.join(","));
-  }
-  sp.set("page", String(page));
-  sp.set("size", String(size));
+  keyword: string,
+): Promise<DownloadCenterKeywordResult> {
+  const kw = keyword.trim();
+  if (!kw) return { total: 0, items: [] };
   try {
-    return await fetchApi<DownloadCenterContentsPage>(
-      `/api/v1/fo/download-center/keyword-contents?${sp.toString()}`,
+    return await fetchApi<DownloadCenterKeywordResult>(
+      `/api/v1/fo/download-center/keyword-contents?keyword=${encodeURIComponent(kw)}`,
     );
   } catch {
-    return { content: [], totalElements: 0, totalPages: 0, page, size };
+    return { total: 0, items: [] };
   }
 }
 
