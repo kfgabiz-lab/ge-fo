@@ -436,6 +436,10 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     return configs["/company/events/detail"];
   }
 
+  if (/^\/support\/tech-hub\/view\/[^/]+$/.test(pathname)) {
+    return configs["/support/tech-hub/view"];
+  }
+
   return (
     configs[pathname] ?? {
       crumbs: [],
