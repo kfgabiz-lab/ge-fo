@@ -139,7 +139,7 @@
       font-weight: 800;
       font-size: 82px;
       line-height: 96px;
-      letter-spacing: -0.2px;
+      letter-spacing: -0.02em;
       margin-bottom: 60px;
     }
 
@@ -685,6 +685,7 @@ section.main_notic .txt:before {
   }
 
   @media (min-width: 1440px) {
+    /* Figma 7577:84836 — What we do PC */
     section.what_we_do__inner {
       position: relative;
       max-width: 1440px;
@@ -1030,7 +1031,7 @@ section.main_notic .txt:before {
     margin-bottom: 40px;
     font-family: jaka;
     font-size: 50px;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 62px;
     letter-spacing: -0.02em;
     color: #222;
