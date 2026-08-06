@@ -126,6 +126,14 @@ const nextConfig: NextConfig = {
             key: "Cross-Origin-Opener-Policy",
             value: "same-origin",
           },
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self'",
+          },
         ],
       },
     ];

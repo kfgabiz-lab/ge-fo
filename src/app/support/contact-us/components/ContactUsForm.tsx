@@ -45,6 +45,32 @@ import ContactUsTermsModal from "./ContactUsTermsModal";
 
 const CONSENT_PRIVACY_ID = "personal-info";
 const CONSENT_MARKETING_ID = "newsletter";
+const ORDERABLE_PRODUCT_ORDER_METHOD = "01";
+const DISCONTINUED_PRODUCT_ORDER_STATUS = "99";
+
+function filterOrderableDeviceRows(rows: DevicesTreeRow[]): DevicesTreeRow[] {
+  const lv3Rows = rows.filter(
+    (row) =>
+      row.depth === "3" &&
+      row.productOrderMethod === ORDERABLE_PRODUCT_ORDER_METHOD &&
+      row.productOrderStatus !== DISCONTINUED_PRODUCT_ORDER_STATUS,
+  );
+  const lv3ParentIds = new Set(lv3Rows.map((row) => row.parentId ?? ""));
+  const lv2Rows = rows.filter(
+    (row) =>
+      row.depth === "2" &&
+      row.rowId != null &&
+      lv3ParentIds.has(String(row.rowId)),
+  );
+  const lv2ParentIds = new Set(lv2Rows.map((row) => row.parentId ?? ""));
+  const lv1Rows = rows.filter(
+    (row) =>
+      row.depth === "1" &&
+      row.rowId != null &&
+      lv2ParentIds.has(String(row.rowId)),
+  );
+  return [...lv1Rows, ...lv2Rows, ...lv3Rows];
+}
 
 function renderSelectValue(label: string) {
   return (
@@ -253,9 +279,10 @@ function ContactUsFormContent() {
     fetchDevicesTreeRows()
       .then((rows) => {
         if (!alive) return;
-        setDeviceRows(rows);
+        const orderableRows = filterOrderableDeviceRows(rows);
+        setDeviceRows(orderableRows);
         const selection = resolveDevicesCategorySelection(
-          rows,
+          orderableRows,
           initialCategoryId,
           initialProductId,
         );
