@@ -15,7 +15,7 @@ type GnbMegaPanelProps = {
   onLinkClick?: () => void;
 };
 
-const DEPTH_HOVER_DELAY_MS = 200;
+const DEPTH_HOVER_DELAY_MS = 50;
 
 function findDepth3(
   categories: GnbMegaDepth2[],

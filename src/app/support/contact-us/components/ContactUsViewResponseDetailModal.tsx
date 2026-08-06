@@ -5,6 +5,7 @@ import {
   contactUsViewResponseDetailSample,
   contactUsViewResponseModal,
 } from "@/data/support/contactUsContent";
+import { getWindowScrollY, lockPageScroll, unlockPageScroll } from "@/lib/lenisScroll";
 import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
 import type { ContactUsDetailResponse } from "../data/contactUsData";
 
@@ -65,12 +66,12 @@ export default function ContactUsViewResponseDetailModal({
       if (event.key === "Escape") onClose();
     };
 
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const scrollY = getWindowScrollY();
+    lockPageScroll(scrollY);
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.body.style.overflow = prevOverflow;
+      unlockPageScroll(scrollY);
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [embedded, open, onClose]);

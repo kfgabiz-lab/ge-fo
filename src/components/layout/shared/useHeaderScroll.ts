@@ -41,9 +41,10 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
     if (!hideGnbRef.current) return;
 
     const currentScrollY = getWindowScrollY();
-    const atTop = resolveAtTop(currentScrollY, isAtTopRef.current, topThreshold);
+    const wasAtTop = isAtTopRef.current;
+    const atTop = resolveAtTop(currentScrollY, wasAtTop, topThreshold);
 
-    if (atTop !== isAtTopRef.current) {
+    if (atTop !== wasAtTop) {
       isAtTopRef.current = atTop;
       setIsAtTop(atTop);
     }
@@ -60,6 +61,19 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
       return;
     }
 
+    if (wasAtTop) {
+      const now = Date.now();
+      visibilityRef.current = "hidden";
+      anchorScrollYRef.current = currentScrollY;
+      lastModeChangeAtRef.current = now;
+
+      if (headerModeRef.current !== "hidden") {
+        headerModeRef.current = "hidden";
+        setHeaderMode("hidden");
+      }
+      return;
+    }
+
     const result = resolveGnbScrollVisibility({
       currentScrollY,
       anchorScrollY: anchorScrollYRef.current,
@@ -67,7 +81,7 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
       hideOnScroll: hideGnbRef.current,
       currentVisibility: visibilityRef.current,
       lastModeChangeAt: lastModeChangeAtRef.current,
-      wasAtTop: isAtTopRef.current,
+      wasAtTop: false,
     });
 
     anchorScrollYRef.current = result.anchorScrollY;
@@ -82,14 +96,13 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
   }, [topThreshold]);
 
   useEffect(() => {
-    isAtTopRef.current = resolveAtTop(
-      getWindowScrollY(),
-      isAtTopRef.current,
-      topThreshold,
-    );
+    isAtTopRef.current = true;
+    headerModeRef.current = "full";
+    visibilityRef.current = "visible";
     anchorScrollYRef.current = getWindowScrollY();
     lastModeChangeAtRef.current = 0;
-    setIsAtTop(isAtTopRef.current);
+    setIsAtTop(true);
+    setHeaderMode("full");
     updateScrollState();
 
     const handleScroll = createRafScrollHandler(updateScrollState);
