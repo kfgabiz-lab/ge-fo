@@ -25,6 +25,15 @@ import {
   MARKETS_PRODUCTS_NAME,
 } from "../data/marketsProductsData";
 import "@/assets/css/markets.css";
+import type { Metadata, ResolvingMetadata } from "next";
+import { buildMenuSeoMetadata } from "@/lib/menuSeo";
+
+export async function generateMetadata(
+  _: unknown,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  return buildMenuSeoMetadata("/markets/oil-gas-mining", parent);
+}
 
 export default async function MarketsOilGasMiningPage() {
   const [faqItems, highlightNewsItems, productItems] = await Promise.all([

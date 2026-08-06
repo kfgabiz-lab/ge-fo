@@ -2,6 +2,15 @@ import WarrantyPolicyBanner from "./components/WarrantyPolicyBanner";
 import WarrantyPolicyCoverage from "./components/WarrantyPolicyCoverage";
 import WarrantyPolicyTitle from "./components/WarrantyPolicyTitle";
 import "@/assets/css/services.css";
+import type { Metadata, ResolvingMetadata } from "next";
+import { buildMenuSeoMetadata } from "@/lib/menuSeo";
+
+export async function generateMetadata(
+  _: unknown,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  return buildMenuSeoMetadata("/services/warranty-policy", parent);
+}
 
 export default function WarrantyPolicyPage() {
   return (

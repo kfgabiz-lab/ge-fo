@@ -10,6 +10,15 @@ import {
   serviceCenterFaqItems,
 } from "@/data/services/serviceCenterContent";
 import "@/assets/css/services.css";
+import type { Metadata, ResolvingMetadata } from "next";
+import { buildMenuSeoMetadata } from "@/lib/menuSeo";
+
+export async function generateMetadata(
+  _: unknown,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  return buildMenuSeoMetadata("/services/service-center", parent);
+}
 
 export default function ServiceCenterPage() {
   return (

@@ -1,6 +1,30 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata, ResolvedMetadata, ResolvingMetadata } from "next";
 import { flattenPageDataItem } from "@/lib/pageData";
 import { fetchData } from "@/lib/pageDataApi";
+
+export function mergeSeoMetadata(
+  previous: ResolvedMetadata,
+  title: string,
+  description: string,
+  image?: string,
+): Metadata {
+  return {
+    title,
+    description,
+    openGraph: {
+      ...previous.openGraph,
+      title,
+      description,
+      ...(image ? { images: [{ url: image }] } : {}),
+    },
+    twitter: {
+      ...previous.twitter,
+      title,
+      description,
+      ...(image ? { images: [image] } : {}),
+    },
+  };
+}
 
 export async function buildPageDataSeoMetadata(
   params: {
@@ -26,10 +50,5 @@ export async function buildPageDataSeoMetadata(
   const title = (row["seo.meta_title"] as string) ?? "";
   const description = (row["seo.meta_description"] as string) ?? "";
 
-  return {
-    title,
-    description,
-    openGraph: { ...previous.openGraph, title, description },
-    twitter: { ...previous.twitter, title, description },
-  };
+  return mergeSeoMetadata(previous, title, description);
 }
