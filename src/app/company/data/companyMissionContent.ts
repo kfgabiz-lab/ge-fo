@@ -34,7 +34,7 @@ export const companyMission = {
       id: "smart",
       title: "Smart",
       description:
-        "We are creating an efficient & convenient future through ICT convergence and technologies.",
+        "We are creating an efficient & convenient future through ICT convergence and technologies",
       icon: `${IMG}/pillar-smart.svg`,
     },
     {

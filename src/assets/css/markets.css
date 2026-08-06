@@ -439,6 +439,12 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-weight: inherit;
   }
 
+  section.markets_stats .markets_stats__head {
+    margin: 0 0 14px;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
   section.markets_stats .markets_stats__label {
     display: block;
     margin: 0 0 4px;
@@ -1914,7 +1920,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     bottom: 24px;
   }
 
-  /* Stats — key-visual Markets MO (data-center baseline) */
+  /* Stats — Figma 8549:98815 Markets MO */
   section.markets_stats {
     margin: 0 0 70px;
   }
@@ -2121,9 +2127,9 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
   section.markets_explore .markets_explore__panel_tit {
     margin-bottom: 10px;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
-    line-height: 34px;
+    line-height: 32px;
     letter-spacing: -0.01em;
     color: #222;
   }

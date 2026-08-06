@@ -27,7 +27,7 @@ export default function MainHeader({
   const { isAtTop, isGnbHidden: scrollGnbHidden, isHeaderRevealed, revealHeader } =
     useHeaderScroll({
       topThreshold: MAIN_TOP_THRESHOLD,
-      hideGnbOnScroll: !isMobileMenuOpen && !isMegaOpen,
+      hideGnbOnScroll: !isMobileMenuOpen && !isMegaOpen && !isSearchOpen,
     });
 
   const isGnbHidden = scrollGnbHidden && !isSearchOpen && !isMegaOpen;

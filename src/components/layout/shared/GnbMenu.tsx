@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GNB_CLOSE_EVENT } from "@/lib/navigation/gnbCloseEvent";
 import { createThrottledScrollHandler } from "@/lib/createThrottledScrollHandler";
-import { getLenisInstance, getWindowScrollY, lockPageScroll, unlockPageScroll, scrollWindowTo } from "@/lib/lenisScroll";
+import { getWindowScrollY, lockPageScroll, unlockPageScroll } from "@/lib/lenisScroll";
 import {
   GNB_SCROLL_THROTTLE_MS,
   resolveAtTop,
@@ -210,7 +210,6 @@ export default function GnbMenu({
   const scrollVisibilityRef = useRef<GnbScrollVisibility>("visible");
   const scrollModeChangeAtRef = useRef(0);
   const megaOpenScrollYRef = useRef(0);
-  const ignoreMegaScrollCloseUntilRef = useRef(0);
   const [isMegaActive, setIsMegaActive] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isGlobalOpen, setIsGlobalOpen] = useState(false);
@@ -300,7 +299,6 @@ export default function GnbMenu({
       lockPageScroll(scrollY);
 
       onMegaOpenChange?.(true);
-      ignoreMegaScrollCloseUntilRef.current = Date.now() + 400;
 
       const defaults = getDefaultMegaState(navItems, navId, pathname);
       setIsMegaActive(true);
@@ -375,16 +373,12 @@ export default function GnbMenu({
     closeMega();
     closeGlobal();
     setIsMobileMenuOpen(false);
+    onRevealHeader?.();
     const scrollY = getWindowScrollY();
     megaOpenScrollYRef.current = scrollY;
-    ignoreMegaScrollCloseUntilRef.current = Date.now() + 400;
+    lockPageScroll(scrollY);
     setIsSearchOpen(true);
-    requestAnimationFrame(() => {
-      if (Math.abs(getWindowScrollY() - scrollY) > 2) {
-        scrollWindowTo(scrollY, { immediate: true });
-      }
-    });
-  }, [closeGlobal, closeMega, closeSearch, isSearchOpen]);
+  }, [closeGlobal, closeMega, closeSearch, isSearchOpen, onRevealHeader]);
 
   const toggleMega = useCallback(
     (navId: string) => {
@@ -413,6 +407,9 @@ export default function GnbMenu({
         closeMega();
         closeSearch();
         closeGlobal();
+        const scrollY = getWindowScrollY();
+        megaOpenScrollYRef.current = scrollY;
+        lockPageScroll(scrollY);
       }
 
       return next;
@@ -481,27 +478,24 @@ export default function GnbMenu({
       }
     };
 
-    document.body.style.overflow = "hidden";
-    const lenis = getLenisInstance();
-    lenis?.stop();
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = "";
-      lenis?.start();
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [closeMobileMenu, isMobileMenuOpen]);
 
   useLayoutEffect(() => {
-    if (!isMegaActive) return;
+    const shouldLock = isOverlayOpen || isMobileMenuOpen;
+    if (!shouldLock) return;
 
-    lockPageScroll(megaOpenScrollYRef.current);
+    const scrollY = megaOpenScrollYRef.current;
+    lockPageScroll(scrollY);
 
     return () => {
-      unlockPageScroll(megaOpenScrollYRef.current);
+      unlockPageScroll(scrollY);
     };
-  }, [isMegaActive]);
+  }, [isMobileMenuOpen, isOverlayOpen]);
 
   useEffect(() => {
     if (!isDimMounted) return;
@@ -533,42 +527,13 @@ export default function GnbMenu({
   ]);
 
   useEffect(() => {
-    if (!isSearchOpen) return;
-
-    const syncScrollAnchor = () => {
-      megaOpenScrollYRef.current = getWindowScrollY();
-    };
-
-    syncScrollAnchor();
-    const frame = requestAnimationFrame(syncScrollAnchor);
-
-    const handleScroll = createThrottledScrollHandler(() => {
-      if (Date.now() < ignoreMegaScrollCloseUntilRef.current) {
-        return;
-      }
-
-      if (Math.abs(getWindowScrollY() - megaOpenScrollYRef.current) < 8) {
-        return;
-      }
-      closeSearch();
-    }, GNB_SCROLL_THROTTLE_MS);
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(frame);
-      handleScroll.cancel();
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [closeSearch, isSearchOpen]);
-
-  useEffect(() => {
     if (isScrollControlled) return;
 
     const updateScrollState = () => {
       const currentScrollY = window.scrollY;
       const threshold = isMain ? 80 : SCROLL_THRESHOLD;
 
-      if (isMobileMenuOpen) {
+      if (isMobileMenuOpen || isOverlayOpen) {
         const atTop = resolveAtTop(
           currentScrollY,
           internalAtTopRef.current,
@@ -622,7 +587,7 @@ export default function GnbMenu({
       handleScroll.cancel();
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [closeMega, isMain, isMobileMenuOpen, isScrollControlled]);
+  }, [closeMega, isMain, isMobileMenuOpen, isOverlayOpen, isScrollControlled]);
 
   const navList = (
     <ul className={isMain ? "main_header__nav-list" : "gnb_nav_list"}>
@@ -1001,6 +966,9 @@ export default function GnbMenu({
             type="button"
             className="gnb_mobile_dim"
             aria-label="메뉴 닫기"
+            data-lenis-prevent
+            onWheel={(event) => event.preventDefault()}
+            onTouchMove={(event) => event.preventDefault()}
             onClick={closeMobileMenu}
           />
         ) : null}
@@ -1013,6 +981,9 @@ export default function GnbMenu({
           type="button"
           className={isOverlayOpen ? "gnb_mega_dim is-open" : "gnb_mega_dim"}
           aria-label="메뉴 닫기"
+          data-lenis-prevent
+          onWheel={(event) => event.preventDefault()}
+          onTouchMove={(event) => event.preventDefault()}
           onClick={() => {
             closeMega();
             closeSearch();

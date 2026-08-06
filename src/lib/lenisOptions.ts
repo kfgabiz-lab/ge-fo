@@ -1,4 +1,3 @@
-import type Lenis from "lenis";
 import type { LenisOptions } from "lenis";
 
 export const LENIS_WHEEL_DELTA_CAP = 72;
@@ -47,11 +46,7 @@ function capVirtualScrollDelta(delta: number, cap: number): number {
   return Math.sign(delta) * cap;
 }
 
-export function createLenisOptions(
-  getLenis: () => Lenis | null = () => null,
-): LenisOptions {
-  void getLenis;
-
+export function createLenisOptions(): LenisOptions {
   if (typeof window === "undefined") {
     return { autoRaf: true };
   }

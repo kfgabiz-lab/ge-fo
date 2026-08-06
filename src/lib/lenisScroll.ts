@@ -2,7 +2,7 @@ import type Lenis from "lenis";
 
 let lenisInstance: Lenis | null = null;
 
-const MEGA_SCROLL_LOCK_CLASS = "is-mega-open-scroll-lock";
+const PAGE_SCROLL_LOCK_CLASS = "is-page-scroll-lock";
 
 export function setLenisInstance(lenis: Lenis | null) {
   lenisInstance = lenis;
@@ -44,11 +44,15 @@ export function scrollWindowTo(
 }
 
 export function lockPageScroll(scrollY: number) {
-  lenisInstance?.stop();
+  const lenis = lenisInstance;
 
-  const docHeight = document.documentElement.scrollHeight;
+  const docHeight = Math.max(
+    document.documentElement.scrollHeight,
+    document.body.scrollHeight,
+    scrollY + window.innerHeight,
+  );
 
-  document.documentElement.classList.add(MEGA_SCROLL_LOCK_CLASS);
+  document.documentElement.classList.add(PAGE_SCROLL_LOCK_CLASS);
   document.documentElement.style.height = `${docHeight}px`;
   document.body.style.position = "fixed";
   document.body.style.top = `-${scrollY}px`;
@@ -56,10 +60,13 @@ export function lockPageScroll(scrollY: number) {
   document.body.style.right = "0";
   document.body.style.width = "100%";
   document.body.style.height = `${docHeight}px`;
+
+  lenis?.scrollTo(scrollY, { immediate: true });
+  lenis?.stop();
 }
 
 export function unlockPageScroll(scrollY: number) {
-  document.documentElement.classList.remove(MEGA_SCROLL_LOCK_CLASS);
+  document.documentElement.classList.remove(PAGE_SCROLL_LOCK_CLASS);
   document.documentElement.style.height = "";
   document.body.style.position = "";
   document.body.style.top = "";

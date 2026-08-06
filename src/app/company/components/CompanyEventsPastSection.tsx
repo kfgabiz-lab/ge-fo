@@ -10,6 +10,7 @@ import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import type { EventsPastItem } from "@/app/company/data/eventsListContent";
+import { handleImageFallback } from "@/lib/imageFallback";
 
 const SORT_OPTIONS = [
   { value: "latest", label: "Latest" },
@@ -86,7 +87,7 @@ export default function CompanyEventsPastSection({
                   prefetch={false}
                 >
                   <div className="company-events-past__image">
-                    <img src={item.image} alt="" />
+                    <img src={item.image} alt="" onError={handleImageFallback} />
                   </div>
                   <div className="company-events-past__content">
                     <h3 className="company-events-past__title">{item.title}</h3>

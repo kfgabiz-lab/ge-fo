@@ -101,7 +101,7 @@ export default function MarketsHero({
 
   if (isKeyVisual) {
     return (
-      <div className="markets_hero__sticky-wrap" data-lenis-prevent-wheel>
+      <div className="markets_hero__sticky-wrap">
         {heroSection}
       </div>
     );

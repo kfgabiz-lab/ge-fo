@@ -247,7 +247,7 @@ export const lsElectricRnd = {
 export const lsElectricHistory = {
   title: "History",
   description:
-    "since 1974, As a leader in power solutions and automation solutions, LS ELECTRIC has become a global leader.",
+    "Since 1974, As a leader in power solutions and automation solutions, LS ELECTRIC has become a global leader.",
   eras: [
     {
       id: "beginning",

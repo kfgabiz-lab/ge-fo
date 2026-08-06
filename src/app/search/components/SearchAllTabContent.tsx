@@ -11,9 +11,12 @@ import {
 } from "@/data/search/searchAllProductsData";
 import {
   fetchSearchAllDocuments,
-  fetchSearchAllDocumentsByKeyword,
   type SearchAllDocumentsResult,
 } from "@/data/search/searchAllDocumentsData";
+import {
+  fetchDownloadCenterContentsByKeyword,
+  type DownloadCenterItem,
+} from "@/data/support/downloadCenterData";
 import {
   EMPTY_SEARCH_MEDIA_RESULT,
   fetchSearchMedia,
@@ -137,6 +140,8 @@ export default function SearchAllTabContent({
       items: [],
     },
   );
+  /* 챗봇 keyword로 1회 받아온 전체(미필터) 문서 리스트 — Documents탭이 재요청 없이 클라이언트에서 필터/페이지네이션 */
+  const [keywordDocuments, setKeywordDocuments] = useState<DownloadCenterItem[]>([]);
   const [mediaResult, setMediaResult] = useState<SearchMediaResult>(
     EMPTY_SEARCH_MEDIA_RESULT,
   );
@@ -168,26 +173,17 @@ export default function SearchAllTabContent({
 
   const [panelFiltered, setPanelFiltered] = useState({
     products: false,
-    documents: false,
     media: false,
     pages: false,
   });
 
   const skipProductsPreview = activeTab === "products" && !panelFiltered.products;
-  const skipDocumentsPreview =
-    activeTab === "documents" && !panelFiltered.documents;
   const skipMediaPreview = activeTab === "media" && !panelFiltered.media;
   const skipPagesPreview = activeTab === "pages" && !panelFiltered.pages;
 
   const handleProductsFiltered = useCallback((filtered: boolean) => {
     setPanelFiltered((prev) =>
       prev.products === filtered ? prev : { ...prev, products: filtered },
-    );
-  }, []);
-
-  const handleDocumentsFiltered = useCallback((filtered: boolean) => {
-    setPanelFiltered((prev) =>
-      prev.documents === filtered ? prev : { ...prev, documents: filtered },
     );
   }, []);
 
@@ -207,14 +203,6 @@ export default function SearchAllTabContent({
     if (filtered) return;
     setProductResult((prev) => (prev.total === total ? prev : { ...prev, total }));
     setLoaded((prev) => (prev.products ? prev : { ...prev, products: true }));
-  }, []);
-
-  const handleDocumentsTotal = useCallback((total: number, filtered: boolean) => {
-    if (filtered) return;
-    setDocumentResult((prev) =>
-      prev.total === total ? prev : { ...prev, total },
-    );
-    setLoaded((prev) => (prev.documents ? prev : { ...prev, documents: true }));
   }, []);
 
   const handleMediaTotal = useCallback((total: number, filtered: boolean) => {
@@ -249,8 +237,6 @@ export default function SearchAllTabContent({
   }, [query, skipProductsPreview]);
 
   useEffect(() => {
-    if (skipDocumentsPreview) return;
-
     const useFallback = !chatbotKeyword && chatbotSettled;
     if (!chatbotKeyword && !useFallback) return;
 
@@ -258,20 +244,29 @@ export default function SearchAllTabContent({
     if (previewQueryRef.current.documents === cacheKey) return;
 
     let alive = true;
-    const request = chatbotKeyword
-      ? fetchSearchAllDocumentsByKeyword(chatbotKeyword, 4)
-      : fetchSearchAllDocuments(query, 4);
 
-    void request.then((result) => {
-      if (!alive) return;
-      previewQueryRef.current.documents = cacheKey;
-      setDocumentResult(result);
-      setLoaded((prev) => ({ ...prev, documents: true }));
-    });
+    if (chatbotKeyword) {
+      /* 챗봇 keyword 확정 시 전체 매칭 리스트를 1회만 받아 All탭(4건)/Documents탭(클라이언트 페이지네이션)이 공유 */
+      void fetchDownloadCenterContentsByKeyword(chatbotKeyword).then((result) => {
+        if (!alive) return;
+        previewQueryRef.current.documents = cacheKey;
+        setKeywordDocuments(result.items);
+        setDocumentResult({ total: result.total, items: result.items.slice(0, 4) });
+        setLoaded((prev) => ({ ...prev, documents: true }));
+      });
+    } else {
+      void fetchSearchAllDocuments(query, 4).then((result) => {
+        if (!alive) return;
+        previewQueryRef.current.documents = cacheKey;
+        setKeywordDocuments([]);
+        setDocumentResult(result);
+        setLoaded((prev) => ({ ...prev, documents: true }));
+      });
+    }
     return () => {
       alive = false;
     };
-  }, [chatbotKeyword, chatbotSettled, query, skipDocumentsPreview]);
+  }, [chatbotKeyword, chatbotSettled, query]);
 
   useEffect(() => {
     if (skipMediaPreview) return;
@@ -438,9 +433,8 @@ export default function SearchAllTabContent({
           <SearchDocumentsFilterProvider>
             {activeTab === "documents" ? (
               <SearchDocumentsPanel
-                keyword={chatbotKeyword}
-                onTotalChange={handleDocumentsTotal}
-                onFilteredChange={handleDocumentsFiltered}
+                items={keywordDocuments}
+                loaded={loaded.documents}
               />
             ) : null}
           </SearchDocumentsFilterProvider>

@@ -81,12 +81,12 @@ export const americaIntro = {
   stats: [
     {
       value: "UL-Certified",
-      label: "reliability and compliance",
+      label: "Reliability and compliance",
       desc: "As the first and only Asian provider of a full UL-certified switchgear line-up",
     },
     {
       value: "World 6th",
-      label: "largest testing capacity lab",
+      label: "Largest testing capacity lab",
       desc: "Largest-scale testing infrastructure for power systems",
     },
     {

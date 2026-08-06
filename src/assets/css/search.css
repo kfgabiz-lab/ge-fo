@@ -306,39 +306,109 @@
     list-style: none;
   }
 
-  section.search_all .search_all__ai-list li {
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
-  }
-
-  section.search_all .search_all__ai-list li + li {
-    margin-top: 10px;
+  section.search_all .search_all__ai-list > li {
+    display: block;
   }
 
   section.search_all .search_all__ai-bullet {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 4px;
-    min-height: 23px;
-  }
-
-  section.search_all .search_all__ai-bullet::before {
-    content: "";
-    display: block;
-    width: 4px;
-    height: 4px;
-    background: #888;
+    display: none;
   }
 
   section.search_all .search_all__ai-list-text {
-    flex: 1;
+    display: block;
     min-width: 0;
     font-size: 16px;
     line-height: 24px;
+    font-weight: 400;
     color: #222;
+  }
+
+  section.search_all .search_all__ai-list-text > :first-child {
+    margin-top: 0;
+  }
+
+  section.search_all .search_all__ai-list-text > :last-child {
+    margin-bottom: 0;
+  }
+
+  section.search_all .search_all__ai-list-text h1 {
+    margin: 0 0 16px;
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #222;
+  }
+
+  section.search_all .search_all__ai-list-text h2 {
+    margin: 28px 0 12px;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #222;
+  }
+
+  section.search_all .search_all__ai-list-text h3 {
+    margin: 20px 0 10px;
+    font-size: 17px;
+    line-height: 26px;
+    font-weight: 700;
+    color: #222;
+  }
+
+  section.search_all .search_all__ai-list-text p {
+    margin: 0 0 8px;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.search_all .search_all__ai-list-text strong {
+    font-weight: 700;
+    color: #222;
+  }
+
+  section.search_all .search_all__ai-list-text a {
+    color: var(--color-primary, #028dff);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  section.search_all .search_all__ai-list-text a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  section.search_all .search_all__ai-list-text ul {
+    margin: 0 0 12px;
+    padding-left: 22px;
+    list-style-type: disc;
+  }
+
+  section.search_all .search_all__ai-list-text ul ul {
+    margin: 6px 0 0;
+    list-style-type: circle;
+  }
+
+  section.search_all .search_all__ai-list-text ul ul ul {
+    list-style-type: square;
+  }
+
+  section.search_all .search_all__ai-list-text li {
+    display: list-item;
+    margin: 0 0 8px;
+    padding: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.search_all .search_all__ai-list-text li > p {
+    margin: 0;
+  }
+
+  section.search_all .search_all__ai-list-text li > p + ul {
+    margin-top: 6px;
   }
 
   section.search_all .search_all__ai:not(.is-expanded) .search_all__ai-list {
@@ -2551,10 +2621,7 @@
   }
 
   section.search_all .search_all__ai-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
+    display: block;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -2566,37 +2633,17 @@
     overflow: visible;
   }
 
-  section.search_all .search_all__ai-list li {
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
+  section.search_all .search_all__ai-list > li {
+    display: block;
     width: 100%;
   }
 
-  section.search_all .search_all__ai-list li + li {
-    margin-top: 0;
-  }
-
   section.search_all .search_all__ai-bullet {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3px;
-    height: 24px;
-  }
-
-  section.search_all .search_all__ai-bullet::before {
-    content: "";
-    display: block;
-    flex-shrink: 0;
-    width: 3px;
-    height: 3px;
-    background: #888;
+    display: none;
   }
 
   section.search_all .search_all__ai-list-text {
-    flex: 1;
+    display: block;
     min-width: 0;
     font-size: 15px;
     line-height: 23px;
@@ -2604,6 +2651,64 @@
     letter-spacing: 0;
     color: #222;
     word-break: break-word;
+  }
+
+  section.search_all .search_all__ai-list-text h1 {
+    margin: 0 0 12px;
+    font-size: 22px;
+    line-height: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  section.search_all .search_all__ai-list-text h2 {
+    margin: 22px 0 10px;
+    font-size: 17px;
+    line-height: 24px;
+    font-weight: 700;
+  }
+
+  section.search_all .search_all__ai-list-text h3 {
+    margin: 16px 0 8px;
+    font-size: 15px;
+    line-height: 23px;
+    font-weight: 700;
+  }
+
+  section.search_all .search_all__ai-list-text p {
+    margin: 0 0 6px;
+    font-size: 15px;
+    line-height: 23px;
+  }
+
+  section.search_all .search_all__ai-list-text ul {
+    margin: 0 0 10px;
+    padding-left: 18px;
+    list-style-type: disc;
+  }
+
+  section.search_all .search_all__ai-list-text ul ul {
+    margin: 4px 0 0;
+    list-style-type: circle;
+  }
+
+  section.search_all .search_all__ai-list-text ul ul ul {
+    list-style-type: square;
+  }
+
+  section.search_all .search_all__ai-list-text li {
+    display: list-item;
+    margin: 0 0 6px;
+    font-size: 15px;
+    line-height: 23px;
+  }
+
+  section.search_all .search_all__ai-list-text li > p {
+    margin: 0;
+  }
+
+  section.search_all .search_all__ai-list-text li > p + ul {
+    margin-top: 4px;
   }
 
   /* Figma 6571:103420 — fade y=299~449, inset 2px */

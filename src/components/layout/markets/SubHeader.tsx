@@ -24,12 +24,15 @@ export default function SubHeader({
   breadcrumbCategoryFallback,
 }: SubHeaderProps) {
   const [isMegaOpen, setIsMegaOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { isAtTop, isGnbHidden, isHeaderRevealed, revealHeader } =
+  const { isAtTop, isGnbHidden: scrollGnbHidden, isHeaderRevealed, revealHeader } =
     useHeaderScroll({
-      hideGnbOnScroll: !isMobileMenuOpen && !isMegaOpen,
+      hideGnbOnScroll: !isMobileMenuOpen && !isMegaOpen && !isSearchOpen,
     });
+
+  const isGnbHidden = scrollGnbHidden && !isSearchOpen && !isMegaOpen;
 
   return (
     <div
@@ -58,6 +61,7 @@ export default function SubHeader({
           />
         }
         onMegaOpenChange={setIsMegaOpen}
+        onSearchOpenChange={setIsSearchOpen}
         onMobileMenuOpenChange={setIsMobileMenuOpen}
       />
     </div>

@@ -30,10 +30,7 @@ export default function LenisScrollProvider({
   children: React.ReactNode;
 }) {
   const lenisRef = useRef<Lenis | null>(null);
-  const options = useMemo(
-    () => createLenisOptions(() => lenisRef.current),
-    [],
-  );
+  const options = useMemo(() => createLenisOptions(), []);
 
   return (
     <ReactLenis root options={options}>

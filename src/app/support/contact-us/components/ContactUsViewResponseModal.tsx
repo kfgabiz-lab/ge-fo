@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { contactUsViewResponseModal } from "@/data/support/contactUsContent";
+import { getWindowScrollY, lockPageScroll, unlockPageScroll } from "@/lib/lenisScroll";
 import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
 import {
   type ContactUsDetailResponse,
@@ -47,12 +48,12 @@ export default function ContactUsViewResponseModal({
       if (event.key === "Escape") onClose();
     };
 
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const scrollY = getWindowScrollY();
+    lockPageScroll(scrollY);
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.body.style.overflow = prevOverflow;
+      unlockPageScroll(scrollY);
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [embedded, open, onClose]);

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { getWindowScrollY, lockPageScroll, unlockPageScroll } from "@/lib/lenisScroll";
 
 export function useModalDismiss(active: boolean, onClose?: () => void) {
   useEffect(() => {
@@ -8,12 +9,12 @@ export function useModalDismiss(active: boolean, onClose?: () => void) {
       if (event.key === "Escape") onClose?.();
     };
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const scrollY = getWindowScrollY();
+    lockPageScroll(scrollY);
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      unlockPageScroll(scrollY);
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [active, onClose]);

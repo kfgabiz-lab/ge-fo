@@ -44,6 +44,7 @@
 html {
   height: 100%;
   overflow-y: scroll;
+  scrollbar-gutter: stable;
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
   scrollbar-width: thin;
@@ -93,6 +94,32 @@ body {
   max-width: 100%;
   overflow-x: clip;
 }
+
+/* 오버레이(GNB·모달) 오픈 시 페이지 스크롤 잠금
+   overflow-y: scroll 유지 — 스크롤바 소실로 레이아웃 폭이 흔들리지 않게 */
+html.is-page-scroll-lock {
+  overflow-y: scroll;
+  overflow-x: clip;
+  overscroll-behavior: none;
+  scrollbar-gutter: stable;
+}
+
+/*
+  Lenis stop() → .lenis-stopped { overflow: clip } (specificity 0,3,0)
+  이 규칙이 scroll-lock을 덮어 스크롤바가 사라지면 딤 뒤 페이지가 흔들림.
+*/
+html.is-page-scroll-lock.lenis.lenis-stopped,
+html.is-page-scroll-lock.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow-y: scroll;
+  overflow-x: clip;
+  scrollbar-gutter: stable;
+}
+
+html.is-page-scroll-lock body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   min-height: 100%;
   display: flex;
@@ -159,7 +186,7 @@ section .btn-base.is-disabled {
   pointer-events: none;
 }
 
-/* Level 01 ??52px */
+/* Level 01 — 52px */
 section .btn-lv01 {
   min-height: var(--btn-lv01-h);
   min-width: var(--btn-lv01-min-w);
@@ -224,7 +251,7 @@ section .btn_outline:hover .icon_download {
   /* opacity: 0.85; */
 }
 
-/* Level 02 ??46px */
+/* Level 02 — 42px */
 section .btn-lv02 {
   min-height: var(--btn-lv02-h);
   min-width: var(--btn-lv02-min-w);
@@ -270,7 +297,7 @@ section .btn-lv02--more:hover .icon_more {
   filter: brightness(0) invert(1);
 }
 
-/* Level 03 ??42px */
+/* Level 03 — 42px */
 section .btn-lv03 {
   min-height: var(--btn-lv03-h);
   min-width: var(--btn-lv03-min-w);
@@ -447,7 +474,7 @@ section .btn_flat,
   padding: 0 28px;
   font-size: 16px;
   font-weight: 600;
-  line-height: 1;
+  line-height: 14px;
   color: #fff;
   text-decoration: none;
   background: var(--color-accent);
@@ -2153,6 +2180,43 @@ section.component-guide .guide_field--search .guide_field__search-clear-icon img
   height: 10px;
 }
 
+/* Search / 280px filled clear · Figma 7311:194983 · #search-280 */
+section.component-guide .guide_field--search .guide_field__search-clear {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-bg);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+section.component-guide .guide_field--search .guide_field__search-clear:hover {
+  background: #f5f7fa;
+  border-color: #ccc;
+}
+
+section.component-guide .guide_field--search .guide_field__search-clear-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+}
+
+section.component-guide .guide_field--search .guide_field__search-clear-icon img {
+  display: block;
+  width: 10px;
+  height: 10px;
+}
+
 /* 브라우저 기본 search clear 숨김 (커스텀 clear 사용) */
 .guide_field--search input[type="search"]::-webkit-search-cancel-button,
 .guide_field--search input[type="search"]::-webkit-search-decoration,
@@ -3244,7 +3308,7 @@ section.highlight_news--markets .section_tit {
     margin-bottom: 40px;
     font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 50px;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 62px;
     letter-spacing: -0.02em;
     color: #222;

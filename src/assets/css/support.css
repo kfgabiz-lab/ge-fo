@@ -1103,6 +1103,7 @@
     list-style: none;
   }
 
+  /* Figma 7922:118142 — nested L1 gap 20 / indent 32 */
   section.devices_product_downloads
     .devices_product_downloads__filter-stack.support_download_filter--pc
     .devices_product_downloads__filter
@@ -1115,6 +1116,16 @@
   section.devices_product_downloads .devices_product_downloads__filter-stack.support_download_filter--pc .devices_product_downloads__filter .devices_product_downloads__check-row {
     display: flex;
     align-items: flex-start;
+  /* Figma 7922:118142 — nested L2 gap 16 / indent +32 (=64 from root) */
+  section.devices_product_downloads
+    .devices_product_downloads__filter-stack.support_download_filter--pc
+    .devices_product_downloads__filter
+    .devices_product_downloads__filter-list--nested
+    .devices_product_downloads__filter-list--nested {
+    gap: 16px;
+    margin-top: 16px;
+  }
+
     gap: 10px;
     width: 100%;
     min-width: 0;
@@ -1146,6 +1157,7 @@
     transform: rotate(0deg);
     transition: transform 0.25s ease;
   }
+  /* Figma Icon / 14px / arrow — 14×14 at y:5 within 24px row */
 
   section.devices_product_downloads .devices_product_downloads__filter-stack.support_download_filter--pc .devices_product_downloads__filter .devices_product_downloads__filter-arrow--14.is-open {
     transform: rotate(180deg);
@@ -2206,7 +2218,6 @@
 
   main.support-page--download-center .support_download_filter-modal__panel .devices_product_downloads__check-label-count,
   main.support-page--tech-hub .support_download_filter-modal__panel .devices_product_downloads__check-label-count {
-    flex-shrink: 0;
     color: #666;
     margin-left: 4px;
   }
@@ -3310,6 +3321,21 @@
 
 /* Support — Where to Buy (Figma 3670:30637) */
 
+/* Figma 7104:136637 — brand pin (PC/MO 공통) */
+section.support_where_to_buy_contents .support_where_to_buy_contents__map-brand-pin {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  z-index: 5;
+  display: block;
+  width: 34px;
+  height: 48px;
+  margin: 0;
+  object-fit: contain;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+}
+
 @media (min-width: 781px) {
   main.support-page--where-to-buy {
     overflow-x: clip;
@@ -3826,6 +3852,19 @@
     width: 100%;
     height: 100%;
     min-height: 900px;
+  }
+
+  /* Figma 7104:136637 — brand pin (PC 위치; 베이스 스타일은 미디어쿼리 밖) */
+  section.support_where_to_buy_contents .support_where_to_buy_contents__map-brand-pin {
+    left: 50%;
+    top: 42%;
+  }
+
+  section.support_where_to_buy_contents
+    .support_where_to_buy_map__popup-anchor--sample
+    .support_where_to_buy_map__popup {
+    /* 핀(48px) + 간격 위에 팝업 */
+    transform: translateY(calc(-100% - 56px));
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_map {
@@ -4399,6 +4438,14 @@ section.support_where_to_buy_banner .common_banner_02__link {
     width: 100%;
     min-height: 708px;
     background: #eee;
+  }
+
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map
+    .support_where_to_buy_contents__map-brand-pin {
+    /* 팝업 아래 중앙 */
+    left: 50%;
+    top: 400px;
+    transform: translate(-50%, -100%);
   }
 
   /* Figma 6561:74413 — mobile map popup */

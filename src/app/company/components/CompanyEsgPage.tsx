@@ -207,7 +207,11 @@ function EsgPoliciesSection() {
                 <span className="company-esg-policies__card-divider" aria-hidden="true" />
                 <p className="company-esg-policies__card-standard">{item.standard}</p>
               </div>
-              <a href={item.downloadHref} className="btn-base btn-lv03 btn-lv03--line">
+              <a
+                href={item.downloadHref}
+                download
+                className="btn-base btn-lv03 btn-lv03--line"
+              >
                 Download
                 <span className="icon_download" aria-hidden="true" />
               </a>

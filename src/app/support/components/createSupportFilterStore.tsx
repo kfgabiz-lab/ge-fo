@@ -56,6 +56,7 @@ type FilterMeta = {
 
 type CategoryMaps = {
   childrenMap: Map<string, string[]>;
+  descendantsMap: Map<string, string[]>;
   parentMap: Map<string, string>;
 };
 
@@ -68,6 +69,34 @@ export type SupportFilterStore = {
   Boundary: (props: { children: ReactNode }) => ReactNode;
   useFilter: () => SupportFilterContextValue;
 };
+
+function walkCategories(
+  options: DownloadCategoryOption[],
+  visit: (option: DownloadCategoryOption, parent?: DownloadCategoryOption) => void,
+  parent?: DownloadCategoryOption,
+) {
+  for (const option of options) {
+    visit(option, parent);
+
+    if (option.nested?.length) {
+      walkCategories(option.nested, visit, option);
+    }
+  }
+}
+
+function collectDescendantIds(
+  option: DownloadCategoryOption,
+  categoryIdPrefix: string,
+): string[] {
+  const ids: string[] = [];
+
+  for (const nested of option.nested ?? []) {
+    ids.push(`${categoryIdPrefix}-${nested.id}`);
+    ids.push(...collectDescendantIds(nested, categoryIdPrefix));
+  }
+
+  return ids;
+}
 
 function buildFilterRegistry(
   categories: DownloadCategoryOption[],
@@ -84,7 +113,7 @@ function buildFilterRegistry(
   } = config;
   const registry: FilterMeta[] = [];
 
-  for (const option of categories) {
+  walkCategories(categories, (option, parent) => {
     const hasNested = (option.nested ?? []).length > 0;
     registry.push({
       id: `${categoryIdPrefix}-${option.id}`,
@@ -93,21 +122,9 @@ function buildFilterRegistry(
       group: categoryGroup,
       section: categorySection,
       isLeaf: !hasNested,
-      isCategoryParent: true,
+      isCategoryParent: !parent,
     });
-
-    for (const nested of option.nested ?? []) {
-      registry.push({
-        id: `${categoryIdPrefix}-${nested.id}`,
-        optionId: nested.id,
-        label: nested.label,
-        group: categoryGroup,
-        section: categorySection,
-        isLeaf: true,
-        isCategoryParent: false,
-      });
-    }
-  }
+  });
 
   for (const option of secondaryOptions) {
     registry.push({
@@ -130,21 +147,26 @@ function buildCategoryMaps(
 ): CategoryMaps {
   const { categoryIdPrefix } = config;
   const childrenMap = new Map<string, string[]>();
+  const descendantsMap = new Map<string, string[]>();
   const parentMap = new Map<string, string>();
 
-  for (const option of categories) {
-    const parentId = `${categoryIdPrefix}-${option.id}`;
+  walkCategories(categories, (option, parent) => {
+    const id = `${categoryIdPrefix}-${option.id}`;
     const childIds = (option.nested ?? []).map(
       (nested) => `${categoryIdPrefix}-${nested.id}`,
     );
 
-    if (childIds.length === 0) continue;
+    if (childIds.length) {
+      childrenMap.set(id, childIds);
+      descendantsMap.set(id, collectDescendantIds(option, categoryIdPrefix));
+    }
 
-    childrenMap.set(parentId, childIds);
-    for (const childId of childIds) parentMap.set(childId, parentId);
-  }
+    if (parent) {
+      parentMap.set(id, `${categoryIdPrefix}-${parent.id}`);
+    }
+  });
 
-  return { childrenMap, parentMap };
+  return { childrenMap, descendantsMap, parentMap };
 }
 
 function syncCategoryParentState(
@@ -157,11 +179,59 @@ function syncCategoryParentState(
   next[parentId] = childIds.every((childId) => next[childId]);
 }
 
+function syncCategoryAncestors(
+  next: Record<string, boolean>,
+  startParentId: string | undefined,
+  childrenMap: Map<string, string[]>,
+  parentMap: Map<string, string>,
+) {
+  let parentId = startParentId;
+
+  while (parentId) {
+    syncCategoryParentState(next, parentId, childrenMap);
+    parentId = parentMap.get(parentId);
+  }
+}
+
+function applyDefaultChecked(
+  next: Record<string, boolean>,
+  option: DownloadCategoryOption,
+  categoryIdPrefix: string,
+  childrenMap: Map<string, string[]>,
+  descendantsMap: Map<string, string[]>,
+) {
+  const id = `${categoryIdPrefix}-${option.id}`;
+
+  if (option.defaultChecked) {
+    next[id] = true;
+
+    for (const descendantId of descendantsMap.get(id) ?? []) {
+      next[descendantId] = true;
+    }
+
+    return;
+  }
+
+  for (const nested of option.nested ?? []) {
+    applyDefaultChecked(
+      next,
+      nested,
+      categoryIdPrefix,
+      childrenMap,
+      descendantsMap,
+    );
+  }
+
+  syncCategoryParentState(next, id, childrenMap);
+}
+
 function buildInitialChecked(
   categories: DownloadCategoryOption[],
   config: SupportFilterStoreConfig,
   registry: FilterMeta[],
   childrenMap: Map<string, string[]>,
+  descendantsMap: Map<string, string[]>,
+  parentMap: Map<string, string>,
   secondaryOptions: DownloadFilterOption[],
 ): Record<string, boolean> {
   const { categoryIdPrefix, secondaryIdPrefix } = config;
@@ -170,23 +240,19 @@ function buildInitialChecked(
   for (const meta of registry) checked[meta.id] = false;
 
   for (const option of categories) {
-    const parentId = `${categoryIdPrefix}-${option.id}`;
-
-    if (option.defaultChecked) {
-      checked[parentId] = true;
-      for (const nested of option.nested ?? []) {
-        checked[`${categoryIdPrefix}-${nested.id}`] = true;
-      }
-      continue;
-    }
-
-    for (const nested of option.nested ?? []) {
-      if (nested.defaultChecked) {
-        checked[`${categoryIdPrefix}-${nested.id}`] = true;
-      }
-    }
-
-    syncCategoryParentState(checked, parentId, childrenMap);
+    applyDefaultChecked(
+      checked,
+      option,
+      categoryIdPrefix,
+      childrenMap,
+      descendantsMap,
+    );
+    syncCategoryAncestors(
+      checked,
+      `${categoryIdPrefix}-${option.id}`,
+      childrenMap,
+      parentMap,
+    );
   }
 
   for (const option of secondaryOptions) {
@@ -199,13 +265,14 @@ function buildInitialChecked(
     for (const id of config.extraDefaultCheckedIds) {
       checked[id] = true;
     }
-    for (const option of categories) {
-      syncCategoryParentState(
+    walkCategories(categories, (option) => {
+      syncCategoryAncestors(
         checked,
         `${config.categoryIdPrefix}-${option.id}`,
         childrenMap,
+        parentMap,
       );
-    }
+    });
   }
 
   return checked;
@@ -245,7 +312,7 @@ export function createSupportFilterStore(
       () => buildFilterRegistry(categories, config, secondaryOptions),
       [categories, secondaryOptions],
     );
-    const { childrenMap, parentMap } = useMemo(
+    const { childrenMap, descendantsMap, parentMap } = useMemo(
       () => buildCategoryMaps(categories, config),
       [categories],
     );
@@ -256,6 +323,8 @@ export function createSupportFilterStore(
         config,
         registry,
         childrenMap,
+        descendantsMap,
+        parentMap,
         secondaryOptions,
       ),
     );
@@ -274,6 +343,8 @@ export function createSupportFilterStore(
           config,
           registry,
           childrenMap,
+          descendantsMap,
+          parentMap,
           secondaryOptions,
         );
         for (const id of Object.keys(base)) {
@@ -281,7 +352,15 @@ export function createSupportFilterStore(
         }
         return base;
       });
-    }, [signature, categories, registry, childrenMap, secondaryOptions]);
+    }, [
+      signature,
+      categories,
+      registry,
+      childrenMap,
+      descendantsMap,
+      parentMap,
+      secondaryOptions,
+    ]);
 
     const isChecked = useCallback(
       (id: string) => Boolean(checked[id]),
@@ -292,16 +371,22 @@ export function createSupportFilterStore(
       (id: string, nextChecked: boolean) => {
         setChecked((current) => {
           const next = { ...current, [id]: nextChecked };
-          const childIds = childrenMap.get(id);
-          if (childIds) {
-            for (const childId of childIds) next[childId] = nextChecked;
+          const descendantIds = descendantsMap.get(id);
+          if (descendantIds) {
+            for (const descendantId of descendantIds) {
+              next[descendantId] = nextChecked;
+            }
           }
-          const parentId = parentMap.get(id);
-          if (parentId) syncCategoryParentState(next, parentId, childrenMap);
+          syncCategoryAncestors(
+            next,
+            parentMap.get(id),
+            childrenMap,
+            parentMap,
+          );
           return next;
         });
       },
-      [childrenMap, parentMap],
+      [childrenMap, descendantsMap, parentMap],
     );
 
     const clearSection = useCallback(

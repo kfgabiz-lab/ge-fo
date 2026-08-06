@@ -2,7 +2,7 @@ import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 import { LIST_DESCRIPTION_MAX_LENGTH, stripHtmlText } from "@/lib/stripHtmlText";
 
-export const ARTICLES_LIST_SIZE = 10;
+export const ARTICLES_LIST_SIZE = 9;
 
 export const articlesImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 

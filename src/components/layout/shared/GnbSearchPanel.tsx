@@ -124,6 +124,9 @@ export default function GnbSearchPanel({
           className="gnb_search_dim"
           aria-label="검색 닫기"
           tabIndex={-1}
+          data-lenis-prevent
+          onWheel={(event) => event.preventDefault()}
+          onTouchMove={(event) => event.preventDefault()}
           onClick={() => onNavigate?.()}
         />
       ) : null}
@@ -131,6 +134,7 @@ export default function GnbSearchPanel({
         id="gnb-search-panel"
         className={isOpen ? "gnb_search is-open" : "gnb_search"}
         aria-hidden={!isOpen}
+        data-lenis-prevent
       >
         <div className="gnb_search__inner">
           <form
