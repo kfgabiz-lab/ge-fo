@@ -15,6 +15,7 @@ import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import { isPreviewActive } from "@/lib/previewMode";
 import type { Metadata, ResolvingMetadata } from "next";
+import HashtagLink from "@/components/ui/HashtagLink";
 import "@/assets/css/company.css";
 
 type CompanyBlogDetailPageProps = {
@@ -110,9 +111,11 @@ export default async function CompanyBlogDetailPage({
         <div className={articleDetailClass("tags")} data-slugkey="tags">
           <div className="company-blog__tags">
             {tags.map((tag, tagIndex) => (
-              <div key={`${tag}-${tagIndex}`} className="company-blog__tag">
-                {tag}
-              </div>
+              <HashtagLink
+                key={`${tag}-${tagIndex}`}
+                tag={tag}
+                className="company-blog__tag"
+              />
             ))}
           </div>
         </div>
