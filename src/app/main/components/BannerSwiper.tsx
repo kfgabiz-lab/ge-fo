@@ -14,34 +14,7 @@ import "swiper/css/effect-fade";
 
 const AUTOPLAY_DELAY_MS = 4000;
 
-const PAGE_FILE_SRC = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
-
-const MOCK_BANNER_SLIDES = [
-  {
-    id: "banner-1",
-    href: "",
-    img: "/img/main/img_main_banner_01.png",
-    alt: "banner_1",
-    tit: "Triple iF Design 2026",
-    txt: "3 Wins in Smart Device & Energy Platform...",
-  },
-  {
-    id: "banner-2",
-    href: "",
-    img: "/img/main/img_main_banner_02.png",
-    alt: "banner_2",
-    tit: "Smart Energy Innovation",
-    txt: "Leading the future of power and automation solutions",
-  },
-  {
-    id: "banner-3",
-    href: "",
-    img: "/img/main/img_main_banner_01.png",
-    alt: "banner_1",
-    tit: "Triple iF Design 2026",
-    txt: "3 Wins in Smart Device & Energy Platform...",
-  },
-];
+const PAGE_FILE_SRC = (mediaId: number | null) => `/api/v1/fo/page-files/${mediaId}`;
 
 interface BannerSwiperProps {
   bannerItems: BannerItem[];
@@ -49,18 +22,14 @@ interface BannerSwiperProps {
 
 export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
   const bannerSlides = useMemo(() => {
-    if (bannerItems.length === 0) return MOCK_BANNER_SLIDES;
-    return bannerItems.map((item, index) => {
-      const mock = MOCK_BANNER_SLIDES[index % MOCK_BANNER_SLIDES.length];
-      return {
-        id: `banner-${item.id}`,
-        href: item.url || mock.href,
-        img: item.mediaId != null ? PAGE_FILE_SRC(item.mediaId) : mock.img,
-        alt: item.mainTitle || mock.alt,
-        tit: item.mainTitle || mock.tit,
-        txt: item.subTitle,
-      };
-    });
+    return bannerItems.map((item) => ({
+      id: `banner-${item.id}`,
+      href: item.url || "",
+      img: PAGE_FILE_SRC(item.mediaId),
+      alt: item.mainTitle || "",
+      tit: item.mainTitle || "",
+      txt: item.subTitle,
+    }));
   }, [bannerItems]);
 
   const swiperRef = useRef<SwiperType | null>(null);

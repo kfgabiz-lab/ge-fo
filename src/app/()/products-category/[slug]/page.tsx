@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import DevicesHelp from "@/app/()/products-systems/components/DevicesHelp";
 import DevicesHero from "@/app/()/products-systems/components/DevicesHero";
 import DevicesMarkets from "@/app/()/products-systems/components/DevicesMarkets";
@@ -8,21 +8,27 @@ import {
   fetchVisibleLv2Categories,
 } from "@/app/()/products-systems/data/productsSystemsData";
 import { fetchCategoryInsights } from "@/data/highlightNews";
+import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import "@/assets/css/devices-systems.css";
 
 type ProductsCategoryPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({
-  params,
-}: ProductsCategoryPageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: ProductsCategoryPageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { slug } = await params;
-  const category = await fetchCategoryBySlug(slug, { depth: 1 });
-  return {
-    title: category?.metaTitle ?? "",
-    description: category?.metaDescription ?? "",
-  };
+  const [category, previous] = await Promise.all([
+    fetchCategoryBySlug(slug, { depth: 1 }),
+    parent,
+  ]);
+  return mergeSeoMetadata(
+    previous,
+    category?.metaTitle ?? "",
+    category?.metaDescription ?? "",
+  );
 }
 
 export default async function ProductsCategoryRoutePage({

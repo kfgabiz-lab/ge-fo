@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import DevicesCategoryList from "@/app/()/products-systems/components/DevicesCategoryList";
 import DevicesHelp from "@/app/()/products-systems/components/DevicesHelp";
 import DevicesMarkets from "@/app/()/products-systems/components/DevicesMarkets";
@@ -15,6 +15,7 @@ import {
   withCategoryContext,
 } from "@/lib/navigation/categoryContext";
 import { fetchCategoryInsightsLv2 } from "@/data/highlightNews";
+import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import "@/assets/css/devices-systems.css";
 
 type ProductRangePageProps = {
@@ -22,27 +23,32 @@ type ProductRangePageProps = {
   searchParams: Promise<{ category?: string }>;
 };
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: ProductRangePageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params, searchParams }: ProductRangePageProps,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { slug } = await params;
   const { category: categoryParam } = await searchParams;
   const categoryId = parseCategoryContext(categoryParam);
 
-  const category = await fetchCategoryBySlug(slug, { depth: 2, categoryId });
+  const [category, previous] = await Promise.all([
+    fetchCategoryBySlug(slug, { depth: 2, categoryId }),
+    parent,
+  ]);
   if (category) {
-    return {
-      title: category.metaTitle ?? "",
-      description: category.metaDescription ?? "",
-    };
+    return mergeSeoMetadata(
+      previous,
+      category.metaTitle ?? "",
+      category.metaDescription ?? "",
+    );
   }
 
   const seo = await fetchProductSeoBySlug(slug, { categoryId });
-  return {
-    title: seo?.metaTitle ?? "",
-    description: seo?.metaDescription ?? "",
-  };
+  return mergeSeoMetadata(
+    previous,
+    seo?.metaTitle ?? "",
+    seo?.metaDescription ?? "",
+  );
 }
 
 export default async function ProductRangeRoutePage({

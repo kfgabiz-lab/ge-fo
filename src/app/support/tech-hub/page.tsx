@@ -1,4 +1,13 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import TechHubPageShell from "./components/TechHubPageShell";
+import { buildMenuSeoMetadata } from "@/lib/menuSeo";
+
+export async function generateMetadata(
+  _: unknown,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  return buildMenuSeoMetadata("/support/tech-hub", parent);
+}
 
 export default async function TechHubPage({
   searchParams,

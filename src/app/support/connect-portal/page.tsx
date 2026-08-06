@@ -4,6 +4,15 @@ import ConnectPortalTitle from "./components/ConnectPortalTitle";
 import ConnectPortalVideo from "./components/ConnectPortalVideo";
 import { connectPortalPage } from "@/data/support/connectPortalContent";
 import "@/assets/css/support.css";
+import type { Metadata, ResolvingMetadata } from "next";
+import { buildMenuSeoMetadata } from "@/lib/menuSeo";
+
+export async function generateMetadata(
+  _: unknown,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  return buildMenuSeoMetadata("/support/connect-portal", parent);
+}
 
 export default function ConnectPortalPage() {
   return (

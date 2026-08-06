@@ -163,6 +163,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       body: JSON.stringify(payload),
     });
     setEmail("");
+    setInterests([]); //Areas of Interest 초기화
     setEmailError(false);
   };
 

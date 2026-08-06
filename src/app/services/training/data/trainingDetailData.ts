@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvedMetadata, ResolvingMetadata } from "next";
 import { fetchApi, SITE_URL } from "@/lib/api";
 import { fetchData } from "@/lib/pageDataApi";
+import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { formatPhoneDisplay } from "@/lib/formatPhone";
 import { siteToday } from "@/lib/siteTime";
@@ -505,31 +506,25 @@ function ogImageFromCurriculum(
 }
 
 function buildOgMetadata(
+  previous: ResolvedMetadata,
   title: string,
   description: string,
   image?: string,
 ): Metadata {
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      ...(image ? { images: [{ url: image }] } : {}),
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      ...(image ? { images: [image] } : {}),
-    },
-  };
+  return mergeSeoMetadata(previous, title, description, image);
 }
 
-export async function buildCourseMetadata(courseId: string): Promise<Metadata> {
-  const curriculum = await fetchTrainingCurriculum(courseId);
+export async function buildCourseMetadata(
+  courseId: string,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const [curriculum, previous] = await Promise.all([
+    fetchTrainingCurriculum(courseId),
+    parent,
+  ]);
   if (!isCurriculumVisible(curriculum) || !curriculum) return {};
   return buildOgMetadata(
+    previous,
     curriculum.title ?? "",
     curriculum.description ?? "",
     ogImageFromCurriculum(curriculum),
@@ -539,10 +534,12 @@ export async function buildCourseMetadata(courseId: string): Promise<Metadata> {
 export async function buildSessionMetadata(
   courseId: string,
   sessionId: string,
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const [rows, curriculum] = await Promise.all([
+  const [rows, curriculum, previous] = await Promise.all([
     fetchTrainingDetailRows(courseId),
     fetchTrainingCurriculum(courseId),
+    parent,
   ]);
   if (!isCurriculumVisible(curriculum)) return {};
   const matched = rows
@@ -551,6 +548,7 @@ export async function buildSessionMetadata(
   if (!matched || !passesGate(matched.json)) return {};
   const d2 = matched.json.curriculum_detail2 ?? {};
   return buildOgMetadata(
+    previous,
     d2.title ?? "",
     curriculum?.description ?? "",
     ogImageFromCurriculum(curriculum),
