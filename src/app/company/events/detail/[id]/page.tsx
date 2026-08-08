@@ -11,7 +11,7 @@ import { fetchData } from "@/lib/pageDataApi";
 import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDateRange } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
-import { isPreviewActive } from "@/lib/previewMode";
+import { getPreviewToken } from "@/lib/previewMode";
 import type { Metadata, ResolvingMetadata } from "next";
 import "@/assets/css/company.css";
 
@@ -24,19 +24,20 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = await params;
-  const preview = await isPreviewActive("events-data", id);
+  const previewToken = await getPreviewToken("events-data", id);
 
-  return buildPageDataSeoMetadata(eventsDetailQuery(id, { preview }), parent);
+  return buildPageDataSeoMetadata(eventsDetailQuery(id, { previewToken }), parent);
 }
 
 export default async function CompanyEventsDetailPage({
   params,
 }: CompanyEventsDetailPageProps) {
   const { id } = await params;
-  const preview = await isPreviewActive("events-data", id);
+  const previewToken = await getPreviewToken("events-data", id);
+  const preview = previewToken !== null;
 
   const [detail, adjacent] = await Promise.all([
-    fetchData(eventsDetailQuery(id, { preview })),
+    fetchData(eventsDetailQuery(id, { previewToken })),
     fetchData(eventsAdjacentQuery(id)),
   ]);
 

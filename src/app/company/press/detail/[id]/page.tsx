@@ -10,7 +10,7 @@ import { fetchData } from "@/lib/pageDataApi";
 import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
-import { isPreviewActive } from "@/lib/previewMode";
+import { getPreviewToken } from "@/lib/previewMode";
 import type { Metadata, ResolvingMetadata } from "next";
 import "@/assets/css/company.css";
 
@@ -23,13 +23,14 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = await params;
-  const preview = await isPreviewActive("press-data", id);
+  const previewToken = await getPreviewToken("press-data", id);
+  const preview = previewToken !== null;
 
   return buildPageDataSeoMetadata(
     {
       slug: "press-data",
       id,
-      where: preview ? {} : { ...PRESS_STATUS_WHERE },
+      where: previewToken ? { previewToken } : { ...PRESS_STATUS_WHERE },
     },
     parent,
   );
@@ -39,13 +40,14 @@ export default async function CompanyPressDetailPage({
   params,
 }: CompanyPressDetailPageProps) {
   const { id } = await params;
-  const preview = await isPreviewActive("press-data", id);
+  const previewToken = await getPreviewToken("press-data", id);
+  const preview = previewToken !== null;
 
   const [detail, adjacent] = await Promise.all([
     fetchData({
       slug: "press-data",
       id,
-      where: preview ? {} : { ...PRESS_STATUS_WHERE },
+      where: previewToken ? { previewToken } : { ...PRESS_STATUS_WHERE },
       리턴함수: (x) => x,
     }),
     fetchData({

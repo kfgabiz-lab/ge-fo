@@ -15,10 +15,8 @@ export const eventsDetailHref = (id: number) => `/company/events/detail/${id}`;
 
 export type EventsRow = PageDataItem;
 
-const EVENTS_VISIBLE_WHERE: Record<string, string> = {
-  condexpr_status: "is_visible=001,publish_dttm<=now()?'게시':'미게시'",
-  condval_status: "게시",
-};
+/** 게시상태는 bo-api가 events-data에 대해 서버측에서 항상 강제한다 — 클라이언트가 조건을 보낼 필요 없음 */
+const EVENTS_VISIBLE_WHERE: Record<string, string> = {};
 
 const EVENTS_PAST_WHERE: Record<string, string> = {
   condexpr_upcoming: "period_to>=today()?'upcoming':'past'",
@@ -165,11 +163,13 @@ export function eventsPastQuery(params: {
   };
 }
 
-export function eventsDetailQuery(id: string | number, opts?: { preview?: boolean }) {
+export function eventsDetailQuery(id: string | number, opts?: { previewToken?: string | null }) {
   return {
     slug: "events-data",
     id,
-    where: opts?.preview ? {} : { ...EVENTS_VISIBLE_WHERE },
+    where: opts?.previewToken
+      ? { previewToken: opts.previewToken }
+      : { ...EVENTS_VISIBLE_WHERE },
     리턴함수: (raw: PageDataItem): EventsRow => raw,
   };
 }

@@ -30,14 +30,12 @@ import type { DownloadFilterOption } from "@/data/support/downloadCenterContent"
 import {
   hvdcApplicationsSection,
   hvdcBenefitsSection,
-  hvdcFaqItems,
   hvdcHero,
   hvdcOverview,
   hvdcWhySection,
 } from "../../data/hvdcContent";
 import {
   xemsBenefitsSection,
-  xemsFaqItems,
   xemsHero,
   xemsOverview,
   xemsWhySection,
@@ -45,14 +43,12 @@ import {
 import {
   microGridApplicationsSection,
   microGridBenefitsSection,
-  microGridFaqItems,
   microGridHero,
   microGridOverview,
 } from "../../data/microGridContent";
 import {
   smartFactoryApplicationsSection,
   smartFactoryBenefitsSection,
-  smartFactoryFaqItems,
   smartFactoryHero,
   smartFactoryOverview,
   smartFactoryWhySection,
@@ -89,7 +85,6 @@ function bindSwDetail(row: Record<string, unknown> | null) {
 function swShellCommonProps(
   props: SwDetailProps,
   bind: ReturnType<typeof bindSwDetail>,
-  fallbackFaq: CommonFaqEntry[],
 ) {
   return {
     downloads: props.downloads,
@@ -97,7 +92,7 @@ function swShellCommonProps(
     productCodes: props.productCodes,
     techHubBanner: props.techHubBanner,
     highlights: props.highlights,
-    faqItems: props.dbFaq.length > 0 ? props.dbFaq : fallbackFaq,
+    faqItems: props.dbFaq,
     connectPortalHref: bind.connectPortal,
     contactHref: props.contactHref,
     otherProducts: props.otherProducts,
@@ -157,7 +152,7 @@ function ScadaDetail(props: SwDetailProps) {
           blocks={hvdcWhySection.blocks}
         />
       }
-      {...swShellCommonProps(props, bind, hvdcFaqItems)}
+      {...swShellCommonProps(props, bind)}
     />
   );
 }
@@ -188,7 +183,7 @@ function XemsDetail(props: SwDetailProps) {
           imageOnly
         />
       }
-      {...swShellCommonProps(props, bind, xemsFaqItems)}
+      {...swShellCommonProps(props, bind)}
     />
   );
 }
@@ -220,7 +215,7 @@ function MicroGridDetail(props: SwDetailProps) {
         />
       }
       whySlot={<DevicesMicroGridHighlights />}
-      {...swShellCommonProps(props, bind, microGridFaqItems)}
+      {...swShellCommonProps(props, bind)}
     />
   );
 }
@@ -258,7 +253,7 @@ function SmartFactoryDetail(props: SwDetailProps) {
           imageOnly
         />
       }
-      {...swShellCommonProps(props, bind, smartFactoryFaqItems)}
+      {...swShellCommonProps(props, bind)}
     />
   );
 }

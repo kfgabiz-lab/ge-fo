@@ -63,10 +63,8 @@ export function toBlogCard(
   };
 }
 
-export const BLOG_STATUS_WHERE: Record<string, string> = {
-  condexpr_status: "is_visible=001,publish_dttm<=now()?'게시':'미게시'",
-  condval_status: "게시",
-};
+/** 게시상태는 bo-api가 blog-data에 대해 서버측에서 항상 강제한다 — 클라이언트가 조건을 보낼 필요 없음 */
+export const BLOG_STATUS_WHERE: Record<string, string> = {};
 
 export async function fetchBlogCategories(): Promise<CodeItem[]> {
   return fetchApi<CodeItem[]>("/api/v1/fo/codes/BLOGCATEGORY");

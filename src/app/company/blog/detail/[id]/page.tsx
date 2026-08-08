@@ -13,7 +13,7 @@ import { fetchData } from "@/lib/pageDataApi";
 import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
-import { isPreviewActive } from "@/lib/previewMode";
+import { getPreviewToken } from "@/lib/previewMode";
 import type { Metadata, ResolvingMetadata } from "next";
 import HashtagLink from "@/components/ui/HashtagLink";
 import "@/assets/css/company.css";
@@ -27,13 +27,13 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = await params;
-  const preview = await isPreviewActive("blog-data", id);
+  const previewToken = await getPreviewToken("blog-data", id);
 
   return buildPageDataSeoMetadata(
     {
       slug: "blog-data",
       id,
-      where: preview ? {} : { ...BLOG_STATUS_WHERE },
+      where: previewToken ? { previewToken } : { ...BLOG_STATUS_WHERE },
     },
     parent,
   );
@@ -43,13 +43,14 @@ export default async function CompanyBlogDetailPage({
   params,
 }: CompanyBlogDetailPageProps) {
   const { id } = await params;
-  const preview = await isPreviewActive("blog-data", id);
+  const previewToken = await getPreviewToken("blog-data", id);
+  const preview = previewToken !== null;
 
   const [detail, categories, adjacent] = await Promise.all([
     fetchData({
       slug: "blog-data",
       id,
-      where: preview ? {} : { ...BLOG_STATUS_WHERE },
+      where: previewToken ? { previewToken } : { ...BLOG_STATUS_WHERE },
       리턴함수: (x) => x,
     }),
     fetchBlogCategories(),

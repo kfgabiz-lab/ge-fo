@@ -50,6 +50,10 @@ export default function CommonFaq({
     });
   }, []);
 
+  if (items.length === 0) {
+    return null;
+  }
+
   return (
     <section className="common_faq" id={sectionId}>
       <div className="common_faq__bg" aria-hidden="true" />
