@@ -16,7 +16,8 @@ import { requestForTrainingStep4Copy } from "@/data/services/requestForTrainingC
 import {
   fetchTrainingProductTree,
   type TrainingProductNode,
-  type TrainingProductTree,
+  type TrainingProductOption,
+  type TrainingProductTreeItem,
 } from "@/lib/training/trainingProductTree";
 import RequestForTrainingFieldError from "./RequestForTrainingFieldError";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
@@ -61,6 +62,40 @@ function otherId(groupId: number): number {
   return -groupId;
 }
 
+type ProductGroup = TrainingProductNode & { products: TrainingProductOption[] };
+
+function productKey(groupId: number, productId: number): string {
+  return `${groupId}:${productId}`;
+}
+
+function buildProductGroups(
+  items: TrainingProductTreeItem[],
+  categoryType: TrainingCategoryType,
+): ProductGroup[] {
+  const groups = new Map<number, ProductGroup>();
+  const seenProducts = new Set<string>();
+  for (const item of items) {
+    if (Number(item.categoryId ?? 0) <= 0) continue;
+    const isPower = categoryType === "power";
+    const groupId = Number((isPower ? item.lv1Id : item.lv2Id) ?? 0);
+    const groupTitle = (isPower ? item.lv1Title : item.lv2Title) ?? "";
+    if (!groupTitle) continue;
+    let group = groups.get(groupId);
+    if (!group) {
+      group = { id: groupId, title: groupTitle, products: [] };
+      groups.set(groupId, group);
+    }
+    const productId = Number((isPower ? item.lv2Id : item.productId) ?? 0);
+    const productName = (isPower ? item.lv2Title : item.productName) ?? "";
+    if (!productName) continue;
+    const key = productKey(groupId, productId);
+    if (seenProducts.has(key)) continue;
+    seenProducts.add(key);
+    group.products.push({ id: productId, name: productName });
+  }
+  return Array.from(groups.values());
+}
+
 export default function RequestForTrainingProductSelector({
   error = false,
   onClearError,
@@ -71,11 +106,7 @@ export default function RequestForTrainingProductSelector({
   const formId = useId();
   const { fields } = requestForTrainingStep4Copy;
   const { step1, step4, setStep4Field } = useRequestForTrainingForm();
-  const [tree, setTree] = useState<TrainingProductTree>({
-    power: [],
-    automation: [],
-    items: [],
-  });
+  const [treeItems, setTreeItems] = useState<TrainingProductTreeItem[]>([]);
   const [categoryTypeOptions, setCategoryTypeOptions] = useState<CategoryTypeOption[]>([]);
   const categoryType = step4.productCategoryType;
   const groupId = step4.productGroupId;
@@ -84,7 +115,7 @@ export default function RequestForTrainingProductSelector({
   useEffect(() => {
     let alive = true;
     fetchTrainingProductTree(true).then((result) => {
-      if (alive) setTree(result);
+      if (alive) setTreeItems(result.items);
     });
     return () => {
       alive = false;
@@ -110,10 +141,13 @@ export default function RequestForTrainingProductSelector({
     }
   }, [isEngineeringTrack, categoryType, setStep4Field]);
 
-  const groups: TrainingProductNode[] = categoryType ? tree[categoryType] : [];
+  const groups = useMemo(
+    () => (categoryType ? buildProductGroups(treeItems, categoryType) : []),
+    [treeItems, categoryType],
+  );
 
-  const selectedIds = useMemo(
-    () => new Set(step4.selectedProducts.map((p) => p.id)),
+  const selectedKeys = useMemo(
+    () => new Set(step4.selectedProducts.map((p) => productKey(p.groupId, p.id))),
     [step4.selectedProducts],
   );
 
@@ -123,10 +157,11 @@ export default function RequestForTrainingProductSelector({
   }
 
   function toggleProduct(id: number, name: string, groupId: number, groupTitle: string) {
-    if (selectedIds.has(id)) {
+    const key = productKey(groupId, id);
+    if (selectedKeys.has(key)) {
       setStep4Field(
         "selectedProducts",
-        step4.selectedProducts.filter((p) => p.id !== id),
+        step4.selectedProducts.filter((p) => productKey(p.groupId, p.id) !== key),
       );
       return;
     }
@@ -141,10 +176,11 @@ export default function RequestForTrainingProductSelector({
     onClearError?.();
   }
 
-  function removeTag(id: number) {
+  function removeTag(groupId: number, id: number) {
+    const key = productKey(groupId, id);
     setStep4Field(
       "selectedProducts",
-      step4.selectedProducts.filter((p) => p.id !== id),
+      step4.selectedProducts.filter((p) => productKey(p.groupId, p.id) !== key),
     );
   }
 
@@ -229,8 +265,10 @@ export default function RequestForTrainingProductSelector({
           >
             <div className="support_service_training_request__checkboxes">
               {products.map((product) => {
-                const checked = selectedIds.has(product.id);
-                const inputId = `${formId}-product-${product.id}`;
+                const checked = selectedKeys.has(
+                  productKey(selectedGroup.id, product.id),
+                );
+                const inputId = `${formId}-product-${selectedGroup.id}-${product.id}`;
                 return (
                   <label
                     key={product.id}
@@ -267,7 +305,9 @@ export default function RequestForTrainingProductSelector({
                   id={`${formId}-product-other`}
                   className="guide_checkbox support_service_training_request__checkbox"
                   disableRipple
-                  checked={selectedIds.has(otherId(selectedGroup.id))}
+                  checked={selectedKeys.has(
+                    productKey(selectedGroup.id, otherId(selectedGroup.id)),
+                  )}
                   onChange={() =>
                     toggleProduct(
                       otherId(selectedGroup.id),
@@ -296,7 +336,10 @@ export default function RequestForTrainingProductSelector({
           <hr className="support_service_training_request__product-divider" aria-hidden />
           <div className="support_service_training_request__tags">
             {step4.selectedProducts.map((product) => (
-              <span key={product.id} className="support_service_training_request__tag">
+              <span
+                key={productKey(product.groupId, product.id)}
+                className="support_service_training_request__tag"
+              >
                 <span className="support_service_training_request__tag-label">
                   {product.name}
                 </span>
@@ -304,7 +347,7 @@ export default function RequestForTrainingProductSelector({
                   type="button"
                   className="support_service_training_request__tag-remove"
                   aria-label={`Remove ${product.name}`}
-                  onClick={() => removeTag(product.id)}
+                  onClick={() => removeTag(product.groupId, product.id)}
                 >
                   <img
                     src="/ico/ico_clear_12.svg"
