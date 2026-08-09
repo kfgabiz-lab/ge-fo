@@ -445,6 +445,7 @@ function ContactUsFormContent() {
     try {
       await submitContactUs(payload);
       alert(contactUsFormCopy.submitSuccess);
+      window.location.href = "/support/contact-us";
     } catch {
     } finally {
       setSubmitting(false);
