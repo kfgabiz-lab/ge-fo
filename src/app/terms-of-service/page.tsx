@@ -6,7 +6,7 @@ import "@/assets/css/common-privacy-policy.css";
 export const metadata: Metadata = {
   title: "Terms of Service | LS ELECTRIC",
   description:
-    "These Terms of Service explain the terms and conditions under which LS Electric America provides its services.",
+    "Read the Terms and Conditions for using the LS ELECTRIC America website, outlining legal rights, intellectual property, and site usage guidelines.",
 };
 
 export default function TermsOfServicePage() {

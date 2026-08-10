@@ -6,7 +6,7 @@ import "@/assets/css/common-privacy-policy.css";
 export const metadata: Metadata = {
   title: "General Terms of Purchase | LS ELECTRIC",
   description:
-    "These General Terms of Purchase explain the terms and conditions under which LS Electric America conducts its purchasing activities.",
+    "Review LS ELECTRIC America's General Terms and Conditions of Purchase governing supplier agreements, procurement standards, delivery terms, and compliance.",
 };
 
 export default function GeneralTermsOfPurchasePage() {

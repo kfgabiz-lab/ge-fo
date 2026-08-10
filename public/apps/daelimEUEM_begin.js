@@ -1,8 +1,8 @@
 //AppID Selection
 //var strTrackId = "TempID"; //도메인에 따라 AppID 구분이 필요한 경우 If구문을 활성화 함.
-var strTrackId = "LSE_MCS_POC"; //Application 이름
+var strTrackId = "LSE_NAHP_POC"; //Application 이름
 if(location.host.indexOf("APP_DOMAIN.daelim.co.kr") > -1){
-        strTrackId = "LSE_MCS_POC";
+        strTrackId = "LSE_NAHP_POC";
 }
 
 window.daelimEUEMConf = {
