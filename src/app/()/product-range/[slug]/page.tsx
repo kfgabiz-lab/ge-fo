@@ -1,4 +1,5 @@
 import type { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
 import DevicesCategoryList from "@/app/()/products-systems/components/DevicesCategoryList";
 import DevicesHelp from "@/app/()/products-systems/components/DevicesHelp";
 import DevicesMarkets from "@/app/()/products-systems/components/DevicesMarkets";
@@ -89,5 +90,7 @@ export default async function ProductRangeRoutePage({
   }
 
   const row = await fetchProductBySlug(slug, { categoryId });
+  if (!row) notFound();
+
   return <ProductDetailRouter slug={slug} row={row} categoryId={categoryId} />;
 }

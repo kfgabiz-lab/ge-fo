@@ -1,4 +1,4 @@
-import DevicesHelp, { CONNECT_PORTAL_FALLBACK_HREF } from "../DevicesHelp";
+import DevicesHelp from "../DevicesHelp";
 import DevicesMarkets from "../DevicesMarkets";
 import DevicesPageFooter from "../DevicesPageFooter";
 import CommonBanner02 from "@/components/banners/CommonBanner02";
@@ -8,7 +8,6 @@ import DevicesProductHero from "./DevicesProductHero";
 import DevicesProductFeaturesSection from "@/components/content/DevicesProductFeaturesSection";
 import DevicesProductNavScope from "./DevicesProductNavScope";
 import DevicesProductVideo from "./DevicesProductVideo";
-import DevicesProductOtherProducts from "./DevicesProductOtherProducts";
 import {
   productDetailNavItems,
   productTemplateDetail,
@@ -61,43 +60,26 @@ export default async function GenericProductDetail({
 
   const { docTypeOptions, page: downloadsPage } = downloadsData;
 
-  const { lv2Name, otherProducts } = lv2Context;
+  const { lv2Name } = lv2Context;
   const heroDetail = { ...detail, category: lv2Name };
   const inquiryHref = withProductInquiryContext(
     detail.expertBannerHref ?? "/support/contact-us",
     categoryId,
     productId,
   );
-  const otherProductsTitle = lv2Name ? `Explore the ${lv2Name} Products` : undefined;
 
-  const showKeyFeatures = detail.keyFeatures.length > 0;
-  const showLineup = detail.lineUp.trim().length > 0;
-  const showVideo = Boolean(detail.youtubeVideoId);
-  const showOtherProducts = otherProducts.length > 0;
-  const showDownloads = downloadsPage.totalElements > 0;
-  const visibleNavItems = productDetailNavItems.filter((item) => {
-    if (item.id === "product-key-feature") return showKeyFeatures;
-    if (item.id === "product-lineup") return showLineup;
-    if (item.id === "product-downloads") return showDownloads;
-    if (item.id === "product-video") return showVideo;
-    if (item.id === "product-other") return showOtherProducts;
-    return true;
-  });
+  const visibleNavItems = productDetailNavItems.filter(
+    (item) => item.id !== "product-other",
+  );
 
   return (
     <main className="devices-page devices-page--product" id="Page_devices_product">
-      <DevicesProductHero
-        product={heroDetail}
-        showDownloads={showDownloads}
-        contactHref={inquiryHref}
-      />
+      <DevicesProductHero product={heroDetail} contactHref={inquiryHref} />
       <DevicesProductNavScope navItems={visibleNavItems}>
-        {showKeyFeatures ? (
-          <DevicesProductFeaturesSection
-            title="Key Features"
-            items={detail.keyFeatures}
-          />
-        ) : null}
+        <DevicesProductFeaturesSection
+          title="Key Features"
+          items={detail.keyFeatures}
+        />
         <CommonBanner02
           variant="expert"
           linkHref={inquiryHref}
@@ -105,7 +87,6 @@ export default async function GenericProductDetail({
           contactEmail={managerEmail}
           backgroundSrc={detail.configuratorBannerBg}
         />
-        {showLineup ? (
         <section className="devices_product_lineup" id="product-lineup">
           <div className="inner">
             <h2 className="section_tit">Lineup</h2>
@@ -123,26 +104,25 @@ export default async function GenericProductDetail({
                   just a few clicks.
                 </p>
               </div>
-              <a
-                href={detail.configuratorHref || CONNECT_PORTAL_FALLBACK_HREF}
-                className="btn-base btn-lv02 btn-lv02--solid"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Go to Configurator
-                <span className="icon_link-14" aria-hidden="true" />
-              </a>
+              {detail.configuratorHref ? (
+                <a
+                  href={detail.configuratorHref}
+                  className="btn-base btn-lv02 btn-lv02--solid"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Go to Configurator
+                  <span className="icon_link-14" aria-hidden="true" />
+                </a>
+              ) : null}
             </div>
           </div>
         </section>
-        ) : null}
-        {showDownloads ? (
-          <DevicesProductDownloads
-            initial={downloadsPage}
-            productCodes={productCodes}
-            docTypeOptions={docTypeOptions}
-          />
-        ) : null}
+        <DevicesProductDownloads
+          initial={downloadsPage}
+          productCodes={productCodes}
+          docTypeOptions={docTypeOptions}
+        />
         {techHubBanner ? (
           <CommonBanner03
             linkHref={techHubBanner.href}
@@ -150,15 +130,7 @@ export default async function GenericProductDetail({
             {...buildHwProductTechHubBannerCopy(techHubBanner)}
           />
         ) : null}
-        {showVideo ? (
-          <DevicesProductVideo youtubeVideoId={detail.youtubeVideoId} />
-        ) : null}
-        {showOtherProducts ? (
-          <DevicesProductOtherProducts
-            items={otherProducts}
-            title={otherProductsTitle}
-          />
-        ) : null}
+        <DevicesProductVideo youtubeVideoId={detail.youtubeVideoId} />
         <div id="product-markets">
           <DevicesMarkets />
         </div>

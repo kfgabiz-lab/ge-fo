@@ -36,20 +36,17 @@ import {
 } from "../../data/hvdcContent";
 import {
   xemsBenefitsSection,
-  xemsHero,
   xemsOverview,
   xemsWhySection,
 } from "../../data/xemsContent";
 import {
   microGridApplicationsSection,
   microGridBenefitsSection,
-  microGridHero,
   microGridOverview,
 } from "../../data/microGridContent";
 import {
   smartFactoryApplicationsSection,
   smartFactoryBenefitsSection,
-  smartFactoryHero,
   smartFactoryOverview,
   smartFactoryWhySection,
 } from "../../data/smartFactoryContent";
@@ -101,20 +98,17 @@ function swShellCommonProps(
 
 function resolveSwFeatures(
   keyFeatures: readonly SwKeyFeature[],
-  fallback: SwProductFeaturesConfig,
+  config: { variant: "list" | "desc"; title: string },
 ): SwProductFeaturesConfig {
-  if (keyFeatures.length === 0) {
-    return fallback;
-  }
-  return fallback.variant === "list"
+  return config.variant === "list"
     ? {
         variant: "list",
-        title: fallback.title,
+        title: config.title,
         items: mapSwKeyFeatures(keyFeatures, "list"),
       }
     : {
         variant: "desc",
-        title: fallback.title,
+        title: config.title,
         items: mapSwKeyFeatures(keyFeatures, "desc"),
       };
 }
@@ -126,8 +120,8 @@ function ScadaDetail(props: SwDetailProps) {
       pageClassName="devices-page devices-page--product devices-page--hvdc"
       pageId="Page_devices_hvdc"
       hero={{
-        title: bind.title ?? hvdcHero.title,
-        description: bind.description ?? hvdcHero.description,
+        title: bind.title ?? "",
+        description: bind.description ?? "",
         tagline: hvdcHero.tagline,
         showTagline: true,
         contactHref: props.contactHref,
@@ -137,7 +131,6 @@ function ScadaDetail(props: SwDetailProps) {
       features={resolveSwFeatures(bind.keyFeatures, {
         variant: "list",
         title: hvdcBenefitsSection.title,
-        items: hvdcBenefitsSection.items,
       })}
       applicationsSlot={
         <DevicesProductApplications
@@ -164,8 +157,8 @@ function XemsDetail(props: SwDetailProps) {
       pageClassName="devices-page devices-page--product devices-page--xems"
       pageId="P-FO-PROD-040000P"
       hero={{
-        title: bind.title ?? xemsHero.title,
-        description: bind.description ?? xemsHero.description,
+        title: bind.title ?? "",
+        description: bind.description ?? "",
         contactHref: props.contactHref,
       }}
       overview={xemsOverview}
@@ -173,7 +166,6 @@ function XemsDetail(props: SwDetailProps) {
       features={resolveSwFeatures(bind.keyFeatures, {
         variant: "desc",
         title: xemsBenefitsSection.title,
-        items: xemsBenefitsSection.items,
       })}
       applicationsSlot={<DevicesXemsEnergySolutions />}
       whySlot={
@@ -195,8 +187,8 @@ function MicroGridDetail(props: SwDetailProps) {
       pageClassName="devices-page devices-page--product devices-page--micro-grid"
       pageId="P-FO-PROD-040000P"
       hero={{
-        title: bind.title ?? microGridHero.title,
-        description: bind.description ?? microGridHero.description,
+        title: bind.title ?? "",
+        description: bind.description ?? "",
         multilineDescription: true,
         contactHref: props.contactHref,
       }}
@@ -205,7 +197,6 @@ function MicroGridDetail(props: SwDetailProps) {
       features={resolveSwFeatures(bind.keyFeatures, {
         variant: "list",
         title: microGridBenefitsSection.title,
-        items: microGridBenefitsSection.items,
       })}
       applicationsSlot={
         <DevicesProductApplications
@@ -227,8 +218,8 @@ function SmartFactoryDetail(props: SwDetailProps) {
       pageClassName="devices-page devices-page--product devices-page--smart-factory"
       pageId="P-FO-PROD-040000P"
       hero={{
-        title: bind.title ?? smartFactoryHero.title,
-        description: bind.description ?? smartFactoryHero.description,
+        title: bind.title ?? "",
+        description: bind.description ?? "",
         contactHref: props.contactHref,
       }}
       overview={smartFactoryOverview}
@@ -236,7 +227,6 @@ function SmartFactoryDetail(props: SwDetailProps) {
       features={resolveSwFeatures(bind.keyFeatures, {
         variant: "list",
         title: smartFactoryBenefitsSection.title,
-        items: smartFactoryBenefitsSection.items,
       })}
       applicationsSlot={
         <DevicesProductApplications

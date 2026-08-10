@@ -60,8 +60,8 @@ function BannerBody({
   linkLabel,
 }: {
   titleTop: string;
-  title: string;
-  description: string[];
+  title?: string;
+  description?: string[];
   countText?: string;
   linkLabel: string;
 }) {
@@ -69,12 +69,14 @@ function BannerBody({
     <>
       <div className="common_banner_03__text">
         <p className="common_banner_03__kicker">{titleTop}</p>
-        <h2 className="common_banner_03__tit">{title}</h2>
-        <div className="common_banner_03__desc">
-          {description.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
-        </div>
+        {title ? <h2 className="common_banner_03__tit">{title}</h2> : null}
+        {description && description.length > 0 ? (
+          <div className="common_banner_03__desc">
+            {description.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
+          </div>
+        ) : null}
         {countText ? (
           <p className="common_banner_03__count">{countText}</p>
         ) : null}
@@ -90,19 +92,14 @@ function BannerBody({
   );
 }
 
-const DEFAULT_DESCRIPTION = [
-  "Need help with installation, configuration, troubleshooting, or maintenance?",
-  "Watch step-by-step video guides for the MCCB series in our Tech Hub.",
-];
-
 const DEFAULT_IMAGE_SRC = "/img/devices/product/banner_hub_video.jpg";
 const DEFAULT_BACKGROUND_SRC = "/img/devices/product/banner_hub_bg.png";
 const DEFAULT_BACKGROUND_SRC_MO = "/img/devices/product/banner_hub_bg_mo.png";
 
 export default function CommonBanner03({
   titleTop = "Tech Hub Video Guide",
-  title = "MCCB Video Tutorials",
-  description = DEFAULT_DESCRIPTION,
+  title,
+  description,
   countText,
   linkHref = "/support/tech-hub",
   linkLabel = "Explore Tech Hub",

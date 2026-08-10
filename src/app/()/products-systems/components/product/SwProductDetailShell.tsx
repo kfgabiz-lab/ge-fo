@@ -77,10 +77,12 @@ export type SwProductDetailShellProps = {
 
 function filterSwNavItems<T extends { readonly id: string }>(
   navItems: readonly T[],
+  showFeatures: boolean,
   showDownloads: boolean,
   showOtherProducts: boolean,
 ): T[] {
   return navItems.filter((item) => {
+    if (item.id === "product-benefits") return showFeatures;
     if (item.id === "product-downloads") return showDownloads;
     if (item.id === "product-other") return showOtherProducts;
     return true;
@@ -106,6 +108,7 @@ export default function SwProductDetailShell({
   contactHref,
   otherProducts,
 }: SwProductDetailShellProps) {
+  const showFeatures = features.items.length > 0;
   const showDownloads = downloads.totalElements > 0;
   const showOtherProducts = otherProducts.length > 0;
   return (
@@ -114,26 +117,29 @@ export default function SwProductDetailShell({
       <DevicesProductNavScope
         navItems={filterSwNavItems(
           SW_PRODUCT_NAV_ITEMS,
+          showFeatures,
           showDownloads,
           showOtherProducts,
         )}
       >
         <DevicesSoftwareOverview data={overview} imageMode={overviewImageMode} />
-        {features.variant === "list" ? (
-          <DevicesProductFeaturesSection
-            variant="list"
-            sectionId="product-benefits"
-            title={features.title}
-            items={features.items}
-          />
-        ) : (
-          <DevicesProductFeaturesSection
-            variant="desc"
-            sectionId="product-benefits"
-            title={features.title}
-            items={features.items}
-          />
-        )}
+        {showFeatures ? (
+          features.variant === "list" ? (
+            <DevicesProductFeaturesSection
+              variant="list"
+              sectionId="product-benefits"
+              title={features.title}
+              items={features.items}
+            />
+          ) : (
+            <DevicesProductFeaturesSection
+              variant="desc"
+              sectionId="product-benefits"
+              title={features.title}
+              items={features.items}
+            />
+          )
+        ) : null}
         {applicationsSlot}
         {whySlot}
         {showDownloads ? (

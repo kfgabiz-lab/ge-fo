@@ -53,11 +53,9 @@ export default function DevicesProductHero({
           )}
         </div>
         <div className="devices_product_hero__content">
-          {product.category ? (
-            <div className="devices_product_hero__meta">
-              <span className="devices_product_hero__category">{product.category}</span>
-            </div>
-          ) : null}
+          {/* <div className="devices_product_hero__meta">
+            <span className="devices_product_hero__category">{product.category}</span>
+          </div> */}
           <div className="devices_product_hero__head">
             <h1 className="devices_product_hero__series" data-slugkey="product.product_name">{product.series}</h1>
             {product.subtitle ? (

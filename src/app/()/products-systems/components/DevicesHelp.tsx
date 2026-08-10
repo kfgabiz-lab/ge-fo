@@ -11,8 +11,6 @@ type DevicesHelpProps = {
   connectPortalHref?: string;
 };
 
-export const CONNECT_PORTAL_FALLBACK_HREF = "https://connect.ls-electric.com/";
-
 function getHelpCtaIconClass(ctaIcon?: DevicesHelpCard["ctaIcon"]) {
   return ctaIcon === "arrow" ? "icon_arrow-18" : "icon_external-18";
 }
@@ -47,7 +45,7 @@ export default function DevicesHelp({
             {cards.map((card) => {
               const isConnectPortal = card.id === "help-1";
               const href = isConnectPortal
-                ? connectPortalHref || CONNECT_PORTAL_FALLBACK_HREF
+                ? connectPortalHref || ""
                 : card.href;
               const isExternal =
                 href.startsWith("http://") || href.startsWith("https://");
@@ -62,7 +60,7 @@ export default function DevicesHelp({
                         "data-slugkey": "product_etc.connect_portal",
                       }
                     : {})}
-                  {...(isConnectPortal || isExternal
+                  {...(href && (isConnectPortal || isExternal)
                     ? { target: "_blank", rel: "noopener noreferrer" }
                     : {})}
                 >

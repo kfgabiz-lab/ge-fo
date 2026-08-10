@@ -1,4 +1,5 @@
 import type { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
 import ProductDetailRouter from "@/app/()/products-systems/components/product/ProductDetailRouter";
 import {
   fetchProductBySlug,
@@ -40,5 +41,7 @@ export default async function ProductDetailRoutePage({
   const categoryId = parseCategoryContext(category);
 
   const row = await fetchProductBySlug(slug, { categoryId });
+  if (!row) notFound();
+
   return <ProductDetailRouter slug={slug} row={row} categoryId={categoryId} />;
 }
