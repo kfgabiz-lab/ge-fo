@@ -1,6 +1,5 @@
 import { fetchApi } from "@/lib/api";
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
-import { gnbNavItems } from "@/data/gnb/navItems";
 import type {
   GnbDevicesMegaMenu,
   GnbNavItem,
@@ -90,22 +89,18 @@ export function resolveGnbNavItems(
 ): GnbNavItem[] {
   const nodes = apiNodes ?? [];
   if (nodes.length === 0) {
-    return gnbNavItems;
+    return [];
   }
 
   return nodes.map((node, index) => {
     const order = index + 1;
 
     if (order === 1) {
-      const fallback = gnbNavItems.find((item) => item.id === "devices");
       return {
         id: "devices",
         label: node.name,
-        href: fallback?.href ?? "",
-        megaMenu:
-          devicesMegaMenu && devicesMegaMenu.categories.length > 0
-            ? devicesMegaMenu
-            : fallback?.megaMenu,
+        href: node.url ?? "",
+        megaMenu: devicesMegaMenu ?? undefined,
       };
     }
 

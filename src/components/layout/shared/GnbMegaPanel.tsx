@@ -152,6 +152,11 @@ export default function GnbMegaPanel({
 
   const activeCategory =
     categories.find((item) => item.id === activeCategoryId) ?? categories[0];
+
+  if (!activeCategory) {
+    return null;
+  }
+
   const activeDepth3 =
     findDepth3(categories, activeCategory.id, activeDepth3Id) ??
     activeCategory.children[0];
