@@ -6,7 +6,7 @@ import "@/assets/css/common-privacy-policy.css";
 export const metadata: Metadata = {
   title: "Privacy Policy | LS ELECTRIC",
   description:
-    "This Privacy Notice explains how LS Electric America collects and uses your personal information in connection with its websites, applications, products, services, events, and experiences.",
+    "Review LS ELECTRIC America's Privacy Notice to understand how we collect, use, store, and protect your personal data in compliance with applicable privacy laws.",
 };
 
 export default function PrivacyPolicyPage() {

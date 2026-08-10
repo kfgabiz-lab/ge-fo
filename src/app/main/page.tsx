@@ -10,6 +10,12 @@ import CommonBanner01 from "@/components/banners/CommonBanner01";
 import CommonBanner03Link from "@/components/banners/CommonBanner03Link";
 import IconCards from "./components/IconCards";
 import "@/assets/css/main.css";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  description:
+    "LS ELECTRIC delivers innovative electrification, power distribution, and industrial automation solutions that help businesses build safer, smarter, and more sustainable operations.",
+};
 
 export default async function MainPage() {
   const highlightNewsItems = await fetchMainHighlightNews();
