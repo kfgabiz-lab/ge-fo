@@ -9,6 +9,7 @@ import SwiperBarControls from "@/components/swiper/SwiperBarControls";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import TabButton from "@/components/ui/TabButton";
 import ProductAwardBadge from "@/components/product/ProductAwardBadge";
+import { getProductBadgeType } from "@/lib/productBadge";
 import type {
   FoProductGroupItem,
   FoProductGroupResponse,
@@ -24,7 +25,8 @@ type ProductItem = {
   imageAlt: string;
   title: string;
   description: string;
-  hasBadge: boolean;
+  badge?: boolean;
+  badges?: 1 | 2;
 };
 
 function toProductItem(item: FoProductGroupItem): ProductItem {
@@ -35,7 +37,7 @@ function toProductItem(item: FoProductGroupItem): ProductItem {
     imageAlt: item.productNm,
     title: item.productNm,
     description: item.prdSubDesc,
-    hasBadge: item.awards.trim() !== "",
+    badges: item.awards === "01" ? (2 as const) : undefined,
   };
 }
 
@@ -217,12 +219,13 @@ function ProductsSwiperPer4({ products }: ProductsSwiperPer4Props) {
         >
           {products.map((product) => {
             const isLinkable = product.href !== "";
+            const badgeType = getProductBadgeType(product);
 
             return (
               <SwiperSlide key={product.id} data-slug-item>
                 <Link
                   href={product.href}
-                  className={product.hasBadge ? "sl type2" : "sl"}
+                  className={badgeType ? `sl ${badgeType}` : "sl"}
                   data-slugkey="seo.slug"
                   data-slugkey-attr="href"
                   aria-disabled={!isLinkable}
@@ -230,7 +233,7 @@ function ProductsSwiperPer4({ products }: ProductsSwiperPer4Props) {
                   onClick={isLinkable ? undefined : (e) => e.preventDefault()}
                 >
                   <div className="img_area">
-                    {product.hasBadge ? <ProductAwardBadge /> : null}
+                    {badgeType ? <ProductAwardBadge /> : null}
                     <img
                       loading="lazy"
                       decoding="async"

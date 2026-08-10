@@ -8,6 +8,7 @@ import DevicesProductHero from "./DevicesProductHero";
 import DevicesProductFeaturesSection from "@/components/content/DevicesProductFeaturesSection";
 import DevicesProductNavScope from "./DevicesProductNavScope";
 import DevicesProductVideo from "./DevicesProductVideo";
+import DevicesProductOtherProducts from "./DevicesProductOtherProducts";
 import {
   productDetailNavItems,
   productTemplateDetail,
@@ -60,16 +61,20 @@ export default async function GenericProductDetail({
 
   const { docTypeOptions, page: downloadsPage } = downloadsData;
 
-  const { lv2Name } = lv2Context;
+  const { lv2Name, otherProducts } = lv2Context;
   const heroDetail = { ...detail, category: lv2Name };
   const inquiryHref = withProductInquiryContext(
     detail.expertBannerHref ?? "/support/contact-us",
     categoryId,
     productId,
   );
+  const otherProductsTitle = lv2Name
+    ? `Explore the ${lv2Name} Products`
+    : undefined;
 
-  const visibleNavItems = productDetailNavItems.filter(
-    (item) => item.id !== "product-other",
+  const showOtherProducts = otherProducts.length > 0;
+  const visibleNavItems = productDetailNavItems.filter((item) =>
+    item.id === "product-other" ? showOtherProducts : true,
   );
 
   return (
@@ -131,6 +136,12 @@ export default async function GenericProductDetail({
           />
         ) : null}
         <DevicesProductVideo youtubeVideoId={detail.youtubeVideoId} />
+        {showOtherProducts ? (
+          <DevicesProductOtherProducts
+            items={otherProducts}
+            title={otherProductsTitle}
+          />
+        ) : null}
         <div id="product-markets">
           <DevicesMarkets />
         </div>

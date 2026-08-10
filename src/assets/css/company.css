@@ -1537,7 +1537,7 @@ section.company-blog-list .company-blog__tag:hover {
 
   .company-page--blog-detail section.company-article-detail .company-article-detail__title {
     margin: 4px 0 0;
-    font-family: inherit;
+    font-family: var(--font-jaka);
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
@@ -1546,7 +1546,7 @@ section.company-blog-list .company-blog__tag:hover {
 
   .company-page--press-detail section.company-article-detail .company-article-detail__title {
     margin: 0;
-    font-family: "Pretendard Variable", var(--font-pretendard);
+    font-family: var(--font-jaka);
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
@@ -1598,7 +1598,7 @@ section.company-blog-list .company-blog__tag:hover {
 
   .company-page--events-detail section.company-article-detail .company-article-detail__title {
     margin: 0;
-    font-family: "Pretendard Variable", var(--font-pretendard);
+    font-family: var(--font-jaka);
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
@@ -1641,7 +1641,7 @@ section.company-blog-list .company-blog__tag:hover {
 
   .company-page--articles-detail section.company-article-detail .company-article-detail__title {
     margin: 0;
-    font-family: inherit;
+    font-family: var(--font-jaka);
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
