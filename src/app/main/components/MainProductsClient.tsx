@@ -250,9 +250,6 @@ function ProductsSwiperPer4({ products }: ProductsSwiperPer4Props) {
                     >
                       {product.title}
                     </h3>
-                    <p className="txt" data-slugkey="productDataForm.prdSubDesc">
-                      {product.description}
-                    </p>
                   </div>
                 </Link>
               </SwiperSlide>
