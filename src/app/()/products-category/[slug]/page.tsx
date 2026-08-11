@@ -9,6 +9,9 @@ import {
 } from "@/app/()/products-systems/data/productsSystemsData";
 import { fetchCategoryInsights } from "@/data/highlightNews";
 import { mergeSeoMetadata } from "@/lib/pageDataSeo";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbList, buildPageGraph, itemUrl, pageUrl } from "@/lib/structuredData/builders";
+import { SITE_URL, WEBSITE_ID } from "@/lib/structuredData/siteConfig";
 import "@/assets/css/devices-systems.css";
 
 type ProductsCategoryPageProps = {
@@ -45,8 +48,59 @@ export default async function ProductsCategoryRoutePage({
       ])
     : [[], []];
 
+  const currentUrl = pageUrl(`/products-category/${slug}`);
+  const productsWithUrl = products
+    .map((p) => ({ p, url: itemUrl(p.href) }))
+    .filter((x): x is { p: (typeof products)[number]; url: string } => x.url !== null);
+  const highlightsWithUrl = highlightItems
+    .map((a) => ({ a, url: itemUrl(a.href) }))
+    .filter((x): x is { a: (typeof highlightItems)[number]; url: string } => x.url !== null);
+  const jsonLdGraph = category
+    ? buildPageGraph([
+        {
+          "@type": "CollectionPage",
+          "@id": `${currentUrl}#webpage`,
+          url: currentUrl,
+          name: category.metaTitle || category.title,
+          description: category.metaDescription || category.description,
+          isPartOf: { "@id": WEBSITE_ID },
+          breadcrumb: { "@id": `${currentUrl}#breadcrumb` },
+          mainEntity: {
+            "@type": "ItemList",
+            name: category.title,
+            description: category.description,
+            itemListElement: productsWithUrl.slice(0, 20).map(({ p, url }, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              item: { "@type": "Product", name: p.title, url },
+            })),
+          },
+          ...(highlightsWithUrl.length
+            ? {
+                about: [
+                  {
+                    "@type": "ItemList",
+                    name: "Highlights(Related Articles)",
+                    itemListElement: highlightsWithUrl.slice(0, 10).map(({ a, url }, i) => ({
+                      "@type": "ListItem",
+                      position: i + 1,
+                      item: { "@type": "Article", headline: a.title, url },
+                    })),
+                  },
+                ],
+              }
+            : {}),
+        },
+        breadcrumbList(currentUrl, [
+          { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },
+          { name: category.title, url: currentUrl },
+        ]),
+      ])
+    : null;
+
   return (
     <main className="devices-page" id="Page_products_category">
+      {jsonLdGraph ? <JsonLd data={jsonLdGraph} /> : null}
       <DevicesHero
         withProducts
         title={category?.title ?? ""}

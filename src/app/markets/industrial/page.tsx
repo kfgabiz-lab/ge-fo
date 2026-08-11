@@ -28,24 +28,38 @@ import {
 } from "../data/marketsProductsData";
 import "@/assets/css/markets.css";
 import type { Metadata, ResolvingMetadata } from "next";
-import { buildMenuSeoMetadata } from "@/lib/menuSeo";
+import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildMarketsPageGraph } from "@/lib/structuredData/marketsGraph";
+
+const PATHNAME = "/markets/industrial";
 
 export async function generateMetadata(
   _: unknown,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  return buildMenuSeoMetadata("/markets/industrial", parent);
+  return buildMenuSeoMetadata(PATHNAME, parent);
 }
 
 export default async function MarketsIndustrialPage() {
-  const [faqItems, highlightNewsItems, productItems] = await Promise.all([
+  const [faqItems, highlightNewsItems, productItems, meta] = await Promise.all([
     fetchMarketsFaqItems(MARKETS_FAQ_CODE.industrial),
     fetchMarketHighlightNews(MARKETS_FAQ_CODE.industrial),
     fetchMarketProducts(MARKETS_PRODUCTS_NAME.industrial),
+    fetchMenuMeta(PATHNAME),
   ]);
+  const jsonLdGraph = buildMarketsPageGraph({
+    pathname: PATHNAME,
+    marketName: industrialHero.title,
+    meta,
+    faqItems,
+    highlightItems: highlightNewsItems,
+    productItems,
+  });
 
   return (
     <main className="markets-page markets-page--industrial" id="Page_markets_industrial">
+      <JsonLd data={jsonLdGraph} />
       <MarketsHero
         variant="key-visual"
         subtitle={industrialHero.subtitle}

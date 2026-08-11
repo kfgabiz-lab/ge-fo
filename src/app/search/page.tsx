@@ -2,13 +2,18 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import SearchAllHero from "./components/SearchAllHero";
 import SearchAllTabContent from "./components/SearchAllTabContent";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildSimpleWebPageGraph } from "@/lib/structuredData/builders";
 import "@/assets/css/search.css";
 import "@/assets/css/devices-product-detail.css";
 
+const SEARCH_TITLE = "Search | LS ELECTRIC";
+const SEARCH_DESCRIPTION =
+  "Search LS ELECTRIC America for advanced power and automation solutions, product specs, technical downloads, media resources, and AI-powered insights.";
+
 export const metadata: Metadata = {
-  title: "Search | LS ELECTRIC",
-  description:
-    "Search LS ELECTRIC America for advanced power and automation solutions, product specs, technical downloads, media resources, and AI-powered insights.",
+  title: SEARCH_TITLE,
+  description: SEARCH_DESCRIPTION,
 };
 
 function SearchAllHeroFallback() {
@@ -27,8 +32,14 @@ function SearchAllHeroFallback() {
 }
 
 export default function SearchAllRoutePage() {
+  const graph = buildSimpleWebPageGraph(
+    "/search",
+    { metaTitle: SEARCH_TITLE, metaDescription: SEARCH_DESCRIPTION },
+    { type: "SearchResultsPage" },
+  );
   return (
     <main className="search-page" id="Page_search_all">
+      <JsonLd data={graph} />
       <Suspense fallback={<SearchAllHeroFallback />}>
         <SearchAllHero />
       </Suspense>

@@ -3,6 +3,9 @@ import DevicesExploreAll from "../components/DevicesExploreAll";
 import type { GnbExploreProduct } from "@/data/gnbExploreAllProducts";
 import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
 import { withCategoryContext } from "@/lib/navigation/categoryContext";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbList, buildPageGraph, pageUrl } from "@/lib/structuredData/builders";
+import { SITE_URL, WEBSITE_ID } from "@/lib/structuredData/siteConfig";
 import "@/assets/css/devices-systems.css";
 
 const MULTI_CATEGORY_PREFERRED_LV2_IDS: readonly string[] = ["587"];
@@ -74,9 +77,11 @@ export default async function ExploreAllProductsPage() {
     }),
   );
 
-  const lv1Categories = deviceRows
-    .filter((r) => r.depth === "1")
-    .map((r) => ({ id: String(r.rowId), label: r.categoryTitle ?? "" }));
+  const lv1Rows = deviceRows.filter((r) => r.depth === "1");
+  const lv1Categories = lv1Rows.map((r) => ({
+    id: String(r.rowId),
+    label: r.categoryTitle ?? "",
+  }));
   const lv2CategoriesByLv1: Record<string, { id: string; label: string }[]> = {};
   for (const r of visibleLv2Rows) {
     const parent = r.parentId as string;
@@ -86,8 +91,39 @@ export default async function ExploreAllProductsPage() {
     });
   }
 
+  const currentUrl = pageUrl("/products-systems/explore-all");
+  const jsonLdGraph = buildPageGraph([
+    {
+      "@type": "CollectionPage",
+      "@id": `${currentUrl}#webpage`,
+      url: currentUrl,
+      name: "Explore All Products",
+      description:
+        "Find any LS ELECTRIC America product quickly — browse our full lineup, organized from A to Z.",
+      isPartOf: { "@id": WEBSITE_ID },
+      breadcrumb: { "@id": `${currentUrl}#breadcrumb` },
+      mainEntity: {
+        "@type": "ItemList",
+        name: "Products & Systems",
+        itemListElement: lv1Rows.map((r, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          item: {
+            "@type": "Product",
+            name: r.categoryTitle ?? "",
+            url: r.categorySlug ? pageUrl(`/products-category/${r.categorySlug}`) : currentUrl,
+          },
+        })),
+      },
+    },
+    breadcrumbList(currentUrl, [
+      { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },
+    ]),
+  ]);
+
   return (
     <main className="devices-page" id="Page_devices_explore_all">
+      <JsonLd data={jsonLdGraph} />
       <section className="devices_explore">
         <div className="inner">
           <header className="devices_explore__head">

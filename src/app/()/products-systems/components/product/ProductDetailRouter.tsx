@@ -15,5 +15,5 @@ export default function ProductDetailRouter({
   if (isSw) {
     return <SwProductDetail slug={slug} row={row} categoryId={categoryId} />;
   }
-  return <GenericProductDetail row={row} categoryId={categoryId} />;
+  return <GenericProductDetail slug={slug} row={row} categoryId={categoryId} />;
 }

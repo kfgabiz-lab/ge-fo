@@ -12,6 +12,8 @@ import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import { getPreviewToken } from "@/lib/previewMode";
 import type { Metadata, ResolvingMetadata } from "next";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildContentDetailGraph } from "@/lib/structuredData/contentGraph";
 import "@/assets/css/company.css";
 
 type CompanyPressDetailPageProps = {
@@ -78,27 +80,42 @@ export default async function CompanyPressDetailPage({
     ? { href: pressDetailHref(adjacent.next.id), title: adjacent.next.title }
     : undefined;
 
+  const jsonLdGraph = buildContentDetailGraph({
+    postType: "NewsArticle",
+    detailPathname: `/company/press/detail/${id}`,
+    listPathname: "/company/press",
+    breadcrumbLabel: "Press",
+    title: (row.title as string) ?? "",
+    metaDescription: (row["seo.meta_description"] as string) ?? "",
+    contentHtml,
+    publishedAt: (pickField(row, "publish_dttm", "publishDttm") as string) ?? "",
+    imagePath: mediaId != null ? pressImageSrc(mediaId) : null,
+  });
+
   return (
-    <CompanyArticleDetail
-      variant="press"
-      pageId="Page_company_press_detail"
-      slug="press-data"
-      recordId={id}
-      preview={preview}
-      title={(row.title as string) ?? ""}
-      date={formatDisplayDate((pickField(row, "publish_dttm", "publishDttm") as string) ?? "")}
-      heroImage={heroImage}
-      pagerAriaLabel="Press post navigation"
-      prev={prev}
-      next={next}
-      listHref="/company/press"
-    >
-      <div className={articleDetailClass("body")} data-slug="press-data">
-        <div
-          data-slugkey="content"
-          dangerouslySetInnerHTML={{ __html: contentHtml }}
-        />
-      </div>
-    </CompanyArticleDetail>
+    <>
+      <JsonLd data={jsonLdGraph} />
+      <CompanyArticleDetail
+        variant="press"
+        pageId="Page_company_press_detail"
+        slug="press-data"
+        recordId={id}
+        preview={preview}
+        title={(row.title as string) ?? ""}
+        date={formatDisplayDate((pickField(row, "publish_dttm", "publishDttm") as string) ?? "")}
+        heroImage={heroImage}
+        pagerAriaLabel="Press post navigation"
+        prev={prev}
+        next={next}
+        listHref="/company/press"
+      >
+        <div className={articleDetailClass("body")} data-slug="press-data">
+          <div
+            data-slugkey="content"
+            dangerouslySetInnerHTML={{ __html: contentHtml }}
+          />
+        </div>
+      </CompanyArticleDetail>
+    </>
   );
 }

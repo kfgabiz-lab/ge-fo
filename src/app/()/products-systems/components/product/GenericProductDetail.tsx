@@ -26,13 +26,17 @@ import {
   buildHwProductTechHubBannerCopy,
   fetchProductTechHubBanner,
 } from "@/data/support/techHubData";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildProductJsonLdGraph } from "@/lib/structuredData/productGraph";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
 export default async function GenericProductDetail({
+  slug,
   row,
   categoryId,
 }: {
+  slug?: string;
   row: Record<string, unknown> | null;
   categoryId?: number;
 }) {
@@ -50,7 +54,13 @@ export default async function GenericProductDetail({
     productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
     productId
       ? fetchProductLv2Context(productId)
-      : Promise.resolve({ lv2Name: "", otherProducts: [] }),
+      : Promise.resolve({
+          lv2Name: "",
+          lv2Slug: "",
+          lv1Name: "",
+          lv1Slug: "",
+          otherProducts: [],
+        }),
     productId ? fetchProductManagerEmail(productId) : Promise.resolve(""),
     productId ? fetchProductInsights(productId) : Promise.resolve([]),
     fetchProductDownloadsInitialData(productCodes),
@@ -61,7 +71,7 @@ export default async function GenericProductDetail({
 
   const { docTypeOptions, page: downloadsPage } = downloadsData;
 
-  const { lv2Name, otherProducts } = lv2Context;
+  const { lv2Name, lv2Slug, lv1Name, lv1Slug, otherProducts } = lv2Context;
   const heroDetail = { ...detail, category: lv2Name };
   const inquiryHref = withProductInquiryContext(
     detail.expertBannerHref ?? "/support/contact-us",
@@ -80,8 +90,24 @@ export default async function GenericProductDetail({
     return true;
   });
 
+  const jsonLdGraph = slug
+    ? buildProductJsonLdGraph({
+        slug,
+        row,
+        detail,
+        lv1Name,
+        lv1Slug,
+        lv2Name,
+        lv2Slug,
+        otherProducts,
+        insights,
+        faqItems,
+      })
+    : null;
+
   return (
     <main className="devices-page devices-page--product" id="Page_devices_product">
+      {jsonLdGraph ? <JsonLd data={jsonLdGraph} /> : null}
       <DevicesProductHero product={heroDetail} contactHref={inquiryHref} />
       <DevicesProductNavScope navItems={visibleNavItems}>
         <DevicesProductFeaturesSection
