@@ -45,6 +45,12 @@ export interface DownloadCenterContentsPage {
   size: number;
 }
 
+export function hasSelectableVersions(item: DownloadCenterItem): boolean {
+  const sourceSystem = item.versions[0]?.files[0]?.sourceSystem ?? null;
+  if (sourceSystem !== "SSQ") return false;
+  return item.versions.some((v) => v.versionName != null && v.versionName.trim() !== "");
+}
+
 export type DownloadCenterSort =
   | ""
   | "doctype"
