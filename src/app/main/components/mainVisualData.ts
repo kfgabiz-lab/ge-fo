@@ -17,6 +17,7 @@ export interface HeroItem {
   orderNo: string;
   mediaId: number | null;
   mediaMimeType: string | null;
+  updatedAt: string | null;
 }
 
 const PAGE_FILE_ENDPOINT = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
@@ -72,6 +73,7 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
         orderNo: (pickField(row, "sort_order", "orderNo") as string) ?? "",
         mediaId,
         mediaMimeType,
+        updatedAt: (row.updatedAt as string) ?? null,
       };
     }),
   );
@@ -80,7 +82,9 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
     const av = orderNoValue(a.orderNo);
     const bv = orderNoValue(b.orderNo);
     if (av !== bv) return av - bv;
-    return a.id - b.id;
+    const at = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+    const bt = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+    return bt - at;
   });
 
   return items;
