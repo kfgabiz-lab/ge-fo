@@ -4,10 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import CompanyFeedEmpty from "@/app/company/components/CompanyFeedEmpty";
 import CompanyBlogListToolbar from "@/app/company/components/CompanyBlogListToolbar";
-import {
-  blogHeroBgImage,
-  blogHeroMainImage,
-} from "@/app/company/data/blogListContent";
+import { blogHeroBgImage } from "@/app/company/data/blogListContent";
 import {
   BLOG_LIST_SIZE,
   BLOG_STATUS_WHERE,
@@ -26,7 +23,7 @@ import PageNumbering from "@/components/pagination/PageNumbering";
 import HashtagLink from "@/components/ui/HashtagLink";
 import "@/assets/css/company.css";
 
-const LIST_FALLBACK_IMAGE = "/img/company/blog/list_01.jpg";
+const LIST_FALLBACK_IMAGE = "/img/devices/product/list_no_data.svg";
 
 type CompanyBlogPageProps = {
   empty?: boolean;
@@ -165,7 +162,7 @@ export default function CompanyBlogPage({
                 prefetch={false}
               >
                 <img
-                  src={featured.imageSrc ?? blogHeroMainImage}
+                  src={featured.imageSrc ?? LIST_FALLBACK_IMAGE}
                   alt={featured.title}
                   data-slugkey="image"
                   data-slugkey-attr="src"

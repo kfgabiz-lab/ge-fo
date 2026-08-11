@@ -18,8 +18,8 @@ import type {
 } from "@/app/company/data/eventsListContent";
 import "@/assets/css/company.css";
 
-const FEATURED_FALLBACK_IMAGE = "/img/company/events/featured_01.png";
-const PAST_FALLBACK_IMAGE = "/img/company/events/past_01.png";
+const FEATURED_FALLBACK_IMAGE = "/img/devices/product/list_no_data.svg";
+const PAST_FALLBACK_IMAGE = "/img/devices/product/list_no_data.svg";
 
 type CompanyEventsPageProps = {
   pageId?: string;

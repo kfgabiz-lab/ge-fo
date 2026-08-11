@@ -274,21 +274,8 @@
       height: 116px;
     }
     .banner_swiper.only .link:before{
-      display:block;
-      content:'';
-      width: 30px;
-      height: 30px;
-      position: absolute;
-      right: 30px;
-      background: url("/ico/ico_arrow_righ_24_white.svg") no-repeat center;
-      top: 50%;
-      margin-top: -15px;
-      transition: .3s;
-      border-radius: 30px;
+      display:none;
     }
-    .banner_swiper.only:hover .link:before{
-    background-color: #E60040;
-}
     .banner_swiper .link {
       display: block;
       overflow: visible;
