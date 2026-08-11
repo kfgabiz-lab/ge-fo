@@ -114,10 +114,10 @@ export function toLvCategoryOptions(
   category: string,
 ): TrainingFilterOption[] {
   if (category === "P") {
-    return distinctOptions(nodes.map((n) => n.depth1Title));
+    return [{ value: "", label: "All" }, ...distinctOptions(nodes.map((n) => n.depth1Title))];
   }
   if (category === "A") {
-    return distinctOptions(nodes.map((n) => n.depth2Title));
+    return [{ value: "", label: "All" }, ...distinctOptions(nodes.map((n) => n.depth2Title))];
   }
   return [];
 }
@@ -129,11 +129,11 @@ export function toSubCategoryOptions(
 ): TrainingFilterOption[] {
   if (category === "P") {
     const matched = nodes.filter((n) => !lvValue || n.depth1Title === lvValue);
-    return distinctOptions(matched.map((n) => n.depth2Title));
+    return [{ value: "", label: "All" }, ...distinctOptions(matched.map((n) => n.depth2Title))];
   }
   if (category === "A") {
     const matched = nodes.filter((n) => !lvValue || n.depth2Title === lvValue);
-    return distinctOptions(matched.map((n) => n.productName));
+    return [{ value: "", label: "All" }, ...distinctOptions(matched.map((n) => n.productName))];
   }
   return [];
 }

@@ -45,6 +45,10 @@ import ContactUsTermsModal from "./ContactUsTermsModal";
 
 const CONSENT_PRIVACY_ID = "personal-info";
 const CONSENT_MARKETING_ID = "newsletter";
+const PRODUCT_CATEGORY_REQUIRED_INQUIRY_TYPES = [
+  "PRODUCT_INFORMATION",
+  "QUOTATION_REQUEST",
+];
 const ORDERABLE_PRODUCT_ORDER_METHOD = "01";
 const DISCONTINUED_PRODUCT_ORDER_STATUS = "99";
 
@@ -93,6 +97,7 @@ type ContactFieldErrors = {
   description?: boolean;
   password?: boolean;
   confirmPassword?: boolean;
+  productCategory?: boolean;
 };
 
 type CategoryLevelConfig = {
@@ -226,6 +231,8 @@ function ContactUsFormContent() {
   const [countries, setCountries] = useState<CodeItem[]>([]);
 
   const [inquiryType, setInquiryType] = useState("");
+  const productCategoryRequired =
+    PRODUCT_CATEGORY_REQUIRED_INQUIRY_TYPES.includes(inquiryType);
   const [deviceRows, setDeviceRows] = useState<DevicesTreeRow[]>([]);
   const [categoryIds, setCategoryIds] = useState<{
     lv1: string;
@@ -315,7 +322,12 @@ function ContactUsFormContent() {
         label: row.categoryTitle ?? "",
       })),
       disabled: false,
-      onChange: (value) => setCategoryIds({ lv1: value, lv2: "", lv3: "" }),
+      onChange: (value) => {
+        setCategoryIds({ lv1: value, lv2: "", lv3: "" });
+        if (errors.productCategory) {
+          setErrors((prev) => ({ ...prev, productCategory: undefined }));
+        }
+      },
     },
     {
       id: contactUsCategoryLevels[1].id,
@@ -345,13 +357,14 @@ function ContactUsFormContent() {
     },
   ];
 
-  function renderCategorySelect(config: CategoryLevelConfig) {
+  function renderCategorySelect(config: CategoryLevelConfig, error = false) {
     return (
       <GuideSelect
         value={config.value}
         onChange={(event) => config.onChange(String(event.target.value))}
         displayEmpty
         disabled={config.disabled}
+        error={error}
         IconComponent={GuideSelectIcon}
         inputProps={{ "aria-label": config.ariaLabel }}
         renderValue={(value) => {
@@ -386,6 +399,7 @@ function ContactUsFormContent() {
       description: description.trim() === "",
       password: password.trim() === "",
       confirmPassword: confirmPassword.trim() === "",
+      productCategory: productCategoryRequired && categoryIds.lv1.trim() === "",
     };
     setErrors(nextErrors);
 
@@ -399,7 +413,8 @@ function ContactUsFormContent() {
       description.trim() !== "" &&
       password.trim() !== "" &&
       confirmPassword.trim() !== "" &&
-      Boolean(consent[CONSENT_PRIVACY_ID]);
+      Boolean(consent[CONSENT_PRIVACY_ID]) &&
+      (!productCategoryRequired || categoryIds.lv1.trim() !== "");
     if (!requiredFilled) {
       alert("Please complete all required fields.");
       return;
@@ -510,11 +525,14 @@ function ContactUsFormContent() {
 
             <div className="support_contact_form__row support_contact_form__row--category">
               <div className="support_contact_form__field support_contact_form__field--category">
-                <ContactUsFieldLabel>
+                <ContactUsFieldLabel required={productCategoryRequired}>
                   {contactUsFormCopy.productCategory}
                 </ContactUsFieldLabel>
                 <FormControl className="guide_field">
-                  {renderCategorySelect(categoryLevels[0])}
+                  {renderCategorySelect(
+                    categoryLevels[0],
+                    Boolean(errors.productCategory),
+                  )}
                 </FormControl>
               </div>
               {categoryLevels.slice(1).map((level) => (

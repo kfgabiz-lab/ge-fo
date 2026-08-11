@@ -73,9 +73,12 @@ export default async function GenericProductDetail({
     : undefined;
 
   const showOtherProducts = otherProducts.length > 0;
-  const visibleNavItems = productDetailNavItems.filter((item) =>
-    item.id === "product-other" ? showOtherProducts : true,
-  );
+  const showVideo = Boolean(detail.youtubeVideoId);
+  const visibleNavItems = productDetailNavItems.filter((item) => {
+    if (item.id === "product-other") return showOtherProducts;
+    if (item.id === "product-video") return showVideo;
+    return true;
+  });
 
   return (
     <main className="devices-page devices-page--product" id="Page_devices_product">
@@ -135,7 +138,9 @@ export default async function GenericProductDetail({
             {...buildHwProductTechHubBannerCopy(techHubBanner)}
           />
         ) : null}
-        <DevicesProductVideo youtubeVideoId={detail.youtubeVideoId} />
+        {showVideo ? (
+          <DevicesProductVideo youtubeVideoId={detail.youtubeVideoId} />
+        ) : null}
         {showOtherProducts ? (
           <DevicesProductOtherProducts
             items={otherProducts}

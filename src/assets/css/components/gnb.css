@@ -793,7 +793,7 @@ color: #fff;
 }
 
 .main_header.is-invert .main_header__nav-link {
-  color: var(--color-primary, #0f1f45);
+  color: #222;
 }
 
 .main_header.is-invert .main_header__icon-menu span {

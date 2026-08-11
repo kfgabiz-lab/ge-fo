@@ -23,10 +23,8 @@ async function resolveBreadcrumbOverride(): Promise<BreadcrumbServerOverride> {
   const sessionMatch = pathname.match(TRAINING_SESSION_PATH_RE);
   if (sessionMatch) {
     const [, variant, courseId] = sessionMatch;
-    const title = await fetchTrainingCourseTitle(courseId);
-    if (!title) return null;
     const courseHref = `/services/${variant}-training/${courseId}`;
-    return { pathname, crumb: { href: courseHref, label: title } };
+    return { pathname, crumb: { href: courseHref, label: "Course" } };
   }
 
   const detailMatch = pathname.match(TRAINING_DETAIL_PATH_RE);
