@@ -765,6 +765,8 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
     playYoutubeAt(index);
   };
 
+  if (slides.length === 0) return null;
+
   return (
     <div
       ref={sectionRef}
