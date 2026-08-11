@@ -7,6 +7,7 @@ import GuideSelect from "@/components/form/GuideSelect";
 import DevicesProductDownloadsCopyLink from "@/app/()/products-systems/components/product/DevicesProductDownloadsCopyLink";
 import {
   fetchDownloadCenterFileUrl,
+  hasSelectableVersions,
   type DownloadCenterItem,
 } from "@/data/support/downloadCenterData";
 import {
@@ -47,13 +48,14 @@ export default function SearchDocumentsCard({
   className?: string;
 }) {
   const versions = item.versions ?? [];
+  const namedVersions = versions.filter((v) => v.versionName?.trim());
   const [selectedVersionId, setSelectedVersionId] = useState<number | null>(
-    versions[0]?.versionId ?? null,
+    namedVersions[0]?.versionId ?? versions[0]?.versionId ?? null,
   );
   const selectedVersion =
     versions.find((v) => v.versionId === selectedVersionId) ?? versions[0];
   const files = selectedVersion?.files ?? [];
-  const showVersionSelect = versions.length > 1;
+  const showVersionSelect = hasSelectableVersions(item);
 
   const highlight = searchTerm?.trim() ? searchTerm.trim() : undefined;
 
@@ -104,10 +106,10 @@ export default function SearchDocumentsCard({
                     IconComponent={GuideSelectIcon}
                     inputProps={{ "aria-label": `Version for ${item.title ?? ""}` }}
                     renderValue={(value) => {
-                      const ver = versions.find(
+                      const ver = namedVersions.find(
                         (v) => String(v.versionId) === String(value),
                       );
-                      const label = ver?.versionName ?? String(ver?.sortKey ?? "");
+                      const label = ver?.versionName ?? "";
                       return (
                         <span className="guide_field__select-value" title={label}>
                           {label}
@@ -115,12 +117,12 @@ export default function SearchDocumentsCard({
                       );
                     }}
                   >
-                    {versions.map((version) => (
+                    {namedVersions.map((version) => (
                       <MenuItem
                         key={version.versionId}
                         value={String(version.versionId)}
                       >
-                        {version.versionName ?? String(version.sortKey)}
+                        {version.versionName}
                       </MenuItem>
                     ))}
                   </GuideSelect>

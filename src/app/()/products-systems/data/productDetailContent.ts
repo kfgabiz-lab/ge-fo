@@ -2,6 +2,7 @@ import {
   fetchDownloadCenterContents,
   fetchDownloadCenterFileUrl,
   fetchDownloadDocTypes,
+  hasSelectableVersions,
   type DownloadCenterItem,
   type DownloadCenterSort,
 } from "@/data/support/downloadCenterData";
@@ -54,6 +55,7 @@ export type ProductDownloadItem = {
   date: string;
   version: string;
   versions?: string[];
+  showVersionSelect?: boolean;
   files: ProductDownloadFile[];
   description?: ProductDownloadDescription;
   highlight?: string;
@@ -85,6 +87,7 @@ export async function mapDownloadCenterItemsToProductDownloads(
         date: item.date ?? "",
         version: latestVersion?.versionName ?? "",
         versions: versionNames,
+        showVersionSelect: hasSelectableVersions(item),
         files: mappedFiles,
       } satisfies ProductDownloadItem;
     }),
