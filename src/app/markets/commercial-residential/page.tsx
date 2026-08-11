@@ -27,24 +27,38 @@ import {
 } from "../data/marketsProductsData";
 import "@/assets/css/markets.css";
 import type { Metadata, ResolvingMetadata } from "next";
-import { buildMenuSeoMetadata } from "@/lib/menuSeo";
+import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildMarketsPageGraph } from "@/lib/structuredData/marketsGraph";
+
+const PATHNAME = "/markets/commercial-residential";
 
 export async function generateMetadata(
   _: unknown,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  return buildMenuSeoMetadata("/markets/commercial-residential", parent);
+  return buildMenuSeoMetadata(PATHNAME, parent);
 }
 
 export default async function MarketsCommercialResidentialPage() {
-  const [faqItems, highlightNewsItems, productItems] = await Promise.all([
+  const [faqItems, highlightNewsItems, productItems, meta] = await Promise.all([
     fetchMarketsFaqItems(MARKETS_FAQ_CODE.commercialResidential),
     fetchMarketHighlightNews(MARKETS_FAQ_CODE.commercialResidential),
     fetchMarketProducts(MARKETS_PRODUCTS_NAME.commercialResidential),
+    fetchMenuMeta(PATHNAME),
   ]);
+  const jsonLdGraph = buildMarketsPageGraph({
+    pathname: PATHNAME,
+    marketName: commercialResidentialHero.title,
+    meta,
+    faqItems,
+    highlightItems: highlightNewsItems,
+    productItems,
+  });
 
   return (
     <main className="markets-page markets-page--commercial-residential" id="Page_markets">
+      <JsonLd data={jsonLdGraph} />
       <MarketsHero
         variant="key-visual"
         subtitle={commercialResidentialHero.subtitle}

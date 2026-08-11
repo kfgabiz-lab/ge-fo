@@ -51,6 +51,9 @@ import {
   smartFactoryWhySection,
 } from "../../data/smartFactoryContent";
 import { mapSwKeyFeatures, type SwKeyFeature } from "../../lib/mapSwKeyFeatures";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbList, buildPageGraph, itemUrl, pageUrl } from "@/lib/structuredData/builders";
+import { SITE_URL, WEBSITE_ID } from "@/lib/structuredData/siteConfig";
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
@@ -289,20 +292,109 @@ export default async function SwProductDetail({
 
   const Detail = SW_DETAIL_COMPONENTS[slug];
   if (!Detail) {
-    return <GenericProductDetail row={row} categoryId={categoryId} />;
+    return <GenericProductDetail slug={slug} row={row} categoryId={categoryId} />;
   }
 
+  const bind = bindSwDetail(row);
+  const currentUrl = pageUrl(`/product/${slug}`);
+  const metaTitle = (row?.["seo.meta_title"] as string) || bind.title || slug;
+  const metaDescription =
+    (row?.["seo.meta_description"] as string) || bind.description || "";
+
+  const productNode = {
+    "@type": "Product",
+    "@id": `${currentUrl}#product`,
+    name: bind.title ?? "",
+    description: bind.description ?? "",
+    brand: { "@type": "Brand", name: "LS ELECTRIC" },
+    category: "Software",
+  };
+
+  const relevantProducts = otherProducts
+    .map((p) => ({ p, url: itemUrl(p.href) }))
+    .filter((x): x is { p: typeof otherProducts[number]; url: string } => x.url !== null);
+  const relevantArticles = highlights
+    .map((a) => ({ a, url: itemUrl(a.href) }))
+    .filter((x): x is { a: typeof highlights[number]; url: string } => x.url !== null);
+
+  const about: Record<string, unknown>[] = [];
+  if (relevantProducts.length) {
+    about.push({
+      "@type": "ItemList",
+      name: `Relavant Products for ${bind.title ?? ""}`,
+      itemListElement: relevantProducts.slice(0, 10).map(({ p, url }, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: { "@type": "Product", name: p.title, url },
+      })),
+    });
+  }
+  if (relevantArticles.length) {
+    about.push({
+      "@type": "ItemList",
+      name: "Highlights(Related Articles)",
+      itemListElement: relevantArticles.slice(0, 10).map(({ a, url }, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: { "@type": "Article", headline: a.title, url },
+      })),
+    });
+  }
+  if (dbFaq.length) {
+    about.push({
+      "@type": "FAQPage",
+      mainEntity: dbFaq.map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: { "@type": "Answer", text: f.answer },
+      })),
+    });
+  }
+
+  const webpageNode = {
+    "@type": "WebPage",
+    "@id": `${currentUrl}#webpage`,
+    url: currentUrl,
+    name: metaTitle,
+    description: metaDescription,
+    isPartOf: { "@id": WEBSITE_ID },
+    breadcrumb: { "@id": `${currentUrl}#breadcrumb` },
+    mainEntity: {
+      "@type": "ItemList",
+      name: `Relavant Products for ${bind.title ?? ""}`,
+      itemListElement: relevantProducts.slice(0, 10).map(({ p, url }, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: { "@type": "Product", name: p.title, url },
+      })),
+    },
+    ...(about.length ? { about } : {}),
+  };
+
+  const graph = buildPageGraph([
+    webpageNode,
+    productNode,
+    breadcrumbList(currentUrl, [
+      { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },
+      { name: "Software", url: pageUrl("/products-category/software") },
+      { name: bind.title ?? slug, url: currentUrl },
+    ]),
+  ]);
+
   return (
-    <Detail
-      row={row}
-      dbFaq={dbFaq}
-      downloads={downloadsData.page}
-      docTypeOptions={downloadsData.docTypeOptions}
-      productCodes={productCodes}
-      techHubBanner={techHubBanner}
-      highlights={highlights}
-      contactHref={contactHref}
-      otherProducts={otherProducts}
-    />
+    <>
+      <JsonLd data={graph} />
+      <Detail
+        row={row}
+        dbFaq={dbFaq}
+        downloads={downloadsData.page}
+        docTypeOptions={downloadsData.docTypeOptions}
+        productCodes={productCodes}
+        techHubBanner={techHubBanner}
+        highlights={highlights}
+        contactHref={contactHref}
+        otherProducts={otherProducts}
+      />
+    </>
   );
 }

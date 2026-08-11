@@ -11,21 +11,74 @@ import {
 } from "@/data/services/serviceCenterContent";
 import "@/assets/css/services.css";
 import type { Metadata, ResolvingMetadata } from "next";
-import { buildMenuSeoMetadata } from "@/lib/menuSeo";
+import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildSimpleWebPageGraph, pageUrl } from "@/lib/structuredData/builders";
+import { GICS_SUPPORT_URL } from "@/lib/structuredData/siteConfig";
+
+const PATHNAME = "/services/service-center";
 
 export async function generateMetadata(
   _: unknown,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  return buildMenuSeoMetadata("/services/service-center", parent);
+  return buildMenuSeoMetadata(PATHNAME, parent);
 }
 
-export default function ServiceCenterPage() {
+export default async function ServiceCenterPage() {
+  const meta = await fetchMenuMeta(PATHNAME);
+  const graph = buildSimpleWebPageGraph(PATHNAME, meta, {
+    extra: {
+      about: [
+        {
+          "@type": "FAQPage",
+          mainEntity: serviceCenterFaqItems.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: { "@type": "Answer", text: item.answer },
+          })),
+        },
+      ],
+      potentialAction: [
+        {
+          "@type": "CommunicateAction",
+          name: "Request for Service",
+          target: { "@type": "EntryPoint", urlTemplate: GICS_SUPPORT_URL },
+        },
+        {
+          "@type": "CommunicateAction",
+          name: "Contact us",
+          target: { "@type": "EntryPoint", urlTemplate: pageUrl("/support/contact-us") },
+        },
+        {
+          "@type": "CommunicateAction",
+          name: "Training Request",
+          target: pageUrl("/services/request-for-training"),
+        },
+        {
+          "@type": "CommunicateAction",
+          name: "Download Center",
+          target: pageUrl("/support/download-center"),
+        },
+        {
+          "@type": "CommunicateAction",
+          name: "Tech Hub",
+          target: pageUrl("/support/tech-hub"),
+        },
+        {
+          "@type": "CommunicateAction",
+          name: "Warranty Policy",
+          target: pageUrl("/services/warranty-policy"),
+        },
+      ],
+    },
+  });
   return (
     <main
       className="support-page support-page--service-center"
       id="P-FO-SERV-010000P"
     >
+      <JsonLd data={graph} />
       <ServiceCenterTitle />
       <ServiceCenterCards />
       <ServiceCenterBanner />

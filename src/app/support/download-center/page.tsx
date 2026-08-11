@@ -1,14 +1,45 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import DownloadCenterPageShell from "./components/DownloadCenterPageShell";
-import { buildMenuSeoMetadata } from "@/lib/menuSeo";
+import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
+import { fetchDownloadCenterContents } from "@/data/support/downloadCenterData";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildSimpleWebPageGraph } from "@/lib/structuredData/builders";
+
+const PATHNAME = "/support/download-center";
 
 export async function generateMetadata(
   _: unknown,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  return buildMenuSeoMetadata("/support/download-center", parent);
+  return buildMenuSeoMetadata(PATHNAME, parent);
 }
 
-export default function DownloadCenterPage() {
-  return <DownloadCenterPageShell pageId="Page_support_download_center" />;
+export default async function DownloadCenterPage() {
+  const [meta, contents] = await Promise.all([
+    fetchMenuMeta(PATHNAME),
+    fetchDownloadCenterContents({ size: 20 }),
+  ]);
+  const graph = buildSimpleWebPageGraph(PATHNAME, meta, {
+    type: "CollectionPage",
+    extra: {
+      hasPart: contents.content.map((item) => ({
+        "@type": "DigitalDocument",
+        name: item.title ?? "",
+        uploadDate: item.date ?? "",
+        hasPart: item.versions.flatMap((v) =>
+          v.files.map((f) => ({
+            "@type": "DataDownload",
+            name: f.fileName ?? "",
+            encodingFormat: f.fileExt ?? "",
+          })),
+        ),
+      })),
+    },
+  });
+  return (
+    <>
+      <JsonLd data={graph} />
+      <DownloadCenterPageShell pageId="Page_support_download_center" />
+    </>
+  );
 }

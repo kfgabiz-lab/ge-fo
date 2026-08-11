@@ -616,13 +616,22 @@ export async function fetchSwRelevantProducts(
 
 export interface ProductLv2Context {
   lv2Name: string;
+  lv2Slug: string;
+  lv1Name: string;
+  lv1Slug: string;
   otherProducts: ProductOtherItem[];
 }
 
 export async function fetchProductLv2Context(
   currentProductId: number,
 ): Promise<ProductLv2Context> {
-  const empty: ProductLv2Context = { lv2Name: "", otherProducts: [] };
+  const empty: ProductLv2Context = {
+    lv2Name: "",
+    lv2Slug: "",
+    lv1Name: "",
+    lv1Slug: "",
+    otherProducts: [],
+  };
   try {
     const [rows, awardsMap] = await Promise.all([
       fetchDevicesTreeRows(),
@@ -633,6 +642,20 @@ export async function fetchProductLv2Context(
     if (myLv2.size === 0) return empty;
 
     const lv2Name = pickLv2NameFromTreeRows(rows, myLv2);
+    const lv2Row = rows.find(
+      (r) => r.depth === "2" && r.rowId != null && myLv2.has(String(r.rowId)),
+    );
+    const lv2Slug = lv2Row?.categorySlug ?? "";
+    const lv1Row = lv2Row
+      ? rows.find(
+          (r) =>
+            r.depth === "1" &&
+            r.rowId != null &&
+            String(r.rowId) === lv2Row.parentId,
+        )
+      : undefined;
+    const lv1Name = lv1Row?.categoryTitle ?? "";
+    const lv1Slug = lv1Row?.categorySlug ?? "";
 
     const seen = new Set<number>();
     const otherProducts: ProductOtherItem[] = [];
@@ -653,7 +676,7 @@ export async function fetchProductLv2Context(
         badge: awardsMap.get(r.productId) === "01",
       });
     }
-    return { lv2Name, otherProducts };
+    return { lv2Name, lv2Slug, lv1Name, lv1Slug, otherProducts };
   } catch {
     return empty;
   }

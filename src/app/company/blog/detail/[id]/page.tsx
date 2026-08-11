@@ -16,6 +16,8 @@ import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import { getPreviewToken } from "@/lib/previewMode";
 import type { Metadata, ResolvingMetadata } from "next";
 import HashtagLink from "@/components/ui/HashtagLink";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildContentDetailGraph } from "@/lib/structuredData/contentGraph";
 import "@/assets/css/company.css";
 
 type CompanyBlogDetailPageProps = {
@@ -86,8 +88,25 @@ export default async function CompanyBlogDetailPage({
     ? { href: blogDetailHref(adjacent.next.id), title: adjacent.next.title }
     : undefined;
 
+  const publishDttm = (pickField(row, "publish_dttm", "publishDttm") as string) ?? "";
+  const jsonLdGraph = buildContentDetailGraph({
+    postType: "BlogPosting",
+    detailPathname: `/company/blog/detail/${id}`,
+    listPathname: "/company/blog",
+    breadcrumbLabel: "Blog",
+    title: (row.title as string) ?? "",
+    metaDescription: (row["seo.meta_description"] as string) ?? "",
+    contentHtml,
+    publishedAt: publishDttm,
+    category: categoryLabel,
+    tags,
+    imagePath: mediaId != null ? blogImageSrc(mediaId) : null,
+  });
+
   return (
-    <CompanyArticleDetail
+    <>
+      <JsonLd data={jsonLdGraph} />
+      <CompanyArticleDetail
       variant="blog"
       pageId="Page_company_blog_detail"
       slug="blog-data"
@@ -122,5 +141,6 @@ export default async function CompanyBlogDetailPage({
         </div>
       </div>
     </CompanyArticleDetail>
+    </>
   );
 }
