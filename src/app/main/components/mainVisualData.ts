@@ -7,6 +7,7 @@ import { getPreviewBannerId } from "@/lib/previewMode";
 const BANNER_SLUG = "banner-data";
 const BANNER_POSITION_HERO = "HERO";
 const BANNER_POSITION_INFORMATION = "INFORMATION";
+const MAX_HERO_BANNERS = 3;
 
 export interface HeroItem {
   id: number;
@@ -93,12 +94,19 @@ export interface BannerItem {
   subTitle: string;
   sortOrder: string;
   mediaId: number | null;
+  updatedAt: string | null;
 }
 
 function sortOrderValue(sortOrder: string): number {
   if (sortOrder === "") return Number.POSITIVE_INFINITY;
   const n = Number(sortOrder);
   return Number.isNaN(n) ? Number.POSITIVE_INFINITY : n;
+}
+
+function updatedAtValue(updatedAt: string | null): number {
+  if (!updatedAt) return 0;
+  const t = new Date(updatedAt).getTime();
+  return Number.isNaN(t) ? 0 : t;
 }
 
 
@@ -123,6 +131,23 @@ function isPreviewRowForPosition(
   return rowPosition === position;
 }
 
+function mapBannerRow(row: Record<string, unknown>): BannerItem {
+  const imageArr = row.image;
+  const mediaId =
+    Array.isArray(imageArr) && imageArr.length > 0
+      ? (imageArr[0] as number)
+      : null;
+  return {
+    id: row._id as number,
+    url: (pickField(row, "url") as string) ?? "",
+    mainTitle: (pickField(row, "banner_title", "mainTitle") as string) ?? "",
+    subTitle: (pickField(row, "sub_title", "subTitle") as string) ?? "",
+    sortOrder: (pickField(row, "sort_order", "sortOrder") as string) ?? "",
+    mediaId,
+    updatedAt: (row.updatedAt as string) ?? null,
+  };
+}
+
 export async function fetchBannerItems(): Promise<BannerItem[]> {
   const [res, previewRow] = await Promise.all([
     fetchData<Record<string, unknown>>({
@@ -139,36 +164,30 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
     fetchPreviewBannerRow(),
   ]);
 
-  const rows = [...(res.content ?? [])];
-  if (isPreviewRowForPosition(previewRow, BANNER_POSITION_HERO)) {
-    const alreadyListed = rows.some((row) => row._id === previewRow._id);
-    if (!alreadyListed) rows.push(previewRow);
-  }
-
-  const items: BannerItem[] = rows.map((row) => {
-    const imageArr = row.image;
-    const mediaId =
-      Array.isArray(imageArr) && imageArr.length > 0
-        ? (imageArr[0] as number)
-        : null;
-    return {
-      id: row._id as number,
-      url: (pickField(row, "url") as string) ?? "",
-      mainTitle: (pickField(row, "banner_title", "mainTitle") as string) ?? "",
-      subTitle: (pickField(row, "sub_title", "subTitle") as string) ?? "",
-      sortOrder: (pickField(row, "sort_order", "sortOrder") as string) ?? "",
-      mediaId,
-    };
-  });
+  const items: BannerItem[] = (res.content ?? []).map(mapBannerRow);
 
   items.sort((a, b) => {
     const av = sortOrderValue(a.sortOrder);
     const bv = sortOrderValue(b.sortOrder);
     if (av !== bv) return av - bv;
+    const at = updatedAtValue(a.updatedAt);
+    const bt = updatedAtValue(b.updatedAt);
+    if (at !== bt) return bt - at;
     return a.id - b.id;
   });
 
-  return items;
+  const limited = items.slice(0, MAX_HERO_BANNERS);
+
+  if (isPreviewRowForPosition(previewRow, BANNER_POSITION_HERO)) {
+    const previewId = previewRow._id as number;
+    if (!limited.some((item) => item.id === previewId)) {
+      limited.push(
+        items.find((item) => item.id === previewId) ?? mapBannerRow(previewRow),
+      );
+    }
+  }
+
+  return limited;
 }
 
 interface CodeItem {
