@@ -2506,7 +2506,9 @@
     height: 38px;
     font-size: 15px;
     line-height: 23px;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__pagination .page-numbering__page.is-active {
@@ -2827,7 +2829,9 @@
     height: 38px;
     font-size: 15px;
     line-height: 23px;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   section.support_tech_hub_contents.devices_product_downloads--tech-hub .support_tech_hub_contents__pagination .page-numbering__page.is-active {

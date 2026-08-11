@@ -2048,7 +2048,9 @@
   .support_service_warranty_notes {
     padding: 30px 40px;
     background: #f5f7fa;
-    margin-top: 40px;
+    /* 260811 start */
+    margin-top: 60px;
+    /* 260811 end */
   }
 
   .support_service_warranty_notes__tit {
@@ -2087,6 +2089,91 @@
     height: 4px;
     background: #666;
   }
+
+  /* 260811 start */
+  .support_service_warranty_documents {
+    margin-top: 150px;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__head {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__head .section_tit {
+    margin-bottom: 0;
+  }
+
+  .support_service_warranty_documents .section_tit {
+    margin: 0;
+    max-width: 683px;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 62px;
+    letter-spacing: -2%;
+    color: #222;
+  }
+
+  .support_service_warranty_documents .section_desc {
+    margin: 0;
+    max-width: 995px;
+    font-size: 18px;
+    line-height: 28px;
+    color: #666;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__list {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__item {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-width: 0;
+    padding: 24px 30px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__name {
+    margin: 0;
+    font-size: 18px;
+    line-height: 28px;
+    color: #222;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__divider {
+    flex-shrink: 0;
+    width: 1px;
+    height: 16px;
+    background: #e8e8e8;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__format {
+    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #666;
+  }
+  /* 260811 end */
 
   section.support_service_warranty_banner {
     padding: 150px 0 0;
@@ -2657,6 +2744,108 @@
     height: 3px;
     background: #666;
   }
+
+  /* 260811 start */
+  /* Figma 9033:92247 — Warranty Documents mobile */
+  .support_service_warranty_documents {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__head {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__head .section_tit {
+    margin-bottom: 0;
+  }
+
+  .support_service_warranty_documents .section_tit {
+    margin: 0;
+    width: 100%;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 40px;
+    letter-spacing: -0.6px;
+    color: #222;
+  }
+
+  .support_service_warranty_documents .section_desc {
+    margin: 0;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #666;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin: 30px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px 24px;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #222;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__divider {
+    display: none;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__format {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #666;
+  }
+
+  .support_service_warranty_documents .support_service_warranty_documents__item .btn-lv03 {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    height: 44px;
+    gap: 4px;
+    padding: 0 24px;
+  }
+  /* 260811 end */
 
   section.support_service_warranty_banner {
     padding: 0;

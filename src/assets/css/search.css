@@ -4035,7 +4035,9 @@
     font-weight: 400;
     line-height: 23px;
     color: #666;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   section.search_products .search_products__pagination .page-numbering__page.is-active {
@@ -4670,7 +4672,9 @@
     font-weight: 400;
     line-height: 23px;
     color: #666;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   section.search_documents .search_documents__pagination .page-numbering__page.is-active {
@@ -5080,7 +5084,9 @@
     font-weight: 400;
     line-height: 23px;
     color: #666;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   section.search_media .search_media__pagination .page-numbering__page.is-active {
@@ -5432,7 +5438,9 @@
     font-weight: 400;
     line-height: 23px;
     color: #666;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   section.search_pages .search_pages__pagination .page-numbering__page.is-active {

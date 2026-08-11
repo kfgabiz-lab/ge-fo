@@ -295,7 +295,9 @@
       overflow: hidden;
       width: 120px;
       height: 120px;
-      top: -20px;
+      /* 260811 start */
+      top: -28px;
+      /* 260811 end */
       left: 30px;
     }
 
@@ -305,11 +307,16 @@
       object-fit: cover;
     }
 
+    /* 260811 start */
     .banner_swiper .txt_area {
-      padding: 24px 28px 28px;
+      padding: 29px 30px 29px;
       color: #fff;
       background: none;
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
     }
+    /* 260811 end */
 
     .banner_swiper .txt_area__arrow {
       display: none;
@@ -318,18 +325,27 @@
     .banner_swiper.only .link:hover .txt_area {
       color: #222;
     }
+    /* 260811 start */
     .banner_swiper .tit {
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1.4;
-      margin-bottom: 8px;
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 32px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: -1%;
     }
 
     .banner_swiper .txt {
-      font-size: 15px;
-      line-height: 1.5;
+      font-size: 16px;
+      line-height: 24px;
       color: rgb(255 255 255 / 70%);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+    /* 260811 end */
     .banner_swiper.only .link:hover .txt_area .txt {
       color: #666;
     }
@@ -1747,6 +1763,12 @@ section.main_notic .txt:before {
       font-weight: 600;
       line-height: 26px;
       color: #fff;
+      /* 260811 start */
+      white-space: nowrap;
+      max-width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      /* 260811 end */
     }
 
     .banner_swiper .txt {
