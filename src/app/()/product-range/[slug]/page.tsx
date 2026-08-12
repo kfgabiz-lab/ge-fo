@@ -11,6 +11,7 @@ import {
   fetchProductBySlug,
   fetchProductSeoBySlug,
 } from "@/app/()/products-systems/data/productsSystemsData";
+import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
 import {
   parseCategoryContext,
   withCategoryContext,
@@ -19,8 +20,30 @@ import { fetchCategoryInsightsLv2 } from "@/data/highlightNews";
 import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbList, buildPageGraph, itemUrl, pageUrl } from "@/lib/structuredData/builders";
-import { SITE_URL, WEBSITE_ID, ORG_ID } from "@/lib/structuredData/siteConfig";
+import {
+  SITE_URL,
+  WEBSITE_ID,
+  ORG_ID,
+  GICS_SUPPORT_URL,
+  CONNECT_PORTAL_EXTERNAL_URL,
+} from "@/lib/structuredData/siteConfig";
 import "@/assets/css/devices-systems.css";
+
+const ACTION_PLATFORMS = [
+  "http://schema.org/DesktopWebPlatform",
+  "http://schema.org/MobileWebPlatform",
+];
+
+async function fetchLv1Parent(
+  lv2CategoryId: number,
+): Promise<{ name: string; slug: string }> {
+  const rows = await fetchDevicesTreeRows();
+  const lv2Row = rows.find((r) => r.depth === "2" && r.rowId === lv2CategoryId);
+  const lv1Row = lv2Row
+    ? rows.find((r) => r.depth === "1" && String(r.rowId) === lv2Row.parentId)
+    : undefined;
+  return { name: lv1Row?.categoryTitle ?? "", slug: lv1Row?.categorySlug ?? "" };
+}
 
 type ProductRangePageProps = {
   params: Promise<{ slug: string }>;
@@ -65,8 +88,11 @@ export default async function ProductRangeRoutePage({
 
   const category = await fetchCategoryBySlug(slug, { depth: 2, categoryId });
   if (category) {
-    const productCards = await fetchCategoryLv2Products(category.id);
-    const highlightItems = await fetchCategoryInsightsLv2(category.id);
+    const [productCards, highlightItems, lv1] = await Promise.all([
+      fetchCategoryLv2Products(category.id),
+      fetchCategoryInsightsLv2(category.id),
+      fetchLv1Parent(category.id),
+    ]);
     const intro = {
       parentLabel: "Products & Systems",
       title: category.title,
@@ -104,6 +130,35 @@ export default async function ProductRangeRoutePage({
               ],
             }
           : {}),
+        potentialAction: [
+          {
+            "@type": "BuyAction",
+            name: "Request a quote or Place an order",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: CONNECT_PORTAL_EXTERNAL_URL,
+              actionPlatform: ACTION_PLATFORMS,
+            },
+          },
+          {
+            "@type": "SearchAction",
+            name: "Find an Authorized Distributor",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: `${SITE_URL}/support/where-to-buy`,
+              actionPlatform: ACTION_PLATFORMS,
+            },
+          },
+          {
+            "@type": "Action",
+            name: "Get Technical Support & Service",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: GICS_SUPPORT_URL,
+              actionPlatform: ACTION_PLATFORMS,
+            },
+          },
+        ],
       },
       {
         "@type": "ProductGroup",
@@ -120,6 +175,14 @@ export default async function ProductRangeRoutePage({
       },
       breadcrumbList(currentUrl, [
         { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },
+        ...(lv1.name
+          ? [
+              {
+                name: lv1.name,
+                url: lv1.slug ? pageUrl(`/products-category/${lv1.slug}`) : currentUrl,
+              },
+            ]
+          : []),
         { name: category.title, url: currentUrl },
       ]),
     ]);

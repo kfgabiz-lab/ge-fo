@@ -11,8 +11,18 @@ import { fetchCategoryInsights } from "@/data/highlightNews";
 import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbList, buildPageGraph, itemUrl, pageUrl } from "@/lib/structuredData/builders";
-import { SITE_URL, WEBSITE_ID } from "@/lib/structuredData/siteConfig";
+import {
+  SITE_URL,
+  WEBSITE_ID,
+  GICS_SUPPORT_URL,
+  CONNECT_PORTAL_EXTERNAL_URL,
+} from "@/lib/structuredData/siteConfig";
 import "@/assets/css/devices-systems.css";
+
+const ACTION_PLATFORMS = [
+  "http://schema.org/DesktopWebPlatform",
+  "http://schema.org/MobileWebPlatform",
+];
 
 type ProductsCategoryPageProps = {
   params: Promise<{ slug: string }>;
@@ -90,6 +100,35 @@ export default async function ProductsCategoryRoutePage({
                 ],
               }
             : {}),
+          potentialAction: [
+            {
+              "@type": "BuyAction",
+              name: "Request a quote or Place an order",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: CONNECT_PORTAL_EXTERNAL_URL,
+                actionPlatform: ACTION_PLATFORMS,
+              },
+            },
+            {
+              "@type": "SearchAction",
+              name: "Find an Authorized Distributor",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: `${SITE_URL}/support/where-to-buy`,
+                actionPlatform: ACTION_PLATFORMS,
+              },
+            },
+            {
+              "@type": "Action",
+              name: "Get Technical Support & Service",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: GICS_SUPPORT_URL,
+                actionPlatform: ACTION_PLATFORMS,
+              },
+            },
+          ],
         },
         breadcrumbList(currentUrl, [
           { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },

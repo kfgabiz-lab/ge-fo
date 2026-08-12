@@ -8,6 +8,12 @@ function stripHtml(html: string): string {
     .trim();
 }
 
+const POST_TYPE_FRAGMENT: Record<"BlogPosting" | "Article" | "NewsArticle", string> = {
+  BlogPosting: "post",
+  Article: "article",
+  NewsArticle: "news",
+};
+
 export function buildContentDetailGraph(input: {
   postType: "BlogPosting" | "Article" | "NewsArticle";
   detailPathname: string;
@@ -17,6 +23,7 @@ export function buildContentDetailGraph(input: {
   metaDescription: string;
   contentHtml: string;
   publishedAt: string;
+  updatedAt?: string;
   category?: string;
   tags?: string[];
   imagePath?: string | null;
@@ -30,20 +37,23 @@ export function buildContentDetailGraph(input: {
     metaDescription,
     contentHtml,
     publishedAt,
+    updatedAt,
     category,
     tags,
     imagePath,
   } = input;
   const currentUrl = pageUrl(detailPathname);
   const orgId = `${SITE_URL}#organization`;
+  const fragment = POST_TYPE_FRAGMENT[postType];
 
   const postNode: JsonLdNode = {
     "@type": postType,
-    "@id": `${currentUrl}#post`,
+    "@id": `${currentUrl}#${fragment}`,
     isPartOf: `${currentUrl}#webpage`,
     headline: title,
     description: metaDescription,
     datePublished: publishedAt,
+    dateModified: updatedAt || publishedAt,
     ...(category ? { articleSection: category } : {}),
     ...(tags && tags.length ? { keywords: tags } : {}),
     articleBody: stripHtml(contentHtml),
@@ -53,7 +63,7 @@ export function buildContentDetailGraph(input: {
       ? {
           image: {
             "@type": "ImageObject",
-            "@id": "#post-image",
+            "@id": `#${fragment}-image`,
             url: pageUrl(imagePath),
           },
         }
@@ -68,7 +78,7 @@ export function buildContentDetailGraph(input: {
     description: metaDescription,
     isPartOf: { "@id": WEBSITE_ID },
     breadcrumb: { "@id": `${currentUrl}#breadcrumb` },
-    mainEntity: { "@id": `${currentUrl}#post` },
+    mainEntity: { "@id": `${currentUrl}#${fragment}` },
   };
 
   return buildPageGraph([
@@ -90,6 +100,7 @@ export function buildContentListGraph(input: {
 }): { "@context": string; "@graph": JsonLdNode[] } {
   const { itemType, pathname, meta, items } = input;
   const currentUrl = pageUrl(pathname);
+  const fragment = POST_TYPE_FRAGMENT[itemType];
   return buildPageGraph([
     {
       "@type": "CollectionPage",
@@ -101,10 +112,10 @@ export function buildContentListGraph(input: {
       breadcrumb: { "@id": `${currentUrl}#breadcrumb` },
       mainEntity: {
         "@type": "ItemList",
-        "@id": `${currentUrl}#${itemType.toLowerCase()}-list`,
+        "@id": `${currentUrl}#${fragment}-list`,
         itemListElement: items.map((item, index) => ({
           "@type": itemType,
-          "@id": `${pageUrl(item.href)}#${itemType.toLowerCase()}`,
+          "@id": `${pageUrl(item.href)}#${fragment}`,
           headline: item.title,
           position: index + 1,
           description: item.description,

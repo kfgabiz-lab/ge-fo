@@ -2,6 +2,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import TechHubView from "../../components/TechHubView";
 import { fetchTechHubContentDetail } from "@/data/support/techHubData";
+import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
 import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import { getYoutubeIdFromUrl, getYoutubePosterSrc } from "@/lib/youtubeEmbed";
 import JsonLd from "@/components/seo/JsonLd";
@@ -40,6 +41,13 @@ export default async function TechHubViewDetailPage({
   const currentUrl = pageUrl(`/support/tech-hub/view/${id}`);
   const videoUrl = detail.chapters[0]?.videoUrl ?? "";
   const videoId = videoUrl ? getYoutubeIdFromUrl(videoUrl) : "";
+  let lv2Slug: string | undefined;
+  if (detail.categoryL2Id) {
+    const rows = await fetchDevicesTreeRows();
+    lv2Slug = rows.find(
+      (r) => r.depth === "2" && String(r.rowId) === detail.categoryL2Id,
+    )?.categorySlug ?? undefined;
+  }
   const videoNode = {
     "@type": "VideoObject",
     "@id": `${currentUrl}#video`,
@@ -48,6 +56,9 @@ export default async function TechHubViewDetailPage({
     uploadDate: detail.sourceUpdatedAt ?? "",
     embedUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : "",
     publisher: { "@id": ORG_ID },
+    ...(lv2Slug
+      ? { about: { "@id": `${pageUrl(`/product-range/${lv2Slug}`)}#productgroup` } }
+      : {}),
   };
   const jsonLdGraph = buildPageGraph([
     {

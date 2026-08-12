@@ -6,9 +6,34 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
 import { fetchWhereToBuyLocations } from "@/data/support/whereToBuyContent";
 import JsonLd from "@/components/seo/JsonLd";
-import { buildSimpleWebPageGraph } from "@/lib/structuredData/builders";
+import { buildSimpleWebPageGraph, pageUrl } from "@/lib/structuredData/builders";
 
 const PATHNAME = "/support/where-to-buy";
+
+/**
+ * "625 Heathrow Dr, Lincolnshire, IL 60069" 형태(Street, City, ST ZIP)일 때만
+ * 분해하고, 그 외 형식은 전부 streetAddress에 그대로 담아 원문을 보존한다.
+ */
+function parseUsAddress(address: string): {
+  streetAddress: string;
+  addressLocality?: string;
+  addressRegion?: string;
+  postalCode?: string;
+} {
+  const parts = address.split(",").map((p) => p.trim()).filter(Boolean);
+  if (parts.length === 3) {
+    const stateZip = parts[2].match(/^([A-Za-z]{2})\s+(\S+)$/);
+    if (stateZip) {
+      return {
+        streetAddress: parts[0],
+        addressLocality: parts[1],
+        addressRegion: stateZip[1],
+        postalCode: stateZip[2],
+      };
+    }
+  }
+  return { streetAddress: address };
+}
 
 export async function generateMetadata(
   _: unknown,
@@ -27,12 +52,12 @@ export default async function WhereToBuyPage() {
     extra: {
       hasPart: locations.slice(0, 50).map((loc) => ({
         "@type": "LocalBusiness",
-        "@id": `${PATHNAME}#distributor-${loc.id}`,
+        "@id": `${pageUrl(PATHNAME)}#distributor-${loc.id}`,
         name: loc.name,
         telephone: loc.phone,
         address: {
           "@type": "PostalAddress",
-          streetAddress: loc.address,
+          ...parseUsAddress(loc.address),
           addressCountry: "US",
         },
         ...(Number.isFinite(loc.lat) && Number.isFinite(loc.lng)

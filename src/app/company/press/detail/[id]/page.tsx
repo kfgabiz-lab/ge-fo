@@ -90,6 +90,7 @@ export default async function CompanyPressDetailPage({
     metaDescription: (row["seo.meta_description"] as string) ?? "",
     contentHtml,
     publishedAt: (pickField(row, "publish_dttm", "publishDttm") as string) ?? "",
+    updatedAt: (row.updatedAt as string) ?? "",
     imagePath: mediaId != null ? pressImageSrc(mediaId) : null,
   });
 

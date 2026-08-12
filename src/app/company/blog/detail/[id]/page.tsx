@@ -99,6 +99,7 @@ export default async function CompanyBlogDetailPage({
     metaDescription: (row["seo.meta_description"] as string) ?? "",
     contentHtml,
     publishedAt: publishDttm,
+    updatedAt: (row.updatedAt as string) ?? "",
     category: categoryLabel,
     tags,
     imagePath: mediaId != null ? blogImageSrc(mediaId) : null,
