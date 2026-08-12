@@ -13,6 +13,7 @@ import { fetchData } from "@/lib/pageDataApi";
 import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
+import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { getPreviewToken } from "@/lib/previewMode";
 import type { Metadata, ResolvingMetadata } from "next";
 import HashtagLink from "@/components/ui/HashtagLink";
@@ -71,7 +72,7 @@ export default async function CompanyBlogDetailPage({
   const categoryCode = (row.category as string) ?? "";
   const categoryLabel = categoryMap.get(categoryCode) ?? categoryCode;
   const tags = splitHashtag(row.hashtag as string | undefined);
-  const contentHtml = (row.content as string) ?? "";
+  const contentHtml = sanitizeHtml((row.content as string) ?? "");
 
   const imageArr = row.image;
   const mediaId =

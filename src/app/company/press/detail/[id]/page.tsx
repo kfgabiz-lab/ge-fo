@@ -10,6 +10,7 @@ import { fetchData } from "@/lib/pageDataApi";
 import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
+import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { getPreviewToken } from "@/lib/previewMode";
 import type { Metadata, ResolvingMetadata } from "next";
 import JsonLd from "@/components/seo/JsonLd";
@@ -63,7 +64,7 @@ export default async function CompanyPressDetailPage({
   ]);
 
   const row: Record<string, unknown> = detail ? flattenPageDataItem(detail) : {};
-  const contentHtml = (row.content as string) ?? "";
+  const contentHtml = sanitizeHtml((row.content as string) ?? "");
 
   const imageArr = row.image;
   const mediaId =

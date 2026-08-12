@@ -4,6 +4,7 @@ import { fetchData } from "@/lib/pageDataApi";
 import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { formatPhoneDisplay } from "@/lib/formatPhone";
+import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { siteToday } from "@/lib/siteTime";
 import type { PageDataItem } from "@/lib/pageData";
 import { fetchProductNamesByIds } from "@/lib/training/trainingProductTree";
@@ -410,7 +411,7 @@ export function toTrainingSessionDetail(
     breadcrumbCurrent: dateDisplay,
     closesLabel: computeClosesLabel(d2.register_period_to),
     registrationNotYetOpen: isRegistrationNotYetOpen(d2.register_period_from),
-    content: d2.content ?? "",
+    content: sanitizeHtml(d2.content ?? ""),
     agenda,
     showTrainerColumn,
     calendar: engineeringTrainingSessionCalendarLabels,

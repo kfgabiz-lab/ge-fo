@@ -11,6 +11,7 @@ import { fetchData } from "@/lib/pageDataApi";
 import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDateRange } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
+import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { getPreviewToken } from "@/lib/previewMode";
 import type { Metadata, ResolvingMetadata } from "next";
 import JsonLd from "@/components/seo/JsonLd";
@@ -45,7 +46,7 @@ export default async function CompanyEventsDetailPage({
   ]);
 
   const row: Record<string, unknown> = detail ? flattenPageDataItem(detail) : {};
-  const contentHtml = (row.content as string) ?? "";
+  const contentHtml = sanitizeHtml((row.content as string) ?? "");
   const periodFrom = (pickField(row, "period_from", "periodFrom") as string) ?? "";
   const periodTo = (pickField(row, "period_to", "periodTo") as string) ?? "";
 
