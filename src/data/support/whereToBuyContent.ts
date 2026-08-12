@@ -106,11 +106,11 @@ export function toWhereToBuyLocation(item: PageDataItem): WhereToBuyLocation {
   };
 }
 
+/** 노출여부(is_visible)는 bo-api가 wheretobuy-agency-data에 대해 서버측에서 항상 강제한다 — 클라이언트가 조건을 보낼 필요 없음 */
 export async function fetchWhereToBuyLocations(): Promise<WhereToBuyLocation[]> {
   const res = await fetchData<WhereToBuyLocation>({
     slug: "wheretobuy-agency-data",
     size: 100,
-    where: { "eq_agency.is_visible": "001" },
     리턴함수: (rows) => rows.map(toWhereToBuyLocation),
   });
   return res.content;

@@ -21,11 +21,11 @@ export const TRAINING_COURSE_BY_VARIANT: Record<TrainingVariant, string> = {
   sales: "03",
 };
 
+/** 노출여부(is_visible)는 bo-api가 currMgmt-data에 대해 서버측에서 항상 강제한다 — 클라이언트가 조건을 보낼 필요 없음 */
 export function trainingStatusWhere(
   variant: TrainingVariant,
 ): Record<string, string> {
   return {
-    "eq_curriculum.is_visible": "001",
     "eq_curriculum.training_course": TRAINING_COURSE_BY_VARIANT[variant],
   };
 }

@@ -24,10 +24,10 @@ export const TRAINING_DETAIL_SLUG = "currDtlMgmt-data";
 
 export const TRAINING_DETAIL_SORT = "curriculum_detail2.training_date_from,asc";
 
+/** 노출여부(is_visible)는 bo-api가 currDtlMgmt-data에 대해 서버측에서 항상 강제한다 — 클라이언트가 조건을 보낼 필요 없음 */
 export function trainingDetailWhere(courseId: string): Record<string, string> {
   return {
     "eq_curriculum_detail1.curriculum_id": courseId,
-    "eq_curriculum_detail3.is_visible": "001",
     "condexpr_training_date_to": "training_date_to>=today()?'valid':'past'",
     "condval_training_date_to": "valid",
   };

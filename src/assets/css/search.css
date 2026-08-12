@@ -5737,6 +5737,7 @@
   }
 }
 
+section.search_all .search_page__desc,
 section.search_pages .search_page__desc {
   display: -webkit-box;
   overflow: hidden;
