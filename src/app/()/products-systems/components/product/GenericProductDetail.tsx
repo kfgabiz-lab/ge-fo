@@ -9,6 +9,7 @@ import DevicesProductFeaturesSection from "@/components/content/DevicesProductFe
 import DevicesProductNavScope from "./DevicesProductNavScope";
 import DevicesProductVideo from "./DevicesProductVideo";
 import DevicesProductOtherProducts from "./DevicesProductOtherProducts";
+import DevicesProductLineupGrid from "./DevicesProductLineupGrid";
 import {
   productDetailNavItems,
   productTemplateDetail,
@@ -124,12 +125,15 @@ export default async function GenericProductDetail({
         <section className="devices_product_lineup" id="product-lineup">
           <div className="inner">
             <h2 className="section_tit">Lineup</h2>
-            <div
-              className="devices_product_lineup__grids"
-              data-slug="product-data"
-              data-slugkey="product_etc.line_up"
-              dangerouslySetInnerHTML={{ __html: detail.lineUp }}
-            />
+            <div className="devices_product_lineup__grids">
+              <DevicesProductLineupGrid modifier="type1">
+                <div
+                  data-slug="product-data"
+                  data-slugkey="product_etc.line_up"
+                  dangerouslySetInnerHTML={{ __html: detail.lineUp }}
+                />
+              </DevicesProductLineupGrid>
+            </div>
             <div className="devices_product_lineup__footer">
               <div className="devices_product_lineup__note">
                 <p>Explore all available configurations effortlessly.</p>

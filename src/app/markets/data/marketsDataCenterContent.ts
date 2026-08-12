@@ -8,7 +8,7 @@ import type {
 
 export const dataCenterHero = {
   subtitle: "Agile, modular power for the AI-driven era.",
-  title: "Data Centers",
+  title: "Data Center",
   heroImage: "/img/markets/data-center/hero.png",
 };
 

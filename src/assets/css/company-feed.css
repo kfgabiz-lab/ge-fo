@@ -978,7 +978,9 @@
     height: 38px;
     font-size: 15px;
     line-height: 23px;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   .company-page--press section.company-press-list .page-numbering__page.is-active,

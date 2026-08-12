@@ -123,6 +123,7 @@
 | Warranty Policy Extension | `src/app/services/warranty-policy/components/WarrantyPolicyExtension.tsx` | Warranty Extension Overview 섹션 — 카드/Important Notes/Exclusions 패널 | TODO(정적) |
 | Warranty Policy Apply | `src/app/services/warranty-policy/components/WarrantyPolicyApply.tsx` | How to Apply 섹션 — 제품 카테고리별 연락처(mailto) 2열 표 | TODO(정적) |
 | Warranty Feature Cards | `src/app/services/warranty-policy/components/WarrantyFeatureCards.tsx` | Coverage/Extension 공용 번호 카드 리스트(`variant`로 구분) | TODO(정적) |
+| Warranty Policy Documents | `src/app/services/warranty-policy/components/WarrantyPolicyDocuments.tsx` | WarrantyPolicyCoverage 내부(보증표 직후, Notes 직전)에서 렌더링되는 보증 정책 PDF 문서(Automation Product Warranty Policy / Power Product Warranty Policy) 다운로드 카드 리스트 섹션 | TODO(정적) |
 | Training Curriculum Page | `src/app/services/training/components/TrainingCurriculumPage.tsx` | sales/engineering/service-training 3개 메뉴가 공유하는 조립 래퍼 — variant로 데이터/클래스/pageId 분기(company/press의 CompanyFeedPage와 동일 패턴) | TODO(정적) |
 | Training Title | `src/app/services/training/components/TrainingTitle.tsx` | 페이지 상단 대제목/설명(`company-about-title` 공통 스타일, CompanyAboutTitleSection 재사용) | TODO(정적) |
 | Training Curriculum | `src/app/services/training/components/TrainingCurriculum.tsx` | 필터(select 3개)+검색+커리큘럼 카드 목록+페이지네이션 섹션 | TODO(정적) |

@@ -2671,7 +2671,9 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     height: 38px;
     font-size: 15px;
     line-height: 23px;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   section.devices_product_downloads

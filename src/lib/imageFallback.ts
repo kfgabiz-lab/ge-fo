@@ -1,6 +1,6 @@
 import type { SyntheticEvent } from "react";
 
-export const NOIMAGE_SRC = "/img/company/press/list_01.png";
+export const NOIMAGE_SRC = "/img/devices/product/list_no_data.svg";
 
 export function handleImageFallback(event: SyntheticEvent<HTMLImageElement>) {
   const img = event.currentTarget;

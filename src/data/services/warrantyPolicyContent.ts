@@ -20,6 +20,15 @@ export type WarrantyApplyRow = {
   contactHref: string;
 };
 
+/* 260811 start */
+export type WarrantyDocumentItem = {
+  id: string;
+  name: string;
+  format: string;
+  downloadHref: string;
+};
+/* 260811 end */
+
 const IMG = "/img/services/warranty-policy";
 
 export const warrantyPolicyPage = {
@@ -138,6 +147,28 @@ export const warrantyPolicyPage = {
       "Product quality is not guaranteed in the event of external factors such as fire, abnormal voltage, or natural disasters such as earthquakes, lightning strikes, or storms.",
     ],
   },
+  /* 260811 start */
+  documents: {
+    title: "Warranty Documents",
+    description:
+      "View and download the warranty policies applicable to LS ELECTRIC America Power and Automation products.",
+    ctaLabel: "Download",
+    items: [
+      {
+        id: "automation-policy",
+        name: "Automation Product Warranty Policy",
+        format: "PDF",
+        downloadHref: "#",
+      },
+      {
+        id: "power-policy",
+        name: "Power Product Warranty Policy",
+        format: "PDF",
+        downloadHref: "#",
+      },
+    ] satisfies WarrantyDocumentItem[],
+  },
+  /* 260811 end */
   banner: {
     title: "Warranty Support",
     description:

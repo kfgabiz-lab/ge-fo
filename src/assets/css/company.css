@@ -720,7 +720,9 @@
     height: 38px;
     font-size: 15px;
     line-height: 23px;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   section.company-blog-list .page-numbering__page.is-active {
@@ -2799,7 +2801,9 @@ section.company-blog-list .company-blog__tag:hover {
     height: 38px;
     font-size: 15px;
     line-height: 23px;
-    border-radius: 4px;
+    /* 260811 start */
+    border-radius: 20px;
+    /* 260811 end */
   }
 
   section.company-events-past .company-events-past__pagination .page-numbering__page.is-active {
@@ -5472,13 +5476,17 @@ section.company-blog-list .company-blog__tag:hover {
     margin-top: 60px;
   }
   section.company-ls-electric-rnd .company-ls-electric-rnd__item-text {
-    max-width: 1024px;
+    /* 260811 start */
+    max-width: 100%;
+    /* 260811 end */
   }
   section.company-ls-electric-rnd .company-ls-electric-rnd__item {
     display: flex;
     gap: 24px;
     align-items: flex-start;
-    padding: 40px 36px;
+    /* 260811 start */
+    padding: 40px 40px 40px 30px;
+    /* 260811 end */
     border: 1px solid #e8e8e8;
     border-radius: 4px;
     background: #fff;

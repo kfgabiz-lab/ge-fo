@@ -33,9 +33,7 @@ const ALL_MONTH_OPTIONS = [
   { value: "12", label: "December" },
 ];
 
-const DEFAULT_MONTH_OPTIONS = ALL_MONTH_OPTIONS.filter(
-  (m) => m.value >= "06" && m.value <= "10",
-);
+const DEFAULT_MONTH_OPTIONS = ALL_MONTH_OPTIONS;
 
 const DEFAULT_YEAR_OPTIONS = [String(new Date().getFullYear())];
 

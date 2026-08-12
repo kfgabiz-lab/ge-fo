@@ -222,7 +222,7 @@ function DevicesProductDownloadsBody({
                         <h3 className="devices_product_downloads__item-tit">
                           {item.title}
                         </h3>
-                        {item.version ? (
+                        {item.showVersionSelect ? (
                           <div className="devices_product_downloads__item-version">
                             <FormControl className="guide_field guide_field--h38 guide_field--w120 devices_product_downloads__version-select">
                               <GuideSelect

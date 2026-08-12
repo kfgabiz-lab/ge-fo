@@ -16,8 +16,8 @@ import { useFeaturedFeed } from "@/hooks/useFeaturedFeed";
 import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
 
-const FEATURED_FALLBACK_IMAGE = "/img/company/press/hero.png";
-const LIST_FALLBACK_IMAGE = "/img/company/press/list_01.png";
+const FEATURED_FALLBACK_IMAGE = "/img/devices/product/list_no_data.svg";
+const LIST_FALLBACK_IMAGE = "/img/devices/product/list_no_data.svg";
 
 interface PressFeaturedCard {
   title: string;

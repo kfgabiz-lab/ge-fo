@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ProductAwardBadge from "@/components/product/ProductAwardBadge";
 import { getProductBadgeType } from "@/lib/productBadge";
 import type { DevicesCategoryProduct } from "../data/vfdContent";
 
@@ -31,7 +30,6 @@ function CategoryProductCard({
       data-slug-item
     >
       <div className="devices_category__item-img">
-        {badgeType ? <ProductAwardBadge dataSlugKey="product.awards" /> : null}
         <img loading={loading} decoding="async" src={item.image ?? undefined} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>
       <div className="devices_category__item-body">
@@ -71,7 +69,6 @@ function CategoryProductCardStacked({
       data-slug-item
     >
       <div className="devices_category__item-img">
-        {badgeType ? <ProductAwardBadge dataSlugKey="product.awards" /> : null}
         <img loading={loading} decoding="async" src={item.image ?? undefined} alt={item.title} data-slugkey="product_info.image" data-slugkey-attr="src" />
       </div>
       <div className="devices_category__item-body">
