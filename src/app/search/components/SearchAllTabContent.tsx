@@ -27,6 +27,7 @@ import {
   fetchSearchPages,
   type SearchPagesResult,
 } from "@/data/search/searchPagesData";
+import SearchAllAi from "./SearchAllAi";
 import SearchDocumentsCard from "./SearchDocumentsCard";
 import SearchEmptyResult from "./SearchEmptyResult";
 import SearchProductCard from "./SearchProductCard";
@@ -40,7 +41,6 @@ import SearchProductsPanel from "./SearchProductsPanel";
 
 import {
   buildSearchTabHref,
-  searchAllPage,
   searchAllTabs,
   toSearchTabId,
   type SearchTabId,
@@ -95,8 +95,6 @@ export default function SearchAllTabContent({
   const [activeTab, setActiveTab] = useState<SearchTabId>(
     () => toSearchTabId(tabParam) ?? initialTab,
   );
-  const [aiExpanded, setAiExpanded] = useState(false);
-
   const [aiAnswer, setAiAnswer] = useState("");
   const [chatbotKeyword, setChatbotKeyword] = useState("");
   const [chatbotSettled, setChatbotSettled] = useState(false);
@@ -455,53 +453,16 @@ export default function SearchAllTabContent({
         ) : null}
 
         {isAllTab && !isAllTabEmpty ? (
-          <div className={aiExpanded ? "search_all__ai is-expanded" : "search_all__ai"}>
-            <div className="search_all__ai-content">
-              <div className="search_all__ai-head">
-                <img
-                  className="search_all__ai-badge"
-                  src="/img/search/search_all_ai_badge.png"
-                  alt=""
-                  width={58}
-                  height={58}
-                  decoding="async"
-                  aria-hidden
-                />
-                <h2 className="search_all__ai-tit">{searchAllPage.aiTitle}</h2>
-                <p className="search_all__ai-note">{searchAllPage.aiDisclaimer}</p>
-              </div>
-              <div className="search_all__ai-list">
-                <ul className="search_all__ai-list">
-                  <li>
-                {aiAnswer ? (
-                    <span className="search_all__ai-list-text">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {aiAnswer}
-                      </ReactMarkdown>
-                    </span>
-                ) : (
-                    <span className="search_all__ai-list-text">
-                      AI response waiting...
-                    </span>
-                )}
-                  </li>
-                </ul>
-              </div>
-            </div>
-            {!aiExpanded ? <div className="search_all__ai-fade" aria-hidden /> : null}
-            <div className="search_all__ai-more">
-              <span className="search_all__ai-more-line" aria-hidden />
-              <button
-                type="button"
-                className="search_all__ai-more-btn"
-                aria-expanded={aiExpanded}
-                onClick={() => setAiExpanded((prev) => !prev)}
-              >
-                Read more
-                <span className="search_all__ai-more-icon" aria-hidden />
-              </button>
-            </div>
-          </div>
+          <SearchAllAi
+            loading={!chatbotKeyword && !chatbotSettled}
+            settled={chatbotSettled}
+          >
+            {aiAnswer ? (
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiAnswer}</ReactMarkdown>
+            ) : (
+              "AI response waiting..."
+            )}
+          </SearchAllAi>
         ) : null}
 
         {isAllTab && productResult.items.length > 0 ? (

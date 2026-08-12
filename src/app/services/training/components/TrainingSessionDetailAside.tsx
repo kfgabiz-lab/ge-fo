@@ -5,6 +5,17 @@ import { engineeringTrainingSessionAssets } from "@/data/services/engineeringTra
 import TrainingSessionCountdown from "./TrainingSessionCountdown";
 import TrainingSessionLocationMap from "./TrainingSessionLocationMap";
 
+function formatPhoneHref(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length === 10) {
+    return `tel:+1${digits}`;
+  }
+  if (digits.length === 11 && digits.startsWith("1")) {
+    return `tel:+${digits}`;
+  }
+  return digits ? `tel:${digits}` : undefined;
+}
+
 function SessionMetaLabel({
   icon,
   children,
@@ -33,6 +44,7 @@ export default function TrainingSessionDetailAside({
 }) {
   const { sidebar } = session;
   const { metaIcons } = engineeringTrainingSessionAssets;
+  const phoneHref = formatPhoneHref(sidebar.location.phone);
 
   return (
     <aside
@@ -102,8 +114,20 @@ export default function TrainingSessionDetailAside({
             {sidebar.location.address.trim() ? (
               <li data-slugkey="curriculum_detail2.address">{sidebar.location.address}</li>
             ) : null}
-            <li data-slugkey="curriculum_detail2.phone">{sidebar.location.phone}</li>
-            <li data-slugkey="curriculum_detail2.email">{sidebar.location.email}</li>
+            <li data-slugkey="curriculum_detail2.phone">
+              {phoneHref ? (
+                <a href={phoneHref}>{sidebar.location.phone}</a>
+              ) : (
+                sidebar.location.phone
+              )}
+            </li>
+            <li data-slugkey="curriculum_detail2.email">
+              {sidebar.location.email.trim() ? (
+                <a href={`mailto:${sidebar.location.email}`}>{sidebar.location.email}</a>
+              ) : (
+                sidebar.location.email
+              )}
+            </li>
           </ul>
           {sidebar.location.address.trim() ? (
             <TrainingSessionLocationMap address={sidebar.location.address} />

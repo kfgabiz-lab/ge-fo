@@ -660,14 +660,13 @@ section.main_notic .txt:before {
     }
   }
 
-  section.what_we_do__inner .swiper_type_01:not(.swiper-initialized) .swiper-slide:not(:first-child) {
-    opacity: 0 !important;
+  section.what_we_do__inner .what_we_do__media-swiper:not(.swiper-initialized) .swiper-slide:not(:first-child) {
+    visibility: hidden;
     pointer-events: none;
   }
 
-  section.what_we_do__inner .swiper_type_01.swiper-fade .swiper-slide {
+  section.what_we_do__inner .what_we_do__media-swiper .swiper-slide {
     height: auto;
-    transition-duration: 0ms;
   }
 
   section.what_we_do__inner .sl_img {
@@ -717,20 +716,25 @@ section.main_notic .txt:before {
       overflow: visible;
     }
 
-    section.what_we_do__inner .swiper_type_01 {
-      overflow: visible;
-    }
-
-    section.what_we_do__inner .swiper_type_01 .swiper-wrapper,
-    section.what_we_do__inner .swiper_type_01 .swiper-slide {
-      overflow: visible;
-    }
-
-    section.what_we_do__inner .swiper_type_01 .sl {
+    section.what_we_do__inner .what_we_do__stage {
       position: relative;
       display: flex;
       align-items: flex-end;
-      overflow: visible;
+    }
+
+    section.what_we_do__inner .what_we_do__media {
+      flex-shrink: 0;
+      width: 1192px;
+      overflow: hidden;
+    }
+
+    section.what_we_do__inner .what_we_do__media-swiper {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    section.what_we_do__inner .what_we_do__media-swiper .swiper-slide {
+      width: 100%;
     }
 
     section.what_we_do__inner .link_more {
@@ -798,8 +802,9 @@ section.main_notic .txt:before {
       position: absolute;
       bottom: 60px;
       right: 60px;
-      z-index: 100;
+      z-index: 200;
       width: 490px;
+      pointer-events: auto;
     }
 
     section.what_we_do__inner .swiper_type_01_pagination {
@@ -1223,14 +1228,13 @@ section.main_notic .txt:before {
 }
 
 @media (max-width: 1439px) {
-  section.what_we_do__inner .swiper_type_01:not(.swiper-initialized) .swiper-slide:not(:first-child) {
-    opacity: 0 !important;
+  section.what_we_do__inner .what_we_do__media-swiper:not(.swiper-initialized) .swiper-slide:not(:first-child) {
+    visibility: hidden;
     pointer-events: none;
   }
 
-  section.what_we_do__inner .swiper_type_01.swiper-fade .swiper-slide {
+  section.what_we_do__inner .what_we_do__media-swiper .swiper-slide {
     height: auto;
-    transition-duration: 0ms;
   }
 
   section.what_we_do__inner .sl_img {
@@ -1266,19 +1270,26 @@ section.main_notic .txt:before {
     line-height: 40px;
   }
 
-  section.what_we_do__inner .swiper_type_01 .sl {
+  section.what_we_do__inner .what_we_do__stage {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 24px;
   }
 
+  section.what_we_do__inner .what_we_do__media {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  section.what_we_do__inner .what_we_do__media-swiper {
+    overflow: hidden;
+    width: 100%;
+  }
+
   section.what_we_do__inner .swiper_type_01_area {
     margin-left: -20px;
     margin-right: -20px;
-  }
-
-  section.what_we_do__inner .swiper_type_01_area .swiper {
-    overflow: visible;
   }
 
   section.what_we_do__inner .link_more {
@@ -1343,8 +1354,9 @@ section.main_notic .txt:before {
     position: absolute;
     width: 295px;
     bottom: 30px;
-    z-index: 100;
+    z-index: 200;
     left: 50px;
+    pointer-events: auto;
   }
 
   section.what_we_do__inner .swiper_type_01_pagination {

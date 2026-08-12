@@ -107,14 +107,9 @@ export default function TechHubView({ detail }: TechHubViewProps) {
                               decoding="async"
                             />
                           </span>
-                          <span className="support_tech_hub_view__series-meta">
+                          <span className="support_tech_hub_view__series-meta support_tech_hub_view__series-meta--chapter">
                             <span className="support_tech_hub_view__chapter">
                               Chapter {ch.chapterName}
-                            </span>
-                            <span className="support_tech_hub_view__series-tit">
-                              <span className="support_tech_hub_view__series-tit-line">
-                                {detail.title}
-                              </span>
                             </span>
                           </span>
                         </button>
@@ -156,7 +151,7 @@ export default function TechHubView({ detail }: TechHubViewProps) {
                             decoding="async"
                           />
                         </span>
-                        <span className="support_tech_hub_view__series-meta">
+                        <span className="support_tech_hub_view__series-meta support_tech_hub_view__series-meta--title">
                           <span className="support_tech_hub_view__series-tit">
                             <span className="support_tech_hub_view__series-tit-line">
                               {rv.title}

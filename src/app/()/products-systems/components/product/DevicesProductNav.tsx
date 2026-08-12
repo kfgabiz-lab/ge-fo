@@ -158,11 +158,10 @@ export default function DevicesProductNav({
     event: React.MouseEvent<HTMLAnchorElement>,
     sectionId: ProductNavSectionId,
   ) => {
-    const navLink = event.currentTarget;
     event.preventDefault();
     setActiveId(sectionId);
 
-    if (isNearProductSection(sectionId, 48, navLink)) {
+    if (isNearProductSection(sectionId, 48)) {
       releasePendingLock();
       if (window.location.hash !== `#${sectionId}`) {
         window.history.replaceState(null, "", `#${sectionId}`);
@@ -173,7 +172,6 @@ export default function DevicesProductNav({
     lockPending(sectionId);
 
     scrollToProductSection(sectionId, {
-      navLink,
       onComplete: () => {
         setActiveId(sectionId);
         releasePendingLock();

@@ -792,7 +792,8 @@
     font-size: 18px;
     line-height: 28px;
     letter-spacing: 0;
-    color: rgb(0 0 0 / 25%);
+    color: #888;
+    opacity: 1;
   }
 
   section.support_download_search .support_download_search__adorn {
@@ -1508,7 +1509,8 @@
   section.support_tech_hub_search .support_tech_hub_search__field .MuiOutlinedInput-input::placeholder {
     font-size: 18px;
     line-height: 28px;
-    color: rgb(0 0 0 / 25%);
+    color: #888;
+    opacity: 1;
   }
 
   section.support_tech_hub_search .support_tech_hub_search__adorn {
@@ -3065,10 +3067,33 @@
     min-width: 0;
   }
 
-  section.support_tech_hub_view .support_tech_hub_view__series-meta .support_tech_hub_view__chapter {
+  section.support_tech_hub_view .support_tech_hub_view__series-meta--title {
+    justify-content: center;
+  }
+
+  section.support_tech_hub_view .support_tech_hub_view__series-meta--chapter {
+    align-self: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 3px;
+  }
+
+  section.support_tech_hub_view
+    .support_tech_hub_view__series-meta--chapter
+    .support_tech_hub_view__chapter {
     display: inline-flex;
     align-self: flex-start;
-    margin-bottom: 0;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 2px 8px;
+    border: 1px solid rgb(15 31 69 / 60%);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #0f1f45;
+    background: #fff;
   }
 
   section.support_tech_hub_view .support_tech_hub_view__series-tit {
@@ -3076,13 +3101,17 @@
     font-weight: 500;
     line-height: 23px;
     color: #222;
+    word-break: break-word;
   }
 
   section.support_tech_hub_view .support_tech_hub_view__series-tit-line {
     display: block;
   }
 
-  section.support_tech_hub_view .support_tech_hub_view__series-item--active .support_tech_hub_view__series-tit {
+  section.support_tech_hub_view
+    .support_tech_hub_view__series-item--active
+    .support_tech_hub_view__series-meta--title
+    .support_tech_hub_view__series-tit {
     text-decoration: underline;
     text-underline-position: from-font;
   }
@@ -3277,14 +3306,27 @@
     display: flex;
     flex: 1 0 0;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     align-items: flex-start;
     min-width: 0;
     width: 174px;
     max-width: 174px;
   }
 
-  section.support_tech_hub_view .support_tech_hub_view__series-meta .support_tech_hub_view__chapter {
+  section.support_tech_hub_view .support_tech_hub_view__series-meta--title {
+    justify-content: center;
+  }
+
+  section.support_tech_hub_view .support_tech_hub_view__series-meta--chapter {
+    align-self: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 3px;
+  }
+
+  section.support_tech_hub_view
+    .support_tech_hub_view__series-meta--chapter
+    .support_tech_hub_view__chapter {
     display: inline-flex;
     align-self: flex-start;
     margin: 0;
@@ -3312,7 +3354,10 @@
     display: block;
   }
 
-  section.support_tech_hub_view .support_tech_hub_view__series-item--active .support_tech_hub_view__series-tit {
+  section.support_tech_hub_view
+    .support_tech_hub_view__series-item--active
+    .support_tech_hub_view__series-meta--title
+    .support_tech_hub_view__series-tit {
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 2px;
@@ -3420,7 +3465,8 @@ section.support_where_to_buy_contents .support_where_to_buy_contents__map-brand-
     font-size: 24px;
     line-height: 34px;
     letter-spacing: -0.01em;
-    color: rgb(0 0 0 / 25%);
+    color: #888;
+    opacity: 1;
   }
 
   section.support_where_to_buy_search .support_where_to_buy_search__adorn {

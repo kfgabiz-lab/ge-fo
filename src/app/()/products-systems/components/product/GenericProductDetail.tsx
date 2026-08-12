@@ -124,7 +124,9 @@ export default async function GenericProductDetail({
         />
         <section className="devices_product_lineup" id="product-lineup">
           <div className="inner">
-            <h2 className="section_tit">Lineup</h2>
+            <div className="devices_product_lineup__head">
+              <h2 className="section_tit">Lineup</h2>
+            </div>
             <div className="devices_product_lineup__grids">
               <DevicesProductLineupGrid modifier="type1">
                 <div

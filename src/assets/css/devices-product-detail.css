@@ -10,7 +10,6 @@
 #product-benefits,
 #product-why,
 #product-key-feature,
-#product-lineup,
 #product-downloads,
 #product-video,
 #product-other,
@@ -29,6 +28,15 @@
 /* Help overlay — section padding-top 150px; align native hash to .section_tit */
 #product-help {
   scroll-margin-top: 50px;
+}
+
+/* Lineup — native hash · h2.section_tit ↔ .devices_product_nav__list top */
+#product-lineup {
+  scroll-margin-top: 0;
+}
+
+section.devices_product_lineup .section_tit {
+  scroll-margin-top: 250px;
 }
 
 section.devices_product_hero .devices_product_hero__btns .icon_download {
@@ -423,6 +431,10 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     z-index: 10;
   }
 
+  .devices-page--product section.common_banner_02 + section.common_banner_02 {
+    margin-top: 40px;
+  }
+
   /* Figma 3871:113566 — expert banner (product page) */
   .devices-page--product section.common_banner_02.common_banner_02--expert
     .common_banner_02__body {
@@ -439,6 +451,19 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     flex-direction: column;
     gap: 30px;
     min-width: 0;
+  }
+
+  .devices-page--product section.common_banner_02.common_banner_02--expert
+    .common_banner_02__body:not(:has(.common_banner_02__contact)) {
+    align-items: center;
+  }
+
+  .devices-page--product section.common_banner_02.common_banner_02--expert
+    .common_banner_02__content:not(:has(.common_banner_02__contact))
+    .common_banner_02__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .devices-page--product section.common_banner_02.common_banner_02--expert
@@ -482,14 +507,35 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     filter: brightness(0) invert(1);
   }
 
+  /* Figma 9120:126428 — expert + arrow CTA */
+  .devices-page--product
+    section.common_banner_02.common_banner_02--arrow
+    .common_banner_02__link
+    .icon_arrow-14 {
+    background: url("/ico/ico_arrow_right_14_white.svg") center / contain
+      no-repeat;
+    filter: none;
+  }
+
+  .devices-page--product
+    section.common_banner_02.common_banner_02--arrow
+    .common_banner_02__link:hover
+    .icon_arrow-14 {
+    filter: none;
+  }
+
   /* Lineup */
   section.devices_product_lineup {
     padding-bottom: 150px;
     background: #fff;
   }
 
-  section.devices_product_lineup .section_tit {
+  section.devices_product_lineup .devices_product_lineup__head {
     margin-bottom: 40px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__head .section_tit {
+    margin-bottom: 0;
   }
 
   section.devices_product_lineup .devices_product_lineup__grids {
@@ -2906,8 +2952,15 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     padding-bottom: 70px;
   }
 
-  section.devices_product_lineup .section_tit {
+  section.devices_product_lineup .devices_product_lineup__head {
     margin-bottom: 30px;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__head .section_tit {
+    margin-bottom: 0;
+  }
+
+  section.devices_product_lineup .section_tit {
     font-family: var(--font-display, "Plus Jakarta Sans", sans-serif);
     font-size: 30px;
     font-weight: 700;
