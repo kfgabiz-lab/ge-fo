@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   getYoutubeIdFromUrl,
   getYoutubePosterSrc,
 } from "@/lib/youtubeEmbed";
 import { formatDisplayDate } from "@/lib/formatDate";
+import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
 import TechHubViewPlayer from "./TechHubViewPlayer";
 import type { TechHubDetail } from "@/data/support/techHubData";
 
@@ -21,6 +23,12 @@ function posterOf(videoUrl: string | null): string | undefined {
 }
 
 export default function TechHubView({ detail }: TechHubViewProps) {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    seedBreadcrumbTitle(pathname, detail.title);
+  }, [pathname, detail.title]);
+
   const chapters = detail.chapters;
   const isSeries = detail.versionCount >= 2;
 

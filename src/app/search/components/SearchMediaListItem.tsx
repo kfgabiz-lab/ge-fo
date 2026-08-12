@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { SearchMediaItem } from "@/data/search/searchAllContent";
+import { handleImageFallback, NOIMAGE_SRC } from "@/lib/imageFallback";
 import {
   includesSearchHighlight,
   renderInlineTextHighlight,
@@ -77,10 +78,11 @@ export default function SearchMediaListItem({
           }
         >
           <img
-            src={item.image || undefined}
+            src={item.image || NOIMAGE_SRC}
             alt=""
             loading="lazy"
             decoding="async"
+            onError={handleImageFallback}
           />
         </div>
         <div className="search_all__media-content">{body}</div>
