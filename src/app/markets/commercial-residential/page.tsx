@@ -54,6 +54,7 @@ export default async function MarketsCommercialResidentialPage() {
     faqItems,
     highlightItems: highlightNewsItems,
     productItems,
+    whitepaperUrl: commercialResidentialHero.secondaryCta.href || undefined,
   });
 
   return (

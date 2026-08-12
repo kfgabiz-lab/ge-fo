@@ -122,15 +122,30 @@ function anchorFor(label: string): string {
   return `${SITE_URL}#${slug}`;
 }
 
+/**
+ * getBreadcrumbConfig()는 화면에 보이는 브레드크럼 내비게이션(HeaderBreadcrumb)에도
+ * 쓰이는 공용 데이터라서, 화면 표시용으로만 존재하는 크럼(예: "Media")이나 화면에서만
+ * 의미 있는 링크(예: "Company"→/company/blog)가 섞여 있다. JSON-LD는 schema.org 기준의
+ * 사이트 구조를 나타내야 하므로, 화면용 설정은 건드리지 않고 이 두 규칙만 SEO 출력에
+ * 적용해 보정한다.
+ */
+const SEO_BREADCRUMB_DROP_LABELS = new Set(["Media", "Training"]);
+const SEO_BREADCRUMB_ANCHOR_LABELS = new Set(["Company", "Markets"]);
+
 export function crumbsFromBreadcrumbConfig(
   pathname: string,
   currentPageUrl: string,
 ): BreadcrumbItem[] {
   const { crumbs, current } = getBreadcrumbConfig(pathname);
-  const items: BreadcrumbItem[] = crumbs.map((c) => ({
-    name: c.label,
-    url: c.href ? pageUrl(c.href) : anchorFor(c.label),
-  }));
+  const items: BreadcrumbItem[] = crumbs
+    .filter((c) => !SEO_BREADCRUMB_DROP_LABELS.has(c.label))
+    .map((c) => ({
+      name: c.label,
+      url:
+        !c.href || SEO_BREADCRUMB_ANCHOR_LABELS.has(c.label)
+          ? anchorFor(c.label)
+          : pageUrl(c.href),
+    }));
   if (current) items.push({ name: current, url: currentPageUrl });
   return items;
 }

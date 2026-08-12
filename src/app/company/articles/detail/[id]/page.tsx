@@ -89,6 +89,7 @@ export default async function CompanyArticlesDetailPage({
     metaDescription: (row["seo.meta_description"] as string) ?? "",
     contentHtml,
     publishedAt: (pickField(row, "publish_dttm", "publishDttm") as string) ?? "",
+    updatedAt: (row.updatedAt as string) ?? "",
     imagePath: mediaId != null ? articlesImageSrc(mediaId) : null,
   });
 

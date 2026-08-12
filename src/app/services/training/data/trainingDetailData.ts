@@ -329,9 +329,10 @@ function toCourseCard(
   const d2 = json.curriculum_detail2 ?? {};
   const typeCodes = splitTypeCodes(d1.training_type);
   const showAddress = shouldShowAddress(d1.training_type);
+  const productNames = extractProductNames(json, productNameMap);
 
   return {
-    id: String(raw.id), 
+    id: String(raw.id),
     date: formatSessionDateRange(d2.training_date_from, d2.training_date_to),
     isoDate: (d2.training_date_from ?? "").slice(0, 10),
     isoDateTo: (d2.training_date_to ?? "").slice(0, 10),
@@ -342,9 +343,10 @@ function toCourseCard(
     location: showAddress
       ? [d2.address_detail, d2.address].filter(Boolean).join(", ") || undefined
       : undefined,
-    productsCovered: formatProductsCovered(
-      extractProductNames(json, productNameMap),
-    ),
+    streetAddress: showAddress ? d2.address || undefined : undefined,
+    extendedAddress: showAddress ? d2.address_detail || undefined : undefined,
+    productsCovered: formatProductsCovered(productNames),
+    productNames,
     typeCodes,
   };
 }
@@ -371,7 +373,8 @@ export function toTrainingSessionDetail(
 
   const categoryLabel = codeLabel(categoryMap, curriculum.product_category);
   const trainingTypeLabel = trainingTypeLabels(d1.training_type, trainingTypeMap);
-  const productsCovered = extractProductNames(json, productNameMap).join(", ");
+  const productNames = extractProductNames(json, productNameMap);
+  const productsCovered = productNames.join(", ");
   const dateDisplay = formatDisplayDate(d2.training_date_from ?? "");
   const showAddress = shouldShowAddress(d1.training_type);
   const addressFull = showAddress
@@ -418,6 +421,7 @@ export function toTrainingSessionDetail(
     event: {
       title: d2.title ?? "",
       startIso: (d2.training_date_from ?? "").slice(0, 10),
+      endIso: (d2.training_date_to ?? "").slice(0, 10) || undefined,
       timeFrom: firstSch?.time_from || undefined,
       timeTo: lastSch?.time_to || firstSch?.time_from || undefined,
       location: addressFull || undefined,
@@ -435,10 +439,13 @@ export function toTrainingSessionDetail(
       location: {
         name: "",
         address: addressFull,
+        streetAddress: showAddress ? d2.address || undefined : undefined,
+        extendedAddress: showAddress ? d2.address_detail || undefined : undefined,
         phone: formatPhoneDisplay(d2.phone),
         email: d2.email ?? "",
       },
       productsCovered,
+      productNames,
       trainingType: trainingTypeLabel,
       registerLabel: engineeringTrainingSessionFormCopy.scrollToRegisterLabel,
     },

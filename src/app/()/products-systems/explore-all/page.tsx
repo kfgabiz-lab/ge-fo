@@ -118,6 +118,7 @@ export default async function ExploreAllProductsPage() {
     },
     breadcrumbList(currentUrl, [
       { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },
+      { name: "Explore All Products", url: currentUrl },
     ]),
   ]);
 

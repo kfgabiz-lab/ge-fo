@@ -62,20 +62,32 @@ export default async function TrainingSessionPage({
   const hrefPrefix = `/services/${variant}-training`;
   const courseUrl = pageUrl(`${hrefPrefix}/${courseId}`);
   const currentUrl = pageUrl(`${hrefPrefix}/${courseId}/${sessionId}`);
+  const sessionHasAddress = Boolean(session.sidebar.location.address);
   const sessionNode = {
     "@type": "CourseInstance",
     "@id": `${currentUrl}#session`,
     name: session.event?.title ?? session.title,
-    courseMode: session.sidebar.location.address ? "In-Person" : "Virtual",
+    courseMode: sessionHasAddress ? "In-Person" : "Virtual",
     startDate: session.event?.startIso ?? "",
+    endDate: session.event?.endIso ?? "",
     underName: { "@id": `${courseUrl}#course` },
-    ...(session.sidebar.location.address
+    location: sessionHasAddress
       ? {
-          location: {
-            "@type": "Place",
-            address: { "@type": "PostalAddress", streetAddress: session.sidebar.location.address },
+          "@type": "Place",
+          address: {
+            "@type": "PostalAddress",
+            addressCountry: "US",
+            ...(session.sidebar.location.streetAddress
+              ? { streetAddress: session.sidebar.location.streetAddress }
+              : {}),
+            ...(session.sidebar.location.extendedAddress
+              ? { extendedAddress: session.sidebar.location.extendedAddress }
+              : {}),
           },
         }
+      : { "@type": "VirtualLocation" },
+    ...(session.sidebar.productNames && session.sidebar.productNames.length
+      ? { about: session.sidebar.productNames.map((name) => ({ "@type": "Product", name })) }
       : {}),
     offers: {
       "@type": "Offer",

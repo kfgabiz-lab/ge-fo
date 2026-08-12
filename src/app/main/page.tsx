@@ -12,7 +12,7 @@ import IconCards from "./components/IconCards";
 import "@/assets/css/main.css";
 import type { Metadata } from "next";
 import JsonLd from "@/components/seo/JsonLd";
-import { buildPageGraph, pageUrl } from "@/lib/structuredData/builders";
+import { breadcrumbList, buildPageGraph, pageUrl } from "@/lib/structuredData/builders";
 import { SITE_NAME, WEBSITE_ID } from "@/lib/structuredData/siteConfig";
 
 const MAIN_DESCRIPTION =
@@ -35,13 +35,7 @@ export default async function MainPage() {
       isPartOf: { "@id": WEBSITE_ID },
       breadcrumb: { "@id": `${currentUrl}#breadcrumb` },
     },
-    {
-      "@type": "BreadcrumbList",
-      "@id": `${currentUrl}#breadcrumb`,
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: currentUrl },
-      ],
-    },
+    breadcrumbList(currentUrl, []),
   ]);
   return (
     <main className="main-page" id="Page_main">

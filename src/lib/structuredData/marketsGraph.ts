@@ -3,6 +3,13 @@ import type { FaqItem, ProductItem } from "@/app/markets/data/marketsContent";
 import { breadcrumbList, buildPageGraph, crumbsFromBreadcrumbConfig, itemUrl, pageUrl, type JsonLdNode } from "./builders";
 import { WEBSITE_ID } from "./siteConfig";
 
+const ACTION_PLATFORMS = [
+  "http://schema.org/DesktopWebPlatform",
+  "http://schema.org/MobileWebPlatform",
+];
+
+const CONNECT_PORTAL_URL = "https://connect.ls-electric.com/";
+
 export function buildMarketsPageGraph(input: {
   pathname: string;
   marketName: string;
@@ -10,9 +17,44 @@ export function buildMarketsPageGraph(input: {
   faqItems: FaqItem[];
   highlightItems: HighlightNewsItem[];
   productItems: ProductItem[];
+  whitepaperUrl?: string;
 }): { "@context": string; "@graph": JsonLdNode[] } {
-  const { pathname, marketName, meta, faqItems, highlightItems, productItems } = input;
+  const { pathname, marketName, meta, faqItems, highlightItems, productItems, whitepaperUrl } = input;
   const currentUrl = pageUrl(pathname);
+
+  const potentialAction: JsonLdNode[] = [
+    {
+      "@type": "CommunicateAction",
+      name: "Contact us",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: pageUrl("/support/contact-us"),
+        actionPlatform: ACTION_PLATFORMS,
+      },
+    },
+    ...(whitepaperUrl
+      ? [
+          {
+            "@type": "DownloadAction",
+            name: "Download Whitepaper",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: whitepaperUrl,
+              actionPlatform: ACTION_PLATFORMS,
+            },
+          },
+        ]
+      : []),
+    {
+      "@type": "Action",
+      name: "Connect Portal",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: CONNECT_PORTAL_URL,
+        actionPlatform: ACTION_PLATFORMS,
+      },
+    },
+  ];
 
   const about: JsonLdNode[] = [];
   const productsWithUrl = productItems
@@ -65,6 +107,7 @@ export function buildMarketsPageGraph(input: {
         }
       : {}),
     ...(about.length ? { about } : {}),
+    potentialAction,
   };
 
   return buildPageGraph([
