@@ -3,7 +3,6 @@ import SubHeader from "@/components/layout/markets/SubHeader";
 import SubFooter from "@/components/layout/markets/SubFooter";
 import type { BreadcrumbServerOverride } from "@/components/layout/shared/HeaderBreadcrumb";
 import { fetchDevicesMegaMenu, fetchGnbMenuData } from "@/data/gnb";
-import { fetchTrainingCourseTitle } from "@/app/services/training/data/trainingDetailData";
 
 const TRAINING_DETAIL_PATH_RE =
   /^\/services\/(?:sales|engineering|service)-training\/([^/]+)$/;
@@ -29,8 +28,7 @@ async function resolveBreadcrumbOverride(): Promise<BreadcrumbServerOverride> {
 
   const detailMatch = pathname.match(TRAINING_DETAIL_PATH_RE);
   if (detailMatch) {
-    const title = await fetchTrainingCourseTitle(detailMatch[1]);
-    return title ? { pathname, current: title } : null;
+    return { pathname, current: "Course" };
   }
 
   return null;

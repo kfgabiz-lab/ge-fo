@@ -8,7 +8,6 @@ import type { Swiper as SwiperType } from "swiper";
 import SwiperBarControls from "@/components/swiper/SwiperBarControls";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import TabButton from "@/components/ui/TabButton";
-import ProductAwardBadge from "@/components/product/ProductAwardBadge";
 import { getProductBadgeType } from "@/lib/productBadge";
 import type {
   FoProductGroupItem,
@@ -233,7 +232,6 @@ function ProductsSwiperPer4({ products }: ProductsSwiperPer4Props) {
                   onClick={isLinkable ? undefined : (e) => e.preventDefault()}
                 >
                   <div className="img_area">
-                    {badgeType ? <ProductAwardBadge /> : null}
                     <img
                       loading="lazy"
                       decoding="async"

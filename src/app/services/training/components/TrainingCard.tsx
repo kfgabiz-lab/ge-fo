@@ -19,7 +19,7 @@ export default function TrainingCard({
       className="support_service_training_card"
       data-slugkey="id"
       data-slugkey-attr="href"
-      onClick={() => seedBreadcrumbTitle(detailHref, course.title)}
+      onClick={() => seedBreadcrumbTitle(detailHref, "Course")}
     >
       <div className="support_service_training_card__media">
         <img
