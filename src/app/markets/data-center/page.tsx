@@ -53,6 +53,7 @@ export default async function MarketsDataCenterPage() {
     faqItems,
     highlightItems: highlightNewsItems,
     productItems,
+    whitepaperUrl: dataCenterHero.secondaryCta.href || undefined,
   });
   return (
     <main className="markets-page markets-page--data-center" id="Page_markets_data_center">
@@ -62,6 +63,7 @@ export default async function MarketsDataCenterPage() {
         subtitle={dataCenterHero.subtitle}
         title={dataCenterHero.title}
         heroImage={dataCenterHero.heroImage}
+        secondaryCta={dataCenterHero.secondaryCta}
       />
       <MarketsIntro
         titleLines={dataCenterIntro.titleLines}

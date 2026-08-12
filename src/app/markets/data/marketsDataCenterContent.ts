@@ -10,6 +10,11 @@ export const dataCenterHero = {
   subtitle: "Agile, modular power for the AI-driven era.",
   title: "Data Center",
   heroImage: "/img/markets/data-center/hero.png",
+  secondaryCta: {
+    label: "Get the Whitepaper",
+    href: "/docs/DataCenter-Whitepaper.pdf",
+    icon: "download" as const,
+  },
 };
 
 export const dataCenterIntro = {
