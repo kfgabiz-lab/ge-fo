@@ -8,6 +8,7 @@ import {
   fetchVisibleLv2Categories,
 } from "@/app/()/products-systems/data/productsSystemsData";
 import { fetchCategoryInsights } from "@/data/highlightNews";
+import { withCategoryContext } from "@/lib/navigation/categoryContext";
 import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbList, buildPageGraph, itemUrl, pageUrl } from "@/lib/structuredData/builders";
@@ -111,7 +112,7 @@ export default async function ProductsCategoryRoutePage({
       <DevicesHelp variant="overlay" />
       <DevicesPageFooter
         highlightItems={highlightItems}
-        bannerLinkHref="/support/contact-us"
+        bannerLinkHref={withCategoryContext("/support/contact-us", category?.id)}
       />
     </main>
   );
