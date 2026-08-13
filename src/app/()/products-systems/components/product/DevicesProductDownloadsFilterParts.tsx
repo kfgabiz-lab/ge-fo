@@ -74,15 +74,19 @@ export function DevicesProductDownloadsFilterCheckRow({
         indeterminateIcon={
           <GuideCheckboxIcon {...guideCheckboxIconsDownloads} />
         }
-        slotProps={{ input: { id, name: id, "aria-label": label } }}
+        slotProps={{ input: { id, name: id } }}
       />
-      <button
-        type="button"
+      <label
+        htmlFor={id}
         className="devices_product_downloads__check-label"
-        onClick={handleLabelClick}
+        onClick={(event) => {
+          if (!indeterminate) return;
+          event.preventDefault();
+          handleLabelClick();
+        }}
       >
         <DevicesProductDownloadsCheckLabel label={label} count={count} />
-      </button>
+      </label>
     </div>
   );
 
@@ -146,6 +150,7 @@ export function DevicesProductDownloadsCategoryFilterRow({
               expanded ? " is-open" : ""
             }`}
             aria-expanded={expanded}
+            aria-controls={`${parentId}-subcategories`}
             aria-label={`${option.label} subcategories`}
             onClick={(event) => {
               event.stopPropagation();
@@ -154,8 +159,12 @@ export function DevicesProductDownloadsCategoryFilterRow({
           />
         ) : null}
       </div>
-      {option.nested?.length && expanded ? (
-        <ul className="devices_product_downloads__filter-list devices_product_downloads__filter-list--nested">
+      {option.nested?.length ? (
+        <ul
+          id={`${parentId}-subcategories`}
+          className="devices_product_downloads__filter-list devices_product_downloads__filter-list--nested"
+          hidden={!expanded}
+        >
           {option.nested.map((nested) => {
             const nestedId = `${idPrefix}-${nested.id}`;
             const isBranch =

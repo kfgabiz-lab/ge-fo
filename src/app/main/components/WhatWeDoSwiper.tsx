@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
@@ -39,8 +39,17 @@ const whatWeDoSlides = [
 export default function WhatWeDoSwiper() {
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const activeSlide = whatWeDoSlides[activeIndex] ?? whatWeDoSlides[0];
   const loopEnabled = whatWeDoSlides.length > 1;
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setPrefersReducedMotion(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   const handleSwiper = useCallback((swiper: SwiperType) => {
     swiperRef.current = swiper;
@@ -52,6 +61,7 @@ export default function WhatWeDoSwiper() {
   };
 
   const handleMouseLeave = () => {
+    if (prefersReducedMotion) return;
     swiperRef.current?.autoplay?.start();
   };
 
@@ -81,6 +91,8 @@ export default function WhatWeDoSwiper() {
     return null;
   }
 
+  const autoplayEnabled = loopEnabled && !prefersReducedMotion;
+
   return (
     <section className="what_we_do__inner">
       <h2 className="tit_area">What we do</h2>
@@ -103,10 +115,14 @@ export default function WhatWeDoSwiper() {
               className="swiper_type_01 what_we_do__media-swiper"
               modules={[A11y, Autoplay]}
               slidesPerView={1}
-              speed={WHAT_WE_DO_SLIDE_SPEED}
+              speed={prefersReducedMotion ? 0 : WHAT_WE_DO_SLIDE_SPEED}
               loop={loopEnabled}
               watchOverflow
-              autoplay={{ delay: AUTOPLAY_DELAY_MS, disableOnInteraction: false }}
+              autoplay={
+                autoplayEnabled
+                  ? { delay: AUTOPLAY_DELAY_MS, disableOnInteraction: false }
+                  : false
+              }
               onSwiper={handleSwiper}
               onSlideChange={handleSlideChange}
               onSlideChangeTransitionEnd={handleSlideChange}
@@ -142,7 +158,7 @@ export default function WhatWeDoSwiper() {
           onSelect={handlePaginationClick}
           onPrev={handlePrev}
           onNext={handleNext}
-          ariaLabel="What We Do 슬라이드 컨트롤"
+          ariaLabel="What We Do slide controls"
         />
       </div>
     </section>

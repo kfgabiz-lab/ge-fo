@@ -831,7 +831,7 @@ export default function GnbMenu({
 
             {!isPanel ? (
               <>
-                <nav className="main_header__nav" aria-label="주 메뉴">
+                <nav className="main_header__nav" aria-label="Main menu">
                   {navList}
                 </nav>
 
@@ -883,7 +883,7 @@ export default function GnbMenu({
                   <button
                     type="button"
                     className="btn_menu"
-                    aria-label="메뉴 열기"
+                    aria-label="Open menu"
                     aria-expanded={isMobileMenuOpen}
                     aria-controls={mobileMenuId}
                     onClick={toggleMobileMenu}
@@ -915,7 +915,7 @@ export default function GnbMenu({
                   <button
                     type="button"
                     className="gnb_mobile_close"
-                    aria-label="메뉴 닫기"
+                    aria-label="Close menu"
                     onClick={closeMobileMenu}
                   >
                     <span className="ir">close menu</span>
@@ -949,7 +949,7 @@ export default function GnbMenu({
 
           {!isPanel ? (
             <>
-              <nav className="gnb_nav_wrap" aria-label="주 메뉴">
+              <nav className="gnb_nav_wrap" aria-label="Main menu">
                 {navList}
               </nav>
 
@@ -995,7 +995,7 @@ export default function GnbMenu({
                 <button
                   type="button"
                   className="btn_menu"
-                  aria-label="메뉴 열기"
+                  aria-label="Open menu"
                   aria-expanded={isMobileMenuOpen}
                   aria-controls={mobileMenuId}
                   onClick={toggleMobileMenu}
@@ -1024,7 +1024,7 @@ export default function GnbMenu({
                 <button
                   type="button"
                   className="gnb_mobile_close"
-                  aria-label="메뉴 닫기"
+                  aria-label="Close menu"
                   onClick={closeMobileMenu}
                 >
                   <p className="ir">close menu</p>
@@ -1051,7 +1051,7 @@ export default function GnbMenu({
         className={
           isMobileMenuOpen ? "gnb_mobile_menu is-open" : "gnb_mobile_menu"
         }
-        aria-label="모바일 메뉴"
+        aria-label="Mobile menu"
         aria-hidden={!isMobileMenuOpen}
       >
         <GnbMobileMenuPanel
@@ -1133,7 +1133,7 @@ export default function GnbMenu({
           <button
             type="button"
             className="gnb_mobile_dim"
-            aria-label="메뉴 닫기"
+            aria-label="Close menu"
             data-lenis-prevent
             onWheel={(event) => event.preventDefault()}
             onTouchMove={(event) => event.preventDefault()}
@@ -1148,7 +1148,7 @@ export default function GnbMenu({
         <button
           type="button"
           className={isOverlayOpen ? "gnb_mega_dim is-open" : "gnb_mega_dim"}
-          aria-label="메뉴 닫기"
+          aria-label="Close menu"
           tabIndex={-1}
           data-lenis-prevent
           onWheel={(event) => event.preventDefault()}

@@ -3230,9 +3230,12 @@ color: #fff;
 }
 
 .gnb_search__field .MuiOutlinedInput-root fieldset,
-.gnb_search__field .MuiOutlinedInput-root:hover fieldset,
-.gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+.gnb_search__field .MuiOutlinedInput-root:hover fieldset {
   border: 1px solid #9535ff !important;
+}
+
+.gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border: 2px solid #9535ff !important;
 }
 
 .gnb_search__field .MuiOutlinedInput-input {
@@ -3447,9 +3450,12 @@ color: #fff;
   }
 
   .gnb_search__field .MuiOutlinedInput-root fieldset,
-  .gnb_search__field .MuiOutlinedInput-root:hover fieldset,
-  .gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+  .gnb_search__field .MuiOutlinedInput-root:hover fieldset {
     border: 1px solid #9535ff !important;
+  }
+
+  .gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+    border: 2px solid #9535ff !important;
   }
 
   .gnb_search__field .MuiOutlinedInput-input {

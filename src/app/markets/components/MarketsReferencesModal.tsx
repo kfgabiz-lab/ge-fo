@@ -16,6 +16,8 @@ type MarketsReferencesModalProps = {
   open: boolean;
   item?: ReferenceItem | null;
   items?: ReferenceItem[];
+  /** Matches trigger `aria-controls` */
+  dialogId?: string;
   onClose: () => void;
   /** prev/next 전환 시 현재 레퍼런스 동기화 */
   onActiveItemChange?: (item: ReferenceItem) => void;
@@ -27,11 +29,14 @@ export default function MarketsReferencesModal({
   open,
   item = null,
   items,
+  dialogId,
   onClose,
   onActiveItemChange,
   embedded = false,
 }: MarketsReferencesModalProps) {
   const titleId = useId();
+  const fallbackDialogId = useId();
+  const resolvedDialogId = dialogId ?? fallbackDialogId;
   const modalRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const [referenceIndex, setReferenceIndex] = useState(0);
@@ -161,6 +166,7 @@ export default function MarketsReferencesModal({
         />
       ) : null}
       <div
+        id={resolvedDialogId}
         className="common_modal__panel"
         role="dialog"
         aria-modal="true"

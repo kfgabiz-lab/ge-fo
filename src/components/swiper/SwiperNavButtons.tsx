@@ -19,8 +19,8 @@ export default function SwiperNavButtons({
   isNextDisabled,
   onPrev,
   onNext,
-  prevLabel = "이전 슬라이드",
-  nextLabel = "다음 슬라이드",
+  prevLabel = "Previous slide",
+  nextLabel = "Next slide",
 }: SwiperNavButtonsProps) {
   const classes = swiperBarClasses[variant];
 

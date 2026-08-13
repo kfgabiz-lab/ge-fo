@@ -16,7 +16,8 @@ export default function CookieSettingPageClient({
   >(initialDialog);
 
   return (
-    <>
+    <main className="common-page common-page--cookie-setting" id="Page_cookie_setting">
+      <h1 className="ir">Cookie Settings</h1>
       <CookieSettingsModal
         open={activeDialog === "banner"}
         onClose={() => setActiveDialog(null)}
@@ -26,6 +27,6 @@ export default function CookieSettingPageClient({
         open={activeDialog === "preferences"}
         onClose={() => setActiveDialog(null)}
       />
-    </>
+    </main>
   );
 }

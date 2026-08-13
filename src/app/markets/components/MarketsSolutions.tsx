@@ -197,12 +197,17 @@ export default function MarketsSolutions() {
                     type="button"
                     className="markets_solutions__accordion-trigger"
                     aria-expanded={isOpen}
+                    aria-controls={`markets-solutions-panel-${zone.id}`}
                     onClick={() => toggleZone(zone.id)}
                   >
                     {mobileTitle}
                   </button>
                   {isOpen ? (
-                    <div className="markets_solutions__accordion-panel">
+                    <div
+                      id={`markets-solutions-panel-${zone.id}`}
+                      className="markets_solutions__accordion-panel"
+                      role="region"
+                    >
                       <ZonePanelBody zone={zone} title={mobileTitle} />
                     </div>
                   ) : null}

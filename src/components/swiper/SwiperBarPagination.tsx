@@ -16,16 +16,12 @@ export default function SwiperBarPagination({
   count,
   activeIndex,
   onSelect,
-  ariaLabel = "슬라이드 페이지네이션",
+  ariaLabel = "Slide pagination",
 }: SwiperBarPaginationProps) {
   const classes = swiperBarClasses[variant];
 
   return (
-    <div
-      className={classes.pagination}
-      role="tablist"
-      aria-label={ariaLabel}
-    >
+    <div className={classes.pagination} role="group" aria-label={ariaLabel}>
       {Array.from({ length: count }, (_, index) => (
         <button
           key={index}
@@ -35,7 +31,7 @@ export default function SwiperBarPagination({
               ? `${classes.item} is-active`
               : classes.item
           }
-          aria-label={`${index + 1}번 슬라이드`}
+          aria-label={`Slide ${index + 1}`}
           aria-current={activeIndex === index ? "true" : undefined}
           onClick={() => onSelect(index)}
         >

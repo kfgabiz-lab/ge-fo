@@ -103,12 +103,13 @@ export const productDownloadsSortOptions = [
   { value: "title_desc", label: "Z to A" },
 ] as const satisfies ReadonlyArray<{ value: DownloadCenterSort; label: string }>;
 
-export const PRODUCT_DOWNLOADS_DEFAULT_SORT: DownloadCenterSort = "doctype";
+export const PRODUCT_DOWNLOADS_DEFAULT_SORT: DownloadCenterSort = "";
 
 export function productDownloadsSortLabel(sort: DownloadCenterSort): string {
+  if (!sort) return "Select";
   return (
     productDownloadsSortOptions.find((option) => option.value === sort)?.label ??
-    "Sort by"
+    "Select"
   );
 }
 

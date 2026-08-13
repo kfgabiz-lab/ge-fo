@@ -121,9 +121,22 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
     () => true,
     () => false,
   );
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const prefersReducedMotionRef = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoplayProgress, setAutoplayProgress] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      prefersReducedMotionRef.current = media.matches;
+      setPrefersReducedMotion(media.matches);
+    };
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   const slides = useMemo<MainSlide[]>(() => {
     return heroItems
@@ -413,6 +426,10 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
   const startImageProgressTimer = useCallback(
     (fromProgress = 0) => {
       clearProgressTimer();
+      if (prefersReducedMotionRef.current) {
+        setProgress(0);
+        return;
+      }
       progressStartRef.current =
         Date.now() - (fromProgress / 100) * IMAGE_AUTOPLAY_DELAY;
 
@@ -504,6 +521,10 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
       setProgress(0);
       bindVideoProgress(video, index);
       if (!isInViewRef.current) return;
+      if (prefersReducedMotionRef.current) {
+        video.pause();
+        return;
+      }
       void video.play().catch(() => {});
     },
     [bindVideoProgress, setProgress],
@@ -520,6 +541,12 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
       clearVideoListeners();
       pauseAll(true);
       setProgress(0);
+
+      if (prefersReducedMotionRef.current) {
+        isVideoPlayingRef.current = false;
+        setIsVideoPlaying(false);
+        return;
+      }
 
       if (slide?.type === "video") {
         isVideoPlayingRef.current = true;
@@ -771,7 +798,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
     <div
       ref={sectionRef}
       className="video-swiper-section"
-      aria-label="메인 비주얼 슬라이드"
+      aria-label="Main visual slides"
     >
       <Swiper
         key={swiperKey}
@@ -782,7 +809,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
         effect="fade"
         fadeEffect={{ crossFade: true }}
         slidesPerView={1}
-        speed={600}
+        speed={prefersReducedMotion ? 0 : 600}
         loop={false}
         autoplay={false}
         observer
@@ -883,7 +910,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
         ))}
       </Swiper>
 
-      <div className="video-pagination" aria-label="슬라이드 페이지네이션">
+      <div className="video-pagination" aria-label="Slide pagination">
         <div
           className={
             isMobileVisual
@@ -900,7 +927,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
                   ? "video-pagination__num is-active"
                   : "video-pagination__num"
               }
-              aria-label={`${index + 1}번 슬라이드`}
+              aria-label={`Slide ${index + 1}`}
               aria-current={activeIndex === index ? "true" : undefined}
               onClick={() => handlePaginationClick(index)}
             >
@@ -915,7 +942,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
           aria-valuemax={100}
           aria-valuenow={Math.round(autoplayProgress)}
           aria-label={
-            isActiveVideo ? "영상 재생 진행률" : "슬라이드 자동재생 진행률"
+            isActiveVideo ? "Video playback progress" : "Slide autoplay progress"
           }
         >
           <span
@@ -927,7 +954,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
           <button
             type="button"
             className="video-pagination__control"
-            aria-label={isVideoPlaying ? "슬라이드 정지" : "슬라이드 재생"}
+            aria-label={isVideoPlaying ? "Pause slide" : "Play slide"}
             aria-pressed={isVideoPlaying}
             onClick={toggleVideoPlayback}
           >

@@ -29,7 +29,7 @@ export default function SwiperBarControls({
   onSelect,
   onPrev,
   onNext,
-  ariaLabel = "슬라이드 컨트롤",
+  ariaLabel = "Slide controls",
   paginationAriaLabel,
   prevLabel,
   nextLabel,

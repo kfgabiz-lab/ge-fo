@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Autoplay, EffectFade } from "swiper/modules";
@@ -34,7 +34,16 @@ export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
 
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const isOnlySlide = bannerSlides.length === 1;
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setPrefersReducedMotion(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   const handleSwiper = useCallback((swiper: SwiperType) => {
     swiperRef.current = swiper;
@@ -61,6 +70,8 @@ export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
     return null;
   }
 
+  const autoplayEnabled = !isOnlySlide && !prefersReducedMotion;
+
   return (
     <div
       className={isOnlySlide ? "banner_swiper only only" : "banner_swiper"}
@@ -73,12 +84,12 @@ export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
         effect="fade"
         fadeEffect={{ crossFade: true }}
         slidesPerView={1}
-        speed={600}
+        speed={prefersReducedMotion ? 0 : 600}
         loop={!isOnlySlide}
         autoplay={
-          isOnlySlide
-            ? false
-            : { delay: AUTOPLAY_DELAY_MS, disableOnInteraction: false }
+          autoplayEnabled
+            ? { delay: AUTOPLAY_DELAY_MS, disableOnInteraction: false }
+            : false
         }
         onSwiper={handleSwiper}
         onSlideChange={handleSlideChange}

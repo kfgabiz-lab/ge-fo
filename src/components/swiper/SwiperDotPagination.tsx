@@ -10,8 +10,8 @@ export default function SwiperDotPagination({
   count,
   activeIndex,
   onSelect,
-  ariaLabel = "배너 페이지네이션",
-  getItemLabel = (index) => `${index + 1}번 배너`,
+  ariaLabel = "Banner pagination",
+  getItemLabel = (index) => `Banner ${index + 1}`,
 }: SwiperDotPaginationProps) {
   return (
     <div className="banner-pagination" aria-label={ariaLabel}>

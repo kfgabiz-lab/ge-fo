@@ -8,7 +8,7 @@ export default function WhereToBuyMapPopup({ location }: WhereToBuyMapPopupProps
   return (
     <div
       className="support_where_to_buy_map__popup"
-      role="dialog"
+      role="region"
       aria-label={location.name}
       data-slug="wheretobuy-agency-data"
     >

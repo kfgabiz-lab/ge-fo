@@ -35,6 +35,7 @@ import SearchMediaPanel from "./SearchMediaPanel";
 import SearchPageList from "./SearchPageList";
 import SearchPagesPanel from "./SearchPagesPanel";
 import SearchProductsPanel from "./SearchProductsPanel";
+import { handleHorizontalTabListKeyDown } from "@/lib/tabKeyboardNav";
 
 import {
   buildSearchTabHref,
@@ -71,7 +72,7 @@ function SearchSectionHead({
       <Link href={exploreHref} prefetch={false} className="btn-text-30 search_all__explore">
         Explore
         <span className="btn-text-30__icon" aria-hidden="true">
-          <span className="icon_arrow-18" aria-hidden="true" />
+          <span className="icon_arrow-14" aria-hidden="true" />
         </span>
       </Link>
     </div>
@@ -370,7 +371,12 @@ export default function SearchAllTabContent({
   return (
     <section className="search_all" id="search-all">
       <div className="inner">
-        <div className="search_all__tabs" role="tablist" aria-label="Search results">
+        <div
+          className="search_all__tabs"
+          role="tablist"
+          aria-label="Search results"
+          onKeyDown={handleHorizontalTabListKeyDown}
+        >
           {searchAllTabs.map((tab) => {
             const isActive = activeTab === tab.id;
             const countLabel =
@@ -392,7 +398,10 @@ export default function SearchAllTabContent({
                 key={tab.id}
                 type="button"
                 role="tab"
+                id={`search-tab-${tab.id}`}
+                aria-controls={`search-panel-${tab.id}`}
                 aria-selected={isActive}
+                tabIndex={isActive ? 0 : -1}
                 className={isActive ? "search_all__tab is-active" : "search_all__tab"}
                 onClick={() => handleTabClick(tab.id)}
               >
@@ -403,105 +412,141 @@ export default function SearchAllTabContent({
         </div>
 
         {activeTab === "products" ? (
-          <SearchProductsPanel
-            onTotalChange={handleProductsTotal}
-            onFilteredChange={handleProductsFiltered}
-          />
+          <div
+            role="tabpanel"
+            id="search-panel-products"
+            aria-labelledby="search-tab-products"
+          >
+            <SearchProductsPanel
+              onTotalChange={handleProductsTotal}
+              onFilteredChange={handleProductsFiltered}
+            />
+          </div>
         ) : null}
         {documentsFilterMounted ? (
           <SearchDocumentsFilterProvider items={keywordDocuments}>
             {activeTab === "documents" ? (
-              <SearchDocumentsPanel
-                items={keywordDocuments}
-                loaded={loaded.documents}
-              />
+              <div
+                role="tabpanel"
+                id="search-panel-documents"
+                aria-labelledby="search-tab-documents"
+              >
+                <SearchDocumentsPanel
+                  items={keywordDocuments}
+                  loaded={loaded.documents}
+                />
+              </div>
             ) : null}
           </SearchDocumentsFilterProvider>
         ) : null}
         {activeTab === "media" ? (
-          <SearchMediaPanel
-            onTotalChange={handleMediaTotal}
-            onFilteredChange={handleMediaFiltered}
-          />
+          <div
+            role="tabpanel"
+            id="search-panel-media"
+            aria-labelledby="search-tab-media"
+          >
+            <SearchMediaPanel
+              onTotalChange={handleMediaTotal}
+              onFilteredChange={handleMediaFiltered}
+            />
+          </div>
         ) : null}
         {activeTab === "pages" ? (
-          <SearchPagesPanel
-            onTotalChange={handlePagesTotal}
-            onFilteredChange={handlePagesFiltered}
-          />
-        ) : null}
-
-        {isAllTab && !isAllTabEmpty ? (
-          <SearchAllAi
-            loading={!chatbotKeyword && !chatbotSettled}
-            settled={chatbotSettled}
+          <div
+            role="tabpanel"
+            id="search-panel-pages"
+            aria-labelledby="search-tab-pages"
           >
-            {aiAnswer ? (
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiAnswer}</ReactMarkdown>
-            ) : (
-              "AI response waiting..."
-            )}
-          </SearchAllAi>
-        ) : null}
-
-        {isAllTab && productResult.items.length > 0 ? (
-          <div className="search_all__section">
-            <SearchSectionHead
-              title="Product"
-              count={formatSearchCount(productResult.total)}
-              exploreHref={buildSearchTabHref(query, "products")}
-            />
-            <div className="search_all__products">
-              {productResult.items.map((item) => (
-                <SearchProductCard key={item.id} item={item} />
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        {isAllTab && documentResult.items.length > 0 ? (
-          <div className="search_all__section search_all__section--documents devices_product_downloads">
-            <SearchSectionHead
-              title="Documents"
-              count={formatSearchCount(documentResult.total)}
-              exploreHref={buildSearchTabHref(query, "documents")}
-            />
-            <div className="search_all__documents-grid">
-              {documentResult.items.map((item) => (
-                <SearchDocumentsCard key={item.id} item={item} searchTerm={query} />
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        {isAllTab && mediaResult.items.length > 0 ? (
-          <div className="search_all__section">
-            <SearchSectionHead
-              title="Media"
-              count={formatSearchCount(mediaResult.totalElements)}
-              exploreHref={buildSearchTabHref(query, "media")}
-            />
-            <SearchMediaList items={mediaResult.items} variant="card" />
-          </div>
-        ) : null}
-
-        {isAllTab && pagesResult.items.length > 0 ? (
-          <div className="search_all__section">
-            <SearchSectionHead
-              title="Pages"
-              count={formatSearchCount(pagesResult.totalElements)}
-              exploreHref={buildSearchTabHref(query, "pages")}
-            />
-            <SearchPageList
-              items={pagesResult.items}
-              listClassName="search_all__pages"
-              itemClassName="search_all__page-item"
-              variant="pages"
+            <SearchPagesPanel
+              onTotalChange={handlePagesTotal}
+              onFilteredChange={handlePagesFiltered}
             />
           </div>
         ) : null}
 
-        {isAllTab && isAllTabEmpty ? <SearchEmptyResult /> : null}
+        {isAllTab ? (
+          <div
+            role="tabpanel"
+            id="search-panel-all"
+            aria-labelledby="search-tab-all"
+          >
+            {!isAllTabEmpty ? (
+              <SearchAllAi
+                loading={!chatbotKeyword && !chatbotSettled}
+                settled={chatbotSettled}
+              >
+                {aiAnswer ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiAnswer}</ReactMarkdown>
+                ) : (
+                  "AI response waiting..."
+                )}
+              </SearchAllAi>
+            ) : null}
+
+            {productResult.items.length > 0 ? (
+              <div className="search_all__section">
+                <SearchSectionHead
+                  title="Product"
+                  count={formatSearchCount(productResult.total)}
+                  exploreHref={buildSearchTabHref(query, "products")}
+                />
+                <div className="search_all__products">
+                  {productResult.items.map((item) => (
+                    <SearchProductCard
+                      key={item.id}
+                      item={item}
+                      searchTerm={query}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {documentResult.items.length > 0 ? (
+              <div className="search_all__section search_all__section--documents devices_product_downloads">
+                <SearchSectionHead
+                  title="Documents"
+                  count={formatSearchCount(documentResult.total)}
+                  exploreHref={buildSearchTabHref(query, "documents")}
+                />
+                <div className="search_all__documents-grid">
+                  {documentResult.items.map((item) => (
+                    <SearchDocumentsCard key={item.id} item={item} searchTerm={query} />
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {mediaResult.items.length > 0 ? (
+              <div className="search_all__section">
+                <SearchSectionHead
+                  title="Media"
+                  count={formatSearchCount(mediaResult.totalElements)}
+                  exploreHref={buildSearchTabHref(query, "media")}
+                />
+                <SearchMediaList items={mediaResult.items} variant="card" />
+              </div>
+            ) : null}
+
+            {pagesResult.items.length > 0 ? (
+              <div className="search_all__section">
+                <SearchSectionHead
+                  title="Pages"
+                  count={formatSearchCount(pagesResult.totalElements)}
+                  exploreHref={buildSearchTabHref(query, "pages")}
+                />
+                <SearchPageList
+                  items={pagesResult.items}
+                  listClassName="search_all__pages"
+                  itemClassName="search_all__page-item"
+                  variant="pages"
+                />
+              </div>
+            ) : null}
+
+            {isAllTabEmpty ? <SearchEmptyResult /> : null}
+          </div>
+        ) : null}
       </div>
     </section>
   );

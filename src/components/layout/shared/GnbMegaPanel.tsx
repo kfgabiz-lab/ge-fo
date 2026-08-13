@@ -174,7 +174,7 @@ export default function GnbMegaPanel({
         <button
           type="button"
           className="gnb_mega__close"
-          aria-label="메뉴 닫기"
+          aria-label="Close menu"
           onClick={onClose}
         >
           <span className="ir">close menu</span>

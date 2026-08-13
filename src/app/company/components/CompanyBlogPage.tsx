@@ -122,6 +122,10 @@ export default function CompanyBlogPage({
     setSearch(value);
     setPageIndex(0);
   };
+
+  const handleViewAllClick = () => {
+    handleSearchSubmit("");
+  }
   const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {
     setSort(value);
     setPageIndex(0);
@@ -218,7 +222,7 @@ export default function CompanyBlogPage({
 
           <div className="company-blog-list__body">
             {showEmpty ? (
-              <CompanyFeedEmpty variant="blog" />
+              <CompanyFeedEmpty variant="blog" onViewAllClick={handleViewAllClick}/>
             ) : (
               <>
                 <ul

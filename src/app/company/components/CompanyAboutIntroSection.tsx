@@ -50,19 +50,24 @@ export default function CompanyAboutIntroSection({
                 loading="lazy"
                 decoding="async"
                 src={heroImage}
-                alt=""
+                alt={headlineLines.join(" ")}
                 className="company-about-intro__hero-img company-about-intro__hero-img--pc"
               />
               <img
                 loading="lazy"
                 decoding="async"
                 src={heroImageMobile}
-                alt=""
+                alt={headlineLines.join(" ")}
                 className="company-about-intro__hero-img company-about-intro__hero-img--mo"
               />
             </>
           ) : (
-            <img loading="lazy" decoding="async" src={heroImage} alt="" />
+            <img
+              loading="lazy"
+              decoding="async"
+              src={heroImage}
+              alt={headlineLines.join(" ")}
+            />
           )}
         </div>
         <div className="company-about-intro__text">

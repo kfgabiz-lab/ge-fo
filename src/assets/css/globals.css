@@ -87,6 +87,47 @@ body {
   overflow-x: clip;
 }
 
+/* Skip navigation — first focusable control for keyboard users */
+.skip_nav {
+  position: relative;
+  z-index: 10000;
+}
+
+.skip_to_content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  padding: 12px 20px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 23px;
+  text-decoration: none;
+  transform: translateY(-120%);
+  transition: transform 0.2s ease;
+}
+
+.skip_to_content:focus,
+.skip_to_content:focus-visible {
+  transform: translateY(0);
+  outline: var(--focus-outline-width) solid var(--focus-outline-inner);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip_to_content {
+    transition: none;
+  }
+}
+
+#main-content:focus,
+main:focus {
+  outline: none;
+}
+
 /* Keyboard focus outline — dual ring (white + navy) for light/dark backgrounds */
 :focus-visible {
   outline: var(--focus-outline-width) solid var(--focus-outline-inner);
@@ -624,6 +665,9 @@ section .btn-text-30 .btn-text-30__icon {
   height: 30px;
   border-radius: 50%;
   transition: background 0.2s ease;
+}
+section .btn-text-30:hover .btn-text-30__icon {
+  background: var(--color-accent);
 }
 section .btn-text-30 .icon_arrow-14 {
   display: block;
@@ -2574,6 +2618,15 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   box-shadow: none;
 }
 
+/* Search inputs — MUI fieldset focus only (no dual :focus-visible ring) */
+.guide_field--search .MuiOutlinedInput-input:focus,
+.guide_field--search .MuiOutlinedInput-input:focus-visible,
+.gnb_search__field .MuiOutlinedInput-input:focus,
+.gnb_search__field .MuiOutlinedInput-input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
 .MuiCheckbox-root.Mui-focusVisible,
 .MuiButtonBase-root.Mui-focusVisible,
 .MuiMenuItem-root.Mui-focusVisible {
@@ -3623,6 +3676,12 @@ section.highlight_news--markets .section_tit {
     animation: none;
   }
 
+  .devices_product_downloads__file-btn-spinner,
+  .common_banner_02__copy-spinner,
+  .devices_product_downloads__refresh-icon.is-spinning,
+  .support_where_to_buy_contents__refresh-icon.is-spinning {
+    animation: none;
+  }
 }
 
 /* 페이지 상단 타이틀 섹션 공통 기본 스타일 (company/services 등 서브페이지 공용, ls-publish company.css 기원)

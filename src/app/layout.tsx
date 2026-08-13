@@ -6,6 +6,7 @@ import LenisScrollProvider from "@/components/layout/LenisScrollProvider";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import ScrollToTopOnNavigate from "@/components/layout/ScrollToTopOnNavigate";
 import SiteLocaleSync from "@/components/layout/SiteLocaleSync";
+import SkipToMainContent from "@/components/layout/SkipToMainContent";
 import { loadSiteSettings, SITE_LOCALE } from "@/lib/siteTime";
 import "../assets/css/reset.css";
 import "../assets/css/fonts.css";
@@ -80,12 +81,14 @@ export default async function RootLayout({
             src="https://www.googletagmanager.com/ns.html?id=GTM-NZSF98NV"
             height="0"
             width="0"
+            title="Google Tag Manager"
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
         <Script src="/apps/daelimEUEM_begin.js" strategy="beforeInteractive" />
         <Script src="/js/daelimEUEM_run.js" strategy="beforeInteractive" />
         <LenisScrollProvider>
+          <SkipToMainContent />
           {children}
           <SiteLocaleSync locale={SITE_LOCALE} />
           <HistoryReloadOnNavigate />

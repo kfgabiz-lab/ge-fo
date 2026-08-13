@@ -126,7 +126,7 @@ export default function GnbSearchPanel({
         <button
           type="button"
           className="gnb_search_dim"
-          aria-label="검색 닫기"
+          aria-label="Close search"
           tabIndex={-1}
           data-lenis-prevent
           onWheel={(event) => event.preventDefault()}
