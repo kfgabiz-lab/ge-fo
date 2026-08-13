@@ -3,17 +3,27 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
-import { useSearchParams } from "next/navigation";
 import { createSupportFilterStore } from "@/app/support/components/createSupportFilterStore";
-import SupportDownloadFilterOptionsLoader from "@/app/support/components/SupportDownloadFilterOptionsLoader";
 import {
   type DownloadCategoryOption,
   type DownloadFilterOption,
 } from "@/data/support/downloadCenterContent";
+import {
+  applyCategoryCounts,
+  buildDocTypeFilters,
+  deriveCategoryCountsFromItems,
+  deriveDocTypeCountsFromItems,
+  fetchDownloadCenterBaseCategoryTree,
+  fetchDownloadDocTypes,
+  toCategoryCountMaps,
+  toDocTypeCountMap,
+  type DownloadCenterItem,
+} from "@/data/support/downloadCenterData";
 
 const store = createSupportFilterStore({
   displayName: "SearchDocuments",
@@ -48,15 +58,48 @@ export function useSearchDocumentsFilterOptions(): SearchDocumentsFilterOptionsV
 }
 
 export function SearchDocumentsFilterProvider({
+  items,
   children,
 }: {
+  items: DownloadCenterItem[];
   children: ReactNode;
 }) {
-  const [categories, setCategories] = useState<DownloadCategoryOption[]>([]);
-  const [documentTypes, setDocumentTypes] = useState<DownloadFilterOption[]>([]);
+  const [baseCategories, setBaseCategories] = useState<DownloadCategoryOption[]>(
+    [],
+  );
+  const [docTypeCodes, setDocTypeCodes] = useState<DownloadFilterOption[]>([]);
 
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q") ?? "";
+  useEffect(() => {
+    let alive = true;
+    void Promise.all([
+      fetchDownloadCenterBaseCategoryTree(),
+      fetchDownloadDocTypes(),
+    ]).then(([tree, codes]) => {
+      if (!alive) return;
+      setBaseCategories(tree);
+      setDocTypeCodes(codes);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const categories = useMemo(() => {
+    const { l1CountMap, l2CountMap } = toCategoryCountMaps(
+      deriveCategoryCountsFromItems(items),
+    );
+    return applyCategoryCounts(baseCategories, l1CountMap, l2CountMap);
+  }, [baseCategories, items]);
+
+  const documentTypes = useMemo(
+    () =>
+      buildDocTypeFilters(
+        docTypeCodes,
+        toDocTypeCountMap(deriveDocTypeCountsFromItems(items)),
+        0,
+      ),
+    [docTypeCodes, items],
+  );
 
   const value = useMemo(
     () => ({ categories, documentTypes }),
@@ -66,12 +109,6 @@ export function SearchDocumentsFilterProvider({
   return (
     <SearchDocumentsFilterOptionsContext.Provider value={value}>
       <store.Provider categories={categories} secondaryOptions={documentTypes}>
-        <SupportDownloadFilterOptionsLoader
-          useFilter={useSearchDocumentsFilter}
-          query={query}
-          onCategoriesChange={setCategories}
-          onDocumentTypesChange={setDocumentTypes}
-        />
         {children}
       </store.Provider>
     </SearchDocumentsFilterOptionsContext.Provider>

@@ -10,12 +10,9 @@ import {
   type SearchAllProductsResult,
 } from "@/data/search/searchAllProductsData";
 import {
-  fetchSearchAllDocuments,
-  type SearchAllDocumentsResult,
-} from "@/data/search/searchAllDocumentsData";
-import {
   fetchDownloadCenterContentsByKeyword,
   type DownloadCenterItem,
+  type DownloadCenterKeywordResult,
 } from "@/data/support/downloadCenterData";
 import {
   EMPTY_SEARCH_MEDIA_RESULT,
@@ -133,13 +130,11 @@ export default function SearchAllTabContent({
     total: 0,
     items: [],
   });
-  const [documentResult, setDocumentResult] = useState<SearchAllDocumentsResult>(
-    {
+  const [documentResult, setDocumentResult] =
+    useState<DownloadCenterKeywordResult>({
       total: 0,
       items: [],
-    },
-  );
-  /* 챗봇 keyword로 1회 받아온 전체(미필터) 문서 리스트 — Documents탭이 재요청 없이 클라이언트에서 필터/페이지네이션 */
+    });
   const [keywordDocuments, setKeywordDocuments] = useState<DownloadCenterItem[]>([]);
   const [mediaResult, setMediaResult] = useState<SearchMediaResult>(
     EMPTY_SEARCH_MEDIA_RESULT,
@@ -236,32 +231,25 @@ export default function SearchAllTabContent({
   }, [query, skipProductsPreview]);
 
   useEffect(() => {
-    const useFallback = !chatbotKeyword && chatbotSettled;
-    if (!chatbotKeyword && !useFallback) return;
+    if (!chatbotKeyword && !chatbotSettled) return;
 
     const cacheKey = chatbotKeyword || `__query__:${query}`;
     if (previewQueryRef.current.documents === cacheKey) return;
 
     let alive = true;
 
-    if (chatbotKeyword) {
-      /* 챗봇 keyword 확정 시 전체 매칭 리스트를 1회만 받아 All탭(4건)/Documents탭(클라이언트 페이지네이션)이 공유 */
-      void fetchDownloadCenterContentsByKeyword(chatbotKeyword).then((result) => {
+    void fetchDownloadCenterContentsByKeyword(chatbotKeyword, query).then(
+      (result) => {
         if (!alive) return;
         previewQueryRef.current.documents = cacheKey;
         setKeywordDocuments(result.items);
-        setDocumentResult({ total: result.total, items: result.items.slice(0, 4) });
+        setDocumentResult({
+          total: result.total,
+          items: result.items.slice(0, 4),
+        });
         setLoaded((prev) => ({ ...prev, documents: true }));
-      });
-    } else {
-      void fetchSearchAllDocuments(query, 4).then((result) => {
-        if (!alive) return;
-        previewQueryRef.current.documents = cacheKey;
-        setKeywordDocuments([]);
-        setDocumentResult(result);
-        setLoaded((prev) => ({ ...prev, documents: true }));
-      });
-    }
+      },
+    );
     return () => {
       alive = false;
     };
@@ -296,15 +284,6 @@ export default function SearchAllTabContent({
       alive = false;
     };
   }, [query, skipPagesPreview]);
-
-  useEffect(() => {
-    setLoaded({
-      products: false,
-      documents: false,
-      media: false,
-      pages: false,
-    });
-  }, [query]);
 
   useEffect(() => {
     const trimmedQuery = query.trim();
@@ -430,7 +409,7 @@ export default function SearchAllTabContent({
           />
         ) : null}
         {documentsFilterMounted ? (
-          <SearchDocumentsFilterProvider>
+          <SearchDocumentsFilterProvider items={keywordDocuments}>
             {activeTab === "documents" ? (
               <SearchDocumentsPanel
                 items={keywordDocuments}

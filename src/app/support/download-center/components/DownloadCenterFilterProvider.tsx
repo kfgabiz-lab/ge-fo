@@ -119,7 +119,6 @@ export function DownloadCenterFilterProvider({
     <DownloadCenterQueryContext.Provider value={queryValue}>
       <store.Provider categories={categories} secondaryOptions={documentTypes}>
         <SupportDownloadFilterOptionsLoader
-          useFilter={useDownloadCenterFilter}
           query={query}
           onCategoriesChange={setCategories}
           onDocumentTypesChange={setDocumentTypes}
