@@ -1358,7 +1358,8 @@ color: #fff;
 }
 
 .gnb_mega--devices.is-mounted {
-  max-height: calc(100vh - 144px);
+  height: 672px;
+  max-height: 672px;
 }
 
 .gnb_mega--simple.gnb_mega--grid.is-mounted {
@@ -2614,11 +2615,26 @@ color: #fff;
   box-sizing: border-box;
 }
 
-/* Devices mega 닫기 — depth4와 무관, inner 기준 절대좌표 (Figma 8793:231438) */
+/* Devices mega — Figma 8793:231462 · panel 672 */
+#gnb-mega-panel-devices.gnb_mega--devices.is-mounted,
+#gnb-mega-panel-devices .gnb_mega__inner {
+  height: 672px;
+  max-height: 672px;
+}
+
+@media (max-height: 816px) {
+  #gnb-mega-panel-devices.gnb_mega--devices.is-mounted,
+  #gnb-mega-panel-devices .gnb_mega__inner {
+    height: calc(100vh - 144px);
+    max-height: calc(100vh - 144px);
+  }
+}
+
+/* Devices mega 닫기 — depth4와 무관, inner 기준 절대좌표 (Figma 8793:231462) */
 .gnb_mega__inner > .gnb_mega__close {
   position: absolute;
   top: 35px;
-  right: 0px;
+  right: 0;
   z-index: 3;
 }
 
@@ -2906,29 +2922,19 @@ color: #fff;
 }
 
 .gnb_mega__close {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: transparent url("/ico/ico_close_mega_24.svg") center / contain no-repeat;
-  cursor: pointer;
-}
-
-.gnb_mega__close {
   display: none;
   position: absolute;
-  top: 34px;
-  left: 50%;
-  transform: translateX(690px);
+  top: 35px;
+  right: 0;
   z-index: 2;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
   padding: 0;
   border: none;
-  background: transparent;
+  background: transparent url("/ico/ico_close_mega_24.svg") center / contain no-repeat;
   cursor: pointer;
 }
 
@@ -2939,19 +2945,8 @@ color: #fff;
 }
 
 @media (min-width: 1201px) {
-  #gnb-mega-panel-devices.is-mounted .gnb_mega__close {
+  .gnb_mega.is-mounted .gnb_mega__close {
     display: inline-flex;
-  }
-
-  .main_header-wrap.is-at-top
-    .main_header.is-mega-open
-    #gnb-mega-panel-devices.is-mounted
-    .gnb_mega__close,
-  .sub_header-wrap.is-at-top
-    .gnb_menu_wrap.sub_header.is-mega-open
-    #gnb-mega-panel-devices.is-mounted
-    .gnb_mega__close {
-    right: calc((100% - min(100%, 1440px)) / 2 + 38px);
   }
 }
 

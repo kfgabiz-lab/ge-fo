@@ -10,6 +10,7 @@ export default function GnbDevicesMegaPanel({
   onCategoryChange,
   onDepth3Change,
   onLinkClick,
+  onClose,
 }: GnbMegaDevicesPanelProps) {
   return (
     <GnbMegaPanel
@@ -17,6 +18,7 @@ export default function GnbDevicesMegaPanel({
       activeCategoryId={activeCategoryId}
       activeDepth3Id={activeDepth3Id}
       onLinkClick={onLinkClick}
+      onClose={onClose}
       onCategoryChange={(categoryId) => {
         onCategoryChange(categoryId);
         const category = categories.find((item) => item.id === categoryId);
