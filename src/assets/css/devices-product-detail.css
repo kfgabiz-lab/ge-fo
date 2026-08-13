@@ -2434,6 +2434,18 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Figma / pub mobile — keep main from overflowing the 1-col grid */
+  section.devices_product_downloads .devices_product_downloads__main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: clip;
   }
 
   section.devices_product_downloads .devices_product_downloads__search-row--pc {
@@ -2441,9 +2453,13 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
   }
 
   section.devices_product_downloads .devices_product_downloads__toolbar {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
+    justify-content: flex-start;
     gap: 0;
+    width: 100%;
+    min-width: 0;
     margin: 0;
     min-height: 37px;
     padding-bottom: 14px;
@@ -2466,6 +2482,8 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     display: flex;
     flex-direction: column;
     gap: 50px;
+    width: 100%;
+    min-width: 0;
     margin-top: 24px;
     padding-top: 0;
     border-top: none;
@@ -2658,8 +2676,11 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.devices_product_downloads .devices_product_downloads__file-main {
     display: flex;
+    flex: 1;
     gap: 6px;
     align-items: flex-start;
+    min-width: 0;
+    max-width: none;
   }
 
   section.devices_product_downloads .devices_product_downloads__pdf {
@@ -2674,9 +2695,12 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
   }
 
   section.devices_product_downloads .devices_product_downloads__file-name {
+    min-width: 0;
+    max-width: 100%;
     font-size: 14px;
     line-height: 20px;
     color: #222;
+    word-break: break-word;
   }
 
   section.devices_product_downloads .devices_product_downloads__file-actions {
