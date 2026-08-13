@@ -78,13 +78,14 @@ export function TechHubFilterProvider({
   const [resetSignal, setResetSignal] = useState(0);
 
   const initialCategoryKey = initialCategories.join(",");
+  const q = query.trim();
 
   useEffect(() => {
     let alive = true;
     const preselected = new Set(
       initialCategoryKey.split(",").filter((code) => code !== ""),
     );
-    fetchTechHubCategoryTree()
+    fetchTechHubCategoryTree({ q })
       .then((tree) => {
         if (!alive) return;
         if (preselected.size === 0) {
@@ -108,11 +109,11 @@ export function TechHubFilterProvider({
     return () => {
       alive = false;
     };
-  }, [initialCategoryKey]);
+  }, [initialCategoryKey, q]);
 
   useEffect(() => {
     let alive = true;
-    fetchTechHubCertCounts().then((counts) => {
+    fetchTechHubCertCounts({ q }).then((counts) => {
       if (!alive) return;
       if (counts.length === 0) return;
       const countMap = new Map(
@@ -129,10 +130,10 @@ export function TechHubFilterProvider({
     return () => {
       alive = false;
     };
-  }, []);
+  }, [q]);
 
-  const setQuery = (q: string) => {
-    setQueryState(q);
+  const setQuery = (next: string) => {
+    setQueryState(next);
     setPage(1);
   };
 

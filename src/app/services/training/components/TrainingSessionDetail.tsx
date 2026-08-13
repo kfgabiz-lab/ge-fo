@@ -24,6 +24,7 @@ import {
   hasValidEventDate,
   type CalendarEvent,
 } from "@/lib/eventShare";
+import { stripHtmlText } from "@/lib/stripHtmlText";
 
 const SESSION_TAB_SCROLL_OFFSET = 150;
 const SESSION_TAB_SCROLL_DURATION_MS = 300;
@@ -123,7 +124,7 @@ export default function TrainingSessionDetail({
   session: EngineeringTrainingSessionDetail;
   variant: TrainingVariant;
 }) {
-  const hasContent = session.content.trim().length > 0;
+  const hasContent = stripHtmlText(session.content).length > 0;
   const tabs = useMemo(
     () => buildSessionTabs(variant, hasContent),
     [variant, hasContent],

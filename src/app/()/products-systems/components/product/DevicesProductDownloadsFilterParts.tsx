@@ -159,11 +159,10 @@ export function DevicesProductDownloadsCategoryFilterRow({
           />
         ) : null}
       </div>
-      {option.nested?.length ? (
+      {option.nested?.length && expanded ? (
         <ul
           id={`${parentId}-subcategories`}
           className="devices_product_downloads__filter-list devices_product_downloads__filter-list--nested"
-          hidden={!expanded}
         >
           {option.nested.map((nested) => {
             const nestedId = `${idPrefix}-${nested.id}`;

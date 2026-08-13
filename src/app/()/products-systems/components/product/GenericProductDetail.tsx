@@ -85,9 +85,15 @@ export default async function GenericProductDetail({
 
   const showOtherProducts = otherProducts.length > 0;
   const showVideo = Boolean(detail.youtubeVideoId);
+  const showKeyFeatures = detail.keyFeatures.length > 0;
+  const showLineup = Boolean(detail.lineUp?.trim());
+  const showDownloadsSection = downloadsPage.totalElements > 0;
   const visibleNavItems = productDetailNavItems.filter((item) => {
     if (item.id === "product-other") return showOtherProducts;
     if (item.id === "product-video") return showVideo;
+    if (item.id === "product-key-feature") return showKeyFeatures;
+    if (item.id === "product-lineup") return showLineup;
+    if (item.id === "product-downloads") return showDownloadsSection;
     return true;
   });
 
@@ -109,12 +115,18 @@ export default async function GenericProductDetail({
   return (
     <main className="devices-page devices-page--product" id="Page_devices_product">
       {jsonLdGraph ? <JsonLd data={jsonLdGraph} /> : null}
-      <DevicesProductHero product={heroDetail} contactHref={inquiryHref} />
+      <DevicesProductHero
+        product={heroDetail}
+        contactHref={inquiryHref}
+        showDownloads={showDownloadsSection}
+      />
       <DevicesProductNavScope navItems={visibleNavItems}>
-        <DevicesProductFeaturesSection
-          title="Key Features"
-          items={detail.keyFeatures}
-        />
+        {showKeyFeatures ? (
+          <DevicesProductFeaturesSection
+            title="Key Features"
+            items={detail.keyFeatures}
+          />
+        ) : null}
         <CommonBanner02
           variant="expert"
           linkHref={inquiryHref}
@@ -122,47 +134,51 @@ export default async function GenericProductDetail({
           contactEmail={managerEmail}
           backgroundSrc={detail.configuratorBannerBg}
         />
-        <section className="devices_product_lineup" id="product-lineup">
-          <div className="inner">
-            <div className="devices_product_lineup__head">
-              <h2 className="section_tit">Lineup</h2>
-            </div>
-            <div className="devices_product_lineup__grids">
-              <DevicesProductLineupGrid modifier="type1">
-                <div
-                  data-slug="product-data"
-                  data-slugkey="product_etc.line_up"
-                  dangerouslySetInnerHTML={{ __html: detail.lineUp }}
-                />
-              </DevicesProductLineupGrid>
-            </div>
-            <div className="devices_product_lineup__footer">
-              <div className="devices_product_lineup__note">
-                <p>Explore all available configurations effortlessly.</p>
-                <p>
-                  Our Configurator helps you select the right specifications in
-                  just a few clicks.
-                </p>
+        {showLineup ? (
+          <section className="devices_product_lineup" id="product-lineup">
+            <div className="inner">
+              <div className="devices_product_lineup__head">
+                <h2 className="section_tit">Lineup</h2>
               </div>
-              {detail.configuratorHref ? (
-                <a
-                  href={detail.configuratorHref}
-                  className="btn-base btn-lv02 btn-lv02--solid"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Go to Configurator
-                  <span className="icon_link-14" aria-hidden="true" />
-                </a>
-              ) : null}
+              <div className="devices_product_lineup__grids">
+                <DevicesProductLineupGrid modifier="type1">
+                  <div
+                    data-slug="product-data"
+                    data-slugkey="product_etc.line_up"
+                    dangerouslySetInnerHTML={{ __html: detail.lineUp }}
+                  />
+                </DevicesProductLineupGrid>
+              </div>
+              <div className="devices_product_lineup__footer">
+                <div className="devices_product_lineup__note">
+                  <p>Explore all available configurations effortlessly.</p>
+                  <p>
+                    Our Configurator helps you select the right specifications in
+                    just a few clicks.
+                  </p>
+                </div>
+                {detail.configuratorHref ? (
+                  <a
+                    href={detail.configuratorHref}
+                    className="btn-base btn-lv02 btn-lv02--solid"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Go to Configurator
+                    <span className="icon_link-14" aria-hidden="true" />
+                  </a>
+                ) : null}
+              </div>
             </div>
-          </div>
-        </section>
-        <DevicesProductDownloads
-          initial={downloadsPage}
-          productCodes={productCodes}
-          docTypeOptions={docTypeOptions}
-        />
+          </section>
+        ) : null}
+        {showDownloadsSection ? (
+          <DevicesProductDownloads
+            initial={downloadsPage}
+            productCodes={productCodes}
+            docTypeOptions={docTypeOptions}
+          />
+        ) : null}
         {techHubBanner ? (
           <CommonBanner03
             linkHref={techHubBanner.href}
