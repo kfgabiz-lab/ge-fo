@@ -27,19 +27,18 @@ export interface TechHubContentsPage {
   size: number;
 }
 
-export interface TechHubContentsParams {
+export interface TechHubFilterParams {
   q?: string;
   categories?: string[];
   certs?: string[];
+}
+
+export interface TechHubContentsParams extends TechHubFilterParams {
   page?: number;
   size?: number;
 }
 
-export async function fetchTechHubContents(
-  params: TechHubContentsParams,
-): Promise<TechHubContentsPage> {
-  const page = params.page ?? 0;
-  const size = params.size ?? 12;
+function buildTechHubFilterQuery(params: TechHubFilterParams): URLSearchParams {
   const sp = new URLSearchParams();
   if (params.q && params.q.trim()) sp.set("q", params.q.trim());
   if (params.categories && params.categories.length > 0) {
@@ -48,6 +47,15 @@ export async function fetchTechHubContents(
   if (params.certs && params.certs.length > 0) {
     sp.set("certs", params.certs.join(","));
   }
+  return sp;
+}
+
+export async function fetchTechHubContents(
+  params: TechHubContentsParams,
+): Promise<TechHubContentsPage> {
+  const page = params.page ?? 0;
+  const size = params.size ?? 12;
+  const sp = buildTechHubFilterQuery(params);
   sp.set("page", String(page));
   sp.set("size", String(size));
   try {
@@ -94,12 +102,15 @@ export interface TechHubCategoryCount {
   count: number;
 }
 
-export async function fetchTechHubCategoryCounts(): Promise<
-  TechHubCategoryCount[]
-> {
+export async function fetchTechHubCategoryCounts(
+  params: TechHubFilterParams = {},
+): Promise<TechHubCategoryCount[]> {
+  const queryString = buildTechHubFilterQuery(params).toString();
   try {
     return await fetchApi<TechHubCategoryCount[]>(
-      `/api/v1/fo/tech-hub/category-counts`,
+      `/api/v1/fo/tech-hub/category-counts${
+        queryString ? `?${queryString}` : ""
+      }`,
     );
   } catch {
     return [];
@@ -111,23 +122,26 @@ export interface TechHubCertCount {
   count: number;
 }
 
-export async function fetchTechHubCertCounts(): Promise<TechHubCertCount[]> {
+export async function fetchTechHubCertCounts(
+  params: TechHubFilterParams = {},
+): Promise<TechHubCertCount[]> {
+  const queryString = buildTechHubFilterQuery(params).toString();
   try {
     return await fetchApi<TechHubCertCount[]>(
-      `/api/v1/fo/tech-hub/cert-counts`,
+      `/api/v1/fo/tech-hub/cert-counts${queryString ? `?${queryString}` : ""}`,
     );
   } catch {
     return [];
   }
 }
 
-export async function fetchTechHubCategoryTree(): Promise<
-  DownloadCategoryOption[]
-> {
+export async function fetchTechHubCategoryTree(
+  params: TechHubFilterParams = {},
+): Promise<DownloadCategoryOption[]> {
   try {
     const [tops, counts] = await Promise.all([
       fetchTopCategories(),
-      fetchTechHubCategoryCounts(),
+      fetchTechHubCategoryCounts(params),
     ]);
     const countMap = new Map(counts.map((c) => [c.categoryL2Id, c.count]));
 
