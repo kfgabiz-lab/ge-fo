@@ -44,7 +44,7 @@ export default function WhatWeDoSwiper() {
 
   const handleSwiper = useCallback((swiper: SwiperType) => {
     swiperRef.current = swiper;
-    setActiveIndex(swiper.activeIndex);
+    setActiveIndex(swiper.realIndex);
   }, []);
 
   const handleMouseEnter = () => {
@@ -56,11 +56,17 @@ export default function WhatWeDoSwiper() {
   };
 
   const handleSlideChange = useCallback((swiper: SwiperType) => {
-    setActiveIndex(swiper.activeIndex);
+    setActiveIndex(swiper.realIndex);
   }, []);
 
   const handlePaginationClick = (index: number) => {
-    swiperRef.current?.slideTo(index);
+    const swiper = swiperRef.current;
+    if (!swiper) return;
+    if (loopEnabled) {
+      swiper.slideToLoop(index);
+      return;
+    }
+    swiper.slideTo(index);
   };
 
   const handlePrev = () => {
@@ -98,7 +104,7 @@ export default function WhatWeDoSwiper() {
               modules={[A11y, Autoplay]}
               slidesPerView={1}
               speed={WHAT_WE_DO_SLIDE_SPEED}
-              rewind={loopEnabled}
+              loop={loopEnabled}
               watchOverflow
               autoplay={{ delay: AUTOPLAY_DELAY_MS, disableOnInteraction: false }}
               onSwiper={handleSwiper}
