@@ -1043,6 +1043,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     color: #222;
   }
 
+  /* PC — Figma 9266:108789 search-row (search 280 + select 200 · gap 12) */
   section.devices_product_downloads .devices_product_downloads__search-row {
     display: flex;
     flex-shrink: 0;
@@ -1054,6 +1055,19 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     .devices_product_downloads__search-row
     .guide_field--search {
     width: 280px;
+  }
+
+  section.devices_product_downloads
+    .devices_product_downloads__search-row
+    .guide_field--search
+    .MuiOutlinedInput-input::placeholder {
+    color: #888;
+  }
+
+  section.devices_product_downloads
+    .devices_product_downloads__search-row
+    .guide_field--w200 {
+    width: 200px;
   }
 
   /* PC — Figma 7922:118486 Accordion list (top rule + 30 / item gap 60) */
