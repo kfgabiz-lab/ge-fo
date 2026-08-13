@@ -63,8 +63,8 @@ export const lsElectricPageTitle = {
 };
 
 export const lsElectricIntro = {
-  heroImage: `${IMG}/intro-hero.jpg`,
-  heroImageMobile: `${IMG}/intro-hero-mo.jpg`,
+  heroImage: `${IMG}/intro-hero.jpg?v=1`,
+  heroImageMobile: `${IMG}/intro-hero-mo.jpg?v=1`,
   headlineLines: ["Smart Power & Automation,", "Built for Performance"],
   paragraphs: [
     "LS ELECTRIC is a global energy and automation company delivering integrated power and digital solutions. By combining advanced electrical engineering with digital technologies, we enable industries and infrastructure to operate with greater efficiency, reliability, and sustainability.",
