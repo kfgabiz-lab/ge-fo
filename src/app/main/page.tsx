@@ -47,7 +47,7 @@ export default async function MainPage() {
       <WhatWeDoSwiper />
       <HighlightNewsSection
         variant="main"
-        title="Catch up on the latest news"
+        title="Catch up on the Latest News"
         items={highlightNewsItems}
         sectionId="main-news"
       />
@@ -64,7 +64,7 @@ export default async function MainPage() {
             href: "/support/contact-us",
           },
           {
-            title: "Where to buy",
+            title: "Where to Buy",
             description:
               "Find authorized retailers and partners to purchase our products.",
             href: "/support/where-to-buy",
