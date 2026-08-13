@@ -53,19 +53,19 @@ export default function WhereToBuyLocationCard({
         <div className="support_where_to_buy_card__meta">
           <p data-slugkey="address">{location.address}</p>
           <p data-slugkey="office_number">{location.phone}</p>
-          <a
-            href={location.website}
-            className="support_where_to_buy_card__website"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(event) => event.stopPropagation()}
-            data-slugkey="homepage"
-            data-slugkey-attr="href"
-          >
-            <span data-slugkey="homepage">{location.websiteLabel}</span>
-          </a>
         </div>
       </button>
+
+      <a
+        href={location.website}
+        className="support_where_to_buy_card__website"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-slugkey="homepage"
+        data-slugkey-attr="href"
+      >
+        <span data-slugkey="homepage">{location.websiteLabel}</span>
+      </a>
 
       <div className="support_where_to_buy_card__actions">
         <a

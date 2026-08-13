@@ -100,6 +100,8 @@ export default function DevicesProductDownloadsMobileControls({
               className="devices_product_downloads__mo-sort-trigger"
               aria-expanded={sortOpen}
               aria-haspopup="listbox"
+              aria-controls="devices-downloads-sort-listbox"
+              aria-label="Sort by"
               onClick={() => setSortOpen((open) => !open)}
             >
               <span className="devices_product_downloads__mo-sort-label">
@@ -112,8 +114,10 @@ export default function DevicesProductDownloadsMobileControls({
 
             {sortOpen ? (
               <ul
+                id="devices-downloads-sort-listbox"
                 className="devices_product_downloads__mo-sort-list"
                 role="listbox"
+                aria-label="Sort by"
               >
                 {productDownloadsSortOptions.map((option) => (
                   <li key={option.value}>
@@ -166,3 +170,4 @@ export default function DevicesProductDownloadsMobileControls({
     </>
   );
 }
+

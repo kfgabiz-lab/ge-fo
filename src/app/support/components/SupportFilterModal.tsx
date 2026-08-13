@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useId, useRef, type ReactNode } from "react";
 import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
 import { useModalDismiss } from "@/lib/useModalDismiss";
 
@@ -18,6 +18,7 @@ export default function SupportFilterModal({
   children,
 }: SupportFilterModalProps) {
   const sheetRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
 
   useModalFocusTrap(sheetRef, open);
   useModalDismiss(open, onClose);
@@ -27,15 +28,24 @@ export default function SupportFilterModal({
   }
 
   return (
-    <div className="support_download_filter-modal" role="dialog" aria-modal="true">
-      <div
+    <div
+      className="support_download_filter-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+    >
+      <button
+        type="button"
         className="support_download_filter-modal__overlay"
+        aria-label="Close filter"
+        tabIndex={-1}
         onClick={onClose}
-        aria-hidden
       />
       <div ref={sheetRef} className="support_download_filter-modal__sheet">
         <header className="support_download_filter-modal__head">
-          <h2 className="support_download_filter-modal__tit">Filter</h2>
+          <h2 id={titleId} className="support_download_filter-modal__tit">
+            Filter
+          </h2>
           <button
             type="button"
             className="support_download_filter-modal__close"

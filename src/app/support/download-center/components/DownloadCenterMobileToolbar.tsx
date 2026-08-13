@@ -55,6 +55,8 @@ export default function DownloadCenterMobileToolbar({
           className="support_download_mo-toolbar__sort-trigger"
           aria-expanded={sortOpen}
           aria-haspopup="listbox"
+          aria-controls="download-center-sort-listbox"
+          aria-label={downloadCenterPage.sortByLabel}
           onClick={() => setSortOpen((open) => !open)}
         >
           <span className="support_download_mo-toolbar__sort-label">
@@ -66,7 +68,12 @@ export default function DownloadCenterMobileToolbar({
         </button>
 
         {sortOpen ? (
-          <ul className="support_download_mo-toolbar__sort-list" role="listbox">
+          <ul
+            id="download-center-sort-listbox"
+            className="support_download_mo-toolbar__sort-list"
+            role="listbox"
+            aria-label={downloadCenterPage.sortByLabel}
+          >
             {downloadCenterPage.mobileSortOptions.map((option) => (
               <li key={option}>
                 <button

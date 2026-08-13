@@ -86,7 +86,12 @@ export default async function RootLayout({
         <Script src="/apps/daelimEUEM_begin.js" strategy="beforeInteractive" />
         <Script src="/js/daelimEUEM_run.js" strategy="beforeInteractive" />
         <LenisScrollProvider>
-          {children}
+          <a href="#main-content" className="skip_to_content">
+            Skip to main content
+          </a>
+          <div id="main-content" tabIndex={-1}>
+            {children}
+          </div>
           <SiteLocaleSync locale={SITE_LOCALE} />
           <HistoryReloadOnNavigate />
           <ScrollToTopOnNavigate />

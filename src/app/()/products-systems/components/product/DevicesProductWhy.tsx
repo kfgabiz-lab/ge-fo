@@ -12,24 +12,36 @@ function renderWhyBlockHead(block: HvdcWhyBlock) {
   );
 }
 
-function renderWhyBlockCards(block: HvdcWhyBlock, imageOnly: boolean) {
+function renderWhyBlockCards(
+  block: HvdcWhyBlock,
+  imageOnly: boolean,
+  sectionTitle: string,
+) {
   return (
     <div className="devices_product_why__cards">
-      {block.cards.map((card) => (
-        <article key={card.title || card.image} className="devices_product_why__card">
-          <div className="devices_product_why__card-visual">
-            <img loading="lazy" decoding="async" src={card.image} alt="" />
-          </div>
-          {imageOnly ? null : (
-            <div className="devices_product_why__card-body">
-              <h4 className="devices_product_why__card-tit">{card.title}</h4>
-              <p className="devices_product_why__card-desc">
-                {renderMultilineText(card.description)}
-              </p>
+      {block.cards.map((card) => {
+        const altText =
+          card.title?.trim() ||
+          block.title?.trim() ||
+          sectionTitle.trim() ||
+          "Product diagram";
+
+        return (
+          <article key={card.title || card.image} className="devices_product_why__card">
+            <div className="devices_product_why__card-visual">
+              <img loading="lazy" decoding="async" src={card.image} alt={altText} />
             </div>
-          )}
-        </article>
-      ))}
+            {imageOnly ? null : (
+              <div className="devices_product_why__card-body">
+                <h4 className="devices_product_why__card-tit">{card.title}</h4>
+                <p className="devices_product_why__card-desc">
+                  {renderMultilineText(card.description)}
+                </p>
+              </div>
+            )}
+          </article>
+        );
+      })}
     </div>
   );
 }
@@ -74,7 +86,7 @@ export default function DevicesProductWhy({
                 <div key={block.id} className={blockClassName}>
                   <div className="devices_product_why__block-split">
                     {renderWhyBlockHead(block)}
-                    {renderWhyBlockCards(block, imageOnly)}
+                    {renderWhyBlockCards(block, imageOnly, title)}
                   </div>
                 </div>
               );
@@ -83,7 +95,7 @@ export default function DevicesProductWhy({
             return (
               <div key={block.id} className={blockClassName}>
                 {renderWhyBlockHead(block)}
-                {renderWhyBlockCards(block, imageOnly)}
+                {renderWhyBlockCards(block, imageOnly, title)}
               </div>
             );
           })}

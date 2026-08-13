@@ -87,6 +87,35 @@ body {
   overflow-x: clip;
 }
 
+/* Skip link — first focusable control for keyboard users */
+.skip_to_content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  padding: 12px 20px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 23px;
+  text-decoration: none;
+  transform: translateY(-120%);
+  transition: transform 0.2s ease;
+}
+
+.skip_to_content:focus,
+.skip_to_content:focus-visible {
+  transform: translateY(0);
+  outline: var(--focus-outline-width) solid var(--focus-outline-inner);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+#main-content:focus {
+  outline: none;
+}
+
 /* Keyboard focus outline — dual ring (white + navy) for light/dark backgrounds */
 :focus-visible {
   outline: var(--focus-outline-width) solid var(--focus-outline-inner);
@@ -2570,6 +2599,15 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
 /* Text fields keep bordered fieldset as the focus cue */
 .MuiOutlinedInput-root.Mui-focused,
 .MuiOutlinedInput-root.Mui-focused.Mui-error {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Search inputs — MUI fieldset focus only (no dual :focus-visible ring) */
+.guide_field--search .MuiOutlinedInput-input:focus,
+.guide_field--search .MuiOutlinedInput-input:focus-visible,
+.gnb_search__field .MuiOutlinedInput-input:focus,
+.gnb_search__field .MuiOutlinedInput-input:focus-visible {
   outline: none;
   box-shadow: none;
 }
