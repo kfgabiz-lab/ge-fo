@@ -87,7 +87,12 @@ body {
   overflow-x: clip;
 }
 
-/* Skip link — first focusable control for keyboard users */
+/* Skip navigation — first focusable control for keyboard users */
+.skip_nav {
+  position: relative;
+  z-index: 10000;
+}
+
 .skip_to_content {
   position: absolute;
   top: 0;
@@ -110,6 +115,12 @@ body {
   outline: var(--focus-outline-width) solid var(--focus-outline-inner);
   outline-offset: var(--focus-outline-offset);
   box-shadow: var(--focus-ring-shadow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip_to_content {
+    transition: none;
+  }
 }
 
 #main-content:focus,
