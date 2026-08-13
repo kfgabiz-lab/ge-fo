@@ -46,7 +46,7 @@ function BusinessCard({ card }: { card: LsElectricBusinessCard }) {
         .filter(Boolean)
         .join(" ")}
     >
-      <img loading="lazy" decoding="async" src={card.image} alt="" />
+      <img loading="lazy" decoding="async" src={card.image} alt={card.title} />
       <span className="company-ls-electric-business__card-overlay" aria-hidden />
       <div className="company-ls-electric-business__card-content">
         <h3 className="company-ls-electric-business__card-tit">{card.title}</h3>
@@ -98,7 +98,7 @@ function PttCard({ card }: { card: LsElectricPttCard }) {
   return (
     <article className="company-ls-electric-ptt__card">
       <div className="company-ls-electric-ptt__card-img">
-        <img loading="lazy" decoding="async" src={card.image} alt="" />
+        <img loading="lazy" decoding="async" src={card.image} alt={card.title} />
       </div>
       <div className="company-ls-electric-ptt__card-body">
         <h3 className="company-ls-electric-ptt__card-tit">{card.title}</h3>
@@ -141,7 +141,12 @@ function HistoryEra({ era }: { era: LsElectricHistoryEra }) {
             <p className="company-ls-electric-history__era-sub">{era.subtitle}</p>
           </div>
           <div className="company-ls-electric-history__era-img">
-            <img loading="lazy" decoding="async" src={era.image} alt="" />
+            <img
+              loading="lazy"
+              decoding="async"
+              src={era.image}
+              alt={era.title}
+            />
           </div>
         </div>
         <div className="company-ls-electric-history__era-conts">
@@ -272,7 +277,12 @@ function LsElectricRndSection() {
         <div className="company-ls-electric-rnd__top">
           <CompanyAboutSectionHead title={lsElectricRnd.title} description={lsElectricRnd.description} />
           <div className="company-ls-electric-rnd__hero">
-            <img loading="lazy" decoding="async" src={lsElectricRnd.heroImage} alt="" />
+            <img
+              loading="lazy"
+              decoding="async"
+              src={lsElectricRnd.heroImage}
+              alt={lsElectricRnd.title}
+            />
           </div>
         </div>
         <div className="company-ls-electric-rnd__list">

@@ -170,7 +170,7 @@ export default function SearchAllAi({
           <h2 className="search_all__ai-tit">{searchAllPage.aiTitle}</h2>
           <p className="search_all__ai-note">{searchAllPage.aiDisclaimer}</p>
         </div>
-        <div className="search_all__ai-body">
+        <div id="search-all-ai-body" className="search_all__ai-body">
           <ul className="search_all__ai-list">
             <li>
               <div ref={innerRef} className="search_all__ai-list-text">
@@ -188,6 +188,7 @@ export default function SearchAllAi({
             type="button"
             className="search_all__ai-more-btn"
             aria-expanded={aiExpanded}
+            aria-controls="search-all-ai-body"
             onClick={() => setAiExpanded((prev) => !prev)}
           >
             {aiExpanded ? "Read less" : "Read more"}

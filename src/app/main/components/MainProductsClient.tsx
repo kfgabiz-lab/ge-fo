@@ -9,6 +9,7 @@ import SwiperBarControls from "@/components/swiper/SwiperBarControls";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import TabButton from "@/components/ui/TabButton";
 import { getProductBadgeType } from "@/lib/productBadge";
+import { handleHorizontalTabListKeyDown } from "@/lib/tabKeyboardNav";
 import type {
   FoProductGroupItem,
   FoProductGroupResponse,
@@ -294,6 +295,7 @@ export default function MainProductsClient({ groups }: MainProductsClientProps) 
           aria-label="제품 카테고리"
           data-slug="prdGrp-data"
           data-slug-repeat="true"
+          onKeyDown={handleHorizontalTabListKeyDown}
         >
           {groups.map((group) => (
             <TabButton

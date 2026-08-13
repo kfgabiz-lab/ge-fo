@@ -6,6 +6,7 @@ import LenisScrollProvider from "@/components/layout/LenisScrollProvider";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
 import ScrollToTopOnNavigate from "@/components/layout/ScrollToTopOnNavigate";
 import SiteLocaleSync from "@/components/layout/SiteLocaleSync";
+import SkipToMainContent from "@/components/layout/SkipToMainContent";
 import { loadSiteSettings, SITE_LOCALE } from "@/lib/siteTime";
 import "../assets/css/reset.css";
 import "../assets/css/fonts.css";
@@ -86,12 +87,8 @@ export default async function RootLayout({
         <Script src="/apps/daelimEUEM_begin.js" strategy="beforeInteractive" />
         <Script src="/js/daelimEUEM_run.js" strategy="beforeInteractive" />
         <LenisScrollProvider>
-          <a href="#main-content" className="skip_to_content">
-            Skip to main content
-          </a>
-          <div id="main-content" tabIndex={-1}>
-            {children}
-          </div>
+          <SkipToMainContent />
+          {children}
           <SiteLocaleSync locale={SITE_LOCALE} />
           <HistoryReloadOnNavigate />
           <ScrollToTopOnNavigate />

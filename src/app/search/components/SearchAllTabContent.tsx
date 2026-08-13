@@ -38,6 +38,7 @@ import SearchMediaPanel from "./SearchMediaPanel";
 import SearchPageList from "./SearchPageList";
 import SearchPagesPanel from "./SearchPagesPanel";
 import SearchProductsPanel from "./SearchProductsPanel";
+import { handleHorizontalTabListKeyDown } from "@/lib/tabKeyboardNav";
 
 import {
   buildSearchTabHref,
@@ -391,7 +392,12 @@ export default function SearchAllTabContent({
   return (
     <section className="search_all" id="search-all">
       <div className="inner">
-        <div className="search_all__tabs" role="tablist" aria-label="Search results">
+        <div
+          className="search_all__tabs"
+          role="tablist"
+          aria-label="Search results"
+          onKeyDown={handleHorizontalTabListKeyDown}
+        >
           {searchAllTabs.map((tab) => {
             const isActive = activeTab === tab.id;
             const countLabel =

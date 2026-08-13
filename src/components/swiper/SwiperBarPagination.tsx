@@ -21,11 +21,7 @@ export default function SwiperBarPagination({
   const classes = swiperBarClasses[variant];
 
   return (
-    <div
-      className={classes.pagination}
-      role="tablist"
-      aria-label={ariaLabel}
-    >
+    <div className={classes.pagination} role="group" aria-label={ariaLabel}>
       {Array.from({ length: count }, (_, index) => (
         <button
           key={index}

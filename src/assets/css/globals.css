@@ -112,7 +112,8 @@ body {
   box-shadow: var(--focus-ring-shadow);
 }
 
-#main-content:focus {
+#main-content:focus,
+main:focus {
   outline: none;
 }
 

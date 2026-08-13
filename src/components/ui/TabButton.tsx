@@ -25,6 +25,7 @@ export default function TabButton({
       id={id}
       aria-selected={isActive}
       aria-controls={controls}
+      tabIndex={isActive ? 0 : -1}
       className={isActive ? "tab_btn is-active" : "tab_btn"}
       onClick={onSelect}
       {...rest}

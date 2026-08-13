@@ -43,7 +43,12 @@ function ShapingBlock({ block }: { block: AmericaShapingBlock }) {
         {block.video ? (
           <CompanyAmericaShapingVideo src={block.video} poster={block.image} />
         ) : (
-          <img loading="lazy" decoding="async" src={block.image} alt="" />
+          <img
+            loading="lazy"
+            decoding="async"
+            src={block.image}
+            alt={block.titleLines.join(" ")}
+          />
         )}
         <span className="company-america-shaping__img-overlay" aria-hidden />
       </div>
@@ -96,7 +101,12 @@ function ShapingBlock({ block }: { block: AmericaShapingBlock }) {
 function BusinessRow({ item }: { item: AmericaBusinessItem }) {
   const image = (
     <div className="company-america-business__img">
-      <img loading="lazy" decoding="async" src={item.image} alt="" />
+      <img
+        loading="lazy"
+        decoding="async"
+        src={item.image}
+        alt={item.title}
+      />
     </div>
   );
   const text = (
@@ -318,14 +328,14 @@ function AmericaLeadersSection() {
                     loading="lazy"
                     decoding="async"
                     src={featured.image}
-                    alt=""
+                    alt={`${featured.name}, ${featured.role}`}
                     className="company-america-leaders__img-el company-america-leaders__img-el--pc"
                   />
                   <img
                     loading="lazy"
                     decoding="async"
                     src={featured.imageMobile}
-                    alt=""
+                    alt={`${featured.name}, ${featured.role}`}
                     className="company-america-leaders__img-el company-america-leaders__img-el--mo"
                   />
                 </>
@@ -334,7 +344,7 @@ function AmericaLeadersSection() {
                   loading="lazy"
                   decoding="async"
                   src={featured.image}
-                  alt=""
+                  alt={`${featured.name}, ${featured.role}`}
                 />
               )}
             </div>
@@ -364,7 +374,7 @@ function AmericaLeadersSection() {
                   loading="lazy"
                   decoding="async"
                   src={leader.image}
-                  alt=""
+                  alt={`${leader.name}, ${leader.role}`}
                 />
                 <span className="company-america-leaders__overlay" aria-hidden />
               </div>

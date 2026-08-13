@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import CommonBanner02CopyLink from "@/components/banners/CommonBanner02CopyLink";
+import { handleHorizontalTabListKeyDown } from "@/lib/tabKeyboardNav";
 import { industryTabs, type IndustryTab } from "../data/marketsContent";
 
 function renderTitleWithBreaks(title: string) {
@@ -52,7 +53,12 @@ export default function MarketsExplore({
           <p className="section_desc">{sectionDesc}</p>
         </div>
 
-        <div className="markets_explore__tabs" role="tablist" aria-label="Industries">
+        <div
+          className="markets_explore__tabs"
+          role="tablist"
+          aria-label="Industries"
+          onKeyDown={handleHorizontalTabListKeyDown}
+        >
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -61,6 +67,7 @@ export default function MarketsExplore({
               role="tab"
               aria-selected={activeTab === tab.id}
               aria-controls={`panel-${tab.id}`}
+              tabIndex={activeTab === tab.id ? 0 : -1}
               className={
                 activeTab === tab.id
                   ? "markets_explore__tab is-active"

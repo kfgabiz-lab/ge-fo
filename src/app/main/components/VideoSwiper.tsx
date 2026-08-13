@@ -121,9 +121,22 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
     () => true,
     () => false,
   );
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const prefersReducedMotionRef = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [autoplayProgress, setAutoplayProgress] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      prefersReducedMotionRef.current = media.matches;
+      setPrefersReducedMotion(media.matches);
+    };
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   const slides = useMemo<MainSlide[]>(() => {
     return heroItems
@@ -413,6 +426,10 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
   const startImageProgressTimer = useCallback(
     (fromProgress = 0) => {
       clearProgressTimer();
+      if (prefersReducedMotionRef.current) {
+        setProgress(0);
+        return;
+      }
       progressStartRef.current =
         Date.now() - (fromProgress / 100) * IMAGE_AUTOPLAY_DELAY;
 
@@ -504,6 +521,10 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
       setProgress(0);
       bindVideoProgress(video, index);
       if (!isInViewRef.current) return;
+      if (prefersReducedMotionRef.current) {
+        video.pause();
+        return;
+      }
       void video.play().catch(() => {});
     },
     [bindVideoProgress, setProgress],
@@ -520,6 +541,12 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
       clearVideoListeners();
       pauseAll(true);
       setProgress(0);
+
+      if (prefersReducedMotionRef.current) {
+        isVideoPlayingRef.current = false;
+        setIsVideoPlaying(false);
+        return;
+      }
 
       if (slide?.type === "video") {
         isVideoPlayingRef.current = true;
@@ -782,7 +809,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
         effect="fade"
         fadeEffect={{ crossFade: true }}
         slidesPerView={1}
-        speed={600}
+        speed={prefersReducedMotion ? 0 : 600}
         loop={false}
         autoplay={false}
         observer
