@@ -219,6 +219,7 @@ export default function RequestForTrainingStep1Form({
                   placeholder={fields.firstName.placeholder}
                   value={step1.firstName}
                   error={Boolean(errors.firstName)}
+                  slotProps={{ htmlInput: { "aria-label": fields.firstName.label } }}
                   onChange={(event) => {
                     setStep1Field("firstName", filterLetters(event.target.value, LETTERS_MAX));
                     onClearError("firstName");
@@ -234,6 +235,7 @@ export default function RequestForTrainingStep1Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.lastName.placeholder}
                   value={step1.lastName}
+                  slotProps={{ htmlInput: { "aria-label": fields.lastName.label } }}
                   onChange={(event) =>
                     setStep1Field("lastName", filterLetters(event.target.value, LETTERS_MAX))
                   }
@@ -251,6 +253,7 @@ export default function RequestForTrainingStep1Form({
                 placeholder={fields.company.placeholder}
                 value={step1.company}
                 error={Boolean(errors.company)}
+                slotProps={{ htmlInput: { "aria-label": fields.company.label } }}
                 onChange={(event) => {
                   setStep1Field("company", filterLetters(event.target.value, LETTERS_MAX));
                   onClearError("company");
@@ -281,6 +284,7 @@ export default function RequestForTrainingStep1Form({
                         onClearError("streetAddress");
                       }}
                       slotProps={{
+                        htmlInput: { "aria-label": fields.streetAddress.label },
                         input: {
                           endAdornment: (
                             <InputAdornment
@@ -342,7 +346,9 @@ export default function RequestForTrainingStep1Form({
                     id={`${formId}-address-2`}
                     className="guide_field guide_field--h50 support_service_training_request__input"
                     placeholder={fields.streetAddress.address2Placeholder}
-                    aria-label={fields.streetAddress.address2Placeholder}
+                    slotProps={{
+                      htmlInput: { "aria-label": fields.streetAddress.address2Placeholder },
+                    }}
                     value={step1.address2}
                     onChange={(event) =>
                       setStep1Field("address2", event.target.value)
@@ -363,6 +369,7 @@ export default function RequestForTrainingStep1Form({
                   placeholder={fields.city.placeholder}
                   value={step1.city}
                   error={Boolean(errors.city)}
+                  slotProps={{ htmlInput: { "aria-label": fields.city.label } }}
                   onChange={(event) => {
                     setStep1Field("city", event.target.value);
                     onClearError("city");
@@ -379,6 +386,7 @@ export default function RequestForTrainingStep1Form({
                   placeholder={fields.state.placeholder}
                   value={step1.state}
                   error={Boolean(errors.state)}
+                  slotProps={{ htmlInput: { "aria-label": fields.state.label } }}
                   onChange={(event) => {
                     setStep1Field("state", event.target.value);
                     onClearError("state");
@@ -398,6 +406,7 @@ export default function RequestForTrainingStep1Form({
                   placeholder={fields.zip.placeholder}
                   value={step1.zip}
                   error={Boolean(errors.zip)}
+                  slotProps={{ htmlInput: { "aria-label": fields.zip.label } }}
                   onChange={(event) => {
                     setStep1Field("zip", filterDigitsOnly(event.target.value));
                     onClearError("zip");
@@ -415,6 +424,7 @@ export default function RequestForTrainingStep1Form({
                   type="tel"
                   value={step1.phone}
                   error={Boolean(errors.phone)}
+                  slotProps={{ htmlInput: { "aria-label": fields.phone.label } }}
                   onChange={(event) => {
                     setStep1Field("phone", filterPhoneDigits(event.target.value));
                     onClearError("phone");
@@ -434,6 +444,7 @@ export default function RequestForTrainingStep1Form({
                   placeholder={fields.email.placeholder}
                   value={step1.email}
                   error={Boolean(errors.email)}
+                  slotProps={{ htmlInput: { "aria-label": fields.email.label } }}
                   onChange={(event) => {
                     setStep1Field("email", filterEmail(event.target.value, EMAIL_MAX));
                     onClearError("email");
@@ -449,6 +460,7 @@ export default function RequestForTrainingStep1Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.title.placeholder}
                   value={step1.title}
+                  slotProps={{ htmlInput: { "aria-label": fields.title.label } }}
                   onChange={(event) =>
                     setStep1Field("title", filterLetters(event.target.value, LETTERS_MAX))
                   }
@@ -467,6 +479,7 @@ export default function RequestForTrainingStep1Form({
                   placeholder={fields.cellPhone.placeholder}
                   type="tel"
                   value={step1.cellPhone}
+                  slotProps={{ htmlInput: { "aria-label": fields.cellPhone.label } }}
                   onChange={(event) =>
                     setStep1Field("cellPhone", filterPhoneDigits(event.target.value))
                   }
@@ -481,6 +494,7 @@ export default function RequestForTrainingStep1Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.salesContact.placeholder}
                   value={step1.salesContact}
+                  slotProps={{ htmlInput: { "aria-label": fields.salesContact.label } }}
                   onChange={(event) =>
                     setStep1Field(
                       "salesContact",

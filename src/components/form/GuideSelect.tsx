@@ -124,6 +124,7 @@ export default function GuideSelect({
   fullWidth = true,
   error,
   disabled,
+  inputProps,
   ...rest
 }: GuideSelectProps) {
   const isMobile = useMediaQuery(MOBILE_MQ);
@@ -199,6 +200,7 @@ export default function GuideSelect({
       native
       displayEmpty={displayEmpty}
       fullWidth={fullWidth}
+      inputProps={inputProps}
       {...rest}
       {...valueProps}
     >
@@ -209,6 +211,7 @@ export default function GuideSelect({
     <Select
       key="guide-select-custom"
       fullWidth={fullWidth}
+      inputProps={inputProps}
       {...rest}
       {...valueProps}
       displayEmpty={displayEmpty}

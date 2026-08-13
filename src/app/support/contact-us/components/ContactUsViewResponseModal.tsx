@@ -179,6 +179,9 @@ export default function ContactUsViewResponseModal({
                     : ""
                 }`}
                 value={inquiryNumber}
+                slotProps={{
+                  htmlInput: { "aria-label": contactUsViewResponseModal.inquiryNumberLabel },
+                }}
                 onChange={(event) => {
                   setInquiryNumber(event.target.value);
                   if (errors.inquiryNumber) {
@@ -206,6 +209,9 @@ export default function ContactUsViewResponseModal({
                 }`}
                 type="password"
                 value={password}
+                slotProps={{
+                  htmlInput: { "aria-label": contactUsViewResponseModal.passwordLabel },
+                }}
                 onChange={(event) => {
                   setPassword(event.target.value);
                   if (errors.password) {

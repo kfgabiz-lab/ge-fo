@@ -173,6 +173,7 @@ function PasswordField({
         slotProps={{
           htmlInput: {
             autoComplete: "off",
+            "aria-label": label,
           },
           input: {
             endAdornment: (
@@ -589,6 +590,7 @@ function ContactUsFormContent() {
                     required
                     error={Boolean(errors[field.errorKey])}
                     value={field.value}
+                    slotProps={{ htmlInput: { "aria-label": field.label } }}
                     onChange={(event) => {
                       field.onChange(event.target.value);
                       if (errors[field.errorKey]) {
@@ -617,6 +619,7 @@ function ContactUsFormContent() {
                   required
                   error={Boolean(errors.companyName)}
                   value={companyName}
+                  slotProps={{ htmlInput: { "aria-label": contactUsFormCopy.companyName } }}
                   onChange={(event) => {
                     setCompanyName(event.target.value);
                     if (errors.companyName) {
@@ -695,6 +698,7 @@ function ContactUsFormContent() {
                 required
                 error={Boolean(errors.description)}
                 value={description}
+                slotProps={{ htmlInput: { "aria-label": contactUsFormCopy.inquiryDetails } }}
                 onChange={(event) => {
                   setDescription(event.target.value);
                   if (errors.description) {
@@ -775,7 +779,11 @@ function ContactUsFormContent() {
                           />
                         }
                         slotProps={{
-                          input: { id: checkboxId, name: item.id },
+                          input: {
+                            id: checkboxId,
+                            name: item.id,
+                            "aria-label": item.label,
+                          },
                         }}
                       />
                       <span>

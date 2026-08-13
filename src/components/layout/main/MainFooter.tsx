@@ -233,6 +233,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
                   placeholder="Email address"
                   error={emailError}
                   value={email}
+                  slotProps={{ htmlInput: { "aria-label": "Email" } }}
                   onChange={(event) => {
                     setEmail(event.target.value);
                     if (emailError) setEmailError(false);
@@ -252,6 +253,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
                           checked={interests.includes(option.value)}
                           icon={<FooterCheckboxIcon />}
                           checkedIcon={<FooterCheckboxIcon checked />}
+                          inputProps={{ "aria-label": option.value }}
                           onChange={(event) =>
                             handleInterestChange(option.value, event.target.checked)
                           }
@@ -278,7 +280,12 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
                     checkedIcon={<FooterCheckboxIcon checked />}
                     onChange={(event) => setAgreedToTerms(event.target.checked)}
                     slotProps={{
-                      input: { id: "main-footer-agree", name: "agree" },
+                      input: {
+                        id: "main-footer-agree",
+                        name: "agree",
+                        "aria-label":
+                          "I agree with the terms of use as described in the Privacy Policy",
+                      },
                     }}
                   />
                 }

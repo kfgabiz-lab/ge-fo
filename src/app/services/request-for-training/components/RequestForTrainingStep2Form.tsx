@@ -94,6 +94,7 @@ export default function RequestForTrainingStep2Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   value={step2.sessionCount}
                   error={Boolean(errors.sessionCount)}
+                  slotProps={{ htmlInput: { "aria-label": fields.sessionCount.label } }}
                   onChange={(event) => {
                     setStep2Field("sessionCount", filterLettersAndDigits(event.target.value));
                     onClearError("sessionCount");
@@ -109,6 +110,7 @@ export default function RequestForTrainingStep2Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   value={step2.sessionDays}
                   error={Boolean(errors.sessionDays)}
+                  slotProps={{ htmlInput: { "aria-label": fields.sessionDays.label } }}
                   onChange={(event) => {
                     setStep2Field("sessionDays", filterDigitsOnly(event.target.value));
                     onClearError("sessionDays");
@@ -128,6 +130,7 @@ export default function RequestForTrainingStep2Form({
                       <GuideDatePicker
                         id={`${formId}-schedule-start`}
                         placeholder={fields.scheduleDates.placeholder}
+                        ariaLabel="Training session start date"
                         value={step2.scheduleStart}
                         onChange={handleScheduleStartChange}
                         min={todayStr}
@@ -146,6 +149,7 @@ export default function RequestForTrainingStep2Form({
                       <GuideDatePicker
                         id={`${formId}-schedule-end`}
                         placeholder={fields.scheduleDates.placeholder}
+                        ariaLabel="Training session end date"
                         value={step2.scheduleEnd}
                         onChange={(value) => {
                           setStep2Field("scheduleEnd", value);
@@ -172,6 +176,7 @@ export default function RequestForTrainingStep2Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   value={step2.studentCount}
                   error={Boolean(errors.studentCount)}
+                  slotProps={{ htmlInput: { "aria-label": fields.studentCount.label } }}
                   onChange={(event) => {
                     setStep2Field("studentCount", filterStudentCount(event.target.value));
                     onClearError("studentCount");
