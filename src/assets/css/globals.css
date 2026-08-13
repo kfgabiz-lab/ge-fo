@@ -36,8 +36,17 @@
   --btn-lv03-px: 24px;
   --btn-icon-56: 56px;
   --btn-rolling-50: 50px;
-  --mui-focus-outline-color: var(--color-primary);
-  --mui-focus-outline-offset: 2px;
+  /* Keyboard focus ring — dual contrast (visible on light & dark) */
+  --focus-outline-inner: #fff;
+  --focus-outline-outer: var(--color-primary);
+  --focus-outline-width: 2px;
+  --focus-outline-offset: 2px;
+  --focus-outline-color: var(--focus-outline-outer);
+  --focus-ring-shadow: 0 0 0
+    calc(var(--focus-outline-offset) + var(--focus-outline-width))
+    var(--focus-outline-outer);
+  --mui-focus-outline-color: var(--focus-outline-outer);
+  --mui-focus-outline-offset: var(--focus-outline-offset);
 }
 
 /* Base */
@@ -47,52 +56,28 @@ html {
   scrollbar-gutter: stable;
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
-  scrollbar-width: thin;
-  scrollbar-color: #888 #e8e8e8;
 }
 
-html *::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
-}
-
-html *::-webkit-scrollbar-track {
-  background: #e8e8e8;
-  border-radius: 2px;
-}
-
-html *::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 2px;
-}
-
-/* WebKit/Blink — scrollbar-* 를 쓰면 ::-webkit-scrollbar* 가 무시되어 Windows 화살표 버튼이 남음 */
-*::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 3px;
 }
 
-*::-webkit-scrollbar-button {
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
   display: none;
 }
 
-*::-webkit-scrollbar-track,
-*::-webkit-scrollbar-track-piece {
-  background-color: #e8e8e8;
-  border: none;
-  border-radius: 0;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border: none;
-  border-radius: 3px;
+::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 2px;
 }
 
 /* Firefox 등 webkit 미지원 브라우저만 표준 속성 사용 */
 @supports not selector(::-webkit-scrollbar) {
   * {
     scrollbar-width: thin;
-    scrollbar-color: #888 #e8e8e8;
+    scrollbar-color: #ddd transparent;
   }
 }
 
@@ -100,6 +85,21 @@ html,
 body {
   max-width: 100%;
   overflow-x: clip;
+}
+
+/* Keyboard focus outline — dual ring (white + navy) for light/dark backgrounds */
+:focus-visible {
+  outline: var(--focus-outline-width) solid var(--focus-outline-inner);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: var(--focus-outline-offset);
+    box-shadow: none;
+  }
 }
 
 /* 오버레이(GNB·모달) 오픈 시 페이지 스크롤 잠금
@@ -553,8 +553,9 @@ section .btn-icon-56:hover .icon_arrow-20 {
 }
 
 .scroll_to_top__btn:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--focus-outline-width) solid var(--focus-outline-inner);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 .scroll_to_top__icon {
@@ -623,9 +624,6 @@ section .btn-text-30 .btn-text-30__icon {
   height: 30px;
   border-radius: 50%;
   transition: background 0.2s ease;
-}
-section .btn-text-30:hover .btn-text-30__icon {
-  background: var(--color-accent);
 }
 section .btn-text-30 .icon_arrow-14 {
   display: block;
@@ -1288,7 +1286,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.34px;
     color: #fff;
     text-align: left;
   }
@@ -1315,6 +1312,21 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   section.common_banner_02 .common_banner_02__link .icon_link-14 {
     background: url("/ico/ico_arrow_right_18_white.svg") center / contain no-repeat;
   }
+
+  /* Figma 9120:126428 — arrow CTA (linkIcon=arrow) */
+  section.common_banner_02.common_banner_02--arrow
+    .common_banner_02__link
+    .icon_arrow-14 {
+    background: url("/ico/ico_arrow_right_14_white.svg") center / contain
+      no-repeat;
+    filter: none;
+  }
+
+  section.common_banner_02.common_banner_02--arrow
+    .common_banner_02__link:hover
+    .icon_arrow-14 {
+    filter: none;
+  }
 }
 
 @media (max-width: 780px) {
@@ -1331,12 +1343,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     background: #0f1f45;
     text-decoration: none;
     color: inherit;
-  }
-
-
-  section.common_banner_02 .common_banner_02__panel:hover .btn-text-30__icon,
-  section.common_banner_02 .common_banner_02__link:hover .btn-text-30__icon {
-    background: var(--color-accent);
   }
 
   section.common_banner_02 .common_banner_02__body .common_banner_02__bg {
@@ -1407,6 +1413,21 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     background: url("/ico/ico_arrow_right_18_white.svg") center / contain no-repeat;
   }
 
+  /* Figma 9120:126428 — arrow CTA (linkIcon=arrow) */
+  section.common_banner_02.common_banner_02--arrow
+    .common_banner_02__link
+    .icon_arrow-14 {
+    background: url("/ico/ico_arrow_right_14_white.svg") center / contain
+      no-repeat;
+    filter: none;
+  }
+
+  section.common_banner_02.common_banner_02--arrow
+    .common_banner_02__link:hover
+    .icon_arrow-14 {
+    filter: none;
+  }
+
   /* Figma 6584:95253 — expert variant (product detail MO) */
   section.common_banner_02.common_banner_02--expert {
     padding: 0;
@@ -1441,7 +1462,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.24px;
   }
 
   section.common_banner_02.common_banner_02--expert .common_banner_02__desc {
@@ -1466,10 +1486,22 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     text-decoration: none;
   }
 
-  section.common_banner_02.common_banner_02--expert .btn-line-30 {
-    height: 32px;
-    min-height: 32px;
-    padding: 8px 18px;
+  /* Figma 8993:165636 — Btn / 30px / Line (Copy Email) */
+  section.common_banner_02.common_banner_02--expert
+    .common_banner_02__contact
+    .btn-line-30--on-dark {
+    box-sizing: border-box;
+    width: fit-content;
+    min-width: 0;
+    max-width: none;
+    height: 30px;
+    min-height: 30px;
+    padding: 8px 14px;
+    gap: 5px;
+    font-size: 13px;
+    line-height: 14px;
+    flex: 0 0 auto;
+    white-space: nowrap;
   }
 
   section.common_banner_02.common_banner_02--expert .common_banner_02__link {
@@ -1487,22 +1519,79 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     height: 22px;
   }
 
-  section.common_banner_02.common_banner_02--expert
-    .common_banner_02__panel:hover
-    .btn-text-30__icon {
-    background: transparent;
-  }
-
-  section.common_banner_02.common_banner_02--expert
+  section.common_banner_02.common_banner_02--expert.common_banner_02--arrow
     .common_banner_02__link:hover
-    .btn-text-30__icon {
-    background: var(--color-accent);
+    .icon_arrow-14 {
+    filter: none;
   }
+}
 
-  section.common_banner_02.common_banner_02--expert
-    .common_banner_02__link:hover
-    .icon_link-14 {
-    filter: brightness(0) invert(1);
+/* common_banner_02 Copy Link — 로딩 + "Link copied!" 토스트 (devices_product_downloads 패턴과 동일) */
+.common_banner_02__copy {
+  position: relative;
+}
+
+.common_banner_02__copy-spinner {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  background: url("/ico/ico_loading_14.svg") center / 14px 14px no-repeat;
+  transform: translate(-50%, -50%);
+  animation: common_banner_02_copy_spin 0.7s linear infinite;
+}
+
+.common_banner_02__copy.is-loading .common_banner_02__copy-label,
+.common_banner_02__copy.is-loading .btn-line-30__icon--copy {
+  visibility: hidden;
+}
+
+.common_banner_02__copy.is-loading .common_banner_02__copy-spinner {
+  display: block;
+}
+
+.common_banner_02__copy-toast {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  z-index: 2;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 109px;
+  height: 33px;
+  margin-bottom: 8px;
+  padding: 0 14px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 23px;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  background: rgb(12 22 37 / 90%);
+  border-radius: 16.5px;
+  transform: translateX(-50%);
+}
+
+.common_banner_02__copy-toast::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 12px;
+  height: 6px;
+  background: rgb(12 22 37 / 90%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform: translateX(-50%);
+}
+
+@keyframes common_banner_02_copy_spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -2477,18 +2566,20 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   color: var(--color-error);
 }
 
-/* === MUI focus outline === */
-.main_footer,
-.common_footer {
-  --mui-focus-outline-color: #fff;
+/* === Focus outline (MUI) — dual ring via global tokens === */
+/* Text fields keep bordered fieldset as the focus cue */
+.MuiOutlinedInput-root.Mui-focused,
+.MuiOutlinedInput-root.Mui-focused.Mui-error {
+  outline: none;
+  box-shadow: none;
 }
 
-.MuiOutlinedInput-root.Mui-focused,
-.MuiOutlinedInput-root.Mui-focused.Mui-error,
 .MuiCheckbox-root.Mui-focusVisible,
 .MuiButtonBase-root.Mui-focusVisible,
 .MuiMenuItem-root.Mui-focusVisible {
-  outline: none;
+  outline: var(--focus-outline-width) solid var(--focus-outline-inner);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 @media (max-width: 780px) {

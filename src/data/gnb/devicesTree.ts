@@ -64,6 +64,13 @@ function findLv2RowByProduct(
   );
 }
 
+function findLv1RowById(
+  rows: DevicesTreeRow[],
+  categoryId: number,
+): DevicesTreeRow | undefined {
+  return rows.find((row) => row.depth === "1" && row.rowId === categoryId);
+}
+
 export function resolveDevicesCategorySelection(
   rows: DevicesTreeRow[],
   categoryId?: number,
@@ -77,7 +84,13 @@ export function resolveDevicesCategorySelection(
   const lv2Row =
     (categoryId !== undefined ? findLv2RowById(rows, categoryId) : undefined) ??
     (productId !== undefined ? findLv2RowByProduct(rows, productId) : undefined);
-  if (!lv2Row || lv2Row.rowId == null) return EMPTY_CATEGORY_SELECTION;
+  if (!lv2Row || lv2Row.rowId == null) {
+    // Lv2/product 매칭 실패 시 categoryId가 Lv1 id인 경우를 시도한다 (Lv1 상세화면 CTA 전용 — lv1만 선택하고 lv2/lv3는 비운다)
+    const lv1Row =
+      categoryId !== undefined ? findLv1RowById(rows, categoryId) : undefined;
+    if (!lv1Row || lv1Row.rowId == null) return EMPTY_CATEGORY_SELECTION;
+    return { lv1: String(lv1Row.rowId), lv2: "", lv3: "" };
+  }
 
   const lv1Row = rows.find(
     (row) =>

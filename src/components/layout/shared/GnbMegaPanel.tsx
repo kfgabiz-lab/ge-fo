@@ -181,7 +181,7 @@ export default function GnbMegaPanel({
         </button>
       ) : null}
 
-      <div className="gnb_mega__col gnb_mega__col--depth2">
+      <div className="gnb_mega__col gnb_mega__col--depth2" data-gnb-col="0">
         <div className="gnb_mega__depth2-body">
           <ul className="gnb_mega__depth2-list">
             {categories.map((category) => {
@@ -238,6 +238,7 @@ export default function GnbMegaPanel({
             ? "gnb_mega__col gnb_mega__col--depth3 is-links"
             : "gnb_mega__col gnb_mega__col--depth3"
         }
+        data-gnb-col="1"
       >
         <div className="gnb_mega__depth3-scroll">
           <ul className="gnb_mega__depth3-list">
@@ -286,6 +287,7 @@ export default function GnbMegaPanel({
               ? "gnb_mega__col gnb_mega__col--depth4 is-empty"
               : "gnb_mega__col gnb_mega__col--depth4"
           }
+          data-gnb-col="2"
         >
           {!isDepth3AsLinks && showDepth4Intro ? (
             <div className="gnb_mega__depth4-intro">

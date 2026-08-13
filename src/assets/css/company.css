@@ -223,6 +223,16 @@
     overflow: hidden;
   }
 
+  section.company-blog-list .company-blog-list__content--no-tags {
+    justify-content: center;
+  }
+
+  section.company-blog-list
+    .company-blog-list__content--no-tags
+    .company-blog__category {
+    margin-top: 0;
+  }
+
   section.company-blog-list .company-blog-list__content-link {
     display: flex;
     flex-direction: column;
@@ -3316,7 +3326,7 @@ section.company-blog-list .company-blog__tag:hover {
     width: 50%;
     padding: 40px 30px 26px;
     box-sizing: border-box;
-    background: url(/pub/img/company/america/leader-featured_02.svg);
+    background: url(/img/company/america/leader-featured_02.svg);
   }
 
   section.company-america-leaders .company-america-leaders__card--featured .company-america-leaders__meta {
@@ -3354,11 +3364,11 @@ section.company-blog-list .company-blog__tag:hover {
     position: relative;
     min-width: 0;
     overflow: hidden;
-    background: #0d142e url(/pub/img/company/america/leader-card-bg.svg) center / cover no-repeat;
+    background: #0d142e url(/img/company/america/leader-card-bg.svg) center / cover no-repeat;
   }
 
   section.company-america-leaders .company-america-leaders__card.company-america-leaders__card--featured {
-    background: #0d142e url(/pub/img/company/america/leader-card-bg.svg) / 50% 100% no-repeat;
+    background: #0d142e url(/img/company/america/leader-card-bg.svg) / 50% 100% no-repeat;
   }
 
   section.company-america-leaders .company-america-leaders__img {
@@ -4199,7 +4209,7 @@ section.company-blog-list .company-blog__tag:hover {
     position: relative;
     width: 100%;
     aspect-ratio: 335 / 503;
-    background: #0d142e url(/pub/img/company/america/leader-card-bg-featured-mo.svg) center / cover no-repeat;
+    background: #0d142e url(/img/company/america/leader-card-bg-featured-mo.svg) center / cover no-repeat;
   }
 
   section.company-america-leaders .company-america-leaders__card--featured .company-america-leaders__img {
@@ -4268,7 +4278,7 @@ section.company-blog-list .company-blog__tag:hover {
     width: 100%;
     overflow: hidden;
     /* Figma Portrait BG — SVG */
-    background: #0d142e url(/pub/img/company/america/leader-card-bg.svg) center / cover no-repeat;
+    background: #0d142e url(/img/company/america/leader-card-bg.svg) center / cover no-repeat;
   }
 
   section.company-america-leaders .company-america-leaders__card.company-america-leaders__card--featured {

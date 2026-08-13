@@ -27,7 +27,7 @@ export default function GnbMarketsMegaPanel({
         <h2 className="gnb_mega__tit">{title}</h2>
       </div>
       <div className="gnb_mega__divider" aria-hidden />
-      <ul className="gnb_mega__grid">
+      <ul className="gnb_mega__grid" data-gnb-grid data-gnb-grid-rows="2">
         {items.map((item) => (
           <li key={item.id} className="gnb_mega__cell">
             <GnbMegaItemLink

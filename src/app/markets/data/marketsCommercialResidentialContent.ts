@@ -181,7 +181,7 @@ export const commercialResidentialWhyItems: WhyItem[] = [
     title: "Reliable Building Power",
     description:
       "Integrated power distribution and protection solutions ensure safe, stable, and efficient electrical operation throughout commercial and residential facilities.",
-    icon: "/pub/img/markets/commercial-residential/why/why_01.svg",
+    icon: "/img/markets/commercial-residential/why/why_01.svg",
   },
   {
     id: "cr-why-2",
@@ -189,7 +189,7 @@ export const commercialResidentialWhyItems: WhyItem[] = [
     title: "Energy Efficiency Optimization",
     description:
       "Building energy management systems and intelligent HVAC controls help reduce energy consumption, lower costs, and improve overall building performance.",
-    icon: "/pub/img/markets/commercial-residential/why/why_02.svg",
+    icon: "/img/markets/commercial-residential/why/why_02.svg",
   },
   {
     id: "cr-why-3",
@@ -197,7 +197,7 @@ export const commercialResidentialWhyItems: WhyItem[] = [
     title: "Smart Sustainable Buildings",
     description:
       "By combining digital monitoring, renewable energy integration, and energy storage technologies, LS ELECTRIC helps create smarter, more sustainable built environments.",
-    icon: "/pub/img/markets/commercial-residential/why/why_03.svg",
+    icon: "/img/markets/commercial-residential/why/why_03.svg",
   },
 ];
 

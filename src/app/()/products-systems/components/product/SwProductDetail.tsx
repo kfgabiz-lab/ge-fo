@@ -53,7 +53,17 @@ import {
 import { mapSwKeyFeatures, type SwKeyFeature } from "../../lib/mapSwKeyFeatures";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbList, buildPageGraph, itemUrl, pageUrl } from "@/lib/structuredData/builders";
-import { SITE_URL, WEBSITE_ID } from "@/lib/structuredData/siteConfig";
+import {
+  SITE_URL,
+  WEBSITE_ID,
+  GICS_SUPPORT_URL,
+  CONNECT_PORTAL_EXTERNAL_URL,
+} from "@/lib/structuredData/siteConfig";
+
+const ACTION_PLATFORMS = [
+  "http://schema.org/DesktopWebPlatform",
+  "http://schema.org/MobileWebPlatform",
+];
 import "@/assets/css/devices-systems.css";
 import "@/assets/css/devices-product-detail.css";
 
@@ -301,6 +311,9 @@ export default async function SwProductDetail({
   const metaDescription =
     (row?.["seo.meta_description"] as string) || bind.description || "";
 
+  const connectPortalUrl = bind.connectPortal || CONNECT_PORTAL_EXTERNAL_URL;
+  const whereToBuyUrl = `${SITE_URL}/support/where-to-buy`;
+
   const productNode = {
     "@type": "Product",
     "@id": `${currentUrl}#product`,
@@ -308,6 +321,35 @@ export default async function SwProductDetail({
     description: bind.description ?? "",
     brand: { "@type": "Brand", name: "LS ELECTRIC" },
     category: "Software",
+    potentialAction: [
+      {
+        "@type": "BuyAction",
+        name: "Request a quote or Place an order",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: connectPortalUrl,
+          actionPlatform: ACTION_PLATFORMS,
+        },
+      },
+      {
+        "@type": "SearchAction",
+        name: "Find an Authorized Distributor",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: whereToBuyUrl,
+          actionPlatform: ACTION_PLATFORMS,
+        },
+      },
+      {
+        "@type": "Action",
+        name: "Get Technical Support & Service",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: GICS_SUPPORT_URL,
+          actionPlatform: ACTION_PLATFORMS,
+        },
+      },
+    ],
   };
 
   const relevantProducts = otherProducts
@@ -318,17 +360,6 @@ export default async function SwProductDetail({
     .filter((x): x is { a: typeof highlights[number]; url: string } => x.url !== null);
 
   const about: Record<string, unknown>[] = [];
-  if (relevantProducts.length) {
-    about.push({
-      "@type": "ItemList",
-      name: `Relavant Products for ${bind.title ?? ""}`,
-      itemListElement: relevantProducts.slice(0, 10).map(({ p, url }, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        item: { "@type": "Product", name: p.title, url },
-      })),
-    });
-  }
   if (relevantArticles.length) {
     about.push({
       "@type": "ItemList",
@@ -337,16 +368,6 @@ export default async function SwProductDetail({
         "@type": "ListItem",
         position: i + 1,
         item: { "@type": "Article", headline: a.title, url },
-      })),
-    });
-  }
-  if (dbFaq.length) {
-    about.push({
-      "@type": "FAQPage",
-      mainEntity: dbFaq.map((f) => ({
-        "@type": "Question",
-        name: f.question,
-        acceptedAnswer: { "@type": "Answer", text: f.answer },
       })),
     });
   }

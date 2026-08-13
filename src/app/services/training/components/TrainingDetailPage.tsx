@@ -69,8 +69,19 @@ export default async function TrainingDetailPage({
       courseMode: s.location ? "In-Person" : "Virtual",
       startDate: s.isoDate,
       endDate: s.isoDateTo,
-      ...(s.location
-        ? { location: { "@type": "Place", address: { "@type": "PostalAddress", streetAddress: s.location } } }
+      location: s.location
+        ? {
+            "@type": "Place",
+            address: {
+              "@type": "PostalAddress",
+              addressCountry: "US",
+              ...(s.streetAddress ? { streetAddress: s.streetAddress } : {}),
+              ...(s.extendedAddress ? { extendedAddress: s.extendedAddress } : {}),
+            },
+          }
+        : { "@type": "VirtualLocation" },
+      ...(s.productNames && s.productNames.length
+        ? { about: s.productNames.map((name) => ({ "@type": "Product", name })) }
         : {}),
       offers: {
         "@type": "Offer",

@@ -61,6 +61,7 @@ export default function CookieSettingsModal({
           type="button"
           className="cookie_settings_modal__dim"
           aria-label="Close cookie settings"
+          tabIndex={-1}
           onClick={() => onClose?.()}
         />
       ) : null}

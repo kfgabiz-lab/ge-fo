@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import CommonBanner02CopyLink from "./CommonBanner02CopyLink";
 
 export type CommonBanner02Variant = "default" | "expert";
+/** CTA icon — Figma 9120:126428 uses arrow (14px) instead of link */
+export type CommonBanner02LinkIcon = "link" | "arrow";
 
 type CommonBanner02Props = {
   variant?: CommonBanner02Variant;
@@ -16,6 +18,8 @@ type CommonBanner02Props = {
   backgroundSrc?: string;
   backgroundSrcMo?: string;
   sectionId?: string;
+  /** default: link icon · arrow: Icon/14px/Arrow (product expert CTA) */
+  linkIcon?: CommonBanner02LinkIcon;
 };
 
 const DEFAULT_BACKGROUND_SRC = "/img/devices/product/banner_configurator_bg.png";
@@ -39,6 +43,10 @@ function isExternalHref(href: string) {
   return href.startsWith("http://") || href.startsWith("https://");
 }
 
+function isMailtoHref(href: string) {
+  return href.startsWith("mailto:");
+}
+
 function BannerLink({
   href,
   linkExternal,
@@ -50,6 +58,14 @@ function BannerLink({
   className: string;
   children: ReactNode;
 }) {
+  if (isMailtoHref(href)) {
+    return (
+      <a href={href} className={className}>
+        {children}
+      </a>
+    );
+  }
+
   if (linkExternal || isExternalHref(href)) {
     return (
       <a
@@ -74,16 +90,20 @@ function CommonBanner02Link({
   href,
   linkExternal,
   linkLabel,
+  linkIcon,
 }: {
   href?: string;
   linkExternal?: boolean;
   linkLabel: string;
+  linkIcon: CommonBanner02LinkIcon;
 }) {
+  const iconClass =
+    linkIcon === "arrow" ? "icon_arrow-14" : "icon_link-14";
   const content = (
     <>
       {linkLabel}
       <span className="btn-text-30__icon">
-        <span className="icon_link-14" aria-hidden="true" />
+        <span className={iconClass} aria-hidden="true" />
       </span>
     </>
   );
@@ -113,6 +133,7 @@ function CommonBanner02Panel({
   contactEmail,
   backgroundSrc,
   backgroundSrcMo,
+  linkIcon,
 }: {
   variant: CommonBanner02Variant;
   title: string;
@@ -123,6 +144,7 @@ function CommonBanner02Panel({
   contactEmail?: string;
   backgroundSrc: string;
   backgroundSrcMo: string;
+  linkIcon: CommonBanner02LinkIcon;
 }) {
   return (
     <div className="common_banner_02__body">
@@ -155,7 +177,8 @@ function CommonBanner02Panel({
                 ))}
               </div>
             </div>
-            {contactEmail ? (
+            {/* Figma 9120:126428 — arrow 타입은 contact(email+Copy) 없음 */}
+            {contactEmail && linkIcon !== "arrow" ? (
               <div className="common_banner_02__contact">
                 <a
                   href={`mailto:${contactEmail}`}
@@ -163,14 +186,20 @@ function CommonBanner02Panel({
                 >
                   {contactEmail}
                 </a>
-                <CommonBanner02CopyLink value={contactEmail} label="Copy Link" />
+                <CommonBanner02CopyLink value={contactEmail} label="Copy Email" />
               </div>
             ) : null}
           </div>
+          {/* contact 있는 타입만 CTA mailto · arrow(contact 없음)는 linkHref */}
           <CommonBanner02Link
-            href={linkHref}
-            linkExternal={linkExternal}
+            href={
+              contactEmail && linkIcon !== "arrow"
+                ? `mailto:${contactEmail}`
+                : linkHref
+            }
+            linkExternal
             linkLabel={linkLabel}
+            linkIcon={linkIcon}
           />
         </>
       ) : (
@@ -187,6 +216,7 @@ function CommonBanner02Panel({
             href={linkHref}
             linkExternal={linkExternal}
             linkLabel={linkLabel}
+            linkIcon={linkIcon}
           />
         </>
       )}
@@ -206,6 +236,7 @@ export default function CommonBanner02({
   backgroundSrc = DEFAULT_BACKGROUND_SRC,
   backgroundSrcMo = DEFAULT_BACKGROUND_SRC_MO,
   sectionId,
+  linkIcon = "link",
 }: CommonBanner02Props) {
   const resolvedTitle =
     title ?? (variant === "expert" ? DEFAULT_EXPERT_TITLE : DEFAULT_TITLE);
@@ -229,6 +260,7 @@ export default function CommonBanner02({
       contactEmail={resolvedContactEmail}
       backgroundSrc={backgroundSrc}
       backgroundSrcMo={backgroundSrcMo}
+      linkIcon={linkIcon}
     />
   );
 
@@ -236,15 +268,16 @@ export default function CommonBanner02({
     variant === "default" && linkHref && linkWrapPanel,
   );
 
+  const sectionClassName = [
+    "common_banner_02",
+    variant === "expert" ? "common_banner_02--expert" : null,
+    linkIcon === "arrow" ? "common_banner_02--arrow" : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <section
-      className={
-        variant === "expert"
-          ? "common_banner_02 common_banner_02--expert"
-          : "common_banner_02"
-      }
-      id={sectionId}
-    >
+    <section className={sectionClassName} id={sectionId}>
       <div className="inner">
         {wrapPanelWithLink ? (
           <BannerLink

@@ -1,4 +1,5 @@
 import CommonLegalBody, { type CommonLegalPageContent } from "./CommonLegalBody";
+import "@/assets/css/company.css";
 
 type CommonLegalPageProps = {
   bodyId: string;

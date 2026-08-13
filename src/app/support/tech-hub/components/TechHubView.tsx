@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   getYoutubeIdFromUrl,
   getYoutubePosterSrc,
 } from "@/lib/youtubeEmbed";
 import { formatDisplayDate } from "@/lib/formatDate";
+import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
 import TechHubViewPlayer from "./TechHubViewPlayer";
 import type { TechHubDetail } from "@/data/support/techHubData";
 
@@ -21,6 +23,12 @@ function posterOf(videoUrl: string | null): string | undefined {
 }
 
 export default function TechHubView({ detail }: TechHubViewProps) {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    seedBreadcrumbTitle(pathname, detail.title);
+  }, [pathname, detail.title]);
+
   const chapters = detail.chapters;
   const isSeries = detail.versionCount >= 2;
 
@@ -107,14 +115,9 @@ export default function TechHubView({ detail }: TechHubViewProps) {
                               decoding="async"
                             />
                           </span>
-                          <span className="support_tech_hub_view__series-meta">
+                          <span className="support_tech_hub_view__series-meta support_tech_hub_view__series-meta--chapter">
                             <span className="support_tech_hub_view__chapter">
                               Chapter {ch.chapterName}
-                            </span>
-                            <span className="support_tech_hub_view__series-tit">
-                              <span className="support_tech_hub_view__series-tit-line">
-                                {detail.title}
-                              </span>
                             </span>
                           </span>
                         </button>
@@ -156,7 +159,7 @@ export default function TechHubView({ detail }: TechHubViewProps) {
                             decoding="async"
                           />
                         </span>
-                        <span className="support_tech_hub_view__series-meta">
+                        <span className="support_tech_hub_view__series-meta support_tech_hub_view__series-meta--title">
                           <span className="support_tech_hub_view__series-tit">
                             <span className="support_tech_hub_view__series-tit-line">
                               {rv.title}

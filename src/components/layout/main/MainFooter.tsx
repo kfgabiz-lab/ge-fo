@@ -263,7 +263,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
               <img loading="lazy" decoding="async" src="/img/logo_white.svg" alt="LS ELECTRIC" />
             </Link>
             <p className="main_footer_02__copyright">
-              © 2024 LS ELECTRIC Co., Ltd. All Rights Reserved.
+              © 2026 LS ELECTRIC Co., Ltd. All Rights Reserved.
             </p>
             <div className="main_footer_02__affiliate">
               <ClickAwayListener onClickAway={closeAffiliateMenu}>

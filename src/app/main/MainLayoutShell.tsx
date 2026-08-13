@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { Children, Fragment, type ReactNode } from "react";
 
 const MODAL_ONLY_PATHS = new Set([
   "/main/cookie-setting",
@@ -22,14 +22,14 @@ export default function MainLayoutShell({
   const pathname = usePathname();
 
   if (MODAL_ONLY_PATHS.has(pathname)) {
-    return <>{children}</>;
+    return <>{Children.toArray(children)}</>;
   }
 
   return (
     <>
-      {header}
-      {children}
-      {footer}
+      <Fragment key="main-layout-header">{header}</Fragment>
+      <Fragment key="main-layout-body">{Children.toArray(children)}</Fragment>
+      <Fragment key="main-layout-footer">{footer}</Fragment>
     </>
   );
 }

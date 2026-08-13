@@ -1,5 +1,15 @@
 /* Search All — Figma 4701:83900 (P-FO-SEARCH-020000T) */
 
+@keyframes search_all_ai_skel_pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
 @media (min-width: 781px) {
   /* Suspense/하이드레이션 전 footer 가 뷰포트에 뜨지 않도록 최소 높이 확보 */
   .search-page {
@@ -77,7 +87,7 @@
   section.search_all_hero .search_all_hero__field .MuiOutlinedInput-input::placeholder {
     font-size: 18px;
     line-height: 28px;
-    color: rgb(0 0 0 / 25%);
+    color: #888;
     opacity: 1;
   }
 
@@ -244,12 +254,68 @@
      보더는 CSS gradient — expand 시 PNG stretch로 상·하 테두리 두꺼워지는 것 방지 */
   section.search_all .search_all__ai {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-height: 198px;
     margin-bottom: 120px;
     padding: 40px 40px 30px;
     border: 2px solid transparent;
     border-radius: 4px;
     background: linear-gradient(#fff, #FFF) padding-box padding-box, linear-gradient(135deg, #028DFF 50%, #9535FF 100%) border-box;
     overflow: hidden;
+  }
+
+  section.search_all .search_all__ai + .search_all__ai,
+  section.search_all .search_all__ai-host + .search_all__ai-host {
+    margin-top: 40px;
+  }
+
+  section.search_all .search_all__ai:has(+ .search_all__ai),
+  section.search_all .search_all__ai-host:has(+ .search_all__ai-host) {
+    margin-bottom: 0;
+  }
+
+  section.search_all .search_all__ai-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  section.search_all .search_all__ai:not(.is-clamped) .search_all__ai-body {
+    padding-bottom: 0;
+  }
+
+  section.search_all .search_all__ai-host {
+    position: relative;
+    width: 100%;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--measuring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    visibility: hidden;
+    pointer-events: none;
+    max-height: none;
+    height: auto;
+    overflow: visible;
+  }
+
+  section.search_all .search_all__ai:not(.is-expanded).is-clamped {
+    height: 460px;
+    max-height: 460px;
+  }
+
+  section.search_all .search_all__ai:not(.is-expanded).is-clamped .search_all__ai-content {
+    overflow: hidden;
+  }
+
+  section.search_all .search_all__ai.is-expanded {
+    max-height: none;
+    height: auto;
   }
 
   section.search_all .search_all__ai-badge {
@@ -297,7 +363,7 @@
   }
 
   section.search_all .search_all__ai:not(.is-expanded) .search_all__ai-body {
-    height: 310px;
+    height: auto;
   }
 
   section.search_all .search_all__ai-list {
@@ -412,8 +478,8 @@
   }
 
   section.search_all .search_all__ai:not(.is-expanded) .search_all__ai-list {
-    max-height: 310px;
-    overflow: hidden;
+    max-height: none;
+    overflow: visible;
   }
 
   section.search_all .search_all__ai-fade {
@@ -474,6 +540,89 @@
 
   section.search_all .search_all__ai.is-expanded .search_all__ai-more-icon {
     transform: rotate(180deg);
+  }
+
+  /* Figma 9145:160214 — AI skeleton (h 460, no Read more) */
+  section.search_all .search_all__ai.search_all__ai--skeleton {
+    height: 460px;
+    min-height: 198px;
+    max-height: 460px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-head {
+    padding-left: 0;
+    gap: 16px 24px;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-body {
+    height: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: none;
+    overflow: hidden;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-more {
+    display: none;
+  }
+
+  section.search_all .search_all__ai-skel {
+    display: block;
+    background: #eff0f3;
+    border-radius: 4px;
+    animation: search_all_ai_skel_pulse 1.2s ease-in-out infinite;
+  }
+
+  section.search_all .search_all__ai-skel--badge {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+  }
+
+  section.search_all .search_all__ai-skel--tit {
+    flex: 1;
+    min-width: 0;
+    max-width: 839px;
+    height: 32px;
+  }
+
+  section.search_all .search_all__ai-skel--note {
+    flex-shrink: 1;
+    width: 427px;
+    max-width: 100%;
+    height: 23px;
+    margin-left: auto;
+  }
+
+  section.search_all .search_all__ai-skel-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 24px;
+  }
+
+  section.search_all .search_all__ai-skel--bullet {
+    flex-shrink: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 0;
+  }
+
+  section.search_all .search_all__ai-skel--bar {
+    flex: 1;
+    min-width: 0;
+    height: 24px;
   }
 
   section.search_all .search_all__section + .search_all__section {
@@ -2528,14 +2677,53 @@
     border: 2px solid transparent;
     border-radius: 4px;
     background: linear-gradient(#fff, #fff) padding-box,      linear-gradient(135deg, #028dff 50%, #9535ff 100%) border-box;
+    box-sizing: border-box;
+    min-height: 198px;
+  }
+
+  section.search_all .search_all__ai:not(.is-clamped) .search_all__ai-body {
+    padding-bottom: 0;
+  }
+
+  section.search_all .search_all__ai-host {
+    position: relative;
+    width: 100%;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--measuring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    visibility: hidden;
+    pointer-events: none;
+    max-height: none;
+    height: auto;
+    overflow: visible;
+  }
+
+  section.search_all .search_all__ai + .search_all__ai,
+  section.search_all .search_all__ai-host + .search_all__ai-host {
+    margin-top: 24px;
+  }
+
+  section.search_all .search_all__ai:has(+ .search_all__ai),
+  section.search_all .search_all__ai-host:has(+ .search_all__ai-host) {
+    margin-bottom: 0;
   }
 
   section.search_all .search_all__ai:not(.is-expanded) {
-    height: 500px;
+    height: auto;
+  }
+
+  section.search_all .search_all__ai:not(.is-expanded).is-clamped {
+    max-height: 460px;
+    height: 460px;
   }
 
   section.search_all .search_all__ai.is-expanded {
     height: auto;
+    max-height: none;
   }
 
   /* Figma 6571:103395 — content clip, flex-basis 0으로 more 영역 확보 */
@@ -2775,6 +2963,86 @@
 
   section.search_all .search_all__ai.is-expanded .search_all__ai-more {
     flex: 0 0 auto;
+  }
+
+  /* Figma 9145:160214 — AI skeleton (MO, h 460, no Read more) */
+  section.search_all .search_all__ai.search_all__ai--skeleton {
+    height: 460px;
+    max-height: 460px;
+    min-height: 198px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-head {
+    grid-template-columns: 40px 1fr;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-skel--badge {
+    grid-column: 1;
+    grid-row: 1;
+    width: 40px;
+    height: 40px;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-skel--note {
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+    max-width: calc(100% - 24px);
+    height: 19px;
+    margin-left: 0;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-skel--tit {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    max-width: none;
+    height: 26px;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-body {
+    height: auto;
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  section.search_all .search_all__ai.search_all__ai--skeleton .search_all__ai-more {
+    display: none;
+  }
+
+  section.search_all .search_all__ai-skel {
+    display: block;
+    background: #eff0f3;
+    border-radius: 4px;
+    animation: search_all_ai_skel_pulse 1.2s ease-in-out infinite;
+  }
+
+  section.search_all .search_all__ai-skel-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 24px;
+  }
+
+  section.search_all .search_all__ai-skel--bullet {
+    flex-shrink: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 0;
+  }
+
+  section.search_all .search_all__ai-skel--bar {
+    flex: 1;
+    min-width: 0;
+    height: 24px;
   }
 
   /* Figma 6571:103421 — search_all__section mobile */

@@ -7,6 +7,7 @@ import { createPortal } from "react-dom";
 import { gnbSearchContent, type GnbSearchTag } from "@/data/gnb/gnbSearchContent";
 import { buildSearchAllHref } from "@/data/search/searchAllContent";
 import { fetchPopularKeywords } from "@/data/search/searchKeywordData";
+import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
 
 type GnbSearchPanelProps = {
   isOpen: boolean;
@@ -50,6 +51,7 @@ export default function GnbSearchPanel({
 }: GnbSearchPanelProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
   const [isMobile, setIsMobile] = useState(false);
@@ -61,6 +63,11 @@ export default function GnbSearchPanel({
     () => false,
   );
   const hasQuery = query.length > 0;
+
+  useModalFocusTrap(panelRef, isOpen, {
+    autoFocus: false,
+    restoreFocus: true,
+  });
 
   const popularTags: readonly GnbSearchTag[] = popularKeywords.map((label) => ({
     label,
@@ -128,6 +135,7 @@ export default function GnbSearchPanel({
         />
       ) : null}
       <div
+        ref={panelRef}
         id="gnb-search-panel"
         className={isOpen ? "gnb_search is-open" : "gnb_search"}
         aria-hidden={!isOpen}

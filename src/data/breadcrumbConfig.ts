@@ -279,13 +279,14 @@ const configs: Record<string, BreadcrumbConfig> = {
     current: "Download Center",
   },
   "/support/tech-hub": {
-    crumbs: [{ label: "Support" }],
-    current: "LS ELECTRIC Tech Hub",
+    crumbs: [{ label: "Support" }, { label: "Resources" }],
+    current: "Tech Hub",
   },
   "/support/tech-hub/view": {
     crumbs: [
       { label: "Support" },
-      { label: "LS ELECTRIC Tech Hub", href: "/support/tech-hub" },
+      { label: "Resources" },
+      { label: "Tech Hub", href: "/support/tech-hub" },
     ],
     current: "Video",
   },

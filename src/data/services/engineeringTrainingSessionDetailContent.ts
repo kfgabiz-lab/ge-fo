@@ -13,6 +13,7 @@ export type EngineeringTrainingAgendaRow = {
 export type EngineeringTrainingSessionEvent = {
   title: string;
   startIso: string;
+  endIso?: string;
   timeFrom?: string;
   timeTo?: string;
   location?: string;
@@ -49,10 +50,13 @@ export type EngineeringTrainingSessionDetail = {
     location: {
       name: string;
       address: string;
+      streetAddress?: string;
+      extendedAddress?: string;
       phone: string;
       email: string;
     };
     productsCovered: string;
+    productNames?: string[];
     trainingType: string;
     registerLabel: string;
   };

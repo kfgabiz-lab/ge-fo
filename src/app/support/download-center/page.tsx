@@ -22,18 +22,19 @@ export default async function DownloadCenterPage() {
   const graph = buildSimpleWebPageGraph(PATHNAME, meta, {
     type: "CollectionPage",
     extra: {
-      hasPart: contents.content.map((item) => ({
-        "@type": "DigitalDocument",
-        name: item.title ?? "",
-        uploadDate: item.date ?? "",
-        hasPart: item.versions.flatMap((v) =>
-          v.files.map((f) => ({
+      hasPart: contents.content.flatMap((item) =>
+        item.versions.map((v) => ({
+          "@type": "DigitalDocument",
+          name: item.title ?? "",
+          uploadDate: item.date ?? "",
+          version: v.versionName ?? "",
+          hasPart: v.files.map((f) => ({
             "@type": "DataDownload",
             name: f.fileName ?? "",
             encodingFormat: f.fileExt ?? "",
           })),
-        ),
-      })),
+        })),
+      ),
     },
   });
   return (

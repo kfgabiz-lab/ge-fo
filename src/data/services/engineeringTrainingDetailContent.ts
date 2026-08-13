@@ -6,7 +6,10 @@ export type EngineeringTrainingSession = {
   trainingType: string;
   duration: string;
   location?: string;
+  streetAddress?: string;
+  extendedAddress?: string;
   productsCovered: string;
+  productNames?: string[];
   isoDate?: string;
   isoDateTo?: string;
   typeCodes?: string[];

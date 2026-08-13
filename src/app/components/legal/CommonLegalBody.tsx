@@ -166,13 +166,13 @@ export default function CommonLegalBody({
 
         <div className="common_privacy_policy__content">
           {activeContent ? (
-            <div
-              className="common_privacy_policy__body"
+            <article
+              className="common_privacy_policy__body ProseMirror"
               dangerouslySetInnerHTML={{ __html: activeContent }}
             />
           ) : (
             <>
-              <div className="common_privacy_policy__intro">
+              <article className="common_privacy_policy__intro ProseMirror">
                 {intro.map((paragraph, index) => (
                   <p key={`intro-${index}`}>{paragraph}</p>
                 ))}
@@ -186,7 +186,7 @@ export default function CommonLegalBody({
                 {outro.map((paragraph, index) => (
                   <p key={`outro-${index}`}>{paragraph}</p>
                 ))}
-              </div>
+              </article>
 
               {sections.map((section) => (
                 <article

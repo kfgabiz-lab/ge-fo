@@ -46,8 +46,7 @@ button {
   cursor: pointer;
 }
 
-:focus,
-:focus-visible {
+:focus:not(:focus-visible) {
   outline: none;
 }
 

@@ -51,6 +51,7 @@ export default function CommonModal({
           type="button"
           className="common_modal__dim"
           aria-label={dimLabel}
+          tabIndex={-1}
           onClick={() => onClose?.()}
         />
       ) : null}

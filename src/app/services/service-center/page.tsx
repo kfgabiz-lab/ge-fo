@@ -16,6 +16,11 @@ import JsonLd from "@/components/seo/JsonLd";
 import { buildSimpleWebPageGraph, pageUrl } from "@/lib/structuredData/builders";
 import { GICS_SUPPORT_URL } from "@/lib/structuredData/siteConfig";
 
+const ACTION_PLATFORMS = [
+  "http://schema.org/DesktopWebPlatform",
+  "http://schema.org/MobileWebPlatform",
+];
+
 const PATHNAME = "/services/service-center";
 
 export async function generateMetadata(
@@ -43,12 +48,20 @@ export default async function ServiceCenterPage() {
         {
           "@type": "CommunicateAction",
           name: "Request for Service",
-          target: { "@type": "EntryPoint", urlTemplate: GICS_SUPPORT_URL },
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: GICS_SUPPORT_URL,
+            actionPlatform: ACTION_PLATFORMS,
+          },
         },
         {
           "@type": "CommunicateAction",
           name: "Contact us",
-          target: { "@type": "EntryPoint", urlTemplate: pageUrl("/support/contact-us") },
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: pageUrl("/support/contact-us"),
+            actionPlatform: ACTION_PLATFORMS,
+          },
         },
         {
           "@type": "CommunicateAction",
@@ -59,6 +72,24 @@ export default async function ServiceCenterPage() {
           "@type": "CommunicateAction",
           name: "Download Center",
           target: pageUrl("/support/download-center"),
+        },
+        {
+          "@type": "CommunicateAction",
+          name: "Knowledge Base for Power Products",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: "https://gics.ls-electric.com/public/knowledgeBasePopup.do",
+            actionPlatform: ACTION_PLATFORMS,
+          },
+        },
+        {
+          "@type": "CommunicateAction",
+          name: "Knowledge Base for Automation Products",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: "https://sol.ls-electric.com/us/en/community/blog",
+            actionPlatform: ACTION_PLATFORMS,
+          },
         },
         {
           "@type": "CommunicateAction",
