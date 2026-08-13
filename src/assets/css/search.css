@@ -546,6 +546,10 @@
     transform: rotate(180deg);
   }
 
+  section.search_all .search_all__ai.is-expanded .search_all__ai-more {
+    margin-top: 30px;
+  }
+
   /* Figma 9145:160214 — AI skeleton (h 460, no Read more) */
   section.search_all .search_all__ai.search_all__ai--skeleton {
     height: 460px;
@@ -3032,6 +3036,7 @@
 
   section.search_all .search_all__ai.is-expanded .search_all__ai-more {
     flex: 0 0 auto;
+    margin-top: 30px;
   }
 
   /* Figma 9145:160214 — AI skeleton (MO, h 460, no Read more) */

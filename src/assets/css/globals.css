@@ -109,7 +109,6 @@ body {
   transition: transform 0.2s ease;
 }
 
-.skip_to_content:focus,
 .skip_to_content:focus-visible {
   transform: translateY(0);
   outline: var(--focus-outline-width) solid var(--focus-outline-inner);
@@ -128,6 +127,12 @@ main:focus {
   outline: none;
 }
 
+/* Mouse/touch focus — no dual ring (keyboard only via :focus-visible) */
+:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
 /* Keyboard focus outline — dual ring (white + navy) for light/dark backgrounds */
 :focus-visible {
   outline: var(--focus-outline-width) solid var(--focus-outline-inner);
@@ -135,10 +140,39 @@ main:focus {
   box-shadow: var(--focus-ring-shadow);
 }
 
+/* MUI — keep MUI focus (fieldset / Mui-focusVisible), not global dual ring */
+.MuiButtonBase-root:focus-visible,
+.MuiCheckbox-root:focus-visible,
+.MuiIconButton-root:focus-visible,
+.MuiMenuItem-root:focus-visible,
+.MuiOutlinedInput-root:focus-visible,
+.MuiOutlinedInput-input:focus-visible,
+.MuiInputBase-root:focus-visible,
+.MuiInputBase-input:focus-visible,
+.MuiSelect-select:focus-visible,
+.MuiPickersDay-root:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
 @media (forced-colors: active) {
   :focus-visible {
     outline: 2px solid Highlight;
     outline-offset: var(--focus-outline-offset);
+    box-shadow: none;
+  }
+
+  .MuiButtonBase-root:focus-visible,
+  .MuiCheckbox-root:focus-visible,
+  .MuiIconButton-root:focus-visible,
+  .MuiMenuItem-root:focus-visible,
+  .MuiOutlinedInput-root:focus-visible,
+  .MuiOutlinedInput-input:focus-visible,
+  .MuiInputBase-root:focus-visible,
+  .MuiInputBase-input:focus-visible,
+  .MuiSelect-select:focus-visible,
+  .MuiPickersDay-root:focus-visible {
+    outline: none;
     box-shadow: none;
   }
 }
@@ -2180,9 +2214,9 @@ section.component-guide .guide_field .MuiOutlinedInput-root:hover fieldset,
 section.devices_product_downloads .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_download_contents .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_download_search .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_contact_form .guide_field .MuiOutlinedInput-root:hover fieldset, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root:hover fieldset , section.support_service_training_request .guide_field .MuiOutlinedInput-root:hover fieldset, section.devices_explore .guide_field .MuiOutlinedInput-root:hover fieldset, section.common_privacy_policy .guide_field .MuiOutlinedInput-root:hover fieldset {
   border-color: var(--color-border);
 }
-section.component-guide .guide_field .MuiOutlinedInput-root.Mui-focused fieldset,
-section.devices_product_downloads .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_download_contents .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_download_search .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_contact_form .guide_field .MuiOutlinedInput-root.Mui-focused fieldset, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root.Mui-focused fieldset , section.support_service_training_request .guide_field .MuiOutlinedInput-root.Mui-focused fieldset, section.devices_explore .guide_field .MuiOutlinedInput-root.Mui-focused fieldset, section.common_privacy_policy .guide_field .MuiOutlinedInput-root.Mui-focused fieldset {
-  border-color: var(--color-border);
+section.component-guide .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset,
+section.devices_product_downloads .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset , section.support_download_contents .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset , section.support_download_search .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset , section.support_where_to_buy_contents .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset , section.support_where_to_buy_search .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset , section.support_contact_form .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset, section.support_service_training_curriculum .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset , section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset , section.support_service_training_session_detail .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset , section.support_service_training_request .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset, section.devices_explore .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset, section.common_privacy_policy .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset {
+  border-color: var(--color-text-muted);
   border-width: 1px;
 }
 section.component-guide .guide_field .MuiOutlinedInput-root.Mui-error fieldset,
@@ -2537,7 +2571,7 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
 .guide_field__select-menu.MuiPaper-root,
 .guide_field__select-menu.MuiPopover-paper,
 .guide_field__select-menu.MuiMenu-paper {
-  margin-top: 0 !important;
+  margin-top: -1px !important;
   border: 1px solid var(--color-text-light, #888);
   /* border-top: none; */
   border-top-left-radius: 0 !important;
@@ -2610,15 +2644,14 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   color: var(--color-error);
 }
 
-/* === Focus outline (MUI) — dual ring via global tokens === */
-/* Text fields keep bordered fieldset as the focus cue */
+/* === Focus (MUI) — use MUI focus cues, not global dual ring === */
+/* Text / select: bordered fieldset is the focus cue */
 .MuiOutlinedInput-root.Mui-focused,
 .MuiOutlinedInput-root.Mui-focused.Mui-error {
   outline: none;
   box-shadow: none;
 }
 
-/* Search inputs — MUI fieldset focus only (no dual :focus-visible ring) */
 .guide_field--search .MuiOutlinedInput-input:focus,
 .guide_field--search .MuiOutlinedInput-input:focus-visible,
 .gnb_search__field .MuiOutlinedInput-input:focus,
@@ -2627,12 +2660,12 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   box-shadow: none;
 }
 
+/* ButtonBase / Checkbox / MenuItem: Mui-focusVisible only (no dual ring) */
 .MuiCheckbox-root.Mui-focusVisible,
 .MuiButtonBase-root.Mui-focusVisible,
 .MuiMenuItem-root.Mui-focusVisible {
-  outline: var(--focus-outline-width) solid var(--focus-outline-inner);
-  outline-offset: var(--focus-outline-offset);
-  box-shadow: var(--focus-ring-shadow);
+  outline: none;
+  box-shadow: none;
 }
 
 @media (max-width: 780px) {
