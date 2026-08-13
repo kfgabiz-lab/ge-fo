@@ -1656,7 +1656,6 @@ color: #fff;
 #gnb-mega-panel-company .gnb_mega__item.is-active,
 #gnb-mega-panel-company .gnb_mega__item:focus-visible {
   background: #f5f7fa;
-  outline: none;
 }
 
 #gnb-mega-panel-markets .gnb_mega__item-head,
@@ -3689,7 +3688,6 @@ color: #fff;
 .gnb_global_menu__item:focus-visible {
   color: #0f1f45;
   background: #f5f7fa;
-  outline: none;
 }
 
 .gnb_global_menu__item.is-disabled,
@@ -3965,9 +3963,10 @@ color: #fff;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-select:focus-within {
-    /* outline: 2px solid #0f1f45;
-    outline-offset: 2px;
-    border-radius: 2px; */
+    outline: var(--focus-outline-width) solid var(--focus-outline-inner);
+    outline-offset: var(--focus-outline-offset);
+    box-shadow: var(--focus-ring-shadow);
+    border-radius: 2px;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_shell.is-open {

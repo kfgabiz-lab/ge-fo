@@ -1,10 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GNB_CLOSE_EVENT } from "@/lib/navigation/gnbCloseEvent";
 import { createThrottledScrollHandler } from "@/lib/createThrottledScrollHandler";
+import {
+  focusFirstMegaContent,
+  handleMegaPanelArrowKey,
+} from "@/lib/gnbKeyboardNav";
+import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
 import { getWindowScrollY, lockPageScroll, unlockPageScroll } from "@/lib/lenisScroll";
 import {
   GNB_SCROLL_THROTTLE_MS,
@@ -209,6 +214,11 @@ export default function GnbMenu({
   const scrollVisibilityRef = useRef<GnbScrollVisibility>("visible");
   const scrollModeChangeAtRef = useRef(0);
   const megaOpenScrollYRef = useRef(0);
+  const navListRef = useRef<HTMLUListElement>(null);
+  const megaPanelRef = useRef<HTMLDivElement>(null);
+  const mobileShellRef = useRef<HTMLDivElement>(null);
+  const megaTriggerRef = useRef<HTMLElement | null>(null);
+  const focusMegaOnOpenRef = useRef(false);
   const [isMegaActive, setIsMegaActive] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isGlobalOpen, setIsGlobalOpen] = useState(false);
@@ -232,6 +242,17 @@ export default function GnbMenu({
   const showMegaPanel = Boolean(activeNavId && megaMenu);
   const isOverlayOpen = isMegaActive || isSearchOpen;
   const isDimMounted = isOverlayOpen || holdMegaDim;
+
+  useModalFocusTrap(megaPanelRef, isMegaActive && showMegaPanel, {
+    autoFocus: false,
+    restoreFocus: false,
+    additionalRefs: [navListRef],
+  });
+
+  useModalFocusTrap(mobileShellRef, isMobileMenuOpen, {
+    autoFocus: true,
+    restoreFocus: true,
+  });
 
   if (pathname !== prevPathname) {
     setPrevPathname(pathname);
@@ -390,6 +411,109 @@ export default function GnbMenu({
     [activeNavId, closeMega, openMega],
   );
 
+  const getDepth1Items = useCallback(() => {
+    if (!navListRef.current) return [] as HTMLElement[];
+    return Array.from(
+      navListRef.current.querySelectorAll<HTMLElement>(
+        ":scope > li > button, :scope > li > a",
+      ),
+    );
+  }, []);
+
+  const focusMegaTrigger = useCallback(() => {
+    const trigger = megaTriggerRef.current;
+    if (!trigger) return;
+    requestAnimationFrame(() => {
+      trigger.focus();
+    });
+  }, []);
+
+  const handleDepth1KeyDown = useCallback(
+    (
+      event: ReactKeyboardEvent<HTMLElement>,
+      item: GnbNavItem,
+      index: number,
+    ) => {
+      const items = getDepth1Items();
+
+      if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+        event.preventDefault();
+        const delta = event.key === "ArrowRight" ? 1 : -1;
+        const nextIndex = (index + delta + items.length) % items.length;
+        const nextEl = items[nextIndex];
+        const nextItem = navItems[nextIndex];
+        nextEl?.focus();
+
+        if (isMegaActive) {
+          if (nextItem?.megaMenu) {
+            megaTriggerRef.current = nextEl;
+            focusMegaOnOpenRef.current = true;
+            openMega(nextItem.id);
+          } else {
+            closeMega();
+          }
+        }
+        return;
+      }
+
+      if (event.key === "Home") {
+        event.preventDefault();
+        items[0]?.focus();
+        return;
+      }
+
+      if (event.key === "End") {
+        event.preventDefault();
+        items[items.length - 1]?.focus();
+        return;
+      }
+
+      if (event.key === "ArrowDown" && item.megaMenu) {
+        event.preventDefault();
+        megaTriggerRef.current = event.currentTarget;
+        if (activeNavId === item.id) {
+          focusFirstMegaContent(megaPanelRef.current);
+        } else {
+          focusMegaOnOpenRef.current = true;
+          openMega(item.id);
+        }
+        return;
+      }
+
+      if (event.key === "Escape" && isMegaActive) {
+        event.preventDefault();
+        closeMega();
+        event.currentTarget.focus();
+      }
+    },
+    [
+      activeNavId,
+      closeMega,
+      getDepth1Items,
+      isMegaActive,
+      navItems,
+      openMega,
+    ],
+  );
+
+  const handleMegaPanelKeyDown = useCallback(
+    (event: ReactKeyboardEvent<HTMLDivElement>) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMega();
+        focusMegaTrigger();
+        return;
+      }
+
+      const result = handleMegaPanelArrowKey(event.nativeEvent);
+      if (result === "trigger") {
+        closeMega();
+        focusMegaTrigger();
+      }
+    },
+    [closeMega, focusMegaTrigger],
+  );
+
   const closeMobileMenu = useCallback(() => {
     closeAllGnbMenus();
   }, [closeAllGnbMenus]);
@@ -478,6 +602,17 @@ export default function GnbMenu({
   }, [showMegaPanel, activeNavId]);
 
   useEffect(() => {
+    if (!showMegaPanel || !isPanelOpen || !focusMegaOnOpenRef.current) return;
+
+    focusMegaOnOpenRef.current = false;
+    const frame = window.requestAnimationFrame(() => {
+      focusFirstMegaContent(megaPanelRef.current);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [showMegaPanel, isPanelOpen, activeNavId]);
+
+  useEffect(() => {
     onMobileMenuOpenChange?.(isMobileMenuOpen);
   }, [isMobileMenuOpen, onMobileMenuOpenChange]);
 
@@ -523,6 +658,7 @@ export default function GnbMenu({
       }
 
       closeMega();
+      focusMegaTrigger();
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -534,6 +670,7 @@ export default function GnbMenu({
   }, [
     closeMega,
     closeSearch,
+    focusMegaTrigger,
     isDimMounted,
     isSearchOpen,
   ]);
@@ -602,8 +739,11 @@ export default function GnbMenu({
   }, [closeMega, isMain, isMobileMenuOpen, isOverlayOpen, isScrollControlled]);
 
   const navList = (
-    <ul className={isMain ? "main_header__nav-list" : "gnb_nav_list"}>
-      {navItems.map((item) => {
+    <ul
+      ref={navListRef}
+      className={isMain ? "main_header__nav-list" : "gnb_nav_list"}
+    >
+      {navItems.map((item, index) => {
         const hasMega = Boolean(item.megaMenu);
         const isMegaOpen = activeNavId === item.id;
         const isActive = hasMega && isMegaOpen;
@@ -627,7 +767,11 @@ export default function GnbMenu({
                 aria-haspopup="true"
                 aria-controls={panelId}
                 onPointerDown={() => onRevealHeader?.()}
-                onClick={() => toggleMega(item.id)}
+                onClick={(event) => {
+                  megaTriggerRef.current = event.currentTarget;
+                  toggleMega(item.id);
+                }}
+                onKeyDown={(event) => handleDepth1KeyDown(event, item, index)}
               >
                 {item.label}
               </button>
@@ -642,6 +786,7 @@ export default function GnbMenu({
               prefetch={false}
               className={isMain ? "main_header__nav-link" : "link"}
               onClick={handleGnbLinkClick}
+              onKeyDown={(event) => handleDepth1KeyDown(event, item, index)}
             >
               {item.label}
             </Link>
@@ -894,6 +1039,7 @@ export default function GnbMenu({
 
   const gnbMobilePanel = (
     <div
+      ref={mobileShellRef}
       className={
         isMobileMenuOpen ? "gnb_mobile_shell is-open" : "gnb_mobile_shell"
       }
@@ -924,10 +1070,13 @@ export default function GnbMenu({
 
     megaPanel = (
       <div
+        ref={megaPanelRef}
         id={megaMenu.panelId}
         role="region"
         aria-label={`${activeNav?.label ?? ""} menu`}
         className={getMegaPanelClassName(megaMenu, isPanelOpen)}
+        data-gnb-mega-root
+        onKeyDown={handleMegaPanelKeyDown}
       >
         {isDevicesMegaMenu(megaMenu) ? (
           <PanelComponent
@@ -937,14 +1086,20 @@ export default function GnbMenu({
             onCategoryChange={setActiveCategoryId}
             onDepth3Change={setActiveDepth3Id}
             onLinkClick={handleGnbLinkClick}
-            onClose={closeMega}
+            onClose={() => {
+              closeMega();
+              focusMegaTrigger();
+            }}
           />
         ) : (
           <PanelComponent
             title={activeNav?.label ?? ""}
             menu={megaMenu}
             onItemClick={handleGnbLinkClick}
-            onClose={closeMega}
+            onClose={() => {
+              closeMega();
+              focusMegaTrigger();
+            }}
           />
         )}
       </div>
@@ -994,6 +1149,7 @@ export default function GnbMenu({
           type="button"
           className={isOverlayOpen ? "gnb_mega_dim is-open" : "gnb_mega_dim"}
           aria-label="메뉴 닫기"
+          tabIndex={-1}
           data-lenis-prevent
           onWheel={(event) => event.preventDefault()}
           onTouchMove={(event) => event.preventDefault()}

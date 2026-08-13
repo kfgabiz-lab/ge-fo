@@ -29,10 +29,11 @@ export default function GnbSectionsMegaPanel({
       </div>
       <div className="gnb_mega__divider" aria-hidden />
       <div className="gnb_mega__columns">
-        {sections.map((section) => (
+        {sections.map((section, index) => (
           <SectionsColumn
             key={section.id}
             section={section}
+            colIndex={index}
             onItemClick={onItemClick}
           />
         ))}
@@ -43,13 +44,19 @@ export default function GnbSectionsMegaPanel({
 
 function SectionsColumn({
   section,
+  colIndex,
   onItemClick,
 }: {
   section: GnbSimpleMegaSection;
+  colIndex: number;
   onItemClick?: () => void;
 }) {
   return (
-    <section className="gnb_mega__col" aria-label={section.label}>
+    <section
+      className="gnb_mega__col"
+      aria-label={section.label}
+      data-gnb-col={colIndex}
+    >
       <p className="gnb_mega__col-label">{section.label}</p>
       <div className="gnb_mega__col-list">
         {section.items.map((item) => (

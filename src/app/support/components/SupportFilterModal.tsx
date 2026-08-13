@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
-import { getWindowScrollY, lockPageScroll, unlockPageScroll } from "@/lib/lenisScroll";
+import { useRef, type ReactNode } from "react";
+import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
+import { useModalDismiss } from "@/lib/useModalDismiss";
 
 type SupportFilterModalProps = {
   open: boolean;
@@ -16,24 +17,10 @@ export default function SupportFilterModal({
   applyLabel,
   children,
 }: SupportFilterModalProps) {
-  useEffect(() => {
-    if (!open) return;
+  const sheetRef = useRef<HTMLDivElement>(null);
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    const scrollY = getWindowScrollY();
-    lockPageScroll(scrollY);
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      unlockPageScroll(scrollY);
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [onClose, open]);
+  useModalFocusTrap(sheetRef, open);
+  useModalDismiss(open, onClose);
 
   if (!open) {
     return null;
@@ -41,8 +28,12 @@ export default function SupportFilterModal({
 
   return (
     <div className="support_download_filter-modal" role="dialog" aria-modal="true">
-      <div className="support_download_filter-modal__overlay" onClick={onClose} aria-hidden />
-      <div className="support_download_filter-modal__sheet">
+      <div
+        className="support_download_filter-modal__overlay"
+        onClick={onClose}
+        aria-hidden
+      />
+      <div ref={sheetRef} className="support_download_filter-modal__sheet">
         <header className="support_download_filter-modal__head">
           <h2 className="support_download_filter-modal__tit">Filter</h2>
           <button

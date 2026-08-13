@@ -36,8 +36,17 @@
   --btn-lv03-px: 24px;
   --btn-icon-56: 56px;
   --btn-rolling-50: 50px;
-  --mui-focus-outline-color: var(--color-primary);
-  --mui-focus-outline-offset: 2px;
+  /* Keyboard focus ring — dual contrast (visible on light & dark) */
+  --focus-outline-inner: #fff;
+  --focus-outline-outer: var(--color-primary);
+  --focus-outline-width: 2px;
+  --focus-outline-offset: 2px;
+  --focus-outline-color: var(--focus-outline-outer);
+  --focus-ring-shadow: 0 0 0
+    calc(var(--focus-outline-offset) + var(--focus-outline-width))
+    var(--focus-outline-outer);
+  --mui-focus-outline-color: var(--focus-outline-outer);
+  --mui-focus-outline-offset: var(--focus-outline-offset);
 }
 
 /* Base */
@@ -76,6 +85,21 @@ html,
 body {
   max-width: 100%;
   overflow-x: clip;
+}
+
+/* Keyboard focus outline — dual ring (white + navy) for light/dark backgrounds */
+:focus-visible {
+  outline: var(--focus-outline-width) solid var(--focus-outline-inner);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: var(--focus-outline-offset);
+    box-shadow: none;
+  }
 }
 
 /* 오버레이(GNB·모달) 오픈 시 페이지 스크롤 잠금
@@ -529,8 +553,9 @@ section .btn-icon-56:hover .icon_arrow-20 {
 }
 
 .scroll_to_top__btn:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: var(--focus-outline-width) solid var(--focus-outline-inner);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 .scroll_to_top__icon {
@@ -2541,18 +2566,20 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   color: var(--color-error);
 }
 
-/* === MUI focus outline === */
-.main_footer,
-.common_footer {
-  --mui-focus-outline-color: #fff;
+/* === Focus outline (MUI) — dual ring via global tokens === */
+/* Text fields keep bordered fieldset as the focus cue */
+.MuiOutlinedInput-root.Mui-focused,
+.MuiOutlinedInput-root.Mui-focused.Mui-error {
+  outline: none;
+  box-shadow: none;
 }
 
-.MuiOutlinedInput-root.Mui-focused,
-.MuiOutlinedInput-root.Mui-focused.Mui-error,
 .MuiCheckbox-root.Mui-focusVisible,
 .MuiButtonBase-root.Mui-focusVisible,
 .MuiMenuItem-root.Mui-focusVisible {
-  outline: none;
+  outline: var(--focus-outline-width) solid var(--focus-outline-inner);
+  outline-offset: var(--focus-outline-offset);
+  box-shadow: var(--focus-ring-shadow);
 }
 
 @media (max-width: 780px) {

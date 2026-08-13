@@ -128,6 +128,7 @@ export default function ContactUsViewResponseDetailModal({
           type="button"
           className="common_modal__dim"
           aria-label="Close dialog"
+          tabIndex={-1}
           onClick={onClose}
         />
       ) : null}

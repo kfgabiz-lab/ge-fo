@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import GnbGlobalMenu from "@/components/layout/shared/GnbGlobalMenu";
 import { gnbGlobalTriggerLabel } from "@/data/gnb/gnbGlobalContent";
+import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
 
 type GnbGlobalTriggerProps = {
   isOpen: boolean;
@@ -42,6 +43,12 @@ export default function GnbGlobalTrigger({
   children,
 }: GnbGlobalTriggerProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useModalFocusTrap(wrapRef, isOpen, {
+    autoFocus: false,
+    restoreFocus: false,
+  });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -66,9 +73,38 @@ export default function GnbGlobalTrigger({
     };
   }, [isOpen, onClose]);
 
+  const focusTrigger = () => {
+    requestAnimationFrame(() => {
+      buttonRef.current?.focus();
+    });
+  };
+
+  const handleTriggerKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      if (!isOpen) {
+        onToggle();
+        return;
+      }
+
+      const firstItem = wrapRef.current?.querySelector<HTMLElement>(
+        '#gnb-global-menu [role="menuitem"]',
+      );
+      firstItem?.focus();
+      return;
+    }
+
+    if (event.key === "Escape" && isOpen) {
+      event.preventDefault();
+      onClose();
+      focusTrigger();
+    }
+  };
+
   return (
     <div ref={wrapRef} className={wrapClassName}>
       <button
+        ref={buttonRef}
         type="button"
         className={
           isOpen ? `${buttonClassName} is-active` : buttonClassName
@@ -78,10 +114,15 @@ export default function GnbGlobalTrigger({
         aria-controls="gnb-global-menu"
         aria-haspopup="menu"
         onClick={onToggle}
+        onKeyDown={handleTriggerKeyDown}
       >
         {children ?? <span className="ir">{buttonLabel}</span>}
       </button>
-      <GnbGlobalMenu isOpen={isOpen} />
+      <GnbGlobalMenu
+        isOpen={isOpen}
+        onClose={onClose}
+        onRequestFocusTrigger={focusTrigger}
+      />
     </div>
   );
 }

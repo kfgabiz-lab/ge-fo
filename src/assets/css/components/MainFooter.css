@@ -192,7 +192,6 @@
 .main_footer__select-menu__option:hover,
 .main_footer__select-menu__option:focus-visible {
   background: rgb(255 255 255 / 12%);
-  outline: none;
 }
 
 /* main_footer_02__left affiliate — menu bottom aligns with trigger top-left (opens up) */
