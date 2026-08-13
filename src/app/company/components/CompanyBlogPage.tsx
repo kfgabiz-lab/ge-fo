@@ -64,7 +64,7 @@ export default function CompanyBlogPage({
     [categoryMap],
   );
 
-  const { featured, excludeWhere } = useFeaturedFeed<BlogCardItem>({
+  const { featured } = useFeaturedFeed<BlogCardItem>({
     slug: "blog-data",
     where: BLOG_STATUS_WHERE,
     sort: "createdAt,desc",
@@ -81,7 +81,6 @@ export default function CompanyBlogPage({
         ...BLOG_STATUS_WHERE,
         ...(categoryCode ? { "eq_blog.category": categoryCode } : {}),
         ...(search ? { "title|content": search } : {}),
-        ...excludeWhere,
       },
       sort:
         sort === "oldest"
@@ -107,7 +106,7 @@ export default function CompanyBlogPage({
     return () => {
       alive = false;
     };
-  }, [categoryCode, search, sort, pageIndex, excludeWhere]);
+  }, [categoryCode, search, sort, pageIndex]);
 
   const listItems = useMemo(
     () => rows.map((row) => toBlogCard(row, categoryMap)),

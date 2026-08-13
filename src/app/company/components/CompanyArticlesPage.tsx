@@ -54,7 +54,7 @@ export default function CompanyArticlesPage() {
     (_, i) => String(currentYear - i),
   );
 
-  const { featured, excludeWhere } = useFeaturedFeed<ArticlesFeaturedCard>({
+  const { featured } = useFeaturedFeed<ArticlesFeaturedCard>({
     slug: "articles-data",
     where: ARTICLES_STATUS_WHERE,
     sort: "createdAt,desc",
@@ -72,7 +72,6 @@ export default function CompanyArticlesPage() {
         ...(search ? { "title|content": search } : {}),
         ...(month ? { month_publish_dttm: month } : {}),
         ...(year ? { year_publish_dttm: year } : {}),
-        ...excludeWhere,
       },
       sort:
         sort === "oldest"
@@ -98,7 +97,7 @@ export default function CompanyArticlesPage() {
     return () => {
       alive = false;
     };
-  }, [pageIndex, search, sort, month, year, excludeWhere]);
+  }, [pageIndex, search, sort, month, year]);
 
   const listItems = useMemo<CompanyFeedListItem[]>(
     () =>
