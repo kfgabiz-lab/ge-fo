@@ -86,13 +86,21 @@ export interface ParentCurriculum {
   training_course?: string; 
 }
 
+interface CurrDtlProductRef {
+  id?: number | string;
+  productId?: number | string;
+  depth1?: number | string;
+  depth2?: number | string;
+  depth3?: number | string;
+}
+
 interface CurrDtlDataJson {
   curriculum_detail1?: CurriculumDetail1;
   curriculum_detail2?: CurriculumDetail2;
   curriculum_detail3?: CurriculumDetail3;
   training_schedule?: TrainingScheduleItemRaw[];
-  power_list?: unknown[] | null;
-  automation_list?: unknown[] | null;
+  power_list?: CurrDtlProductRef[] | null;
+  automation_list?: CurrDtlProductRef[] | null;
 }
 
 interface ParsedRow {
@@ -120,16 +128,25 @@ const MONTH_ABBR = [
   "Dec",
 ];
 
+function depth3Of(ref: CurrDtlProductRef | null | undefined): number | null {
+  if (ref == null || typeof ref !== "object") return null;
+  const id = Number(ref.depth3);
+  return Number.isFinite(id) ? id : null;
+}
+
+function productRefsOf(json: CurrDtlDataJson): CurrDtlProductRef[] {
+  return [...(json.power_list ?? []), ...(json.automation_list ?? [])];
+}
+
 function extractProductNames(
   json: CurrDtlDataJson,
   nameMap: Map<number, string>,
 ): string[] {
-  const ids = [...(json.power_list ?? []), ...(json.automation_list ?? [])];
   const out: string[] = [];
   const seen = new Set<number>();
-  for (const raw of ids) {
-    const id = Number(raw);
-    if (!Number.isFinite(id) || seen.has(id)) continue;
+  for (const ref of productRefsOf(json)) {
+    const id = depth3Of(ref);
+    if (id == null || seen.has(id)) continue;
     seen.add(id);
     const name = nameMap.get(id);
     if (name) out.push(name);
@@ -479,9 +496,9 @@ export async function fetchProductNamesForRows(
   const ids = new Set<number>();
   for (const raw of rows) {
     const json = (raw.dataJson ?? {}) as CurrDtlDataJson;
-    for (const v of [...(json.power_list ?? []), ...(json.automation_list ?? [])]) {
-      const id = Number(v);
-      if (Number.isFinite(id)) ids.add(id);
+    for (const ref of productRefsOf(json)) {
+      const id = depth3Of(ref);
+      if (id != null) ids.add(id);
     }
   }
   return fetchProductNamesByIds(Array.from(ids));
