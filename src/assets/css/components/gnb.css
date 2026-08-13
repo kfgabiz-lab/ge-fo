@@ -2745,17 +2745,28 @@ color: #fff;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #ddd transparent;
 }
 
 .gnb_mega__depth3-scroll::-webkit-scrollbar {
   width: 3px;
 }
 
+.gnb_mega__depth3-scroll::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
 .gnb_mega__depth3-scroll::-webkit-scrollbar-thumb {
   border-radius: 2px;
   background: #ddd;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .gnb_mega__depth3-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #ddd transparent;
+  }
 }
 
 .gnb_mega__depth3-list {
