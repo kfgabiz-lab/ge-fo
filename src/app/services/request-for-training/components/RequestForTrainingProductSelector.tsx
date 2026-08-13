@@ -200,11 +200,12 @@ export default function RequestForTrainingProductSelector({
       <RequestForTrainingFieldLabel
         htmlFor={`${formId}-product-category`}
         required={fields.products.required}
+        className="support_service_training_request__field-label--products"
       >
         {fields.products.label}
       </RequestForTrainingFieldLabel>
 
-      <div className="support_service_training_request__form-row support_service_training_request__form-row--selects">
+      <div className="support_service_training_request__form-row support_service_training_request__form-row--2 support_service_training_request__form-row--selects">
         <GuideSelect
           className="guide_field guide_field--h50 support_service_training_request__select"
           value={categoryType}
@@ -214,7 +215,7 @@ export default function RequestForTrainingProductSelector({
           disabled={!isEngineeringTrack}
           displayEmpty
           IconComponent={GuideSelectIcon}
-          inputProps={{ "aria-label": "Product category", id: `${formId}-product-category` }}
+          inputProps={{ "aria-label": fields.products.label, id: `${formId}-product-category` }}
           renderValue={(value) => {
             const current = categoryTypeOptions.find((o) => o.id === value);
             return renderSelectValue(current ? current.label : CATEGORY_PLACEHOLDER, !current);
@@ -280,6 +281,7 @@ export default function RequestForTrainingProductSelector({
                       className="guide_checkbox support_service_training_request__checkbox"
                       disableRipple
                       checked={checked}
+                      inputProps={{ "aria-label": product.name }}
                       onChange={() =>
                         toggleProduct(
                           product.id,
@@ -308,6 +310,7 @@ export default function RequestForTrainingProductSelector({
                   checked={selectedKeys.has(
                     productKey(selectedGroup.id, otherId(selectedGroup.id)),
                   )}
+                  inputProps={{ "aria-label": OTHER_LABEL }}
                   onChange={() =>
                     toggleProduct(
                       otherId(selectedGroup.id),

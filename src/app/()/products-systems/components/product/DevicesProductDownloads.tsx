@@ -142,36 +142,9 @@ function DevicesProductDownloadsBody({
                 <strong>{totalElements.toLocaleString()}</strong> results
               </p>
               <div className="devices_product_downloads__search-row devices_product_downloads__search-row--pc">
-                <FormControl className="guide_field guide_field--w200">
-                  <GuideSelect
-                    value={sort}
-                    displayEmpty
-                    onChange={(event) =>
-                      setSort(event.target.value as DownloadCenterSort)
-                    }
-                    IconComponent={GuideSelectIcon}
-                    inputProps={{ "aria-label": "Sort by" }}
-                    renderValue={(value) => {
-                      const text = productDownloadsSortLabel(
-                        value as DownloadCenterSort,
-                      );
-                      return (
-                        <span className="guide_field__select-value" title={text}>
-                          {text}
-                        </span>
-                      );
-                    }}
-                  >
-                    {productDownloadsSortOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </GuideSelect>
-                </FormControl>
                 <TextField
                   className="guide_field guide_field--search"
-                  placeholder=""
+                  placeholder="key word"
                   aria-label="key word downloads"
                   value={keyword}
                   onChange={(event) => setKeyword(event.target.value)}
@@ -205,6 +178,33 @@ function DevicesProductDownloadsBody({
                     },
                   }}
                 />
+                <FormControl className="guide_field guide_field--w200">
+                  <GuideSelect
+                    value={sort}
+                    displayEmpty
+                    onChange={(event) =>
+                      setSort(event.target.value as DownloadCenterSort)
+                    }
+                    IconComponent={GuideSelectIcon}
+                    inputProps={{ "aria-label": "Sort by" }}
+                    renderValue={(value) => {
+                      const text = productDownloadsSortLabel(
+                        value as DownloadCenterSort,
+                      );
+                      return (
+                        <span className="guide_field__select-value" title={text}>
+                          {text}
+                        </span>
+                      );
+                    }}
+                  >
+                    {productDownloadsSortOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </GuideSelect>
+                </FormControl>
               </div>
             </div>
             <div className="devices_product_downloads__list">

@@ -95,7 +95,7 @@ export default function WhatWeDoSwiper() {
 
   return (
     <section className="what_we_do__inner">
-      <h2 className="tit_area">What we do</h2>
+      <h2 className="tit_area">What We Do</h2>
 
       <div
         className="swiper_type_01_area"

@@ -80,6 +80,7 @@ export default function RequestForTrainingCheckboxGroup({
                 className="guide_checkbox support_service_training_request__checkbox"
                 disableRipple
                 checked={checked}
+                inputProps={{ "aria-label": option }}
                 onChange={() => toggleOption(option)}
                 icon={<GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />}
                 checkedIcon={

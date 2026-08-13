@@ -10,7 +10,7 @@ import {
   type ReactNode,
   type SyntheticEvent,
 } from "react";
-import { Select, type SelectProps } from "@mui/material";
+import { FormControl, Select, type SelectProps } from "@mui/material";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export type GuideSelectProps = SelectProps & {
@@ -120,6 +120,11 @@ export default function GuideSelect({
   renderValue,
   value,
   defaultValue,
+  className,
+  fullWidth = true,
+  error,
+  disabled,
+  inputProps,
   ...rest
 }: GuideSelectProps) {
   const isMobile = useMediaQuery(MOBILE_MQ);
@@ -185,29 +190,28 @@ export default function GuideSelect({
     };
   }, [closeMenu, open]);
 
-  if (mounted && useNativeOnMobile && isMobile) {
-    const placeholderText =
-      displayEmpty && renderValue
-        ? menuItemLabel(renderValue("" as never))
-        : "";
+  const placeholderText =
+    displayEmpty && renderValue ? menuItemLabel(renderValue("" as never)) : "";
+  const useNative = Boolean(mounted && useNativeOnMobile && isMobile);
 
-    return (
-      <Select
-        key="guide-select-native"
-        native
-        displayEmpty={displayEmpty}
-        {...rest}
-        {...valueProps}
-      >
-        {displayEmpty ? <option value="">{placeholderText}</option> : null}
-        {convertMenuItemsToOptions(children)}
-      </Select>
-    );
-  }
-
-  return (
+  const select = useNative ? (
+    <Select
+      key="guide-select-native"
+      native
+      displayEmpty={displayEmpty}
+      fullWidth={fullWidth}
+      inputProps={inputProps}
+      {...rest}
+      {...valueProps}
+    >
+      {displayEmpty ? <option value="">{placeholderText}</option> : null}
+      {convertMenuItemsToOptions(children)}
+    </Select>
+  ) : (
     <Select
       key="guide-select-custom"
+      fullWidth={fullWidth}
+      inputProps={inputProps}
       {...rest}
       {...valueProps}
       displayEmpty={displayEmpty}
@@ -219,5 +223,17 @@ export default function GuideSelect({
     >
       {children}
     </Select>
+  );
+
+  return (
+    <FormControl
+      className={className}
+      fullWidth={fullWidth}
+      error={error}
+      disabled={disabled}
+      variant="outlined"
+    >
+      {select}
+    </FormControl>
   );
 }

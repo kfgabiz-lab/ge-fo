@@ -16,9 +16,7 @@ import { searchAllListClasses } from "./searchAllListClasses";
 const { pageSize: PAGE_SIZE } = searchDocumentsPage;
 
 type SearchDocumentsPanelProps = {
-  /** 챗봇 keyword로 이미 한 번에 받아온 전체(미필터) 문서 리스트 — 재요청 없이 이 안에서 필터/페이지네이션 */
   items: DownloadCenterItem[];
-  /** 상위(SearchAllTabContent)의 전체 리스트 fetch가 완료됐는지 여부 */
   loaded: boolean;
 };
 
@@ -44,10 +42,6 @@ export default function SearchDocumentsPanel({
   const isFiltered =
     categoryKey !== "" || parentCategoryKey !== "" || docTypeKey !== "";
 
-  /* 카테고리/문서유형 필터를 클라이언트에서 적용 — 이미 받아온 전체 리스트 안에서만 거른다(재요청 없음).
-     서버 쿼리(DownloadCenterService.searchDocumentsByKeyword)의 조건과 동일한 의미:
-     - docTypes: AND(IN)
-     - categories(L2)/parentCategories(L1, L2 미배정 건만): OR로 묶여 docTypes와 AND */
   const filteredItems = useMemo(() => {
     if (!isFiltered) return items;
     const catSet = categoryKey ? new Set(categoryKey.split(",")) : null;
@@ -61,20 +55,22 @@ export default function SearchDocumentsPanel({
       if (!catSet && !parentSet) return true;
       const matchesCategory = !!catSet && !!item.categoryL2Id && catSet.has(item.categoryL2Id);
       const matchesParent =
-        !!parentSet && !item.categoryL2Id && !!item.categoryL1Id && parentSet.has(item.categoryL1Id);
+        !!parentSet && !!item.categoryL1Id && parentSet.has(item.categoryL1Id);
       return matchesCategory || matchesParent;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items, isFiltered, categoryKey, parentCategoryKey, docTypeKey]);
 
+  const isLoading = !loaded;
   const totalElements = filteredItems.length;
   const totalPages = Math.max(1, Math.ceil(totalElements / PAGE_SIZE));
   const isEmptyResult = loaded && totalElements === 0;
 
   const pageItems = useMemo(() => {
+    if (isLoading) return [];
     const from = (currentPage - 1) * PAGE_SIZE;
     return filteredItems.slice(from, from + PAGE_SIZE);
-  }, [filteredItems, currentPage]);
+  }, [filteredItems, currentPage, isLoading]);
 
   const firstResetRef = useRef(true);
   useEffect(() => {
@@ -89,6 +85,7 @@ export default function SearchDocumentsPanel({
     <section
       className="search_documents devices_product_downloads"
       id="search-documents"
+      aria-busy={isLoading}
     >
       <div className="inner">
         <div className="search_documents__body devices_product_downloads__body">
@@ -121,8 +118,8 @@ export default function SearchDocumentsPanel({
             </div>
 
             <div className="search_documents__results">
-              <p className="search_documents__count">
-                Total <strong>{totalElements.toLocaleString()}</strong>
+              <p className="search_documents__count" aria-live="polite">
+                Total <strong>{isLoading ? "" : totalElements.toLocaleString()}</strong>
               </p>
 
               {isEmptyResult ? (
@@ -141,7 +138,7 @@ export default function SearchDocumentsPanel({
               )}
             </div>
 
-            {isEmptyResult ? null : (
+            {isLoading || isEmptyResult ? null : (
               <PageNumbering
                 className="search_documents__pagination"
                 currentPage={currentPage}

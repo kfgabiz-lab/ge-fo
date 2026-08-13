@@ -304,7 +304,7 @@ export default function TrainingSessionDetailForm({
                 setStudentName(filterLetters(event.target.value, 100));
                 clearError("studentName");
               }}
-              slotProps={{ htmlInput: { maxLength: 100 } }}
+              slotProps={{ htmlInput: { maxLength: 100, "aria-label": "Student Name" } }}
             />
           </div>
           <div className="support_service_training_session_detail__field">
@@ -322,7 +322,7 @@ export default function TrainingSessionDetailForm({
                 setEmail(filterEmail(event.target.value, 255));
                 clearError("email");
               }}
-              slotProps={{ htmlInput: { maxLength: 255 } }}
+              slotProps={{ htmlInput: { maxLength: 255, "aria-label": "E-mail Address" } }}
             />
           </div>
         </div>
@@ -342,7 +342,7 @@ export default function TrainingSessionDetailForm({
                 setJobTitle(filterLetters(event.target.value, 100));
                 clearError("jobTitle");
               }}
-              slotProps={{ htmlInput: { maxLength: 100 } }}
+              slotProps={{ htmlInput: { maxLength: 100, "aria-label": "Job Title" } }}
             />
           </div>
           <div className="support_service_training_session_detail__field">
@@ -361,7 +361,7 @@ export default function TrainingSessionDetailForm({
                 setPhone(filterPhoneDigits(event.target.value));
                 clearError("phone");
               }}
-              slotProps={{ htmlInput: { maxLength: PHONE_MAX_DIGITS } }}
+              slotProps={{ htmlInput: { maxLength: PHONE_MAX_DIGITS, "aria-label": "Phone" } }}
             />
           </div>
         </div>
@@ -381,7 +381,7 @@ export default function TrainingSessionDetailForm({
                 setCompanyName(filterLetters(event.target.value, 100));
                 clearError("companyName");
               }}
-              slotProps={{ htmlInput: { maxLength: 100 } }}
+              slotProps={{ htmlInput: { maxLength: 100, "aria-label": "Company" } }}
             />
           </div>
         </div>
@@ -403,6 +403,7 @@ export default function TrainingSessionDetailForm({
                 value={streetAddress}
                 onChange={(event) => setStreetAddress(event.target.value)}
                 slotProps={{
+                  htmlInput: { "aria-label": "Street Address" },
                   input: {
                     endAdornment: (
                       <InputAdornment position="end" className="guide_field__search-adorn">
@@ -458,10 +459,9 @@ export default function TrainingSessionDetailForm({
               id={`${formId}-address-2`}
               className="guide_field guide_field--h50 support_service_training_session_detail__input"
               placeholder="Address 2"
-              aria-label="Address 2"
               value={address2}
               onChange={(event) => setAddress2(event.target.value)}
-              slotProps={{ htmlInput: { maxLength: 255 } }}
+              slotProps={{ htmlInput: { maxLength: 255, "aria-label": "Address 2" } }}
             />
           </div>
         </div>
@@ -479,7 +479,7 @@ export default function TrainingSessionDetailForm({
               onChange={(event) => {
                 setApartment(filterLetters(event.target.value, 100));
               }}
-              slotProps={{ htmlInput: { maxLength: 100 } }}
+              slotProps={{ htmlInput: { maxLength: 100, "aria-label": "Apartment, suite, etc" } }}
             />
           </div>
           <div className="support_service_training_session_detail__field">
@@ -490,7 +490,7 @@ export default function TrainingSessionDetailForm({
               placeholder="City"
               value={city}
               onChange={(event) => setCity(event.target.value)}
-              slotProps={{ htmlInput: { maxLength: 100 } }}
+              slotProps={{ htmlInput: { maxLength: 100, "aria-label": "City" } }}
             />
           </div>
         </div>
@@ -506,7 +506,7 @@ export default function TrainingSessionDetailForm({
               placeholder="State/Province"
               value={stateProvince}
               onChange={(event) => setStateProvince(event.target.value)}
-              slotProps={{ htmlInput: { maxLength: 100 } }}
+              slotProps={{ htmlInput: { maxLength: 100, "aria-label": "State/Province" } }}
             />
           </div>
           <div className="support_service_training_session_detail__field">
@@ -519,7 +519,7 @@ export default function TrainingSessionDetailForm({
               placeholder="ZIP / Postal Code"
               value={zipCode}
               onChange={(event) => setZipCode(event.target.value)}
-              slotProps={{ htmlInput: { maxLength: 20 } }}
+              slotProps={{ htmlInput: { maxLength: 20, "aria-label": "ZIP / Postal Code" } }}
             />
           </div>
         </div>
@@ -577,7 +577,10 @@ export default function TrainingSessionDetailForm({
               id={`${formId}-event-date`}
               className="guide_field guide_field--h50 support_service_training_session_detail__input support_service_training_session_detail__input--readonly"
               value={eventDateDisplay}
-              slotProps={{ input: { readOnly: true } }}
+              slotProps={{
+                input: { readOnly: true },
+                htmlInput: { "aria-label": "Event date" },
+              }}
             />
           </div>
         </div>

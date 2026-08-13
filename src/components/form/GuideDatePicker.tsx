@@ -28,6 +28,7 @@ export type GuideDatePickerProps = Omit<DatePickerProps, "value" | "onChange" | 
   min?: string;
   max?: string;
   placeholder?: string;
+  ariaLabel?: string;
   className?: string;
 };
 
@@ -38,6 +39,7 @@ export default function GuideDatePicker({
   min,
   max,
   placeholder,
+  ariaLabel,
   className,
   format = "YYYY-MM-DD",
   slotProps,
@@ -65,6 +67,7 @@ export default function GuideDatePicker({
 
   const fieldSlotProps =
     slotProps?.field && typeof slotProps.field === "object" ? slotProps.field : undefined;
+  const resolvedAriaLabel = ariaLabel || placeholder;
 
   return (
     <DatePicker
@@ -83,13 +86,19 @@ export default function GuideDatePicker({
         ...slotProps,
         field: {
           clearable: false,
-          "aria-label": placeholder,
+          "aria-label": resolvedAriaLabel,
           ...fieldSlotProps,
         },
         textField: {
           id,
           className: fieldClassName,
           ...textFieldSlotProps,
+          inputProps: {
+            "aria-label": resolvedAriaLabel,
+            ...(typeof textFieldSlotProps?.inputProps === "object"
+              ? textFieldSlotProps.inputProps
+              : {}),
+          },
         },
         openPickerButton: {
           className: mergeClassNames(
