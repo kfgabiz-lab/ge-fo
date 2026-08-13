@@ -6,7 +6,7 @@ export const affiliatePageTitle = {
 };
 
 export const affiliateIntro = {
-  heroImage: `${IMG}/hero.jpg`,
+  heroImage: `${IMG}/hero-0813.jpg`,
   headlineLines: ["Power and Infrastructure Solutions", "Across the Americas"],
   paragraphs: [
     "Our affiliates deliver reliable electrical systems, engineering services,",
