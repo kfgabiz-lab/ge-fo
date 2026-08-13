@@ -204,9 +204,9 @@
   }
 
   .company-page--articles section.company-articles-list .company-articles-list__title {
-    min-height: 96px;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
+    min-height: 64px;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.company-press-list .company-press-list__date,
