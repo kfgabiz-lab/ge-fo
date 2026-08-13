@@ -29,6 +29,7 @@ export default function RequestForTrainingSteps({
                 step.status === "active" ? " is-active" : ""
               }${step.status === "completed" ? " is-completed" : ""}`}
               role="listitem"
+              aria-current={step.status === "active" ? "step" : undefined}
             >
               <div className="support_service_training_request__step-icon">
                 <img

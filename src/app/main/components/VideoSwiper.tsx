@@ -146,7 +146,9 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
           id: `hero-${item.id}`,
           subtit: item.sub,
           titLines: item.titleText ? [item.titleText] : [],
-          ...(item.btnText ? { link: { href: item.btnUrl || "", label: item.btnText } } : {}),
+          ...(item.btnText && item.btnUrl.trim()
+            ? { link: { href: item.btnUrl.trim(), label: item.btnText } }
+            : {}),
         };
 
         if (item.mediaMimeType?.startsWith("video/")) {
@@ -857,6 +859,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
                   muted
                   playsInline
                   preload="metadata"
+                  aria-label={slide.alt || slide.titLines.join(" ") || "Hero video"}
                 >
                   {slide.sources.map((source) => (
                     <source
@@ -877,7 +880,11 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
               )}
               <div className="sl_dim" aria-hidden="true" />
               <div className="sl_content">
-                <h2 className="sl_subtit" data-slugkey="sub">{slide.subtit}</h2>
+                {slide.subtit ? (
+                  <p className="sl_subtit" data-slugkey="sub">
+                    {slide.subtit}
+                  </p>
+                ) : null}
                 <h2 className="sl_tit" data-slugkey="titleText">
                   {slide.titLines.map((line, lineIndex) => (
                     <span key={line}>
