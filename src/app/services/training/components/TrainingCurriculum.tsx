@@ -24,6 +24,7 @@ import {
   toSubCategoryOptions,
   toTrainingCard,
   trainingDetailHref,
+  trainingHasSessionWhere,
   trainingStatusWhere,
   type TrainingCategoryNode,
   type TrainingRow,
@@ -169,6 +170,7 @@ export default function TrainingCurriculum({
       size: TRAINING_LIST_SIZE,
       where: {
         ...trainingStatusWhere(variant),
+        ...trainingHasSessionWhere(),
         ...(categoryValue
           ? { "eq_curriculum.product_category": categoryValue }
           : {}),
