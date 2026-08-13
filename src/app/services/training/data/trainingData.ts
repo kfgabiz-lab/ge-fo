@@ -30,6 +30,18 @@ export function trainingStatusWhere(
   };
 }
 
+export const TRAINING_SESSION_SLUG = "currDtlMgmt-data";
+export const TRAINING_SESSION_VISIBLE_CODE = "001";
+
+export function trainingHasSessionWhere(): Record<string, string> {
+  return {
+    exs_0: TRAINING_SESSION_SLUG,
+    exk_0: "curriculum_detail1.curriculum_id",
+    exm_0: "id",
+    exf_0: `curriculum_detail3.is_visible=${TRAINING_SESSION_VISIBLE_CODE}`,
+  };
+}
+
 export type TrainingRow = PageDataItem;
 
 export interface CodeItem {

@@ -3,7 +3,6 @@
 import type { EngineeringTrainingSessionDetail } from "@/data/services/engineeringTrainingSessionDetailContent";
 import { engineeringTrainingSessionAssets } from "@/data/services/engineeringTrainingSessionDetailContent";
 import TrainingSessionCountdown from "./TrainingSessionCountdown";
-import TrainingSessionLocationMap from "./TrainingSessionLocationMap";
 
 function formatPhoneHref(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -129,9 +128,6 @@ export default function TrainingSessionDetailAside({
               )}
             </li>
           </ul>
-          {sidebar.location.address.trim() ? (
-            <TrainingSessionLocationMap address={sidebar.location.address} />
-          ) : null}
         </div>
 
         <div className="support_service_training_session_detail__meta-item support_service_training_session_detail__meta-item--products">
