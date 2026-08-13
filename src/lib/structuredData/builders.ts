@@ -129,7 +129,7 @@ function anchorFor(label: string): string {
  * 사이트 구조를 나타내야 하므로, 화면용 설정은 건드리지 않고 이 두 규칙만 SEO 출력에
  * 적용해 보정한다.
  */
-const SEO_BREADCRUMB_DROP_LABELS = new Set(["Media", "Training"]);
+const SEO_BREADCRUMB_DROP_LABELS = new Set(["Media", "Training", "Resources"]);
 const SEO_BREADCRUMB_ANCHOR_LABELS = new Set(["Company", "Markets"]);
 
 export function crumbsFromBreadcrumbConfig(
