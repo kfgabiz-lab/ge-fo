@@ -266,10 +266,10 @@ function ProductsSwiperPer4({ products }: ProductsSwiperPer4Props) {
             onSelect={handlePaginationClick}
             onPrev={handlePrev}
             onNext={handleNext}
-            ariaLabel="제품 슬라이드 컨트롤"
-            paginationAriaLabel="제품 슬라이드 페이지네이션"
-            prevLabel="이전 제품"
-            nextLabel="다음 제품"
+            ariaLabel="Product slide controls"
+            paginationAriaLabel="Product slide pagination"
+            prevLabel="Previous product"
+            nextLabel="Next product"
           />
         ) : null}
       </div>
@@ -292,7 +292,7 @@ export default function MainProductsClient({ groups }: MainProductsClientProps) 
         <div
           className="tab_area"
           role="tablist"
-          aria-label="제품 카테고리"
+          aria-label="Product categories"
           data-slug="prdGrp-data"
           data-slug-repeat="true"
           onKeyDown={handleHorizontalTabListKeyDown}

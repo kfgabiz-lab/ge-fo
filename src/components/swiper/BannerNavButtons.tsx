@@ -11,7 +11,7 @@ export default function BannerNavButtons({
   isNextDisabled,
   onPrev,
   onNext,
-  ariaLabel = "배너 네비게이션",
+  ariaLabel = "Banner navigation",
 }: BannerNavButtonsProps) {
   return (
     <div className="banner-nav" aria-label={ariaLabel}>
@@ -22,7 +22,7 @@ export default function BannerNavButtons({
             ? "banner-nav__btn banner-nav__btn--prev is-disabled"
             : "banner-nav__btn banner-nav__btn--prev"
         }
-        aria-label="이전 배너"
+        aria-label="Previous banner"
         aria-disabled={isPrevDisabled}
         disabled={isPrevDisabled}
         onClick={onPrev}
@@ -36,7 +36,7 @@ export default function BannerNavButtons({
             ? "banner-nav__btn banner-nav__btn--next is-disabled"
             : "banner-nav__btn banner-nav__btn--next"
         }
-        aria-label="다음 배너"
+        aria-label="Next banner"
         aria-disabled={isNextDisabled}
         disabled={isNextDisabled}
         onClick={onNext}

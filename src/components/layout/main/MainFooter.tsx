@@ -86,6 +86,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       .filter((option) => option.defaultChecked)
       .map((option) => option.value),
   );
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [affiliateOpen, setAffiliateOpen] = useState(false);
   const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
   const [cookiePreferencesOpen, setCookiePreferencesOpen] = useState(false);
@@ -155,6 +156,11 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       return; 
     }
 
+    if (!agreedToTerms) {
+      alert("Please agree to the Privacy Policy to continue.");
+      return;
+    }
+
     const payload = {
       email: trimmedEmail,
       areasOfInterest: interests.join(", "),
@@ -175,6 +181,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
         alert("Successfully Subscribed!\nThank you for joining. We'll be in touch soon with the latest from LS ELECTRIC.");
         setEmail("");
         setInterests([]); // Areas of interest reset
+        setAgreedToTerms(false);
         setEmailError(false);
       }
 
@@ -262,12 +269,29 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
               <button type="submit" className="btn_flat">
                 Get Insights
               </button>
-              <p className="main_footer__agree">
-                and I agree with the terms of use as described in the{" "}
-                <Link href="/privacy-policy" className="main_footer__agree-link">
-                  Privacy Policy.
-                </Link>
-              </p>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    className="main_footer__checkbox"
+                    checked={agreedToTerms}
+                    icon={<FooterCheckboxIcon />}
+                    checkedIcon={<FooterCheckboxIcon checked />}
+                    onChange={(event) => setAgreedToTerms(event.target.checked)}
+                    slotProps={{
+                      input: { id: "main-footer-agree", name: "agree" },
+                    }}
+                  />
+                }
+                label={
+                  <span className="main_footer__agree">
+                    I agree with the terms of use as described in the{" "}
+                    <Link href="/privacy-policy" className="main_footer__agree-link">
+                      Privacy Policy.
+                    </Link>
+                  </span>
+                }
+                className="main_footer__agree-check"
+              />
             </div>
           </form>
         </div>

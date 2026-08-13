@@ -303,6 +303,22 @@
   background: #DDDDDD ;
  
 }
+
+.main_footer__agree-check.MuiFormControlLabel-root {
+  align-items: flex-start;
+  margin: 0;
+  gap: 8px;
+}
+
+.main_footer__agree-check .MuiCheckbox-root {
+  padding: 0;
+  color: #fff;
+}
+
+.main_footer__agree-check .MuiFormControlLabel-label {
+  margin: 0;
+}
+
 .main_footer__agree {
   margin: 0;
   color: #fff;
@@ -310,7 +326,7 @@
   font-size: 14px;
   font-style: normal;
   font-weight: 300;
-  line-height: 100%;
+  line-height: 1.4;
 }
 
 .main_footer__agree a,

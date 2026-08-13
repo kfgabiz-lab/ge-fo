@@ -74,7 +74,7 @@ export function DevicesProductDownloadsFilterCheckRow({
         indeterminateIcon={
           <GuideCheckboxIcon {...guideCheckboxIconsDownloads} />
         }
-        slotProps={{ input: { id, name: id, "aria-label": label } }}
+        slotProps={{ input: { id, name: id } }}
       />
       <label
         htmlFor={id}

@@ -798,7 +798,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
     <div
       ref={sectionRef}
       className="video-swiper-section"
-      aria-label="메인 비주얼 슬라이드"
+      aria-label="Main visual slides"
     >
       <Swiper
         key={swiperKey}
@@ -910,7 +910,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
         ))}
       </Swiper>
 
-      <div className="video-pagination" aria-label="슬라이드 페이지네이션">
+      <div className="video-pagination" aria-label="Slide pagination">
         <div
           className={
             isMobileVisual
@@ -927,7 +927,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
                   ? "video-pagination__num is-active"
                   : "video-pagination__num"
               }
-              aria-label={`${index + 1}번 슬라이드`}
+              aria-label={`Slide ${index + 1}`}
               aria-current={activeIndex === index ? "true" : undefined}
               onClick={() => handlePaginationClick(index)}
             >
@@ -942,7 +942,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
           aria-valuemax={100}
           aria-valuenow={Math.round(autoplayProgress)}
           aria-label={
-            isActiveVideo ? "영상 재생 진행률" : "슬라이드 자동재생 진행률"
+            isActiveVideo ? "Video playback progress" : "Slide autoplay progress"
           }
         >
           <span
@@ -954,7 +954,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
           <button
             type="button"
             className="video-pagination__control"
-            aria-label={isVideoPlaying ? "슬라이드 정지" : "슬라이드 재생"}
+            aria-label={isVideoPlaying ? "Pause slide" : "Play slide"}
             aria-pressed={isVideoPlaying}
             onClick={toggleVideoPlayback}
           >

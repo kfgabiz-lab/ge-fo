@@ -81,6 +81,7 @@ export default async function RootLayout({
             src="https://www.googletagmanager.com/ns.html?id=GTM-NZSF98NV"
             height="0"
             width="0"
+            title="Google Tag Manager"
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>

@@ -3673,6 +3673,12 @@ section.highlight_news--markets .section_tit {
     animation: none;
   }
 
+  .devices_product_downloads__file-btn-spinner,
+  .common_banner_02__copy-spinner,
+  .devices_product_downloads__refresh-icon.is-spinning,
+  .support_where_to_buy_contents__refresh-icon.is-spinning {
+    animation: none;
+  }
 }
 
 /* 페이지 상단 타이틀 섹션 공통 기본 스타일 (company/services 등 서브페이지 공용, ls-publish company.css 기원)

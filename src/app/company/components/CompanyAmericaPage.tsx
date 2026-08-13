@@ -41,7 +41,11 @@ function ShapingBlock({ block }: { block: AmericaShapingBlock }) {
     <article className="company-america-shaping__block">
       <div className="company-america-shaping__img">
         {block.video ? (
-          <CompanyAmericaShapingVideo src={block.video} poster={block.image} />
+          <CompanyAmericaShapingVideo
+            src={block.video}
+            poster={block.image}
+            ariaLabel={block.titleLines.join(" ")}
+          />
         ) : (
           <img
             loading="lazy"
