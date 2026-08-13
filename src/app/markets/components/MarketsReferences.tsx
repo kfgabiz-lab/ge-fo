@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { references, type ReferenceItem } from "../data/marketsContent";
 import MarketsReferencesModal from "./MarketsReferencesModal";
 
@@ -11,6 +11,7 @@ type MarketsReferencesProps = {
 export default function MarketsReferences({
   items = references,
 }: MarketsReferencesProps) {
+  const dialogId = useId();
   const [activeItem, setActiveItem] = useState<ReferenceItem | null>(null);
 
   return (
@@ -30,6 +31,7 @@ export default function MarketsReferences({
               className="item"
               aria-haspopup="dialog"
               aria-expanded={activeItem?.id === item.id}
+              aria-controls={dialogId}
               onClick={() => setActiveItem(item)}
             >
               <div className="img_area">
@@ -48,6 +50,7 @@ export default function MarketsReferences({
         open={Boolean(activeItem)}
         item={activeItem}
         items={items}
+        dialogId={dialogId}
         onClose={() => setActiveItem(null)}
         onActiveItemChange={setActiveItem}
       />
