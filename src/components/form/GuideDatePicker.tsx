@@ -67,7 +67,9 @@ export default function GuideDatePicker({
 
   const fieldSlotProps =
     slotProps?.field && typeof slotProps.field === "object" ? slotProps.field : undefined;
-  const resolvedAriaLabel = ariaLabel || placeholder;
+  // Only set aria-label when explicitly provided — avoid doubling a visible
+  // <label htmlFor> with placeholder text as an accessible name.
+  const resolvedAriaLabel = ariaLabel || undefined;
 
   const existingTextFieldSlotProps =
     textFieldSlotProps &&
@@ -103,7 +105,7 @@ export default function GuideDatePicker({
         ...slotProps,
         field: {
           clearable: false,
-          "aria-label": resolvedAriaLabel,
+          ...(resolvedAriaLabel ? { "aria-label": resolvedAriaLabel } : {}),
           ...fieldSlotProps,
         },
         textField: {
@@ -114,7 +116,7 @@ export default function GuideDatePicker({
             ...existingTextFieldSlotProps,
             htmlInput: {
               ...existingHtmlInput,
-              "aria-label": resolvedAriaLabel,
+              ...(resolvedAriaLabel ? { "aria-label": resolvedAriaLabel } : {}),
             },
           },
         },

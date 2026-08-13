@@ -173,7 +173,6 @@ function PasswordField({
         slotProps={{
           htmlInput: {
             autoComplete: "off",
-            "aria-label": label,
           },
           input: {
             endAdornment: (
@@ -486,7 +485,6 @@ function ContactUsFormContent() {
                 <div
                   className="support_contact_form__radios"
                   role="radiogroup"
-                  aria-label={contactUsFormCopy.inquiryType}
                 >
                   {inquiryTypes.map((option) => {
                     const inputId = `${formId}-${option.code}`;
@@ -590,7 +588,6 @@ function ContactUsFormContent() {
                     required
                     error={Boolean(errors[field.errorKey])}
                     value={field.value}
-                    slotProps={{ htmlInput: { "aria-label": field.label } }}
                     onChange={(event) => {
                       field.onChange(event.target.value);
                       if (errors[field.errorKey]) {
@@ -619,7 +616,6 @@ function ContactUsFormContent() {
                   required
                   error={Boolean(errors.companyName)}
                   value={companyName}
-                  slotProps={{ htmlInput: { "aria-label": contactUsFormCopy.companyName } }}
                   onChange={(event) => {
                     setCompanyName(event.target.value);
                     if (errors.companyName) {
@@ -629,7 +625,7 @@ function ContactUsFormContent() {
                 />
               </div>
               <div className="support_contact_form__field support_contact_form__field--half support_contact_form__field--country">
-                <ContactUsFieldLabel required>
+                <ContactUsFieldLabel htmlFor={`${formId}-country`} required>
                   {contactUsFormCopy.country}
                 </ContactUsFieldLabel>
                 <FormControl className="guide_field">
@@ -644,7 +640,7 @@ function ContactUsFormContent() {
                     error={Boolean(errors.country)}
                     displayEmpty
                     IconComponent={GuideSelectIcon}
-                    inputProps={{ "aria-label": contactUsFormCopy.country }}
+                    inputProps={{ id: `${formId}-country` }}
                     renderValue={(value) => {
                       const label = value ? String(value) : countryPlaceholder;
                       return (
@@ -698,7 +694,6 @@ function ContactUsFormContent() {
                 required
                 error={Boolean(errors.description)}
                 value={description}
-                slotProps={{ htmlInput: { "aria-label": contactUsFormCopy.inquiryDetails } }}
                 onChange={(event) => {
                   setDescription(event.target.value);
                   if (errors.description) {
@@ -782,7 +777,6 @@ function ContactUsFormContent() {
                           input: {
                             id: checkboxId,
                             name: item.id,
-                            "aria-label": item.label,
                           },
                         }}
                       />

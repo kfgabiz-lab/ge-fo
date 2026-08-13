@@ -70,8 +70,7 @@ export default function RequestForTrainingConsentSection({
           className="guide_field support_service_training_request__input support_service_training_request__input--textarea"
           placeholder={fields.comments.placeholder}
           multiline
-          value={step4.comments}
-          slotProps={{ htmlInput: { "aria-label": fields.comments.label } }}
+          value={step4.comments}
           onChange={(event) =>
             setStep4Field("comments", filterComments(event.target.value))
           }
@@ -92,8 +91,7 @@ export default function RequestForTrainingConsentSection({
           <Checkbox
             className="guide_checkbox support_service_training_request__checkbox"
             disableRipple
-            checked={step4.consentChecked}
-            inputProps={{ "aria-label": fields.consent.label }}
+            checked={step4.consentChecked}
             onChange={(event) => {
               setStep4Field("consentChecked", event.target.checked);
               onClearError?.("consent");

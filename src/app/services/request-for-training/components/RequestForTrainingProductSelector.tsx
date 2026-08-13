@@ -215,7 +215,7 @@ export default function RequestForTrainingProductSelector({
           disabled={!isEngineeringTrack}
           displayEmpty
           IconComponent={GuideSelectIcon}
-          inputProps={{ "aria-label": fields.products.label, id: `${formId}-product-category` }}
+          inputProps={{ id: `${formId}-product-category` }}
           renderValue={(value) => {
             const current = categoryTypeOptions.find((o) => o.id === value);
             return renderSelectValue(current ? current.label : CATEGORY_PLACEHOLDER, !current);
@@ -280,8 +280,7 @@ export default function RequestForTrainingProductSelector({
                       id={inputId}
                       className="guide_checkbox support_service_training_request__checkbox"
                       disableRipple
-                      checked={checked}
-                      inputProps={{ "aria-label": product.name }}
+                      checked={checked}
                       onChange={() =>
                         toggleProduct(
                           product.id,
@@ -309,8 +308,7 @@ export default function RequestForTrainingProductSelector({
                   disableRipple
                   checked={selectedKeys.has(
                     productKey(selectedGroup.id, otherId(selectedGroup.id)),
-                  )}
-                  inputProps={{ "aria-label": OTHER_LABEL }}
+                  )}
                   onChange={() =>
                     toggleProduct(
                       otherId(selectedGroup.id),

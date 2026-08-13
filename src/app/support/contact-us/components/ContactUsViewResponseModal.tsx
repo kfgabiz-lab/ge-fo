@@ -178,10 +178,7 @@ export default function ContactUsViewResponseModal({
                     ? " support_contact_view_response_modal__input--error"
                     : ""
                 }`}
-                value={inquiryNumber}
-                slotProps={{
-                  htmlInput: { "aria-label": contactUsViewResponseModal.inquiryNumberLabel },
-                }}
+                value={inquiryNumber}
                 onChange={(event) => {
                   setInquiryNumber(event.target.value);
                   if (errors.inquiryNumber) {
@@ -208,10 +205,7 @@ export default function ContactUsViewResponseModal({
                   errors.password ? " support_contact_view_response_modal__input--error" : ""
                 }`}
                 type="password"
-                value={password}
-                slotProps={{
-                  htmlInput: { "aria-label": contactUsViewResponseModal.passwordLabel },
-                }}
+                value={password}
                 onChange={(event) => {
                   setPassword(event.target.value);
                   if (errors.password) {
