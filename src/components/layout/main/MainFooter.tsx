@@ -150,21 +150,38 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       return;
     }
 
+    if (interests.length === 0) {
+      alert("Please select at least one area of interest to continue.");
+      return; 
+    }
+
     const payload = {
       email: trimmedEmail,
       areasOfInterest: interests.join(", "),
     };
+    try {
+      const response = await fetchApi<{ success: boolean }>(
+        "/api/v1/fo/newsletter/insights",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        },
+      );
 
-    await fetchApi("/api/v1/fo/newsletter/insights", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-    setEmail("");
-    setInterests([]); //Areas of Interest 초기화
-    setEmailError(false);
+      if (response.success) {
+        alert("Successfully Subscribed!\nThank you for joining. We'll be in touch soon with the latest from LS ELECTRIC.");
+        setEmail("");
+        setInterests([]); // Areas of interest reset
+        setEmailError(false);
+      }
+
+    } catch (error) {
+      alert("A server error occurred. Please try again later.");
+    
+    }
   };
 
   const handleAffiliateSelect = (value: string) => {

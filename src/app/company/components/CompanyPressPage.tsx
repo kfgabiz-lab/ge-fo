@@ -134,6 +134,9 @@ export default function CompanyPressPage() {
     setYear(value);
     setPageIndex(0);
   };
+  const handleViewAllClick = () => {
+  handleSearchSubmit("");
+};
 
   return (
     <main className="company-page company-page--press" id="Page_company_press">
@@ -164,6 +167,7 @@ export default function CompanyPressPage() {
         yearValue={year}
         onYearChange={handleYearChange}
         yearOptions={yearOptions}
+        onViewAllClick={handleViewAllClick}
       />
     </main>
   );

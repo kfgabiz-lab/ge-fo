@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import {
   FormControl,
   InputAdornment,
@@ -90,6 +90,10 @@ export default function CompanyFeedListToolbar({
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") submitSearch();
   };
+
+  useEffect(() => {
+    setSearchDraft(searchValue);
+  }, [searchValue]);
 
   return (
     <div className={`${prefix}__toolbar`}>
