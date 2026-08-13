@@ -9,15 +9,12 @@ import {
   type ReactNode,
 } from "react";
 import { createSupportFilterStore } from "@/app/support/components/createSupportFilterStore";
+import SupportDownloadFilterOptionsLoader from "@/app/support/components/SupportDownloadFilterOptionsLoader";
 import {
   type DownloadCategoryOption,
   type DownloadFilterOption,
 } from "@/data/support/downloadCenterContent";
-import {
-  fetchDownloadCenterCategoryTree,
-  fetchDownloadDocTypeFilters,
-  type DownloadCenterSort,
-} from "@/data/support/downloadCenterData";
+import { type DownloadCenterSort } from "@/data/support/downloadCenterData";
 import { fetchPopularKeywords } from "@/data/search/searchKeywordData";
 
 const store = createSupportFilterStore({
@@ -76,32 +73,6 @@ export function DownloadCenterFilterProvider({
 
   useEffect(() => {
     let alive = true;
-    fetchDownloadCenterCategoryTree()
-      .then((tree) => {
-        if (!alive) return;
-        setCategories(tree);
-      })
-      .finally(() => {
-        if (alive) setCategoriesLoaded(true);
-      });
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    let alive = true;
-    fetchDownloadDocTypeFilters().then((options) => {
-      if (!alive) return;
-      setDocumentTypes(options);
-    });
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    let alive = true;
     fetchPopularKeywords("DOWNLOAD_CENTER").then((keywords) => {
       if (!alive) return;
       setPopularKeywords(keywords);
@@ -147,6 +118,13 @@ export function DownloadCenterFilterProvider({
   return (
     <DownloadCenterQueryContext.Provider value={queryValue}>
       <store.Provider categories={categories} secondaryOptions={documentTypes}>
+        <SupportDownloadFilterOptionsLoader
+          useFilter={useDownloadCenterFilter}
+          query={query}
+          onCategoriesChange={setCategories}
+          onDocumentTypesChange={setDocumentTypes}
+          onCategoriesLoadedChange={setCategoriesLoaded}
+        />
         {children}
       </store.Provider>
     </DownloadCenterQueryContext.Provider>

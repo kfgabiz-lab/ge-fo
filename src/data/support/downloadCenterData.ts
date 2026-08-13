@@ -59,22 +59,23 @@ export type DownloadCenterSort =
   | "title"
   | "title_desc";
 
-export interface DownloadCenterContentsParams {
+export interface DownloadCenterFilterParams {
   q?: string;
   categories?: string[];
   parentCategories?: string[];
   docTypes?: string[];
   productCodes?: string[];
+}
+
+export interface DownloadCenterContentsParams extends DownloadCenterFilterParams {
   sort?: DownloadCenterSort;
   page?: number;
   size?: number;
 }
 
-export async function fetchDownloadCenterContents(
-  params: DownloadCenterContentsParams,
-): Promise<DownloadCenterContentsPage> {
-  const page = params.page ?? 0;
-  const size = params.size ?? 12;
+function buildDownloadCenterFilterQuery(
+  params: DownloadCenterFilterParams,
+): URLSearchParams {
   const sp = new URLSearchParams();
   if (params.q && params.q.trim()) sp.set("q", params.q.trim());
   if (params.categories && params.categories.length > 0) {
@@ -89,6 +90,15 @@ export async function fetchDownloadCenterContents(
   if (params.productCodes && params.productCodes.length > 0) {
     sp.set("productCodes", params.productCodes.join(","));
   }
+  return sp;
+}
+
+export async function fetchDownloadCenterContents(
+  params: DownloadCenterContentsParams,
+): Promise<DownloadCenterContentsPage> {
+  const page = params.page ?? 0;
+  const size = params.size ?? 12;
+  const sp = buildDownloadCenterFilterQuery(params);
   if (params.sort) sp.set("sort", params.sort);
   sp.set("page", String(page));
   sp.set("size", String(size));
@@ -131,15 +141,37 @@ export interface DownloadCenterCategoryCount {
   count: number;
 }
 
-export async function fetchDownloadCenterCategoryCounts(): Promise<
-  DownloadCenterCategoryCount[]
-> {
+export interface DownloadCenterL1CategoryCount {
+  categoryL1Id: string | null;
+  count: number;
+}
+
+export interface DownloadCenterCategoryCounts {
+  l1Counts: DownloadCenterL1CategoryCount[];
+  l2Counts: DownloadCenterCategoryCount[];
+}
+
+const EMPTY_CATEGORY_COUNTS: DownloadCenterCategoryCounts = {
+  l1Counts: [],
+  l2Counts: [],
+};
+
+export async function fetchDownloadCenterCategoryCounts(
+  params: DownloadCenterFilterParams = {},
+): Promise<DownloadCenterCategoryCounts> {
+  const queryString = buildDownloadCenterFilterQuery(params).toString();
   try {
-    return await fetchApi<DownloadCenterCategoryCount[]>(
-      `/api/v1/fo/download-center/category-counts`,
+    const res = await fetchApi<DownloadCenterCategoryCounts>(
+      `/api/v1/fo/download-center/category-counts${
+        queryString ? `?${queryString}` : ""
+      }`,
     );
+    return {
+      l1Counts: res?.l1Counts ?? [],
+      l2Counts: res?.l2Counts ?? [],
+    };
   } catch {
-    return [];
+    return EMPTY_CATEGORY_COUNTS;
   }
 }
 
@@ -150,13 +182,9 @@ export interface DownloadCenterDocTypeCount {
 }
 
 export async function fetchDownloadCenterDocTypeCounts(
-  productCodes?: string[],
+  params: DownloadCenterFilterParams = {},
 ): Promise<DownloadCenterDocTypeCount[]> {
-  const sp = new URLSearchParams();
-  if (productCodes && productCodes.length > 0) {
-    sp.set("productCodes", productCodes.join(","));
-  }
-  const queryString = sp.toString();
+  const queryString = buildDownloadCenterFilterQuery(params).toString();
   try {
     return await fetchApi<DownloadCenterDocTypeCount[]>(
       `/api/v1/fo/download-center/doctype-counts${
@@ -184,38 +212,42 @@ export async function fetchDownloadDocTypes(): Promise<DownloadFilterOption[]> {
   }
 }
 
-export async function fetchDownloadDocTypeFilters(options?: {
-  productCodes?: string[];
+export type DownloadDocTypeFilterOptions = DownloadCenterFilterParams & {
   fallbackCount?: number;
-}): Promise<DownloadFilterOption[]> {
+};
+
+export async function fetchDownloadDocTypeFilters(
+  options: DownloadDocTypeFilterOptions = {},
+): Promise<DownloadFilterOption[]> {
+  const { fallbackCount, ...filterParams } = options;
   const [docTypes, counts] = await Promise.all([
     fetchDownloadDocTypes(),
-    fetchDownloadCenterDocTypeCounts(options?.productCodes),
+    fetchDownloadCenterDocTypeCounts(filterParams),
   ]);
   const countMap = new Map(counts.map((c) => [c.docType, c.count]));
   return docTypes.map((docType) => ({
     ...docType,
-    count: countMap.get(docType.id) ?? options?.fallbackCount,
+    count: countMap.get(docType.id) ?? fallbackCount,
   }));
 }
 
-export async function fetchDownloadCenterCategoryTree(): Promise<
-  DownloadCategoryOption[]
-> {
+export async function fetchDownloadCenterCategoryTree(
+  params: DownloadCenterFilterParams = {},
+): Promise<DownloadCategoryOption[]> {
   try {
     const [tops, counts] = await Promise.all([
       fetchTopCategories(),
-      fetchDownloadCenterCategoryCounts(),
+      fetchDownloadCenterCategoryCounts(params),
     ]);
-    const countMap = new Map(
-      counts
+    const l1CountMap = new Map(
+      counts.l1Counts
+        .filter((c) => c.categoryL1Id)
+        .map((c) => [c.categoryL1Id as string, c.count]),
+    );
+    const l2CountMap = new Map(
+      counts.l2Counts
         .filter((c) => c.categoryL2Id)
         .map((c) => [c.categoryL2Id as string, c.count]),
-    );
-    const parentOnlyCountMap = new Map(
-      counts
-        .filter((c) => !c.categoryL2Id && c.categoryL1Id)
-        .map((c) => [c.categoryL1Id as string, c.count]),
     );
 
     const childrenByParentId = await fetchCategoryChildrenBatch(
@@ -227,16 +259,13 @@ export async function fetchDownloadCenterCategoryTree(): Promise<
       const nested = children.map((child) => ({
         id: child.code,
         label: child.title,
-        count: countMap.get(child.code) ?? 0,
+        count: l2CountMap.get(child.code) ?? 0,
       }));
-      const total =
-        nested.reduce((sum, n) => sum + (n.count ?? 0), 0) +
-        (parentOnlyCountMap.get(top.code) ?? 0);
       return {
         id: top.code,
         label: top.title,
         hasArrow: nested.length > 0,
-        count: total,
+        count: l1CountMap.get(top.code) ?? 0,
         nested,
       } satisfies DownloadCategoryOption;
     });

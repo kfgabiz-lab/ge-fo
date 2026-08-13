@@ -3,20 +3,17 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
+import { useSearchParams } from "next/navigation";
 import { createSupportFilterStore } from "@/app/support/components/createSupportFilterStore";
+import SupportDownloadFilterOptionsLoader from "@/app/support/components/SupportDownloadFilterOptionsLoader";
 import {
   type DownloadCategoryOption,
   type DownloadFilterOption,
 } from "@/data/support/downloadCenterContent";
-import {
-  fetchDownloadCenterCategoryTree,
-  fetchDownloadDocTypeFilters,
-} from "@/data/support/downloadCenterData";
 
 const store = createSupportFilterStore({
   displayName: "SearchDocuments",
@@ -58,26 +55,8 @@ export function SearchDocumentsFilterProvider({
   const [categories, setCategories] = useState<DownloadCategoryOption[]>([]);
   const [documentTypes, setDocumentTypes] = useState<DownloadFilterOption[]>([]);
 
-  useEffect(() => {
-    let alive = true;
-    fetchDownloadCenterCategoryTree().then((tree) => {
-      if (alive) setCategories(tree);
-    });
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    let alive = true;
-    fetchDownloadDocTypeFilters().then((options) => {
-      if (!alive) return;
-      setDocumentTypes(options);
-    });
-    return () => {
-      alive = false;
-    };
-  }, []);
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") ?? "";
 
   const value = useMemo(
     () => ({ categories, documentTypes }),
@@ -87,6 +66,12 @@ export function SearchDocumentsFilterProvider({
   return (
     <SearchDocumentsFilterOptionsContext.Provider value={value}>
       <store.Provider categories={categories} secondaryOptions={documentTypes}>
+        <SupportDownloadFilterOptionsLoader
+          useFilter={useSearchDocumentsFilter}
+          query={query}
+          onCategoriesChange={setCategories}
+          onDocumentTypesChange={setDocumentTypes}
+        />
         {children}
       </store.Provider>
     </SearchDocumentsFilterOptionsContext.Provider>
