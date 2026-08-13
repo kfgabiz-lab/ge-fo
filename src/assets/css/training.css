@@ -1508,6 +1508,11 @@
     max-width: none;
   }
 
+  section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiOutlinedInput-root,
+  section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiNativeSelect-select {
+    background: #fff;
+  }
+
   section.support_service_training_request .support_service_training_request__field {
     display: flex;
     flex-direction: column;
@@ -1763,9 +1768,7 @@
     border: 1px solid #e8e8e8;
   }
 
-  section.support_service_training_request .support_service_training_request__field--products {
-    gap: 0;
-  }
+
 
   section.support_service_training_request .support_service_training_request__form-grid--step4 {
     gap: 40px;
@@ -1839,6 +1842,14 @@
     padding: 0;
   }
 
+  /* MUI keyboard focus — checkbox (disableRipple 대비) */
+  section.support_service_training_request
+    .support_service_training_request__checkbox.MuiCheckbox-root.Mui-focusVisible {
+    outline: 2px solid var(--mui-focus-outline-color, var(--color-primary));
+    outline-offset: var(--mui-focus-outline-offset, 2px);
+    border-radius: 4px;
+  }
+
   section.support_service_training_request .support_service_training_request__tags {
     display: flex;
     flex-wrap: wrap;
@@ -1888,6 +1899,15 @@
     max-height: none;
     align-items: flex-start;
     padding: 14px 20px;
+  }
+
+  /* MUI focus — textarea fieldset (section 스코프 #ddd 덮어씀) */
+  section.support_service_training_request
+    .support_service_training_request__input--textarea
+    .MuiOutlinedInput-root.Mui-focused:not(.Mui-error)
+    fieldset {
+    border-color: var(--color-text-muted);
+    border-width: 1px;
   }
 
   section.support_service_training_request .support_service_training_request__input--textarea .MuiOutlinedInput-input {
@@ -4092,6 +4112,10 @@
     gap: 14px;
   }
 
+  section.support_service_training_request .support_service_training_request__field-label--products {
+    margin-bottom: 0;
+  }
+
   section.support_service_training_request .support_service_training_request__form-row--selects {
     flex-direction: column;
     gap: 10px;
@@ -4103,6 +4127,11 @@
     flex: none;
     width: 100%;
     max-width: none;
+  }
+
+  section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiOutlinedInput-root,
+  section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiNativeSelect-select {
+    background: #fff;
   }
 
   section.support_service_training_request .support_service_training_request__checkbox-group {
@@ -4143,6 +4172,13 @@
   section.support_service_training_request .support_service_training_request__checkbox.MuiCheckbox-root {
     padding: 0;
     margin-top: 1px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__checkbox.MuiCheckbox-root.Mui-focusVisible {
+    outline: 2px solid var(--mui-focus-outline-color, var(--color-primary));
+    outline-offset: var(--mui-focus-outline-offset, 2px);
+    border-radius: 4px;
   }
 
   section.support_service_training_request .support_service_training_request__product-panel {
@@ -4277,6 +4313,14 @@
     max-height: none;
     align-items: flex-start;
     padding: 16px 20px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__input--textarea
+    .MuiOutlinedInput-root.Mui-focused:not(.Mui-error)
+    fieldset {
+    border-color: var(--color-text-muted);
+    border-width: 1px;
   }
 
   section.support_service_training_request .support_service_training_request__input--textarea .MuiOutlinedInput-input {

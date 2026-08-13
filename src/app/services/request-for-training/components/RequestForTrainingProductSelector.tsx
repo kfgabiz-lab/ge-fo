@@ -200,11 +200,12 @@ export default function RequestForTrainingProductSelector({
       <RequestForTrainingFieldLabel
         htmlFor={`${formId}-product-category`}
         required={fields.products.required}
+        className="support_service_training_request__field-label--products"
       >
         {fields.products.label}
       </RequestForTrainingFieldLabel>
 
-      <div className="support_service_training_request__form-row support_service_training_request__form-row--selects">
+      <div className="support_service_training_request__form-row support_service_training_request__form-row--2 support_service_training_request__form-row--selects">
         <GuideSelect
           className="guide_field guide_field--h50 support_service_training_request__select"
           value={categoryType}
