@@ -147,6 +147,7 @@ export default function SwProductDetailShell({
             initial={downloads}
             productCodes={productCodes}
             docTypeOptions={docTypeOptions}
+            productName={hero.title}
           />
         ) : null}
         {techHubBanner ? (
