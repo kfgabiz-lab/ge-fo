@@ -513,7 +513,11 @@ export default function SearchAllTabContent({
                 />
                 <div className="search_all__products">
                   {productResult.items.map((item) => (
-                    <SearchProductCard key={item.id} item={item} />
+                    <SearchProductCard
+                      key={item.id}
+                      item={item}
+                      searchTerm={query}
+                    />
                   ))}
                 </div>
               </div>
