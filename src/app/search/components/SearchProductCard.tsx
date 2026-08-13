@@ -34,7 +34,13 @@ export default function SearchProductCard({
             )}
           </span>
           <span className="search_all__product-path-icon" aria-hidden />
-          <span className="search_all__product-path-text">{item.highlight}</span>
+          <span className="search_all__product-path-text">
+            {renderTitleTextHighlight(
+              item.highlight,
+              highlight,
+              "search_all__product-path-text-mark",
+            )}
+          </span>
         </p>
         <div className="search_all__product-text">
           <h3 className="search_all__product-tit">
