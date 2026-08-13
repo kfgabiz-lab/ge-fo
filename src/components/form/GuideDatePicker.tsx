@@ -69,6 +69,23 @@ export default function GuideDatePicker({
     slotProps?.field && typeof slotProps.field === "object" ? slotProps.field : undefined;
   const resolvedAriaLabel = ariaLabel || placeholder;
 
+  const existingTextFieldSlotProps =
+    textFieldSlotProps &&
+    typeof textFieldSlotProps === "object" &&
+    "slotProps" in textFieldSlotProps &&
+    textFieldSlotProps.slotProps &&
+    typeof textFieldSlotProps.slotProps === "object"
+      ? textFieldSlotProps.slotProps
+      : undefined;
+
+  const existingHtmlInput =
+    existingTextFieldSlotProps &&
+    "htmlInput" in existingTextFieldSlotProps &&
+    existingTextFieldSlotProps.htmlInput &&
+    typeof existingTextFieldSlotProps.htmlInput === "object"
+      ? existingTextFieldSlotProps.htmlInput
+      : undefined;
+
   return (
     <DatePicker
       value={resolvedValue}
@@ -93,11 +110,12 @@ export default function GuideDatePicker({
           id,
           className: fieldClassName,
           ...textFieldSlotProps,
-          inputProps: {
-            "aria-label": resolvedAriaLabel,
-            ...(typeof textFieldSlotProps?.inputProps === "object"
-              ? textFieldSlotProps.inputProps
-              : {}),
+          slotProps: {
+            ...existingTextFieldSlotProps,
+            htmlInput: {
+              ...existingHtmlInput,
+              "aria-label": resolvedAriaLabel,
+            },
           },
         },
         openPickerButton: {

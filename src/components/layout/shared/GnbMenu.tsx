@@ -812,7 +812,7 @@ export default function GnbMenu({
                 <Link href={logoHref} prefetch={false} onClick={handleLogoClick}>
                   <img loading="eager" decoding="async"
                     src="/img/logo_white.svg"
-                    alt="LS ELECTRIC"
+                    alt=""
                     className="main_header__logo-img main_header__logo-img--white"
                     aria-hidden
                   />
