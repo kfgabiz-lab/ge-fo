@@ -17,6 +17,7 @@ import {
 } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { pushDataLayerEvent } from "@/lib/gtm";
 import {
   type DevicesTreeRow,
   fetchDevicesTreeRows,
@@ -459,6 +460,13 @@ function ContactUsFormContent() {
 
     try {
       await submitContactUs(payload);
+      pushDataLayerEvent({
+        event: "generate_lead",
+        form_name: "Contact Us",
+        inquiry_type:
+          inquiryTypes.find((option) => option.code === inquiryType)?.name ??
+          inquiryType,
+      });
       alert(contactUsFormCopy.submitSuccess);
       window.location.href = "/support/contact-us";
     } catch {

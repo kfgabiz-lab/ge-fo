@@ -15,6 +15,7 @@ import {
 } from "./breadcrumbTitleStore";
 import { CONNECT_PORTAL_EXTERNAL_URL } from "@/data/support/connectPortalContent";
 import { isMainPath } from "@/lib/navigation/crossSectionNav";
+import { pushDataLayerEvent } from "@/lib/gtm";
 import {
   CATEGORY_CONTEXT_PARAM,
   hrefPathname,
@@ -239,6 +240,13 @@ function HeaderBreadcrumbContent({
             className="breadcrumb_external"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() =>
+              pushDataLayerEvent({
+                event: "click_external_portal",
+                portal_name: "Connect Portal",
+                click_location: "GNB_Util",
+              })
+            }
           >
             Connect Portal
             <span className="icon_external" aria-hidden="true" />

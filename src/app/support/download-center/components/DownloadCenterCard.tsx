@@ -5,6 +5,7 @@ import { useState } from "react";
 import DevicesProductDownloadsCopyLink from "@/app/()/products-systems/components/product/DevicesProductDownloadsCopyLink";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
+import { pushDataLayerEvent } from "@/lib/gtm";
 import {
   fetchDownloadCenterFileUrl,
   hasSelectableVersions,
@@ -43,6 +44,13 @@ export default function DownloadCenterCard({ item }: DownloadCenterCardProps) {
       const url = await fetchDownloadCenterFileUrl(file.filePath);
       if (url && typeof window !== "undefined") {
         window.open(url, "_blank", "noopener,noreferrer");
+        pushDataLayerEvent({
+          event: "file_download",
+          file_name: file.fileName ?? "",
+          product_info: "",
+          file_category: item.docTypeLabel ?? "",
+          file_extension: (file.fileExt ?? "").toLowerCase(),
+        });
       }
     } catch {
     }

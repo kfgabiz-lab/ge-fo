@@ -177,6 +177,7 @@ export default async function GenericProductDetail({
             initial={downloadsPage}
             productCodes={productCodes}
             docTypeOptions={docTypeOptions}
+            productName={detail.series}
           />
         ) : null}
         {techHubBanner ? (

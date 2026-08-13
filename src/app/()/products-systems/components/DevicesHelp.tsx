@@ -1,8 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { pushDataLayerEvent } from "@/lib/gtm";
 import {
   motorControlHelpCards,
   type DevicesHelpCard,
 } from "../data/motorControlContent";
+
+function externalPortalNameFor(cardId: string): string | null {
+  if (cardId === "help-1") return "Connect Portal";
+  if (cardId === "help-3") return "G-ICS";
+  return null;
+}
 
 type DevicesHelpProps = {
   variant?: "default" | "overlay";
@@ -49,6 +58,7 @@ export default function DevicesHelp({
                 : card.href;
               const isExternal =
                 href.startsWith("http://") || href.startsWith("https://");
+              const portalName = externalPortalNameFor(card.id);
               return (
                 <Link
                   key={card.id}
@@ -63,6 +73,16 @@ export default function DevicesHelp({
                   {...(href && (isConnectPortal || isExternal)
                     ? { target: "_blank", rel: "noopener noreferrer" }
                     : {})}
+                  onClick={
+                    portalName
+                      ? () =>
+                          pushDataLayerEvent({
+                            event: "click_external_portal",
+                            portal_name: portalName,
+                            click_location: "Body_CTA",
+                          })
+                      : undefined
+                  }
                 >
                   <div className="devices_help__card-body">
                     <h3 className="devices_help__card-tit">

@@ -6,6 +6,7 @@ import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import { formatDisplayDate } from "@/lib/formatDate";
+import { pushDataLayerEvent } from "@/lib/gtm";
 import DevicesProductDownloadsCopyLink from "./DevicesProductDownloadsCopyLink";
 import DevicesProductDownloadsDocumentFilter from "./DevicesProductDownloadsDocumentFilter";
 import DevicesProductDownloadsFilter from "./DevicesProductDownloadsFilter";
@@ -25,16 +26,23 @@ import {
 import type { DownloadCenterSort } from "@/data/support/downloadCenterData";
 import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
 
+function fileExtensionOf(fileName: string): string {
+  const dotIndex = fileName.lastIndexOf(".");
+  return dotIndex === -1 ? "" : fileName.slice(dotIndex + 1).toLowerCase();
+}
+
 type DevicesProductDownloadsProps = {
   initial: ProductDownloadsPage;
   productCodes: string[];
   docTypeOptions?: DownloadFilterOption[];
+  productName?: string;
 };
 
 export default function DevicesProductDownloads({
   initial,
   productCodes,
   docTypeOptions = [],
+  productName,
 }: DevicesProductDownloadsProps) {
   return (
     <DevicesProductDownloadsFilterBoundary
@@ -44,6 +52,7 @@ export default function DevicesProductDownloads({
       <DevicesProductDownloadsBody
         initial={initial}
         productCodes={productCodes}
+        productName={productName}
       />
     </DevicesProductDownloadsFilterBoundary>
   );
@@ -52,6 +61,7 @@ export default function DevicesProductDownloads({
 function DevicesProductDownloadsBody({
   initial,
   productCodes,
+  productName,
 }: DevicesProductDownloadsProps) {
   const { selectedDocTypes } = useDevicesProductDownloadsFilter();
   const docTypeKey = [...selectedDocTypes].sort().join(",");
@@ -286,6 +296,13 @@ function DevicesProductDownloadsBody({
                                 onClick={() => {
                                   if (file.url) {
                                     window.open(file.url, "_blank", "noopener,noreferrer");
+                                    pushDataLayerEvent({
+                                      event: "file_download",
+                                      file_name: file.name,
+                                      product_info: productName ?? "",
+                                      file_category: item.type,
+                                      file_extension: fileExtensionOf(file.name),
+                                    });
                                   }
                                 }}
                               >
