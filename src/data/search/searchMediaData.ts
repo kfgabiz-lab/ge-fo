@@ -10,7 +10,6 @@ type MediaSourceMeta = {
   sourceType: MediaSourceType;
   filterLabel: string;
   categoryLabel: string;
-  fallbackImage?: string;
 };
 
 export const SEARCH_MEDIA_SOURCES: MediaSourceMeta[] = [
@@ -25,21 +24,18 @@ export const SEARCH_MEDIA_SOURCES: MediaSourceMeta[] = [
     sourceType: "BLOG",
     filterLabel: "Blog",
     categoryLabel: "Blog",
-    fallbackImage: "/img/company/blog/list_01.jpg",
   },
   {
     optionId: "press",
     sourceType: "PRESS",
     filterLabel: "Press",
     categoryLabel: "Press",
-    fallbackImage: "/img/company/press/list_01.png",
   },
   {
     optionId: "articles",
     sourceType: "ARTICLE",
     filterLabel: "Articles",
     categoryLabel: "Article",
-    fallbackImage: "/img/company/articles/list_01.png",
   },
 ];
 
@@ -115,7 +111,7 @@ function toMediaCard(
   return {
     id: `${item.sourceType}-${item.id}`,
     href: item.link ?? "",
-    image: item.imageUrl ?? meta?.fallbackImage ?? "",
+    image: item.imageUrl ?? "",
     category: meta?.categoryLabel ?? "",
     title: item.title ?? "",
     description: description || undefined,
