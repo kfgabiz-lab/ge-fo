@@ -33,6 +33,7 @@ type CompanyFeedListSectionProps = {
   onSearchSubmit?: (value: string) => void;
   sortValue?: "latest" | "oldest" | "az" | "za";
   onSortChange?: (value: "latest" | "oldest" | "az" | "za") => void;
+  onViewAllClick?: () => void;
 };
 
 export default function CompanyFeedListSection({
@@ -54,6 +55,7 @@ export default function CompanyFeedListSection({
   onSearchSubmit,
   sortValue,
   onSortChange,
+  onViewAllClick,
 }: CompanyFeedListSectionProps) {
   const prefix = `company-${variant}-list`;
   const sectionClass = empty ? `${prefix} ${prefix}--no-data` : prefix;
@@ -77,7 +79,7 @@ export default function CompanyFeedListSection({
 
         <div className={`${prefix}__body`}>
           {empty ? (
-            <CompanyFeedEmpty variant={variant} viewAllHref={viewAllHref} />
+            <CompanyFeedEmpty variant={variant} viewAllHref={viewAllHref} onViewAllClick={onViewAllClick}/>
           ) : (
             <>
               <CompanyFeedListGrid variant={variant} items={items} detailHref={detailHref} />

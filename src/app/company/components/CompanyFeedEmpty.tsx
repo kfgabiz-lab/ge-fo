@@ -6,11 +6,13 @@ type CompanyFeedEmptyVariant = "press" | "articles" | "blog";
 type CompanyFeedEmptyProps = {
   variant: CompanyFeedEmptyVariant;
   viewAllHref?: string;
+  onViewAllClick?: () => void;
 };
 
 export default function CompanyFeedEmpty({
   variant,
   viewAllHref = `/company/${variant}`,
+  onViewAllClick,
 }: CompanyFeedEmptyProps) {
   const prefix = `company-${variant}-list`;
 
@@ -27,6 +29,7 @@ export default function CompanyFeedEmpty({
       </div>
       <Link
         href={viewAllHref}
+        onClick={onViewAllClick}
         className={`btn-base btn-lv01 btn-lv01--solid ${prefix}__empty-btn`}
       >
         View All

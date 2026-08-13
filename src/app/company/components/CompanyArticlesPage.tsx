@@ -134,6 +134,9 @@ export default function CompanyArticlesPage() {
     setYear(value);
     setPageIndex(0);
   };
+  const handleViewAllClick = () => {
+    handleSearchSubmit("");
+  };
 
   return (
     <main className="company-page company-page--articles" id="Page_company_articles">
@@ -164,6 +167,7 @@ export default function CompanyArticlesPage() {
         yearValue={year}
         onYearChange={handleYearChange}
         yearOptions={yearOptions}
+        onViewAllClick={handleViewAllClick}
       />
     </main>
   );
