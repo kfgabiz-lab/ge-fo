@@ -75,7 +75,7 @@ function SearchSectionHead({
       <Link href={exploreHref} prefetch={false} className="btn-text-30 search_all__explore">
         Explore
         <span className="btn-text-30__icon" aria-hidden="true">
-          <span className="icon_arrow-18" aria-hidden="true" />
+          <span className="icon_arrow-14" aria-hidden="true" />
         </span>
       </Link>
     </div>

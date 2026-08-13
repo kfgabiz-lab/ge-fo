@@ -677,6 +677,19 @@
     font-family: 'jaka';
   }
 
+  section.search_all .search_all__explore:hover .btn-text-30__icon {
+    background: var(--color-accent);
+  }
+
+  section.search_all .search_all__explore .icon_arrow-14 {
+    filter: none;
+    background: url("/ico/ico_arrow_right_14.svg") center / contain no-repeat;
+  }
+
+  section.search_all .search_all__explore:hover .icon_arrow-14 {
+    filter: brightness(0) invert(1);
+  }
+
   /* Figma 6430:106958 — Product list */
   section.search_all .search_all__products {
     display: grid;
@@ -705,10 +718,6 @@
     padding: 24px;
     background: #f5f7fa;
     transition: background 0.2s ease;
-  }
-
-  section.search_all .search_all__product:hover .search_all__product-img {
-    background: #eef1f6;
   }
 
   section.search_all .search_all__product-img img {
@@ -3164,9 +3173,19 @@
     height: 22px;
   }
 
-  section.search_all .search_all__explore .icon_arrow-18 {
+  section.search_all .search_all__explore .icon_arrow-14 {
     width: 14px;
     height: 14px;
+    filter: none;
+    background: url("/ico/ico_arrow_right_14.svg") center / contain no-repeat;
+  }
+
+  section.search_all .search_all__explore:hover .btn-text-30__icon {
+    background: var(--color-accent);
+  }
+
+  section.search_all .search_all__explore:hover .icon_arrow-14 {
+    filter: brightness(0) invert(1);
   }
 
   section.search_all .search_all__products {

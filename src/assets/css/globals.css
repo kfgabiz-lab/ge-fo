@@ -666,6 +666,9 @@ section .btn-text-30 .btn-text-30__icon {
   border-radius: 50%;
   transition: background 0.2s ease;
 }
+section .btn-text-30:hover .btn-text-30__icon {
+  background: var(--color-accent);
+}
 section .btn-text-30 .icon_arrow-14 {
   display: block;
   width: 14px;
