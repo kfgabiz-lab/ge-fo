@@ -54,7 +54,6 @@ export type AmericaLeaderItem = {
   imageMobile?: string;
   role: string;
   name: string;
-  signature?: string;
 };
 
 export type AmericaSocialLink = {
@@ -333,7 +332,6 @@ export const americaLeaders = {
     id: "charlie-lee",
     image: `${IMG}/leader-featured.webp`,
     imageMobile: `${IMG}/leader-featured-mo.webp`,
-    signature: `${IMG}/leader-signature.svg`,
     name: "ChungHee (Charlie) Lee",
     role: "CEO & President of LS ELECTRIC America and\nLS ELECTRIC Utah",
   } satisfies AmericaLeaderItem,

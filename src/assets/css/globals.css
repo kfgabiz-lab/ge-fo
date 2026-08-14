@@ -58,24 +58,25 @@ html {
   text-size-adjust: none;
 }
 
-::-webkit-scrollbar {
-  width: 3px;
+body *::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
 }
 
-::-webkit-scrollbar-button {
+body *::-webkit-scrollbar-button {
   width: 0;
   height: 0;
   display: none;
 }
 
-::-webkit-scrollbar-thumb {
+body *::-webkit-scrollbar-thumb {
   background: #ddd;
   border-radius: 2px;
 }
 
-/* Firefox 등 webkit 미지원 브라우저만 표준 속성 사용 */
+/* Firefox 등 webkit 미지원 브라우저만 표준 속성 사용 (html 페이지 스크롤은 기본) */
 @supports not selector(::-webkit-scrollbar) {
-  * {
+  body * {
     scrollbar-width: thin;
     scrollbar-color: #ddd transparent;
   }
@@ -473,8 +474,9 @@ section .btn-line-30--on-dark .btn-line-30__icon--copy {
   background-image: url("/ico/ico_copy_white_14.svg");
 }
 
-/* Copy Link — 로딩 + "Link copied!" 토스트 (Figma 7954:145265 / 145273) */
-.devices_product_downloads__file-btn--copy {
+/* Copy Link / Download — 로딩 + 완료 토스트 (Figma 7954:145265 / 145273) */
+.devices_product_downloads__file-btn--copy,
+.devices_product_downloads__file-btn--download {
   position: relative;
 }
 
@@ -493,11 +495,17 @@ section .btn-line-30--on-dark .btn-line-30__icon--copy {
 .devices_product_downloads__file-btn--copy.is-loading
   .devices_product_downloads__file-btn-label,
 .devices_product_downloads__file-btn--copy.is-loading
+  .devices_product_downloads__file-btn-icon,
+.devices_product_downloads__file-btn--download.is-loading
+  .devices_product_downloads__file-btn-label,
+.devices_product_downloads__file-btn--download.is-loading
   .devices_product_downloads__file-btn-icon {
   visibility: hidden;
 }
 
 .devices_product_downloads__file-btn--copy.is-loading
+  .devices_product_downloads__file-btn-spinner,
+.devices_product_downloads__file-btn--download.is-loading
   .devices_product_downloads__file-btn-spinner {
   display: block;
 }
@@ -3395,7 +3403,7 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   }
 
   .cookie_preferences_modal .common_modal__panel::-webkit-scrollbar {
-    width: 3px;
+    width: 5px;
   }
 
   .cookie_preferences_modal .common_modal__panel::-webkit-scrollbar-button {

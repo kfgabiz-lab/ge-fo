@@ -3,13 +3,13 @@
 import { FormControl, MenuItem } from "@mui/material";
 import { useState } from "react";
 import DevicesProductDownloadsCopyLink from "@/app/()/products-systems/components/product/DevicesProductDownloadsCopyLink";
+import DevicesProductDownloadsDownloadBtn from "@/app/()/products-systems/components/product/DevicesProductDownloadsDownloadBtn";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
 import { pushDataLayerEvent } from "@/lib/gtm";
 import {
   fetchDownloadCenterFileUrl,
   hasSelectableVersions,
-  type DownloadCenterFile,
   type DownloadCenterItem,
 } from "@/data/support/downloadCenterData";
 
@@ -38,23 +38,6 @@ export default function DownloadCenterCard({ item }: DownloadCenterCardProps) {
     versions.find((v) => v.versionId === selectedVersionId) ?? versions[0];
   const files = selectedVersion?.files ?? [];
   const showVersionSelect = hasSelectableVersions(item);
-
-  const handleDownload = async (file: DownloadCenterFile) => {
-    try {
-      const url = await fetchDownloadCenterFileUrl(file.filePath);
-      if (url && typeof window !== "undefined") {
-        window.open(url, "_blank", "noopener,noreferrer");
-        pushDataLayerEvent({
-          event: "file_download",
-          file_name: file.fileName ?? "",
-          product_info: "",
-          file_category: item.docTypeLabel ?? "",
-          file_extension: (file.fileExt ?? "").toLowerCase(),
-        });
-      }
-    } catch {
-    }
-  };
 
   return (
     <article className="devices_product_downloads__item">
@@ -144,17 +127,18 @@ export default function DownloadCenterCard({ item }: DownloadCenterCardProps) {
                       className="devices_product_downloads__file-btn--line"
                       resolveUrl={() => fetchDownloadCenterFileUrl(file.filePath)}
                     />
-                    <button
-                      type="button"
-                      className="devices_product_downloads__file-btn devices_product_downloads__file-btn--download"
-                      onClick={() => handleDownload(file)}
-                    >
-                      Download
-                      <span
-                        className="devices_product_downloads__file-btn-icon"
-                        aria-hidden
-                      />
-                    </button>
+                    <DevicesProductDownloadsDownloadBtn
+                      resolveUrl={() => fetchDownloadCenterFileUrl(file.filePath)}
+                      onDownloaded={() => {
+                        pushDataLayerEvent({
+                          event: "file_download",
+                          file_name: file.fileName ?? "",
+                          product_info: "",
+                          file_category: item.docTypeLabel ?? "",
+                          file_extension: (file.fileExt ?? "").toLowerCase(),
+                        });
+                      }}
+                    />
                   </div>
                 </li>
               ))}

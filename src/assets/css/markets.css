@@ -1467,7 +1467,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_solutions .markets_solutions__panel-card::-webkit-scrollbar {
-    width: 3px;
+    width: 5px;
   }
 
   section.markets_solutions .markets_solutions__panel-card::-webkit-scrollbar-button {

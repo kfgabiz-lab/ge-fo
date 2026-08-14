@@ -5,6 +5,7 @@ import { useState } from "react";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
 import DevicesProductDownloadsCopyLink from "@/app/()/products-systems/components/product/DevicesProductDownloadsCopyLink";
+import DevicesProductDownloadsDownloadBtn from "@/app/()/products-systems/components/product/DevicesProductDownloadsDownloadBtn";
 import {
   fetchDownloadCenterFileUrl,
   hasSelectableVersions,
@@ -58,16 +59,6 @@ export default function SearchDocumentsCard({
   const showVersionSelect = hasSelectableVersions(item);
 
   const highlight = searchTerm?.trim() ? searchTerm.trim() : undefined;
-
-  const handleDownload = async (filePath: string | null) => {
-    try {
-      const url = await fetchDownloadCenterFileUrl(filePath);
-      if (url && typeof window !== "undefined") {
-        window.open(url, "_blank", "noopener,noreferrer");
-      }
-    } catch {
-    }
-  };
 
   const rootClass = className
     ? `devices_product_downloads__item search_all__document ${className}`.trim()
@@ -161,14 +152,9 @@ export default function SearchDocumentsCard({
                     className="devices_product_downloads__file-btn--line"
                     resolveUrl={() => fetchDownloadCenterFileUrl(file.filePath)}
                   />
-                  <button
-                    type="button"
-                    className="devices_product_downloads__file-btn devices_product_downloads__file-btn--download"
-                    onClick={() => handleDownload(file.filePath)}
-                  >
-                    Download
-                    <span className="devices_product_downloads__file-btn-icon" aria-hidden />
-                  </button>
+                  <DevicesProductDownloadsDownloadBtn
+                    resolveUrl={() => fetchDownloadCenterFileUrl(file.filePath)}
+                  />
                 </div>
               </li>
             ))}

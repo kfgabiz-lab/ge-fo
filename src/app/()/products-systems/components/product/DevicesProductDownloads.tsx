@@ -8,6 +8,7 @@ import PageNumbering from "@/components/pagination/PageNumbering";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { pushDataLayerEvent } from "@/lib/gtm";
 import DevicesProductDownloadsCopyLink from "./DevicesProductDownloadsCopyLink";
+import DevicesProductDownloadsDownloadBtn from "./DevicesProductDownloadsDownloadBtn";
 import DevicesProductDownloadsDocumentFilter from "./DevicesProductDownloadsDocumentFilter";
 import DevicesProductDownloadsFilter from "./DevicesProductDownloadsFilter";
 import {
@@ -290,28 +291,18 @@ function DevicesProductDownloadsBody({
                             </div>
                             <div className="devices_product_downloads__file-actions">
                               <DevicesProductDownloadsCopyLink url={file.url} />
-                              <button
-                                type="button"
-                                className="devices_product_downloads__file-btn devices_product_downloads__file-btn--download"
-                                onClick={() => {
-                                  if (file.url) {
-                                    window.open(file.url, "_blank", "noopener,noreferrer");
-                                    pushDataLayerEvent({
-                                      event: "file_download",
-                                      file_name: file.name,
-                                      product_info: productName ?? "",
-                                      file_category: item.type,
-                                      file_extension: fileExtensionOf(file.name),
-                                    });
-                                  }
+                              <DevicesProductDownloadsDownloadBtn
+                                url={file.url}
+                                onDownloaded={() => {
+                                  pushDataLayerEvent({
+                                    event: "file_download",
+                                    file_name: file.name,
+                                    product_info: productName ?? "",
+                                    file_category: item.type,
+                                    file_extension: fileExtensionOf(file.name),
+                                  });
                                 }}
-                              >
-                                Download
-                                <span
-                                  className="devices_product_downloads__file-btn-icon"
-                                  aria-hidden="true"
-                                />
-                              </button>
+                              />
                             </div>
                           </li>
                         ))}

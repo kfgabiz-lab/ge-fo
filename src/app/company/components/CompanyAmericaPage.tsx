@@ -353,16 +353,6 @@ function AmericaLeadersSection() {
               )}
             </div>
             <div className="company-america-leaders__panel">
-              {featured.signature ? (
-                <img
-                  loading="lazy"
-                  decoding="async"
-                  src={featured.signature}
-                  alt=""
-                  className="company-america-leaders__signature"
-                  aria-hidden
-                />
-              ) : null}
               <div className="company-america-leaders__meta">
                 <p className="company-america-leaders__name">{featured.name}</p>
                 <p className="company-america-leaders__role">{featured.role}</p>

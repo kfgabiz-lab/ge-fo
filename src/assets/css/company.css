@@ -3322,7 +3322,7 @@ section.company-blog-list .company-blog__tag:hover {
     flex: 0 0 50%;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: flex-end;
     width: 50%;
     padding: 40px 30px 26px;
     box-sizing: border-box;
@@ -3339,15 +3339,6 @@ section.company-blog-list .company-blog__tag:hover {
     max-width: none;
     display: flex;
     flex-direction: column;
-  }
-
-  section.company-america-leaders .company-america-leaders__signature {
-    display: block;
-    width: 140px;
-    max-width: 100%;
-    height: auto;
-    margin-left: auto;
-    pointer-events: none;
   }
 
   /* Figma — 하단 4×2 · 342×435 · gap 24 */
@@ -4249,19 +4240,6 @@ section.company-blog-list .company-blog__tag:hover {
     align-items: flex-start;
     text-align: left;
     max-width: calc(100% - 48px);
-  }
-
-  section.company-america-leaders .company-america-leaders__signature {
-    position: absolute;
-    top: 65.2%;
-    right: 24px;
-    left: auto;
-    display: block;
-    width: 177px;
-    max-width: 52%;
-    height: auto;
-    margin: 0;
-    pointer-events: none;
   }
 
   section.company-america-leaders .company-america-leaders__grid {

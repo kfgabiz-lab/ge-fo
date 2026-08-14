@@ -20,6 +20,15 @@
   --gnb-mobile-panel-ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* GNB 스크롤은 전역 5px과 별도로 3px 유지 */
+.gnb_mega ::-webkit-scrollbar,
+.gnb_mega::-webkit-scrollbar,
+.gnb_menu_wrap ::-webkit-scrollbar,
+.main_header ::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
 .sub_header-wrap.is-product-detail {
   --sub-header-scroll-duration: var(--sub-header-scroll-duration-product);
   --sub-header-scroll-duration-hide: var(--sub-header-scroll-duration-product);
