@@ -63,8 +63,8 @@ export const lsElectricPageTitle = {
 };
 
 export const lsElectricIntro = {
-  heroImage: `${IMG}/intro-hero.jpg?v=1`,
-  heroImageMobile: `${IMG}/intro-hero-mo.jpg?v=1`,
+  heroImage: `${IMG}/intro-hero.webp?v=1`,
+  heroImageMobile: `${IMG}/intro-hero-mo.webp?v=1`,
   headlineLines: ["Smart Power & Automation,", "Built for Performance"],
   paragraphs: [
     "LS ELECTRIC is a global energy and automation company delivering integrated power and digital solutions. By combining advanced electrical engineering with digital technologies, we enable industries and infrastructure to operate with greater efficiency, reliability, and sustainability.",
@@ -76,8 +76,8 @@ export const lsElectricHighlights = {
   title: "2025 Highlights",
   ctaLabel: "View IR infomation",
   ctaHref: "https://www.ls-electric.com/about-us/investor-relations/ir-materials",
-  bgImage: `${IMG}/highlights-bg.jpg`,
-  bgImageMo: `${IMG}/highlights-bg-mo.jpg`,
+  bgImage: `${IMG}/highlights-bg.webp`,
+  bgImageMo: `${IMG}/highlights-bg-mo.webp`,
   footnote: "*Financial figures in 2025",
   stats: [
     {
@@ -128,28 +128,28 @@ export const lsElectricBusiness = {
     {
       id: "power",
       title: "Power Solution",
-      image: `${IMG}/business-power.jpg`,
+      image: `${IMG}/business-power.webp`,
       items: ["Power Transmission", "Power Distribution"],
       gradient: "bottom",
     },
     {
       id: "energy",
       title: "Smart Energy Solution",
-      image: `${IMG}/business-energy.jpg`,
+      image: `${IMG}/business-energy.webp`,
       items: ["Photovoltaic (PV)", "Energy Storage System (ESS)", "Microgrid"],
       gradient: "bottom",
     },
     {
       id: "automation",
       title: "Automation Solution",
-      image: `${IMG}/business-automation.jpg`,
+      image: `${IMG}/business-automation.webp`,
       items: ["PLC", "Servo", "Drive", "HMI"],
       gradient: "top",
     },
     {
       id: "railway",
       title: "Railway Solution",
-      image: `${IMG}/business-railway.jpg`,
+      image: `${IMG}/business-railway.webp`,
       items: ["Railway Signaling", "Railway Power Supply"],
       gradient: "bottom",
     },
@@ -160,8 +160,8 @@ export const lsElectricGlobal = {
   title: "Global Network",
   description:
     "LS ELECTRIC set a mid-to long-term vision for each overseas market to broaden its global business presence. In addition to pursuing the evolution of our existing businesses, we are discovering new business opportunities and strengthening the basis of business operations to take a tailor-made approach to each local market.",
-  bgTexture: `${IMG}/global-bg.png`,
-  mapImage: `${IMG}/global-map.png`,
+  bgTexture: `${IMG}/global-bg.webp`,
+  mapImage: `${IMG}/global-map.webp`,
   stats: [
     { id: "network", label: "Global Network", value: "14", unit: "Countries" },
     { id: "production", label: "Production Corp", value: "7", unit: "cities" },
@@ -182,7 +182,7 @@ export const lsElectricPtt = {
   cards: [
     {
       id: "infrastructure",
-      image: `${IMG}/ptt-01.jpg`,
+      image: `${IMG}/ptt-01.webp`,
       title: "Test Infrastructure",
       subtitle: "World 6th largest testing capacity lab",
       description:
@@ -190,7 +190,7 @@ export const lsElectricPtt = {
     },
     {
       id: "talent",
-      image: `${IMG}/ptt-02.jpg`,
+      image: `${IMG}/ptt-02.webp`,
       title: "Talent & Expertise",
       subtitle: "IEC Standards & Compliance Expertise",
       description:
@@ -198,7 +198,7 @@ export const lsElectricPtt = {
     },
     {
       id: "excellence",
-      image: `${IMG}/ptt-03.jpg`,
+      image: `${IMG}/ptt-03.webp`,
       title: "Operational Excellence",
       subtitle: "Trusted Global Testing & Certification",
       description:
@@ -211,7 +211,7 @@ export const lsElectricRnd = {
   title: "R&D Center",
   description:
     "Guided by our mission of 'Futuring Smart Energy', we maintain dedicated research institutes for energy and automation, respectively, to ensure a relentless pursuit of quality and technology in these areas. In addition, the AX Sector, led by the ESG/Vision Management CVO, leverages artificial intelligence, machine learning, and big data technologies to advance our businesses, thereby steering global market trends and solidifying our future competitiveness.",
-  heroImage: `${IMG}/rnd-hero.jpg`,
+  heroImage: `${IMG}/rnd-hero.webp`,
   items: [
     {
       id: "tech-map",
@@ -253,7 +253,7 @@ export const lsElectricHistory = {
       id: "beginning",
       title: "Era of Beginning",
       subtitle: "We Pioneer the Power and Automation industries",
-      image: `${IMG}/history-beginning.jpg`,
+      image: `${IMG}/history-beginning.webp`,
       period: "1974 ~ 1995",
       align: "left",
       events: [
@@ -269,7 +269,7 @@ export const lsElectricHistory = {
       id: "challenge",
       title: "Era of Challenge",
       subtitle: "We Become the Leader in Power and Automation Sectors",
-      image: `${IMG}/history-challenge.jpg`,
+      image: `${IMG}/history-challenge.webp`,
       period: "1996 ~ 2007",
       align: "right",
       events: [
@@ -288,7 +288,7 @@ export const lsElectricHistory = {
       id: "growth",
       title: "Era of Growth and Innovation",
       subtitle: "We Takeoff as a Global Leader",
-      image: `${IMG}/history-growth.jpg`,
+      image: `${IMG}/history-growth.webp`,
       period: "2008 ~ 2014",
       align: "left",
       events: [
@@ -310,7 +310,7 @@ export const lsElectricHistory = {
       id: "value",
       title: "Era of Value Management",
       subtitle: "We Open Up the Future of Smart Energy",
-      image: `${IMG}/history-value.jpg`,
+      image: `${IMG}/history-value.webp`,
       period: "2015 ~",
       align: "right",
       events: [

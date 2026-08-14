@@ -10,7 +10,7 @@ export const smartFactoryHero = {
 };
 
 export const smartFactoryOverview = {
-  image: smartFactoryImg("overview_hero.jpg"),
+  image: smartFactoryImg("overview_hero.webp"),
   imageAlt: "Smart factory diagnostic monitoring control room",
   title: "Predictive Asset Diagnostics:\nEnhancing Reliability Through Intelligent Monitoring",
   description:
@@ -61,7 +61,7 @@ export const smartFactoryApplicationsSection = {
       subtitle: "(HV CMD)",
       description:
         "Provides condition monitoring and diagnostic capabilities for high-voltage power equipment, including HV GIS and power transformers, to support reliable operation of transmission assets.",
-      image: smartFactoryImg("application_transmission.jpg"),
+      image: smartFactoryImg("application_transmission.webp"),
     },
     {
       id: "app-2",
@@ -69,7 +69,7 @@ export const smartFactoryApplicationsSection = {
       subtitle: "(MV/LV CMD)",
       description:
         "Provides condition monitoring and diagnostics for medium and low voltage equipment, including cast resin transformers, switchboards, and distribution systems.",
-      image: smartFactoryImg("application_distribution.jpg"),
+      image: smartFactoryImg("application_distribution.webp"),
     },
     {
       id: "app-3",
@@ -77,7 +77,7 @@ export const smartFactoryApplicationsSection = {
       subtitle: "(CMS)",
       description:
         "An integrated monitoring and management platform that connects with up to 200 CMD systems, enabling centralised supervision of substation assets across domestic and international sites.",
-      image: smartFactoryImg("application_cms.jpg"),
+      image: smartFactoryImg("application_cms.webp"),
     },
   ] satisfies HvdcApplication[],
 };
@@ -92,8 +92,8 @@ export const smartFactoryWhySection = {
       title: "DAU (Data Acquisition Unit)",
       lead: "Collects diagnostic data from power equipment through a compact and flexible hardware platform designed for easy installation and maintenance.",
       cards: [
-        { title: "", description: "", image: smartFactoryImg("why_dau_01.jpg") },
-        { title: "", description: "", image: smartFactoryImg("why_dau_02.jpg") },
+        { title: "", description: "", image: smartFactoryImg("why_dau_01.webp") },
+        { title: "", description: "", image: smartFactoryImg("why_dau_02.webp") },
       ],
     },
     {
@@ -101,8 +101,8 @@ export const smartFactoryWhySection = {
       title: "CMD (Condition Monitoring & Diagnostic System)",
       lead: "Provides AI-based condition monitoring, diagnostics, trend analysis, alarm management, and reporting at the local site level.",
       cards: [
-        { title: "", description: "", image: smartFactoryImg("why_cmd_01.jpg") },
-        { title: "", description: "", image: smartFactoryImg("why_cmd_02.jpg") },
+        { title: "", description: "", image: smartFactoryImg("why_cmd_01.webp") },
+        { title: "", description: "", image: smartFactoryImg("why_cmd_02.webp") },
       ],
     },
     {
@@ -110,8 +110,8 @@ export const smartFactoryWhySection = {
       title: "CMS (Centralised Management System)",
       lead: "Enables centralised monitoring and management of up to 200 substations through integrated diagnostics and reporting.",
       cards: [
-        { title: "", description: "", image: smartFactoryImg("why_cms_01.jpg") },
-        { title: "", description: "", image: smartFactoryImg("why_cms_02.jpg") },
+        { title: "", description: "", image: smartFactoryImg("why_cms_01.webp") },
+        { title: "", description: "", image: smartFactoryImg("why_cms_02.webp") },
       ],
     },
     {
@@ -120,7 +120,7 @@ export const smartFactoryWhySection = {
       layout: "split",
       lead:
         "Provides real-time access to equipment status, alarms,\nand diagnostic information anytime and anywhere through\na web-based mobile interface.",
-      cards: [{ title: "", description: "", image: smartFactoryImg("why_mobile_01.jpg") }],
+      cards: [{ title: "", description: "", image: smartFactoryImg("why_mobile_01.webp") }],
     },
   ] satisfies HvdcWhyBlock[],
 };

@@ -17,8 +17,8 @@ export const companyMission = {
   title: "Mission & Vision",
   description:
     "Innovating at the intersection of energy, automation, and digital intelligence.",
-  bgImage: `${IMG}/mission-bg.png`,
-  bgImageMo: `${IMG}/mission-bg-mo.png`,
+  bgImage: `${IMG}/mission-bg.webp`,
+  bgImageMo: `${IMG}/mission-bg-mo.webp`,
   missionLogo: `${IMG}/mission-logo.svg`,
   missionText:
     "LS ELECTRIC, which has been pioneering the power and automation industries for the past 40 years, now offers smart convergence solutions by combining ICT and DC technologies.",
@@ -47,7 +47,7 @@ export const companyMission = {
   ] satisfies CompanyMissionPillar[],
   coreValueLogo: `${IMG}/core-value-logo.svg`,
   coreValueDesc: "Fundamental transformation for the growth era",
-  coreValueArrow: `${IMG}/mission-arrow.png`,
+  coreValueArrow: `${IMG}/mission-arrow.webp`,
   coreValuePlusIcon: `${IMG}/mission-value-plus.svg`,
   coreValues: [
     { id: "challenge", label: "Challenge", icon: `${IMG}/value-challenge.svg` },

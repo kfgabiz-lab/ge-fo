@@ -5216,12 +5216,12 @@ section.support_where_to_buy_banner .common_banner_02__link {
     margin: 1px 0 0;
     border: none;
     border-radius: 0;
-    background: url("/ico/ico_radio_off_22.png") center / 22px 22px no-repeat;
+    background: url("/ico/ico_radio_off_22.webp") center / 22px 22px no-repeat;
     cursor: pointer;
   }
 
   section.support_contact_form .support_contact_form__radio:checked {
-    background-image: url("/ico/ico_radio_on_22.png");
+    background-image: url("/ico/ico_radio_on_22.webp");
   }
 
   section.support_contact_form .support_contact_form__external-link {
@@ -5620,12 +5620,12 @@ section.support_where_to_buy_banner .common_banner_02__link {
     margin: 0;
     border: none;
     border-radius: 0;
-    background: url("/ico/ico_radio_off_22.png") center / 22px 22px no-repeat;
+    background: url("/ico/ico_radio_off_22.webp") center / 22px 22px no-repeat;
     cursor: pointer;
   }
 
   section.support_contact_form .support_contact_form__radio:checked {
-    background-image: url("/ico/ico_radio_on_22.png");
+    background-image: url("/ico/ico_radio_on_22.webp");
   }
 
   section.support_contact_form .support_contact_form__radio-label span {

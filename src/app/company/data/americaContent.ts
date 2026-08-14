@@ -71,7 +71,7 @@ export const americaPageTitle = {
 };
 
 export const americaIntro = {
-  heroImage: `${IMG}/hero.jpg`,
+  heroImage: `${IMG}/hero.webp`,
   headlineLines: ["Delivering Power and Automation Solutions Across the United States"],
   paragraphs: [
     "LS ELECTRIC America is the North American subsidiary of LS ELECTRIC, delivering power and automation solutions across the region.",
@@ -103,7 +103,7 @@ export const americaShaping = {
   blocks: [
     {
       id: "bastrop",
-      image: `${IMG}/shaping-bastrop.jpg`,
+      image: `${IMG}/shaping-bastrop.webp`,
       video: `${IMG}/bastrop.webm`,
       titleLines: [
         "Built in Texas. Proven across America.",
@@ -132,7 +132,7 @@ export const americaShaping = {
     },
     {
       id: "utah",
-      image: `${IMG}/shaping-utah.jpg`,
+      image: `${IMG}/shaping-utah.webp`,
       video: `${IMG}/utah.webm`,
       titleLines: [
         "Securing the Supply Chain:",
@@ -168,7 +168,7 @@ export const americaBusiness = {
   items: [
     {
       id: "lv-mv",
-      image: `${IMG}/business-01.jpg`,
+      image: `${IMG}/business-01.webp`,
       title: "LV & MV Power Solutions",
       description:
         "We provide complete low and medium voltage power distribution solutions—from transformers and switchgear to switchboards, panelboards, and DC power systems. Built for mission critical applications like data centers, manufacturing, and commercial infrastructure, our solutions deliver the reliability, efficiency, and scalability North American operations demand.",
@@ -176,7 +176,7 @@ export const americaBusiness = {
     },
     {
       id: "grid",
-      image: `${IMG}/business-02.jpg`,
+      image: `${IMG}/business-02.webp`,
       title: "Grid & Utility Infrastructure",
       description:
         "LS ELECTRIC supports utilities, renewable developers, and large industrial projects with high voltage transmission and grid infrastructure solutions. Our portfolio—from ultra high voltage disconnect switches to power transformers—is designed to strengthen grid resilience, improve efficiency, and support the transition to cleaner, more reliable energy systems across North America.",
@@ -184,7 +184,7 @@ export const americaBusiness = {
     },
     {
       id: "automation",
-      image: `${IMG}/business-03.jpg`,
+      image: `${IMG}/business-03.webp`,
       title: "Automation & Industrial Control",
       description:
         "We deliver advanced automation and motor control solutions including VFDs, PLCs, HMIs, and integrated control systems. Designed for North American industry, our technologies help manufacturers and operators boost productivity, reduce downtime, and drive smarter, data driven decision making.",
@@ -194,8 +194,8 @@ export const americaBusiness = {
 };
 
 export const americaCareersBanner = {
-  bgImage: `${IMG}/banner-bg.png`,
-  bgImageMo: `${IMG}/banner-bg-mo.png`,
+  bgImage: `${IMG}/banner-bg.webp`,
+  bgImageMo: `${IMG}/banner-bg-mo.webp`,
   title: "Imagineers Dedicated to the Future of Smart Energy",
   description: "Join LS ELECTRIC and drive the energy transition in North America.",
   ctaLabel: "Explore Careers",
@@ -331,8 +331,8 @@ export const americaLeaders = {
     "Connecting accomplished executives and business leaders who shape industries and create lasting value.",
   featured: {
     id: "charlie-lee",
-    image: `${IMG}/leader-featured.png`,
-    imageMobile: `${IMG}/leader-featured-mo.png`,
+    image: `${IMG}/leader-featured.webp`,
+    imageMobile: `${IMG}/leader-featured-mo.webp`,
     signature: `${IMG}/leader-signature.svg`,
     name: "ChungHee (Charlie) Lee",
     role: "CEO & President of LS ELECTRIC America and\nLS ELECTRIC Utah",
@@ -340,49 +340,49 @@ export const americaLeaders = {
   items: [
     {
       id: "youn-seob-lim",
-      image: `${IMG}/leader-01.png`,
+      image: `${IMG}/leader-01.webp`,
       name: "Youn Seob Lim",
       role: "Head of Grid Business Division & President of LS Energy Solutions",
     },
     {
       id: "jaekyun-kim",
-      image: `${IMG}/leader-02.png`,
+      image: `${IMG}/leader-02.webp`,
       name: "JaeKyun (J.K.) Kim",
       role: "Head of Power System Division",
     },
     {
       id: "sean-cho",
-      image: `${IMG}/leader-03.png`,
+      image: `${IMG}/leader-03.webp`,
       name: "Sean Seungheon Cho",
       role: "Head of Business Support Division",
     },
     {
       id: "edward-lee",
-      image: `${IMG}/leader-04.png`,
+      image: `${IMG}/leader-04.webp`,
       name: "Edward Lee",
       role: "Head of Solution Business Department",
     },
     {
       id: "steve-lee",
-      image: `${IMG}/leader-05.png`,
+      image: `${IMG}/leader-05.webp`,
       name: "Steve Lee",
       role: "Head of Engineering & Technology Center",
     },
     {
       id: "yongmo-jeong",
-      image: `${IMG}/leader-06.png`,
+      image: `${IMG}/leader-06.webp`,
       name: "Yongmo Jeong",
       role: "Head of Operation Center, Bastrop Campus TX",
     },
     {
       id: "andrew-urda",
-      image: `${IMG}/leader-07.png`,
+      image: `${IMG}/leader-07.webp`,
       name: "Andrew Urda",
       role: "Head of Marketing",
     },
     {
       id: "mike-ellisor",
-      image: `${IMG}/leader-08.png`,
+      image: `${IMG}/leader-08.webp`,
       name: "Mike Ellisor",
       role: "Head of Power Solution Sales Team",
     },

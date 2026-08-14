@@ -10,7 +10,7 @@ export const xemsHero = {
 };
 
 export const xemsOverview = {
-  image: xemsImg("overview_hero.jpg"),
+  image: xemsImg("overview_hero.webp"),
   imageAlt: "Industrial control room with energy monitoring dashboards",
   title: "Integrated Energy Management for\nSmarter Operations.",
   description:
@@ -57,7 +57,7 @@ export const xemsEnergySolutionsSection = {
       subtitle: "(Factory Energy Management System)",
       description:
         "FEMS provides an energy management solution for industrial facilities, supporting energy monitoring, management, and analysis across factory operations.",
-      image: xemsImg("application_fems.jpg"),
+      image: xemsImg("application_fems.webp"),
     },
     {
       id: "bems",
@@ -65,7 +65,7 @@ export const xemsEnergySolutionsSection = {
       subtitle: "(Building Energy Management System)",
       description:
         "BEMS provides a control and management solution for commercial buildings, supporting efficient building energy operation and management.",
-      image: xemsImg("application_bems.jpg"),
+      image: xemsImg("application_bems.webp"),
     },
   ] satisfies HvdcApplication[],
   diagramImage: xemsImg("energy_diagram.svg"),
@@ -126,8 +126,8 @@ export const xemsWhySection = {
       title: "Energy Information Acquisition / Management",
       lead: "Collects various energy data scattered around buildings/factories in real-time, enabling objectification, quantification, and history inquiry of the data.",
       cards: [
-        { title: "", description: "", image: xemsImg("why_acquisition_01.jpg") },
-        { title: "", description: "", image: xemsImg("why_acquisition_02.jpg") },
+        { title: "", description: "", image: xemsImg("why_acquisition_01.webp") },
+        { title: "", description: "", image: xemsImg("why_acquisition_02.webp") },
       ],
     },
     {
@@ -135,8 +135,8 @@ export const xemsWhySection = {
       title: "Energy Diagnosis / Analysis",
       lead: "Diagnoses and analyzes energy data collected in various ways, using various analysis tools to analyze energy usage information.",
       cards: [
-        { title: "", description: "", image: xemsImg("why_diagnosis_01.jpg") },
-        { title: "", description: "", image: xemsImg("why_diagnosis_02.jpg") },
+        { title: "", description: "", image: xemsImg("why_diagnosis_01.webp") },
+        { title: "", description: "", image: xemsImg("why_diagnosis_02.webp") },
       ],
     },
     {
@@ -144,8 +144,8 @@ export const xemsWhySection = {
       title: "Energy Efficiency & Saving",
       lead: "Sets a baseline using analyzed data on energy usage and conducts efficiency activities to find and manage energy reduction items objectively.",
       cards: [
-        { title: "", description: "", image: xemsImg("why_efficiency_01.jpg") },
-        { title: "", description: "", image: xemsImg("why_efficiency_02.jpg") },
+        { title: "", description: "", image: xemsImg("why_efficiency_01.webp") },
+        { title: "", description: "", image: xemsImg("why_efficiency_02.webp") },
       ],
     },
     {
@@ -153,8 +153,8 @@ export const xemsWhySection = {
       title: "Power Quality Monitoring / Analysis",
       lead: "Utilizes the platform of Power SCADA to apply key functions of existing SCADA to the FEMS Web solution, and includes proprietary communication protocols such as DNP 3.0, IEC61850, and standard communication protocols like MODBUS TCP.",
       cards: [
-        { title: "", description: "", image: xemsImg("why_pq_01.jpg") },
-        { title: "", description: "", image: xemsImg("why_pq_02.jpg") },
+        { title: "", description: "", image: xemsImg("why_pq_01.webp") },
+        { title: "", description: "", image: xemsImg("why_pq_02.webp") },
       ],
     },
   ] satisfies HvdcWhyBlock[],

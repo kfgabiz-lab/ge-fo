@@ -188,8 +188,8 @@ function PasswordField({
                   <img
                     src={
                       visible
-                        ? "/ico/ico_password_on_22.png"
-                        : "/ico/ico_password_off_22.png"
+                        ? "/ico/ico_password_on_22.webp"
+                        : "/ico/ico_password_off_22.webp"
                     }
                     alt=""
                     width={22}

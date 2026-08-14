@@ -175,8 +175,8 @@ export const warrantyPolicyPage = {
       "We're Here for You Our support team is happy to help with any warranty-related questions.",
     ctaLabel: "Contact Us",
     ctaHref: "/support/contact-us",
-    backgroundImage: `${IMG}/banner-bg.jpg`,
-    backgroundImageMobile: `${IMG}/banner-bg-mo.jpg`,
+    backgroundImage: `${IMG}/banner-bg.webp`,
+    backgroundImageMobile: `${IMG}/banner-bg-mo.webp`,
   },
   extension: {
     title: "Warranty Extension Overview",

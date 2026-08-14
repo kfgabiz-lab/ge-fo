@@ -1,7 +1,7 @@
 const IMG = "/img/services/request-for-training";
 
 export const requestForTrainingAssets = {
-  stepBarBg: `${IMG}/step-bar-bg.png`,
+  stepBarBg: `${IMG}/step-bar-bg.webp`,
   recaptcha: "/img/services/engineering-training/session-recaptcha.webp",
 } as const;
 

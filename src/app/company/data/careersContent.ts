@@ -16,7 +16,7 @@ export const careersLinkedInCta = {
 
 export const careersJobsSection = {
   title: "Job Description",
-  backgroundImage: `${IMG}/jobs-bg.png`,
+  backgroundImage: `${IMG}/jobs-bg.webp`,
 } as const;
 
 export type CareersJob = {
@@ -63,8 +63,8 @@ export async function fetchCareersJobs(): Promise<CareersJob[]> {
 }
 
 export const careersLinkedInBanner = {
-  backgroundImage: `${IMG}/linkedin-banner.jpg`,
-  backgroundImageMo: `${IMG}/linkedin-banner-mo.jpg`,
+  backgroundImage: `${IMG}/linkedin-banner.webp`,
+  backgroundImageMo: `${IMG}/linkedin-banner-mo.webp`,
   title: "Explore Open Positions on LinkedIn",
   titleMo: ["Explore Open Positions ", "on LinkedIn"] as const,
   description: [

@@ -6,7 +6,7 @@ export const esgPageTitle = {
 };
 
 export const esgIntro = {
-  heroImage: `${IMG}/hero.jpg`,
+  heroImage: `${IMG}/hero.webp`,
   headlineLines: ["ESG Driving Strategy"],
   paragraphs: [
     "LS ELECTRIC America, Inc. has established its ESG vision, “Sustainable Future with Green Energy Solution,” to become a global leader driving sustainable growth and the future of smart energy. Under this ESG vision, we are committed to building a sustainable future through our core principles of Reduce Carbon Emissions, Respect Society, and Responsible Business.",
@@ -18,7 +18,7 @@ export const esgIntro = {
 };
 
 export const esgVision = {
-  backgroundImage: `${IMG}/vision-bg.jpg`,
+  backgroundImage: `${IMG}/vision-bg.webp`,
   missionImage: `/img/company/america/mission-logo.svg`,
   arrowImage: `${IMG}/arrow.svg`,
   visionEmblemImage: `${IMG}/vision-emblem.svg`,

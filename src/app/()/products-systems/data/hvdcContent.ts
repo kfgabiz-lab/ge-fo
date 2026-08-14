@@ -10,7 +10,7 @@ export const hvdcHero = {
 };
 
 export const hvdcOverview = {
-  image: hvdcImg("overview_hero.jpg"),
+  image: hvdcImg("overview_hero.webp"),
   imageAlt: "SCADA control room monitoring systems",
   title:
     "Beyond Monitoring: Driving Grid\nResiliency through Intelligent Automation.",
@@ -70,7 +70,7 @@ export const hvdcApplicationsSection = {
       subtitle: "(Electrical Equipment Control Monitoring System)",
       description:
         "ECMS is designed for power plants to support the operation, management, monitoring, and control of power generation equipment.",
-      image: hvdcImg("application_ecms.jpg"),
+      image: hvdcImg("application_ecms.webp"),
     },
     {
       id: "app-2",
@@ -78,7 +78,7 @@ export const hvdcApplicationsSection = {
       subtitle: "(Power Quality Management System)",
       description:
         "PQMS collects and analyzes power quality data in\nreal time to help identify key causes of power quality degradation.",
-      image: hvdcImg("application_pqms.jpg"),
+      image: hvdcImg("application_pqms.webp"),
     },
     {
       id: "app-3",
@@ -86,7 +86,7 @@ export const hvdcApplicationsSection = {
       subtitle: "(Substation Automation System)",
       description:
         "SAS provides a digital substation automation solution for unmanned operation at individual substations.",
-      image: hvdcImg("application_sas.jpg"),
+      image: hvdcImg("application_sas.webp"),
     },
   ] satisfies HvdcApplication[],
 };
@@ -111,24 +111,24 @@ export const hvdcWhySection = {
           title: "PQ waveform data analysis",
           description:
             "Supports PQ instantaneous value waveform analysis and harmonic, phase angle, RMS analysis function (Two cursor analysis function is provided)",
-          image: hvdcImg("why_pq_01.jpg"),
+          image: hvdcImg("why_pq_01.webp"),
         },
         {
           title: "PQ data analysis",
           description: "Provides easy data extraction of analysis results",
-          image: hvdcImg("why_pq_02.jpg"),
+          image: hvdcImg("why_pq_02.webp"),
         },
         {
           title: "Trend analysis of PQ event occurrence",
           description:
             "Provides event occurrence trend by time (specific time period, daily event, daily event occurrence)",
-          image: hvdcImg("why_pq_03.jpg"),
+          image: hvdcImg("why_pq_03.webp"),
         },
         {
           title: "Standard curve analysis (CBEMA, ITIC, SEMI)",
           description:
             "Provides CBEMA, ITIC, SEMI standard curve analysis function according to power quality standards",
-          image: hvdcImg("why_pq_04.jpg"),
+          image: hvdcImg("why_pq_04.webp"),
         },
       ],
     },
@@ -140,13 +140,13 @@ export const hvdcWhySection = {
           title: "Historical data",
           description:
             "The PSDR function saves all analog and digital data every 2 seconds and manages them as files,and the user can select a file at a specific point in time. Provides a function to replay historical data for that time",
-          image: hvdcImg("why_psdr_01.jpg"),
+          image: hvdcImg("why_psdr_01.webp"),
         },
         {
           title: "Create database",
           description:
             "It provides PSDR viewport and PSDR database creation functions independently of the real-time operating system",
-          image: hvdcImg("why_psdr_02.jpg"),
+          image: hvdcImg("why_psdr_02.webp"),
         },
       ],
     },
@@ -181,7 +181,7 @@ export const hvSystemProducts = [
   {
     id: "hv-1",
     href: "/product/scada",
-    image: hvdcImg("overview_hero.jpg"),
+    image: hvdcImg("overview_hero.webp"),
     title: "SCADA",
     description: hvdcHero.description,
   },

@@ -72,8 +72,8 @@ export const engineeringTrainingSessionCalendarLabels = {
 } as const;
 
 export const engineeringTrainingSessionAssets = {
-  countdownBg: `${IMG}/session-countdown-bg.jpg`,
-  recaptcha: `${IMG}/session-recaptcha.png`,
+  countdownBg: `${IMG}/session-countdown-bg.webp`,
+  recaptcha: `${IMG}/session-recaptcha.webp`,
   registerScrollIcon: `${ICO}/ico_scrto_18.svg`,
   calendarIcons: {
     google: `${ICO}/ico_google_18.svg`,

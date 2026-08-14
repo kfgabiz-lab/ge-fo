@@ -11,7 +11,7 @@ export const microGridHero = {
 };
 
 export const microGridOverview = {
-  image: microGridImg("overview_hero.jpg"),
+  image: microGridImg("overview_hero.webp"),
   imageAlt: "Microgrid control room with energy monitoring dashboards",
   title: "Intelligent Microgrid Management:\nDelivering Reliable Energy Operations",
   description:
@@ -62,7 +62,7 @@ export const microGridApplicationsSection = {
       subtitle: "(Uiwang Microgrid Project)",
       description:
         "Integrates PV, BESS, EV chargers, and utility grid infrastructure into a unified microgrid platform. Supports distributed energy optimisation and seamless grid-to-island operation.",
-      image: microGridImg("application_urban.jpg"),
+      image: microGridImg("application_urban.webp"),
     },
     {
       id: "app-2",
@@ -70,7 +70,7 @@ export const microGridApplicationsSection = {
       subtitle: "(Seoul National University Campus)",
       description:
         "Provides resilient power supply through seamless transfer and islanding operation. Ensures uninterrupted operation of critical facilities during grid disturbances.",
-      image: microGridImg("application_campus.jpg"),
+      image: microGridImg("application_campus.webp"),
     },
     {
       id: "app-3",
@@ -78,7 +78,7 @@ export const microGridApplicationsSection = {
       subtitle: "(LVDC Island Microgrid)",
       description:
         "Delivers reliable power through renewable energy, ESS, and diesel generator integration. Enables efficient and self-sufficient energy operation in remote areas.",
-      image: microGridImg("application_remote.jpg"),
+      image: microGridImg("application_remote.webp"),
     },
   ] satisfies HvdcApplication[],
 };

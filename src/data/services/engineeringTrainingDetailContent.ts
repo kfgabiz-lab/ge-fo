@@ -55,7 +55,7 @@ export const engineeringTrainingDetails: Record<string, EngineeringTrainingDetai
       "Engineering training materials that combine the principles, specifications, and setup methods of LS circuit breakers from low pressure (MCB/MCCB/ACB) to medium pressure (VCB) into theory",
       "and practice",
     ],
-    heroImage: `${IMG}/course-01.jpg`,
+    heroImage: `${IMG}/course-01.webp`,
     schedule: {
       trainingTypeFilter: {
         label: "Training Type",

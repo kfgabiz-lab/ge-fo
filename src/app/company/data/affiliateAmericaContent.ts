@@ -6,7 +6,7 @@ export const affiliatePageTitle = {
 };
 
 export const affiliateIntro = {
-  heroImage: `${IMG}/hero.jpg`,
+  heroImage: `${IMG}/hero.webp`,
   headlineLines: ["Power and Infrastructure Solutions", "Across the Americas"],
   paragraphs: [
     "Our affiliates deliver reliable electrical systems, engineering services,",
@@ -29,7 +29,7 @@ export type AffiliateAmericaItem = {
 export const affiliateList: AffiliateAmericaItem[] = [
   {
     id: "ls-energy-solutions",
-    logo: `${IMG}/logo-ls-energy-solutions.png`,
+    logo: `${IMG}/logo-ls-energy-solutions.webp`,
     logoWidth: 218,
     logoHeight: 32,
     foundedYear: "2008",
@@ -40,7 +40,7 @@ export const affiliateList: AffiliateAmericaItem[] = [
   },
   {
     id: "ls-electric-usa",
-    logo: `${IMG}/logo-ls-electric-usa.png`,
+    logo: `${IMG}/logo-ls-electric-usa.webp`,
     logoWidth: 218,
     logoHeight: 42,
     foundedYear: "1995",
@@ -51,7 +51,7 @@ export const affiliateList: AffiliateAmericaItem[] = [
   },
   {
     id: "ls-e-mobility-solutions",
-    logo: `${IMG}/logo-ls-e-mobility-solutions.png`,
+    logo: `${IMG}/logo-ls-e-mobility-solutions.webp`,
     logoWidth: 218,
     logoHeight: 30,
     foundedYear: "2005",
@@ -62,7 +62,7 @@ export const affiliateList: AffiliateAmericaItem[] = [
   },
   {
     id: "ls-cable-usa",
-    logo: `${IMG}/logo-ls-cable-usa.png`,
+    logo: `${IMG}/logo-ls-cable-usa.webp`,
     logoWidth: 218,
     logoHeight: 56,
     foundedYear: "1962",
@@ -73,7 +73,7 @@ export const affiliateList: AffiliateAmericaItem[] = [
   },
   {
     id: "ls-mtron",
-    logo: `${IMG}/logo-ls-mtron.png`,
+    logo: `${IMG}/logo-ls-mtron.webp`,
     logoWidth: 144,
     logoHeight: 32,
     foundedYear: "1962",
@@ -84,7 +84,7 @@ export const affiliateList: AffiliateAmericaItem[] = [
   },
   {
     id: "ls-mnm",
-    logo: `${IMG}/logo-ls-mnm.png`,
+    logo: `${IMG}/logo-ls-mnm.webp`,
     logoWidth: 132,
     logoHeight: 32,
     foundedYear: "1936",
