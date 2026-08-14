@@ -1513,6 +1513,11 @@
     background: #fff;
   }
 
+  section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiOutlinedInput-root.Mui-disabled,
+  section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiOutlinedInput-root.Mui-disabled .MuiNativeSelect-select {
+    background: var(--color-bg-muted);
+  }
+
   section.support_service_training_request .support_service_training_request__field {
     display: flex;
     flex-direction: column;
@@ -2390,6 +2395,10 @@
     appearance: none;
     -webkit-appearance: none;
     background: #fff;
+  }
+
+  section.support_service_training_detail_schedule .guide_field .MuiOutlinedInput-root.Mui-disabled .MuiNativeSelect-select {
+    background: transparent;
   }
 
   section.support_service_training_detail_schedule .guide_field .guide_field__select-icon,
@@ -4132,6 +4141,11 @@
   section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiOutlinedInput-root,
   section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiNativeSelect-select {
     background: #fff;
+  }
+
+  section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiOutlinedInput-root.Mui-disabled,
+  section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select .MuiOutlinedInput-root.Mui-disabled .MuiNativeSelect-select {
+    background: var(--color-bg-muted);
   }
 
   section.support_service_training_request .support_service_training_request__checkbox-group {

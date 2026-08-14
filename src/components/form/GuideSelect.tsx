@@ -202,6 +202,7 @@ export default function GuideSelect({
     <Select
       key="guide-select-native"
       native
+      disabled={disabled}
       displayEmpty={displayEmpty}
       fullWidth={fullWidth}
       inputProps={inputProps}
@@ -214,6 +215,7 @@ export default function GuideSelect({
   ) : (
     <Select
       key="guide-select-custom"
+      disabled={disabled}
       fullWidth={fullWidth}
       inputProps={inputProps}
       {...rest}

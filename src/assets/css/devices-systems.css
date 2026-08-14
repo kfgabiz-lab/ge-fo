@@ -1690,6 +1690,10 @@ section.devices_explore .guide_field .MuiSelect-icon.MuiSelect-iconOpen {
     background: #fff;
   }
 
+  section.devices_explore .guide_field .MuiOutlinedInput-root.Mui-disabled .MuiNativeSelect-select {
+    background: transparent;
+  }
+
   section.devices_explore .guide_field .MuiNativeSelect-root .MuiNativeSelect-icon {
     position: absolute;
     top: 50%;
