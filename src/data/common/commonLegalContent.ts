@@ -2,9 +2,12 @@
 export const commonLegalBodyContent = {
   versionPlaceholder: "MM DD, YYYY",
   versions: [
-    { value: "2025-01-01", label: "01 01, 2025" },
+    // 기본 값 노출없이 실제 데이터 표출을 위해 주석처리
+    //  { value: "2025-01-01", label: "01 01, 2025" },
   ],
-  defaultVersion: "2025-01-01",
+  
+  // defaultVersion: "2025-01-01",
+  defaultVersion: "",
   intro: [
     'This Privacy Notice explains how LS Electric America collects and uses your personal information in connection with its websites, applications, products, services, events, and experiences (collectively referred to as the "LS Offerings").',
     "Our operations in Lincolnshire, IL and Bastrop, TX adhere to stringent data protection standards, complying with U.S. federal regulations and specific state statutes such as the CCPA/CPRA, Illinois BIPA, and the Texas Data Privacy and Security Act, including the applicable data protection laws and related regulations. To safeguard the personal information of data subjects and address related concerns promptly and effectively, the Company has established and published this Privacy Notice on its website (https://www.lselectricamerica.com/).",

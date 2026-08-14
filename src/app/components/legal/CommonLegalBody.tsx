@@ -75,9 +75,11 @@ export default function CommonLegalBody({
   const [version, setVersion] = useState<string>(defaultVersion);
   const [termsEntries, setTermsEntries] = useState<TermsEntry[]>([]);
   const [activeContent, setActiveContent] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
+    setIsLoading(true);
 
     fetchData<TermsRow>({
       slug: "termsMgmt-data",
@@ -101,14 +103,21 @@ export default function CommonLegalBody({
           .filter((entry) => entry.value);
 
         setTermsEntries(entries);
+        setIsLoading(false);
+
         if (entries.length > 0) {
           setVersion(entries[0].value);
           setActiveContent(entries[0].content);
+        } else {
+          setVersion(defaultVersion);
+          setActiveContent("");
         }
       })
       .catch(() => {
         if (!cancelled) {
           setTermsEntries([]);
+          setIsLoading(false);
+          setVersion(defaultVersion);
           setActiveContent("");
         }
       });
@@ -128,6 +137,7 @@ export default function CommonLegalBody({
   };
 
   const versionOptions = termsEntries.length > 0 ? termsEntries : versions;
+  const showFallbackContent = !isLoading && !activeContent && termsEntries.length === 0;
 
   return (
     <section className="common_privacy_policy" id={bodyId}>
@@ -154,7 +164,8 @@ export default function CommonLegalBody({
                 );
               }}
             >
-              <MenuItem value="" disabled>{versionPlaceholder}</MenuItem>
+              {/* versionPlaceholder 가 목록에도 나오고 있어 삭제처리
+              <MenuItem value="" disabled>{versionPlaceholder}</MenuItem> */}
               {versionOptions.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -165,12 +176,12 @@ export default function CommonLegalBody({
         </div>
 
         <div className="common_privacy_policy__content">
-          {activeContent ? (
+          {isLoading ? null : activeContent ? (
             <article
               className="common_privacy_policy__body ProseMirror"
               dangerouslySetInnerHTML={{ __html: activeContent }}
             />
-          ) : (
+          ) : showFallbackContent ? (
             <>
               <article className="common_privacy_policy__intro ProseMirror">
                 {intro.map((paragraph, index) => (
@@ -209,7 +220,7 @@ export default function CommonLegalBody({
                 </article>
               ))}
             </>
-          )}
+          ) : null}
         </div>
       </div>
     </section>
