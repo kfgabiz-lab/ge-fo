@@ -23,9 +23,9 @@
   }
 
   .type1 .product_award_badge__icon {
-    width: 80px;
-    height: 40px;
-    background-image: url("/img/devices-systems/products/badge_if_award_lg.webp");
+    width: 50px;
+    height: 50px;
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.webp");
   }
 
   .type2 .product_award_badge__icon {
