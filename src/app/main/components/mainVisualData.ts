@@ -158,7 +158,6 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
       slug: BANNER_SLUG,
       where: {
         eq_banner_position: BANNER_POSITION_HERO,
-        eq_is_visible: "001",
         drs_post_period: "in_range",
       },
       sort: "banner.sort_order,asc",
@@ -211,7 +210,6 @@ export async function fetchNoticeItem(): Promise<NoticeItem | null> {
       slug: BANNER_SLUG,
       where: {
         eq_banner_position: BANNER_POSITION_INFORMATION,
-        eq_is_visible: "001",
         drs_post_period: "in_range",
       },
       sort: "banner.post_period_from,desc",
