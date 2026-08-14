@@ -1,7 +1,7 @@
 export type HighlightNewsItem = {
   id: string;
   href: string;
-  image: string;
+  image: string | null;
   imageAlt?: string;
   tag: string;
   title: string;

@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import type { HighlightNewsItem, HighlightNewsVariant } from "@/types/highlightNews";
+import { NOIMAGE_SRC, handleImageFallback } from "@/lib/imageFallback";
 
 export type { HighlightNewsItem, HighlightNewsVariant };
 
@@ -38,7 +41,13 @@ export default function HighlightNewsSection({
           {items.map((item) => (
             <Link key={item.id} href={item.href} className="item">
               <div className="img_area">
-                <img loading="lazy" decoding="async" src={item.image} alt={item.imageAlt ?? item.title} />
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={item.image ?? NOIMAGE_SRC}
+                  alt={item.imageAlt ?? item.title}
+                  onError={handleImageFallback}
+                />
               </div>
               <div className="txt_area">
                 <span className="tag">{item.tag}</span>

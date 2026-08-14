@@ -1,5 +1,5 @@
 import { fetchApi } from "@/lib/api";
-import { LIST_DESCRIPTION_MAX_LENGTH, stripHtmlText } from "@/lib/stripHtmlText";
+import { stripHtmlText } from "@/lib/stripHtmlText";
 import type { SearchMediaItem } from "@/data/search/searchAllContent";
 
 
@@ -106,7 +106,7 @@ function toMediaCard(
 ): SearchMediaItem {
   const meta = SOURCE_BY_TYPE.get(item.sourceType as MediaSourceType);
   const isVideo = item.sourceType === "TECH_HUB";
-  const description = stripHtmlText(item.snippet, LIST_DESCRIPTION_MAX_LENGTH);
+  const description = stripHtmlText(item.snippet);
 
   return {
     id: `${item.sourceType}-${item.id}`,

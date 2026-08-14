@@ -26,10 +26,6 @@ import {
   type ArticlesRow,
 } from "@/app/company/data/articlesData";
 
-const PRESS_FALLBACK_IMAGE = "/img/company/press/list_01.png";
-const BLOG_FALLBACK_IMAGE = "/img/company/blog/list_01.jpg";
-const ARTICLES_FALLBACK_IMAGE = "/img/company/articles/list_01.png";
-
 const HIGHLIGHT_LIMIT = 3;
 
 const MONTH_ABBR = [
@@ -62,7 +58,7 @@ function mergeAndPickTopNews(
       item: {
         id: `press-${card.id}`,
         href: pressDetailHref(card.id),
-        image: card.imageSrc ?? PRESS_FALLBACK_IMAGE,
+        image: card.imageSrc,
         imageAlt: card.title,
         tag: "Press",
         title: card.title,
@@ -80,7 +76,7 @@ function mergeAndPickTopNews(
       item: {
         id: `blog-${card.id}`,
         href: blogDetailHref(card.id),
-        image: card.imageSrc ?? BLOG_FALLBACK_IMAGE,
+        image: card.imageSrc,
         imageAlt: card.title,
         tag: "Blog",
         title: card.title,
@@ -97,7 +93,7 @@ function mergeAndPickTopNews(
       item: {
         id: `articles-${card.id}`,
         href: articlesDetailHref(card.id),
-        image: card.imageSrc ?? ARTICLES_FALLBACK_IMAGE,
+        image: card.imageSrc,
         imageAlt: card.title,
         tag: "Articles",
         title: card.title,
@@ -170,11 +166,11 @@ interface ProductInsightRow {
 function resolveInsightMeta(slug: string) {
   switch (slug) {
     case "press-data":
-      return { tag: "Press", href: pressDetailHref, fallback: PRESS_FALLBACK_IMAGE, img: pressImageSrc };
+      return { tag: "Press", href: pressDetailHref, img: pressImageSrc };
     case "blog-data":
-      return { tag: "Blog", href: blogDetailHref, fallback: BLOG_FALLBACK_IMAGE, img: blogImageSrc };
+      return { tag: "Blog", href: blogDetailHref, img: blogImageSrc };
     case "articles-data":
-      return { tag: "Articles", href: articlesDetailHref, fallback: ARTICLES_FALLBACK_IMAGE, img: articlesImageSrc };
+      return { tag: "Articles", href: articlesDetailHref, img: articlesImageSrc };
     default:
       return null;
   }
@@ -197,7 +193,7 @@ function toHighlightNewsItems(rows: ProductInsightRow[]): HighlightNewsItem[] {
       return {
         id: `${meta.tag.toLowerCase()}-${row.id}`,
         href: meta.href(row.id),
-        image: imageSrc ?? meta.fallback,
+        image: imageSrc,
         imageAlt: row.title,
         tag: meta.tag,
         title: row.title,
