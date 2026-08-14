@@ -77,6 +77,7 @@ export function useModalFocusTrap(
   const additionalRefsRef = useRef(additionalRefs);
   additionalRefsRef.current = additionalRefs;
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const isRedirectingFocusRef = useRef(false);
 
   useEffect(() => {
     if (!active) return;
@@ -155,18 +156,26 @@ export function useModalFocusTrap(
     };
 
     const onFocusIn = (event: FocusEvent) => {
+      if (isRedirectingFocusRef.current) return;
+
       const target = event.target;
       if (!(target instanceof Node) || containsTarget(target)) {
         return;
       }
 
       const focusableElements = collectFocusableElements(roots);
-      if (focusableElements.length === 0) {
-        roots[0]?.focus();
-        return;
-      }
 
-      focusableElements[0].focus();
+      isRedirectingFocusRef.current = true;
+      try {
+        if (focusableElements.length === 0) {
+          roots[0]?.focus();
+          return;
+        }
+
+        focusableElements[0].focus();
+      } finally {
+        isRedirectingFocusRef.current = false;
+      }
     };
 
     document.addEventListener("keydown", onKeyDown);
