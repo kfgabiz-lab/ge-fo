@@ -50,7 +50,6 @@ function orderNoValue(orderNo: string): number {
 export async function fetchHeroItems(): Promise<HeroItem[]> {
   const res = await fetchData<Record<string, unknown>>({
     slug: "hero-data",
-    where: { drs_post_period: "in_range" },
     sort: "hero.sort_order,asc",
     size: 100,
     datetimeRange: true,
@@ -158,7 +157,6 @@ export async function fetchBannerItems(): Promise<BannerItem[]> {
       slug: BANNER_SLUG,
       where: {
         eq_banner_position: BANNER_POSITION_HERO,
-        drs_post_period: "in_range",
       },
       sort: "banner.sort_order,asc",
       size: 100,
@@ -210,7 +208,6 @@ export async function fetchNoticeItem(): Promise<NoticeItem | null> {
       slug: BANNER_SLUG,
       where: {
         eq_banner_position: BANNER_POSITION_INFORMATION,
-        drs_post_period: "in_range",
       },
       sort: "banner.post_period_from,desc",
       size: 1,
