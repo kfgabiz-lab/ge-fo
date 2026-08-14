@@ -2477,6 +2477,25 @@ section .guide_field .MuiNativeSelect-select {
   color: var(--color-text);
   background: transparent;
 }
+
+section .guide_field .MuiOutlinedInput-root.Mui-disabled {
+  background: var(--color-bg-muted);
+  color: #222;
+  -webkit-text-fill-color: #222;
+  opacity: 1;
+}
+
+section .guide_field .MuiOutlinedInput-root.Mui-disabled .MuiSelect-select,
+section .guide_field .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input,
+section .guide_field .MuiOutlinedInput-root.Mui-disabled .MuiNativeSelect-select,
+section .guide_field .MuiOutlinedInput-root.Mui-disabled .guide_field__select-value,
+section .guide_field .MuiNativeSelect-select:disabled {
+  color: #222;
+  -webkit-text-fill-color: #222;
+  opacity: 1;
+  background: transparent;
+  cursor: default;
+}
 section .guide_field .MuiNativeSelect-root .MuiNativeSelect-icon {
   top: calc(50% - 0.35em);
   right: 20px;
