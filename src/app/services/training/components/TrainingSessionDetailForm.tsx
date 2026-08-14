@@ -643,7 +643,7 @@ export default function TrainingSessionDetailForm({
         className="btn-base btn-lv01 btn-lv01--solid support_service_training_session_detail__submit"
         disabled={
           submitting ||
-          session.closesLabel === "Closed" ||
+          session.registrationClosed ||
           session.registrationNotYetOpen
         }
       >
