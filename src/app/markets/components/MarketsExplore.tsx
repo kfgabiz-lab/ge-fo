@@ -120,12 +120,21 @@ export default function MarketsExplore({
             ) : null}
           </div>
           <div className="markets_explore__img">
-            <img
-              loading="lazy"
-              decoding="async"
-              src={active.image}
-              alt={stripHtml(active.title)}
-            />
+            {tabs.map((tab) => {
+              const isActive = tab.id === active.id;
+              return (
+                <img
+                  key={tab.id}
+                  className={isActive ? "is-active" : undefined}
+                  loading="eager"
+                  fetchPriority={isActive ? "high" : "low"}
+                  decoding="async"
+                  src={tab.image}
+                  alt={isActive ? stripHtml(tab.title) : ""}
+                  aria-hidden={isActive ? undefined : true}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

@@ -672,10 +672,18 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_explore .markets_explore__img img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center bottom;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  section.markets_explore .markets_explore__img img.is-active {
+    opacity: 1;
   }
 
   section.markets_explore.markets_explore--wide-tabs .markets_explore__tabs {
@@ -2206,10 +2214,18 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_explore .markets_explore__img img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center bottom;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  section.markets_explore .markets_explore__img img.is-active {
+    opacity: 1;
   }
 
   /* References — key-visual Markets MO (data-center baseline) */
