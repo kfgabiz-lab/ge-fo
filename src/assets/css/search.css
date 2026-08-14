@@ -1442,14 +1442,19 @@
   }
 
   section.search_all .search_all__media-tit {
+    display: -webkit-box;
     margin: 0;
+    overflow: hidden;
     font-size: 22px;
     line-height: 32px;
     font-weight: 500;
     letter-spacing: -0.22px;
     color: #222;
-    white-space: pre-wrap;
+    white-space: normal;
     word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_all .search_all__media-tit-text {
@@ -1491,6 +1496,7 @@
     word-break: break-word;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_all .search_all__media-desc-mark {
@@ -1623,14 +1629,19 @@
   }
 
   section.search_media .search_all__media-tit {
+    display: -webkit-box;
     margin: 0;
+    overflow: hidden;
     font-size: 22px;
     line-height: 32px;
     font-weight: 500;
     letter-spacing: -0.22px;
     color: #222;
-    white-space: pre-wrap;
+    white-space: normal;
     word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_media .search_all__media-tit-text {
@@ -1672,6 +1683,7 @@
     word-break: break-word;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_media .search_all__media-desc-mark {
@@ -1763,17 +1775,24 @@
   section.search_all .search_page__tit-row {
     display: flex;
     align-items: center;
+    min-width: 0;
     min-height: 28px;
   }
 
   section.search_all .search_page__tit {
+    display: -webkit-box;
     margin: 0;
+    min-width: 0;
+    overflow: hidden;
     font-size: 18px;
     line-height: 28px;
     font-weight: 500;
     color: #222;
-    white-space: pre-wrap;
+    white-space: normal;
     word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_all .search_page__tit-text {
@@ -1908,17 +1927,24 @@
   section.search_pages .search_page__tit-row {
     display: flex;
     align-items: center;
+    min-width: 0;
     min-height: 28px;
   }
 
   section.search_pages .search_page__tit {
+    display: -webkit-box;
     margin: 0;
+    min-width: 0;
+    overflow: hidden;
     font-size: 18px;
     line-height: 28px;
     font-weight: 500;
     color: #222;
-    white-space: pre-wrap;
+    white-space: normal;
     word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_pages .search_page__tit-text {
@@ -3805,15 +3831,20 @@
 
   section.search_all .search_all__media-tit,
   section.search_media .search_all__media-tit {
+    display: -webkit-box;
     margin: 0;
     width: 100%;
+    overflow: hidden;
     font-size: 20px;
     line-height: 28px;
     font-weight: 600;
     letter-spacing: -0.2px;
     color: #222;
-    white-space: pre-wrap;
+    white-space: normal;
     word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_all .search_all__media-tit-text,
@@ -3847,6 +3878,7 @@
     gap: 0;
     width: 100%;
     margin: 0;
+    overflow: hidden;
     word-break: break-word;
   }
 
@@ -3863,7 +3895,8 @@
     color: #666;
     word-break: break-word;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: unset;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_all .search_all__media-desc-mark,
@@ -3967,15 +4000,20 @@
 
   section.search_all .search_page__tit,
   section.search_pages .search_page__tit {
+    display: -webkit-box;
     margin: 0;
     width: 100%;
+    overflow: hidden;
     font-size: 18px;
     line-height: 28px;
     font-weight: 500;
     letter-spacing: 0;
     color: #222;
-    white-space: pre-wrap;
+    white-space: normal;
     word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_all .search_page__tit-text,
