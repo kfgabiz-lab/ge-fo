@@ -186,8 +186,7 @@ export default function RequestForTrainingStep3Form({
                     id={`${formId}-location-name`}
                     className="guide_field guide_field--h50 support_service_training_request__input"
                     value={step3.locationName}
-                    error={Boolean(errors.locationName)}
-                    slotProps={{ htmlInput: { "aria-label": fields.locationName.label } }}
+                    error={Boolean(errors.locationName)}
                     onChange={(event) => {
                       setStep3Field(
                         "locationName",
@@ -216,8 +215,7 @@ export default function RequestForTrainingStep3Form({
                           onChange={(event) =>
                             setStep3Field("streetAddress", event.target.value)
                           }
-                          slotProps={{
-                            htmlInput: { "aria-label": fields.streetAddress.label },
+                          slotProps={{
                             input: {
                               endAdornment: (
                                 <InputAdornment
@@ -296,8 +294,7 @@ export default function RequestForTrainingStep3Form({
                       id={`${formId}-city`}
                       className="guide_field guide_field--h50 support_service_training_request__input"
                       placeholder={fields.city.placeholder}
-                      value={step3.city}
-                      slotProps={{ htmlInput: { "aria-label": fields.city.label } }}
+                      value={step3.city}
                       onChange={(event) => setStep3Field("city", event.target.value)}
                     />
                   </div>
@@ -309,8 +306,7 @@ export default function RequestForTrainingStep3Form({
                       id={`${formId}-state`}
                       className="guide_field guide_field--h50 support_service_training_request__input"
                       placeholder={fields.state.placeholder}
-                      value={step3.state}
-                      slotProps={{ htmlInput: { "aria-label": fields.state.label } }}
+                      value={step3.state}
                       onChange={(event) => setStep3Field("state", event.target.value)}
                     />
                   </div>
@@ -324,8 +320,7 @@ export default function RequestForTrainingStep3Form({
                     id={`${formId}-zip`}
                     className="guide_field guide_field--h50 support_service_training_request__input"
                     placeholder={fields.zip.placeholder}
-                    value={step3.zip}
-                    slotProps={{ htmlInput: { "aria-label": fields.zip.label } }}
+                    value={step3.zip}
                     onChange={(event) => setStep3Field("zip", event.target.value)}
                   />
                 </div>
@@ -337,8 +332,7 @@ export default function RequestForTrainingStep3Form({
                   <TextField
                     id={`${formId}-contact-person`}
                     className="guide_field guide_field--h50 support_service_training_request__input"
-                    value={step3.contactPerson}
-                    slotProps={{ htmlInput: { "aria-label": fields.contactPerson.label } }}
+                    value={step3.contactPerson}
                     onChange={(event) =>
                       setStep3Field("contactPerson", filterContactPerson(event.target.value))
                     }
@@ -356,8 +350,7 @@ export default function RequestForTrainingStep3Form({
                     id={`${formId}-contact-details`}
                     className="guide_field guide_field--h50 support_service_training_request__input"
                     value={step3.contactDetails}
-                    error={Boolean(errors.contactDetails)}
-                    slotProps={{ htmlInput: { "aria-label": fields.contactDetails.label } }}
+                    error={Boolean(errors.contactDetails)}
                     onChange={(event) => {
                       setStep3Field(
                         "contactDetails",

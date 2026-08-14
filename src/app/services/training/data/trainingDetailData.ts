@@ -5,7 +5,6 @@ import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { formatPhoneDisplay } from "@/lib/formatPhone";
 import { sanitizeHtml } from "@/lib/sanitizeHtml";
-import { siteToday } from "@/lib/siteTime";
 import type { PageDataItem } from "@/lib/pageData";
 import { fetchProductNamesByIds } from "@/lib/training/trainingProductTree";
 import {
@@ -101,6 +100,10 @@ interface CurrDtlDataJson {
   training_schedule?: TrainingScheduleItemRaw[];
   power_list?: CurrDtlProductRef[] | null;
   automation_list?: CurrDtlProductRef[] | null;
+  _registrationDaysLeft?: number | null;
+  _registrationClosed?: boolean;
+  _registrationClosesToday?: boolean;
+  _registrationNotYetOpen?: boolean | null;
 }
 
 interface ParsedRow {
@@ -154,25 +157,15 @@ function extractProductNames(
   return out;
 }
 
-function computeClosesLabel(registerPeriodTo?: string): string {
-  const ymd = parseYmd(registerPeriodTo);
-  if (!ymd) return "";
-  const now = siteToday();
-  const endUtc = Date.UTC(ymd.y, ymd.m - 1, ymd.d);
-  const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-  const days = Math.ceil((endUtc - todayUtc) / 86_400_000);
-  if (days < 0) return "Closed";
-  if (days === 0) return "Closes today";
-  return `Closes in ${days} ${days === 1 ? "day" : "days"}`;
-}
-
-function isRegistrationNotYetOpen(registerPeriodFrom?: string): boolean {
-  const ymd = parseYmd(registerPeriodFrom);
-  if (!ymd) return false;
-  const now = siteToday();
-  const startUtc = Date.UTC(ymd.y, ymd.m - 1, ymd.d);
-  const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-  return todayUtc < startUtc;
+function formatClosesLabel(
+  daysLeft: number | null,
+  closed: boolean,
+  closesToday: boolean,
+): string {
+  if (daysLeft == null) return "";
+  if (closed) return "Closed";
+  if (closesToday) return "Closes today";
+  return `Closes in ${daysLeft} ${daysLeft === 1 ? "day" : "days"}`;
 }
 
 function parseYmd(dateStr?: string): { y: number; m: number; d: number } | null {
@@ -203,15 +196,6 @@ function formatSessionDateRange(from?: string, to?: string): string {
   const only = f ?? t;
   if (!only) return "";
   return `${MONTH_ABBR[only.m]} ${only.d}, ${only.y}`;
-}
-
-function isNotPast(dateTo?: string): boolean {
-  const ymd = parseYmd(dateTo);
-  if (!ymd) return true;
-  const now = siteToday();
-  const endUtc = Date.UTC(ymd.y, ymd.m - 1, ymd.d);
-  const todayUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-  return endUtc >= todayUtc;
 }
 
 function sortSchedule(
@@ -294,10 +278,6 @@ export function isCurriculumVisible(
   return curriculum?.is_visible === "001";
 }
 
-function passesGate(json: CurrDtlDataJson): boolean {
-  return isNotPast(json.curriculum_detail2?.training_date_to);
-}
-
 export function toTrainingCourseDetail(
   rows: PageDataItem[],
   courseId: string,
@@ -306,9 +286,10 @@ export function toTrainingCourseDetail(
   trainingTypeMap: Map<string, string>,
   productNameMap: Map<number, string>,
 ): EngineeringTrainingDetail {
-  const valid: ParsedRow[] = rows
-    .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
-    .filter(({ json }) => passesGate(json));
+  const valid: ParsedRow[] = rows.map((raw) => ({
+    raw,
+    json: (raw.dataJson ?? {}) as CurrDtlDataJson,
+  }));
 
   const categoryLabel = codeLabel(categoryMap, curriculum.product_category);
 
@@ -354,7 +335,11 @@ function toCourseCard(
     isoDate: (d2.training_date_from ?? "").slice(0, 10),
     isoDateTo: (d2.training_date_to ?? "").slice(0, 10),
     title: d2.title ?? "",
-    closesLabel: computeClosesLabel(d2.register_period_to),
+    closesLabel: formatClosesLabel(
+      json._registrationDaysLeft ?? null,
+      json._registrationClosed ?? false,
+      json._registrationClosesToday ?? false,
+    ),
     trainingType: formatTrainingTypeCovered(d1.training_type, trainingTypeMap),
     duration: formatDurationCovered(d2.duration),
     location: showAddress
@@ -383,7 +368,6 @@ export function toTrainingSessionDetail(
   if (!matched) return null;
 
   const { json } = matched;
-  if (!passesGate(json)) return null;
 
   const d1 = json.curriculum_detail1 ?? {};
   const d2 = json.curriculum_detail2 ?? {};
@@ -429,8 +413,13 @@ export function toTrainingSessionDetail(
     title: d2.title ?? "",
     courseTitle: curriculum.title ?? undefined,
     breadcrumbCurrent: dateDisplay,
-    closesLabel: computeClosesLabel(d2.register_period_to),
-    registrationNotYetOpen: isRegistrationNotYetOpen(d2.register_period_from),
+    closesLabel: formatClosesLabel(
+      json._registrationDaysLeft ?? null,
+      json._registrationClosed ?? false,
+      json._registrationClosesToday ?? false,
+    ),
+    registrationClosed: json._registrationClosed ?? false,
+    registrationNotYetOpen: json._registrationNotYetOpen ?? false,
     content: sanitizeHtml(d2.content ?? ""),
     agenda,
     showTrainerColumn,
@@ -570,7 +559,7 @@ export async function buildSessionMetadata(
   const matched = rows
     .map((raw) => ({ raw, json: (raw.dataJson ?? {}) as CurrDtlDataJson }))
     .find(({ raw }) => Number(raw.id) === Number(sessionId));
-  if (!matched || !passesGate(matched.json)) return {};
+  if (!matched) return {};
   const d2 = matched.json.curriculum_detail2 ?? {};
   return buildOgMetadata(
     previous,

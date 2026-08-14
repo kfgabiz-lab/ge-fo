@@ -3219,23 +3219,28 @@ color: #fff;
   width: 100%;
 }
 
+/* Figma 8793:232922 — Gradients/AI stroke */
 .gnb_search__field .MuiOutlinedInput-root {
   height: 80px;
   min-height: 80px;
   max-height: 80px;
   padding: 0 30px;
   gap: 14px;
+  border: 1px solid transparent;
   border-radius: 4px;
-  background: #f5f5f5;
+  background:
+    linear-gradient(#f5f5f5, #f5f5f5) padding-box,
+    linear-gradient(135deg, #028dff 50%, #9535ff 100%) border-box;
 }
 
 .gnb_search__field .MuiOutlinedInput-root fieldset,
-.gnb_search__field .MuiOutlinedInput-root:hover fieldset {
-  border: 1px solid #9535ff !important;
+.gnb_search__field .MuiOutlinedInput-root:hover fieldset,
+.gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border: none !important;
 }
 
-.gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
-  border: 2px solid #9535ff !important;
+.gnb_search__field .MuiOutlinedInput-root.Mui-focused {
+  border-width: 2px;
 }
 
 .gnb_search__field .MuiOutlinedInput-input {
@@ -3445,17 +3450,21 @@ color: #fff;
     max-height: 60px;
     padding: 0 20px;
     gap: 8px;
+    border: 1px solid transparent;
     border-radius: 4px;
-    background: #f5f5f5;
+    background:
+      linear-gradient(#f5f5f5, #f5f5f5) padding-box,
+      linear-gradient(135deg, #028dff 50%, #9535ff 100%) border-box;
   }
 
   .gnb_search__field .MuiOutlinedInput-root fieldset,
-  .gnb_search__field .MuiOutlinedInput-root:hover fieldset {
-    border: 1px solid #9535ff !important;
+  .gnb_search__field .MuiOutlinedInput-root:hover fieldset,
+  .gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+    border: none !important;
   }
 
-  .gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
-    border: 2px solid #9535ff !important;
+  .gnb_search__field .MuiOutlinedInput-root.Mui-focused {
+    border-width: 2px;
   }
 
   .gnb_search__field .MuiOutlinedInput-input {
@@ -3840,20 +3849,20 @@ color: #fff;
     background: transparent url("/ico/ico_close_24.svg") center / contain no-repeat;
   }
 
-  /* Figma 8793:234601 — is-top white */
-  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+  /* Figma 8793:234601 — is-top white (fixed header only; panel은 흰 배경이라 제외) */
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open):not(.is-mobile-open)
     .btn_area--mobile
     .btn_search:not(.is-close),
-  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open):not(.is-mobile-open)
     .main_header__actions--mobile
     .main_header__btn-search:not(.is-close) {
     background-image: url("/ico/ico_search_24_white_mo.svg");
   }
 
-  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open):not(.is-mobile-open)
     .btn_area--mobile
     .icon_menu,
-  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open):not(.is-mobile-open)
     .main_header__actions--mobile
     .icon_menu {
     background-image: url("/ico/ico_menu_24_white_mo.svg");
@@ -3893,8 +3902,8 @@ color: #fff;
     background-image: url("/ico/ico_menu_24_mo.svg");
   }
 
-  /* Figma 8793:234601 — 모바일 is-top 검색 (actions) */
-  .main_header.is-top:not(.is-search-open):not(.is-mega-open)
+  /* Figma 8793:234601 — 모바일 is-top 검색 (fixed header only) */
+  .main_header.is-top:not(.is-search-open):not(.is-mega-open):not(.is-mobile-open)
     .main_header__btn-search:not(.is-close) {
     background-image: url("/ico/ico_search_24_white_mo.svg");
   }
@@ -3905,9 +3914,11 @@ color: #fff;
     min-width: 0;
   }
 
+  /* Figma 8793:233350 — globe + label + chevron */
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_panel__gnb-row .gnb_mobile_global-slot {
     display: flex;
-    position: relative;
+    align-items: center;
+    min-width: 0;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-select {
@@ -3936,8 +3947,8 @@ color: #fff;
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-select__native {
     appearance: none;
+    -webkit-appearance: none;
     width: auto;
-    min-width: 0;
     max-width: 100%;
     margin: 0;
     padding: 0;
@@ -3949,7 +3960,7 @@ color: #fff;
     font-weight: 500;
     line-height: 23px;
     cursor: pointer;
-    width: fit-content;
+    field-sizing: content;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-select__chevron {
@@ -3957,22 +3968,28 @@ color: #fff;
     flex-shrink: 0;
     width: 14px;
     height: 14px;
-    background: url("/ico/ico_bottom_10.svg") center / contain no-repeat;
+    background: url("/ico/ico_bottom_10.svg") center / 10px 10px no-repeat;
     pointer-events: none;
-    background-position: 1px 4px;
-    position: absolute;
-    right: 0;
+    top: 3px;
+    position: relative;
   }
 
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-select__native:focus,
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-select__native:focus-visible {
     outline: none;
+    box-shadow: none;
   }
 
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-select:focus,
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-select:focus-within {
-    outline: var(--focus-outline-width) solid var(--focus-outline-inner);
-    outline-offset: var(--focus-outline-offset);
-    box-shadow: var(--focus-ring-shadow);
-    border-radius: 2px;
+    outline: none;
+    box-shadow: none;
+  }
+
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-slot:focus,
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_global-slot:focus-within {
+    outline: none;
+    box-shadow: none;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_shell.is-open {
@@ -3997,6 +4014,89 @@ color: #fff;
     display: block;
     flex-shrink: 0;
     border-bottom: 1px solid rgb(34 34 34 / 10%);
+  }
+
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell.is-open
+    .gnb_mobile_panel__gnb-row
+    .main_header__inner,
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell.is-open
+    .gnb_mobile_panel__gnb-row
+    .gnb_menu_inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 16px;
+  }
+
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell.is-open
+    .gnb_mobile_panel__gnb-row
+    .gnb_mobile_global-slot {
+    flex: 0 1 auto;
+    max-width: calc(100% - 88px);
+  }
+
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell.is-open
+    .gnb_mobile_panel__gnb-row
+    .main_header__actions--mobile,
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell.is-open
+    .gnb_mobile_panel__gnb-row
+    .btn_area--mobile {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 24px;
+  }
+
+  /* 패널(흰 배경) — 검색/닫기 #222 (is-top 흰 아이콘보다 우선) */
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell
+    .main_header__actions--mobile
+    .main_header__btn-search:not(.is-close),
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell
+    .btn_area--mobile
+    .btn_search:not(.is-close),
+  .main_header.is-top
+    .gnb_mobile_shell
+    .main_header__actions--mobile
+    .main_header__btn-search:not(.is-close),
+  .main_header.is-top
+    .gnb_mobile_shell
+    .btn_area--mobile
+    .btn_search:not(.is-close) {
+    background: url("/ico/ico_search_24_mo.svg") center / contain no-repeat;
+  }
+
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell
+    .main_header__actions--mobile
+    .main_header__btn-search.is-close,
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell
+    .btn_area--mobile
+    .btn_search.is-close {
+    background: url("/ico/ico_close_24.svg") center / contain no-repeat;
+  }
+
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell
+    .main_header__actions--mobile
+    .gnb_mobile_close,
+  :is(.gnb_menu_wrap, .main_header)
+    .gnb_mobile_shell
+    .btn_area--mobile
+    .gnb_mobile_close {
+    display: block;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: transparent url("/ico/ico_close_24.svg") center / contain no-repeat;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_shell .main_header__btn-search:not(.is-close) {

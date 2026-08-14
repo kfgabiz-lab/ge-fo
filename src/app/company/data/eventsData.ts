@@ -1,5 +1,5 @@
 import { formatDisplayDateRange, formatMonthLabel } from "@/lib/formatDate";
-import { siteToday, siteTodayStr } from "@/lib/siteTime";
+import { siteToday } from "@/lib/siteTime";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 import type {
   EventsCalendarEntry,
@@ -30,10 +30,8 @@ function toDateStr(d: Date) {
   return `${y}-${m}-${day}`;
 }
 
-function thisAndNextMonthRange(now: Date) {
-  const from = now;
-  const to = new Date(now.getFullYear(), now.getMonth() + 2, 0);
-  return { from: toDateStr(from), to: toDateStr(to) };
+function nextMonthEnd(now: Date) {
+  return toDateStr(new Date(now.getFullYear(), now.getMonth() + 2, 0));
 }
 
 function toEventsCommon(item: EventsRow) {
@@ -56,7 +54,6 @@ function toEventsCommon(item: EventsRow) {
 }
 
 export function eventsFeaturedQuery(fallbackImage: string, now: Date = siteToday()) {
-  const { from, to } = thisAndNextMonthRange(now);
   return {
     slug: "events-data",
     page: 0,
@@ -65,8 +62,8 @@ export function eventsFeaturedQuery(fallbackImage: string, now: Date = siteToday
     where: {
       ...EVENTS_VISIBLE_WHERE,
       exclude: "content",
-      period_from_gte: from,
-      period_from_lte: to,
+      period_from_gte: "today()",
+      period_from_lte: nextMonthEnd(now),
     },
     리턴함수: (rows: PageDataItem[]): EventsFeaturedItem[] =>
       rows.map((item) => {
@@ -89,14 +86,17 @@ export function eventsCalendarQuery() {
     page: 0,
     unpaged: true,
     sort: "events.period_from,asc",
-    where: { ...EVENTS_VISIBLE_WHERE, exclude: "content" },
+    where: {
+      ...EVENTS_VISIBLE_WHERE,
+      exclude: "content",
+      condexpr_upcoming: "period_to>=today()?'upcoming':'past'",
+      condval_upcoming: "upcoming",
+    },
     리턴함수: (rows: PageDataItem[]): EventsCalendarMonth[] => {
-      const todayStr = siteTodayStr();
       const monthMap = new Map<string, EventsCalendarEntry[]>();
       for (const item of rows) {
         const c = toEventsCommon(item);
         if (!c.periodFrom) continue;
-        if (c.periodTo && c.periodTo < todayStr) continue;
         const monthKey = c.periodFrom.slice(0, 7);
         const entry: EventsCalendarEntry = {
           id: String(c.id),

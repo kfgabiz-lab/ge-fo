@@ -5027,7 +5027,8 @@ section.company-blog-list .company-blog__tag:hover {
     color: #fff;
   }
 
-  section.company-ls-electric-highlights .company-ls-electric-highlights__link .icon_arrow-14 {
+  /* Figma 7575:88164 — Icon / 14px / Link (white) */
+  section.company-ls-electric-highlights .company-ls-electric-highlights__link .icon_link-14 {
     filter: brightness(0) invert(1);
   }
 

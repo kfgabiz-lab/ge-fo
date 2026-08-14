@@ -3573,10 +3573,17 @@ section.highlight_news--markets .section_tit {
   }
 
   section.highlight_news--markets .tit {
+    display: -webkit-box;
+    overflow: hidden;
+    max-width: 100%;
     font-size: 22px;
     font-weight: 500;
     line-height: 32px;
     color: #222;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    max-width: 463px;
   }
 
   section.highlight_news .date {
@@ -3662,14 +3669,15 @@ section.highlight_news--markets .section_tit {
   }
 
   section.highlight_news--markets .tit {
+    display: -webkit-box;
+    overflow: hidden;
+    max-width: 100%;
     font-size: 18px;
     font-weight: 500;
     line-height: 28px;
     letter-spacing: -0.01em;
     color: #222;
     word-break: break-word;
-    display: -webkit-box;
-    overflow: hidden;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-clamp: 2;
