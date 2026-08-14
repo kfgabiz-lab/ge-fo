@@ -7686,7 +7686,7 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-careers-title .company-careers-title__heading {
-    font-family: jaka;
+    font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 70px;
     font-weight: 800;
     line-height: 80px;
@@ -7934,6 +7934,7 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-careers-title .company-careers-title__heading {
+    font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 36px;
     line-height: 46px;
     letter-spacing: -0.02em;

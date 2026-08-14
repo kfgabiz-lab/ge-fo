@@ -1150,9 +1150,13 @@
     font-weight: 600;
     line-height: 30px;
     color: #222;
-    white-space: nowrap;
+    display: -webkit-box;
     overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     transition: color 0.2s ease;
   }
 
@@ -3323,14 +3327,19 @@
   section.search_all .search_all__document .devices_product_downloads__item-tit,
   section.search_documents .search_all__document .devices_product_downloads__item-tit {
     margin: 0;
+    min-width: 0;
     font-size: 18px;
     line-height: 26px;
     font-weight: 600;
     letter-spacing: 0;
     color: #222;
+    display: -webkit-box;
+    overflow: hidden;
     white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.search_all .search_all__document .devices_product_downloads__item-tit-mark,

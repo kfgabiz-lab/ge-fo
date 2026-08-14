@@ -452,6 +452,16 @@ section .btn-line-30--on-dark .btn-line-30__icon--copy {
   background-image: url("/ico/ico_copy_white_14.svg");
 }
 
+.devices_product_downloads__item-tit {
+  display: -webkit-box;
+  min-width: 0;
+  overflow: hidden;
+  word-break: break-word;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
 .devices_product_downloads__file-name {
   min-width: 0;
   overflow: hidden;
