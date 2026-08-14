@@ -156,10 +156,10 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       return; 
     }
 
-    if (!agreedToTerms) {
-      alert("Please agree to the Privacy Policy to continue.");
-      return;
-    }
+    // if (!agreedToTerms) {
+    //   alert("Please agree to the Privacy Policy to continue.");
+    //   return;
+    // }
 
     const payload = {
       email: trimmedEmail,
@@ -232,7 +232,8 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
                   type="email"
                   placeholder="Email address"
                   error={emailError}
-                  value={email}
+                  value={email}
+
                   onChange={(event) => {
                     setEmail(event.target.value);
                     if (emailError) setEmailError(false);
@@ -251,7 +252,8 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
                           className="main_footer__checkbox"
                           checked={interests.includes(option.value)}
                           icon={<FooterCheckboxIcon />}
-                          checkedIcon={<FooterCheckboxIcon checked />}
+                          checkedIcon={<FooterCheckboxIcon checked />}
+
                           onChange={(event) =>
                             handleInterestChange(option.value, event.target.checked)
                           }
