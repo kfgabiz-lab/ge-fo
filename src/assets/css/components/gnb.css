@@ -4145,7 +4145,7 @@ color: #fff;
     flex-direction: column;
     padding: 0;
     background: #fff;
-    overflow-y: auto;
+    overflow: hidden;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_shell.is-open .gnb_mobile_menu.is-open {
@@ -4158,7 +4158,7 @@ color: #fff;
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-height: 110vh;
+    min-height: 0;
     width: 100%;
   }
 
@@ -4301,7 +4301,7 @@ color: #fff;
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-height: 110vh;
+    min-height: 0;
     width: 100%;
   }
 
@@ -4465,9 +4465,29 @@ color: #fff;
     flex: 1;
     flex-direction: column;
     gap: 0;
+    min-height: 0;
     margin: 0;
     padding: 0;
     list-style: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_list::-webkit-scrollbar,
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_depth2__grid::-webkit-scrollbar,
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_depth2__sections::-webkit-scrollbar,
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_depth4__body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_depth2__grid,
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_depth2__sections,
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_depth4__body {
+    scrollbar-width: none;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_list .link {
@@ -4520,7 +4540,6 @@ color: #fff;
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_list--depth3 {
     gap: 2px;
-    padding-bottom: 110px;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_list--depth3 .link {
@@ -4554,6 +4573,9 @@ color: #fff;
     flex: 1;
     min-width: 0;
     max-width: 305px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_list__arrow {

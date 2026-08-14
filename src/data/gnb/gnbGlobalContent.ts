@@ -7,7 +7,7 @@ export type GnbGlobalRegion = {
 export const gnbGlobalActiveRegionId = "america";
 //global, korea 제외 숨김 처리
 export const gnbGlobalRegions: GnbGlobalRegion[] = [
-  // { id: "america", label: "America", href: "#" },
+  { id: "america", label: "America", href: "#" },
   { id: "global", label: "Global", href: "https://www.ls-electric.com" },
   { id: "korea", label: "Korea", href: "https://www.ls-electric.com/ko/" },
   // { id: "china", label: "China", href: "#" },

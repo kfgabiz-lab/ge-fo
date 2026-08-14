@@ -1642,7 +1642,7 @@ section.devices_explore .guide_field .MuiSelect-icon.MuiSelect-iconOpen {
   }
 
   section.devices_explore .devices_explore__tit-rest {
-    text-transform: lowercase;
+    /* text-transform: lowercase; */
   }
 
   section.devices_explore .devices_explore__desc {

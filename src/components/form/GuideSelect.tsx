@@ -33,7 +33,10 @@ function menuItemLabel(node: ReactNode): string {
   return "";
 }
 
-function convertMenuItemsToOptions(children: ReactNode) {
+function convertMenuItemsToOptions(
+  children: ReactNode,
+  skipEmptyValue = false,
+) {
   return Children.toArray(children).flatMap((child) => {
     if (!isValidElement(child)) return [];
 
@@ -46,6 +49,7 @@ function convertMenuItemsToOptions(children: ReactNode) {
     if (!("value" in element.props)) return [];
 
     const value = element.props.value ?? "";
+    if (skipEmptyValue && String(value) === "") return [];
 
     return [
       <option key={String(value)} value={String(value)} disabled={element.props.disabled}>
@@ -205,7 +209,7 @@ export default function GuideSelect({
       {...valueProps}
     >
       {displayEmpty ? <option value="">{placeholderText}</option> : null}
-      {convertMenuItemsToOptions(children)}
+      {convertMenuItemsToOptions(children, displayEmpty)}
     </Select>
   ) : (
     <Select
