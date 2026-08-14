@@ -71,7 +71,7 @@ export type ContactUsModalsHubModalId =
 
 export const contactUsTechnicalInquiry = {
   label: "Technical Inquiry",
-  href: "https://www.ls-electric.com/",
+  href: "https://gicstest.ls-electric.com/public/index.do?lang=en&nation=US",
 } as const;
 
 export const contactUsCategoryLevels = [
