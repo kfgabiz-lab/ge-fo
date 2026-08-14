@@ -3219,23 +3219,28 @@ color: #fff;
   width: 100%;
 }
 
+/* Figma 8793:232922 — Gradients/AI stroke */
 .gnb_search__field .MuiOutlinedInput-root {
   height: 80px;
   min-height: 80px;
   max-height: 80px;
   padding: 0 30px;
   gap: 14px;
+  border: 1px solid transparent;
   border-radius: 4px;
-  background: #f5f5f5;
+  background:
+    linear-gradient(#f5f5f5, #f5f5f5) padding-box,
+    linear-gradient(135deg, #028dff 50%, #9535ff 100%) border-box;
 }
 
 .gnb_search__field .MuiOutlinedInput-root fieldset,
-.gnb_search__field .MuiOutlinedInput-root:hover fieldset {
-  border: 1px solid #9535ff !important;
+.gnb_search__field .MuiOutlinedInput-root:hover fieldset,
+.gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+  border: none !important;
 }
 
-.gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
-  border: 2px solid #9535ff !important;
+.gnb_search__field .MuiOutlinedInput-root.Mui-focused {
+  border-width: 2px;
 }
 
 .gnb_search__field .MuiOutlinedInput-input {
@@ -3445,17 +3450,21 @@ color: #fff;
     max-height: 60px;
     padding: 0 20px;
     gap: 8px;
+    border: 1px solid transparent;
     border-radius: 4px;
-    background: #f5f5f5;
+    background:
+      linear-gradient(#f5f5f5, #f5f5f5) padding-box,
+      linear-gradient(135deg, #028dff 50%, #9535ff 100%) border-box;
   }
 
   .gnb_search__field .MuiOutlinedInput-root fieldset,
-  .gnb_search__field .MuiOutlinedInput-root:hover fieldset {
-    border: 1px solid #9535ff !important;
+  .gnb_search__field .MuiOutlinedInput-root:hover fieldset,
+  .gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
+    border: none !important;
   }
 
-  .gnb_search__field .MuiOutlinedInput-root.Mui-focused fieldset {
-    border: 2px solid #9535ff !important;
+  .gnb_search__field .MuiOutlinedInput-root.Mui-focused {
+    border-width: 2px;
   }
 
   .gnb_search__field .MuiOutlinedInput-input {

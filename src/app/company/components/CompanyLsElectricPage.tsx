@@ -219,13 +219,13 @@ function LsElectricHighlightsSection() {
               className="btn-text-30__icon company-ls-electric-highlights__link-icon company-ls-electric-highlights__link-icon--pc"
               aria-hidden="true"
             >
-              <span className="icon_arrow-14" />
+              <span className="icon_link-14" />
             </span>
             <span
               className="btn-text-30__icon company-ls-electric-highlights__link-icon company-ls-electric-highlights__link-icon--mo"
               aria-hidden="true"
             >
-              <span className="icon_arrow-14" />
+              <span className="icon_link-14" />
             </span>
           </a>
         </div>
