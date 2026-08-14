@@ -355,13 +355,18 @@
   }
 
   .devices_products .tit {
+    display: -webkit-box;
+    overflow: hidden;
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
     letter-spacing: -0.01em;
     color: #222;
     transition: 0.3s;
-    text-wrap: balance;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   .devices_products .item:hover .tit {
@@ -965,11 +970,16 @@
   }
 
   section.devices_hero.devices_hero--with-products .devices_products .tit {
+    display: -webkit-box;
+    overflow: hidden;
     font-size: 16px;
     font-weight: 600;
     line-height: 22px;
     letter-spacing: 0;
-    text-wrap: balance;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.devices_products {
@@ -997,6 +1007,15 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .devices_products .tit {
+    display: -webkit-box;
+    overflow: hidden;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   /* Help overlay — products-systems (.devices-page) */

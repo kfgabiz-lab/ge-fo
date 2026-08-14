@@ -358,6 +358,8 @@ section .btn-lv02--more:hover .icon_more {
 
 /* Level 03 — 42px */
 section .btn-lv03 {
+  position: relative;
+  overflow: visible;
   min-height: var(--btn-lv03-h);
   min-width: var(--btn-lv03-min-w);
   padding: 0 var(--btn-lv03-px);
@@ -480,12 +482,15 @@ section .btn-line-30--on-dark .btn-line-30__icon--copy {
 .devices_product_downloads__file-btn.is-loading
   .devices_product_downloads__file-btn-label,
 .devices_product_downloads__file-btn.is-loading
-  .devices_product_downloads__file-btn-icon {
+  .devices_product_downloads__file-btn-icon,
+.btn-lv03.is-loading .btn-lv03-label,
+.btn-lv03.is-loading .icon_download {
   visibility: hidden;
 }
 
 .devices_product_downloads__file-btn.is-loading
-  .devices_product_downloads__file-btn-spinner {
+  .devices_product_downloads__file-btn-spinner,
+.btn-lv03.is-loading .devices_product_downloads__file-btn-spinner {
   display: block;
 }
 

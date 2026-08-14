@@ -1745,12 +1745,18 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_products .tit {
+    display: -webkit-box;
+    overflow: hidden;
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
     color: #222;
     margin-bottom: 2px;
     transition: 0.3s;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.markets_products .markets_products__more {
@@ -3105,8 +3111,12 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     line-height: 20px;
     color: #222;
     margin-bottom: 0;
-    display: flex;
-    align-items: stretch;
+    display: -webkit-box;
+    overflow: hidden;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.markets_products .markets_products__more {

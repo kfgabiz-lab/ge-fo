@@ -996,13 +996,18 @@ section.main_notic .txt:before {
   }
 
   section.main_products .products_swipers.per4 .tit_product {
-    text-wrap: balance;
+    display: -webkit-box;
+    overflow: hidden;
     margin-bottom: 2px;
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
     color: #222;
     letter-spacing: -1%;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
   section.main_products .products_swipers.per4 .sl:hover .tit_product {
     text-decoration: underline;
@@ -2250,13 +2255,18 @@ section.main_notic .txt:before {
   }
 
   section.main_products .products_swipers.per4 .tit_product {
-    text-wrap: balance;
+    display: -webkit-box;
+    overflow: hidden;
     margin-bottom: 0;
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
     letter-spacing: -0.01em;
     color: #222;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.main_products .products_swipers_controls {

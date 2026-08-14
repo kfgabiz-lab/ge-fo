@@ -11,6 +11,8 @@ type DevicesProductDownloadsDownloadBtnProps = {
   url?: string;
   resolveUrl?: () => Promise<string>;
   className?: string;
+  label?: string;
+  variant?: "file" | "lv03";
   onDownloaded?: (url: string) => void;
 };
 
@@ -18,6 +20,8 @@ export default function DevicesProductDownloadsDownloadBtn({
   url,
   resolveUrl,
   className = "",
+  label = "Download",
+  variant = "file",
   onDownloaded,
 }: DevicesProductDownloadsDownloadBtnProps) {
   const [phase, setPhase] = useState<DownloadPhase>("idle");
@@ -50,7 +54,7 @@ export default function DevicesProductDownloadsDownloadBtn({
       }
     }
 
-    if (fileUrl && typeof window !== "undefined") {
+    if (fileUrl && fileUrl !== "#" && typeof window !== "undefined") {
       window.open(fileUrl, "_blank", "noopener,noreferrer");
       onDownloaded?.(fileUrl);
     }
@@ -65,9 +69,11 @@ export default function DevicesProductDownloadsDownloadBtn({
     timersRef.current.push(showToast);
   };
 
+  const isLv03 = variant === "lv03";
   const btnClass = [
-    "devices_product_downloads__file-btn",
-    "devices_product_downloads__file-btn--download",
+    isLv03
+      ? "btn-base btn-lv03 btn-lv03--line"
+      : "devices_product_downloads__file-btn devices_product_downloads__file-btn--download",
     className,
     phase === "loading" ? "is-loading" : "",
   ]
@@ -89,9 +95,19 @@ export default function DevicesProductDownloadsDownloadBtn({
           Download complete!
         </span>
       ) : null}
-      <span className="devices_product_downloads__file-btn-label">Download</span>
       <span
-        className="devices_product_downloads__file-btn-icon"
+        className={
+          isLv03
+            ? "btn-lv03-label"
+            : "devices_product_downloads__file-btn-label"
+        }
+      >
+        {label}
+      </span>
+      <span
+        className={
+          isLv03 ? "icon_download" : "devices_product_downloads__file-btn-icon"
+        }
         aria-hidden="true"
       />
       <span

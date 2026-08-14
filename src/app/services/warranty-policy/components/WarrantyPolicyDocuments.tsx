@@ -1,3 +1,4 @@
+import DevicesProductDownloadsDownloadBtn from "@/app/()/products-systems/components/product/DevicesProductDownloadsDownloadBtn";
 import { warrantyPolicyPage } from "@/data/services/warrantyPolicyContent";
 
 /* 260811 start */
@@ -23,14 +24,11 @@ export default function WarrantyPolicyDocuments() {
                 {item.format}
               </p>
             </div>
-            <a
-              href={item.downloadHref}
-              className="btn-base btn-lv03 btn-lv03--line"
-              {...(item.downloadHref !== "#" ? { download: true } : {})}
-            >
-              {documents.ctaLabel}
-              <span className="icon_download" aria-hidden="true" />
-            </a>
+            <DevicesProductDownloadsDownloadBtn
+              url={item.downloadHref}
+              label={documents.ctaLabel}
+              variant="lv03"
+            />
           </li>
         ))}
       </ul>
