@@ -20,13 +20,46 @@
   --gnb-mobile-panel-ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* GNB 스크롤은 전역 5px과 별도로 3px 유지 */
+/* GNB 내부만 커스텀 스크롤 (3px) — 페이지 html/body는 브라우저 기본 */
 .gnb_mega ::-webkit-scrollbar,
 .gnb_mega::-webkit-scrollbar,
 .gnb_menu_wrap ::-webkit-scrollbar,
 .main_header ::-webkit-scrollbar {
   width: 3px;
   height: 3px;
+}
+
+.gnb_mega ::-webkit-scrollbar-button,
+.gnb_mega::-webkit-scrollbar-button,
+.gnb_menu_wrap ::-webkit-scrollbar-button,
+.main_header ::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.gnb_mega ::-webkit-scrollbar-track,
+.gnb_mega::-webkit-scrollbar-track,
+.gnb_menu_wrap ::-webkit-scrollbar-track,
+.main_header ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.gnb_mega ::-webkit-scrollbar-thumb,
+.gnb_mega::-webkit-scrollbar-thumb,
+.gnb_menu_wrap ::-webkit-scrollbar-thumb,
+.main_header ::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 2px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .gnb_mega,
+  .gnb_menu_wrap,
+  .main_header {
+    scrollbar-width: thin;
+    scrollbar-color: #ddd transparent;
+  }
 }
 
 .sub_header-wrap.is-product-detail {

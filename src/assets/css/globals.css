@@ -58,30 +58,6 @@ html {
   text-size-adjust: none;
 }
 
-body *::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-body *::-webkit-scrollbar-button {
-  width: 0;
-  height: 0;
-  display: none;
-}
-
-body *::-webkit-scrollbar-thumb {
-  background: #ddd;
-  border-radius: 2px;
-}
-
-/* Firefox 등 webkit 미지원 브라우저만 표준 속성 사용 (html 페이지 스크롤은 기본) */
-@supports not selector(::-webkit-scrollbar) {
-  body * {
-    scrollbar-width: thin;
-    scrollbar-color: #ddd transparent;
-  }
-}
-
 html,
 body {
   max-width: 100%;
