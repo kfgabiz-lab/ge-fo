@@ -56,10 +56,12 @@ export function DevicesProductDownloadsFilterBoundary({
   children,
   productCodes = [],
   docTypeOptions = [],
+  keyword = "",
 }: {
   children: ReactNode;
   productCodes?: string[];
   docTypeOptions?: DownloadFilterOption[];
+  keyword?: string;
 }) {
   const context = useContext(DevicesProductDownloadsFilterContext);
 
@@ -71,6 +73,7 @@ export function DevicesProductDownloadsFilterBoundary({
     <DevicesProductDownloadsFilterProvider
       productCodes={productCodes}
       docTypeOptions={docTypeOptions}
+      keyword={keyword}
     >
       {children}
     </DevicesProductDownloadsFilterProvider>
@@ -81,10 +84,12 @@ export function DevicesProductDownloadsFilterProvider({
   children,
   productCodes = [],
   docTypeOptions = [],
+  keyword = "",
 }: {
   children: ReactNode;
   productCodes?: string[];
   docTypeOptions?: DownloadFilterOption[];
+  keyword?: string;
 }) {
   const [documentTypes, setDocumentTypes] =
     useState<DownloadFilterOption[]>(docTypeOptions);
@@ -97,22 +102,24 @@ export function DevicesProductDownloadsFilterProvider({
   useEffect(() => {
     let alive = true;
     const codes = productCodeKey ? productCodeKey.split(",") : [];
-    fetchDownloadDocTypeFilters({ productCodes: codes, fallbackCount: 0 }).then(
-      (options) => {
-        if (!alive) return;
-        setDocumentTypes(options);
-        setChecked((current) =>
-          buildCheckedState(
-            options,
-            (optionId) => current[buildFilterId(optionId)] ?? true,
-          ),
-        );
-      },
-    );
+    fetchDownloadDocTypeFilters({
+      productCodes: codes,
+      q: keyword,
+      fallbackCount: 0,
+    }).then((options) => {
+      if (!alive) return;
+      setDocumentTypes(options);
+      setChecked((current) =>
+        buildCheckedState(
+          options,
+          (optionId) => current[buildFilterId(optionId)] ?? true,
+        ),
+      );
+    });
     return () => {
       alive = false;
     };
-  }, [productCodeKey]);
+  }, [productCodeKey, keyword]);
 
   const isChecked = useCallback((id: string) => Boolean(checked[id]), [checked]);
 

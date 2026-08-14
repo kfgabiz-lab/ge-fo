@@ -39,21 +39,39 @@ type DevicesProductDownloadsProps = {
   productName?: string;
 };
 
+type DevicesProductDownloadsBodyProps = {
+  initial: ProductDownloadsPage;
+  productCodes: string[];
+  productName?: string;
+  keyword: string;
+  setKeyword: (value: string) => void;
+  appliedKeyword: string;
+  setAppliedKeyword: (value: string) => void;
+};
+
 export default function DevicesProductDownloads({
   initial,
   productCodes,
   docTypeOptions = [],
   productName,
 }: DevicesProductDownloadsProps) {
+  const [keyword, setKeyword] = useState("");
+  const [appliedKeyword, setAppliedKeyword] = useState("");
+
   return (
     <DevicesProductDownloadsFilterBoundary
       productCodes={productCodes}
       docTypeOptions={docTypeOptions}
+      keyword={appliedKeyword}
     >
       <DevicesProductDownloadsBody
         initial={initial}
         productCodes={productCodes}
         productName={productName}
+        keyword={keyword}
+        setKeyword={setKeyword}
+        appliedKeyword={appliedKeyword}
+        setAppliedKeyword={setAppliedKeyword}
       />
     </DevicesProductDownloadsFilterBoundary>
   );
@@ -63,7 +81,11 @@ function DevicesProductDownloadsBody({
   initial,
   productCodes,
   productName,
-}: DevicesProductDownloadsProps) {
+  keyword,
+  setKeyword,
+  appliedKeyword,
+  setAppliedKeyword,
+}: DevicesProductDownloadsBodyProps) {
   const { selectedDocTypes } = useDevicesProductDownloadsFilter();
   const docTypeKey = [...selectedDocTypes].sort().join(",");
   const productCodeKey = [...productCodes].sort().join(",");
@@ -75,8 +97,6 @@ function DevicesProductDownloadsBody({
   const [sort, setSort] = useState<DownloadCenterSort>(
     PRODUCT_DOWNLOADS_DEFAULT_SORT,
   );
-  const [keyword, setKeyword] = useState("");
-  const [appliedKeyword, setAppliedKeyword] = useState("");
 
   const commitSearch = () => {
     setAppliedKeyword(keyword.trim());
