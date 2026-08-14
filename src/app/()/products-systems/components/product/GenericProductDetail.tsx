@@ -193,7 +193,8 @@ export default async function GenericProductDetail({
         {showOtherProducts ? (
           <DevicesProductOtherProducts
             items={otherProducts}
-            title={otherProductsTitle}
+            title="Other Products"
+            // title={otherProductsTitle} Other Products 로 하드코딩 처리
           />
         ) : null}
         <div id="product-markets">
