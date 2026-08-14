@@ -52,6 +52,7 @@ const PRODUCT_CATEGORY_REQUIRED_INQUIRY_TYPES = [
 ];
 const ORDERABLE_PRODUCT_ORDER_METHOD = "01";
 const DISCONTINUED_PRODUCT_ORDER_STATUS = "99";
+const EMAIL_FORMAT_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function filterOrderableDeviceRows(rows: DevicesTreeRow[]): DevicesTreeRow[] {
   const lv3Rows = rows.filter(
@@ -391,8 +392,10 @@ function ContactUsFormContent() {
     event.preventDefault();
     if (submitting) return;
 
+    const emailValid =
+      email.trim() !== "" && EMAIL_FORMAT_REGEX.test(email.trim());
     const nextErrors: ContactFieldErrors = {
-      email: email.trim() === "",
+      email: !emailValid,
       firstName: firstName.trim() === "",
       lastName: lastName.trim() === "",
       companyName: companyName.trim() === "",
@@ -400,13 +403,13 @@ function ContactUsFormContent() {
       description: description.trim() === "",
       password: password.trim() === "",
       confirmPassword: confirmPassword.trim() === "",
-      productCategory: productCategoryRequired && categoryIds.lv1.trim() === "",
+      productCategory: productCategoryRequired && categoryIds.lv3.trim() === "",
     };
     setErrors(nextErrors);
 
     const requiredFilled =
       inquiryType.trim() !== "" &&
-      email.trim() !== "" &&
+      emailValid &&
       firstName.trim() !== "" &&
       lastName.trim() !== "" &&
       companyName.trim() !== "" &&
@@ -415,9 +418,13 @@ function ContactUsFormContent() {
       password.trim() !== "" &&
       confirmPassword.trim() !== "" &&
       Boolean(consent[CONSENT_PRIVACY_ID]) &&
-      (!productCategoryRequired || categoryIds.lv1.trim() !== "");
+      (!productCategoryRequired || categoryIds.lv3.trim() !== "");
     if (!requiredFilled) {
-      alert("Please complete all required fields.");
+      alert(
+        email.trim() !== "" && !emailValid
+          ? "Please enter a valid email address."
+          : "Please complete all required fields.",
+      );
       return;
     }
 
@@ -547,7 +554,7 @@ function ContactUsFormContent() {
                   key={level.id}
                   className="guide_field support_contact_form__category-select"
                 >
-                  {renderCategorySelect(level)}
+                  {renderCategorySelect(level, Boolean(errors.productCategory))}
                 </FormControl>
               ))}
             </div>
