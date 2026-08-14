@@ -1133,6 +1133,11 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-weight: 600;
     line-height: 30px;
     color: #222;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.devices_product_downloads .devices_product_downloads__item-tit-mark {
@@ -1233,6 +1238,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     background: #f5f7fa;
     border-radius: 4px;
   margin-top: 16px;
+    overflow: visible;
   }
 
   section.devices_product_downloads .devices_product_downloads__files {
@@ -1242,6 +1248,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     margin: 0;
     padding: 0;
     list-style: none;
+    overflow: visible;
   }
 
   section.devices_product_downloads .devices_product_downloads__file {
@@ -1253,6 +1260,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 15px;
     line-height: 24px;
     color: #222;
+    overflow: visible;
   }
 
   section.devices_product_downloads .devices_product_downloads__pdf {
@@ -1281,6 +1289,9 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.devices_product_downloads .devices_product_downloads__file-name {
     min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   section.devices_product_downloads .devices_product_downloads__file-actions {
@@ -1289,6 +1300,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     flex-shrink: 0;
     justify-content: flex-end;
     min-width: 219px;
+    overflow: visible;
   }
 
   /* Figma Btn / 30px / Line */
@@ -1298,6 +1310,8 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     justify-content: center;
     gap: 5px;
     box-sizing: border-box;
+    position: relative;
+    overflow: visible;
     height: 30px;
     padding: 8px 14px;
     font-size: 13px;
@@ -1334,6 +1348,21 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     .devices_product_downloads__file-btn--download
     .devices_product_downloads__file-btn-icon {
     background-image: url("/ico/ico_download.svg");
+  }
+
+  section.devices_product_downloads
+    .devices_product_downloads__file-btn.is-loading
+    .devices_product_downloads__file-btn-label,
+  section.devices_product_downloads
+    .devices_product_downloads__file-btn.is-loading
+    .devices_product_downloads__file-btn-icon {
+    visibility: hidden;
+  }
+
+  section.devices_product_downloads
+    .devices_product_downloads__file-btn.is-loading
+    .devices_product_downloads__file-btn-spinner {
+    display: block;
   }
 
   section.devices_product_downloads .devices_product_downloads__mo-controls {
@@ -2554,11 +2583,17 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.devices_product_downloads .devices_product_downloads__item-tit {
     grid-column: auto;
+    min-width: 0;
     padding-right: 0;
     font-size: 18px;
     font-weight: 600;
     line-height: 26px;
     color: #222;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.devices_product_downloads .devices_product_downloads__item-tit-mark {
@@ -2662,6 +2697,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     display: flex;
     flex-direction: column;
     gap: 24px;
+    max-width: 100%;
   }
 
   section.devices_product_downloads .devices_product_downloads__file {
@@ -2700,7 +2736,9 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 14px;
     line-height: 20px;
     color: #222;
-    word-break: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   section.devices_product_downloads .devices_product_downloads__file-actions {
@@ -2709,6 +2747,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     gap: 8px;
     width: 100%;
     min-width: 0;
+    overflow: visible;
   }
 
   section.devices_product_downloads .devices_product_downloads__file-btn {
@@ -2717,6 +2756,8 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     justify-content: center;
     gap: 5px;
     box-sizing: border-box;
+    position: relative;
+    overflow: visible;
     min-width: 143px;
     width: 50%;
     height: 32px;

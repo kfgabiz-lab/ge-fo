@@ -474,10 +474,19 @@ section .btn-line-30--on-dark .btn-line-30__icon--copy {
   background-image: url("/ico/ico_copy_white_14.svg");
 }
 
+.devices_product_downloads__file-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* Copy Link / Download — 로딩 + 완료 토스트 (Figma 7954:145265 / 145273) */
+.devices_product_downloads__file-btn,
 .devices_product_downloads__file-btn--copy,
 .devices_product_downloads__file-btn--download {
   position: relative;
+  overflow: visible;
 }
 
 .devices_product_downloads__file-btn-spinner {
@@ -492,20 +501,14 @@ section .btn-line-30--on-dark .btn-line-30__icon--copy {
   animation: devices_product_downloads_copy_spin 0.7s linear infinite;
 }
 
-.devices_product_downloads__file-btn--copy.is-loading
+.devices_product_downloads__file-btn.is-loading
   .devices_product_downloads__file-btn-label,
-.devices_product_downloads__file-btn--copy.is-loading
-  .devices_product_downloads__file-btn-icon,
-.devices_product_downloads__file-btn--download.is-loading
-  .devices_product_downloads__file-btn-label,
-.devices_product_downloads__file-btn--download.is-loading
+.devices_product_downloads__file-btn.is-loading
   .devices_product_downloads__file-btn-icon {
   visibility: hidden;
 }
 
-.devices_product_downloads__file-btn--copy.is-loading
-  .devices_product_downloads__file-btn-spinner,
-.devices_product_downloads__file-btn--download.is-loading
+.devices_product_downloads__file-btn.is-loading
   .devices_product_downloads__file-btn-spinner {
   display: block;
 }

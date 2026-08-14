@@ -1438,6 +1438,12 @@
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__item-tit {
     grid-column: 1;
+    min-width: 0;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__item-version {
@@ -2366,10 +2372,16 @@
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__item-tit {
+    min-width: 0;
     font-size: 18px;
     font-weight: 600;
     line-height: 26px;
     color: #222;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__item-version {
@@ -2432,12 +2444,14 @@
     padding: 20px;
     border-radius: 4px;
     background: #f5f7fa;
+    
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__files {
     gap: 24px;
     display: flex;
     flex-direction: column;
+    max-width: 100%;
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__file {
@@ -2454,12 +2468,17 @@
     gap: 6px;
     align-items: flex-start;
     display: flex;
+    min-width: 0;
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__file-name {
+    min-width: 0;
     font-size: 14px;
     line-height: 20px;
     color: #222;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__file-actions {
