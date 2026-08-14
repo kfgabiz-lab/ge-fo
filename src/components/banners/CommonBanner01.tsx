@@ -5,7 +5,7 @@ export default function CommonBanner01() {
   return (
     <section className="common_banner_01">
       <div className="img_area">
-        <img loading="lazy" decoding="async" src="/img/main/bg_banner_02.png" alt="banner_02" />
+        <img loading="lazy" decoding="async" src="/img/main/bg_banner_02.webp" alt="banner_02" />
       </div>
       <div className="tit_area">
         <h2 className="banner_tit">Engineering the Future of Smart Energy</h2>

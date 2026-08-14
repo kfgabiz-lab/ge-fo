@@ -13,7 +13,7 @@ export default function MarketsWhy({
     <section className="markets_why">
       <div className="markets_why__bg" aria-hidden="true">
         <div className="img_area">
-          <img loading="lazy" decoding="async" src="/img/markets/bg_why_market.jpg" alt="" />
+          <img loading="lazy" decoding="async" src="/img/markets/bg_why_market.webp" alt="" />
         </div>
       </div>
       <div className="inner">

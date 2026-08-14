@@ -15,21 +15,21 @@ const WHAT_WE_DO_EXPLORE_HREF = "/company/ls-electric-america";
 const whatWeDoSlides = [
   {
     id: "lv-mv-power",
-    img: "/img/main/what_we_do_01.jpg",
+    img: "/img/main/what_we_do_01.webp",
     alt: "LV & MV Power Solutions",
     tit: "LV & MV Power Solutions",
     txt: "We provide complete low and medium voltage power distribution solutions—from transformers and switchgear to switchboards, panelboards, and DC power systems. Built for mission critical applications like data centers, manufacturing, and commercial infrastructure, our solutions deliver the reliability, efficiency, and scalability North American operations demand.",
   },
   {
     id: "grid-utility",
-    img: "/img/main/what_we_do_02.jpg",
+    img: "/img/main/what_we_do_02.webp",
     alt: "Grid & Utility Infrastructure",
     tit: "Grid & Utility Infrastructure",
     txt: "LS ELECTRIC supports utilities, renewable developers, and large industrial projects with high voltage transmission and grid infrastructure solutions. Our portfolio—from ultra high voltage disconnect switches to power transformers—is designed to strengthen grid resilience, improve efficiency, and support the transition to cleaner, more reliable energy systems across North America.",
   },
   {
     id: "automation-control",
-    img: "/img/main/what_we_do_03.jpg",
+    img: "/img/main/what_we_do_03.webp",
     alt: "Automation & Industrial Control",
     tit: "Automation & Industrial Control",
     txt: "We deliver advanced automation and motor control solutions including VFDs, PLCs, HMIs, and integrated control systems. Designed for North American industry, our technologies help manufacturers and operators boost productivity, reduce downtime, and drive smarter, data driven decision making.",

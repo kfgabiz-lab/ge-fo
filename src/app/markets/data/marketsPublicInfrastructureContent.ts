@@ -10,7 +10,7 @@ export const publicInfrastructureHero = {
   subtitle:
     "Powering resilient, efficient, and future-ready infrastructure for communities and essential public services.",
   title: "Public Infrastructure",
-  heroImage: "/img/markets/public-infrastructure/hero/hero.jpg",
+  heroImage: "/img/markets/public-infrastructure/hero/hero.webp",
 };
 
 export const publicInfrastructureIntro = {
@@ -25,7 +25,7 @@ export const publicInfrastructureIndustryTabs: IndustryTab[] = [
     title: "Federal, State, and Municipal Government",
     description:
       "LS ELECTRIC offers robust power distribution and energy management solutions tailored for government administrative facilities and civic infrastructure. Our integrated systems, featuring UL-listed switchgear and intelligent protection relays, support facility modernization and provide enhanced energy visibility. By utilizing our IoT-enabled monitoring platforms, government entities can optimize operational efficiency and meet strict sustainability mandates with scalable, future-ready electrical architectures",
-    image: "/img/markets/public-infrastructure/explore/img_government.jpg",
+    image: "/img/markets/public-infrastructure/explore/img_government.webp",
   },
   {
     id: "airports",
@@ -33,7 +33,7 @@ export const publicInfrastructureIndustryTabs: IndustryTab[] = [
     title: "Airports",
     description:
       "Modern aviation hubs require 24/7 reliability across terminals, runway systems, and baggage handling. LS ELECTRIC is a proven leader in airport power modernization, exemplified by our recent project to implement Substation Automation (SA) at Incheon International Airport. This project involves upgrading 154kV GIS (Gas Insulated Switchgear) and integrating IED-based control systems under the IEC 61850 international standard, enabling complete automation of monitoring, measurement, and control.\n\nOur comprehensive airport solutions—from design and manufacturing to SCADA system installation—ensure real-time power management and a seamless, uninterruptible power supply. By combining high-performance automation with proven field experience, LS ELECTRIC helps global airports reduce operational costs, enhance system transparency, and proactively respond to the growing energy demands of the aviation industry.",
-    image: "/img/markets/public-infrastructure/explore/img_airports.jpg",
+    image: "/img/markets/public-infrastructure/explore/img_airports.webp",
   },
   {
     id: "water",
@@ -41,7 +41,7 @@ export const publicInfrastructureIndustryTabs: IndustryTab[] = [
     title: "Water and Wastewater",
     description:
       "Water treatment and pumping stations demand stable process control and high-durability motor management. LS ELECTRIC provides specialized electrical and automation solutions, such as high-efficiency VFDs and PLC-based control systems, that optimize flow rates while reducing energy consumption. Our integrated approach supports the modernization of aging water infrastructure, enabling predictive maintenance and ensuring consistent regulatory performance for municipal utilities.",
-    image: "/img/markets/public-infrastructure/explore/img_water.jpg",
+    image: "/img/markets/public-infrastructure/explore/img_water.webp",
   },
   {
     id: "healthcare",
@@ -49,7 +49,7 @@ export const publicInfrastructureIndustryTabs: IndustryTab[] = [
     title: "Healthcare",
     description:
       "In healthcare, power continuity is a matter of life and death. LS ELECTRIC delivers redundant power distribution and backup power integration designed for hospitals, laboratories, and medical campuses. Featuring intelligent circuit protection like the Susol Smart MCCB with LSIG relay functions, our solutions ensure uninterrupted operation of mission-critical life-support systems. We help healthcare operators maintain safe, resilient, and energy-optimized environments for patient care.",
-    image: "/img/markets/public-infrastructure/explore/img_healthcare.jpg",
+    image: "/img/markets/public-infrastructure/explore/img_healthcare.webp",
   },
 ];
 
@@ -57,7 +57,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
   {
     id: "pi-ref-1",
     href: "",
-    image: "/img/markets/public-infrastructure/references/ref_01.jpg",
+    image: "/img/markets/public-infrastructure/references/ref_01.webp",
     title: "HV-LV Integrated Turnkey Supply",
     description:
       "The rapid expansion of AI data centers has increased demand for reliable and integrated power infrastructure solutions. This project focused on providing a comprehensive electrical package to support a large-scale data center facility with high-voltage and low-voltage equipment.",
@@ -65,7 +65,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "HV-LV Integrated Turnkey Supply",
-      images: ["/img/markets/public-infrastructure/references/ref_01.jpg"],
+      images: ["/img/markets/public-infrastructure/references/ref_01.webp"],
       overview: [
         "The rapid expansion of AI data centers has increased demand for reliable and integrated power infrastructure solutions. This project focused on providing a comprehensive electrical package to support a large-scale data center facility with high-voltage and low-voltage equipment.",
         "To meet the customer's aggressive schedule and requirement for streamlined project execution, a single-source supply approach was implemented. The solution included 180 medium-voltage switchgear panels and 120 unit substations, combining coordinated engineering, procurement, manufacturing, and delivery processes to reduce integration complexity and accelerate project progress.",
@@ -86,7 +86,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
   {
     id: "pi-ref-2",
     href: "",
-    image: "/img/markets/public-infrastructure/references/ref_02.jpg",
+    image: "/img/markets/public-infrastructure/references/ref_02.webp",
     title: "Australian Data Center Project",
     description:
       "PROJECT DUNE is a data center project in Australia aimed at providing an integrated solution by combining advanced power infrastructure and building automation capabilities. The project focuses on delivering reliable and cost-effective solutions for global colocation data center customers.",
@@ -94,7 +94,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Australian Data Center Project",
-      images: ["/img/markets/public-infrastructure/references/ref_02.jpg"],
+      images: ["/img/markets/public-infrastructure/references/ref_02.webp"],
       overview: [
         "PROJECT DUNE is a data center project in Australia aimed at providing an integrated solution by combining advanced power infrastructure and building automation capabilities. The project focuses on delivering reliable and cost-effective solutions for global colocation data center customers.",
         "To meet customer requirements for competitive pricing and high-quality electrical systems, an alternative sourcing strategy was reviewed by utilizing an established supplier network. Based on this approach, a competitive electrical package including medium-voltage switchgear, transformer solutions, and low-voltage switchgear was proposed.",
@@ -116,7 +116,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
   {
     id: "pi-ref-3",
     href: "",
-    image: "/img/markets/public-infrastructure/references/ref_03.jpg",
+    image: "/img/markets/public-infrastructure/references/ref_03.webp",
     title: "AI Data Center Demonstration Testbed",
     description:
       "To address the rapid expansion of the global data center market, the company and a strategic partner established a collaborative demonstration testbed. This facility aims to strengthen validation capabilities in power and cooling infrastructure, supporting joint market entry into the emerging AI data center sector.",
@@ -124,7 +124,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "AI Data Center Demonstration Testbed",
-      images: ["/img/markets/public-infrastructure/references/ref_03.jpg"],
+      images: ["/img/markets/public-infrastructure/references/ref_03.webp"],
       overview: [
         "To address the rapid expansion of the global data center market, the company and a strategic partner established a collaborative demonstration testbed. This facility aims to strengthen validation capabilities in power and cooling infrastructure, supporting joint market entry into the emerging AI data center sector.",
         "To meet requirements for a high-efficiency, high-density AI data center model, the solution integrates liquid cooling and advanced power systems. The company is delivering a power quality monitoring system and an optimized DC power architecture, combined with the partner's specialized high-density racks.",
@@ -154,7 +154,7 @@ export const publicInfrastructureBenefits: BenefitItem[] = [
       "Ensure stable, 24/7 operation of essential public services through high-reliability power distribution and diagnostic technologies.",
     capabilities:
       "Advanced UL-listed switchgear and IED-based Substation Automation (SA) that enables complete automation of power monitoring and control for mission-critical facilities like international airports.",
-    image: "/img/markets/public-infrastructure/benefits/benefit_01.jpg",
+    image: "/img/markets/public-infrastructure/benefits/benefit_01.webp",
   },
   {
     id: "pi-b2",
@@ -164,7 +164,7 @@ export const publicInfrastructureBenefits: BenefitItem[] = [
       "Support long-term community growth and modernization with flexible, modular electrical systems.",
     capabilities:
       "Open communication protocols (Modbus, Ethernet) and modular hardware design that simplify integration with existing and future infrastructure.",
-    image: "/img/markets/public-infrastructure/benefits/benefit_02.jpg",
+    image: "/img/markets/public-infrastructure/benefits/benefit_02.webp",
     reverse: true,
   },
   {
@@ -175,7 +175,7 @@ export const publicInfrastructureBenefits: BenefitItem[] = [
       "Prioritize public safety and ensure compliance with strict North American industry standards.",
     capabilities:
       "UL-listed Arc-Resistant equipment and intelligent Susol Smart MCCB units that provide precision metering and equipment maintenance diagnostics.",
-    image: "/img/markets/public-infrastructure/benefits/benefit_03.jpg",
+    image: "/img/markets/public-infrastructure/benefits/benefit_03.webp",
   },
   {
     id: "pi-b4",
@@ -185,7 +185,7 @@ export const publicInfrastructureBenefits: BenefitItem[] = [
       "Reduce the financial burden on public budgets through data-driven energy optimization and smart management.",
     capabilities:
       "IEC 61850 compliant systems and GridSol CARE cloud-based monitoring that minimize energy waste while lowering operational and maintenance costs through real-time data.",
-    image: "/img/markets/public-infrastructure/benefits/benefit_04.jpg",
+    image: "/img/markets/public-infrastructure/benefits/benefit_04.webp",
     reverse: true,
   },
 ];
@@ -221,21 +221,21 @@ export const publicInfrastructureProducts: ProductItem[] = [
   {
     id: "pi-p1",
     href: "/product/metasol-ms",
-    image: "/img/markets/public-infrastructure/products/product_01.jpg",
+    image: "/img/markets/public-infrastructure/products/product_01.webp",
     title: "Metasol MS",
     category: "Metasol Contactor & Overload Relay",
   },
   {
     id: "pi-p2",
     href: "",
-    image: "/img/markets/public-infrastructure/products/product_02.jpg",
+    image: "/img/markets/public-infrastructure/products/product_02.webp",
     title: "Miniature circuit breaker",
     category: "The Global Standard",
   },
   {
     id: "pi-p3",
     href: "",
-    image: "/img/markets/public-infrastructure/products/product_03.jpg",
+    image: "/img/markets/public-infrastructure/products/product_03.webp",
     title: "Metasol MMS",
     category: "Metasol Contactor & Overload Relay",
     badges: 2,
@@ -243,14 +243,14 @@ export const publicInfrastructureProducts: ProductItem[] = [
   {
     id: "pi-p4",
     href: "",
-    image: "/img/markets/public-infrastructure/products/product_04.jpg",
+    image: "/img/markets/public-infrastructure/products/product_04.webp",
     title: "Susol UL MCCB",
     category: "Susol UL Molded Case Circuit Breaker",
   },
   {
     id: "pi-p5",
     href: "",
-    image: "/img/markets/public-infrastructure/products/product_05.jpg",
+    image: "/img/markets/public-infrastructure/products/product_05.webp",
     title: "DMPi",
     category: "Intelligent Digital Motor Protection Relay",
     badges: 2,
@@ -258,21 +258,21 @@ export const publicInfrastructureProducts: ProductItem[] = [
   {
     id: "pi-p6",
     href: "",
-    image: "/img/markets/public-infrastructure/products/product_06.jpg",
+    image: "/img/markets/public-infrastructure/products/product_06.webp",
     title: "IMP",
     category: "Intelligent Motor Protection Relay",
   },
   {
     id: "pi-p7",
     href: "",
-    image: "/img/markets/public-infrastructure/products/product_07.jpg",
+    image: "/img/markets/public-infrastructure/products/product_07.webp",
     title: "MMP",
     category: "Small Electronic Motor Protection Relay",
   },
   {
     id: "pi-p8",
     href: "",
-    image: "/img/markets/public-infrastructure/products/product_08.jpg",
+    image: "/img/markets/public-infrastructure/products/product_08.webp",
     title: "GMP",
     category: "Electronic Motor Protection Relay",
   },

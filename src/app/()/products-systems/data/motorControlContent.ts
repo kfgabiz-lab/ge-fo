@@ -130,7 +130,7 @@ export const motorControlMarkets: DevicesMarketItem[] = [
   {
     id: "mkt-1",
     href: "/markets/data-center",
-    image: "/img/main/card_01.jpg",
+    image: "/img/main/card_01.webp",
     title: "Data Center",
     tagline: "Scalable & Uninterrupted Power",
     description:
@@ -139,7 +139,7 @@ export const motorControlMarkets: DevicesMarketItem[] = [
   {
     id: "mkt-4",
     href: "/markets/power-grid",
-    image: "/img/main/card_04.png",
+    image: "/img/main/card_04.webp",
     title: "Power Grid",
     tagline: "Intelligent Grid & Energy Orchestration",
     description:
@@ -148,7 +148,7 @@ export const motorControlMarkets: DevicesMarketItem[] = [
   {
     id: "mkt-3",
     href: "/markets/oil-gas-mining",
-    image: "/img/main/card_03.png",
+    image: "/img/main/card_03.webp",
     title: "Oil & Gas, Mining Industries",
     tagline: "Rugged Reliability for Harsh Environments",
     description:
@@ -157,7 +157,7 @@ export const motorControlMarkets: DevicesMarketItem[] = [
   {
     id: "mkt-2",
     href: "/markets/public-infrastructure",
-    image: "/img/main/card_02.png",
+    image: "/img/main/card_02.webp",
     title: "Public Infrastructure",
     tagline: "Resilient Power for Mission-Critical Facilities",
     description:
@@ -166,7 +166,7 @@ export const motorControlMarkets: DevicesMarketItem[] = [
   {
     id: "mkt-5",
     href: "/markets/industrial",
-    image: "/img/main/card_05.png",
+    image: "/img/main/card_05.webp",
     title: "Industrial",
     tagline: "Smart Automation & Motor Control",
     description:
@@ -192,7 +192,7 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
       "Get pricing, review technical specifications, using our sales portal for the right LS ELECTRIC solution.",
     cta: "Go to Connect Portal",
     ctaIcon: "link",
-    image: "/img/devices-systems/devices_help_01.jpg",
+    image: "/img/devices-systems/devices_help_01.webp",
   },
   {
     id: "help-2",
@@ -202,7 +202,7 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
       "Connect with an authorized LS ELECTRIC distributor or sales representative serving your area.",
     cta: "Where to Buy",
     ctaIcon: "arrow",
-    image: "/img/devices-systems/devices_help_02.jpg",
+    image: "/img/devices-systems/devices_help_02.webp",
   },
   {
     id: "help-3",
@@ -212,7 +212,7 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
       "Keep your equipment operating safely and reliably with expert support for installation, maintenance, and repairs.",
     cta: "Go to G-ICS",
     ctaIcon: "link",
-    image: "/img/devices-systems/devices_help_03.jpg",
+    image: "/img/devices-systems/devices_help_03.webp",
   },
 ];
 
@@ -220,7 +220,7 @@ export const motorControlHighlights: HighlightNewsItem[] = [
   {
     id: "ds-hl-1",
     href: "",
-    image: "/img/devices-systems/highlights/highlight_01.jpg",
+    image: "/img/devices-systems/highlights/highlight_01.webp",
     tag: "Press",
     title:
       "LS ELECTRIC Takes Aim at Next-Generation Data Center 'DC Power' Market",
@@ -229,7 +229,7 @@ export const motorControlHighlights: HighlightNewsItem[] = [
   {
     id: "ds-hl-2",
     href: "",
-    image: "/img/devices-systems/highlights/highlight_02.jpg",
+    image: "/img/devices-systems/highlights/highlight_02.webp",
     tag: "Blog",
     title:
       "LS ELECTRIC Continues Winning Orders for U.S. Data Center Power Infrastructure",
@@ -238,7 +238,7 @@ export const motorControlHighlights: HighlightNewsItem[] = [
   {
     id: "ds-hl-3",
     href: "",
-    image: "/img/devices-systems/highlights/highlight_03.jpg",
+    image: "/img/devices-systems/highlights/highlight_03.webp",
     tag: "Press",
     title: "LS ELECTRIC Surpasses 60 Billion KRW in Japanese ESS Market Orders",
     date: "Apr 08, 2026",

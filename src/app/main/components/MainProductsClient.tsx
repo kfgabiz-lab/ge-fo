@@ -16,7 +16,7 @@ import type {
 } from "./mainProductsData";
 import "swiper/css";
 
-const PRODUCT_IMAGE_FALLBACK = "/img/main/product_01.jpg";
+const PRODUCT_IMAGE_FALLBACK = "/img/main/product_01.webp";
 
 type ProductItem = {
   id: string;

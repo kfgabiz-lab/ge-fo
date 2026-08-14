@@ -7,8 +7,8 @@ export const industrialSolutionsIntro = {
 };
 
 export const industrialSolutionsDiagram = {
-  src: "/img/markets/industrial/solutions/diagram.png",
-  mobileSrc: "/img/markets/industrial/solutions/diagram_mo.png",
+  src: "/img/markets/industrial/solutions/diagram.webp",
+  mobileSrc: "/img/markets/industrial/solutions/diagram_mo.webp",
   alt: "Industrial automation architecture diagram showing field, control, and management levels",
   width: 1440,
   height: 752,

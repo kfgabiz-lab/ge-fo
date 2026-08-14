@@ -1,10 +1,10 @@
 export const blogDetailHero = {
-  src: "/img/company/blog/detail_hero.png",
+  src: "/img/company/blog/detail_hero.webp",
   alt: "Arc resistance in electrical systems",
 };
 
 export const blogDetailContentImage = {
-  src: "/img/company/blog/detail_content.png",
+  src: "/img/company/blog/detail_content.webp",
   alt: "Industrial control panel related visual",
 };
 

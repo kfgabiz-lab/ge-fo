@@ -9,14 +9,14 @@ export const pressDetailMeta = {
 };
 
 export const pressDetailHero = {
-  src: "/img/company/press/detail_hero.png",
+  src: "/img/company/press/detail_hero.webp",
   alt: "ELECS KOREA 2026 exhibition booth",
 };
 
 export const pressDetailYoutube = {
   videoId: "WtQN9rcdI-0",
   title: "LS ELECTRIC MCCB Line Introduction (ENG)",
-  poster: "/img/company/press/detail_video_poster.png",
+  poster: "/img/company/press/detail_video_poster.webp",
 };
 
 export const pressDetailBullets = [

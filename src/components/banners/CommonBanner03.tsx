@@ -92,9 +92,9 @@ function BannerBody({
   );
 }
 
-const DEFAULT_IMAGE_SRC = "/img/devices/product/banner_hub_video.jpg";
-const DEFAULT_BACKGROUND_SRC = "/img/devices/product/banner_hub_bg.png";
-const DEFAULT_BACKGROUND_SRC_MO = "/img/devices/product/banner_hub_bg_mo.png";
+const DEFAULT_IMAGE_SRC = "/img/devices/product/banner_hub_video.webp";
+const DEFAULT_BACKGROUND_SRC = "/img/devices/product/banner_hub_bg.webp";
+const DEFAULT_BACKGROUND_SRC_MO = "/img/devices/product/banner_hub_bg_mo.webp";
 
 export default function CommonBanner03({
   titleTop = "Tech Hub Video Guide",

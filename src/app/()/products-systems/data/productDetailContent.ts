@@ -236,7 +236,7 @@ export const productDownloadDescriptionSample: ProductDownloadDescription = {
     "Starting from V3.80.0605, the warning message has been strengthened when NVRAM data is not deleted. Please refer to the 3.80.0605 Release Note.",
     "When the HMI is turned off, turn on the backup battery switch on the back of the device and take action related to NVRAM as described in Release Note.",
   ],
-  image: "/img/devices/product/download_description.png",
+  image: "/img/devices/product/download_description.webp",
   imageAlt: "Download software interface screenshot",
 };
 
@@ -378,7 +378,7 @@ export const metasolMsDetail: ProductDetail = {
   subtitle: "",
   description:
     "Metasol MS is a high-reliability motor starter solution designed for stable control and protection of industrial motor circuits. It provides dependable switching and protection functions required for motor operation, while its enclosed structure helps minimize arc exposure. With a compact design, Metasol MS supports safer operation and efficient control panel configuration. A wide range of ratings, various accessories, and support for global standards make it suitable for industrial motor control applications.",
-  image: "/img/devices-systems/product/product_metasol_ms_hero.png",
+  image: "/img/devices-systems/product/product_metasol_ms_hero.webp",
   specs: [
     { label: "Rated Current", value: "6 ~ 2650 A" },
     { label: "Rated Operational Voltage", value: "690, 1000 V" },
@@ -390,7 +390,7 @@ export const metasolMsDetail: ProductDetail = {
   youtubeVideoId: "E3wi6qPy1Cc",
   configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
   configuratorExternal: true,
-  configuratorBannerBg: "/img/devices/product/banner_configurator_bg.png",
+  configuratorBannerBg: "/img/devices/product/banner_configurator_bg.webp",
   expertBannerHref: "/support/contact-us",
   expertContactEmail: "automation_support.us@lselectricamerica.com",
   otherProducts: [],
@@ -424,7 +424,7 @@ export const h100PlusDetail: ProductDetail = {
   subtitle: "",
   description:
     "H100+ is an HVAC drive designed for fan and pump applications. It provides dedicated protection functions and control technology to support energy-efficient operation in HVAC systems. With intuitive operation and support for various building automation communication protocols, H100+ enables smart and efficient HVAC control.",
-  image: "/img/devices-systems/product/product_h100_plus_hero.png",
+  image: "/img/devices-systems/product/product_h100_plus_hero.webp",
   specs: [
     { label: "Motor rating", value: "1 - 1000HP" },
     {
@@ -439,7 +439,7 @@ export const h100PlusDetail: ProductDetail = {
   youtubeVideoId: "E3wi6qPy1Cc",
   configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
   configuratorExternal: true,
-  configuratorBannerBg: "/img/devices/product/banner_configurator_bg.png",
+  configuratorBannerBg: "/img/devices/product/banner_configurator_bg.webp",
   expertBannerHref: "/support/contact-us",
   expertContactEmail: "automation_support.us@lselectricamerica.com",
   otherProducts: [],
@@ -460,35 +460,35 @@ export const productTemplateDetail: ProductDetail = {
     {
       id: "op-sp100",
       href: "#",
-      image: "/img/devices-systems/products/other/product_other_sp100.png",
+      image: "/img/devices-systems/products/other/product_other_sp100.webp",
       title: "SP100",
       subtitle: "H100 add-on optimizer",
     },
     {
       id: "op-g100",
       href: "#",
-      image: "/img/devices-systems/products/other/product_other_g100.png",
+      image: "/img/devices-systems/products/other/product_other_g100.webp",
       title: "G100",
       subtitle: "General Drive",
     },
     {
       id: "op-m100",
       href: "#",
-      image: "/img/devices-systems/products/other/product_other_m100.png",
+      image: "/img/devices-systems/products/other/product_other_m100.webp",
       title: "M100",
       subtitle: "Micro Drive",
     },
     {
       id: "op-s100",
       href: "#",
-      image: "/img/devices-systems/products/other/product_other_s100.png",
+      image: "/img/devices-systems/products/other/product_other_s100.webp",
       title: "S100",
       subtitle: "Standard Drive",
     },
     {
       id: "op-is7",
       href: "#",
-      image: "/img/devices-systems/products/other/product_other_is7.png",
+      image: "/img/devices-systems/products/other/product_other_is7.webp",
       title: "iS7",
       subtitle: "Premium Drive",
     },
@@ -533,7 +533,7 @@ export const susolUlSmartMccbDetail: ProductDetail = {
   subtitle: "",
   description:
     "The premium Susol UL Air Circuit Breaker (ACB) is designed to meet customer requirements with high interrupting capacity, a lineup up to 6000 A, and a frame structure optimized for switchboard design. The Susol UL ACB is equipped with advanced Trip Relays that support measurement, diagnostics, analysis, and communication. Together with a complete power monitoring and protection coordination system, it provides an integrated solution for power distribution applications.",
-  image: "/img/devices-systems/product/product_susol_ul_smart_mccb_hero.png",
+  image: "/img/devices-systems/product/product_susol_ul_smart_mccb_hero.webp",
   specs: [
     { label: "Rated Current", value: "400~6000 A" },
     {
@@ -551,7 +551,7 @@ export const susolUlSmartMccbDetail: ProductDetail = {
   youtubeVideoId: "",
   configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
   configuratorExternal: true,
-  configuratorBannerBg: "/img/devices/product/banner_configurator_bg.png",
+  configuratorBannerBg: "/img/devices/product/banner_configurator_bg.webp",
   expertBannerHref: "/support/contact-us",
   expertContactEmail: "automation_support.us@lselectricamerica.com",
   otherProducts: [],

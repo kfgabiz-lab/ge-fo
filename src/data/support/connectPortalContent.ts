@@ -6,7 +6,7 @@ export const connectPortalPage = {
     "An all-in-one eSales platform for product discovery, ordering, shipping, and customer inquiries.",
   video: {
     youtubeVideoId: "73F6r_x5J2Y",
-    poster: "/img/support/connect-portal/hero-video.jpg",
+    poster: "/img/support/connect-portal/hero-video.webp",
     title: "Connect Portal — Main Page Overview",
     headingLines: ["Your next order", "starts here."],
     mobileHeadingLine: "Your next order starts here.",
@@ -27,8 +27,8 @@ export const connectPortalPage = {
     text: "Connect Portal simplifies your purchasing experience with easy access to product search, online ordering, shipment tracking, and project quote management - all from one convenient platform",
   },
   featuresBg: {
-    pc: "/img/support/connect-portal/bg_section_support.jpg",
-    mobile: "/img/main/bg_section_main_info_mo.png",
+    pc: "/img/support/connect-portal/bg_section_support.webp",
+    mobile: "/img/main/bg_section_main_info_mo.webp",
   },
   featureCards: [
     {

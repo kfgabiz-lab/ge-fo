@@ -575,7 +575,7 @@ section.main_notic .txt:before {
 
   section.main_info {
     padding: 120px 0 150px;
-    background: url(/img/main/bg_section_main_info.jpg);
+    background: url(/img/main/bg_section_main_info.webp);
     color: #111;
     min-height: 1200px;
     background-size: cover;
@@ -1124,7 +1124,7 @@ section.main_notic .txt:before {
     color: #fff;
     flex-direction: column;
     align-items: stretch;
-    background: url(/img/main/common_banner_03.png);
+    background: url(/img/main/common_banner_03.webp);
     background-position: right;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1972,7 +1972,7 @@ section.main_notic .txt:before {
   section.main_info {
     padding: 75px 20px 150px;
     background-color: #0b0e14;
-    background-image: url(/img/main/bg_section_main_info_mo.png);
+    background-image: url(/img/main/bg_section_main_info_mo.webp);
     background-repeat: no-repeat;
     background-position: center top;
     background-size: cover;
@@ -2342,7 +2342,7 @@ section.main_notic .txt:before {
 
   section.common_banner_03 {
     color: #fff;
-    background: url(/img/main/common_banner_03.png) 50% / cover no-repeat;
+    background: url(/img/main/common_banner_03.webp) 50% / cover no-repeat;
     flex-direction: column;
     background-position: top right;
     min-height: 405px;

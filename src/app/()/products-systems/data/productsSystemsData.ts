@@ -11,7 +11,7 @@ import type { ProductOtherItem } from "./productDetailContent";
 import type { DevicesProductItem } from "./motorControlContent";
 import type { DevicesCategoryProduct } from "./vfdContent";
 
-export const PRODUCTS_SYSTEMS_PLACEHOLDER = "/img/main/product_01.jpg";
+export const PRODUCTS_SYSTEMS_PLACEHOLDER = "/img/main/product_01.webp";
 
 export function resolveFirstImageUrl(value: unknown): string | null {
   if (Array.isArray(value) && value.length > 0) {

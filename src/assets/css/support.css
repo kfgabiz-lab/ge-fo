@@ -399,7 +399,7 @@
     flex-shrink: 0;
     width: 28px;
     height: 28px;
-    background: url("/img/support/connect-portal/check-icon.png") center / contain no-repeat;
+    background: url("/img/support/connect-portal/check-icon.webp") center / contain no-repeat;
   }
 
   section.support_connect_detail .support_connect_detail__item-txt {
@@ -709,7 +709,7 @@
     width: 24px;
     height: 24px;
     margin-top: 2px;
-    background: url("/img/support/connect-portal/check-icon.png") center / contain no-repeat;
+    background: url("/img/support/connect-portal/check-icon.webp") center / contain no-repeat;
   }
 
   section.support_connect_detail .support_connect_detail__item-txt {

@@ -38,7 +38,7 @@ export const oilGasMiningSolutionsBlocks: MarketsSolutionBlock[] = [
 ];
 
 export const oilGasMiningSolutionsDiagram = {
-  src: "/img/markets/oil-gas-mining/solutions/diagram_esp.png",
+  src: "/img/markets/oil-gas-mining/solutions/diagram_esp.webp",
   alt: "Oil and gas ESP system diagram showing wellhead, VFD and pump-control, power supply, and downhole components from production tubing to sensor",
   width: 2640,
   height: 1604,

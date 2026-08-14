@@ -11,8 +11,8 @@ type CommonBanner04Props = {
   backgroundSrcMo?: string;
 };
 
-const DEFAULT_BACKGROUND_SRC = "/img/banner/bg_banner_03.png";
-const DEFAULT_BACKGROUND_SRC_MO = "/img/banner/bg_banner_03_mo.png";
+const DEFAULT_BACKGROUND_SRC = "/img/banner/bg_banner_03.webp";
+const DEFAULT_BACKGROUND_SRC_MO = "/img/banner/bg_banner_03_mo.webp";
 const DEFAULT_TITLE = "Consult with an LS ELECTRIC Expert";
 const DEFAULT_DESCRIPTION =
   "Have a general question not related to quotes or technical service? Leave us a message and our team will get back to you.";

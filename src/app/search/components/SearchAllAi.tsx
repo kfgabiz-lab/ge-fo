@@ -160,7 +160,7 @@ export default function SearchAllAi({
         <div className="search_all__ai-head">
           <img
             className="search_all__ai-badge"
-            src="/img/search/search_all_ai_badge.png"
+            src="/img/search/search_all_ai_badge.webp"
             alt=""
             width={58}
             height={58}

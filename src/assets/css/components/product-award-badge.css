@@ -25,13 +25,13 @@
   .type1 .product_award_badge__icon {
     width: 80px;
     height: 40px;
-    background-image: url("/img/devices-systems/products/badge_if_award_lg.png");
+    background-image: url("/img/devices-systems/products/badge_if_award_lg.webp");
   }
 
   .type2 .product_award_badge__icon {
     width: 40px;
     height: 40px;
-    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.webp");
   }
 }
 
@@ -60,13 +60,13 @@
   .type1 .product_award_badge__icon {
     width: 48px;
     height: 24px;
-    background-image: url("/img/devices-systems/products/badge_if_award_lg.png");
+    background-image: url("/img/devices-systems/products/badge_if_award_lg.webp");
   }
 
   .type2 .product_award_badge__icon {
     width: 24px;
     height: 24px;
-    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.webp");
   }
 }
 
@@ -75,7 +75,7 @@
   section.main_products .product_award_badge__icon {
     width: 50px;
     height: 50px;
-    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.webp");
   }
 }
 
@@ -83,6 +83,6 @@
   section.main_products .product_award_badge__icon {
     width: 50px;
     height: 50px;
-    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.webp");
   }
 }

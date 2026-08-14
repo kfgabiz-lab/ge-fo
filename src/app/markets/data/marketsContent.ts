@@ -26,23 +26,23 @@ export type BenefitItem = {
 };
 
 export const marketsBenefitImages = {
-  benefit01: "/img/markets/benefits/benefit_01.jpg",
-  benefit02: "/img/markets/benefits/benefit_02.jpg",
-  benefit03: "/img/markets/benefits/benefit_03.jpg",
-  benefit04: "/img/markets/benefits/benefit_04.jpg",
-  benefit05: "/img/markets/benefits/benefit_05.jpg",
-  benefit06: "/img/markets/benefits/benefit_06.jpg",
-  benefit07: "/img/markets/benefits/benefit_07.jpg",
-  benefit08: "/img/markets/benefits/benefit_08.jpg",
-  benefit09: "/img/markets/benefits/benefit_09.jpg",
-  benefit10: "/img/markets/benefits/benefit_10.jpg",
+  benefit01: "/img/markets/benefits/benefit_01.webp",
+  benefit02: "/img/markets/benefits/benefit_02.webp",
+  benefit03: "/img/markets/benefits/benefit_03.webp",
+  benefit04: "/img/markets/benefits/benefit_04.webp",
+  benefit05: "/img/markets/benefits/benefit_05.webp",
+  benefit06: "/img/markets/benefits/benefit_06.webp",
+  benefit07: "/img/markets/benefits/benefit_07.webp",
+  benefit08: "/img/markets/benefits/benefit_08.webp",
+  benefit09: "/img/markets/benefits/benefit_09.webp",
+  benefit10: "/img/markets/benefits/benefit_10.webp",
 } as const;
 
 export const commercialResidentialHero = {
   subtitle: "Smart & Sustainable Building Infrastructure",
   title: "Commercial & Residential",
   titleLines: ["Commercial", "& Residential"],
-  heroImage: "/img/markets/commercial-residential/hero/hero.jpg",
+  heroImage: "/img/markets/commercial-residential/hero/hero.webp",
   secondaryCta: {
     label: "Get the Whitepaper",
     href: "",
@@ -106,7 +106,7 @@ export const industryTabs: IndustryTab[] = [
     title: "Hotels",
     description:
       "LS ELECTRIC delivers reliable and energy-efficient power infrastructure for hotels, ensuring uninterrupted operations and enhanced guest comfort. With integrated solutions including low-voltage systems, smart distribution, and BEMS, hotels can optimize energy usage, reduce operational costs, and maintain a safe and comfortable environment.",
-    image: "/img/markets/explore/img_hotels.jpg",
+    image: "/img/markets/explore/img_hotels.webp",
   },
   {
     id: "retail",
@@ -114,7 +114,7 @@ export const industryTabs: IndustryTab[] = [
     title: "Retail Stores",
     description:
       "For retail environments, LS ELECTRIC provides stable power distribution and smart energy management to support seamless store operations. Its solutions enable efficient lighting and HVAC control, reduce energy consumption, and enhance operational efficiency across single stores and multi-site retail chains.",
-    image: "/img/markets/explore/img_retail.jpg",
+    image: "/img/markets/explore/img_retail.webp",
   },
   {
     id: "logistics",
@@ -122,7 +122,7 @@ export const industryTabs: IndustryTab[] = [
     title: "Logistics",
     description:
       "LS ELECTRIC supports logistics facilities with robust power systems and intelligent monitoring solutions to ensure continuous and efficient operations. Through real-time energy management and reliable power infrastructure, warehouses and distribution centers can improve operational uptime and reduce maintenance risks.",
-    image: "/img/markets/explore/img_logistics.jpg",
+    image: "/img/markets/explore/img_logistics.webp",
   },
   {
     id: "commercial",
@@ -130,7 +130,7 @@ export const industryTabs: IndustryTab[] = [
     title: "Commercial Buildings",
     description:
       "LS ELECTRIC offers integrated building power solutions combining switchgear, smart electrical rooms, and BEMS for optimized building performance. These solutions enhance energy efficiency, ensure power reliability, and enable data-driven building operations for offices, data centers, and large commercial facilities.",
-    image: "/img/markets/explore/img_commercial.jpg",
+    image: "/img/markets/explore/img_commercial.webp",
   },
   {
     id: "residential",
@@ -138,7 +138,7 @@ export const industryTabs: IndustryTab[] = [
     title: "Residential",
     description:
       "For residential environments, LS ELECTRIC provides safe and efficient electrical systems including low-voltage protection devices and smart energy solutions. These solutions enhance electrical safety, improve energy efficiency, and support the development of smart and sustainable living environments.",
-    image: "/img/markets/explore/img_residential.jpg",
+    image: "/img/markets/explore/img_residential.webp",
   },
 ];
 
@@ -151,7 +151,7 @@ export const benefits: BenefitItem[] = [
       "Ensures stable and secure power supply, minimizing downtime and protecting critical building operations.",
     capabilities:
       "Low-voltage protection devices, switchgear, transformers, and integrated power distribution solutions",
-    image: "/img/markets/img_benefit_01.png",
+    image: "/img/markets/img_benefit_01.webp",
   },
   {
     id: "2",
@@ -160,7 +160,7 @@ export const benefits: BenefitItem[] = [
     description:
       "Optimizes energy consumption, reducing operating costs while improving overall energy efficiency.",
     capabilities: "BEMS, power monitoring systems, and data-driven energy analytics",
-    image: "/img/markets/img_benefit_02.png",
+    image: "/img/markets/img_benefit_02.webp",
     reverse: true,
   },
   {
@@ -171,7 +171,7 @@ export const benefits: BenefitItem[] = [
       "Enables real-time monitoring and data-driven operations, improving facility management and maintenance efficiency.",
     capabilities:
       "Smart electrical room solutions, digital monitoring, and integrated power management platforms",
-    image: "/img/markets/img_benefit_03.png",
+    image: "/img/markets/img_benefit_03.webp",
   },
   {
     id: "4",
@@ -180,7 +180,7 @@ export const benefits: BenefitItem[] = [
     description:
       "Supports carbon reduction and ESG goals while enabling sustainable and future-ready building environments.",
     capabilities: "Renewable energy integration (PV), ESS, and smart energy solutions",
-    image: "/img/markets/img_benefit_04.png",
+    image: "/img/markets/img_benefit_04.webp",
     reverse: true,
   },
 ];
@@ -192,7 +192,7 @@ export const whyItems: WhyItem[] = [
     title: "Technological Innovation",
     description:
       "Low-voltage protection devices, power distribution systems, smart electrical rooms, BEMS, and renewable energy solutions",
-    icon: "/img/markets/img_why_01.png",
+    icon: "/img/markets/img_why_01.webp",
   },
   {
     id: "why-2",
@@ -200,7 +200,7 @@ export const whyItems: WhyItem[] = [
     title: "Operational Optimization",
     description:
       "Optimized power consumption, reduced operating costs, and improved energy efficiency across building facilities",
-    icon: "/img/markets/img_why_02.png",
+    icon: "/img/markets/img_why_02.webp",
   },
   {
     id: "why-3",
@@ -208,7 +208,7 @@ export const whyItems: WhyItem[] = [
     title: "Proven Reliability",
     description:
       "Highly reliable and safe power infrastructure tailored to the demanding requirements of commercial buildings",
-    icon: "/img/markets/img_why_03.png",
+    icon: "/img/markets/img_why_03.webp",
   },
 ];
 
@@ -216,7 +216,7 @@ export const references: ReferenceItem[] = [
   {
     id: "ref-1",
     href: "",
-    image: "/img/markets/markets_ref_01.png",
+    image: "/img/markets/markets_ref_01.webp",
     title: "Global Commercial Tower",
     description:
       "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears",
@@ -224,9 +224,9 @@ export const references: ReferenceItem[] = [
      country: "Vietnam",
     modal: {
       images: [
-        "/img/markets/markets_ref_01.png",
-        "/img/markets/markets_ref_02.png",
-        "/img/markets/img_benefit_01.png",
+        "/img/markets/markets_ref_01.webp",
+        "/img/markets/markets_ref_02.webp",
+        "/img/markets/img_benefit_01.webp",
       ],
       overview: [
         "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears and LV switchgears for a landmark commercial tower in Ho Chi Minh City.",
@@ -253,7 +253,7 @@ export const references: ReferenceItem[] = [
   {
     id: "ref-2",
     href: "",
-    image: "/img/markets/markets_ref_02.png",
+    image: "/img/markets/markets_ref_02.webp",
     title: "LG USA New Headquarters",
     description:
       "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears",
@@ -262,10 +262,10 @@ export const references: ReferenceItem[] = [
     modal: {
       modalTitle: "LG Electronics USA New Headquarters",
       images: [
-        "/img/markets/markets_ref_02.png",
-        "/img/markets/markets_ref_03.png",
-        "/img/markets/markets_ref_01.png",
-        "/img/markets/img_benefit_02.png",
+        "/img/markets/markets_ref_02.webp",
+        "/img/markets/markets_ref_03.webp",
+        "/img/markets/markets_ref_01.webp",
+        "/img/markets/img_benefit_02.webp",
       ],
       overview: [
         "South Korea's LG Electronics is a leading global electronics company standing toe-to-toe with Samsung Electronics. Also, it has a strong partnership with Apple Inc., and has built its new headquarters at 111 Sylvan Ave. in Englewood Cliffs, New Jersey, while investing a total of USD 300 million into constructing the buildings for a new business campus.",
@@ -293,7 +293,7 @@ export const references: ReferenceItem[] = [
   {
     id: "ref-3",
     href: "",
-    image: "/img/markets/markets_ref_03.png",
+    image: "/img/markets/markets_ref_03.webp",
     title: "KPX Energy Management System",
     description:
       "Owing to the next-generation EMS constructed at the operators can now optimally manage power generation, analyze systems",
@@ -301,9 +301,9 @@ export const references: ReferenceItem[] = [
      country: "South Korea",
     modal: {
       images: [
-        "/img/markets/markets_ref_03.png",
-        "/img/markets/markets_ref_01.png",
-        "/img/markets/img_benefit_03.png",
+        "/img/markets/markets_ref_03.webp",
+        "/img/markets/markets_ref_01.webp",
+        "/img/markets/img_benefit_03.webp",
       ],
       overview: [
         "Owing to the next-generation EMS constructed at the site, operators can now optimally manage power generation and analyze systems in real time.",
@@ -333,21 +333,21 @@ export const products: ProductItem[] = [
   {
     id: "mp-1",
     href: "",
-    image: "/img/main/product_01.jpg",
+    image: "/img/main/product_01.webp",
     title: "Metasol MS",
     category: "Contactor",
   },
   {
     id: "mp-2",
     href: "",
-    image: "/img/main/product_01.jpg",
+    image: "/img/main/product_01.webp",
     title: "Susol ACB",
     category: "Breaker",
   },
   {
     id: "mp-3",
     href: "",
-    image: "/img/main/product_01.jpg",
+    image: "/img/main/product_01.webp",
     title: "XGT PLC",
     category: "Automation",
     badges: 1,
@@ -355,7 +355,7 @@ export const products: ProductItem[] = [
   {
     id: "mp-4",
     href: "",
-    image: "/img/main/product_01.jpg",
+    image: "/img/main/product_01.webp",
     title: "iG5A Drive",
     category: "Drive",
     badges: 2,
@@ -363,28 +363,28 @@ export const products: ProductItem[] = [
   {
     id: "mp-5",
     href: "",
-    image: "/img/main/product_01.jpg",
+    image: "/img/main/product_01.webp",
     title: "BEMS Panel",
     category: "BEMS",
   },
   {
     id: "mp-6",
     href: "",
-    image: "/img/main/product_01.jpg",
+    image: "/img/main/product_01.webp",
     title: "Smart Meter",
     category: "Metering",
   },
   {
     id: "mp-7",
     href: "",
-    image: "/img/main/product_01.jpg",
+    image: "/img/main/product_01.webp",
     title: "ESS PCS",
     category: "Energy Storage",
   },
   {
     id: "mp-8",
     href: "",
-    image: "/img/main/product_01.jpg",
+    image: "/img/main/product_01.webp",
     title: "Solar Inverter",
     category: "Renewables",
   },

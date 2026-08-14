@@ -43,13 +43,13 @@ export const commercialSolutionsHvacBlock: MarketsSolutionBlock = {
 
 export const commercialSolutionsDiagrams = {
   power: {
-    src: "/img/markets/commercial-residential/solutions/diagram_power.png",
+    src: "/img/markets/commercial-residential/solutions/diagram_power.webp",
     alt: "Infrastructure monitoring and power transmission diagram showing DCIM, BMS, EMS, EPMS, AMS and transmission through renewable energy distribution",
     width: 2640,
     height: 1176,
   },
   hvac: {
-    src: "/img/markets/commercial-residential/solutions/diagram_hvac.png",
+    src: "/img/markets/commercial-residential/solutions/diagram_hvac.webp",
     alt: "HVAC system schematic showing HMI, redundant controller, fan and pump VFD, dampers, coils, and sensors",
     width: 2640,
     height: 1518,

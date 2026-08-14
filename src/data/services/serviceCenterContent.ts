@@ -80,9 +80,9 @@ export const serviceCenterPage = {
     description: "Contact our team for additional support and general inquiries.",
     ctaLabel: "Contact Us",
     ctaHref: "/support/contact-us",
-    backgroundImage: "/img/services/service-center/help-01.jpg",
+    backgroundImage: "/img/services/service-center/help-01.webp",
     backgroundImageMobile:
-      "/img/services/service-center/banner-still-need-help.png",
+      "/img/services/service-center/banner-still-need-help.webp",
   },
   offering: {
     title: "Our Services",
@@ -96,7 +96,7 @@ export const serviceCenterPage = {
         titleLines: ["Technical Support"],
         description:
           "Our team provides guidance through remote assistance or direct consultation to ensure stable operation and minimize disruption.",
-        image: "/img/services/service-center/offering-01.jpg",
+        image: "/img/services/service-center/offering-01.webp",
       },
       {
         id: "offering-02",
@@ -106,7 +106,7 @@ export const serviceCenterPage = {
         descriptionLines: [
           "Centralized claim management to ensure efficient handling of product-related issues, including investigation, coordination, and resolution follow-up.",
         ],
-        image: "/img/services/service-center/offering-02.jpg",
+        image: "/img/services/service-center/offering-02.webp",
       },
       {
         id: "offering-03",
@@ -115,7 +115,7 @@ export const serviceCenterPage = {
         titleLines: ["Field Support"],
         description:
           "Reliable field support for troubleshooting, repair, and system stabilization, delivered by experienced engineers in coordination with LS ELECTRIC.",
-        image: "/img/services/service-center/offering-03.jpg",
+        image: "/img/services/service-center/offering-03.webp",
       },
       // {
       //   id: "offering-04",
@@ -124,7 +124,7 @@ export const serviceCenterPage = {
       //   titleLines: ["On-Site", "Field Service"],
       //   description:
       //     "Qualified field engineers deliver hands-on troubleshooting, repair, and replacement services wherever your operations are located.",
-      //   image: "/img/services/service-center/offering-04.jpg",
+      //   image: "/img/services/service-center/offering-04.webp",
       // },
     ],
   },
@@ -136,9 +136,9 @@ export const serviceCenterPage = {
       "Fast, reliable support through every stage of the service process.",
     ctaLabel: "Request for Service",
     ctaHref: GICS_REQUEST_URL,
-    backgroundImage: "/img/main/bg_section_main_info.jpg",
+    backgroundImage: "/img/main/bg_section_main_info.webp",
     backgroundImageMobile:
-      "/img/services/service-center/service-flow-bg-mo.png",
+      "/img/services/service-center/service-flow-bg-mo.webp",
     pathImage: "/img/services/service-center/service-flow-line.svg",
     icons: {
       pin: "/img/services/service-center/service-flow-icon-pin.svg",
@@ -195,7 +195,7 @@ export const serviceCenterPage = {
       "A centralized digital service platform for managing all your service needs—anytime, anywhere.",
     ctaLabel: "Go to G-ICS",
     ctaHref: GICS_REQUEST_URL,
-    image: "/img/services/service-center/g-ics-hero.jpg",
+    image: "/img/services/service-center/g-ics-hero.webp",
     imageAlt: "LS ELECTRIC technicians reviewing equipment plans on site",
     features: [
       {
@@ -238,7 +238,7 @@ export const serviceCenterPage = {
         ctaIcon: "arrow" as const,
         href: GICS_REQUEST_URL,
         external: true,
-        image: "/img/services/service-center/help-01.jpg",
+        image: "/img/services/service-center/help-01.webp",
       },
       {
         id: "warranty",
@@ -249,7 +249,7 @@ export const serviceCenterPage = {
         ctaIcon: "link" as const,
         href: GICS_REQUEST_URL,
         external: true,
-        image: "/img/services/service-center/help-02.jpg",
+        image: "/img/services/service-center/help-02.webp",
       },
       {
         id: "contact",
@@ -260,7 +260,7 @@ export const serviceCenterPage = {
         ctaIcon: "link" as const,
         href: "/support/contact-us",
         external: false,
-        image: "/img/services/service-center/help-03.jpg",
+        image: "/img/services/service-center/help-03.webp",
       },
     ],
   },

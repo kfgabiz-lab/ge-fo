@@ -44,62 +44,62 @@ const techHubVideoSeed: TechHubVideoItem[] = [
   {
     id: "th-1",
     title: ["[VCB] VL Type_Insertion VCB", "using trolley"],
-    poster: "/img/support/tech-hub/thumb-vcb.jpg",
+    poster: "/img/support/tech-hub/thumb-vcb.webp",
   },
   {
     id: "th-2",
     title: ["[VCB] VL Type_Insertion VCB", "using trolley"],
-    poster: "/img/support/tech-hub/thumb-vcb.jpg",
+    poster: "/img/support/tech-hub/thumb-vcb.webp",
   },
   {
     id: "th-3",
     title: ["[VCB] VL Type_Insertion VCB", "using trolley"],
-    poster: "/img/support/tech-hub/thumb-vcb.jpg",
+    poster: "/img/support/tech-hub/thumb-vcb.webp",
   },
   {
     id: "th-4",
     title: "[GIMAC-IV] Appearance and Composition",
-    poster: "/img/support/tech-hub/thumb-gimac.jpg",
+    poster: "/img/support/tech-hub/thumb-gimac.webp",
   },
   {
     id: "th-5",
     title: "[EMPR] MMP Rated Current and CT Ratio Setting Manual",
-    poster: "/img/support/tech-hub/thumb-empr.jpg",
+    poster: "/img/support/tech-hub/thumb-empr.webp",
   },
   {
     id: "th-6",
     title: "[ACB] UVT Coil Replacement Manual",
-    poster: "/img/support/tech-hub/thumb-acb.jpg",
+    poster: "/img/support/tech-hub/thumb-acb.webp",
   },
   {
     id: "th-7",
     title: ["[VCB] VL Type_Insertion VCB", "using trolley"],
-    poster: "/img/support/tech-hub/thumb-vcb.jpg",
+    poster: "/img/support/tech-hub/thumb-vcb.webp",
   },
   {
     id: "th-8",
     title: ["[VCB] VL Type_Insertion VCB", "using trolley"],
-    poster: "/img/support/tech-hub/thumb-vcb.jpg",
+    poster: "/img/support/tech-hub/thumb-vcb.webp",
   },
   {
     id: "th-9",
     title: "[GIMAC-IV] Appearance and Composition",
-    poster: "/img/support/tech-hub/thumb-gimac.jpg",
+    poster: "/img/support/tech-hub/thumb-gimac.webp",
   },
   {
     id: "th-10",
     title: "[EMPR] MMP Rated Current and CT Ratio Setting Manual",
-    poster: "/img/support/tech-hub/thumb-empr.jpg",
+    poster: "/img/support/tech-hub/thumb-empr.webp",
   },
   {
     id: "th-11",
     title: "[ACB] UVT Coil Replacement Manual",
-    poster: "/img/support/tech-hub/thumb-acb.jpg",
+    poster: "/img/support/tech-hub/thumb-acb.webp",
   },
   {
     id: "th-12",
     title: ["[VCB] VL Type_Insertion VCB", "using trolley"],
-    poster: "/img/support/tech-hub/thumb-vcb.jpg",
+    poster: "/img/support/tech-hub/thumb-vcb.webp",
   },
 ];
 
@@ -166,7 +166,7 @@ export type TechHubViewDetail = {
   listHref: string;
 };
 
-const techHubViewPoster = "/img/support/tech-hub/thumb-vcb.jpg";
+const techHubViewPoster = "/img/support/tech-hub/thumb-vcb.webp";
 
 export const techHubViewDetail: TechHubViewDetail = {
   chapter: "Chapter2",

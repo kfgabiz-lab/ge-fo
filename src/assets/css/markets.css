@@ -132,7 +132,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     text-align: center;
   }
   section.markets_hero .hero_img {
-    background: url(/img/markets/bg_market.png);
+    background: url(/img/markets/bg_market.webp);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -1858,7 +1858,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     height: 310px;
     background-position: center top;
     background-size: cover;
-    background: url(/img/markets/bg_market.png);
+    background: url(/img/markets/bg_market.webp);
     /* background-attachment: fixed; */
   }
 
@@ -2947,7 +2947,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     left: 0;
     right: 0;
     background-color: #0b0e14;
-    background-image: url(/img/main/bg_section_main_info_mo.png);
+    background-image: url(/img/main/bg_section_main_info_mo.webp);
     background-repeat: no-repeat;
     background-position: center top;
     background-size: cover;
@@ -3392,7 +3392,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   .markets-page--commercial-residential section.markets_products .type2 .product_award_badge__icon {
     width: 24px;
     height: 24px;
-    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.webp");
   }
 
   /* Data Center — markets_solutions map MO (data-center 전용 컴포넌트 · 가이드 포함) */

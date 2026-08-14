@@ -2923,7 +2923,7 @@ section.company-blog-list .company-blog__tag:hover {
     position: absolute;
     inset: 0;
     background:
-      url("/img/company/america/shaping-bg.png") left top / cover no-repeat,
+      url("/img/company/america/shaping-bg.webp") left top / cover no-repeat,
       #0c1625;
     pointer-events: none;
   }
@@ -3800,7 +3800,7 @@ section.company-blog-list .company-blog__tag:hover {
     position: absolute;
     inset: 0;
     background:
-      url("/img/company/america/shaping-bg.png") left top / cover no-repeat,
+      url("/img/company/america/shaping-bg.webp") left top / cover no-repeat,
       #0c1625;
     pointer-events: none;
   }
@@ -6042,7 +6042,7 @@ section.company-blog-list .company-blog__tag:hover {
     min-height: 150px;
     padding: 30px;
     border-radius: 4px;
-    background: url("/pub/img/company/esg/card-bg.jpg") center / cover no-repeat;
+    background: url("/pub/img/company/esg/card-bg.webp") center / cover no-repeat;
   }
 
   section.company-esg-vision .company-esg-vision__card-icon {
@@ -7416,7 +7416,7 @@ section.company-blog-list .company-blog__tag:hover {
     min-height: 112px;
     padding: 24px;
     border-radius: 4px;
-    background: url("/pub/img/company/esg/card-bg.jpg") center / cover no-repeat;
+    background: url("/pub/img/company/esg/card-bg.webp") center / cover no-repeat;
   }
 
   section.company-esg-vision .company-esg-vision__card-icon {

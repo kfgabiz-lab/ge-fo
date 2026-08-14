@@ -13,23 +13,23 @@ type CardItem = {
 
 const cardImagesById: Record<string, Pick<CardItem, "image" | "imageAlt">> = {
   "data-center": {
-    image: "/img/main/card_01.jpg",
+    image: "/img/main/card_01.webp",
     imageAlt: "Data Center",
   },
   "power-grid": {
-    image: "/img/main/card_04.png",
+    image: "/img/main/card_04.webp",
     imageAlt: "Power Grid",
   },
   "oil-gas-mining": {
-    image: "/img/main/card_03.png",
+    image: "/img/main/card_03.webp",
     imageAlt: "Oil & Gas, Mining Industries",
   },
   "public-infrastructure": {
-    image: "/img/main/card_02.png",
+    image: "/img/main/card_02.webp",
     imageAlt: "Public Infrastructure",
   },
   industrial: {
-    image: "/img/main/card_05.png",
+    image: "/img/main/card_05.webp",
     imageAlt: "Industrial",
   },
   "commercial-residential": {

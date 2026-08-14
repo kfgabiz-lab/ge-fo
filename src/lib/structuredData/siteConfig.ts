@@ -7,7 +7,7 @@ export const ORG_ID = `${SITE_URL}#organization`;
 export const WEBSITE_ID = `${SITE_URL}#website`;
 
 export const SITE_NAME = "LS ELECTRIC America";
-export const ORG_LOGO_URL = `${SITE_URL}/img/logo.png`;
+export const ORG_LOGO_URL = `${SITE_URL}/img/logo.webp`;
 
 export const ORG_SAME_AS = [
   "https://www.linkedin.com/company/lselectricamerica",

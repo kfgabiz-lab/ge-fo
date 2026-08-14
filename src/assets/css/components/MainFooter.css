@@ -4,7 +4,7 @@
   margin-top: auto;
   color: #fff;
   background-color: var(--color-primary, #0f1f45);
-  background-image: url("/img/footer/bg_common_footer.png");
+  background-image: url("/img/footer/bg_common_footer.webp");
   background-repeat: no-repeat;
   background-position: right bottom;
   background-size: cover;
@@ -558,7 +558,7 @@
   }
   .main_footer {
     background-position: right bottom;
-    background-image: url("/img/footer/mo_bg_common_footer.png");
+    background-image: url("/img/footer/mo_bg_common_footer.webp");
   }
   .main_footer__tit {
     font-size: 28px;

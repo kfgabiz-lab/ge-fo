@@ -10,8 +10,8 @@ import type { SolutionProduct, SolutionZone } from "../data/marketsSolutions";
 
 const PANEL_FADE_MS = 450;
 
-const MAP_BG_PC = "/img/markets/solutions/bg_datacenter.png";
-const MAP_BG_MO = "/img/markets/solutions/bg_datacenter_mo.png";
+const MAP_BG_PC = "/img/markets/solutions/bg_datacenter.webp";
+const MAP_BG_MO = "/img/markets/solutions/bg_datacenter_mo.webp";
 
 function SolutionProductRow({ product }: { product: SolutionProduct }) {
   return (

@@ -3443,13 +3443,13 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
   section.devices_product_other .type1 .product_award_badge__icon {
     width: 50px;
     height: 50px;
-    background-image: url("/img/devices-systems/products/badge_if_award_sm.png");
+    background-image: url("/img/devices-systems/products/badge_if_award_sm.webp");
   }
 
   section.devices_product_other .type2 .product_award_badge__icon {
     width: 80px;
     height: 39px;
-    background-image: url("/img/devices-systems/products/badge_if_award_lg.png");
+    background-image: url("/img/devices-systems/products/badge_if_award_lg.webp");
   }
 
   section.devices_product_other .swiper_type_01_controls {

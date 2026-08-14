@@ -1,10 +1,10 @@
 export const mediaArticleDetailHero = {
-  src: "/img/company/articles/hero.png",
+  src: "/img/company/articles/hero.webp",
   alt: "Control panel troubleshooting article cover",
 };
 
 export const mediaArticleDetailContentImage = {
-  src: "/img/company/blog/detail_content.png",
+  src: "/img/company/blog/detail_content.webp",
   alt: "Industrial control panel troubleshooting infographic",
 };
 

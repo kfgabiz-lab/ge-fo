@@ -1,5 +1,5 @@
 export const eventsDetailHero = {
-  src: "/img/company/events/detail_hero.png",
+  src: "/img/company/events/detail_hero.webp",
   alt: "ELECS KOREA 2026 exhibition booth",
 };
 

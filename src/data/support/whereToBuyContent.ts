@@ -36,7 +36,7 @@ export const whereToBuyPage = {
   viewMapLabel: "View Map",
   totalResults: 2658,
   mapPinImage: "/img/support/where-to-buy/pin.svg",
-  mapBrandPinImage: "/img/support/where-to-buy/pin-brand.png",
+  mapBrandPinImage: "/img/support/where-to-buy/pin-brand.webp",
   mapDefaultCenter: { lat: whereToBuyHq.lat, lng: whereToBuyHq.lng },
   mapDefaultZoom: 9,
 } as const;
@@ -230,8 +230,8 @@ export const whereToBuyEmptyContent = {
 } as const;
 
 export const whereToBuyBanner = {
-  backgroundImage: "/img/support/where-to-buy/banner.jpg",
-  backgroundImageMobile: "/img/support/where-to-buy/banner-mo.jpg",
+  backgroundImage: "/img/support/where-to-buy/banner.webp",
+  backgroundImageMobile: "/img/support/where-to-buy/banner-mo.webp",
   title: "Finding the Right Place to Purchase?",
   description:
     "Our experts are ready to guide you to the right distribution channel.",

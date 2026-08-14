@@ -26,13 +26,13 @@ export const publicInfrastructureAutomationBlock: MarketsSolutionBlock = {
 
 export const publicInfrastructureSolutionsDiagrams = {
   power: {
-    src: "/img/markets/public-infrastructure/solutions/diagram_power.png",
+    src: "/img/markets/public-infrastructure/solutions/diagram_power.webp",
     alt: "Isometric diagram of public infrastructure power management network with EMS, SCADA, DMS, xEMS, DCS, and Microgrid across dams, cities, and renewable energy sites",
     width: 2640,
     height: 1440,
   },
   automation: {
-    src: "/img/markets/public-infrastructure/solutions/diagram_automation.png",
+    src: "/img/markets/public-infrastructure/solutions/diagram_automation.webp",
     alt: "High-availability automation architecture showing Edge Computing Solution, HMI, Redundant PLC, Integrated Control and Motion PLC, All-in-one Micro PLC, Multi-Port RAPIEnet Switch, VFD, and Expandable Smart I/O",
     width: 2640,
     height: 1464,

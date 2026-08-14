@@ -47,8 +47,8 @@ const productImg = {
   dcProducts:
     "/img/devices-systems/products/iec-dc-acb-and-switch-disconnector.webp",
   eHouse: "/img/devices-systems/products/e-house.webp",
-  scada: "/img/markets/solutions/product_scada.png",
-  fallback: "/img/main/product_01.jpg",
+  scada: "/img/markets/solutions/product_scada.webp",
+  fallback: "/img/main/product_01.webp",
 } as const;
 
 const productSamples = [

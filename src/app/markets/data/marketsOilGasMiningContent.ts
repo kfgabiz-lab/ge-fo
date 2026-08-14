@@ -10,7 +10,7 @@ export const oilGasMiningHero = {
   subtitle:
     "Reliable, Safe & High-Performance Solutions for Harsh Industrial Environments",
   title: "Oil & Gas, Mining Industries",
-  heroImage: "/img/markets/oil-gas-mining/hero/hero.jpg",
+  heroImage: "/img/markets/oil-gas-mining/hero/hero.webp",
 };
 
 export const oilGasMiningIntro = {
@@ -28,7 +28,7 @@ export const oilGasMiningIndustryTabs: IndustryTab[] = [
     title: "Petroleum & Chemical Refineries",
     description:
       "LS ELECTRIC provides reliable power and automation solutions for refineries and chemical plants, ensuring safe, continuous operations while enhancing stability, reducing downtime, and improving overall efficiency.",
-    image: "/img/markets/oil-gas-mining/explore/img_petroleum.jpg",
+    image: "/img/markets/oil-gas-mining/explore/img_petroleum.webp",
   },
   {
     id: "mining",
@@ -36,7 +36,7 @@ export const oilGasMiningIndustryTabs: IndustryTab[] = [
     title: "Metals & Mining",
     description:
       "LS ELECTRIC provides robust electrical and automation solutions tailored for mining and metal processing environments. Designed to withstand extreme conditions, our systems ensure reliable operation, enhanced productivity, and reduced maintenance costs.",
-    image: "/img/markets/oil-gas-mining/explore/img_mining.jpg",
+    image: "/img/markets/oil-gas-mining/explore/img_mining.webp",
   },
   {
     id: "marine",
@@ -44,7 +44,7 @@ export const oilGasMiningIndustryTabs: IndustryTab[] = [
     title: "Marine",
     description:
       "LS ELECTRIC offers compact, reliable, and high-performance electrical solutions for marine and offshore environments. Our solutions ensure stable power supply and safe operation under challenging maritime conditions.",
-    image: "/img/markets/oil-gas-mining/explore/img_marine.jpg",
+    image: "/img/markets/oil-gas-mining/explore/img_marine.webp",
   },
 ];
 
@@ -52,7 +52,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
   {
     id: "ogm-ref-1",
     href: "",
-    image: "/img/markets/oil-gas-mining/references/ref_01.jpg",
+    image: "/img/markets/oil-gas-mining/references/ref_01.webp",
     title: "Lotte Hanoi Mall",
     description:
       "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears, and integrated power distribution for this large-scale commercial development.",
@@ -60,7 +60,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Lotte Hanoi Mall",
-      images: ["/img/markets/oil-gas-mining/references/ref_01.jpg"],
+      images: ["/img/markets/oil-gas-mining/references/ref_01.webp"],
       overview: [
         "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears, and integrated power distribution for this large-scale commercial development.",
         "The project required coordinated high-voltage and low-voltage equipment engineered for reliable operation across a complex mixed-use facility with demanding load profiles.",
@@ -81,7 +81,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
   {
     id: "ogm-ref-2",
     href: "",
-    image: "/img/markets/oil-gas-mining/references/ref_02.jpg",
+    image: "/img/markets/oil-gas-mining/references/ref_02.webp",
     title: "LG USA New Headquarters",
     description:
       "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears, and coordinated low-voltage distribution for the new headquarters campus.",
@@ -89,7 +89,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "LG USA New Headquarters",
-      images: ["/img/markets/oil-gas-mining/references/ref_02.jpg"],
+      images: ["/img/markets/oil-gas-mining/references/ref_02.webp"],
       overview: [
         "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears, and coordinated low-voltage distribution for the new headquarters campus.",
         "The solution was designed to meet North American standards while supporting the customer's goals for energy efficiency and operational reliability across the facility.",
@@ -110,7 +110,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
   {
     id: "ogm-ref-3",
     href: "",
-    image: "/img/markets/oil-gas-mining/references/ref_03.jpg",
+    image: "/img/markets/oil-gas-mining/references/ref_03.webp",
     title: "KPX Energy Management System",
     description:
       "Owing to the next-generation EMS constructed at the site, operators can now optimally manage power generation, analyze systems, and improve grid-wide operational visibility.",
@@ -118,7 +118,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "KPX Energy Management System",
-      images: ["/img/markets/oil-gas-mining/references/ref_03.jpg"],
+      images: ["/img/markets/oil-gas-mining/references/ref_03.webp"],
       overview: [
         "Owing to the next-generation EMS constructed at the site, operators can now optimally manage power generation, analyze systems, and improve grid-wide operational visibility.",
         "The energy management system integrates real-time monitoring, analytics, and control capabilities to support efficient power operations across the network.",
@@ -147,7 +147,7 @@ export const oilGasMiningBenefits: BenefitItem[] = [
       "Engineered for oil, gas, and mining sites, LS ELECTRIC solutions are designed to operate safely in explosive and high-risk environments, ensuring compliance with global standards while protecting personnel and assets.",
     capabilities:
       "Explosion-proof compatible systems, high-reliability switchgear, protection devices, and solutions designed for hazardous and high-risk industrial zones",
-    image: "/img/markets/oil-gas-mining/benefits/benefit_01.jpg",
+    image: "/img/markets/oil-gas-mining/benefits/benefit_01.webp",
   },
   {
     id: "ogm-b2",
@@ -157,7 +157,7 @@ export const oilGasMiningBenefits: BenefitItem[] = [
       "Mission-critical operations demand uninterrupted power. LS ELECTRIC delivers highly reliable power distribution and protection systems that ensure stable operation and minimize unplanned downtime.",
     capabilities:
       "Robust switchgear, advanced protection relays, condition monitoring, and fault detection systems for stable, continuous operation",
-    image: "/img/markets/oil-gas-mining/benefits/benefit_02.jpg",
+    image: "/img/markets/oil-gas-mining/benefits/benefit_02.webp",
     reverse: true,
   },
   {
@@ -168,7 +168,7 @@ export const oilGasMiningBenefits: BenefitItem[] = [
       "Built to withstand harsh environments such as heat, dust, vibration, and corrosion, LS ELECTRIC products ensure long-term durability and consistent performance in mining sites, refineries, and offshore platforms.",
     capabilities:
       "Durable equipment design, high-performance drives, corrosion-resistant systems, and solutions optimized for extreme industrial conditions",
-    image: "/img/markets/oil-gas-mining/benefits/benefit_03.jpg",
+    image: "/img/markets/oil-gas-mining/benefits/benefit_03.webp",
   },
   {
     id: "ogm-b4",
@@ -178,7 +178,7 @@ export const oilGasMiningBenefits: BenefitItem[] = [
       "From process automation to real-time monitoring, LS ELECTRIC enables data-driven operations that enhance efficiency, improve visibility, and support predictive maintenance across complex industrial processes.",
     capabilities:
       "PLCs, drives, SCADA systems, real-time monitoring, and integrated automation platforms for optimized and intelligent operations",
-    image: "/img/markets/oil-gas-mining/benefits/benefit_04.jpg",
+    image: "/img/markets/oil-gas-mining/benefits/benefit_04.webp",
     reverse: true,
   },
 ];
@@ -214,21 +214,21 @@ export const oilGasMiningProducts: ProductItem[] = [
   {
     id: "ogm-p1",
     href: "/product/metasol-ms",
-    image: "/img/markets/oil-gas-mining/products/product_01.jpg",
+    image: "/img/markets/oil-gas-mining/products/product_01.webp",
     title: "Metasol MS",
     category: "Metasol Contactor & Overload Relay",
   },
   {
     id: "ogm-p2",
     href: "",
-    image: "/img/markets/oil-gas-mining/products/product_02.jpg",
+    image: "/img/markets/oil-gas-mining/products/product_02.webp",
     title: "Miniature circuit breaker",
     category: "The Global Standard",
   },
   {
     id: "ogm-p3",
     href: "",
-    image: "/img/markets/oil-gas-mining/products/product_03.jpg",
+    image: "/img/markets/oil-gas-mining/products/product_03.webp",
     title: "Metasol MMS",
     category: "Metasol Contactor & Overload Relay",
     badges: 2,
@@ -236,14 +236,14 @@ export const oilGasMiningProducts: ProductItem[] = [
   {
     id: "ogm-p4",
     href: "",
-    image: "/img/markets/oil-gas-mining/products/product_04.jpg",
+    image: "/img/markets/oil-gas-mining/products/product_04.webp",
     title: "Susol UL MCCB",
     category: "Susol UL Molded Case Circuit Breaker",
   },
   {
     id: "ogm-p5",
     href: "",
-    image: "/img/markets/oil-gas-mining/products/product_05.jpg",
+    image: "/img/markets/oil-gas-mining/products/product_05.webp",
     title: "DMPi",
     category: "Intelligent Digital Motor Protection Relay",
     badges: 2,
@@ -251,21 +251,21 @@ export const oilGasMiningProducts: ProductItem[] = [
   {
     id: "ogm-p6",
     href: "",
-    image: "/img/markets/oil-gas-mining/products/product_06.jpg",
+    image: "/img/markets/oil-gas-mining/products/product_06.webp",
     title: "IMP",
     category: "Intelligent Motor Protection Relay",
   },
   {
     id: "ogm-p7",
     href: "",
-    image: "/img/markets/oil-gas-mining/products/product_07.jpg",
+    image: "/img/markets/oil-gas-mining/products/product_07.webp",
     title: "MMP",
     category: "Small Electronic Motor Protection Relay",
   },
   {
     id: "ogm-p8",
     href: "",
-    image: "/img/markets/oil-gas-mining/products/product_08.jpg",
+    image: "/img/markets/oil-gas-mining/products/product_08.webp",
     title: "GMP",
     category: "Electronic Motor Protection Relay",
   },

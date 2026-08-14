@@ -131,7 +131,7 @@ export default function DevicesHelp({
         <div className="devices_help__body">
           <div className="devices_help__visual">
             <img loading="lazy" decoding="async"
-              src="/img/markets/img_benefit_01.png"
+              src="/img/markets/img_benefit_01.webp"
               alt=""
               className="devices_help__visual-img"
             />

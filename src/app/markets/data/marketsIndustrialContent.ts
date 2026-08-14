@@ -10,7 +10,7 @@ import {
 export const industrialHero = {
   subtitle: "Smart, Efficient & Sustainable Industrial Operations",
   title: "Industrial",
-  heroImage: "/img/markets/industrial/hero/hero.jpg",
+  heroImage: "/img/markets/industrial/hero/hero.webp",
 };
 
 export const industrialIntro = {
@@ -54,7 +54,7 @@ export const industrialIndustryTabs: IndustryTab[] = [
     title: "Automotive",
     description:
       "LS ELECTRIC's automotive solution delivers a highly reliable and efficient production environment by leveraging a redundant RAPInet-based network for fast and stable communication, along with rapid fault response through advanced diagnostic features. Its OPC UA-based integrated architecture enables seamless scalability from field-level devices to MES, while supporting various industrial protocols for enhanced flexibility and compatibility. In addition, predictive maintenance functions enable proactive equipment management and reduced downtime. Combined with durable HMI and long-lifespan drive technologies, it maximizes operational reliability, convenience, and overall efficiency across the entire automotive production process.",
-    image: "/img/markets/industrial/explore/img_automotive.jpg",
+    image: "/img/markets/industrial/explore/img_automotive.webp",
   },
   {
     id: "semiconductor",
@@ -62,7 +62,7 @@ export const industrialIndustryTabs: IndustryTab[] = [
     title: "Semiconductor",
     description:
       "LS ELECTRIC's semiconductor solutions deliver high precision, stable power quality, and reliable operation for sensitive manufacturing environments. Advanced PLCs and drives enable accurate, high-speed control, while integrated monitoring and energy management ensure real-time visibility, optimized efficiency, and reduced downtime. Built on a scalable and robust network architecture, the solution enhances productivity and ensures consistent process quality.",
-    image: "/img/markets/industrial/explore/img_semiconductor.jpg",
+    image: "/img/markets/industrial/explore/img_semiconductor.webp",
   },
   {
     id: "machinery",
@@ -70,7 +70,7 @@ export const industrialIndustryTabs: IndustryTab[] = [
     title: "Machinery",
     description:
       "LS ELECTRIC's Machinery solutions focus on delivering high-performance, precise, and flexible control for a wide range of industrial equipment. With advanced PLCs, motion control, and high-efficiency drives, they enable accurate positioning, high-speed operation, and synchronized control across complex machinery systems. The solutions support diverse industrial communication protocols, ensuring seamless integration with existing equipment and systems. In addition, intuitive HMI and integrated software tools enhance usability, reduce engineering time, and simplify maintenance. Overall, LS ELECTRIC provides a reliable and scalable automation platform that improves productivity, ensures consistent quality, and optimizes machine performance.",
-    image: "/img/markets/industrial/explore/img_machinery.jpg",
+    image: "/img/markets/industrial/explore/img_machinery.webp",
   },
   {
     id: "food-beverage",
@@ -78,7 +78,7 @@ export const industrialIndustryTabs: IndustryTab[] = [
     title: "Food & Beverage",
     description:
       "LS ELECTRIC's Food & Beverage solutions are designed to ensure hygiene, consistency, and efficiency across the entire production process. They provide precise control of mixing, filling, and packaging through advanced PLCs and drives, while maintaining stable operations even in demanding environments. With integrated monitoring and traceability capabilities, the solutions support strict quality control and regulatory compliance. In addition, energy-efficient drives and smart automation help reduce operating costs and improve productivity, enabling manufacturers to achieve reliable, high-quality production at scale.",
-    image: "/img/markets/industrial/explore/img_food_beverage.jpg",
+    image: "/img/markets/industrial/explore/img_food_beverage.webp",
   },
 ];
 
@@ -86,7 +86,7 @@ export const industrialReferences: ReferenceItem[] = [
   {
     id: "ind-ref-1",
     href: "",
-    image: "/img/markets/industrial/references/ref_01.jpg",
+    image: "/img/markets/industrial/references/ref_01.webp",
     title: "Lotte Hanoi Mall",
     description:
       "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears",
@@ -94,7 +94,7 @@ export const industrialReferences: ReferenceItem[] = [
      country: "",
     modal: {
       modalTitle: "Lotte Hanoi Mall",
-      images: ["/img/markets/industrial/references/ref_01.jpg"],
+      images: ["/img/markets/industrial/references/ref_01.webp"],
       overview: [
         "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears, and integrated power distribution for this large-scale commercial development.",
         "The project required coordinated high-voltage and low-voltage equipment engineered for reliable operation across a complex mixed-use facility with demanding load profiles.",
@@ -115,7 +115,7 @@ export const industrialReferences: ReferenceItem[] = [
   {
     id: "ind-ref-2",
     href: "",
-    image: "/img/markets/industrial/references/ref_02.jpg",
+    image: "/img/markets/industrial/references/ref_02.webp",
     title: "LG USA New Headquarters",
     description:
       "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears",
@@ -123,7 +123,7 @@ export const industrialReferences: ReferenceItem[] = [
      country: "",
     modal: {
       modalTitle: "LG USA New Headquarters",
-      images: ["/img/markets/industrial/references/ref_02.jpg"],
+      images: ["/img/markets/industrial/references/ref_02.webp"],
       overview: [
         "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears, and coordinated low-voltage distribution for the new headquarters campus.",
         "The solution was designed to meet North American standards while supporting the customer's goals for energy efficiency and operational reliability across the facility.",
@@ -144,7 +144,7 @@ export const industrialReferences: ReferenceItem[] = [
   {
     id: "ind-ref-3",
     href: "",
-    image: "/img/markets/industrial/references/ref_03.jpg",
+    image: "/img/markets/industrial/references/ref_03.webp",
     title: "KPX Energy Management System",
     description:
       "Owing to the next-generation EMS constructed at the operators can now optimally manage power generation, analyze systems",
@@ -152,7 +152,7 @@ export const industrialReferences: ReferenceItem[] = [
      country: "",
     modal: {
       modalTitle: "KPX Energy Management System",
-      images: ["/img/markets/industrial/references/ref_03.jpg"],
+      images: ["/img/markets/industrial/references/ref_03.webp"],
       overview: [
         "Owing to the next-generation EMS constructed at the site, operators can now optimally manage power generation, analyze systems, and improve grid-wide operational visibility.",
         "The energy management system integrates real-time monitoring, analytics, and control capabilities to support efficient power operations across the network.",
@@ -181,7 +181,7 @@ export const industrialBenefits: BenefitItem[] = [
       "High-performance PLCs, drives, and automation systems enable faster, more precise operations, improving overall production efficiency.",
     capabilities:
       "Optimizing production performance through high-speed PLCs, precision drives, and integrated automation systems, enabling faster cycle times and synchronized operations",
-    image: "/img/markets/industrial/benefits/benefit_01.jpg",
+    image: "/img/markets/industrial/benefits/benefit_01.webp",
   },
   {
     id: "ind-b2",
@@ -191,7 +191,7 @@ export const industrialBenefits: BenefitItem[] = [
       "Robust power and control solutions ensure stable operations, minimizing downtime and supporting continuous production.",
     capabilities:
       "Stable and continuous operations with robust power distribution, protection systems, and condition monitoring for proactive fault prevention",
-    image: "/img/markets/industrial/benefits/benefit_02.jpg",
+    image: "/img/markets/industrial/benefits/benefit_02.webp",
     reverse: true,
   },
   {
@@ -202,7 +202,7 @@ export const industrialBenefits: BenefitItem[] = [
       "Advanced energy management and optimized system control help reduce energy consumption and operational costs.",
     capabilities:
       "Reduced energy consumption and operational costs by implementing high-efficiency drives, energy monitoring systems, and optimized power management",
-    image: "/img/markets/industrial/benefits/benefit_03.jpg",
+    image: "/img/markets/industrial/benefits/benefit_03.webp",
   },
   {
     id: "ind-b4",
@@ -212,7 +212,7 @@ export const industrialBenefits: BenefitItem[] = [
       "Seamless integration with smart factory and digital platforms enables data-driven decision-making and flexible system expansion.",
     capabilities:
       "Data-driven operations and future-ready expansion through smart factory solutions, seamless system integration, and scalable digital platforms",
-    image: "/img/markets/industrial/benefits/benefit_04.jpg",
+    image: "/img/markets/industrial/benefits/benefit_04.webp",
     reverse: true,
   },
 ];
@@ -248,21 +248,21 @@ export const industrialProducts: ProductItem[] = [
   {
     id: "ind-p1",
     href: "/product/metasol-ms",
-    image: "/img/markets/industrial/products/product_01.jpg",
+    image: "/img/markets/industrial/products/product_01.webp",
     title: "Metasol MS",
     category: "Metasol Contactor & Overload Relay",
   },
   {
     id: "ind-p2",
     href: "",
-    image: "/img/markets/industrial/products/product_02.jpg",
+    image: "/img/markets/industrial/products/product_02.webp",
     title: "Miniature circuit breaker",
     category: "The Global Standard",
   },
   {
     id: "ind-p3",
     href: "",
-    image: "/img/markets/industrial/products/product_03.jpg",
+    image: "/img/markets/industrial/products/product_03.webp",
     title: "Metasol MMS",
     category: "Metasol Contactor & Overload Relay",
     badges: 2,
@@ -270,14 +270,14 @@ export const industrialProducts: ProductItem[] = [
   {
     id: "ind-p4",
     href: "",
-    image: "/img/markets/industrial/products/product_04.jpg",
+    image: "/img/markets/industrial/products/product_04.webp",
     title: "Susol UL MCCB",
     category: "Susol UL Molded Case Circuit Breaker",
   },
   {
     id: "ind-p5",
     href: "",
-    image: "/img/markets/industrial/products/product_05.jpg",
+    image: "/img/markets/industrial/products/product_05.webp",
     title: "DMPi",
     category: "Intelligent Digital Motor Protection Relay",
     badges: 2,
@@ -285,21 +285,21 @@ export const industrialProducts: ProductItem[] = [
   {
     id: "ind-p6",
     href: "",
-    image: "/img/markets/industrial/products/product_06.jpg",
+    image: "/img/markets/industrial/products/product_06.webp",
     title: "IMP",
     category: "Intelligent Motor Protection Relay",
   },
   {
     id: "ind-p7",
     href: "",
-    image: "/img/markets/industrial/products/product_07.jpg",
+    image: "/img/markets/industrial/products/product_07.webp",
     title: "MMP",
     category: "Small Electronic Motor Protection Relay",
   },
   {
     id: "ind-p8",
     href: "",
-    image: "/img/markets/industrial/products/product_08.jpg",
+    image: "/img/markets/industrial/products/product_08.webp",
     title: "GMP",
     category: "Electronic Motor Protection Relay",
   },

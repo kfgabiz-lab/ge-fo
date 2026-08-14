@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { TrainingCardItem } from "../data/trainingData";
 import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
 
-const CARD_FALLBACK_IMAGE = "/img/services/engineering-training/course-01.jpg";
+const CARD_FALLBACK_IMAGE = "/img/services/engineering-training/course-01.webp";
 
 export default function TrainingCard({
   course,

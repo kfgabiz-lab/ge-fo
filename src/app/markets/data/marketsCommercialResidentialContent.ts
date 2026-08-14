@@ -86,7 +86,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
   {
     id: "cr-ref-1",
     href: "",
-    image: "/img/markets/commercial-residential/references/ref_01.jpg",
+    image: "/img/markets/commercial-residential/references/ref_01.webp",
     title: "HV-LV Integrated Turnkey Supply",
     description:
       "The rapid expansion of AI data centers has increased demand for reliable and integrated power infrastructure solutions. This project focused on providing a comprehensive electrical package to support a large-scale data center facility with high-voltage and low-voltage equipment.",
@@ -94,7 +94,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
      country: "",
     modal: {
       modalTitle: "HV-LV Integrated Turnkey Supply",
-      images: ["/img/markets/commercial-residential/references/ref_01.jpg"],
+      images: ["/img/markets/commercial-residential/references/ref_01.webp"],
       overview: [
         "The rapid expansion of AI data centers has increased demand for reliable and integrated power infrastructure solutions. This project focused on providing a comprehensive electrical package to support a large-scale data center facility with high-voltage and low-voltage equipment.",
         "To meet the customer's aggressive schedule and requirement for streamlined project execution, a single-source supply approach was implemented. The solution included 180 medium-voltage switchgear panels and 120 unit substations, combining coordinated engineering, procurement, manufacturing, and delivery processes to reduce integration complexity and accelerate project progress.",
@@ -115,7 +115,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
   {
     id: "cr-ref-2",
     href: "",
-    image: "/img/markets/commercial-residential/references/ref_02.jpg",
+    image: "/img/markets/commercial-residential/references/ref_02.webp",
     title: "Australian Data Center Project",
     description:
       "PROJECT DUNE is a data center project in Australia aimed at providing an integrated solution by combining advanced power infrastructure and building automation capabilities. The project focuses on delivering reliable and cost-effective solutions for global colocation data center customers.",
@@ -123,7 +123,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
      country: "",
     modal: {
       modalTitle: "Australian Data Center Project",
-      images: ["/img/markets/commercial-residential/references/ref_02.jpg"],
+      images: ["/img/markets/commercial-residential/references/ref_02.webp"],
       overview: [
         "PROJECT DUNE is a data center project in Australia aimed at providing an integrated solution by combining advanced power infrastructure and building automation capabilities. The project focuses on delivering reliable and cost-effective solutions for global colocation data center customers.",
         "To meet customer requirements for competitive pricing and high-quality electrical systems, an alternative sourcing strategy was reviewed by utilizing an established supplier network. Based on this approach, a competitive electrical package including medium-voltage switchgear, transformer solutions, and low-voltage switchgear was proposed.",
@@ -145,7 +145,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
   {
     id: "cr-ref-3",
     href: "",
-    image: "/img/markets/commercial-residential/references/ref_03.jpg",
+    image: "/img/markets/commercial-residential/references/ref_03.webp",
     title: "AI Data Center Demonstration Testbed",
     description:
       "To address the rapid expansion of the global data center market, the company and a strategic partner established a collaborative demonstration testbed. This facility aims to strengthen validation capabilities in power and cooling infrastructure, supporting joint market entry into the emerging AI data center sector.",
@@ -153,7 +153,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
      country: "",
     modal: {
       modalTitle: "AI Data Center Demonstration Testbed",
-      images: ["/img/markets/commercial-residential/references/ref_03.jpg"],
+      images: ["/img/markets/commercial-residential/references/ref_03.webp"],
       overview: [
         "To address the rapid expansion of the global data center market, the company and a strategic partner established a collaborative demonstration testbed. This facility aims to strengthen validation capabilities in power and cooling infrastructure, supporting joint market entry into the emerging AI data center sector.",
         "To meet requirements for a high-efficiency, high-density AI data center model, the solution integrates liquid cooling and advanced power systems. The company is delivering a power quality monitoring system and an optimized DC power architecture, combined with the partner's specialized high-density racks.",
@@ -205,21 +205,21 @@ export const commercialResidentialProducts: ProductItem[] = [
   {
     id: "cr-p1",
     href: "/product/metasol-ms",
-    image: "/img/markets/commercial-residential/products/product_01.jpg",
+    image: "/img/markets/commercial-residential/products/product_01.webp",
     title: "Metasol MS",
     category: "Metasol Contactor & Overload Relay",
   },
   {
     id: "cr-p2",
     href: "",
-    image: "/img/markets/commercial-residential/products/product_02.jpg",
+    image: "/img/markets/commercial-residential/products/product_02.webp",
     title: "Miniature circuit breaker",
     category: "The Global Standard",
   },
   {
     id: "cr-p3",
     href: "",
-    image: "/img/markets/commercial-residential/products/product_03.jpg",
+    image: "/img/markets/commercial-residential/products/product_03.webp",
     title: "Metasol MMS",
     category: "Metasol Contactor & Overload Relay",
     badges: 2,
@@ -227,14 +227,14 @@ export const commercialResidentialProducts: ProductItem[] = [
   {
     id: "cr-p4",
     href: "",
-    image: "/img/markets/commercial-residential/products/product_04.jpg",
+    image: "/img/markets/commercial-residential/products/product_04.webp",
     title: "Susol UL MCCB",
     category: "Susol UL Molded Case Circuit Breaker",
   },
   {
     id: "cr-p5",
     href: "",
-    image: "/img/markets/commercial-residential/products/product_05.jpg",
+    image: "/img/markets/commercial-residential/products/product_05.webp",
     title: "DMPi",
     category: "Intelligent Digital Motor Protection Relay",
     badges: 2,
@@ -242,21 +242,21 @@ export const commercialResidentialProducts: ProductItem[] = [
   {
     id: "cr-p6",
     href: "",
-    image: "/img/markets/commercial-residential/products/product_06.jpg",
+    image: "/img/markets/commercial-residential/products/product_06.webp",
     title: "IMP",
     category: "Intelligent Motor Protection Relay",
   },
   {
     id: "cr-p7",
     href: "",
-    image: "/img/markets/commercial-residential/products/product_07.jpg",
+    image: "/img/markets/commercial-residential/products/product_07.webp",
     title: "MMP",
     category: "Small Electronic Motor Protection Relay",
   },
   {
     id: "cr-p8",
     href: "",
-    image: "/img/markets/commercial-residential/products/product_08.jpg",
+    image: "/img/markets/commercial-residential/products/product_08.webp",
     title: "GMP",
     category: "Electronic Motor Protection Relay",
   },

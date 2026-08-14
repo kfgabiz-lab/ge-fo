@@ -12,7 +12,7 @@ export const powerGridHero = {
   subtitle:
     "Reliable, Intelligent & Sustainable Power Infrastructure for Modern Energy Systems",
   title: "Power Grid",
-  heroImage: "/img/markets/power-grid/hero/hero.jpg",
+  heroImage: "/img/markets/power-grid/hero/hero.webp",
 };
 
 export const powerGridIntro = {
@@ -31,7 +31,7 @@ export const powerGridIndustryTabs: IndustryTab[] = [
     title: "Power Generation, Transmission<br>& Distribution",
     description:
       "LS ELECTRIC delivers comprehensive power solutions across generation, transmission, and distribution networks, ensuring stable and efficient energy flow. With proven technologies in switchgear, transformers, and protection systems, we enhance grid reliability, minimize losses, and support large-scale infrastructure with fast and dependable delivery.",
-    image: "/img/markets/power-grid/explore/img_generation.jpg",
+    image: "/img/markets/power-grid/explore/img_generation.webp",
   },
   {
     id: "microgrids",
@@ -39,7 +39,7 @@ export const powerGridIndustryTabs: IndustryTab[] = [
     title: "Microgrids",
     description:
       "LS ELECTRIC enables flexible and resilient microgrid solutions by integrating distributed energy resources with advanced control and automation systems. Our smart microgrid platforms optimize energy usage, ensure stable operation in both grid-connected and islanded modes, and support energy independence for critical facilities.",
-    image: "/img/markets/power-grid/explore/img_microgrids.jpg",
+    image: "/img/markets/power-grid/explore/img_microgrids.webp",
   },
   {
     id: "bess",
@@ -47,7 +47,7 @@ export const powerGridIndustryTabs: IndustryTab[] = [
     title: "BESS (Battery Energy Storage Systems)",
     description:
       "LS ELECTRIC provides high-performance BESS solutions with optimized power conversion systems (PCS) and reliable electrical infrastructure. Our solutions improve grid stability, support peak shaving, and enhance renewable energy utilization, backed by safe system design and efficient energy management capabilities.",
-    image: "/img/markets/power-grid/explore/img_bess.jpg",
+    image: "/img/markets/power-grid/explore/img_bess.webp",
     cta: {
       title: "Contact LS Energy Solutions for BESS",
       email: "sales@ls-es.com",
@@ -61,7 +61,7 @@ export const powerGridIndustryTabs: IndustryTab[] = [
     title: "Utilities",
     description:
       "LS ELECTRIC partners with utilities to modernize grid infrastructure through intelligent power distribution and digital monitoring solutions. Our robust equipment and smart grid technologies improve operational efficiency, enable real-time asset management, and ensure long-term reliability in evolving energy environments.",
-    image: "/img/markets/power-grid/explore/img_utilities.jpg",
+    image: "/img/markets/power-grid/explore/img_utilities.webp",
   },
   {
     id: "renewables",
@@ -69,7 +69,7 @@ export const powerGridIndustryTabs: IndustryTab[] = [
     title: "Renewables",
     description:
       "LS ELECTRIC supports renewable energy integration with advanced electrical and automation solutions tailored for solar, wind, and hybrid energy systems. Our technologies enable seamless grid connection, maximize energy efficiency, and ensure stable operation while accelerating the transition toward sustainable energy systems.",
-    image: "/img/markets/power-grid/explore/img_renewables.jpg",
+    image: "/img/markets/power-grid/explore/img_renewables.webp",
   },
 ];
 
@@ -77,7 +77,7 @@ export const powerGridReferences: ReferenceItem[] = [
   {
     id: "pg-ref-1",
     href: "",
-    image: "/img/markets/power-grid/references/ref_01.jpg",
+    image: "/img/markets/power-grid/references/ref_01.webp",
     title: "Lotte Hanoi Mall",
     description:
       "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears, and integrated power distribution for this large-scale commercial development.",
@@ -85,7 +85,7 @@ export const powerGridReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Lotte Hanoi Mall",
-      images: ["/img/markets/power-grid/references/ref_01.jpg"],
+      images: ["/img/markets/power-grid/references/ref_01.webp"],
       overview: [
         "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears, and integrated power distribution for this large-scale commercial development.",
         "The project required coordinated high-voltage and low-voltage equipment engineered for reliable operation across a complex mixed-use facility with demanding load profiles.",
@@ -106,7 +106,7 @@ export const powerGridReferences: ReferenceItem[] = [
   {
     id: "pg-ref-2",
     href: "",
-    image: "/img/markets/power-grid/references/ref_02.jpg",
+    image: "/img/markets/power-grid/references/ref_02.webp",
     title: "LG USA New Headquarters",
     description:
       "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears, and coordinated low-voltage distribution for the new headquarters campus.",
@@ -114,7 +114,7 @@ export const powerGridReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "LG USA New Headquarters",
-      images: ["/img/markets/power-grid/references/ref_02.jpg"],
+      images: ["/img/markets/power-grid/references/ref_02.webp"],
       overview: [
         "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears, and coordinated low-voltage distribution for the new headquarters campus.",
         "The solution was designed to meet North American standards while supporting the customer's goals for energy efficiency and operational reliability across the facility.",
@@ -135,7 +135,7 @@ export const powerGridReferences: ReferenceItem[] = [
   {
     id: "pg-ref-3",
     href: "",
-    image: "/img/markets/power-grid/references/ref_03.jpg",
+    image: "/img/markets/power-grid/references/ref_03.webp",
     title: "KPX Energy Management System",
     description:
       "Owing to the next-generation EMS constructed at the site, operators can now optimally manage power generation, analyze systems, and improve grid-wide operational visibility.",
@@ -143,7 +143,7 @@ export const powerGridReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "KPX Energy Management System",
-      images: ["/img/markets/power-grid/references/ref_03.jpg"],
+      images: ["/img/markets/power-grid/references/ref_03.webp"],
       overview: [
         "Owing to the next-generation EMS constructed at the site, operators can now optimally manage power generation, analyze systems, and improve grid-wide operational visibility.",
         "The energy management system integrates real-time monitoring, analytics, and control capabilities to support efficient power operations across the network.",
@@ -172,7 +172,7 @@ export const powerGridBenefits: BenefitItem[] = [
       "LS ELECTRIC ensures stable and uninterrupted power flow across generation, transmission, and distribution networks, supporting critical infrastructure and utility operations.",
     capabilities:
       "High-performance switchgear, protection relays, fault detection systems, and grid stabilization solutions for reliable power delivery",
-    image: "/img/markets/power-grid/benefits/benefit_01.jpg",
+    image: "/img/markets/power-grid/benefits/benefit_01.webp",
   },
   {
     id: "pg-b2",
@@ -182,7 +182,7 @@ export const powerGridBenefits: BenefitItem[] = [
       "From utilities to microgrids, LS ELECTRIC enables intelligent grid management through advanced automation and real-time monitoring technologies.",
     capabilities:
       "SCADA systems, EMS/DMS platforms, real-time monitoring, and integrated automation for optimized grid operation",
-    image: "/img/markets/power-grid/benefits/benefit_02.jpg",
+    image: "/img/markets/power-grid/benefits/benefit_02.webp",
     reverse: true,
   },
   {
@@ -193,7 +193,7 @@ export const powerGridBenefits: BenefitItem[] = [
       "Supporting the transition to clean energy, LS ELECTRIC provides solutions that seamlessly integrate renewables and energy storage systems into the grid.",
     capabilities:
       "BESS solutions, power conversion systems (PCS), renewable interconnection technologies, and grid balancing solutions",
-    image: "/img/markets/power-grid/benefits/benefit_03.jpg",
+    image: "/img/markets/power-grid/benefits/benefit_03.webp",
   },
   {
     id: "pg-b4",
@@ -203,7 +203,7 @@ export const powerGridBenefits: BenefitItem[] = [
       "Designed for diverse applications including utilities, microgrids, and distributed energy systems, LS ELECTRIC solutions offer scalable and adaptable power infrastructure.",
     capabilities:
       "Modular substations, microgrid solutions, distribution systems, and flexible grid architecture for evolving energy demands",
-    image: "/img/markets/power-grid/benefits/benefit_04.jpg",
+    image: "/img/markets/power-grid/benefits/benefit_04.webp",
     reverse: true,
   },
 ];
@@ -211,7 +211,7 @@ export const powerGridBenefits: BenefitItem[] = [
 export const powerGridSustainabilityCards: SustainabilityCard[] = [
   {
     id: "pg-sus-1",
-    image: "/img/markets/power-grid/sustainability/card_01.jpg",
+    image: "/img/markets/power-grid/sustainability/card_01.webp",
     title: "Sustainability & ESG Leadership",
     bullets: [
       "LS ELECTRIC has established a structured ESG management system, strengthening sustainability across environmental, social, and governance areas.",
@@ -220,7 +220,7 @@ export const powerGridSustainabilityCards: SustainabilityCard[] = [
   },
   {
     id: "pg-sus-2",
-    image: "/img/markets/power-grid/sustainability/card_02.jpg",
+    image: "/img/markets/power-grid/sustainability/card_02.webp",
     title: "Carbon Neutrality & Renewable Transition",
     bullets: [
       "LS ELECTRIC is committed to achieving carbon neutrality by 2040 and expanding renewable energy usage through RE100 participation.",
@@ -294,21 +294,21 @@ export const powerGridProducts: ProductItem[] = [
   {
     id: "pg-p1",
     href: "/product/metasol-ms",
-    image: "/img/markets/power-grid/products/product_01.jpg",
+    image: "/img/markets/power-grid/products/product_01.webp",
     title: "Metasol MS",
     category: "Metasol Contactor & Overload Relay",
   },
   {
     id: "pg-p2",
     href: "",
-    image: "/img/markets/power-grid/products/product_02.jpg",
+    image: "/img/markets/power-grid/products/product_02.webp",
     title: "Miniature circuit breaker",
     category: "The Global Standard",
   },
   {
     id: "pg-p3",
     href: "",
-    image: "/img/markets/power-grid/products/product_03.jpg",
+    image: "/img/markets/power-grid/products/product_03.webp",
     title: "Metasol MMS",
     category: "Metasol Contactor & Overload Relay",
     badges: 2,
@@ -316,14 +316,14 @@ export const powerGridProducts: ProductItem[] = [
   {
     id: "pg-p4",
     href: "",
-    image: "/img/markets/power-grid/products/product_04.jpg",
+    image: "/img/markets/power-grid/products/product_04.webp",
     title: "Susol UL MCCB",
     category: "Susol UL Molded Case Circuit Breaker",
   },
   {
     id: "pg-p5",
     href: "",
-    image: "/img/markets/power-grid/products/product_05.jpg",
+    image: "/img/markets/power-grid/products/product_05.webp",
     title: "DMPi",
     category: "Intelligent Digital Motor Protection Relay",
     badges: 2,
@@ -331,21 +331,21 @@ export const powerGridProducts: ProductItem[] = [
   {
     id: "pg-p6",
     href: "",
-    image: "/img/markets/power-grid/products/product_06.jpg",
+    image: "/img/markets/power-grid/products/product_06.webp",
     title: "IMP",
     category: "Intelligent Motor Protection Relay",
   },
   {
     id: "pg-p7",
     href: "",
-    image: "/img/markets/power-grid/products/product_07.jpg",
+    image: "/img/markets/power-grid/products/product_07.webp",
     title: "MMP",
     category: "Small Electronic Motor Protection Relay",
   },
   {
     id: "pg-p8",
     href: "",
-    image: "/img/markets/power-grid/products/product_08.jpg",
+    image: "/img/markets/power-grid/products/product_08.webp",
     title: "GMP",
     category: "Electronic Motor Protection Relay",
   },

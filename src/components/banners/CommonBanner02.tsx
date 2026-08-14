@@ -22,9 +22,9 @@ type CommonBanner02Props = {
   linkIcon?: CommonBanner02LinkIcon;
 };
 
-const DEFAULT_BACKGROUND_SRC = "/img/devices/product/banner_configurator_bg.png";
+const DEFAULT_BACKGROUND_SRC = "/img/devices/product/banner_configurator_bg.webp";
 const DEFAULT_BACKGROUND_SRC_MO =
-  "/img/devices/product/banner_configurator_bg_mo.png";
+  "/img/devices/product/banner_configurator_bg_mo.webp";
 
 const DEFAULT_TITLE = "Consult with an LS ELECTRIC Expert";
 const DEFAULT_EXPERT_TITLE = "Connect with Our Product Expert";
