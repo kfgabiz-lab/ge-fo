@@ -3583,6 +3583,7 @@ section.highlight_news--markets .section_tit {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-clamp: 2;
+    max-width: 463px;
   }
 
   section.highlight_news .date {
