@@ -3,7 +3,7 @@ import { stripHtmlText } from "@/lib/stripHtmlText";
 import type { SearchMediaItem } from "@/data/search/searchAllContent";
 
 
-export type MediaSourceType = "TECH_HUB" | "BLOG" | "PRESS" | "ARTICLE";
+export type MediaSourceType = "TECH_HUB" | "BLOG" | "PRESS" | "ARTICLE" | "EVENT";
 
 type MediaSourceMeta = {
   optionId: string;
@@ -36,6 +36,12 @@ export const SEARCH_MEDIA_SOURCES: MediaSourceMeta[] = [
     sourceType: "ARTICLE",
     filterLabel: "Articles",
     categoryLabel: "Article",
+  },
+  {
+    optionId: "events",
+    sourceType: "EVENT",
+    filterLabel: "Events",
+    categoryLabel: "Event",
   },
 ];
 
