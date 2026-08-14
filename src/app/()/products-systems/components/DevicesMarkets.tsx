@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { motorControlMarkets } from "../data/motorControlContent";
+import { NOIMAGE_SRC } from "@/lib/imageFallback";
 
 export default function DevicesMarkets() {
   return (
@@ -17,7 +18,12 @@ export default function DevicesMarkets() {
           {motorControlMarkets.map((item) => (
             <Link key={item.id} href={item.href} className="item">
               <div className="img_area">
-                <img loading="lazy" decoding="async" src={item.image} alt={item.title} />
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={item.image || NOIMAGE_SRC}
+                  alt={item.title}
+                />
                 <span className="btn-icon-56" aria-hidden="true">
                   <span className="icon_arrow-20" />
                 </span>
