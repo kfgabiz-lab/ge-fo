@@ -6,12 +6,14 @@ export const ARTICLES_LIST_SIZE = 9;
 
 export const articlesImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-export const articlesDetailHref = (id: number) => `/company/articles/detail/${id}`;
+export const articlesDetailHref = (id: number, slug?: string | null) =>
+  `/company/articles/${slug || id}`;
 
 export type ArticlesRow = PageDataItem;
 
 export interface ArticlesCardItem {
   id: number;
+  slug: string | null;
   title: string;
   description: string;
   date: string;
@@ -27,6 +29,7 @@ export function toArticlesCard(item: ArticlesRow): ArticlesCardItem {
   const publishDttm = (pickField(row, "publish_dttm", "publishDttm") as string) ?? "";
   return {
     id: item.id,
+    slug: (row["seo.slug"] as string) || null,
     title: (row.title as string) ?? "",
     description: stripHtmlText(row.content as string | undefined, LIST_DESCRIPTION_MAX_LENGTH),
     date: formatDisplayDate(publishDttm),

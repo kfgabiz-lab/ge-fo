@@ -211,8 +211,8 @@ export const requestForTrainingTypeOptions = [
 ] as const;
 
 export const requestForTrainingRoutes = {
-  step1: "/services/request-for-training",
-  step2: "/services/request-for-training/step-2",
-  step3: "/services/request-for-training/step-3",
-  step4: "/services/request-for-training/step-4",
+  step1: "/services/training/request",
+  step2: "/services/training/request/step-2",
+  step3: "/services/training/request/step-3",
+  step4: "/services/training/request/step-4",
 } as const;

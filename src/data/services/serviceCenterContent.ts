@@ -51,7 +51,7 @@ export const serviceCenterPage = {
         description:
           "Enhance your product knowledge with instructor-led training programs.",
         icon: "/img/services/service-center/icon-training.svg",
-        href: "/services/request-for-training",
+        href: "/services/training/request",
         external: false,
       },
       {

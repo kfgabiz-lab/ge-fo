@@ -41,7 +41,7 @@ export default async function CompanyArticlesListPage() {
       title: item.title,
       description: item.description,
       rawDate: item.rawDate,
-      href: articlesDetailHref(item.id),
+      href: articlesDetailHref(item.id, item.slug),
     })),
   });
   return (

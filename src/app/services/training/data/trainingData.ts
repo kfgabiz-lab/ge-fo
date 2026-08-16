@@ -12,14 +12,25 @@ export const TRAINING_LIST_SIZE = 10;
 export const trainingImageSrc = (mediaId: number) =>
   `/api/v1/fo/page-files/${mediaId}`;
 
-export const trainingDetailHref = (prefix: string, id: number) =>
-  `${prefix}/${id}`;
+export const trainingDetailHref = (
+  prefix: string,
+  id: number,
+  slug?: string | null,
+) => `${prefix}/${slug || id}`;
 
 export const TRAINING_COURSE_BY_VARIANT: Record<TrainingVariant, string> = {
   engineering: "01",
   service: "02",
   sales: "03",
 };
+
+export const TRAINING_VARIANT_BY_COURSE_CODE: Record<string, TrainingVariant> =
+  Object.fromEntries(
+    Object.entries(TRAINING_COURSE_BY_VARIANT).map(([variant, code]) => [
+      code,
+      variant as TrainingVariant,
+    ]),
+  );
 
 /** 노출여부(is_visible)는 bo-api가 currMgmt-data에 대해 서버측에서 항상 강제한다 — 클라이언트가 조건을 보낼 필요 없음 */
 export function trainingStatusWhere(
@@ -51,11 +62,12 @@ export interface CodeItem {
 
 export interface TrainingCardItem {
   id: number;
-  categoryCode: string; 
-  categoryLabel: string; 
+  slug: string | null;
+  categoryCode: string;
+  categoryLabel: string;
   title: string;
   description: string;
-  imageSrc: string | null; 
+  imageSrc: string | null;
 }
 
 export function toCategoryMap(codes: CodeItem[]): Map<string, string> {
@@ -84,6 +96,7 @@ export function toTrainingCard(
   const code = (row.product_category as string) ?? "";
   return {
     id: item.id,
+    slug: (row["seo.slug"] as string) || null,
     categoryCode: code,
     categoryLabel: categoryMap.get(code) ?? code,
     title: (row.title as string) ?? "",

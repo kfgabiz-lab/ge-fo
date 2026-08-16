@@ -33,6 +33,94 @@ const nextConfig: NextConfig = {
      데이터 추가 보정으로 다른 slug 가 채워지면 매핑 갱신. */
   async redirects() {
     return [
+      /* Blog/Press/Articles/Events 상세 URL 개편 — 구 /company/{type}/detail/{id} → /company/{type}/{id 또는 slug} */
+      {
+        source: "/company/blog/detail/:id",
+        destination: "/company/blog/:id",
+        permanent: true,
+      },
+      {
+        source: "/company/press/detail/:id",
+        destination: "/company/press/:id",
+        permanent: true,
+      },
+      {
+        source: "/company/articles/detail/:id",
+        destination: "/company/articles/:id",
+        permanent: true,
+      },
+      {
+        source: "/company/events/detail/:id",
+        destination: "/company/events/:id",
+        permanent: true,
+      },
+      /* Training URL 개편 — 구 /services/{variant}-training(...) / /services/request-for-training(...)
+         → /services/training/{variant} 및 /services/training/{courseId}(/{sessionId}), /services/training/request(...) */
+      {
+        source: "/services/sales-training",
+        destination: "/services/training/sales",
+        permanent: true,
+      },
+      {
+        source: "/services/engineering-training",
+        destination: "/services/training/engineering",
+        permanent: true,
+      },
+      {
+        source: "/services/service-training",
+        destination: "/services/training/service",
+        permanent: true,
+      },
+      {
+        source: "/services/sales-training/:courseId",
+        destination: "/services/training/:courseId",
+        permanent: true,
+      },
+      {
+        source: "/services/engineering-training/:courseId",
+        destination: "/services/training/:courseId",
+        permanent: true,
+      },
+      {
+        source: "/services/service-training/:courseId",
+        destination: "/services/training/:courseId",
+        permanent: true,
+      },
+      {
+        source: "/services/sales-training/:courseId/:sessionId",
+        destination: "/services/training/:courseId/:sessionId",
+        permanent: true,
+      },
+      {
+        source: "/services/engineering-training/:courseId/:sessionId",
+        destination: "/services/training/:courseId/:sessionId",
+        permanent: true,
+      },
+      {
+        source: "/services/service-training/:courseId/:sessionId",
+        destination: "/services/training/:courseId/:sessionId",
+        permanent: true,
+      },
+      {
+        source: "/services/request-for-training",
+        destination: "/services/training/request",
+        permanent: true,
+      },
+      {
+        source: "/services/request-for-training/step-2",
+        destination: "/services/training/request/step-2",
+        permanent: true,
+      },
+      {
+        source: "/services/request-for-training/step-3",
+        destination: "/services/training/request/step-3",
+        permanent: true,
+      },
+      {
+        source: "/services/request-for-training/step-4",
+        destination: "/services/training/request/step-4",
+        permanent: true,
+      },
       {
         source: "/products-systems/motor-control",
         destination: "/products-category/lv-products-and-systems",

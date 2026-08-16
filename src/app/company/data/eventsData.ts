@@ -11,7 +11,8 @@ import type {
 export const EVENTS_PAST_SIZE = 9;
 
 export const eventsImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
-export const eventsDetailHref = (id: number) => `/company/events/detail/${id}`;
+export const eventsDetailHref = (id: number, slug?: string | null) =>
+  `/company/events/${slug || id}`;
 
 export type EventsRow = PageDataItem;
 
@@ -43,6 +44,7 @@ function toEventsCommon(item: EventsRow) {
   const periodTo = (pickField(row, "period_to", "periodTo") as string) ?? "";
   return {
     id: item.id,
+    slug: (row["seo.slug"] as string) || null,
     title: (row.title as string) ?? "",
     venue: (row.location as string) ?? "",
     periodFrom,
@@ -74,7 +76,7 @@ export function eventsFeaturedQuery(fallbackImage: string, now: Date = siteToday
           dateRange: c.dateRange,
           venue: c.venue,
           image: c.imageSrc ?? fallbackImage,
-          href: eventsDetailHref(c.id),
+          href: eventsDetailHref(c.id, c.slug),
         };
       }),
   };
@@ -103,7 +105,7 @@ export function eventsCalendarQuery() {
           title: c.title,
           venue: c.venue,
           dates: c.dates,
-          href: eventsDetailHref(c.id),
+          href: eventsDetailHref(c.id, c.slug),
         };
         const list = monthMap.get(monthKey) ?? [];
         list.push(entry);
@@ -157,7 +159,7 @@ export function eventsPastQuery(params: {
           title: c.title,
           dateRange: c.dateRange,
           image: c.imageSrc ?? fallbackImage,
-          href: eventsDetailHref(c.id),
+          href: eventsDetailHref(c.id, c.slug),
         };
       }),
   };
