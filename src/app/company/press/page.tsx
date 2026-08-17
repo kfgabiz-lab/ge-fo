@@ -41,7 +41,7 @@ export default async function CompanyPressListPage() {
       title: item.title,
       description: item.description,
       rawDate: item.rawDate,
-      href: pressDetailHref(item.id),
+      href: pressDetailHref(item.id, item.slug),
     })),
   });
   return (

@@ -5,7 +5,7 @@ import {
   emptyRequestForTrainingStep4Options,
   fetchRequestForTrainingStep4Options,
   type RequestForTrainingStep4Options,
-} from "@/app/services/request-for-training/data/requestForTrainingCodes";
+} from "@/app/services/training/request/data/requestForTrainingCodes";
 import { requestForTrainingStep4Copy } from "@/data/services/requestForTrainingContent";
 import RequestForTrainingCheckboxGroup from "./RequestForTrainingCheckboxGroup";
 import RequestForTrainingFieldError from "./RequestForTrainingFieldError";

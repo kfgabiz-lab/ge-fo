@@ -16,7 +16,7 @@ export default function TrainingDetailSession({
   session: EngineeringTrainingSession;
   hrefPrefix: string;
 }) {
-  const sessionHref = `${hrefPrefix}/${courseId}/${session.id}`;
+  const sessionHref = `${hrefPrefix}/${courseId}/${session.slug || session.id}`;
 
   return (
     <li className="support_service_training_detail_schedule__item" data-slug-item>

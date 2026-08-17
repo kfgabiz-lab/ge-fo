@@ -158,7 +158,7 @@ export default function CompanyBlogPage({
           {featured ? (
             <div className="company-blog-featured__card" data-slug="blog-data">
               <Link
-                href={blogDetailHref(featured.id)}
+                href={blogDetailHref(featured.id, featured.slug)}
                 className="company-blog-featured__image"
                 data-slugkey="id"
                 data-slugkey-attr="href"
@@ -174,7 +174,7 @@ export default function CompanyBlogPage({
               </Link>
               <div className="company-blog-featured__content">
                 <Link
-                  href={blogDetailHref(featured.id)}
+                  href={blogDetailHref(featured.id, featured.slug)}
                   className="company-blog-featured__text"
                   data-slugkey="id"
                   data-slugkey-attr="href"
@@ -240,7 +240,7 @@ export default function CompanyBlogPage({
                         <div className="company-blog-list__link">
                           <div className="company-blog-list__image">
                             <Link
-                              href={blogDetailHref(item.id)}
+                              href={blogDetailHref(item.id, item.slug)}
                               aria-label={item.title}
                               data-slugkey="id"
                               data-slugkey-attr="href"
@@ -257,7 +257,7 @@ export default function CompanyBlogPage({
                           </div>
                           <div className="company-blog-list__content">
                             <Link
-                              href={blogDetailHref(item.id)}
+                              href={blogDetailHref(item.id, item.slug)}
                               className="company-blog-list__content-link"
                               data-slugkey="id"
                               data-slugkey-attr="href"

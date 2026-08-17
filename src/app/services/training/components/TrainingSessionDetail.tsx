@@ -149,7 +149,7 @@ export default function TrainingSessionDetail({
 
   useEffect(() => {
     seedBreadcrumbTitle(
-      `/services/${variant}-training/${session.courseId}`,
+      `/services/training/${session.courseId}`,
       "Course",
     );
   }, [variant, session.courseId, session.courseTitle]);

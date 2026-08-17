@@ -34,7 +34,7 @@ function toPressFeaturedCard(row: PressRow): PressFeaturedCard {
     description: card.description,
     date: card.date,
     image: card.imageSrc ?? FEATURED_FALLBACK_IMAGE,
-    href: pressDetailHref(card.id),
+    href: pressDetailHref(card.id, card.slug),
   };
 }
 
@@ -108,7 +108,7 @@ export default function CompanyPressPage() {
           title: card.title,
           date: card.date,
           image: card.imageSrc ?? LIST_FALLBACK_IMAGE,
-          href: pressDetailHref(card.id),
+          href: pressDetailHref(card.id, card.slug),
         };
       }),
     [rows],

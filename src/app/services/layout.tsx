@@ -4,12 +4,15 @@ import SubFooter from "@/components/layout/markets/SubFooter";
 import type { BreadcrumbServerOverride } from "@/components/layout/shared/HeaderBreadcrumb";
 import { fetchDevicesMegaMenu, fetchGnbMenuData } from "@/data/gnb";
 
-const TRAINING_DETAIL_PATH_RE =
-  /^\/services\/(?:sales|engineering|service)-training\/([^/]+)$/;
-const TRAINING_SESSION_PATH_RE =
-  /^\/services\/(sales|engineering|service)-training\/([^/]+)\/[^/]+$/;
+const TRAINING_RESERVED_TOP = "sales|engineering|service|request";
+const TRAINING_DETAIL_PATH_RE = new RegExp(
+  `^/services/training/(?!(?:${TRAINING_RESERVED_TOP})$)([^/]+)$`,
+);
+const TRAINING_SESSION_PATH_RE = new RegExp(
+  `^/services/training/(?!(?:${TRAINING_RESERVED_TOP})(?:/|$))([^/]+)/[^/]+$`,
+);
 const TRAINING_REQUEST_PATH_RE =
-  /^\/services\/request-for-training(\/step-(2|3|4)(-type_01)?)?$/;
+  /^\/services\/training\/request(\/step-(2|3|4)(-type_01)?)?$/;
 
 async function resolveBreadcrumbOverride(): Promise<BreadcrumbServerOverride> {
   const pathname = (await headers()).get("x-pathname");
@@ -21,8 +24,8 @@ async function resolveBreadcrumbOverride(): Promise<BreadcrumbServerOverride> {
 
   const sessionMatch = pathname.match(TRAINING_SESSION_PATH_RE);
   if (sessionMatch) {
-    const [, variant, courseId] = sessionMatch;
-    const courseHref = `/services/${variant}-training/${courseId}`;
+    const [, courseId] = sessionMatch;
+    const courseHref = `/services/training/${courseId}`;
     return { pathname, crumb: { href: courseHref, label: "Course" } };
   }
 

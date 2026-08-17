@@ -31,6 +31,7 @@ export default async function CompanyEventsListPage() {
           const row = flattenPageDataItem(raw);
           return {
             id: raw.id,
+            slug: (row["seo.slug"] as string) || null,
             title: (row.title as string) ?? "",
             location: (row.location as string) ?? "",
             periodFrom: (pickField(row, "period_from", "periodFrom") as string) ?? "",
@@ -54,7 +55,7 @@ export default async function CompanyEventsListPage() {
         "@id": `${currentUrl}#event-list`,
         itemListElement: res.content.map((item) => ({
           "@type": "ExhibitionEvent",
-          "@id": `${pageUrl(eventsDetailHref(item.id))}#event`,
+          "@id": `${pageUrl(eventsDetailHref(item.id, item.slug))}#event`,
           name: item.title,
           startDate: item.periodFrom,
           endDate: item.periodTo,
@@ -62,7 +63,7 @@ export default async function CompanyEventsListPage() {
           eventStatus: "https://schema.org/EventScheduled",
           location: { "@type": "Place", name: item.location },
           performer: { "@id": ORG_ID },
-          url: pageUrl(eventsDetailHref(item.id)),
+          url: pageUrl(eventsDetailHref(item.id, item.slug)),
         })),
       },
     },

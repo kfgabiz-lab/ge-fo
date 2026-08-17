@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { eventsDetailHero } from "@/app/company/data/eventsDetailContent";
@@ -13,6 +14,7 @@ import { formatDisplayDateRange } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { getPreviewToken } from "@/lib/previewMode";
+import { resolveContentId } from "@/lib/contentSlugOrId";
 import type { Metadata, ResolvingMetadata } from "next";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbList, buildPageGraph, pageUrl } from "@/lib/structuredData/builders";
@@ -27,7 +29,9 @@ export async function generateMetadata(
   { params }: CompanyEventsDetailPageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id } = await params;
+  const { id: idOrSlug } = await params;
+  const id = await resolveContentId("events-data", idOrSlug);
+  if (id == null) notFound();
   const previewToken = await getPreviewToken("events-data", id);
 
   return buildPageDataSeoMetadata(eventsDetailQuery(id, { previewToken }), parent);
@@ -36,7 +40,9 @@ export async function generateMetadata(
 export default async function CompanyEventsDetailPage({
   params,
 }: CompanyEventsDetailPageProps) {
-  const { id } = await params;
+  const { id: idOrSlug } = await params;
+  const id = await resolveContentId("events-data", idOrSlug);
+  if (id == null) notFound();
   const previewToken = await getPreviewToken("events-data", id);
   const preview = previewToken !== null;
 
@@ -65,7 +71,8 @@ export default async function CompanyEventsDetailPage({
     ? { href: eventsDetailHref(adjacent.next.id), title: adjacent.next.title }
     : undefined;
 
-  const currentUrl = pageUrl(`/company/events/detail/${id}`);
+  const canonicalSlug = (row["seo.slug"] as string) || id;
+  const currentUrl = pageUrl(`/company/events/${canonicalSlug}`);
   const title = (row.title as string) ?? "";
   const eventNode = {
     "@type": "ExhibitionEvent",

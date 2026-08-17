@@ -7,7 +7,8 @@ export const BLOG_LIST_SIZE = 10;
 
 export const blogImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-export const blogDetailHref = (id: number) => `/company/blog/detail/${id}`;
+export const blogDetailHref = (id: number, slug?: string | null) =>
+  `/company/blog/${slug || id}`;
 
 export type BlogRow = PageDataItem;
 
@@ -18,6 +19,7 @@ export interface CodeItem {
 
 export interface BlogCardItem {
   id: number;
+  slug: string | null;
   categoryCode: string;
   categoryLabel: string;
   title: string;
@@ -52,6 +54,7 @@ export function toBlogCard(
   const publishDttm = (pickField(row, "publish_dttm", "publishDttm") as string) ?? "";
   return {
     id: item.id,
+    slug: (row["seo.slug"] as string) || null,
     categoryCode: code,
     categoryLabel: categoryMap.get(code) ?? code,
     title: (row.title as string) ?? "",

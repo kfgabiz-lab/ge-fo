@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { mediaArticleDetailHero } from "@/app/company/data/mediaArticleDetailContent";
@@ -12,6 +13,7 @@ import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { getPreviewToken } from "@/lib/previewMode";
+import { resolveContentId } from "@/lib/contentSlugOrId";
 import type { Metadata, ResolvingMetadata } from "next";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildContentDetailGraph } from "@/lib/structuredData/contentGraph";
@@ -25,7 +27,9 @@ export async function generateMetadata(
   { params }: CompanyArticlesDetailPageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id } = await params;
+  const { id: idOrSlug } = await params;
+  const id = await resolveContentId("articles-data", idOrSlug, ARTICLES_STATUS_WHERE);
+  if (id == null) notFound();
   const previewToken = await getPreviewToken("articles-data", id);
 
   return buildPageDataSeoMetadata(
@@ -41,7 +45,9 @@ export async function generateMetadata(
 export default async function CompanyArticlesDetailPage({
   params,
 }: CompanyArticlesDetailPageProps) {
-  const { id } = await params;
+  const { id: idOrSlug } = await params;
+  const id = await resolveContentId("articles-data", idOrSlug, ARTICLES_STATUS_WHERE);
+  if (id == null) notFound();
   const previewToken = await getPreviewToken("articles-data", id);
   const preview = previewToken !== null;
 
@@ -80,9 +86,10 @@ export default async function CompanyArticlesDetailPage({
     ? { href: articlesDetailHref(adjacent.next.id), title: adjacent.next.title }
     : undefined;
 
+  const canonicalSlug = (row["seo.slug"] as string) || id;
   const jsonLdGraph = buildContentDetailGraph({
     postType: "Article",
-    detailPathname: `/company/articles/detail/${id}`,
+    detailPathname: `/company/articles/${canonicalSlug}`,
     listPathname: "/company/articles",
     breadcrumbLabel: "Articles",
     title: (row.title as string) ?? "",

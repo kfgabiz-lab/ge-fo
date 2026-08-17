@@ -13,7 +13,7 @@ import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildTrainingListGraph } from "@/lib/structuredData/trainingListGraph";
 
-const PATHNAME = "/services/engineering-training";
+const PATHNAME = "/services/training/service";
 
 export async function generateMetadata(
   _: unknown,
@@ -22,7 +22,7 @@ export async function generateMetadata(
   return buildMenuSeoMetadata(PATHNAME, parent);
 }
 
-export default async function EngineeringTrainingPage() {
+export default async function ServiceTrainingPage() {
   const [meta, categories] = await Promise.all([
     fetchMenuMeta(PATHNAME),
     fetchTrainingCategories(),
@@ -32,7 +32,7 @@ export default async function EngineeringTrainingPage() {
     slug: TRAINING_SLUG,
     page: 0,
     size: TRAINING_LIST_SIZE,
-    where: trainingStatusWhere("engineering"),
+    where: trainingStatusWhere("service"),
     sort: "createdAt,desc",
     리턴함수: (rows) => rows.map((row) => toTrainingCard(row, categoryMap)),
   });
@@ -40,7 +40,7 @@ export default async function EngineeringTrainingPage() {
   return (
     <>
       <JsonLd data={graph} />
-      <TrainingCurriculumPage variant="engineering" />
+      <TrainingCurriculumPage variant="service" />
     </>
   );
 }

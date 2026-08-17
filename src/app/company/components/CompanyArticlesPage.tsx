@@ -34,7 +34,7 @@ function toArticlesFeaturedCard(row: ArticlesRow): ArticlesFeaturedCard {
     description: card.description,
     date: card.date,
     image: card.imageSrc ?? FEATURED_FALLBACK_IMAGE,
-    href: articlesDetailHref(card.id),
+    href: articlesDetailHref(card.id, card.slug),
   };
 }
 
@@ -108,7 +108,7 @@ export default function CompanyArticlesPage() {
           title: card.title,
           date: card.date,
           image: card.imageSrc ?? LIST_FALLBACK_IMAGE,
-          href: articlesDetailHref(card.id),
+          href: articlesDetailHref(card.id, card.slug),
         };
       }),
     [rows],

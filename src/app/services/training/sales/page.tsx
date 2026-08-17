@@ -13,7 +13,7 @@ import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildTrainingListGraph } from "@/lib/structuredData/trainingListGraph";
 
-const PATHNAME = "/services/sales-training";
+const PATHNAME = "/services/training/sales";
 
 export async function generateMetadata(
   _: unknown,

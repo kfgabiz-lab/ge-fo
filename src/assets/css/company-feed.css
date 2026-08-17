@@ -129,7 +129,7 @@
 
   section.company-press-featured .btn-text-30.company-press-featured__link .icon_arrow-14,
   section.company-articles-featured .btn-text-30.company-articles-featured__link .icon_arrow-14 {
-    background: url("/pub/ico/ico_arrow_right_14_white.svg") center / contain no-repeat;
+    background: url("/ico/ico_arrow_right_14_white.svg") center / contain no-repeat;
   }
 
   section.company-press-featured .company-press-featured__card:hover .btn-text-30.company-press-featured__link .btn-text-30__icon,
@@ -359,7 +359,7 @@
     transform-origin: center center;
     transition: transform 0.25s ease;
     pointer-events: none;
-    background: url("/pub/ico/ico_up_16.svg") center / contain no-repeat;
+    background: url("/ico/ico_up_16.svg") center / contain no-repeat;
   }
 
   section.company-press-list .guide_field .MuiSelect-icon.MuiSelect-iconOpen,
@@ -558,7 +558,7 @@
 
   section.company-press-featured .btn-text-30.company-press-featured__link .icon_arrow-14,
   section.company-articles-featured .btn-text-30.company-articles-featured__link .icon_arrow-14 {
-    background: url("/pub/ico/ico_arrow_right_14_white.svg") center / contain no-repeat;
+    background: url("/ico/ico_arrow_right_14_white.svg") center / contain no-repeat;
   }
 
   section.company-press-featured .company-press-featured__card:hover .btn-text-30.company-press-featured__link .btn-text-30__icon,

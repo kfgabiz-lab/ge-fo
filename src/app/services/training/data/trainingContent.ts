@@ -42,7 +42,7 @@ export const trainingContent: Record<TrainingVariant, TrainingContentEntry> = {
     mainClassName: "support-page support-page--sales-training",
     sectionId: "sales-training-curriculum",
     ariaLabel: "Sales training curriculum pages",
-    detailHrefPrefix: "/services/sales-training",
+    detailHrefPrefix: "/services/training",
   },
   engineering: {
     ...engineeringTrainingPage,
@@ -50,7 +50,7 @@ export const trainingContent: Record<TrainingVariant, TrainingContentEntry> = {
     mainClassName: "support-page support-page--engineering-training",
     sectionId: "engineering-training-curriculum",
     ariaLabel: "Training curriculum pages",
-    detailHrefPrefix: "/services/engineering-training",
+    detailHrefPrefix: "/services/training",
   },
   service: {
     ...serviceTrainingPage,
@@ -58,6 +58,6 @@ export const trainingContent: Record<TrainingVariant, TrainingContentEntry> = {
     mainClassName: "support-page support-page--service-training",
     sectionId: "service-training-curriculum",
     ariaLabel: "Service training curriculum pages",
-    detailHrefPrefix: "/services/service-training",
+    detailHrefPrefix: "/services/training",
   },
 };

@@ -7,7 +7,7 @@ import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildSimpleWebPageGraph, pageUrl } from "@/lib/structuredData/builders";
 
-const PATHNAME = "/services/request-for-training";
+const PATHNAME = "/services/training/request";
 
 export async function generateMetadata(
   _: unknown,

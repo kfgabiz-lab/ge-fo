@@ -394,7 +394,7 @@ export default function TrainingCurriculum({
             >
               <TrainingCard
                 course={item}
-                detailHref={trainingDetailHref(detailHrefPrefix, item.id)}
+                detailHref={trainingDetailHref(detailHrefPrefix, item.id, item.slug)}
               />
             </li>
           ))}
