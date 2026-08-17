@@ -258,110 +258,113 @@ export default function RequestForTrainingProductSelector({
         ) : null}
       </div>
 
-      {selectedGroup ? (
+      {selectedGroup || step4.selectedProducts.length > 0 ? (
         <div className="support_service_training_request__product-panel">
-          <fieldset
-            className="support_service_training_request__checkbox-group support_service_training_request__checkbox-group--no-legend"
-            aria-label="Product options"
-          >
-            <div className="support_service_training_request__checkboxes">
-              {products.map((product) => {
-                const checked = selectedKeys.has(
-                  productKey(selectedGroup.id, product.id),
-                );
-                const inputId = `${formId}-product-${selectedGroup.id}-${product.id}`;
-                return (
-                  <label
-                    key={product.id}
-                    className="support_service_training_request__checkbox-label"
-                    htmlFor={inputId}
-                  >
-                    <Checkbox
-                      id={inputId}
-                      className="guide_checkbox support_service_training_request__checkbox"
-                      disableRipple
-                      checked={checked}
-                      onChange={() =>
-                        toggleProduct(
-                          product.id,
-                          product.name,
-                          selectedGroup.id,
-                          selectedGroup.title,
-                        )
-                      }
-                      icon={<GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />}
-                      checkedIcon={
-                        <GuideCheckboxIcon checked {...guideCheckboxIconsContactConsent} />
-                      }
-                    />
-                    <span>{product.name}</span>
-                  </label>
-                );
-              })}
-              <label
-                className="support_service_training_request__checkbox-label"
-                htmlFor={`${formId}-product-other`}
-              >
-                <Checkbox
-                  id={`${formId}-product-other`}
-                  className="guide_checkbox support_service_training_request__checkbox"
-                  disableRipple
-                  checked={selectedKeys.has(
-                    productKey(selectedGroup.id, otherId(selectedGroup.id)),
-                  )}
-                  onChange={() =>
-                    toggleProduct(
-                      otherId(selectedGroup.id),
-                      OTHER_LABEL,
-                      selectedGroup.id,
-                      selectedGroup.title,
-                    )
-                  }
-                  icon={<GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />}
-                  checkedIcon={<GuideCheckboxIcon checked {...guideCheckboxIconsContactConsent} />}
-                />
-                <span>{OTHER_LABEL}</span>
-              </label>
-            </div>
-            {fields.products.hint ? (
-              <p className="support_service_training_request__field-hint">
-                {fields.products.hint}
-              </p>
-            ) : null}
-          </fieldset>
-        </div>
-      ) : null}
-
-      {step4.selectedProducts.length > 0 ? (
-        <div className="support_service_training_request__product-panel">
-          <hr className="support_service_training_request__product-divider" aria-hidden />
-          <div className="support_service_training_request__tags">
-            {step4.selectedProducts.map((product) => (
-              <span
-                key={productKey(product.groupId, product.id)}
-                className="support_service_training_request__tag"
-              >
-                <span className="support_service_training_request__tag-label">
-                  {product.name}
-                </span>
-                <button
-                  type="button"
-                  className="support_service_training_request__tag-remove"
-                  aria-label={`Remove ${product.name}`}
-                  onClick={() => removeTag(product.groupId, product.id)}
+          {selectedGroup ? (
+            <fieldset
+              className="support_service_training_request__checkbox-group support_service_training_request__checkbox-group--no-legend"
+              aria-label="Product options"
+            >
+              <div className="support_service_training_request__checkboxes">
+                {products.map((product) => {
+                  const checked = selectedKeys.has(
+                    productKey(selectedGroup.id, product.id),
+                  );
+                  const inputId = `${formId}-product-${selectedGroup.id}-${product.id}`;
+                  return (
+                    <label
+                      key={product.id}
+                      className="support_service_training_request__checkbox-label"
+                      htmlFor={inputId}
+                    >
+                      <Checkbox
+                        id={inputId}
+                        className="guide_checkbox support_service_training_request__checkbox"
+                        disableRipple
+                        checked={checked}
+                        onChange={() =>
+                          toggleProduct(
+                            product.id,
+                            product.name,
+                            selectedGroup.id,
+                            selectedGroup.title,
+                          )
+                        }
+                        icon={<GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />}
+                        checkedIcon={
+                          <GuideCheckboxIcon checked {...guideCheckboxIconsContactConsent} />
+                        }
+                      />
+                      <span>{product.name}</span>
+                    </label>
+                  );
+                })}
+                <label
+                  className="support_service_training_request__checkbox-label"
+                  htmlFor={`${formId}-product-other`}
                 >
-                  <img
-                    src="/ico/ico_clear_12.svg"
-                    alt=""
-                    width={12}
-                    height={12}
-                    loading="lazy"
-                    decoding="async"
+                  <Checkbox
+                    id={`${formId}-product-other`}
+                    className="guide_checkbox support_service_training_request__checkbox"
+                    disableRipple
+                    checked={selectedKeys.has(
+                      productKey(selectedGroup.id, otherId(selectedGroup.id)),
+                    )}
+                    onChange={() =>
+                      toggleProduct(
+                        otherId(selectedGroup.id),
+                        OTHER_LABEL,
+                        selectedGroup.id,
+                        selectedGroup.title,
+                      )
+                    }
+                    icon={<GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />}
+                    checkedIcon={<GuideCheckboxIcon checked {...guideCheckboxIconsContactConsent} />}
                   />
-                </button>
-              </span>
-            ))}
-          </div>
+                  <span>{OTHER_LABEL}</span>
+                </label>
+              </div>
+              {fields.products.hint ? (
+                <p className="support_service_training_request__field-hint">
+                  {fields.products.hint}
+                </p>
+              ) : null}
+            </fieldset>
+          ) : null}
+
+          {selectedGroup && step4.selectedProducts.length > 0 ? (
+            <hr className="support_service_training_request__product-divider" aria-hidden />
+          ) : null}
+
+          {step4.selectedProducts.length > 0 ? (
+            <div className="support_service_training_request__tags">
+              {step4.selectedProducts.map((product) => (
+                <span
+                  key={productKey(product.groupId, product.id)}
+                  className="support_service_training_request__tag"
+                >
+                  <span className="support_service_training_request__tag-label">
+                    {product.name}
+                  </span>
+                  <button
+                    type="button"
+                    className="support_service_training_request__tag-remove"
+                    aria-label={`Remove ${product.name}`}
+                    onClick={() => removeTag(product.groupId, product.id)}
+                  >
+                    <img
+                      src="/ico/ico_clear_12.svg"
+                      alt=""
+                      width={12}
+                      height={12}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </button>
+                </span>
+              ))}
+            </div>
+          ) : null}
         </div>
       ) : null}
 
