@@ -86,6 +86,9 @@ export default function CompanyFeedListToolbar({
   const clearSearch = () => {
     setSearchDraft("");
     onSearchSubmit?.("");
+    // Reset month/year selects too so "View all" shows full list
+    onMonthChange?.("");
+    onYearChange?.("");
   };
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") submitSearch();

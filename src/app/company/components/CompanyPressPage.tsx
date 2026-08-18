@@ -135,7 +135,10 @@ export default function CompanyPressPage() {
     setPageIndex(0);
   };
   const handleViewAllClick = () => {
-  handleSearchSubmit("");
+    // Clear search and reset month/year filters so "View All" shows full list
+    setMonth("");
+    setYear("");
+    handleSearchSubmit("");
 };
 
   return (

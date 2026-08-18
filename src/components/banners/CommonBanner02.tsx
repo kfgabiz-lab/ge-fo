@@ -236,7 +236,7 @@ export default function CommonBanner02({
   backgroundSrc = DEFAULT_BACKGROUND_SRC,
   backgroundSrcMo = DEFAULT_BACKGROUND_SRC_MO,
   sectionId,
-  linkIcon = "link",
+  linkIcon,
 }: CommonBanner02Props) {
   const resolvedTitle =
     title ?? (variant === "expert" ? DEFAULT_EXPERT_TITLE : DEFAULT_TITLE);
@@ -248,6 +248,7 @@ export default function CommonBanner02({
     (variant === "expert" ? DEFAULT_EXPERT_LINK_LABEL : DEFAULT_LINK_LABEL);
   const resolvedContactEmail =
     variant === "expert" ? (contactEmail ?? DEFAULT_EXPERT_EMAIL) : contactEmail;
+  const resolvedLinkIcon = contactEmail ? "link" : "arrow";
 
   const panel = (
     <CommonBanner02Panel
@@ -260,7 +261,7 @@ export default function CommonBanner02({
       contactEmail={resolvedContactEmail}
       backgroundSrc={backgroundSrc}
       backgroundSrcMo={backgroundSrcMo}
-      linkIcon={linkIcon}
+      linkIcon={resolvedLinkIcon}
     />
   );
 
