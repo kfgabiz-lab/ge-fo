@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useId, useState } from "react";
+import { Suspense, useEffect, useId, useMemo, useState } from "react";
 import {
   GuideCheckboxIcon,
   GuideSelectIcon,
@@ -48,16 +48,22 @@ const PRODUCT_CATEGORY_REQUIRED_INQUIRY_TYPES = [
   "PRODUCT_INFORMATION",
   "QUOTATION_REQUEST",
 ];
+const QUOTATION_REQUEST_INQUIRY_TYPE = "QUOTATION_REQUEST";
 const ORDERABLE_PRODUCT_ORDER_METHOD = "01";
 const DISCONTINUED_PRODUCT_ORDER_STATUS = "99";
 const EMAIL_FORMAT_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function filterOrderableDeviceRows(rows: DevicesTreeRow[]): DevicesTreeRow[] {
+function filterDeviceRowsByInquiryType(
+  rows: DevicesTreeRow[],
+  inquiryType: string,
+): DevicesTreeRow[] {
+  const isQuotationRequest = inquiryType === QUOTATION_REQUEST_INQUIRY_TYPE;
   const lv3Rows = rows.filter(
     (row) =>
       row.depth === "3" &&
-      row.productOrderMethod === ORDERABLE_PRODUCT_ORDER_METHOD &&
-      row.productOrderStatus !== DISCONTINUED_PRODUCT_ORDER_STATUS,
+      row.productOrderStatus !== DISCONTINUED_PRODUCT_ORDER_STATUS &&
+      (!isQuotationRequest ||
+        row.productOrderMethod === ORDERABLE_PRODUCT_ORDER_METHOD),
   );
   const lv3ParentIds = new Set(lv3Rows.map((row) => row.parentId ?? ""));
   const lv2Rows = rows.filter(
@@ -233,7 +239,7 @@ function ContactUsFormContent() {
   const [inquiryType, setInquiryType] = useState("");
   const productCategoryRequired =
     PRODUCT_CATEGORY_REQUIRED_INQUIRY_TYPES.includes(inquiryType);
-  const [deviceRows, setDeviceRows] = useState<DevicesTreeRow[]>([]);
+  const [rawDeviceRows, setRawDeviceRows] = useState<DevicesTreeRow[]>([]);
   const [categoryIds, setCategoryIds] = useState<{
     lv1: string;
     lv2: string;
@@ -285,22 +291,27 @@ function ContactUsFormContent() {
     fetchDevicesTreeRows()
       .then((rows) => {
         if (!alive) return;
-        const orderableRows = filterOrderableDeviceRows(rows);
-        setDeviceRows(orderableRows);
+        setRawDeviceRows(rows);
+        const initialRows = filterDeviceRowsByInquiryType(rows, "");
         const selection = resolveDevicesCategorySelection(
-          orderableRows,
+          initialRows,
           initialCategoryId,
           initialProductId,
         );
         if (selection.lv1) setCategoryIds(selection);
       })
       .catch(() => {
-        if (alive) setDeviceRows([]);
+        if (alive) setRawDeviceRows([]);
       });
     return () => {
       alive = false;
     };
   }, [initialCategoryId, initialProductId]);
+
+  const deviceRows = useMemo(
+    () => filterDeviceRowsByInquiryType(rawDeviceRows, inquiryType),
+    [rawDeviceRows, inquiryType],
+  );
 
   const lv1Rows = deviceRows.filter((row) => row.depth === "1");
   const lv2Rows = deviceRows.filter(
@@ -512,7 +523,10 @@ function ContactUsFormContent() {
                           name={`${formId}-inquiry-type`}
                           value={option.code}
                           checked={inquiryType === option.code}
-                          onChange={() => setInquiryType(option.code)}
+                          onChange={() => {
+                            setInquiryType(option.code);
+                            setCategoryIds({ lv1: "", lv2: "", lv3: "" });
+                          }}
                         />
                         <span>{option.name}</span>
                       </label>
