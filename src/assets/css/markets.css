@@ -2219,6 +2219,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_explore .markets_explore__img {
+    width: 100%;
     aspect-ratio: 586 / 640;
     overflow: hidden;
     position: relative;
