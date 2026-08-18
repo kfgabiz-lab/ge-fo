@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import CommonModal from "@/components/common/CommonModal";
 import { fetchData } from "@/lib/pageDataApi";
+import "@/assets/css/prosemirror.css";
 
 type PrivacyPolicyModalProps = {
   open: boolean;
@@ -72,9 +73,9 @@ export default function PrivacyPolicyModal({
       }
     >
       <div data-slug="termsMgmt-data">
-        <div
+        <article
           data-slugkey="content"
-          className="privacy_policy_modal__text"
+          className="ProseMirror privacy_policy_modal__text"
           dangerouslySetInnerHTML={{ __html: termsHtml ?? "" }}
         />
       </div>
