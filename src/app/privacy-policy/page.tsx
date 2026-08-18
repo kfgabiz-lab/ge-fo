@@ -4,7 +4,7 @@ import { legalPages } from "@/data/common/commonLegalContent";
 import "@/assets/css/common-privacy-policy.css";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | LS ELECTRIC",
+  title: "Privacy Policy",
   description:
     "Review LS ELECTRIC America's Privacy Notice to understand how we collect, use, store, and protect your personal data in compliance with applicable privacy laws.",
 };

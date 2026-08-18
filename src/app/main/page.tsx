@@ -19,7 +19,7 @@ const MAIN_DESCRIPTION =
   "LS ELECTRIC delivers innovative electrification, power distribution, and industrial automation solutions that help businesses build safer, smarter, and more sustainable operations.";
 
 export const metadata: Metadata = {
-  title: "LS ELECTRIC America",
+  title: { absolute: "LS ELECTRIC America" },
   description: MAIN_DESCRIPTION,
 };
 

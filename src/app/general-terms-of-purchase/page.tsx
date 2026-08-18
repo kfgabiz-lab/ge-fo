@@ -4,7 +4,7 @@ import { legalPages } from "@/data/common/commonLegalContent";
 import "@/assets/css/common-privacy-policy.css";
 
 export const metadata: Metadata = {
-  title: "General Terms of Purchase | LS ELECTRIC",
+  title: "General Terms of Purchase",
   description:
     "Review LS ELECTRIC America's General Terms and Conditions of Purchase governing supplier agreements, procurement standards, delivery terms, and compliance.",
 };
