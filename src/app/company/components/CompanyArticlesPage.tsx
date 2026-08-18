@@ -135,6 +135,9 @@ export default function CompanyArticlesPage() {
     setPageIndex(0);
   };
   const handleViewAllClick = () => {
+    // Clear search and reset month/year filters so "View All" shows full list
+    setMonth("");
+    setYear("");
     handleSearchSubmit("");
   };
 
