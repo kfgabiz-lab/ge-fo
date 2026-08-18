@@ -6,12 +6,14 @@ export const PRESS_LIST_SIZE = 9;
 
 export const pressImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-export const pressDetailHref = (id: number) => `/company/press/detail/${id}`;
+export const pressDetailHref = (id: number, slug?: string | null) =>
+  `/company/press/${slug || id}`;
 
 export type PressRow = PageDataItem;
 
 export interface PressCardItem {
   id: number;
+  slug: string | null;
   title: string;
   description: string;
   date: string;
@@ -27,6 +29,7 @@ export function toPressCard(item: PressRow): PressCardItem {
   const publishDttm = (pickField(row, "publish_dttm", "publishDttm") as string) ?? "";
   return {
     id: item.id,
+    slug: (row["seo.slug"] as string) || null,
     title: (row.title as string) ?? "",
     description: stripHtmlText(row.content as string | undefined, LIST_DESCRIPTION_MAX_LENGTH),
     date: formatDisplayDate(publishDttm),

@@ -321,35 +321,35 @@ const configs: Record<string, BreadcrumbConfig> = {
     crumbs: [{ label: "Services" }],
     current: "Warranty Policy",
   },
-  "/services/request-for-training": {
+  "/services/training/request": {
     crumbs: [
       { label: "Services" },
       { label: "Training" },
     ],
     current: "Training Request",
   },
-  "/services/request-for-training/step-2": {
+  "/services/training/request/step-2": {
     crumbs: [
       { label: "Services" },
       { label: "Training" },
     ],
     current: "Training Request",
   },
-  "/services/request-for-training/step-3": {
+  "/services/training/request/step-3": {
     crumbs: [
       { label: "Services" },
       { label: "Training" },
     ],
     current: "Training Request",
   },
-  "/services/request-for-training/step-4": {
+  "/services/training/request/step-4": {
     crumbs: [
       { label: "Services" },
       { label: "Training" },
     ],
     current: "Training Request",
   },
-  "/services/request-for-training/step-4-type_01": {
+  "/services/training/request/step-4-type_01": {
     crumbs: [
       { label: "Services" },
       { label: "Training" },
@@ -372,20 +372,22 @@ const configs: Record<string, BreadcrumbConfig> = {
 };
 
 export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
+  const trainingReserved = "sales|engineering|service|request";
+
   const sessionMatch = pathname.match(
-    /^\/services\/(sales|engineering|service)-training\/([^/]+)\/([^/]+)$/,
+    new RegExp(
+      `^/services/training/(?!(?:${trainingReserved})(?:/|$))([^/]+)/([^/]+)$`,
+    ),
   );
   if (sessionMatch) {
-    const [, variant, courseId] = sessionMatch;
-    const listHref = `/services/${variant}-training`;
+    const [, courseId] = sessionMatch;
     return {
       crumbs: [
         { label: "Services" },
         { label: "Training" },
-        { label: TRAINING_VARIANT_LABELS[variant], href: listHref },
         {
           label: "Curriculum Detail",
-          href: `${listHref}/${courseId}`,
+          href: `/services/training/${courseId}`,
         },
       ],
       current: "Session",
@@ -393,25 +395,17 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
   }
 
   const detailMatch = pathname.match(
-    /^\/services\/(sales|engineering|service)-training\/([^/]+)$/,
+    new RegExp(`^/services/training/(?!(?:${trainingReserved})$)([^/]+)$`),
   );
   if (detailMatch) {
-    const [, variant] = detailMatch;
     return {
-      crumbs: [
-        { label: "Services" },
-        { label: "Training" },
-        {
-          label: TRAINING_VARIANT_LABELS[variant],
-          href: `/services/${variant}-training`,
-        },
-      ],
+      crumbs: [{ label: "Services" }, { label: "Training" }],
       current: "Curriculum Detail",
     };
   }
 
   const listMatch = pathname.match(
-    /^\/services\/(sales|engineering|service)-training$/,
+    /^\/services\/training\/(sales|engineering|service)$/,
   );
   if (listMatch) {
     const [, variant] = listMatch;
@@ -421,19 +415,19 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     };
   }
 
-  if (/^\/company\/blog\/detail\/[^/]+$/.test(pathname)) {
+  if (/^\/company\/blog\/(?!detail$|no-data$)[^/]+$/.test(pathname)) {
     return configs["/company/blog/detail"];
   }
 
-  if (/^\/company\/press\/detail\/[^/]+$/.test(pathname)) {
+  if (/^\/company\/press\/(?!detail$|no-data$)[^/]+$/.test(pathname)) {
     return configs["/company/press/detail"];
   }
 
-  if (/^\/company\/articles\/detail\/[^/]+$/.test(pathname)) {
+  if (/^\/company\/articles\/(?!detail$|no-data$)[^/]+$/.test(pathname)) {
     return configs["/company/articles/detail"];
   }
 
-  if (/^\/company\/events\/detail\/[^/]+$/.test(pathname)) {
+  if (/^\/company\/events\/(?!detail$)[^/]+$/.test(pathname)) {
     return configs["/company/events/detail"];
   }
 

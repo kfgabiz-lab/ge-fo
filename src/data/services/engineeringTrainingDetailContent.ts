@@ -1,5 +1,6 @@
 export type EngineeringTrainingSession = {
   id: string;
+  slug?: string | null;
   date: string;
   title: string;
   closesLabel: string;

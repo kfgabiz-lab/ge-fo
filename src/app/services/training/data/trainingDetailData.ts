@@ -77,12 +77,13 @@ interface TrainingScheduleItemRaw {
 
 export interface ParentCurriculum {
   id?: number;
+  slug?: string | null;
   title?: string;
   description?: string;
-  image?: number[]; 
-  product_category?: string; 
+  image?: number[];
+  product_category?: string;
   is_visible?: string;
-  training_course?: string; 
+  training_course?: string;
 }
 
 interface CurrDtlProductRef {
@@ -94,6 +95,7 @@ interface CurrDtlProductRef {
 }
 
 interface CurrDtlDataJson {
+  seo?: { slug?: string };
   curriculum_detail1?: CurriculumDetail1;
   curriculum_detail2?: CurriculumDetail2;
   curriculum_detail3?: CurriculumDetail3;
@@ -331,6 +333,7 @@ function toCourseCard(
 
   return {
     id: String(raw.id),
+    slug: json.seo?.slug || null,
     date: formatSessionDateRange(d2.training_date_from, d2.training_date_to),
     isoDate: (d2.training_date_from ?? "").slice(0, 10),
     isoDateTo: (d2.training_date_to ?? "").slice(0, 10),
@@ -480,10 +483,13 @@ export async function fetchTrainingCurriculum(
     리턴함수: (item) => item,
   });
   if (!raw) return null;
-  const json = (raw.dataJson ?? {}) as { curriculum?: ParentCurriculum };
+  const json = (raw.dataJson ?? {}) as {
+    curriculum?: ParentCurriculum;
+    seo?: { slug?: string };
+  };
   const curriculum = json.curriculum;
   if (!curriculum) return null;
-  return { ...curriculum, id: Number(raw.id) };
+  return { ...curriculum, id: Number(raw.id), slug: json.seo?.slug || null };
 }
 
 export async function fetchProductNamesForRows(

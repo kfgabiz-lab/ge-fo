@@ -790,6 +790,12 @@
     display: none;
   }
 
+  section.support_service_training_session_detail
+    .support_service_training_session_detail__agenda-list
+    + .support_service_training_session_detail__block-tit {
+    margin-top: calc(60px - 20px);
+  }
+
   section.support_service_training_session_detail .support_service_training_session_detail__form {
     display: flex;
     flex-direction: column;
@@ -1145,19 +1151,37 @@
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__meta-icon {
-    display: flex;
+    display: block;
     flex: 0 0 20px;
-    align-items: center;
-    justify-content: center;
     width: 20px;
     height: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
   }
 
-  section.support_service_training_session_detail .support_service_training_session_detail__meta-icon img {
-    display: block;
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
+  section.support_service_training_session_detail .support_service_training_session_detail__meta-icon--date {
+    background-image: url("/ico/ico_training_date_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__meta-icon--duration {
+    background-image: url("/ico/ico_training_duration_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__meta-icon--type {
+    background-image: url("/ico/ico_training_type_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__meta-icon--class-size {
+    background-image: url("/ico/ico_training_class_size_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__meta-icon--location {
+    background-image: url("/ico/ico_training_location_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__meta-icon--products {
+    background-image: url("/ico/ico_training_products_20.svg");
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__meta-value {
@@ -2856,7 +2880,7 @@
     line-height: 20px;
     letter-spacing: 0;
     color: #666;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     white-space: nowrap;
   }
 
@@ -2866,19 +2890,36 @@
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-icon {
-    display: flex;
     flex: 0 0 18px;
-    align-items: center;
-    justify-content: center;
     width: 18px;
     height: 18px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
   }
 
-  section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-icon img {
-    display: block;
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
+  section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-icon--date {
+    background-image: url("/ico/ico_training_date_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-icon--duration {
+    background-image: url("/ico/ico_training_duration_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-icon--type {
+    background-image: url("/ico/ico_training_type_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-icon--class-size {
+    background-image: url("/ico/ico_training_class_size_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-icon--location {
+    background-image: url("/ico/ico_training_location_20.svg");
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-icon--products {
+    background-image: url("/ico/ico_training_products_20.svg");
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-value {
@@ -3155,6 +3196,12 @@
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  section.support_service_training_session_detail
+    .support_service_training_session_detail__agenda-list
+    + .support_service_training_session_detail__block-tit {
+    margin-top: calc(60px - 24px);
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__agenda-list::before {

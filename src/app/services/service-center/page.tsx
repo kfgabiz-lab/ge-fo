@@ -66,7 +66,7 @@ export default async function ServiceCenterPage() {
         {
           "@type": "CommunicateAction",
           name: "Training Request",
-          target: pageUrl("/services/request-for-training"),
+          target: pageUrl("/services/training/request"),
         },
         {
           "@type": "CommunicateAction",

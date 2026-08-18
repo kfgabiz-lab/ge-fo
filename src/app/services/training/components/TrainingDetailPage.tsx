@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
 import type { TrainingVariant } from "../data/trainingContent";
-import { fetchTrainingCategories, toCategoryMap } from "../data/trainingData";
+import {
+  TRAINING_VARIANT_BY_COURSE_CODE,
+  fetchTrainingCategories,
+  toCategoryMap,
+} from "../data/trainingData";
 import {
   fetchProductNamesForRows,
   fetchTrainingCurriculum,
@@ -9,6 +13,7 @@ import {
   isCurriculumVisible,
   toTrainingCourseDetail,
 } from "../data/trainingDetailData";
+import { resolveContentId } from "@/lib/contentSlugOrId";
 import TrainingDetailHero from "./TrainingDetailHero";
 import TrainingDetailSchedule from "./TrainingDetailSchedule";
 import JsonLd from "@/components/seo/JsonLd";
@@ -23,12 +28,13 @@ const VARIANT_LABELS: Record<TrainingVariant, string> = {
 };
 
 export default async function TrainingDetailPage({
-  variant,
-  courseId,
+  courseId: courseIdOrSlug,
 }: {
-  variant: TrainingVariant;
   courseId: string;
 }) {
+  const courseId = await resolveContentId("currMgmt-data", courseIdOrSlug);
+  if (courseId == null) notFound();
+
   const [rows, curriculum, categoryCodes, trainingTypeCodes] =
     await Promise.all([
       fetchTrainingDetailRows(courseId),
@@ -41,22 +47,27 @@ export default async function TrainingDetailPage({
     notFound();
   }
 
+  const variant: TrainingVariant =
+    TRAINING_VARIANT_BY_COURSE_CODE[curriculum.training_course ?? ""] ?? "sales";
+  const canonicalCourseSlug = curriculum.slug || courseId;
+
   const productNameMap = await fetchProductNamesForRows(rows);
   const categoryMap = toCategoryMap(categoryCodes);
   const trainingTypeMap = toCategoryMap(trainingTypeCodes);
 
   const detail = toTrainingCourseDetail(
     rows,
-    courseId,
+    canonicalCourseSlug,
     curriculum,
     categoryMap,
     trainingTypeMap,
     productNameMap,
   );
 
-  const hrefPrefix = `/services/${variant}-training`;
+  const hrefPrefix = "/services/training";
+  const variantListHref = `${hrefPrefix}/${variant}`;
 
-  const currentUrl = pageUrl(`${hrefPrefix}/${courseId}`);
+  const currentUrl = pageUrl(`${hrefPrefix}/${canonicalCourseSlug}`);
   const courseNode = {
     "@type": "Course",
     "@id": `${currentUrl}#course`,
@@ -86,7 +97,7 @@ export default async function TrainingDetailPage({
       offers: {
         "@type": "Offer",
         availability: "https://schema.org/InStock",
-        url: `${pageUrl(`${hrefPrefix}/${courseId}/${s.id}`)}#session-registration`,
+        url: `${pageUrl(`${hrefPrefix}/${canonicalCourseSlug}/${s.slug || s.id}`)}#session-registration`,
       },
     })),
   };
@@ -104,7 +115,7 @@ export default async function TrainingDetailPage({
     courseNode,
     breadcrumbList(currentUrl, [
       { name: "Services", url: `${SITE_URL}#services` },
-      { name: VARIANT_LABELS[variant], url: pageUrl(hrefPrefix) },
+      { name: VARIANT_LABELS[variant], url: pageUrl(variantListHref) },
       { name: "Course", url: currentUrl },
     ]),
   ]);

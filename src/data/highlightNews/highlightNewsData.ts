@@ -57,7 +57,7 @@ function mergeAndPickTopNews(
       sortId: card.id,
       item: {
         id: `press-${card.id}`,
-        href: pressDetailHref(card.id),
+        href: pressDetailHref(card.id, card.slug),
         image: card.imageSrc,
         imageAlt: card.title,
         tag: "Press",
@@ -75,7 +75,7 @@ function mergeAndPickTopNews(
       sortId: card.id,
       item: {
         id: `blog-${card.id}`,
-        href: blogDetailHref(card.id),
+        href: blogDetailHref(card.id, card.slug),
         image: card.imageSrc,
         imageAlt: card.title,
         tag: "Blog",
@@ -92,7 +92,7 @@ function mergeAndPickTopNews(
       sortId: card.id,
       item: {
         id: `articles-${card.id}`,
-        href: articlesDetailHref(card.id),
+        href: articlesDetailHref(card.id, card.slug),
         image: card.imageSrc,
         imageAlt: card.title,
         tag: "Articles",
