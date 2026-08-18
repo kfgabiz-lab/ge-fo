@@ -1,6 +1,8 @@
 import { fetchApi } from "@/lib/api";
-import { LIST_DESCRIPTION_MAX_LENGTH, stripHtmlText } from "@/lib/stripHtmlText";
+import { stripHtmlText } from "@/lib/stripHtmlText";
 import type { SearchPageItem } from "@/data/search/searchAllContent";
+
+const SEARCH_PAGES_DESCRIPTION_MAX_LENGTH = 399;
 
 
 export type PageSectionCode = "MARKETS" | "SERVICE" | "SUPPORT" | "COMPANY";
@@ -88,7 +90,7 @@ function toPageItem(
     href: item.url ?? "",
     category: item.sectionName ?? "",
     title: item.title ?? "",
-    description: stripHtmlText(item.snippet, LIST_DESCRIPTION_MAX_LENGTH),
+    description: stripHtmlText(item.snippet, SEARCH_PAGES_DESCRIPTION_MAX_LENGTH),
     highlight: highlight || undefined,
   };
 }
