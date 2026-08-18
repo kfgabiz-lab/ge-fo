@@ -4,7 +4,6 @@ import DevicesProductApplications from "./DevicesProductApplications";
 import DevicesProductWhy from "./DevicesProductWhy";
 import DevicesMicroGridHighlights from "./DevicesMicroGridHighlights";
 import DevicesXemsEnergySolutions from "./DevicesXemsEnergySolutions";
-import GenericProductDetail from "./GenericProductDetail";
 import SwProductDetailShell, {
   type SwProductFeaturesConfig,
 } from "./SwProductDetailShell";
@@ -261,14 +260,15 @@ function SmartFactoryDetail(props: SwDetailProps) {
   );
 }
 
+/* product.product_code 기준 매핑 — slug는 SEO 목적으로 언제든 바뀔 수 있어 매핑 키로 쓰지 않는다 */
 const SW_DETAIL_COMPONENTS: Record<
   string,
   ((props: SwDetailProps) => ReactElement) | undefined
 > = {
-  scada: ScadaDetail,
-  xems: XemsDetail,
-  "micro-grid": MicroGridDetail,
-  "smart-factory": SmartFactoryDetail,
+  "L06-01-01": ScadaDetail,
+  "L06-02-01": XemsDetail,
+  "L06-03-01": MicroGridDetail,
+  "L06-04-01": SmartFactoryDetail,
 };
 
 export default async function SwProductDetail({
@@ -300,10 +300,7 @@ export default async function SwProductDetail({
     productId,
   );
 
-  const Detail = SW_DETAIL_COMPONENTS[slug];
-  if (!Detail) {
-    return <GenericProductDetail slug={slug} row={row} categoryId={categoryId} />;
-  }
+  const Detail = SW_DETAIL_COMPONENTS[productCode]!;
 
   const bind = bindSwDetail(row);
   const currentUrl = pageUrl(`/product/${slug}`);

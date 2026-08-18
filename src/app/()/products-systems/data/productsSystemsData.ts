@@ -592,6 +592,8 @@ interface SwRelevantProductRow {
   slug: string | null;
   image: string | null;
   awards: string | null;
+  /** "LV2"(카테고리 자신, 대표이미지) | "LV3"(특정 제품) — attribute01 코드 세그먼트 수 기준 */
+  level: "LV2" | "LV3" | null;
 }
 
 export async function fetchSwRelevantProducts(
@@ -603,7 +605,7 @@ export async function fetchSwRelevantProducts(
     );
     return rows.map((r) => ({
       id: r.slug || `product-${r.id}`,
-      href: r.slug ? `/product/${r.slug}` : "",
+      href: r.slug ? (r.level === "LV2" ? `/product-range/${r.slug}` : `/product/${r.slug}`) : "",
       image: resolveImageUrlFromJsonText(r.image) ?? "",
       title: r.title ?? "",
       subtitle: "",
