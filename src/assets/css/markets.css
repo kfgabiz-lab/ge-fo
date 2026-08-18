@@ -1811,6 +1811,8 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_hero .markets_hero__sub {
+    width: 100%;
+    max-width: 335px;
     margin-bottom: 0;
     font-size: 16px;
     font-weight: 300;
@@ -1929,6 +1931,8 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_hero.markets_hero--key-visual .markets_hero__sub {
+    width: 100%;
+    max-width: 335px;
     font-size: 16px;
     line-height: 24px;
     color: #fff;
@@ -3218,7 +3222,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     align-items: center;
     gap: 0;
     width: 100%;
-    max-width: 335px;
+    max-width: none;
     margin: 0 auto;
     padding: 0 20px;
     text-align: center;
@@ -3245,6 +3249,8 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   .markets-page--public-infrastructure section.markets_hero.markets_hero--key-visual .markets_hero__sub,
   .markets-page--oil-gas-mining section.markets_hero.markets_hero--key-visual .markets_hero__sub,
   .markets-page--power-grid section.markets_hero.markets_hero--key-visual .markets_hero__sub {
+    width: 100%;
+    max-width: 335px;
     margin: 0 0 40px;
     font-size: 18px;
     font-weight: 300;
