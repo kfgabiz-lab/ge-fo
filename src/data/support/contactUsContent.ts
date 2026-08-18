@@ -82,20 +82,12 @@ export const contactUsCategoryLevels = [
 
 export const contactUsConsentItems = [
   {
-    id: "personal-info",
-    label: "Consent to Collection and Use of Personal Information",
-    defaultChecked: false,
-    required: true,
-    termsLabel: "View Full Terms",
-    termsHref: "",
-  },
-  {
     id: "newsletter",
     label:
-      "Consent to receive marketing and technical information, industry news from LS ELECTRIC in accordance with LS ELECTRIC's Privacy Policy.",
-    defaultChecked: true,
-    termsLabel: "View Full Terms",
-    termsHref: "",
+      "Yes, I consent to receive commercial electronic messages (including emails and newsletters) from LS ELECTRIC America regarding products, services, and events.",
+    labelRest:
+      "I understand that I can withdraw my consent at any time.",
+    defaultChecked: false,
   },
 ] as const;
 
@@ -119,6 +111,8 @@ export const contactUsFormCopy = {
   sendLabel: "Send",
   sendLabelMobile: "LIST",
   sendingLabel: "Sending...",
+  submitAck:
+    'By clicking "Send", you acknowledge that your information will be processed in accordance with our Privacy Policy, which includes the transfer of your inquiry data to our parent company in South Korea for support purposes.',
   submitSuccess:
     "Your inquiry has been submitted. A confirmation number has been sent to your email",
 } as const;

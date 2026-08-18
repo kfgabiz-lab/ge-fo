@@ -981,10 +981,8 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
   }
 
   section.devices_product_downloads .devices_product_downloads__check-label {
-    display: inline-flex;
+    display: block;
     flex: 1;
-    align-items: flex-start;
-    gap: 0;
     min-width: 0;
     max-width: 236px;
     padding: 0;
@@ -995,6 +993,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     line-height: 24px;
     color: #222;
     text-align: left;
+    word-break: break-word;
     cursor: pointer;
   }
 
@@ -1004,8 +1003,8 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
   }
 
   section.devices_product_downloads .devices_product_downloads__check-label-count {
-    flex-shrink: 0;
     color: #666;
+    margin-left: 4px;
   }
 
   /* Figma 3871:113125 — main */

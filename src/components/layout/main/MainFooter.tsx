@@ -271,6 +271,13 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
               <button type="submit" className="btn_flat">
                 Get Insights
               </button>
+              <div className="main_footer__agree">
+                I agree with the terms of use as described in the{" "}
+                <Link href="/privacy-policy" className="main_footer__agree-link">
+                  Privacy Policy.
+                </Link>
+              </div>
+              {/* privacy policy 체크박스 기획상 미사용으로 제거
               <FormControlLabel
                 control={
                   <Checkbox
@@ -291,7 +298,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
                   </span>
                 }
                 className="main_footer__agree-check"
-              />
+              /> */}
             </div>
           </form>
         </div>
