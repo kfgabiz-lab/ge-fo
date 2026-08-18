@@ -107,7 +107,9 @@ export default function SearchAllAi({
         ? parseFloat(getComputedStyle(head).marginBottom) || 0
         : 0;
 
-      const natural = headH + headMb + inner.scrollHeight + padY + borderY;
+      const gap = parseFloat(getComputedStyle(content).rowGap || getComputedStyle(content).gap) || 0;
+
+      const natural = headH + headMb + gap + inner.scrollHeight + padY + borderY;
       const needsMore = natural > COLLAPSED_HEIGHT;
       setAiNeedsMore((prev) => (prev === needsMore ? prev : needsMore));
       setAiChecked(true);
