@@ -66,6 +66,7 @@ export default async function MarketsPublicInfrastructurePage() {
         subtitle={publicInfrastructureHero.subtitle}
         title={publicInfrastructureHero.title}
         heroImage={publicInfrastructureHero.heroImage}
+        hideSecondaryCta
       />
       <MarketsIntro
         titleLines={publicInfrastructureIntro.titleLines}

@@ -66,6 +66,7 @@ export default async function MarketsCommercialResidentialPage() {
         title={commercialResidentialHero.title}
         heroImage={commercialResidentialHero.heroImage}
         secondaryCta={commercialResidentialHero.secondaryCta}
+        hideSecondaryCta
       />
       <MarketsIntro
         titleLines={commercialResidentialIntro.titleLines}
