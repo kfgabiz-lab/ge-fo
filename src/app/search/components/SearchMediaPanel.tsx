@@ -94,7 +94,7 @@ function SearchMediaPanelContent({
           />
 
           <div className="search_media__main">
-            <div className="search_media__list-block">
+            <div className="search_media__content-block">
               <div className="search_media__mo-filter-wrap">
                 <button
                   type="button"
@@ -133,6 +133,7 @@ function SearchMediaPanelContent({
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
                 ariaLabel="Search media pagination"
+                scrollTargetSelector=".search_media__count"
               />
             )}
           </div>

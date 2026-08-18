@@ -94,7 +94,7 @@ function SearchPagesPanelContent({
           />
 
           <div className="search_pages__main">
-            <div className="search_pages__list-block">
+            <div className="search_pages__content-block">
               <div className="search_pages__mo-filter-wrap">
                 <button
                   type="button"
@@ -138,6 +138,7 @@ function SearchPagesPanelContent({
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
                 ariaLabel="Search pages pagination"
+                scrollTargetSelector=".search_pages__count"
               />
             )}
           </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { emptyStateIconSrc } from "@/data/commonAssets";
 import { searchEmptyResult } from "@/data/search/searchAllContent";
 
 export default function SearchEmptyResult({
@@ -10,7 +11,12 @@ export default function SearchEmptyResult({
 
   return (
     <div className={className ? `search_empty ${className}` : "search_empty"}>
-      <p className="search_empty__title">{title}</p>
+      <div className="search_empty__top">
+        <div className="search_empty__icon" aria-hidden="true">
+          <img src={emptyStateIconSrc} alt="" />
+        </div>
+        <p className="search_empty__title">{title}</p>
+      </div>
       <ul className="search_empty__list">
         {notes.map((note) => (
           <li key={note} className="search_empty__item">
