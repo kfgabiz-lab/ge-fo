@@ -653,7 +653,10 @@ function ContactUsFormContent() {
                     IconComponent={GuideSelectIcon}
                     inputProps={{ id: `${formId}-country` }}
                     renderValue={(value) => {
-                      const label = value ? String(value) : countryPlaceholder;
+                       const selected = countries.find(
+                          (option) => option.code === String(value),
+                      );
+                      const label = value ? selected?.name ?? String(value) : countryPlaceholder;
                       return (
                         <span
                           className={
@@ -681,7 +684,7 @@ function ContactUsFormContent() {
                     )}
                     {countries.map((option) => (
                       <MenuItem key={option.code} value={option.code}>
-                        {option.code}
+                        {option.name}
                       </MenuItem>
                     ))}
                   </GuideSelect>

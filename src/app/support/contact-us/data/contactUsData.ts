@@ -32,7 +32,7 @@ export async function fetchInquiryTypes(): Promise<CodeItem[]> {
 }
 
 export async function fetchCountries(): Promise<CodeItem[]> {
-  return fetchApi<CodeItem[]>("/api/v1/fo/codes/COUNTRYCODE");
+  return fetchApi<CodeItem[]>("/api/v1/fo/codes/COUNTRYNAME");
 }
 
 export async function submitContactUs(

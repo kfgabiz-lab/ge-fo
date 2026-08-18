@@ -753,6 +753,7 @@
     font-size: 15px;
     line-height: 23px;
     color: #222;
+ 
   }
 
   section.search_all .search_all__product-path-label {
@@ -3739,6 +3740,7 @@
   section.search_all .search_all__product-path-text {
     font-weight: 400;
     color: #222;
+    word-break: break-all;
   }
 
   section.search_all .search_all__product-path-text-mark {

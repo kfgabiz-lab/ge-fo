@@ -1,9 +1,11 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import { getWindowScrollY, scrollWindowTo } from "@/lib/lenisScroll";
+import { getLenisInstance, scrollWindowTo } from "@/lib/lenisScroll";
 
 const MAX_VISIBLE_PAGES = 5;
+const LIST_TARGET_SELECTOR =
+  "ul, ol, .support_tech_hub_grid, [class*='__list'], [class*='__grid']";
 
 function getStickyHeaderOffset() {
   const wrap = document.querySelector<HTMLElement>(
@@ -23,7 +25,12 @@ function getStickyHeaderOffset() {
 
 function findPaginationScrollTarget(nav: HTMLElement) {
   const previous = nav.previousElementSibling;
-  if (previous instanceof HTMLElement) return previous;
+  if (previous instanceof HTMLElement) {
+    const list = previous.matches(LIST_TARGET_SELECTOR)
+      ? previous
+      : previous.querySelector<HTMLElement>(LIST_TARGET_SELECTOR);
+    return list ?? previous;
+  }
 
   const section = nav.closest("section");
   if (section instanceof HTMLElement) return section;
@@ -33,17 +40,55 @@ function findPaginationScrollTarget(nav: HTMLElement) {
 
 function getContentFingerprint(nav: HTMLElement) {
   const target = findPaginationScrollTarget(nav);
-  return `${target.childElementCount}:${target.textContent ?? ""}`;
+  const items = Array.from(target.children, (child) =>
+    (child.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 80),
+  );
+  return `${items.length}:${items.join("|")}`;
 }
 
-function scrollToUpdatedArea(nav: HTMLElement) {
-  const target = findPaginationScrollTarget(nav);
+function getScrollAlignElement(nav: HTMLElement, scrollTargetSelector?: string) {
+  if (scrollTargetSelector) {
+    const scope = nav.closest("section") ?? document;
+    const target = scope.querySelector<HTMLElement>(scrollTargetSelector);
+    if (target) return target;
+  }
+
+  const list = findPaginationScrollTarget(nav);
+  if (list.firstElementChild instanceof HTMLElement) {
+    return list.firstElementChild;
+  }
+  return list;
+}
+
+function getAlignOffset(align: HTMLElement) {
+  if (align.classList.contains("section_tit")) {
+    const navList = document.querySelector<HTMLElement>(
+      ".devices_product_nav > ul.devices_product_nav__list",
+    );
+    if (navList) {
+      const navTop = navList.getBoundingClientRect().top;
+      if (navTop > 0) return Math.round(navTop);
+    }
+  }
+
+  return getStickyHeaderOffset();
+}
+
+function scrollToUpdatedArea(nav: HTMLElement, scrollTargetSelector?: string) {
+  const align = getScrollAlignElement(nav, scrollTargetSelector);
+  const lenis = getLenisInstance();
+  lenis?.resize();
+
+  const scrollY = lenis?.scroll ?? window.scrollY ?? document.documentElement.scrollTop;
   const top = Math.max(
     0,
-    getWindowScrollY() +
-      target.getBoundingClientRect().top -
-      getStickyHeaderOffset(),
+    scrollY + align.getBoundingClientRect().top - getAlignOffset(align),
   );
+
+  if (lenis) {
+    lenis.scrollTo(top, { immediate: true, force: true });
+    return;
+  }
 
   scrollWindowTo(top, { immediate: true });
 }
@@ -76,6 +121,7 @@ type PageNumberingProps = {
   totalPages: number;
   onPageChange?: (page: number) => void;
   ariaLabel?: string;
+  scrollTargetSelector?: string;
 };
 
 function ChevronIcon({ className }: { className?: string }) {
@@ -97,55 +143,67 @@ export default function PageNumbering({
   totalPages,
   onPageChange,
   ariaLabel = "Page navigation",
+  scrollTargetSelector,
 }: PageNumberingProps) {
   const navRef = useRef<HTMLElement>(null);
-  const didMountRef = useRef(false);
+  const pendingScrollRef = useRef(false);
   const contentFingerprintRef = useRef("");
   const safeTotal = Math.max(1, totalPages);
   const safeCurrent = Math.min(Math.max(1, currentPage), safeTotal);
   const visiblePages = getVisiblePages(safeCurrent, safeTotal);
 
   useLayoutEffect(() => {
+    if (!pendingScrollRef.current) return;
+
     const nav = navRef.current;
     if (!nav) return;
 
-    if (!didMountRef.current) {
-      didMountRef.current = true;
-      contentFingerprintRef.current = getContentFingerprint(nav);
-      return;
-    }
+    const previous = contentFingerprintRef.current;
 
-    const scrollAfterContentUpdate = () => {
+    const finish = () => {
+      pendingScrollRef.current = false;
       contentFingerprintRef.current = getContentFingerprint(nav);
-      scrollToUpdatedArea(nav);
+      const active = document.activeElement;
+      if (active instanceof HTMLElement && nav.contains(active)) {
+        active.blur();
+      }
+      scrollToUpdatedArea(nav, scrollTargetSelector);
+      requestAnimationFrame(() => {
+        scrollToUpdatedArea(nav, scrollTargetSelector);
+      });
     };
 
-    if (getContentFingerprint(nav) !== contentFingerprintRef.current) {
-      scrollAfterContentUpdate();
+    if (getContentFingerprint(nav) !== previous) {
+      finish();
       return;
     }
 
     const target = findPaginationScrollTarget(nav);
     const observer = new MutationObserver(() => {
+      if (getContentFingerprint(nav) === previous) return;
       observer.disconnect();
-      scrollAfterContentUpdate();
+      finish();
     });
-    observer.observe(target, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-    });
+    observer.observe(target, { childList: true, subtree: true });
 
     return () => observer.disconnect();
-  }, [safeCurrent]);
+  }, [safeCurrent, scrollTargetSelector]);
 
   const goToPage = (page: number) => {
     if (page < 1 || page > safeTotal || page === safeCurrent) return;
+    if (navRef.current) {
+      contentFingerprintRef.current = getContentFingerprint(navRef.current);
+      pendingScrollRef.current = true;
+    }
     onPageChange?.(page);
   };
 
   const controlClass = (disabled: boolean) =>
     `page-numbering__control${disabled ? " is-disabled" : ""}`;
+
+  const preventButtonFocus = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+  };
 
   return (
     <nav
@@ -159,6 +217,7 @@ export default function PageNumbering({
           className={`${controlClass(safeCurrent === 1)} page-numbering__control--first`}
           disabled={safeCurrent === 1}
           aria-label="First page"
+          onMouseDown={preventButtonFocus}
           onClick={() => goToPage(1)}
         >
           <span className="page-numbering__icon page-numbering__icon--double" aria-hidden>
@@ -171,6 +230,7 @@ export default function PageNumbering({
           className={`${controlClass(safeCurrent === 1)} page-numbering__control--prev`}
           disabled={safeCurrent === 1}
           aria-label="Previous page"
+          onMouseDown={preventButtonFocus}
           onClick={() => goToPage(safeCurrent - 1)}
         >
           <ChevronIcon className="page-numbering__chev page-numbering__chev--left" />
@@ -185,6 +245,7 @@ export default function PageNumbering({
             }`}
             aria-label={`Page ${page}`}
             aria-current={page === safeCurrent ? "page" : undefined}
+            onMouseDown={preventButtonFocus}
             onClick={() => goToPage(page)}
           >
             {page}
@@ -196,6 +257,7 @@ export default function PageNumbering({
           className={`${controlClass(safeCurrent === safeTotal)} page-numbering__control--next`}
           disabled={safeCurrent === safeTotal}
           aria-label="Next page"
+          onMouseDown={preventButtonFocus}
           onClick={() => goToPage(safeCurrent + 1)}
         >
           <ChevronIcon className="page-numbering__chev page-numbering__chev--right" />
@@ -205,6 +267,7 @@ export default function PageNumbering({
           className={`${controlClass(safeCurrent === safeTotal)} page-numbering__control--end`}
           disabled={safeCurrent === safeTotal}
           aria-label="Last page"
+          onMouseDown={preventButtonFocus}
           onClick={() => goToPage(safeTotal)}
         >
           <span className="page-numbering__icon page-numbering__icon--double" aria-hidden>

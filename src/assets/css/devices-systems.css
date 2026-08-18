@@ -2,6 +2,8 @@
 
 .devices-page section .section_tit {
   font-weight: 700;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 @media (min-width: 781px) {
@@ -365,8 +367,8 @@
     transition: 0.3s;
     word-break: break-word;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   .devices_products .item:hover .tit {
@@ -978,8 +980,8 @@
     letter-spacing: 0;
     word-break: break-word;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   section.devices_products {
@@ -1014,8 +1016,8 @@
     overflow: hidden;
     word-break: break-word;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   /* Help overlay — products-systems (.devices-page) */

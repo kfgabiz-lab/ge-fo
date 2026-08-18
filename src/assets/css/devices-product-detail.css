@@ -1080,6 +1080,53 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     border-top: 1px solid #e8e8e8;
   }
 
+  /* Search empty — match company-blog-list__empty */
+  section.devices_product_downloads .devices_product_downloads__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    margin: 120px 0 0;
+    padding: 0;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-icon {
+    width: 148px;
+    aspect-ratio: 1;
+    margin-bottom: 16px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-title {
+    margin: 0;
+    color: #222;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-desc {
+    margin: 0;
+    color: #888;
+    font-size: 16px;
+    line-height: 1;
+  }
+
   /* PC — Figma 7922:118489 Downloads item (head gap 12 · title/version items-end · body gap 16) */
   section.devices_product_downloads .devices_product_downloads__item {
     display: flex;
@@ -2515,6 +2562,52 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     margin-top: 24px;
     padding-top: 0;
     border-top: none;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    margin: 120px 0 0;
+    padding: 0;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-icon {
+    width: 148px;
+    aspect-ratio: 1;
+    margin-bottom: 16px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-title {
+    margin: 0;
+    color: #222;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__empty-desc {
+    margin: 0;
+    color: #888;
+    font-size: 16px;
+    line-height: 1;
   }
 
   section.devices_product_downloads .devices_product_downloads__item {
