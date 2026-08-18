@@ -71,11 +71,19 @@ export async function mapDownloadCenterItemsToProductDownloads(
       >((latest, v) => (!latest || v.sortKey > latest.sortKey ? v : latest), null);
       const files = latestVersion?.files ?? [];
       const mappedFiles: ProductDownloadFile[] = await Promise.all(
-        files.map(async (file) => ({
-          name: file.fileName ?? "",
-          size: file.fileSizeText ?? "",
-          url: await fetchDownloadCenterFileUrl(file.filePath),
-        })),
+        files.map(async (file) => {
+          let url = "";
+          try {
+            url = await fetchDownloadCenterFileUrl(file.filePath);
+          } catch {
+            url = "";
+          }
+          return {
+            name: file.fileName ?? "",
+            size: file.fileSizeText ?? "",
+            url,
+          };
+        }),
       );
       const versionNames = item.versions
         .map((v) => v.versionName)

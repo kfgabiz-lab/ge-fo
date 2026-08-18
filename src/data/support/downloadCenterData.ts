@@ -376,12 +376,8 @@ export async function fetchDownloadCenterFileUrl(
   filePath: string | null | undefined,
 ): Promise<string> {
   if (!filePath) return "";
-  try {
-    const text = await fetchApiText(
-      `/api/v1/fo/ctpApi/fileDownUrl?filePath=${encodeURIComponent(filePath)}`,
-    );
-    return text.replace(/^"|"$/g, "").trim();
-  } catch {
-    return "";
-  }
+  const text = await fetchApiText(
+    `/api/v1/fo/ctpApi/fileDownUrl?filePath=${encodeURIComponent(filePath)}`,
+  );
+  return text.replace(/^"|"$/g, "").trim();
 }
