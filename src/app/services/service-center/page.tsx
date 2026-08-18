@@ -8,6 +8,7 @@ import ServiceCenterTitle from "./components/ServiceCenterTitle";
 import {
   serviceCenterFaqDescriptionLines,
   serviceCenterFaqItems,
+  GICS_KNOWLEDGE_BASE_URL,
 } from "@/data/services/serviceCenterContent";
 import "@/assets/css/services.css";
 import type { Metadata, ResolvingMetadata } from "next";
@@ -78,7 +79,7 @@ export default async function ServiceCenterPage() {
           name: "Knowledge Base for Power Products",
           target: {
             "@type": "EntryPoint",
-            urlTemplate: "https://gics.ls-electric.com/public/knowledgeBasePopup.do",
+            urlTemplate: GICS_KNOWLEDGE_BASE_URL,
             actionPlatform: ACTION_PLATFORMS,
           },
         },

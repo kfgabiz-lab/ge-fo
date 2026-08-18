@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { pushDataLayerEvent } from "@/lib/gtm";
+import { CONNECT_PORTAL_EXTERNAL_URL } from "@/data/support/connectPortalContent";
 import {
   motorControlHelpCards,
   type DevicesHelpCard,
@@ -54,7 +55,7 @@ export default function DevicesHelp({
             {cards.map((card) => {
               const isConnectPortal = card.id === "help-1";
               const href = isConnectPortal
-                ? connectPortalHref || ""
+                ? connectPortalHref || CONNECT_PORTAL_EXTERNAL_URL
                 : card.href;
               const isExternal =
                 href.startsWith("http://") || href.startsWith("https://");

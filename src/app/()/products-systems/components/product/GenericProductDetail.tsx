@@ -149,15 +149,15 @@ export default async function GenericProductDetail({
                   />
                 </DevicesProductLineupGrid>
               </div>
-              <div className="devices_product_lineup__footer">
-                <div className="devices_product_lineup__note">
-                  <p>Explore all available configurations effortlessly.</p>
-                  <p>
-                    Our Configurator helps you select the right specifications in
-                    just a few clicks.
-                  </p>
-                </div>
-                {detail.configuratorHref ? (
+              {detail.configuratorHref ? (
+                <div className="devices_product_lineup__footer">
+                  <div className="devices_product_lineup__note">
+                    <p>Explore all available configurations effortlessly.</p>
+                    <p>
+                      Our Configurator helps you select the right specifications in
+                      just a few clicks.
+                    </p>
+                  </div>
                   <a
                     href={detail.configuratorHref}
                     className="btn-base btn-lv02 btn-lv02--solid"
@@ -167,8 +167,8 @@ export default async function GenericProductDetail({
                     Go to Configurator
                     <span className="icon_link-14" aria-hidden="true" />
                   </a>
-                ) : null}
-              </div>
+                </div>
+              ) : null}
             </div>
           </section>
         ) : null}

@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // ge-api(SPRING_PROFILES_ACTIVE: local/developer/dev/prod)와 동일한 배포 프로필 값을
+  // 클라이언트 번들에도 노출 — src/lib/deploymentProfile.ts 참고
+  env: {
+    NEXT_PUBLIC_PROFILE: process.env.SPRING_PROFILES_ACTIVE || "",
+  },
   images: {
     // BO 관리형 이미지(배너/히어로 등) 교체 반영 지연과 캐시 효율의 절충 — 1주일
     minimumCacheTTL: 604800,

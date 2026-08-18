@@ -1,4 +1,5 @@
 ﻿import type { HighlightNewsItem } from "@/types/highlightNews";
+import { GICS_INDEX_URL } from "@/lib/externalLinks";
 
 export const motorControlHero = {
   title: "LV Products and Systems",
@@ -206,7 +207,7 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
   },
   {
     id: "help-3",
-    href: "https://gics.ls-electric.com/public/index.do?lang=en",
+    href: GICS_INDEX_URL,
     title: "Get Technical Support & Service",
     description:
       "Keep your equipment operating safely and reliably with expert support for installation, maintenance, and repairs.",

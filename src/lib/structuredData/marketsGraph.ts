@@ -2,13 +2,12 @@ import type { HighlightNewsItem } from "@/types/highlightNews";
 import type { FaqItem, ProductItem } from "@/app/markets/data/marketsContent";
 import { breadcrumbList, buildPageGraph, crumbsFromBreadcrumbConfig, itemUrl, pageUrl, type JsonLdNode } from "./builders";
 import { WEBSITE_ID } from "./siteConfig";
+import { CONNECT_PORTAL_EXTERNAL_URL } from "@/data/support/connectPortalContent";
 
 const ACTION_PLATFORMS = [
   "http://schema.org/DesktopWebPlatform",
   "http://schema.org/MobileWebPlatform",
 ];
-
-const CONNECT_PORTAL_URL = "https://connect.ls-electric.com/";
 
 export function buildMarketsPageGraph(input: {
   pathname: string;
@@ -50,7 +49,7 @@ export function buildMarketsPageGraph(input: {
       name: "Connect Portal",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: CONNECT_PORTAL_URL,
+        urlTemplate: CONNECT_PORTAL_EXTERNAL_URL,
         actionPlatform: ACTION_PLATFORMS,
       },
     },

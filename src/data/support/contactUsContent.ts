@@ -1,3 +1,5 @@
+import { GICS_INDEX_URL } from "@/lib/externalLinks";
+
 export const contactUsPage = {
   title: "Contact Us",
   description: "Talk to a specialist. Get answers that move your business forward.",
@@ -71,7 +73,7 @@ export type ContactUsModalsHubModalId =
 
 export const contactUsTechnicalInquiry = {
   label: "Technical Inquiry",
-  href: "https://gicstest.ls-electric.com/public/index.do?lang=en&nation=US",
+  href: GICS_INDEX_URL,
 } as const;
 
 export const contactUsCategoryLevels = [

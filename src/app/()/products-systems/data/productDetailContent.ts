@@ -7,6 +7,7 @@ import {
   type DownloadCenterSort,
 } from "@/data/support/downloadCenterData";
 import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
+import { CONNECT_PORTAL_BASE_URL } from "@/lib/externalLinks";
 
 export type ProductSpec = {
   label: string;
@@ -396,7 +397,7 @@ export const metasolMsDetail: ProductDetail = {
   lineUp: "",
   downloads: metasolMsDownloads,
   youtubeVideoId: "E3wi6qPy1Cc",
-  configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
+  configuratorHref: `${CONNECT_PORTAL_BASE_URL}/product/config?id=a0TTJ00000uqvlV2AQ`,
   configuratorExternal: true,
   configuratorBannerBg: "/img/devices/product/banner_configurator_bg.webp",
   expertBannerHref: "/support/contact-us",
@@ -445,7 +446,7 @@ export const h100PlusDetail: ProductDetail = {
   lineUp: "",
   downloads: metasolMsDownloads,
   youtubeVideoId: "E3wi6qPy1Cc",
-  configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
+  configuratorHref: `${CONNECT_PORTAL_BASE_URL}/product/config?id=a0TTJ00000uqvlV2AQ`,
   configuratorExternal: true,
   configuratorBannerBg: "/img/devices/product/banner_configurator_bg.webp",
   expertBannerHref: "/support/contact-us",
@@ -557,7 +558,7 @@ export const susolUlSmartMccbDetail: ProductDetail = {
   lineUp: "",
   downloads: metasolMsDownloads,
   youtubeVideoId: "",
-  configuratorHref: "https://connect.ls-electric.com/product/config?id=a0TTJ00000uqvlV2AQ",
+  configuratorHref: `${CONNECT_PORTAL_BASE_URL}/product/config?id=a0TTJ00000uqvlV2AQ`,
   configuratorExternal: true,
   configuratorBannerBg: "/img/devices/product/banner_configurator_bg.webp",
   expertBannerHref: "/support/contact-us",

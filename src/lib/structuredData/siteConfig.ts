@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/api";
+import { GICS_INDEX_URL } from "@/lib/externalLinks";
 import { CONNECT_PORTAL_EXTERNAL_URL } from "@/data/support/connectPortalContent";
 
 export { SITE_URL, CONNECT_PORTAL_EXTERNAL_URL };
@@ -14,7 +15,7 @@ export const ORG_SAME_AS = [
   "https://www.youtube.com/@LSELECTRIC",
 ];
 
-export const GICS_SUPPORT_URL = "https://gics.ls-electric.com/public/index.do";
+export const GICS_SUPPORT_URL = GICS_INDEX_URL;
 
 export const ORG_ADDRESS = {
   "@type": "PostalAddress" as const,

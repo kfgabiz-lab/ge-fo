@@ -1,6 +1,8 @@
 import type { CommonFaqEntry } from "@/components/faq/CommonFaq";
+import { GICS_BASE_URL } from "@/lib/externalLinks";
 
-export const GICS_REQUEST_URL = "https://gics.ls-electric.com/loginForm.do?lang=ko";
+export const GICS_REQUEST_URL = `${GICS_BASE_URL}/loginForm.do?lang=ko`;
+export const GICS_KNOWLEDGE_BASE_URL = `${GICS_BASE_URL}/public/knowledgeBasePopup.do`;
 
 export const serviceCenterPage = {
   title: "Service Center",
@@ -15,7 +17,7 @@ export const serviceCenterPage = {
         {
           id: "power",
           label: "Power Products",
-          href: "https://gics.ls-electric.com/public/knowledgeBasePopup.do",
+          href: GICS_KNOWLEDGE_BASE_URL,
           external: true,
         },
         {

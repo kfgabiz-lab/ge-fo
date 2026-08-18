@@ -1,4 +1,6 @@
-export const CONNECT_PORTAL_EXTERNAL_URL = "https://connect.ls-electric.com/";
+import { CONNECT_PORTAL_BASE_URL } from "@/lib/externalLinks";
+
+export const CONNECT_PORTAL_EXTERNAL_URL = `${CONNECT_PORTAL_BASE_URL}/`;
 
 export const connectPortalPage = {
   title: "Connect Portal",

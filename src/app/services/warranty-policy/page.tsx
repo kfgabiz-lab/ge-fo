@@ -6,6 +6,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildSimpleWebPageGraph } from "@/lib/structuredData/builders";
+import { GICS_SUPPORT_URL } from "@/lib/structuredData/siteConfig";
 
 const PATHNAME = "/services/warranty-policy";
 
@@ -31,7 +32,7 @@ export default async function WarrantyPolicyPage() {
         {
           "@type": "CommunicateAction",
           name: "Request Warranty Service",
-          target: "https://gics.ls-electric.com/public/index.do",
+          target: GICS_SUPPORT_URL,
         },
       ],
     },
