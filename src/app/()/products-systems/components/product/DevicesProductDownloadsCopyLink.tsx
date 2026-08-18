@@ -42,16 +42,32 @@ export default function DevicesProductDownloadsCopyLink({
     setPhase("loading");
 
     let text = url ?? (typeof window !== "undefined" ? window.location.href : "");
+    let failed = false;
     if (resolveUrl) {
       try {
         text = await resolveUrl();
       } catch {
         text = "";
+        failed = true;
       }
     }
-    try {
-      if (text) await navigator.clipboard.writeText(text);
-    } catch {
+
+    if (!text) {
+      failed = true;
+    } else {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        failed = true;
+      }
+    }
+
+    if (failed) {
+      setPhase("idle");
+      if (typeof window !== "undefined") {
+        window.alert("Something went wrong. Please try again.");
+      }
+      return;
     }
 
     const showToast = setTimeout(() => {
