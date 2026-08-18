@@ -2443,10 +2443,12 @@
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__files-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
     border-radius: 4px;
     background: #f5f7fa;
-    
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__files {
@@ -2458,7 +2460,7 @@
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__file {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     gap: 14px;
     padding: 0;
     border: none;
@@ -2484,7 +2486,7 @@
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__file-actions {
-    justify-content: flex-end;
+    justify-content: center;
     gap: 8px;
     display: flex;
   }
@@ -2885,8 +2887,13 @@
   }
 
   section.support_tech_hub_contents.devices_product_downloads--tech-hub .support_tech_hub_card__tit-line {
+    display: -webkit-box;
+    overflow: hidden;
     word-break: break-word;
     overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   section.support_tech_hub_contents.devices_product_downloads--tech-hub .support_tech_hub_card:hover .support_tech_hub_card__tit,
