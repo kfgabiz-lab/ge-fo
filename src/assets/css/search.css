@@ -3476,6 +3476,9 @@
 
   section.search_all .search_all__document .devices_product_downloads__files-panel,
   section.search_documents .search_all__document .devices_product_downloads__files-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
     background: #f5f7fa;
     border-radius: 4px;
@@ -3485,17 +3488,19 @@
   section.search_documents .search_all__document .devices_product_downloads__files {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 24px;
     margin: 0;
     padding: 0;
     list-style: none;
+    width: 100%;
   }
 
   section.search_all .search_all__document .devices_product_downloads__file,
   section.search_documents .search_all__document .devices_product_downloads__file {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     gap: 14px;
     width: 100%;
     font-size: 14px;
@@ -3508,6 +3513,7 @@
     display: flex;
     align-items: flex-start;
     gap: 6px;
+    width: 100%;
     max-width: none;
     min-width: 0;
   }
@@ -3547,6 +3553,8 @@
   section.search_documents .search_all__document .devices_product_downloads__file-actions {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
     gap: 8px;
     width: 100%;
     min-width: 0;
@@ -3555,15 +3563,15 @@
   section.search_all .search_all__document .devices_product_downloads__file-btn,
   section.search_documents .search_all__document .devices_product_downloads__file-btn {
     display: inline-flex;
-    flex: 1;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: center;
     gap: 5px;
     box-sizing: border-box;
     height: 32px;
     min-height: 32px;
-    min-width: 0;
     padding: 8px 14px;
+    overflow: visible;
     font-size: 13px;
     font-weight: 400;
     line-height: 1;
@@ -3571,14 +3579,44 @@
     background: #fff;
     border: 1px solid rgb(15 31 69 / 30%);
     border-radius: 4px;
+    white-space: nowrap;
   }
 
   section.search_all .search_all__document .devices_product_downloads__file-btn--copy,
-  section.search_documents .search_all__document .devices_product_downloads__file-btn--copy,
+  section.search_documents .search_all__document .devices_product_downloads__file-btn--copy {
+    flex: 0 0 143px;
+    width: 143px;
+    min-width: 143px;
+    max-width: 143px;
+  }
+
   section.search_all .search_all__document .devices_product_downloads__file-btn--download,
   section.search_documents .search_all__document .devices_product_downloads__file-btn--download {
-    min-width: 0;
-    flex: 1;
+    flex: 0 0 143px;
+    width: 143px;
+    min-width: 143px;
+    max-width: 143px;
+  }
+
+  section.search_all .search_all__document .devices_product_downloads__file-btn-icon,
+  section.search_documents .search_all__document .devices_product_downloads__file-btn-icon {
+    flex-shrink: 0;
+    display: block;
+    width: 14px;
+    height: 14px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 14px 14px;
+  }
+
+  section.search_all .search_all__document .devices_product_downloads__file-btn--copy .devices_product_downloads__file-btn-icon,
+  section.search_documents .search_all__document .devices_product_downloads__file-btn--copy .devices_product_downloads__file-btn-icon {
+    background-image: url("/ico/ico_copy_14.svg");
+  }
+
+  section.search_all .search_all__document .devices_product_downloads__file-btn--download .devices_product_downloads__file-btn-icon,
+  section.search_documents .search_all__document .devices_product_downloads__file-btn--download .devices_product_downloads__file-btn-icon {
+    background-image: url("/ico/ico_download.svg");
   }
 
   section.search_all .search_all__product {

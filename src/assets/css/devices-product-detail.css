@@ -2690,6 +2690,8 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     border-radius: 4px;
     background: #f5f7fa;
     display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   section.devices_product_downloads .devices_product_downloads__files {
@@ -2702,7 +2704,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
   section.devices_product_downloads .devices_product_downloads__file {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     gap: 14px;
     padding: 0;
     border: none;
@@ -2714,6 +2716,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     flex: 1;
     gap: 6px;
     align-items: flex-start;
+    width: 100%;
     min-width: 0;
     max-width: none;
   }
@@ -2742,7 +2745,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.devices_product_downloads .devices_product_downloads__file-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 8px;
     width: 100%;
     min-width: 0;
