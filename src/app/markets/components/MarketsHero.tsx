@@ -17,6 +17,7 @@ type MarketsHeroProps = {
   heroImage?: string;
   variant?: MarketsHeroVariant;
   secondaryCta?: MarketsHeroSecondaryCta;
+  hideSecondaryCta?: boolean;
 };
 
 const DEFAULT_SUBTITLE = "Smart & Sustainable Building Infrastructure";
@@ -29,6 +30,7 @@ export default function MarketsHero({
   heroImage,
   variant = "default",
   secondaryCta,
+  hideSecondaryCta = false,
 }: MarketsHeroProps) {
   const isKeyVisual = variant === "key-visual";
   const sectionClassName = [
@@ -59,16 +61,18 @@ export default function MarketsHero({
       <Link href="/support/contact-us" className="btn-base btn-lv01 btn-lv01--solid">
         Contact Us
       </Link>
-      <Link
-        href={secondaryCta?.href ?? ""}
-        className="btn-base btn-lv01 btn-lv01--line"
-      >
-        {secondaryCta?.label ?? "Get the Whitepaper"}
-        <span
-          className={secondaryCta?.icon === "link" ? "icon_link" : "icon_download"}
-          aria-hidden="true"
-        />
-      </Link>
+      {hideSecondaryCta ? null : (
+        <Link
+          href={secondaryCta?.href ?? ""}
+          className="btn-base btn-lv01 btn-lv01--line"
+        >
+          {secondaryCta?.label ?? "Get the Whitepaper"}
+          <span
+            className={secondaryCta?.icon === "link" ? "icon_link" : "icon_download"}
+            aria-hidden="true"
+          />
+        </Link>
+      )}
     </div>
   );
 

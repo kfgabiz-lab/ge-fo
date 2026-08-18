@@ -37,8 +37,8 @@ export async function fetchWarrantyCoverageRows(): Promise<WarrantyCoverageRow[]
       if (a.productType !== b.productType) {
         return a.productType < b.productType ? -1 : 1;
       }
-      if (a.createdAt !== b.createdAt) {
-        return a.createdAt < b.createdAt ? 1 : -1;
+      if (a.productName !== b.productName) {
+        return a.productName.localeCompare(b.productName);
       }
       return b.id - a.id;
     })
