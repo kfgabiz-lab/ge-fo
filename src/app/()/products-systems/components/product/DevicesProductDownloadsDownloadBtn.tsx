@@ -46,15 +46,29 @@ export default function DevicesProductDownloadsDownloadBtn({
     setPhase("loading");
 
     let fileUrl = url ?? "";
+    let failed = false;
     if (resolveUrl) {
       try {
         fileUrl = await resolveUrl();
       } catch {
         fileUrl = "";
+        failed = true;
       }
     }
 
-    if (fileUrl && fileUrl !== "#" && typeof window !== "undefined") {
+    if (!fileUrl || fileUrl === "#") {
+      failed = true;
+    }
+
+    if (failed) {
+      setPhase("idle");
+      if (typeof window !== "undefined") {
+        window.alert("Something went wrong. Please try again.");
+      }
+      return;
+    }
+
+    if (typeof window !== "undefined") {
       window.open(fileUrl, "_blank", "noopener,noreferrer");
       onDownloaded?.(fileUrl);
     }
