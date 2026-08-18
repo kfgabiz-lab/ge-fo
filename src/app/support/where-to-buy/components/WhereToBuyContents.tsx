@@ -46,6 +46,7 @@ export default function WhereToBuyContents({
   const [activeId, setActiveId] = useState<string>("");
   const popupAnchorRef = useRef<HTMLDivElement>(null);
   const [refreshSpin, setRefreshSpin] = useState(false);
+  const [searchResetKey, setSearchResetKey] = useState(0);
   const [mobileView, setMobileView] = useState<WhereToBuyMobileView>(
     noDataPage ? "list" : "map",
   );
@@ -114,6 +115,11 @@ export default function WhereToBuyContents({
     setTextSearchResults(null);
     setSearchCoord(null);
     setRadiusValue(whereToBuyDefaultDistance);
+    setSearchResetKey((current) => current + 1);
+  };
+
+  const handleViewAll = () => {
+    handleReset();
   };
 
   const handleRefresh = () => {
@@ -163,6 +169,7 @@ export default function WhereToBuyContents({
       <div className="support_where_to_buy_contents__shell">
         <div className="support_where_to_buy_contents__list-col">
           <WhereToBuyControls
+            searchResetKey={searchResetKey}
             radiusValue={radiusValue}
             onRadiusChange={handleRadiusChange}
             onLocate={handleLocate}
@@ -212,7 +219,7 @@ export default function WhereToBuyContents({
               </div>
             ) : (
               <div className="support_where_to_buy_contents__no-data">
-                <WhereToBuyEmpty />
+                <WhereToBuyEmpty onViewAll={handleViewAll} />
               </div>
             )}
           </div>

@@ -13,6 +13,7 @@ import {
 import type { GeoCoord } from "@/lib/geo/distance";
 
 type WhereToBuyControlsProps = {
+  searchResetKey: number;
   radiusValue: string;
   onRadiusChange: (value: string) => void;
   onLocate: (coord: GeoCoord | null, source: WhereToBuyLocateSource) => void;
@@ -29,6 +30,7 @@ function renderSelectValue(label: string) {
 }
 
 export default function WhereToBuyControls({
+  searchResetKey,
   radiusValue,
   onRadiusChange,
   onLocate,
@@ -38,6 +40,7 @@ export default function WhereToBuyControls({
   return (
     <div className="support_where_to_buy_contents__controls">
       <WhereToBuySearch
+        key={searchResetKey}
         embedded
         onLocate={onLocate}
         onTextFallback={onTextFallback}
