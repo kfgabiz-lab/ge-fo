@@ -2,24 +2,28 @@ import type { Metadata, ResolvedMetadata, ResolvingMetadata } from "next";
 import { flattenPageDataItem } from "@/lib/pageData";
 import { fetchData } from "@/lib/pageDataApi";
 
+const TITLE_SUFFIX = " | LS ELECTRIC America";
+
 export function mergeSeoMetadata(
   previous: ResolvedMetadata,
   title: string,
   description: string,
   image?: string,
 ): Metadata {
+  const socialTitle = `${title}${TITLE_SUFFIX}`;
+
   return {
     title,
     description,
     openGraph: {
       ...previous.openGraph,
-      title,
+      title: socialTitle,
       description,
       ...(image ? { images: [{ url: image }] } : {}),
     },
     twitter: {
       ...previous.twitter,
-      title,
+      title: socialTitle,
       description,
       ...(image ? { images: [image] } : {}),
     },
