@@ -80,12 +80,12 @@ export const engineeringTrainingSessionAssets = {
     ical: `${ICO}/ico_calendar_18.svg`,
   },
   metaIcons: {
-    date: `${ICO}/ico_training_date_18.svg`,
-    duration: `${ICO}/ico_training_duration_18.svg`,
+    date: `${ICO}/ico_training_date_20.svg`,
+    duration: `${ICO}/ico_training_duration_20.svg`,
     trainingType: `${ICO}/ico_training_type_20.svg`,
-    classSize: `${ICO}/ico_training_class_size_18.svg`,
-    location: `${ICO}/ico_training_location_18.svg`,
-    products: `${ICO}/ico_training_products_18.svg`,
+    classSize: `${ICO}/ico_training_class_size_20.svg`,
+    location: `${ICO}/ico_training_location_20.svg`,
+    products: `${ICO}/ico_training_products_20.svg`,
   },
 } as const;
 

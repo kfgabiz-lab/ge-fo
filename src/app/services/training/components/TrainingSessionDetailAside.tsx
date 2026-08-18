@@ -15,18 +15,27 @@ function formatPhoneHref(phone: string) {
   return digits ? `tel:${digits}` : undefined;
 }
 
+type SessionMetaIcon =
+  | "date"
+  | "duration"
+  | "type"
+  | "class-size"
+  | "location"
+  | "products";
+
 function SessionMetaLabel({
   icon,
   children,
 }: {
-  icon: string;
+  icon: SessionMetaIcon;
   children: string;
 }) {
   return (
     <p className="support_service_training_session_detail__meta-label">
-      <span className="support_service_training_session_detail__meta-icon" aria-hidden>
-        <img src={icon} alt="" width={20} height={20} loading="lazy" decoding="async" />
-      </span>
+      <span
+        className={`support_service_training_session_detail__meta-icon support_service_training_session_detail__meta-icon--${icon}`}
+        aria-hidden
+      />
       {children}
     </p>
   );
@@ -42,7 +51,6 @@ export default function TrainingSessionDetailAside({
   onRegister: () => void;
 }) {
   const { sidebar } = session;
-  const { metaIcons } = engineeringTrainingSessionAssets;
   const phoneHref = formatPhoneHref(sidebar.location.phone);
 
   return (
@@ -55,7 +63,7 @@ export default function TrainingSessionDetailAside({
         <div className="support_service_training_session_detail__meta-grid">
           <div className="support_service_training_session_detail__meta-row">
             <div className="support_service_training_session_detail__meta-item">
-              <SessionMetaLabel icon={metaIcons.date}>DATE</SessionMetaLabel>
+              <SessionMetaLabel icon="date">DATE</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
                 data-slugkey="curriculum_detail2.training_date_from"
@@ -64,7 +72,7 @@ export default function TrainingSessionDetailAside({
               </p>
             </div>
             <div className="support_service_training_session_detail__meta-item">
-              <SessionMetaLabel icon={metaIcons.duration}>DURATION</SessionMetaLabel>
+              <SessionMetaLabel icon="duration">DURATION</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
                 data-slugkey="curriculum_detail2.duration"
@@ -76,9 +84,7 @@ export default function TrainingSessionDetailAside({
 
           <div className="support_service_training_session_detail__meta-row">
             <div className="support_service_training_session_detail__meta-item">
-              <SessionMetaLabel icon={metaIcons.trainingType}>
-                Training Type
-              </SessionMetaLabel>
+              <SessionMetaLabel icon="type">TRAINING TYPE</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
                 data-slugkey="curriculum_detail1.training_type"
@@ -87,7 +93,7 @@ export default function TrainingSessionDetailAside({
               </p>
             </div>
             <div className="support_service_training_session_detail__meta-item">
-              <SessionMetaLabel icon={metaIcons.classSize}>CLASS SIZE</SessionMetaLabel>
+              <SessionMetaLabel icon="class-size">CLASS SIZE</SessionMetaLabel>
               <p
                 className="support_service_training_session_detail__meta-value"
                 data-slugkey="curriculum_detail2.capacity"
@@ -100,9 +106,7 @@ export default function TrainingSessionDetailAside({
 
         <div className="support_service_training_session_detail__meta-item support_service_training_session_detail__meta-item--location">
           <div className="support_service_training_session_detail__meta-head">
-            <SessionMetaLabel icon={metaIcons.location}>
-              LOCATION INFORMATION
-            </SessionMetaLabel>
+            <SessionMetaLabel icon="location">LOCATION INFORMATION</SessionMetaLabel>
             {sidebar.location.name.trim() ? (
               <p className="support_service_training_session_detail__meta-value">
                 {sidebar.location.name}
@@ -131,9 +135,7 @@ export default function TrainingSessionDetailAside({
         </div>
 
         <div className="support_service_training_session_detail__meta-item support_service_training_session_detail__meta-item--products">
-          <SessionMetaLabel icon={metaIcons.products}>
-            PRODUCTS COVERED
-          </SessionMetaLabel>
+          <SessionMetaLabel icon="products">PRODUCTS COVERED</SessionMetaLabel>
           <p className="support_service_training_session_detail__meta-text">
             {sidebar.productsCovered}
           </p>
