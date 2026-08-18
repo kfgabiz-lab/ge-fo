@@ -10,6 +10,7 @@ import { pushDataLayerEvent } from "@/lib/gtm";
 import DevicesProductDownloadsCopyLink from "./DevicesProductDownloadsCopyLink";
 import DevicesProductDownloadsDownloadBtn from "./DevicesProductDownloadsDownloadBtn";
 import DevicesProductDownloadsDocumentFilter from "./DevicesProductDownloadsDocumentFilter";
+import DevicesProductDownloadsEmpty from "./DevicesProductDownloadsEmpty";
 import DevicesProductDownloadsFilter from "./DevicesProductDownloadsFilter";
 import {
   DevicesProductDownloadsFilterBoundary,
@@ -142,9 +143,15 @@ function DevicesProductDownloadsBody({
   const showingStart =
     items.length === 0 ? 0 : (currentPage - 1) * PRODUCT_DOWNLOADS_PAGE_SIZE + 1;
   const showingEnd = items.length === 0 ? 0 : showingStart + items.length - 1;
+  const isEmpty = items.length === 0;
 
   return (
-    <section className="devices_product_downloads" id="product-downloads">
+    <section
+      className={`devices_product_downloads${
+        isEmpty ? " devices_product_downloads--no-data" : ""
+      }`}
+      id="product-downloads"
+    >
         <div className="inner">
           <div className="devices_product_downloads__head">
             <h2 className="section_tit" ref={titleRef} tabIndex={-1}>
@@ -231,6 +238,10 @@ function DevicesProductDownloadsBody({
                 </FormControl>
               </div>
             </div>
+            {isEmpty ? (
+              <DevicesProductDownloadsEmpty />
+            ) : (
+              <>
             <div className="devices_product_downloads__list">
               {items.map((item, index) => (
                 <article
@@ -339,12 +350,15 @@ function DevicesProductDownloadsBody({
               className="devices_product_downloads__pagination"
               currentPage={currentPage}
               totalPages={totalPages}
+              scrollTargetSelector=".section_tit"
               onPageChange={(page) => {
                 setCurrentPage(page);
                 titleRef.current?.focus();
               }}
               ariaLabel="Downloads pagination"
             />
+              </>
+            )}
           </div>
         </div>
       </div>
