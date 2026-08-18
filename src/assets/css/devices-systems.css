@@ -2,6 +2,8 @@
 
 .devices-page section .section_tit {
   font-weight: 700;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 @media (min-width: 781px) {
