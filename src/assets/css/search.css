@@ -3246,7 +3246,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 0;
+    min-width: 36px;
     height: 28px;
     padding: 6px 8px 7px;
     border-radius: 100px;
