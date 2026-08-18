@@ -94,7 +94,7 @@ export function DevicesProductDownloadsFilterProvider({
   const [documentTypes, setDocumentTypes] =
     useState<DownloadFilterOption[]>(docTypeOptions);
   const [checked, setChecked] = useState(() =>
-    buildCheckedState(docTypeOptions, () => true),
+    buildCheckedState(docTypeOptions, () => false),
   );
 
   const productCodeKey = [...productCodes].sort().join(",");
@@ -112,7 +112,7 @@ export function DevicesProductDownloadsFilterProvider({
       setChecked((current) =>
         buildCheckedState(
           options,
-          (optionId) => current[buildFilterId(optionId)] ?? true,
+          (optionId) => current[buildFilterId(optionId)] ?? false,
         ),
       );
     });

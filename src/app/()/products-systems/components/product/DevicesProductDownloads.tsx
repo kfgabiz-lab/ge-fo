@@ -89,6 +89,7 @@ function DevicesProductDownloadsBody({
   const { selectedDocTypes } = useDevicesProductDownloadsFilter();
   const docTypeKey = [...selectedDocTypes].sort().join(",");
   const productCodeKey = [...productCodes].sort().join(",");
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   const [items, setItems] = useState(initial.items);
   const [totalElements, setTotalElements] = useState(initial.totalElements);
@@ -146,7 +147,9 @@ function DevicesProductDownloadsBody({
     <section className="devices_product_downloads" id="product-downloads">
         <div className="inner">
           <div className="devices_product_downloads__head">
-            <h2 className="section_tit">Downloads</h2>
+            <h2 className="section_tit" ref={titleRef} tabIndex={-1}>
+              Downloads
+            </h2>
           </div>
           <DevicesProductDownloadsMobileControls
             sort={sort}
@@ -336,7 +339,10 @@ function DevicesProductDownloadsBody({
               className="devices_product_downloads__pagination"
               currentPage={currentPage}
               totalPages={totalPages}
-              onPageChange={setCurrentPage}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+                titleRef.current?.focus();
+              }}
               ariaLabel="Downloads pagination"
             />
           </div>
