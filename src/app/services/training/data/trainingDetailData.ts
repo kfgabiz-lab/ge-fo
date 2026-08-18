@@ -359,6 +359,7 @@ function toCourseCard(
 export function toTrainingSessionDetail(
   rows: PageDataItem[],
   courseId: string,
+  curriculumId: string,
   sessionId: string,
   curriculum: ParentCurriculum,
   categoryMap: Map<string, string>,
@@ -411,6 +412,7 @@ export function toTrainingSessionDetail(
 
   return {
     courseId,
+    curriculumId,
     sessionId,
     category: categoryLabel,
     title: d2.title ?? "",

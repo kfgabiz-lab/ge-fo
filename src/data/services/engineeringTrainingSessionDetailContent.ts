@@ -25,7 +25,10 @@ export type EngineeringTrainingSessionEvent = {
 };
 
 export type EngineeringTrainingSessionDetail = {
+  /** URL/표시용 슬러그(없으면 숫자 id 문자열) — 링크 생성 등 사람이 보는 경로에 사용 */
   courseId: string;
+  /** 신청 폼에서 서버로 보내는 실제 커리큘럼 숫자 id(문자열) — courseId 와 달리 항상 숫자만 담긴다 */
+  curriculumId: string;
   sessionId: string;
   category: string;
   title: string;

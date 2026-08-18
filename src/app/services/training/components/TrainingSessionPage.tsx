@@ -71,6 +71,7 @@ export default async function TrainingSessionPage({
   const session = toTrainingSessionDetail(
     rows,
     canonicalCourseSlug,
+    courseId,
     sessionId,
     curriculum,
     categoryMap,

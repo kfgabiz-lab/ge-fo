@@ -87,7 +87,7 @@ export default function TrainingSessionDetailForm({
   const formId = useId();
   const eventDateDisplay = session.sidebar.eventDateToAttend;
   const eventDateValue = session.event?.startIso ?? "";
-  const curriculumId = Number(session.courseId);
+  const curriculumId = Number(session.curriculumId);
   const sessionId = Number(session.sessionId);
 
   const [studentName, setStudentName] = useState("");
