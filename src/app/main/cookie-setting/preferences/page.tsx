@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import CookiePreferencesPageClient from "./CookiePreferencesPageClient";
 
 export const metadata: Metadata = {
-  title: "Cookie Preferences | LS ELECTRIC",
+  title: "Cookie Preferences",
   description:
     "Choose which optional cookies LS ELECTRIC may use while you browse the website.",
 };

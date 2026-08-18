@@ -270,6 +270,10 @@
     overflow: hidden;
   }
 
+  section.search_all .search_all__ai:not(.is-clamped):not(.is-expanded) {
+    padding-bottom: 40px;
+  }
+
   section.search_all .search_all__ai + .search_all__ai,
   section.search_all .search_all__ai-host + .search_all__ai-host {
     margin-top: 40px;
@@ -2778,12 +2782,19 @@
     margin-bottom: 70px;
     position: relative;
     padding: 24px 24px 0;
-    overflow: hidden;
+    overflow: visible;
     border: 2px solid transparent;
     border-radius: 4px;
     background: linear-gradient(#fff, #fff) padding-box,      linear-gradient(135deg, #028dff 50%, #9535ff 100%) border-box;
     box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     min-height: 198px;
+  }
+
+  section.search_all .search_all__ai:not(.is-clamped):not(.is-expanded) {
+    padding-bottom: 24px;
   }
 
   section.search_all .search_all__ai:not(.is-clamped) .search_all__ai-body {
@@ -2824,6 +2835,7 @@
   section.search_all .search_all__ai:not(.is-expanded).is-clamped {
     max-height: 460px;
     height: 460px;
+    overflow: hidden;
   }
 
   section.search_all .search_all__ai.is-expanded {
@@ -2831,12 +2843,19 @@
     max-height: none;
   }
 
-  /* Figma 6571:103395 — content clip, flex-basis 0으로 more 영역 확보 */
+  /* Figma 6571:103395 — clamp일 때만 본문 clip, more 영역 확보 */
   section.search_all .search_all__ai-content {
     display: flex;
-    flex: 1 1 0;
+    flex: none;
     flex-direction: column;
     gap: 16px;
+    min-width: 0;
+    max-width: 100%;
+    overflow: visible;
+  }
+
+  section.search_all .search_all__ai:not(.is-expanded).is-clamped .search_all__ai-content {
+    flex: 1 1 0;
     min-height: 0;
     overflow: hidden;
   }
@@ -2897,15 +2916,22 @@
 
   section.search_all .search_all__ai-body {
     z-index: 1;
-    flex: 1 1 auto;
-    min-height: 0;
+    flex: none;
+    min-width: 0;
+    max-width: 100%;
     margin-top: 0;
     padding-bottom: 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
   section.search_all .search_all__ai:not(.is-expanded) .search_all__ai-body {
     height: auto;
+  }
+
+  section.search_all .search_all__ai:not(.is-expanded).is-clamped .search_all__ai-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
   }
 
   section.search_all .search_all__ai.is-expanded .search_all__ai-body {
@@ -2938,12 +2964,35 @@
   section.search_all .search_all__ai-list-text {
     display: block;
     min-width: 0;
+    max-width: 100%;
     font-size: 15px;
     line-height: 23px;
     font-weight: 400;
     letter-spacing: 0;
     color: #222;
+    overflow-wrap: anywhere;
     word-break: break-word;
+  }
+
+  section.search_all .search_all__ai-list-text table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+  }
+
+  section.search_all .search_all__ai-list-text pre,
+  section.search_all .search_all__ai-list-text code {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  section.search_all .search_all__ai-list-text img {
+    max-width: 100%;
+    height: auto;
   }
 
   section.search_all .search_all__ai-list-text h1 {

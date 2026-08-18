@@ -4,7 +4,7 @@ import { legalPages } from "@/data/common/commonLegalContent";
 import "@/assets/css/common-privacy-policy.css";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | LS ELECTRIC",
+  title: "Terms of Service",
   description:
     "Read the Terms and Conditions for using the LS ELECTRIC America website, outlining legal rights, intellectual property, and site usage guidelines.",
 };

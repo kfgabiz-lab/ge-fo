@@ -1,7 +1,7 @@
 import { fetchApi } from "@/lib/api";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
-import { LIST_DESCRIPTION_MAX_LENGTH, stripHtmlText } from "@/lib/stripHtmlText";
+import { stripHtmlText } from "@/lib/stripHtmlText";
 
 export const BLOG_LIST_SIZE = 10;
 
@@ -58,7 +58,7 @@ export function toBlogCard(
     categoryCode: code,
     categoryLabel: categoryMap.get(code) ?? code,
     title: (row.title as string) ?? "",
-    description: stripHtmlText(row.content as string | undefined, LIST_DESCRIPTION_MAX_LENGTH),
+    description: stripHtmlText(row.content as string | undefined, 410),
     date: formatDisplayDate(publishDttm),
     rawDate: publishDttm,
     imageSrc: mediaId != null ? blogImageSrc(mediaId) : null,

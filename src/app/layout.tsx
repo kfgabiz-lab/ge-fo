@@ -19,7 +19,10 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "LS ELECTRIC | Smart Energy Global Leader",
+  title: {
+    template: "%s | LS ELECTRIC America",
+    default: "LS ELECTRIC America",
+  },
   description:
     "LS ELECTRIC is starting a new chapter to bring smart energy to light everywhere around the world. We deliver safe, clean energy and innovative solutions for a sustainable future.",
   formatDetection: {

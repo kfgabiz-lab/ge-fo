@@ -13,7 +13,7 @@ import "@/assets/css/devices-product-detail.css";
 
 const RESULTS_PER_TYPE = 3;
 
-const SEARCH_TITLE = "Search | LS ELECTRIC";
+const SEARCH_TITLE = "Search";
 const SEARCH_DESCRIPTION =
   "Search LS ELECTRIC America for advanced power and automation solutions, product specs, technical downloads, media resources, and AI-powered insights.";
 
