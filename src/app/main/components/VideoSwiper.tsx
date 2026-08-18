@@ -145,7 +145,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
         const base = {
           id: `hero-${item.id}`,
           subtit: item.sub,
-          titLines: item.titleText ? [item.titleText] : [],
+          titLines: item.titleText ? item.titleText.split("\n") : [],
           ...(item.btnText && item.btnUrl.trim()
             ? { link: { href: item.btnUrl.trim(), label: item.btnText } }
             : {}),
