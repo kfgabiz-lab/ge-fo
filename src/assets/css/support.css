@@ -5158,7 +5158,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 60px;
+    gap: 40px;
     max-width: 1040px;
     margin: 0 auto;
   }
@@ -5371,8 +5371,8 @@ section.support_where_to_buy_banner .common_banner_02__link {
   section.support_contact_form .support_contact_form__consent-row {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
+    gap: 10px;
+    width: 100%;
   }
 
   section.support_contact_form .support_contact_form__consent-label {
@@ -5387,24 +5387,31 @@ section.support_where_to_buy_banner .common_banner_02__link {
 
   section.support_contact_form .support_contact_form__consent-label .guide_checkbox.MuiCheckbox-root {
     padding: 1px 0;
+    width: 22px;
+    min-width: 22px;
+    height: 24px;
+    flex-shrink: 0;
   }
 
-  section.support_contact_form .support_contact_form__terms-link {
-    flex-shrink: 0;
-    padding: 0;
-    border: none;
-    background: transparent;
-    font-size: 15px;
-    line-height: 23px;
-    color: #666;
-    text-decoration: underline;
-    text-underline-position: from-font;
-    cursor: pointer;
+  section.support_contact_form .support_contact_form__consent-text-rest::before {
+    content: " ";
+  }
+
+  section.support_contact_form .support_contact_form__consent-note {
+    margin: 0;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #222;
+    opacity: 0.8;
   }
 
   section.support_contact_form .support_contact_form__submit-wrap {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
     width: 100%;
     margin: 0;
   }
@@ -5422,7 +5429,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
 
 @media (max-width: 780px) {
 
-  /* Figma 6561:75910 — Contact Us mobile */
+  /* Figma 9471:99403 — Contact Us mobile */
   main.support-page--contact-us section.support_contact_title .inner,
   main.support-page--contact-us section.support_contact_form .inner {
     padding-left: 20px;
@@ -5444,7 +5451,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
   }
 
   section.support_contact_form .support_contact_form__panel {
-    gap: 50px;
+    gap: 30px;
     padding: 0;
     align-items: center;
     width: 100%;
@@ -5528,7 +5535,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    margin: 16px 0 0;
+    margin: 0;
     width: 100%;
   }
 
@@ -5541,9 +5548,8 @@ section.support_where_to_buy_banner .common_banner_02__link {
 
   section.support_contact_form .support_contact_form__consent-row {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
+    align-items: flex-start;
+    gap: 10px;
     width: 100%;
   }
 
@@ -5563,7 +5569,9 @@ section.support_where_to_buy_banner .common_banner_02__link {
     margin: 0;
     padding: 1px 0 0;
     width: 22px;
+    min-width: 22px;
     height: 23px;
+    flex-shrink: 0;
     align-self: flex-start;
   }
 
@@ -5572,25 +5580,30 @@ section.support_where_to_buy_banner .common_banner_02__link {
     height: 22px;
   }
 
-  section.support_contact_form .support_contact_form__consent-label span {
+  section.support_contact_form .support_contact_form__consent-text {
     min-width: 0;
+    flex: 1 1 auto;
     width: 303px;
+    max-width: 303px;
     word-break: break-word;
   }
 
-  section.support_contact_form .support_contact_form__terms-link {
+  section.support_contact_form .support_contact_form__consent-text-rest {
     display: block;
+  }
+
+  section.support_contact_form .support_contact_form__consent-text-rest::before {
+    content: none;
+  }
+
+  section.support_contact_form .support_contact_form__consent-note {
+    margin: 0;
     width: 100%;
-    padding: 0;
-    border: none;
-    background: transparent;
     font-size: 14px;
+    font-weight: 400;
     line-height: 20px;
-    color: #666;
-    text-align: right;
-    text-decoration: underline;
-    text-underline-position: from-font;
-    cursor: pointer;
+    color: #222;
+    opacity: 0.8;
   }
 
   section.support_contact_form .support_contact_form__group {
@@ -5768,9 +5781,11 @@ section.support_where_to_buy_banner .common_banner_02__link {
 
   section.support_contact_form .support_contact_form__submit-wrap {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
     width: 100%;
-    margin: 0;
+    margin: 30px 0 0;
   }
 
   section.support_contact_form .support_contact_form__submit {
@@ -5782,7 +5797,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
     font-size: 15px;
     font-weight: 600;
     line-height: 1;
-    margin-top: 50px;
+    margin-top: 0;
   }
 
   .support_contact_view_response_modal .common_modal__body {

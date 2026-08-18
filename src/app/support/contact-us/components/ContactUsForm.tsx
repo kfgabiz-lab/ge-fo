@@ -42,9 +42,7 @@ import {
   fetchInquiryTypes,
   submitContactUs,
 } from "../data/contactUsData";
-import ContactUsTermsModal from "./ContactUsTermsModal";
 
-const CONSENT_PRIVACY_ID = "personal-info";
 const CONSENT_MARKETING_ID = "newsletter";
 const PRODUCT_CATEGORY_REQUIRED_INQUIRY_TYPES = [
   "PRODUCT_INFORMATION",
@@ -255,7 +253,6 @@ function ContactUsFormContent() {
       contactUsConsentItems.map((item) => [item.id, item.defaultChecked]),
     ),
   );
-  const [termsModalOpen, setTermsModalOpen] = useState(false);
   const [errors, setErrors] = useState<ContactFieldErrors>({});
 
   const [submitting, setSubmitting] = useState(false);
@@ -417,7 +414,6 @@ function ContactUsFormContent() {
       description.trim() !== "" &&
       password.trim() !== "" &&
       confirmPassword.trim() !== "" &&
-      Boolean(consent[CONSENT_PRIVACY_ID]) &&
       (!productCategoryRequired || categoryIds.lv3.trim() !== "");
     if (!requiredFilled) {
       alert(
@@ -448,7 +444,7 @@ function ContactUsFormContent() {
       password,
       confirmPassword,
       marketingOptInFlag: Boolean(consent[CONSENT_MARKETING_ID]),
-      privacyConsentFlag: Boolean(consent[CONSENT_PRIVACY_ID]),
+      privacyConsentFlag: true,
     };
     const lv1Row = lv1Rows.find((row) => rowKey(row) === categoryIds.lv1);
     const lv2Row = lv2Rows.find((row) => rowKey(row) === categoryIds.lv2);
@@ -795,35 +791,15 @@ function ContactUsFormContent() {
                           },
                         }}
                       />
-                      <span>
+                      <span className="support_contact_form__consent-text">
                         {item.label}
-                        {"required" in item && item.required ? (
-                          <span
-                            className="support_contact_form__required"
-                            aria-hidden
-                          >
-                            {" "}
-                            *
+                        {"labelRest" in item && item.labelRest ? (
+                          <span className="support_contact_form__consent-text-rest">
+                            {item.labelRest}
                           </span>
                         ) : null}
                       </span>
                     </label>
-                    {item.termsHref ? (
-                      <Link
-                        href={item.termsHref}
-                        className="support_contact_form__terms-link"
-                      >
-                        {item.termsLabel}
-                      </Link>
-                    ) : (
-                      <button
-                        type="button"
-                        className="support_contact_form__terms-link"
-                        onClick={() => setTermsModalOpen(true)}
-                      >
-                        {item.termsLabel}
-                      </button>
-                    )}
                   </div>
                 );
                 })}
@@ -832,6 +808,9 @@ function ContactUsFormContent() {
           </div>
 
           <div className="support_contact_form__submit-wrap">
+            <p className="support_contact_form__consent-note">
+              {contactUsFormCopy.submitAck}
+            </p>
             <button
               type="submit"
               className="btn-base btn-lv01 btn-lv01--solid support_contact_form__submit"
@@ -842,10 +821,6 @@ function ContactUsFormContent() {
           </div>
         </form>
       </div>
-      <ContactUsTermsModal
-        open={termsModalOpen}
-        onClose={() => setTermsModalOpen(false)}
-      />
     </section>
   );
 }
