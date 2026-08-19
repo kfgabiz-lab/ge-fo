@@ -1136,6 +1136,19 @@ section.company-blog-list .company-blog__tag:hover {
     line-height: 18px;
     padding: 2px 8px;
     background: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  section.company-article-detail.company-article-detail--blog .company-article-detail__tags .company-blog__tag:hover {
+    border-color: #0f1f45;
+    background: #0f1f45;
+    color: #fff;
+    font-weight: 500;
   }
 
   .company-page--articles-detail section.company-article-detail.company-article-detail--articles .company-article-detail__article {
@@ -1976,6 +1989,22 @@ section.company-blog-list .company-blog__tag:hover {
     line-height: 18px;
     padding: 2px 8px;
     background: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .company-page--blog-detail
+    section.company-article-detail.company-article-detail--blog
+    .company-article-detail__tags
+    .company-blog__tag:hover {
+    border-color: #0f1f45;
+    background: #0f1f45;
+    color: #fff;
+    font-weight: 500;
   }
 
   .company-page--press-detail
