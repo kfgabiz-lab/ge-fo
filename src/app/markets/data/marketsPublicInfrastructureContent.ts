@@ -5,6 +5,7 @@ import {
   type ReferenceItem,
   type WhyItem,
 } from "./marketsContent";
+import type { MarketStatItem } from "./marketsDataCenterContent";
 
 export const publicInfrastructureHero = {
   subtitle:
@@ -17,6 +18,33 @@ export const publicInfrastructureIntro = {
   titleLines: ["Reliable Power for", "Critical Infrastructure"],
   text: "Public infrastructure is the vital foundation of modern society, requiring uncompromising power reliability, intelligent automation, and resilient operational systems. As cities continue to modernize, infrastructure operators face increasing pressure to improve energy efficiency, ensure operational continuity, and embrace digital transformation. LS ELECTRIC provides a comprehensive portfolio of low- and medium-voltage power distribution systems, including our industry-leading Susol series circuit breakers, advanced Power Transformers (up to 550kV/800MVA), and the GridSol CARE digital management platform. From government facilities and global transportation hubs to critical water treatment plants and mission-critical healthcare institutions, our integrated solutions are engineered to enhance operational stability and optimize energy usage. By converging advanced electrical technologies with smart ICT-based automation, LS ELECTRIC empowers operators to build safer, smarter, and more sustainable environments for the communities they serve.",
 };
+
+export const publicInfrastructureStats: MarketStatItem[] = [
+  {
+    id: "pi-continuity",
+    label: "Continuity",
+    value: "Maximum Availability",
+    sublabel: "",
+    description:
+      "High-availability control and intelligent energy management ensure uninterrupted operation of mission-critical infrastructure.",
+  },
+  {
+    id: "pi-efficiency",
+    label: "Efficiency",
+    value: "Operational Intelligence",
+    sublabel: "",
+    description:
+      "Real-time monitoring, automated control, and data-driven optimization improve operational efficiency and decision-making.",
+  },
+  {
+    id: "pi-sustainability",
+    label: "Sustainability",
+    value: "Resilience & Scalability",
+    sublabel: "",
+    description:
+      "Flexible, scalable solutions support reliable infrastructure operation while enabling future expansion and smart grid integration.",
+  },
+];
 
 export const publicInfrastructureIndustryTabs: IndustryTab[] = [
   {

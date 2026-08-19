@@ -471,6 +471,8 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     line-height: 52px;
     letter-spacing: -0.02em;
     color: #222;
+    white-space: pre-line;
+    max-width:320px;
   }
 
   section.markets_stats .markets_stats__value-unit {
@@ -2019,6 +2021,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     line-height: 38px;
     letter-spacing: -0.02em;
     font-weight: 700;
+    white-space: pre-line;
   }
 
   section.markets_stats .markets_stats__value-unit,
