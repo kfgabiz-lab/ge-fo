@@ -31,7 +31,7 @@ export const footerAffiliateOptions: FooterAffiliateOption[] = [
   {
     value: "ls-energy-solutions",
     label: "LS Energy Solutions",
-    href: "https://www.ls-electric.com//",
+    href: "https://www.ls-es.com/",
   },
   {
     value: "ls-e-mobility-solutions",
