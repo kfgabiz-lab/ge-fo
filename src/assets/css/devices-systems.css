@@ -253,7 +253,13 @@
   }
 
   section.devices_category--stacked .devices_category__item-desc {
+    display: -webkit-box;
+    overflow: hidden;
     color: #222;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   /* Hero ? Figma 3082:52982 (01_Title) + 52961 (02_List) */
@@ -845,7 +851,8 @@
     color: #222;
     word-break: break-word;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   section.devices_category--stacked .devices_category__item:hover .devices_category__item-tit {
