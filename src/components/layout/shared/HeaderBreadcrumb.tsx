@@ -233,7 +233,7 @@ function HeaderBreadcrumbContent({
             Contact Us
           </Link>
           <Link href="/support/where-to-buy" prefetch={false}>
-            Where to buy
+            Where to Buy
           </Link>
           <a
             href={CONNECT_PORTAL_EXTERNAL_URL}

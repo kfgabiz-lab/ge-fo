@@ -1,5 +1,6 @@
 import MarketsHero from "../components/MarketsHero";
 import MarketsIntro from "../components/MarketsIntro";
+import MarketsStats from "../components/MarketsStats";
 import MarketsExplore from "../components/MarketsExplore";
 import MarketsReferences from "../components/MarketsReferences";
 import MarketsBenefits from "../components/MarketsBenefits";
@@ -16,6 +17,7 @@ import {
   publicInfrastructureIndustryTabs,
   publicInfrastructureIntro,
   publicInfrastructureReferences,
+  publicInfrastructureStats,
   publicInfrastructureWhyItems,
 } from "../data/marketsPublicInfrastructureContent";
 import { publicInfrastructureSolutionsPanel } from "../data/marketsPublicInfrastructureSolutionsPanel";
@@ -72,6 +74,7 @@ export default async function MarketsPublicInfrastructurePage() {
         titleLines={publicInfrastructureIntro.titleLines}
         text={publicInfrastructureIntro.text}
       />
+      <MarketsStats items={publicInfrastructureStats} />
       <MarketsExplore tabs={publicInfrastructureIndustryTabs} />
       <MarketsReferences items={publicInfrastructureReferences} />
       <MarketsBenefits items={publicInfrastructureBenefits} />
