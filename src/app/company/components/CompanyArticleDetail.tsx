@@ -155,7 +155,7 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
             >
               <span className={articleDetailClass("pager-dir")}>
                 <span className={articleDetailClass("pager-leading")}>
-                  <span className={articleDetailClass("pager-label")}>PREV</span>
+                  <span className={articleDetailClass("pager-label")}>NEXT</span>
                   <img
                     src="/ico/ico_arrow_pager_14.svg"
                     alt=""
@@ -174,7 +174,7 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
             <Link href={next.href} className={articleDetailClass("pager-item")} prefetch={false}>
               <span className={articleDetailClass("pager-dir")}>
                 <span className={articleDetailClass("pager-leading")}>
-                  <span className={articleDetailClass("pager-label")}>NEXT</span>
+                  <span className={articleDetailClass("pager-label")}>PREV</span>
                   <img
                     src="/ico/ico_arrow_pager_14.svg"
                     alt=""

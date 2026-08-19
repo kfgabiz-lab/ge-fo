@@ -31,7 +31,7 @@ export default function CommonFaq({
   title = "FAQ",
   description,
   items,
-  defaultOpenIndex = 0,
+  defaultOpenIndex = -1,
   sectionId,
 }: CommonFaqProps) {
   const [expandedIndices, setExpandedIndices] = useState<Set<number>>(() =>
