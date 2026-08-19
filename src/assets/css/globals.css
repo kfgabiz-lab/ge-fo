@@ -3023,11 +3023,11 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   }
 
   .common_modal__line {
-    margin-top: 24px;
+    margin-top: 20px;
   }
 
   .common_modal__foot {
-    padding: 30px 40px 40px;
+    padding: 40px 40px 40px;
   }
 }
 
@@ -3461,7 +3461,7 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   }
 }
 
-/* privacy_policy_modal — Figma 5565:128525 · shell: common_modal */
+/* privacy_policy_modal — Figma 9589:91867 · 800×700, body scroll 445px */
 .privacy_policy_modal .common_modal__body {
   max-height: 445px;
 }
@@ -3520,8 +3520,21 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
 }
 
 @media (min-width: 781px) {
+  .privacy_policy_modal .common_modal__panel {
+    height: min(700px, calc(100vh - 48px));
+    max-height: 700px;
+  }
+
   .privacy_policy_modal .common_modal__body {
+    flex: 1 1 445px;
+    min-height: 0;
+    height: 515px;
+    max-height: 515px;
     padding: 40px 80px 0 40px;
+  }
+
+  .privacy_policy_modal .common_modal__foot {
+    margin-top: auto;
   }
 
   .privacy_policy_modal__section-tit {

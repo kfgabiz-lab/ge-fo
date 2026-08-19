@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useRef, useSyncExternalStore, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
 import { useModalDismiss } from "@/lib/useModalDismiss";
 
@@ -17,6 +18,8 @@ type CommonModalProps = {
   children: ReactNode;
 };
 
+const emptySubscribe = () => () => undefined;
+
 export default function CommonModal({
   open,
   onClose,
@@ -31,6 +34,11 @@ export default function CommonModal({
 }: CommonModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const active = open && !embedded;
+  const canPortal = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
 
   useModalFocusTrap(panelRef, active);
   useModalDismiss(active, onClose);
@@ -44,8 +52,8 @@ export default function CommonModal({
     .filter(Boolean)
     .join(" ");
 
-  return (
-    <div className={rootClassName}>
+  const modalElement = (
+    <div className={rootClassName} {...(active ? { "data-lenis-prevent": "" } : {})}>
       {!embedded ? (
         <button
           type="button"
@@ -81,4 +89,10 @@ export default function CommonModal({
       </div>
     </div>
   );
+
+  if (embedded || !canPortal) {
+    return modalElement;
+  }
+
+  return createPortal(modalElement, document.body);
 }
