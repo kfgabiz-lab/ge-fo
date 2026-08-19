@@ -33,7 +33,7 @@ export const cookiePreferencesModal = {
       description:
         "Necessary cookies are absolutely essential for the website to function properly. This category only includes cookies that ensures basic functionalities and security features of the website. These cookies do not store any personal information.",
       required: true,
-      defaultChecked: true,
+      defaultChecked: false,
     },
     {
       id: "functional",
@@ -47,28 +47,28 @@ export const cookiePreferencesModal = {
       title: "Performance",
       description:
         "Performance cookies are used to understand and analyze the key performance indexes of the website which helps in delivering a better user experience for the visitors.",
-      defaultChecked: false,
+      defaultChecked: true,
     },
     {
       id: "analytics",
       title: "Analytics",
       description:
         "Analytical cookies are used to understand how visitors interact with the website. These cookies help provide information on metrics the number of visitors, bounce rate, traffic source, etc.",
-      defaultChecked: false,
+      defaultChecked: true,
     },
     {
       id: "advertisement",
       title: "Advertisement",
       description:
         "Advertisement cookies are used to provide visitors with relevant ads and marketing campaigns. These cookies track visitors across websites and collect information to provide customized ads.",
-      defaultChecked: false,
+      defaultChecked: true,
     },
     {
       id: "others",
       title: "Others",
       description:
         "Other uncategorized cookies are those that are being analyzed and have not been classified into a category as yet.",
-      defaultChecked: false,
+      defaultChecked: true,
     },
   ] satisfies ReadonlyArray<{
     id: CookiePreferenceId;
