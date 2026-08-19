@@ -90,7 +90,6 @@ function CommonBanner04Body({
         alt=""
         aria-hidden
       />
-      <div className="common_banner_04__dim" aria-hidden="true" />
       <div className="inner common_banner_04__inner">
         <h2 className="common_banner_04__tit">{title}</h2>
         <p className="common_banner_04__desc">{description}</p>

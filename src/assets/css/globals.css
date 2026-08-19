@@ -1197,14 +1197,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     display: none;
   }
 
-  section.common_banner_04 .common_banner_04__dim {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: rgb(15 31 69 / 55%);
-    pointer-events: none;
-  }
-
   section.common_banner_04 .common_banner_04__inner {
     position: relative;
     z-index: 2;
@@ -1265,12 +1257,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   }
 
   section.common_banner_04 .common_banner_04__body .common_banner_04__bg--pc {
-    display: none;
-  }
-
-  /* Figma 6584:98491 — 모바일 전용 배경(이미 어두움), dim 없음 */
-  section.common_banner_04 .common_banner_04__body:has(.common_banner_04__bg--mo)
-    .common_banner_04__dim {
     display: none;
   }
 

@@ -4039,10 +4039,6 @@ section.company-blog-list .company-blog__tag:hover {
     display: none;
   }
 
-  .company-page--america section.common_banner_04 .common_banner_04__dim {
-    display: none;
-  }
-
   .company-page--america section.common_banner_04 .common_banner_04__inner {
     position: relative;
     z-index: 2;

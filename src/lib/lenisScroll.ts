@@ -3,69 +3,6 @@ import type Lenis from "lenis";
 let lenisInstance: Lenis | null = null;
 
 const PAGE_SCROLL_LOCK_CLASS = "is-page-scroll-lock";
-let pageScrollEventsBound = false;
-
-function getScrollableAncestor(node: EventTarget | null): HTMLElement | null {
-  let el: HTMLElement | null =
-    node instanceof HTMLElement
-      ? node
-      : node instanceof Node
-        ? node.parentElement
-        : null;
-
-  while (el && el !== document.body && el !== document.documentElement) {
-    const overflowY = window.getComputedStyle(el).overflowY;
-    if (
-      (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") &&
-      el.scrollHeight > el.clientHeight + 1
-    ) {
-      return el;
-    }
-    el = el.parentElement;
-  }
-
-  return null;
-}
-
-function preventPageWheel(event: WheelEvent) {
-  const scrollable = getScrollableAncestor(event.target);
-  if (!scrollable) {
-    event.preventDefault();
-    return;
-  }
-
-  if (event.deltaY < 0 && scrollable.scrollTop <= 0) {
-    event.preventDefault();
-    return;
-  }
-
-  if (
-    event.deltaY > 0 &&
-    scrollable.scrollTop + scrollable.clientHeight >= scrollable.scrollHeight - 1
-  ) {
-    event.preventDefault();
-  }
-}
-
-function preventPageTouchMove(event: TouchEvent) {
-  if (!getScrollableAncestor(event.target)) {
-    event.preventDefault();
-  }
-}
-
-function bindPageScrollBlock() {
-  if (pageScrollEventsBound) return;
-  pageScrollEventsBound = true;
-  window.addEventListener("wheel", preventPageWheel, { passive: false });
-  window.addEventListener("touchmove", preventPageTouchMove, { passive: false });
-}
-
-function unbindPageScrollBlock() {
-  if (!pageScrollEventsBound) return;
-  pageScrollEventsBound = false;
-  window.removeEventListener("wheel", preventPageWheel);
-  window.removeEventListener("touchmove", preventPageTouchMove);
-}
 
 export function setLenisInstance(lenis: Lenis | null) {
   lenisInstance = lenis;
@@ -126,11 +63,9 @@ export function lockPageScroll(scrollY: number) {
 
   lenis?.scrollTo(scrollY, { immediate: true });
   lenis?.stop();
-  bindPageScrollBlock();
 }
 
 export function unlockPageScroll(scrollY: number) {
-  unbindPageScrollBlock();
   document.documentElement.classList.remove(PAGE_SCROLL_LOCK_CLASS);
   document.documentElement.style.height = "";
   document.body.style.position = "";

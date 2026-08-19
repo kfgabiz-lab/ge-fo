@@ -1,7 +1,5 @@
 import type { LenisOptions } from "lenis";
 
-export const LENIS_WHEEL_DELTA_CAP = 72;
-
 function isScrollableOverflow(node: HTMLElement): boolean {
   const style = window.getComputedStyle(node);
   const overflowY = style.overflowY;
@@ -38,14 +36,6 @@ function shouldPreventSmoothScroll(node: HTMLElement): boolean {
   return false;
 }
 
-function capVirtualScrollDelta(delta: number, cap: number): number {
-  if (Math.abs(delta) <= cap) {
-    return delta;
-  }
-
-  return Math.sign(delta) * cap;
-}
-
 export function createLenisOptions(): LenisOptions {
   if (typeof window === "undefined") {
     return { autoRaf: true };
@@ -70,16 +60,5 @@ export function createLenisOptions(): LenisOptions {
     smoothWheel: true,
     syncTouch: false,
     prevent: (node) => shouldPreventSmoothScroll(node),
-    virtualScroll: (data) => {
-      data.deltaY = capVirtualScrollDelta(
-        data.deltaY,
-        LENIS_WHEEL_DELTA_CAP,
-      );
-      data.deltaX = capVirtualScrollDelta(
-        data.deltaX,
-        LENIS_WHEEL_DELTA_CAP,
-      );
-      return true;
-    },
   };
 }
