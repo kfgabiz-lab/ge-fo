@@ -114,7 +114,8 @@ export const contactUsFormCopy = {
   sendLabelMobile: "LIST",
   sendingLabel: "Sending...",
   submitAck:
-    'By clicking "Send", you acknowledge that your information will be processed in accordance with our Privacy Policy, which includes the transfer of your inquiry data to our parent company in South Korea for support purposes.',
+    'By clicking "Send", you acknowledge that your information will be processed in accordance with our {privacyPolicy}, which includes the transfer of your inquiry data to our parent company in South Korea for support purposes.',
+  submitAckLinkLabel: "Privacy Policy",
   submitSuccess:
     "Your inquiry has been submitted. A confirmation number has been sent to your email",
 } as const;
