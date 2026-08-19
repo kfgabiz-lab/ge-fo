@@ -4893,7 +4893,7 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-about-intro.company-about-intro--headline-wide .company-about-intro__headline {
-    max-width: 970px;
+    max-width: 1304px;
   }
 
   section.company-about-intro.company-about-intro--hero-bottom .company-about-intro__hero img {
@@ -4945,7 +4945,7 @@ section.company-blog-list .company-blog__tag:hover {
     top: 0;
     right: 0;
     width: 1px;
-    height: 144px;
+    height: 100%;
     background: #ddd;
   }
 

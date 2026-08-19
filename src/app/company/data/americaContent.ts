@@ -71,27 +71,28 @@ export const americaPageTitle = {
 
 export const americaIntro = {
   heroImage: `${IMG}/hero.webp`,
-  headlineLines: ["Delivering Power and Automation Solutions Across the United States"],
+  headlineLines: ["Delivering Power Distribution and", "Automation Solutions Across the United States"],
   paragraphs: [
-    "LS ELECTRIC America is the North American subsidiary of LS ELECTRIC, delivering power and automation solutions across the region.",
-    "We provide electrical systems, automation products, and field services across the full lifecycle—from design and installation to maintenance and optimization—helping reduce downtime and ensure reliable operations.",
-    "Entering the U.S. market with UL certification across its entire product lineup—the first in Asia—LS ELECTRIC America combines global engineering expertise with local execution, supported by its headquarters in Chicago, a sales office in Los Angeles, and six affiliates across North America.",
+    "As the North American subsidiary of global leader LS ELECTRIC, LS ELECTRIC America delivers comprehensive power and automation solutions engineered to maximize operational reliability and efficiency.",
+    "We partner with clients across the entire asset lifecycle—providing tailored system design, seamless installation, proactive maintenance, and continuous optimization to minimize costly downtime.",
+    "Driven by a legacy of innovation, LS ELECTRIC America made history as the first Asian manufacturer to secure UL certification across its entire product portfolio. By combining world-class engineering expertise with localized execution, we ensure responsive, top-tier service tailored to regional demands.",
+    "Headquartered in Chicago, supported by a Los Angeles sales office, and backed by six strategic affiliates, LS ELECTRIC America is uniquely positioned to empower industrial and commercial operations across North America.",
   ],
   stats: [
     {
       value: "UL-Certified",
-      label: "Reliability and compliance",
-      desc: "As the first and only Asian provider of a full UL-certified switchgear line-up",
+      label: "for reliability and compliance",
+      desc: "The first and only Asian provider of a full UL-certified switchgear line-up.",
     },
     {
-      value: "World 6th",
-      label: "Largest testing capacity lab",
-      desc: "Largest-scale testing infrastructure for power systems",
+      value: "World's 6th",
+      label: "largest power-system testing-capacity lab",
+      desc: "Globally ranked testing infrastructure guaranteeing power system resilience",
     },
     {
       value: "1,000+",
-      label: "Projects",
-      desc: "Power infrastructure experience",
+      label: "Power Infrastructure Projects",
+      desc: "Proven track record of over 1,000 global power deployments",
     },
   ] satisfies AmericaStatItem[],
 };
@@ -117,15 +118,15 @@ export const americaShaping = {
         },
         {
           title: "Grid-Scale Manufacturing",
-          desc: "Domestically producing transformers, switchgear, and power systems",
+          desc: "Domestically producing transformers, switchgear, and power systems.",
         },
         {
           title: "Mission-Critical Support",
-          desc: "Supporting U.S. Power Infrastructure such as Semiconductor, Data Center, EV and Renewable industries.",
+          desc: "Supporting U.S. power infrastructure, including semiconductor, data center, EV, and renewable industries.",
         },
         {
           title: "24/7 Service",
-          desc: "Pre & After-Sales Services, On-site Project Management and Training across the U.S.",
+          desc: "Pre- and after-sales services, on-site project management, and training across the U.S.",
         },
       ],
     },
@@ -141,19 +142,19 @@ export const americaShaping = {
       highlights: [
         {
           title: "Western United States Hub",
-          desc: "Dedicated regional manufacturing of heavy-duty distribution systems and custom engineering",
+          desc: "Dedicated regional manufacturing of heavy-duty distribution systems and custom engineering.",
         },
         {
           title: "On-Demand Capacity",
-          desc: "Drastically reducing lead times and strengthening local supply resilience for U.S. power markets",
+          desc: "Reducing lead times and strengthening local supply resilience for U.S. power markets.",
         },
         {
           title: "Custom Engineering",
-          desc: "Tailored system integration designed to accelerate massive infrastructure expansion across North America",
+          desc: "System integration for infrastructure expansion across North America.",
         },
         {
           title: "Market Responsiveness",
-          desc: "Enhancing delivery speed and responsiveness for North American customers",
+          desc: "Enhancing delivery speed and responsiveness for North American customers.",
         },
       ],
     },
@@ -170,7 +171,7 @@ export const americaBusiness = {
       image: `${IMG}/business-01.webp`,
       title: "LV & MV Power Solutions",
       description:
-        "We provide complete low and medium voltage power distribution solutions—from transformers and switchgear to switchboards, panelboards, and DC power systems. Built for mission critical applications like data centers, manufacturing, and commercial infrastructure, our solutions deliver the reliability, efficiency, and scalability North American operations demand.",
+        "LS ELECTRIC America delivers LV and MV power distribution solutions, from transformers and switchgear to switchboards, panelboards, and DC power systems. These solutions provide reliable, efficient, and scalable power for data centers, manufacturing, and commericial infrastructure industries",
       imagePosition: "left",
     },
     {
@@ -178,7 +179,7 @@ export const americaBusiness = {
       image: `${IMG}/business-02.webp`,
       title: "Grid & Utility Infrastructure",
       description:
-        "LS ELECTRIC supports utilities, renewable developers, and large industrial projects with high voltage transmission and grid infrastructure solutions. Our portfolio—from ultra high voltage disconnect switches to power transformers—is designed to strengthen grid resilience, improve efficiency, and support the transition to cleaner, more reliable energy systems across North America.",
+        "LS ELECTRIC supports utilities, renewable developers, and large industrial projects with high-voltage transmission and grid infrastructure solutions. Our portfolio includes ultra-high-voltage disconnect switches and power transformers. This portfolio is designed to strengthen grid resilience, improve efficiency, and support the transition to more reliable energy systems across North America.",
       imagePosition: "right",
     },
     {
@@ -186,7 +187,7 @@ export const americaBusiness = {
       image: `${IMG}/business-03.webp`,
       title: "Automation & Industrial Control",
       description:
-        "We deliver advanced automation and motor control solutions including VFDs, PLCs, HMIs, and integrated control systems. Designed for North American industry, our technologies help manufacturers and operators boost productivity, reduce downtime, and drive smarter, data driven decision making.",
+        "LS ELECTRIC America delivers VFDs, PLCs, HMIs, and integrated automation and motor control systems. Built for North American industry, these solutions increase productivity, reduce downtime, and enable data-driven decisions.",
       imagePosition: "left",
     },
   ] satisfies AmericaBusinessItem[],
@@ -202,9 +203,9 @@ export const americaCareersBanner = {
 };
 
 export const americaOperate = {
-  title: "Where We Operate",
+  title: "LS ELECTRIC U.S. Operations",
   description:
-    "Expanding our footprint across the United States. LS ELECTRIC connects operational hubs and project sites through a strong network, delivering reliable performance wherever we operate.",
+    "LS ELECTRIC supports U.S. projects through connected operational hubs and service locations, delivering reliable local performance.",
   mapImage: `${IMG}/map.svg`,
   contactIcons: {
     map: "/ico/ico_map_16.svg",
@@ -325,9 +326,9 @@ export const americaOperate = {
 };
 
 export const americaLeaders = {
-  title: "Meet Our Leaders",
+  title: "Meet LS ELECTRIC America Leaders",
   description:
-    "Connecting accomplished executives and business leaders who shape industries and create lasting value.",
+    "Leaders advancing North American power, automation, and energy infrastructure.",
   featured: {
     id: "charlie-lee",
     image: `${IMG}/leader-featured.webp`,

@@ -59,7 +59,7 @@ export type LsElectricHistoryEra = {
 export const lsElectricPageTitle = {
   title: "LS ELECTRIC",
   description:
-    "Driving global innovation in electrification, automation, and energy systems.",
+    "Advancing electrification, automation, and energy systems across the world",
 };
 
 export const lsElectricIntro = {
@@ -67,8 +67,8 @@ export const lsElectricIntro = {
   heroImageMobile: `${IMG}/intro-hero-mo.webp?v=1`,
   headlineLines: ["Smart Power & Automation,", "Built for Performance"],
   paragraphs: [
-    "LS ELECTRIC is a global energy and automation company delivering integrated power and digital solutions. By combining advanced electrical engineering with digital technologies, we enable industries and infrastructure to operate with greater efficiency, reliability, and sustainability.",
-    "Our solutions span the full lifecycle—from system design and implementation to operation and optimization—helping customers enhance performance, reduce energy consumption, and ensure long-term resilience. With over 4,400 employees and a network of nine affiliates, LS ELECTRIC continues to expand its global presence while advancing the future of electrification and digital transformation.",
+    "LS ELECTRIC delivers integrated power, automation, and digital solutions. We help industrial and infrastructure operators improve efficiency, reliability, and resilience. From system design to optimization, LS ELECTRIC supports the full power-system lifecycle.",
+    "Our 4,400+ employees and nine affiliates are committed to advancing electrification and digital transformation",
   ],
 };
 
@@ -123,7 +123,7 @@ export const lsElectricHighlights = {
 export const lsElectricBusiness = {
   title: "Our Business",
   description:
-    "From power infrastructure to smart automation, we deliver end-to-end solutions.",
+    "End-to-end power infrastructure, smart energy, and automation solutions.",
   cards: [
     {
       id: "power",
@@ -159,7 +159,7 @@ export const lsElectricBusiness = {
 export const lsElectricGlobal = {
   title: "Global Network",
   description:
-    "LS ELECTRIC set a mid-to long-term vision for each overseas market to broaden its global business presence. In addition to pursuing the evolution of our existing businesses, we are discovering new business opportunities and strengthening the basis of business operations to take a tailor-made approach to each local market.",
+    "LS ELECTRIC builds market-specific plans to expand its global presence. We strengthen local operations and tailor power, automation, and energy solutions to each market.",
   bgTexture: `${IMG}/global-bg.webp`,
   mapImage: `${IMG}/global-map.webp`,
   stats: [
@@ -178,15 +178,15 @@ export const lsElectricGlobal = {
 export const lsElectricPtt = {
   title: "Power Testing & Technology Institute (PT&T)",
   description:
-    "The principle of PT&T is to create a better energy for future generations. Thanks to the most rigorous and strict testing in the world, we not only vouch for the reliable performance and quality of the products and systems that consumers use, but also motivate manufacturers to develop better products. Accordingly, we have been recognized by numerous agencies and experts.",
+    "PT&T advances reliable energy systems for future generations. Rigorous testing validates product and system performance, quality, and certification readiness.",
   cards: [
     {
       id: "infrastructure",
       image: `${IMG}/ptt-01.webp`,
       title: "Test Infrastructure",
-      subtitle: "World 6th largest testing capacity lab",
+      subtitle: "One of the World's Top Six Power Testing Laboratories",
       description:
-        "Recognized as one of the world's top six testing laboratories with a 4,000MVA-class testing infrastructure and advanced DC testing capabilities.",
+        "PT&T is recognized among the world's top six testing laboratories. Its infrastructure includes 4,000 MVA-class capacity and advanced DC testing.",
     },
     {
       id: "talent",
@@ -194,7 +194,7 @@ export const lsElectricPtt = {
       title: "Talent & Expertise",
       subtitle: "IEC Standards & Compliance Expertise",
       description:
-        "Continuously advancing research on evolving IEC international standards and testing regulations through world-class engineering expertise.",
+        "PT&T advances research on evolving IEC standards and testing regulations through specialized engineering expertise.",
     },
     {
       id: "excellence",
@@ -202,7 +202,7 @@ export const lsElectricPtt = {
       title: "Operational Excellence",
       subtitle: "Trusted Global Testing & Certification",
       description:
-        "As an accredited testing institution, PT&T operates under ISO/IEC 17025 standards to deliver globally trusted testing and certification services.",
+        "As an accredited institution, PT&T operates under ISO/IEC 17025 to provide trusted testing and certification services.",
     },
   ] satisfies LsElectricPttCard[],
 };
@@ -210,15 +210,15 @@ export const lsElectricPtt = {
 export const lsElectricRnd = {
   title: "R&D Center",
   description:
-    "Guided by our mission of 'Futuring Smart Energy', we maintain dedicated research institutes for energy and automation, respectively, to ensure a relentless pursuit of quality and technology in these areas. In addition, the AX Sector, led by the ESG/Vision Management CVO, leverages artificial intelligence, machine learning, and big data technologies to advance our businesses, thereby steering global market trends and solidifying our future competitiveness.",
+    "Guided by our 'Futuring Smart Energy' mission, LS ELECTRIC operates dedicated research institutes for energy and automation. These institutes strengthen quality and technology development in both fields. Led by the ESG/Vision Management CVO, the AX Sector applies artificial intelligence, machine learning, and big data to advance business capabilities. This work supports LS ELECTRIC's global market position and long-term competitiveness.",
   heroImage: `${IMG}/rnd-hero.webp`,
   items: [
     {
       id: "tech-map",
       number: 1,
-      title: "Enhance technological expertise through the Technology Map",
+      title: "Strengthen Technology Expertise Through the Technology Map",
       description:
-        "Tech Map is applied as a tool to check the relevant levels of technology and human resources and to develop and manage them to meet our business goals.",
+        "The Technology Map assesses technology and talent levels. It guides development and management against LS ELECTRIC business goals.",
     },
     {
       id: "development",
@@ -230,28 +230,28 @@ export const lsElectricRnd = {
     {
       id: "scouting",
       number: 3,
-      title: "Tech. Scouting",
+      title: "Technology Scouting",
       description:
-        "We continuously strengthen our expertise through dedicated technology development organizations. In addition, we operate the LS ELECTRIC R&D STAR Partners™ program to discover outstanding technology partners.",
+        "Dedicated technology organizations strengthen LS ELECTRIC expertise. The R&D STAR Partners™ program identifies qualified technology partners.",
     },
     {
       id: "awards",
       number: 4,
-      title: "Awarding R&D Professionals",
+      title: "Recognizing R&D Professionals",
       description:
-        "Every year, the Best R&D Award is presented to outstanding R&D projects. The project that wins the first prize is submitted to the Tech Fair organized by LS Group so that its performance can be shared and celebrated across the entire business group.",
+        "The annual Best R&D Award recognizes outstanding projects. The first-prize project is submitted to the LS Group Tech Fair for enterprise-wide knowledge sharing.",
     },
   ] satisfies LsElectricRndItem[],
 };
 
 export const lsElectricHistory = {
-  title: "History",
+  title: "LS ELECTRIC History",
   description:
-    "Since 1974, As a leader in power solutions and automation solutions, LS ELECTRIC has become a global leader.",
+    "Since 1974, LS ELECTRIC has advanced power and automation solutions globally.",
   eras: [
     {
       id: "beginning",
-      title: "Era of Beginning",
+      title: "Era of Foundation",
       subtitle: "We Pioneer the Power and Automation industries",
       image: `${IMG}/history-beginning.webp`,
       period: "1974 ~ 1995",

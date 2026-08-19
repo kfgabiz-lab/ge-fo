@@ -280,10 +280,13 @@ function AmericaOperateSection() {
   return (
     <section className="company-america-operate">
       <div className="inner">
-        <CompanyAboutSectionHead
-          title={americaOperate.title}
-          description={americaOperate.description}
-        />
+        <div className="company-about__head">
+          <h2 className="section_tit">{americaOperate.title}</h2>
+          <p className="section_desc">
+            LS ELECTRIC supports U.S. projects through connected operational hubs and<br />
+            service locations, delivering reliable local performance.
+          </p>
+        </div>
         <div className="company-america-operate__map">
           <img
             loading="lazy"
