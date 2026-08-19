@@ -1,9 +1,28 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getLenisInstance, scrollWindowTo } from "@/lib/lenisScroll";
 
 const SCROLL_THRESHOLD_PX = 400;
+const BASE_BOTTOM_DESKTOP_PX = 40;
+const BASE_BOTTOM_MOBILE_PX = 20;
+const FOOTER_SELECTOR = ".main_footer";
+
+function getBaseBottomPx() {
+  return window.matchMedia("(max-width: 780px)").matches
+    ? BASE_BOTTOM_MOBILE_PX
+    : BASE_BOTTOM_DESKTOP_PX;
+}
+
+function getFooterAwareBottomPx(baseBottom: number) {
+  const footer = document.querySelector(FOOTER_SELECTOR);
+  if (!footer) {
+    return baseBottom;
+  }
+
+  const footerTop = footer.getBoundingClientRect().top;
+  return Math.max(baseBottom, window.innerHeight - footerTop + baseBottom);
+}
 
 function scrollToTopSmooth() {
   const reducedMotion = window.matchMedia(
@@ -25,28 +44,59 @@ function scrollToTopSmooth() {
 }
 
 export default function ScrollToTopButton() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef(BASE_BOTTOM_DESKTOP_PX);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      setIsVisible(window.scrollY > SCROLL_THRESHOLD_PX);
+    let frameId = 0;
+
+    const applyBottom = (nextBottom: number) => {
+      const roundedBottom = Math.round(nextBottom);
+      if (bottomRef.current === roundedBottom) {
+        return;
+      }
+
+      bottomRef.current = roundedBottom;
+      rootRef.current?.style.setProperty("bottom", `${roundedBottom}px`);
     };
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const update = () => {
+      frameId = 0;
+      const baseBottom = getBaseBottomPx();
+      const visible = window.scrollY > SCROLL_THRESHOLD_PX;
+      applyBottom(getFooterAwareBottomPx(baseBottom));
+      setIsVisible((prev) => (prev === visible ? prev : visible));
+    };
+
+    const scheduleUpdate = () => {
+      if (frameId !== 0) {
+        return;
+      }
+      frameId = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
   }, []);
 
   const handleClick = useCallback(() => {
     scrollToTopSmooth();
   }, []);
 
-  if (!isVisible) {
-    return null;
-  }
-
   return (
-    <div className="scroll_to_top">
+    <div
+      ref={rootRef}
+      className="scroll_to_top"
+      hidden={!isVisible}
+    >
       <button
         type="button"
         className="scroll_to_top__btn"

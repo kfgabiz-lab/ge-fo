@@ -606,6 +606,8 @@ section .btn-icon-56:hover .icon_arrow-20 {
   right: clamp(16px, 4vw, 40px);
   bottom: clamp(16px, 4vw, 40px);
   z-index: 900;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .scroll_to_top__btn {
