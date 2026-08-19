@@ -43,6 +43,24 @@ const mapFillStyle = {
 
 const MOBILE_MAP_MQ = "(max-width: 780px)";
 
+const MILES_PER_DEGREE_LAT = 69;
+
+// circle.getBounds()는 setCenter/setRadius 직후 동기적으로 최신값을 보장하지 않으므로
+// (Circle 내부 캐시 재계산 타이밍 문제) 원점+반경으로 bounds를 직접 계산한다.
+function computeRadiusBounds(
+  maps: typeof google.maps,
+  origin: GeoCoord,
+  radiusMiles: number,
+): google.maps.LatLngBounds {
+  const latDelta = radiusMiles / MILES_PER_DEGREE_LAT;
+  const lngDelta =
+    radiusMiles / (MILES_PER_DEGREE_LAT * Math.cos((origin.lat * Math.PI) / 180));
+  return new maps.LatLngBounds(
+    { lat: origin.lat - latDelta, lng: origin.lng - lngDelta },
+    { lat: origin.lat + latDelta, lng: origin.lng + lngDelta },
+  );
+}
+
 export default function WhereToBuyMap({
   locations,
   activeLocation,
@@ -381,33 +399,23 @@ export default function WhereToBuyMap({
 
     const mappable = locations.filter(hasValidCoords);
 
-    if (locationsChanged && !isFiltered && !boundsMode) {
-      const circleBounds = circleRef.current?.getBounds();
-      if (circleBounds) {
-        suppressUserMoveRef.current = true;
-        map.fitBounds(circleBounds);
-      }
-      return;
-    }
-
-    if (isFiltered && locationsChanged) {
-      if (mappable.length >= 1) {
-        suppressUserMoveRef.current = true;
-        const bounds = new maps.LatLngBounds();
-        if (!boundsMode) {
-          bounds.extend(radiusOriginRef.current);
-        }
-        mappable.forEach((location) => {
-          bounds.extend({ lat: location.lat, lng: location.lng });
-        });
-        map.fitBounds(bounds);
-      } else if (!boundsMode) {
-        const circleBounds = circleRef.current?.getBounds();
-        if (circleBounds) {
-          suppressUserMoveRef.current = true;
-          map.fitBounds(circleBounds);
-        }
-      }
+    if (locationsChanged && !boundsMode) {
+      // 반경필터 모드(검색 전 초기 상태 포함): 결과 건수와 무관하게 항상 반경 원 전체에 맞춰 카메라를 맞춘다.
+      const circleBounds = computeRadiusBounds(
+        maps,
+        radiusOriginRef.current,
+        radiusMilesRef.current,
+      );
+      suppressUserMoveRef.current = true;
+      map.fitBounds(circleBounds);
+    } else if (isFiltered && boundsMode && locationsChanged && mappable.length >= 1) {
+      // 영역검색(지도 드래그 후 "이 지역에서 검색") 모드: 반경 원 개념이 없으므로 실제 매칭 지점 기준으로 맞춘다.
+      suppressUserMoveRef.current = true;
+      const bounds = new maps.LatLngBounds();
+      mappable.forEach((location) => {
+        bounds.extend({ lat: location.lat, lng: location.lng });
+      });
+      map.fitBounds(bounds);
     }
 
     const skipAutoPan = boundsMode && locationsChanged;
