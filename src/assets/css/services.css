@@ -1465,7 +1465,8 @@
   section.support_service_flow .support_service_flow__diagram {
     display: flex;
     gap: 18px;
-    align-items: stretch;
+    align-items: flex-start;
+    width: 100%;
     min-height: 0;
     margin-top: 30px;
   }
@@ -1479,15 +1480,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    align-self: stretch;
     flex-shrink: 0;
     width: 30px;
     position: relative;
+    bottom: 80px;
   }
 
   section.support_service_flow .support_service_flow__track-pin {
     display: block;
     width: 24px;
     height: 30px;
+    margin-left: 3px;
     flex-shrink: 0;
     object-fit: contain;
   }
@@ -1504,7 +1508,7 @@
     );
     position: absolute;
     top: 30px;
-    bottom: 62px;
+    bottom: 0;
     left: 14px;
   }
 
@@ -1530,14 +1534,14 @@
     display: none;
   }
 
-  /* Figma 6880:146628 — 18px red check + soft glow (28px), centered on 30px track */
+  /* Figma 7619:328555 — 18px check + glow (28px), centered on 30px track */
   section.support_service_flow .support_service_flow__step:not(.support_service_flow__step--issue)::before {
     position: absolute;
-    top: 1px;
+    top: 0;
     left: -47px;
     width: 28px;
     height: 28px;
-    background: url("/img/services/service-center/service-flow-icon-dot.svg")
+    background: url("/img/services/service-center/service-flow-icon-dot-mo.svg")
       center / 28px 28px no-repeat;
     content: "";
   }
@@ -1800,9 +1804,9 @@
     width: auto;
   }
 
-  /* Service Flow — mobile layout diagram center */
+  /* Service Flow — tablet layout diagram left-aligned */
   section.support_service_flow .support_service_flow__diagram {
-    justify-content: center;
+    justify-content: flex-start;
   }
 }
 

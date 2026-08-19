@@ -1818,6 +1818,13 @@
     padding: 60px 0 40px;
   }
 
+  main.support-page--download-center
+    section.support_download_mo-controls:has(
+      ~ section.support_download_contents .support_download_active-filters
+    ) {
+    padding-bottom: 20px;
+  }
+
   main.support-page--download-center .support_download_filter--pc {
     display: none;
   }
@@ -2283,10 +2290,108 @@
     gap: 0;
   }
 
-  section.support_download_contents.devices_product_downloads--center .support_download_active-filters,
   section.support_tech_hub_contents.devices_product_downloads--tech-hub .support_download_active-filters,
   section.support_download_contents.devices_product_downloads--center .support_download_sort--pc {
     display: none;
+  }
+
+  /* Figma 6064:27382 / 6316:228900 — mobile active filter chips */
+  section.support_download_contents.devices_product_downloads--center .support_download_active-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 40px;
+    min-width: 0;
+  }
+
+  section.support_download_contents.devices_product_downloads--center .support_download_active-filters__chips {
+    display: flex;
+    flex: 1;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  section.support_download_contents.devices_product_downloads--center .support_download_active-filters__chip {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    font: inherit;
+    color: #222;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__chip-text {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #222;
+    white-space: nowrap;
+  }
+
+  section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__chip-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+  }
+
+  section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__chip-icon img {
+    display: block;
+    width: 12px;
+    height: 12px;
+  }
+
+  section.support_download_contents.devices_product_downloads--center .support_download_active-filters__clear {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__clear-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+  }
+
+  section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__clear-icon img {
+    display: block;
+    width: 12px;
+    height: 12px;
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__toolbar {
@@ -2295,7 +2400,7 @@
     gap: 0;
     margin: 0;
     min-height: 37px;
-    padding-bottom: 14px;
+    padding-bottom: 0;
     border-bottom: 1px solid #ddd;
   }
 

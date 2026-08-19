@@ -1383,6 +1383,26 @@ section.main_notic .txt:before {
 }
 
 @media (max-width: 780px) {
+  section.what_we_do__inner .swiper_type_01_area {
+    position: relative;
+  }
+
+  section.what_we_do__inner .txt_area {
+    min-height: 0;
+    height: auto;
+    padding: 30px 30px 87px;
+    box-sizing: border-box;
+  }
+
+  section.what_we_do__inner .swiper_type_01_controls {
+    left: 50px;
+    right: 30px;
+    width: auto;
+    max-width: none;
+    bottom: 30px;
+    top: auto;
+  }
+
   section.main_visual {
     position: relative;
 

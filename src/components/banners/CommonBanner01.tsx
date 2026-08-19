@@ -5,7 +5,24 @@ export default function CommonBanner01() {
   return (
     <section className="common_banner_01">
       <div className="img_area">
-        <img loading="lazy" decoding="async" src="/img/main/bg_banner_02.webp" alt="banner_02" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          loading="lazy"
+          decoding="async"
+          className="common_banner_01__bg common_banner_01__bg--pc"
+          src="/img/main/bg_banner_02.webp"
+          alt=""
+          aria-hidden
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          loading="lazy"
+          decoding="async"
+          className="common_banner_01__bg common_banner_01__bg--mo"
+          src="/img/main/bg_banner_02_m.webp"
+          alt=""
+          aria-hidden
+        />
       </div>
       <div className="tit_area">
         <h2 className="banner_tit">Engineering the Future of Smart Energy</h2>

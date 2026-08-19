@@ -472,7 +472,8 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     letter-spacing: -0.02em;
     color: #222;
     white-space: pre-line;
-    max-width:320px;
+    max-width:360px;
+    word-break: break-word;
   }
 
   section.markets_stats .markets_stats__value-unit {
