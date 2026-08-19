@@ -41,6 +41,9 @@ export function useHeaderScroll(options?: UseHeaderScrollOptions) {
     if (!hideGnbRef.current) return;
 
     const currentScrollY = getWindowScrollY();
+    if (document.documentElement.classList.contains("is-page-scroll-lock")) {
+      return;
+    }
     const wasAtTop = isAtTopRef.current;
     const atTop = resolveAtTop(currentScrollY, wasAtTop, topThreshold);
 

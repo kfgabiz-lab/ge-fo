@@ -2895,7 +2895,7 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
 .common_modal {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 1100;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2909,6 +2909,8 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   border: none;
   background: rgb(0 0 0 / 60%);
   cursor: pointer;
+  overscroll-behavior: none;
+  touch-action: none;
   animation: common-modal-dim-in 0.2s ease forwards;
 }
 
@@ -2974,6 +2976,7 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 @supports not selector(::-webkit-scrollbar) {

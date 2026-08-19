@@ -60,6 +60,8 @@ export default function CommonModal({
           className="common_modal__dim"
           aria-label={dimLabel}
           tabIndex={-1}
+          onWheel={(event) => event.preventDefault()}
+          onTouchMove={(event) => event.preventDefault()}
           onClick={() => onClose?.()}
         />
       ) : null}

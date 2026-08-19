@@ -679,6 +679,10 @@ export default function GnbMenu({
     if (isScrollControlled) return;
 
     const updateScrollState = () => {
+      if (document.documentElement.classList.contains("is-page-scroll-lock")) {
+        return;
+      }
+
       const currentScrollY = window.scrollY;
       const threshold = isMain ? 80 : SCROLL_THRESHOLD;
 
