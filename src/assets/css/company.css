@@ -4906,9 +4906,8 @@ section.company-blog-list .company-blog__tag:hover {
 
   section.company-about-intro.company-about-intro--with-stats .company-about-intro__stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    justify-content: space-between;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 161px;
     margin-top: 120px;
     padding: 70px 80px;
     border-radius: 4px;
@@ -4927,18 +4926,13 @@ section.company-blog-list .company-blog__tag:hover {
 
   section.company-about-intro.company-about-intro--with-stats .company-about-intro__stat {
     position: relative;
-    width: 100%;
-    padding: 0 0 0 80px;
-  }
-
-  section.company-about-intro.company-about-intro--with-stats .company-about-intro__stat:first-child {
-    padding-left: 0;
+    min-width: 0;
   }
 
   section.company-about-intro.company-about-intro--with-stats .company-about-intro__stat-divider {
     position: absolute;
     top: 0;
-    right: 0;
+    right: -81px;
     width: 1px;
     height: 100%;
     background: #ddd;
