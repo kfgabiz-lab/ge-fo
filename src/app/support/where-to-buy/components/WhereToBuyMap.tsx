@@ -55,10 +55,10 @@ function computeRadiusBounds(
   const latDelta = radiusMiles / MILES_PER_DEGREE_LAT;
   const lngDelta =
     radiusMiles / (MILES_PER_DEGREE_LAT * Math.cos((origin.lat * Math.PI) / 180));
-  return new maps.LatLngBounds(
-    { lat: origin.lat - latDelta, lng: origin.lng - lngDelta },
-    { lat: origin.lat + latDelta, lng: origin.lng + lngDelta },
-  );
+  const bounds = new maps.LatLngBounds();
+  bounds.extend({ lat: origin.lat - latDelta, lng: origin.lng - lngDelta });
+  bounds.extend({ lat: origin.lat + latDelta, lng: origin.lng + lngDelta });
+  return bounds;
 }
 
 export default function WhereToBuyMap({
