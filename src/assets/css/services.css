@@ -1484,14 +1484,14 @@
     flex-shrink: 0;
     width: 30px;
     position: relative;
-    bottom: 80px;
+   height: 560px;
+    top: 0;
   }
 
   section.support_service_flow .support_service_flow__track-pin {
     display: block;
     width: 24px;
     height: 30px;
-    margin-left: 3px;
     flex-shrink: 0;
     object-fit: contain;
   }
