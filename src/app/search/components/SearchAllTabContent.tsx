@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { getLenisInstance, getWindowScrollY, scrollWindowTo } from "@/lib/lenisScroll";
 import {
   fetchSearchAllProducts,
   type SearchAllProductsResult,
@@ -38,7 +38,6 @@ import SearchProductsPanel from "./SearchProductsPanel";
 import { handleHorizontalTabListKeyDown } from "@/lib/tabKeyboardNav";
 
 import {
-  buildSearchTabHref,
   searchAllTabs,
   toSearchTabId,
   type SearchTabId,
@@ -54,14 +53,30 @@ function formatSearchCount(count: number): string {
   return count > 99 ? "99+" : String(count);
 }
 
+const SEARCH_TABS_SCROLL_OFFSET_PX = 120;
+
+function scrollToSearchTabs(tabsEl: HTMLElement | null) {
+  if (!tabsEl) return;
+  const targetTop = Math.max(
+    0,
+    tabsEl.getBoundingClientRect().top + getWindowScrollY() - SEARCH_TABS_SCROLL_OFFSET_PX,
+  );
+  const lenis = getLenisInstance();
+  if (lenis) {
+    lenis.scrollTo(targetTop, { programmatic: true, force: true });
+    return;
+  }
+  scrollWindowTo(targetTop, { behavior: "smooth" });
+}
+
 function SearchSectionHead({
   title,
   count,
-  exploreHref,
+  onExplore,
 }: {
   title: string;
   count: number | string;
-  exploreHref: string;
+  onExplore: () => void;
 }) {
   return (
     <div className="search_all__section-head">
@@ -69,12 +84,16 @@ function SearchSectionHead({
         <h2 className="search_all__section-tit">{title}</h2>
         <span className="search_all__section-count">{count}</span>
       </div>
-      <Link href={exploreHref} prefetch={false} className="btn-text-30 search_all__explore">
+      <button
+        type="button"
+        onClick={onExplore}
+        className="btn-text-30 search_all__explore"
+      >
         Explore
         <span className="btn-text-30__icon" aria-hidden="true">
           <span className="icon_arrow-14" aria-hidden="true" />
         </span>
-      </Link>
+      </button>
     </div>
   );
 }
@@ -114,6 +133,7 @@ export default function SearchAllTabContent({
 
   const router = useRouter();
   const pathname = usePathname();
+  const tabsRef = useRef<HTMLDivElement>(null);
   const handleTabClick = useCallback(
     (tabId: SearchTabId) => {
       setActiveTab(tabId);
@@ -124,6 +144,7 @@ export default function SearchAllTabContent({
       router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
         scroll: false,
       });
+      scrollToSearchTabs(tabsRef.current);
     },
     [pathname, router, searchParams],
   );
@@ -372,6 +393,7 @@ export default function SearchAllTabContent({
     <section className="search_all" id="search-all">
       <div className="inner">
         <div
+          ref={tabsRef}
           className="search_all__tabs"
           role="tablist"
           aria-label="Search results"
@@ -488,7 +510,7 @@ export default function SearchAllTabContent({
                 <SearchSectionHead
                   title="Product"
                   count={formatSearchCount(productResult.total)}
-                  exploreHref={buildSearchTabHref(query, "products")}
+                  onExplore={() => handleTabClick("products")}
                 />
                 <div className="search_all__products">
                   {productResult.items.map((item) => (
@@ -507,7 +529,7 @@ export default function SearchAllTabContent({
                 <SearchSectionHead
                   title="Documents"
                   count={formatSearchCount(documentResult.total)}
-                  exploreHref={buildSearchTabHref(query, "documents")}
+                  onExplore={() => handleTabClick("documents")}
                 />
                 <div className="search_all__documents-grid">
                   {documentResult.items.map((item) => (
@@ -522,7 +544,7 @@ export default function SearchAllTabContent({
                 <SearchSectionHead
                   title="Media"
                   count={formatSearchCount(mediaResult.totalElements)}
-                  exploreHref={buildSearchTabHref(query, "media")}
+                  onExplore={() => handleTabClick("media")}
                 />
                 <SearchMediaList items={mediaResult.items} variant="card" />
               </div>
@@ -533,7 +555,7 @@ export default function SearchAllTabContent({
                 <SearchSectionHead
                   title="Pages"
                   count={formatSearchCount(pagesResult.totalElements)}
-                  exploreHref={buildSearchTabHref(query, "pages")}
+                  onExplore={() => handleTabClick("pages")}
                 />
                 <SearchPageList
                   items={pagesResult.items}
