@@ -658,7 +658,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center bottom;
+    object-position: center;
   }
 
   section.devices_help .devices_help__card--overlay:hover .btn-text-30__icon {

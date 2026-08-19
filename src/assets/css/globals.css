@@ -3259,6 +3259,10 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   cursor: default;
 }
 
+.cookie_preferences_modal__check:has(.MuiCheckbox-root.Mui-disabled) {
+  cursor: default;
+}
+
 .cookie_preferences_modal__check .guide_checkbox__icon {
   display: block;
   width: 22px;

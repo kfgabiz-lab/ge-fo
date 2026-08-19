@@ -109,19 +109,29 @@ export default function CookiePreferencesModal({
         {cookiePreferencesModal.description}
       </p>
       <ul className="cookie_preferences_modal__list">
-        {cookiePreferencesModal.categories.map((category) => (
+        {cookiePreferencesModal.categories.map((category) => {
+          const checkboxIcons = category.required
+            ? {
+                uncheckedSrc:
+                  guideCheckboxIconsContactConsent.disabledCheckedSrc,
+                checkedSrc:
+                  guideCheckboxIconsContactConsent.disabledCheckedSrc,
+              }
+            : guideCheckboxIconsContactConsent;
+
+          return (
           <li key={category.id} className="cookie_preferences_modal__item">
             <label className="cookie_preferences_modal__check">
               <Checkbox
                 checked={preferences[category.id]}
                 disabled={category.required}
                 icon={
-                  <GuideCheckboxIcon {...guideCheckboxIconsContactConsent} />
+                  <GuideCheckboxIcon {...checkboxIcons} />
                 }
                 checkedIcon={
                   <GuideCheckboxIcon
                     checked
-                    {...guideCheckboxIconsContactConsent}
+                    {...checkboxIcons}
                   />
                 }
                 onChange={(_, checked) => updatePreference(category.id, checked)}
@@ -140,7 +150,8 @@ export default function CookiePreferencesModal({
               {category.description}
             </p>
           </li>
-        ))}
+          );
+        })}
       </ul>
     </CommonModal>
   );
