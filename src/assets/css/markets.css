@@ -236,13 +236,6 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     background-attachment: scroll;
   }
 
-  section.markets_hero.markets_hero--key-visual .hero_img::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgb(0 0 0 / 20%);
-    pointer-events: none;
-  }
 
   section.markets_hero.markets_hero--key-visual .markets_hero__content {
     position: relative;
@@ -1911,13 +1904,6 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     background-size: cover;
   }
 
-  section.markets_hero.markets_hero--key-visual .hero_img::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgb(0 0 0 / 20%);
-    pointer-events: none;
-  }
 
   section.markets_hero.markets_hero--key-visual .markets_hero__content {
     position: relative;
