@@ -6,6 +6,7 @@ import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
 import { guideSearchFieldMobileSlotProps } from "@/components/form/guideFieldMobileProps";
 import PageNumbering from "@/components/pagination/PageNumbering";
+import { emptyStateIconSrc } from "@/data/commonAssets";
 import { fetchData } from "@/lib/pageDataApi";
 import type {
   TrainingCurriculumData,
@@ -381,32 +382,53 @@ export default function TrainingCurriculum({
           />
         </div>
 
-        <ul
-          className="support_service_training_curriculum__list"
-          data-slug="currMgmt-data"
-          data-slug-repeat="true"
-        >
-          {listItems.map((item) => (
-            <li
-              key={item.id}
-              className="support_service_training_curriculum__item"
-              data-slug-item
+        {listItems.length === 0 ? (
+          <div className="support_service_training_curriculum__empty">
+            <div
+              className="support_service_training_curriculum__empty-icon"
+              aria-hidden="true"
             >
-              <TrainingCard
-                course={item}
-                detailHref={trainingDetailHref(detailHrefPrefix, item.id, item.slug)}
-              />
-            </li>
-          ))}
-        </ul>
+              <img src={emptyStateIconSrc} alt="" />
+            </div>
+            <div className="support_service_training_curriculum__empty-text">
+              <p className="support_service_training_curriculum__empty-title">
+                There are no results
+              </p>
+              <p className="support_service_training_curriculum__empty-desc">
+                Try adjusting your filters or search terms.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <>
+            <ul
+              className="support_service_training_curriculum__list"
+              data-slug="currMgmt-data"
+              data-slug-repeat="true"
+            >
+              {listItems.map((item) => (
+                <li
+                  key={item.id}
+                  className="support_service_training_curriculum__item"
+                  data-slug-item
+                >
+                  <TrainingCard
+                    course={item}
+                    detailHref={trainingDetailHref(detailHrefPrefix, item.id, item.slug)}
+                  />
+                </li>
+              ))}
+            </ul>
 
-        <PageNumbering
-          className="support_service_training_curriculum__pagination"
-          currentPage={pageIndex + 1}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          ariaLabel={ariaLabel}
-        />
+            <PageNumbering
+              className="support_service_training_curriculum__pagination"
+              currentPage={pageIndex + 1}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              ariaLabel={ariaLabel}
+            />
+          </>
+        )}
       </div>
     </section>
   );

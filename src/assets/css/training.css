@@ -171,6 +171,51 @@
     border-top: 1px solid #e8e8e8;
   }
 
+  section.support_service_training_curriculum .support_service_training_curriculum__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    padding: 80px 0;
+  }
+
+  section.support_service_training_curriculum .support_service_training_curriculum__empty-icon {
+    width: 148px;
+    aspect-ratio: 1;
+    margin-bottom: 16px;
+  }
+
+  section.support_service_training_curriculum .support_service_training_curriculum__empty-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  section.support_service_training_curriculum .support_service_training_curriculum__empty-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  section.support_service_training_curriculum .support_service_training_curriculum__empty-title {
+    margin: 0;
+    color: #222;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+  }
+
+  section.support_service_training_curriculum .support_service_training_curriculum__empty-desc {
+    margin: 0;
+    color: #888;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
   .support_service_training_card {
     display: flex;
     gap: 50px;
@@ -358,6 +403,51 @@
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    padding: 80px 0;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-icon {
+    width: 148px;
+    aspect-ratio: 1;
+    margin-bottom: 16px;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-title {
+    margin: 0;
+    color: #222;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-desc {
+    margin: 0;
+    color: #888;
+    font-size: 16px;
+    line-height: 1.4;
   }
 
   section.support_service_training_detail_schedule .support_service_training_detail_schedule__item {
@@ -2193,6 +2283,24 @@
     border-top: 0;
   }
 
+  section.support_service_training_curriculum .support_service_training_curriculum__empty {
+    padding: 60px 0;
+  }
+
+  section.support_service_training_curriculum .support_service_training_curriculum__empty-icon {
+    width: 110px;
+  }
+
+  section.support_service_training_curriculum .support_service_training_curriculum__empty-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  section.support_service_training_curriculum .support_service_training_curriculum__empty-desc {
+    font-size: 15px;
+    line-height: 23px;
+  }
+
   .support-page--engineering-training .support_service_training_card,
   .support-page--service-training .support_service_training_card,
   .support-page--sales-training .support_service_training_card {
@@ -2456,6 +2564,24 @@
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty {
+    padding: 60px 0;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-icon {
+    width: 110px;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-desc {
+    font-size: 15px;
+    line-height: 23px;
   }
 
   section.support_service_training_detail_schedule .support_service_training_detail_schedule__item {

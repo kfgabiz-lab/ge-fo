@@ -4,6 +4,7 @@ import { FormControl, MenuItem } from "@mui/material";
 import { useMemo, useState } from "react";
 import { GuideSelectIcon } from "@/components/form/GuideFieldIcons";
 import GuideSelect from "@/components/form/GuideSelect";
+import { emptyStateIconSrc } from "@/data/commonAssets";
 import type { EngineeringTrainingDetail } from "@/data/services/engineeringTrainingDetailContent";
 import { toCategoryOptions, type CodeItem } from "../data/trainingData";
 import TrainingDetailSession from "./TrainingDetailSession";
@@ -120,20 +121,39 @@ export default function TrainingDetailSchedule({
           </FormControl>
         </div>
 
-        <ul
-          className="support_service_training_detail_schedule__list"
-          data-slug="currDtlMgmt-data"
-          data-slug-repeat="true"
-        >
-          {filteredSessions.map((session) => (
-            <TrainingDetailSession
-              key={session.id}
-              courseId={detail.courseId}
-              session={session}
-              hrefPrefix={hrefPrefix}
-            />
-          ))}
-        </ul>
+        {filteredSessions.length === 0 ? (
+          <div className="support_service_training_detail_schedule__empty">
+            <div
+              className="support_service_training_detail_schedule__empty-icon"
+              aria-hidden="true"
+            >
+              <img src={emptyStateIconSrc} alt="" />
+            </div>
+            <div className="support_service_training_detail_schedule__empty-text">
+              <p className="support_service_training_detail_schedule__empty-title">
+                There are no results
+              </p>
+              <p className="support_service_training_detail_schedule__empty-desc">
+                Try adjusting your filters
+              </p>
+            </div>
+          </div>
+        ) : (
+          <ul
+            className="support_service_training_detail_schedule__list"
+            data-slug="currDtlMgmt-data"
+            data-slug-repeat="true"
+          >
+            {filteredSessions.map((session) => (
+              <TrainingDetailSession
+                key={session.id}
+                courseId={detail.courseId}
+                session={session}
+                hrefPrefix={hrefPrefix}
+              />
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   );
