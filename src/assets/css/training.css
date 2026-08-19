@@ -247,6 +247,8 @@
 
   section.support_service_training_curriculum .support_service_training_curriculum__pagination {
     margin-top: 0;
+    padding-top: 30px;
+    border-top: 1px solid #e8e8e8;
     width: 100%;
   }
 
