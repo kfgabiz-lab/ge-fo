@@ -5402,12 +5402,16 @@ section.support_where_to_buy_banner .common_banner_02__link {
   }
 
   section.support_contact_form .support_contact_form__input--textarea .MuiOutlinedInput-input {
-    height: auto;
+    height: auto !important;
     min-height: 123px;
     max-height: 123px;
     padding: 0 20px;
     overflow-y: auto;
     resize: none;
+  }
+
+  section.support_contact_form .support_contact_form__input--textarea textarea[aria-hidden="true"] {
+    display: none !important;
   }
 
   section.support_contact_form .guide_field .MuiOutlinedInput-input::placeholder {
@@ -5845,12 +5849,16 @@ section.support_where_to_buy_banner .common_banner_02__link {
   }
 
   section.support_contact_form .support_contact_form__input--textarea .MuiOutlinedInput-input {
-    height: auto;
+    height: auto !important;
     min-height: 148px;
     max-height: 148px;
     padding: 0 20px;
     overflow-y: auto;
     resize: none;
+  }
+
+  section.support_contact_form .support_contact_form__input--textarea textarea[aria-hidden="true"] {
+    display: none !important;
   }
 
   section.support_contact_form .support_contact_form__password-toggle {

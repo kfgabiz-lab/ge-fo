@@ -513,9 +513,7 @@ section .btn-line-30--on-dark .btn-line-30__icon--copy {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 109px;
-  height: 33px;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
   padding: 0 14px;
   font-size: 15px;
   font-weight: 400;
@@ -1407,6 +1405,12 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     .icon_arrow-14 {
     filter: none;
   }
+
+  section.common_banner_02.common_banner_02--expert .common_banner_02__panel,
+  section.common_banner_02.common_banner_02--expert .common_banner_02__body,
+  section.common_banner_02.common_banner_02--expert .common_banner_02__contact {
+    overflow: visible;
+  }
 }
 
 @media (max-width: 780px) {
@@ -1513,6 +1517,16 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     padding: 0;
   }
 
+  section.common_banner_02.common_banner_02--expert .common_banner_02__panel,
+  section.common_banner_02.common_banner_02--expert .common_banner_02__body {
+    overflow: visible;
+  }
+
+  section.common_banner_02.common_banner_02--expert .common_banner_02__content {
+    position: relative;
+    z-index: 1;
+  }
+
   section.common_banner_02.common_banner_02--expert .common_banner_02__panel {
     min-height: 368px;
     border-radius: 0;
@@ -1606,44 +1620,25 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   }
 }
 
-/* common_banner_02 Copy Link — 로딩 + "Link copied!" 토스트 (devices_product_downloads 패턴과 동일) */
+/* common_banner_02 Copy Email — "Email copied!" 토스트 */
 .common_banner_02__copy {
   position: relative;
-}
-
-.common_banner_02__copy-spinner {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 14px;
-  height: 14px;
-  background: url("/ico/ico_loading_14.svg") center / 14px 14px no-repeat;
-  transform: translate(-50%, -50%);
-  animation: common_banner_02_copy_spin 0.7s linear infinite;
-}
-
-.common_banner_02__copy.is-loading .common_banner_02__copy-label,
-.common_banner_02__copy.is-loading .btn-line-30__icon--copy {
-  visibility: hidden;
-}
-
-.common_banner_02__copy.is-loading .common_banner_02__copy-spinner {
-  display: block;
+  overflow: visible;
+  z-index: 3;
 }
 
 .common_banner_02__copy-toast {
   position: absolute;
   left: 50%;
   bottom: 100%;
-  z-index: 2;
+  z-index: 20;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 109px;
   height: 33px;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
   padding: 0 14px;
   font-size: 15px;
   font-weight: 400;
@@ -1667,12 +1662,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   background: rgb(12 22 37 / 90%);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform: translateX(-50%);
-}
-
-@keyframes common_banner_02_copy_spin {
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
 }
 
 /* Rolling / Swiper nav 50px */
@@ -3812,7 +3801,6 @@ section.highlight_news--markets .section_tit {
   }
 
   .devices_product_downloads__file-btn-spinner,
-  .common_banner_02__copy-spinner,
   .devices_product_downloads__refresh-icon.is-spinning,
   .support_where_to_buy_contents__refresh-icon.is-spinning {
     animation: none;

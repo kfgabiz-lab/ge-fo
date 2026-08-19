@@ -718,7 +718,7 @@ function ContactUsFormContent() {
                 className="guide_field support_contact_form__input support_contact_form__input--textarea"
                 placeholder={contactUsFormCopy.inquiryDetailsPlaceholder}
                 multiline
-                minRows={5}
+                rows={5}
                 required
                 error={Boolean(errors.description)}
                 value={description}

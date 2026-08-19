@@ -3,10 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
-const LOADING_MS = 1000;
 const TOAST_MS = 1000;
-
-type CopyPhase = "idle" | "loading" | "copied";
 
 type CommonBanner02CopyLinkProps = {
   value: string;
@@ -22,59 +19,47 @@ export default function CommonBanner02CopyLink({
   variant = "on-dark",
   className,
 }: CommonBanner02CopyLinkProps) {
-  const [phase, setPhase] = useState<CopyPhase>("idle");
-  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const [copied, setCopied] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
-      timersRef.current.forEach(clearTimeout);
-      timersRef.current = [];
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
 
-  const handleCopy = async () => {
-    if (phase === "loading") return;
-
-    timersRef.current.forEach(clearTimeout);
-    timersRef.current = [];
-    setPhase("loading");
-
-    try {
-      await navigator.clipboard.writeText(value);
-    } catch {
+  const handleCopy = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
     }
 
-    const showToast = setTimeout(() => {
-      setPhase("copied");
-      const hideToast = setTimeout(() => setPhase("idle"), TOAST_MS);
-      timersRef.current.push(hideToast);
-    }, LOADING_MS);
-    timersRef.current.push(showToast);
+    setCopied(true);
+    timerRef.current = setTimeout(() => setCopied(false), TOAST_MS);
+
+    if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+      void navigator.clipboard.writeText(value).catch(() => {});
+    }
   };
 
   const baseClass =
     variant === "on-dark"
       ? "btn-base btn-line-30 btn-line-30--on-dark"
       : "btn-base btn-line-30";
-  const btnClass = [
-    className ? `${baseClass} ${className}` : baseClass,
-    "common_banner_02__copy",
-    phase === "loading" ? "is-loading" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const btnClass = className
+    ? `${baseClass} ${className} common_banner_02__copy`
+    : `${baseClass} common_banner_02__copy`;
 
   return (
     <button
       type="button"
       className={btnClass}
       onClick={handleCopy}
-      aria-busy={phase === "loading"}
       aria-live="polite"
     >
-      {phase === "copied" ? (
+      {copied ? (
         <span className="common_banner_02__copy-toast" role="status">
-          Link copied!
+          Email copied!
         </span>
       ) : null}
       <span className="common_banner_02__copy-label">{label}</span>
@@ -82,7 +67,6 @@ export default function CommonBanner02CopyLink({
         className="btn-line-30__icon btn-line-30__icon--copy"
         aria-hidden="true"
       />
-      <span className="common_banner_02__copy-spinner" aria-hidden="true" />
     </button>
   );
 }
