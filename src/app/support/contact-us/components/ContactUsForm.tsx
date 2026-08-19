@@ -262,6 +262,7 @@ function ContactUsFormContent() {
   const [errors, setErrors] = useState<ContactFieldErrors>({});
 
   const [submitting, setSubmitting] = useState(false);
+  const submitAckParts = contactUsFormCopy.submitAck.split("{privacyPolicy}");
 
   useEffect(() => {
     let alive = true;
@@ -826,7 +827,14 @@ function ContactUsFormContent() {
 
           <div className="support_contact_form__submit-wrap">
             <p className="support_contact_form__consent-note">
-              {contactUsFormCopy.submitAck}
+              {submitAckParts[0]}
+              <Link
+                href="/privacy-policy"
+                className="support_contact_form__consent-note-link"
+              >
+                {contactUsFormCopy.submitAckLinkLabel}
+              </Link>
+              {submitAckParts[1]}
             </p>
             <button
               type="submit"

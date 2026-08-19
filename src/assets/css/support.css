@@ -5607,6 +5607,13 @@ section.support_where_to_buy_banner .common_banner_02__link {
     opacity: 0.8;
   }
 
+  section.support_contact_form .support_contact_form__consent-note-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+
   section.support_contact_form .support_contact_form__submit-wrap {
     display: flex;
     flex-direction: column;
