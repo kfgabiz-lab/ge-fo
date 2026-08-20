@@ -6099,6 +6099,26 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
   width: 100%;
 }
 
+.support_contact_view_response_modal__password-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin: 0 16px 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.support_contact_view_response_modal__password-toggle img {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
 .support_contact_view_response_modal__fields .guide_field .MuiOutlinedInput-root,
 .support_contact_view_response_modal__input .MuiOutlinedInput-root {
   height: 50px;
