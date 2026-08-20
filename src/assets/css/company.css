@@ -6104,14 +6104,145 @@ section.company-blog-list .company-blog__tag:hover {
     color: #222;
   }
 
+  section.company-esg-climate .company-esg-climate__roadmap-visual {
+    position: relative;
+    width: 100%;
+    max-width: 1440px;
+    min-height: 486px;
+  }
+
   section.company-esg-climate .company-esg-climate__roadmap-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
     display: block;
     width: 100%;
     height: auto;
+    pointer-events: none;
   }
 
   section.company-esg-climate .company-esg-climate__roadmap-phases {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 496fr 489fr 455fr;
+    gap: 0;
+    align-items: start;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-phase {
+    display: block;
+    min-width: 0;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-phase:nth-child(1) {
+    margin-left: calc(7 / 1440 * 100%);
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-line {
     display: none;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-phase-body {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 428px;
+    min-width: 0;
+    padding-left: 48px;
+    margin-left: 6px;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-phase-head {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-phase-label {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
+    color: #e60040;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-phase-heading {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: -0.01em;
+    color: #0f1f45;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-items {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-item-text {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-item-text::before {
+    flex-shrink: 0;
+    width: 4px;
+    height: 4px;
+    margin-top: 10px;
+    background: #222;
+    content: "";
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-subitems {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0 0 0 12px;
+    list-style: none;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-subitem {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #888;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-subitem::before {
+    flex-shrink: 0;
+    width: 4px;
+    height: 1px;
+    margin-top: 11px;
+    background: #888;
+    content: "";
   }
 
   section.company-esg-policies {
@@ -7474,6 +7605,11 @@ section.company-blog-list .company-blog__tag:hover {
     line-height: 30px;
     letter-spacing: -0.01em;
     color: #222;
+  }
+
+  section.company-esg-climate .company-esg-climate__roadmap-visual {
+    min-height: 0;
+    padding-left: 0;
   }
 
   section.company-esg-climate .company-esg-climate__roadmap-body {
