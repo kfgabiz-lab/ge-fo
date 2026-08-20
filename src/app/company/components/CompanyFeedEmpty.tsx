@@ -24,7 +24,7 @@ export default function CompanyFeedEmpty({
       <div className={`${prefix}__empty-text`}>
         <p className={`${prefix}__empty-title`}>There are no results</p>
         <p className={`${prefix}__empty-desc`}>
-          Check if all the words are spelled correctly
+          Try adjusting your filters or search terms.
         </p>
       </div>
       <Link
