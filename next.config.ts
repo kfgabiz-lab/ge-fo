@@ -128,7 +128,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/products-systems/motor-control",
-        destination: "/products-category/lv-products-and-systems",
+        destination: "/product-category/lv-products-and-systems",
         permanent: true,
       },
       {
@@ -168,7 +168,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/products-systems/software",
-        destination: "/products-category/software",
+        destination: "/product-category/software",
         permanent: true,
       },
       {
@@ -179,6 +179,11 @@ const nextConfig: NextConfig = {
       {
         source: "/products-systems/variable-frequency-drive",
         destination: "/product-range/variable-frequency-drive",
+        permanent: true,
+      },
+      {
+        source: "/products-category/:slug*",
+        destination: "/product-category/:slug*",
         permanent: true,
       },
     ];

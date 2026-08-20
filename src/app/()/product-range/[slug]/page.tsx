@@ -179,7 +179,7 @@ export default async function ProductRangeRoutePage({
           ? [
               {
                 name: lv1.name,
-                url: lv1.slug ? pageUrl(`/products-category/${lv1.slug}`) : currentUrl,
+                url: lv1.slug ? pageUrl(`/product-category/${lv1.slug}`) : currentUrl,
               },
             ]
           : []),

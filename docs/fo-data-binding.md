@@ -136,7 +136,7 @@
 search, support(contact-us·where-to-buy만 이관), guide — 아직 fo에 마이그레이션되지 않았습니다(company/services는 이관 완료, 나머지 하위 메뉴는 미이관). 필요 시 fo-orchestrator의 STEP 0-0(페이지 분석)부터 시작합니다.
 
 ### products-systems (데이터바인딩 완료 + URL 라우팅 개편 완료)
-카테고리(1depth/2depth)·제품상세는 `category-data`/`product-data`를 seo.slug 기준으로 조회하는 **3계층 동적 라우트**로 재구성됐습니다: `src/app/()/products-category/[slug]`(1depth) · `src/app/()/product-range/[slug]`(2depth 카테고리 또는 제품) · `src/app/()/product/[slug]`(제품). 과거의 `motor-control`/`lv-automation`/`variable-frequency-drive`/`software` 폴더 기반 라우트는 삭제됐고, 구 URL은 `next.config.ts`의 `redirects()`로 매핑돼 있습니다(seo.slug 확정분만 — 미입력분은 매핑 없음, 데이터 보정 후 수동 추가 필요).
+카테고리(1depth/2depth)·제품상세는 `category-data`/`product-data`를 seo.slug 기준으로 조회하는 **3계층 동적 라우트**로 재구성됐습니다: `src/app/()/product-category/[slug]`(1depth) · `src/app/()/product-range/[slug]`(2depth 카테고리 또는 제품) · `src/app/()/product/[slug]`(제품). 과거의 `motor-control`/`lv-automation`/`variable-frequency-drive`/`software` 폴더 기반 라우트, 그리고 구 1depth 경로 `products-category`는 삭제/변경됐고, 해당 구 URL들은 모두 `next.config.ts`의 `redirects()`로 현재 URL(`product-category/*`)에 매핑돼 있습니다(seo.slug 확정분만 — 미입력분은 매핑 없음, 데이터 보정 후 수동 추가 필요).
 
 제품상세는 slug별 예외 없이 `GenericProductDetail`(`src/app/()/products-systems/components/product/GenericProductDetail.tsx`) 하나로 렌더됩니다 — DB에 없는 리치 섹션(다운로드/Applications/Why 등)은 안 나오고 제네릭 템플릿 기본값으로 폴백하며, 데이터가 채워지면 코드 수정 없이 자동 반영됩니다.
 

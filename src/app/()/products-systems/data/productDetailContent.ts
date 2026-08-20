@@ -462,7 +462,7 @@ export const productTemplateDetail: ProductDetail = {
   series: "Product Template",
   category: "Product Category",
   parentLabel: "Product Category",
-  parentHref: "/products-category/lv-products-and-systems",
+  parentHref: "/product-category/lv-products-and-systems",
   description:
     "Product detail page template based on the H100 Plus layout. Replace hero copy, specs, key features, lineup, downloads, video, and other products for each new product page.",
   otherProducts: [

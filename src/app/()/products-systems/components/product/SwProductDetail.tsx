@@ -394,7 +394,7 @@ export default async function SwProductDetail({
     productNode,
     breadcrumbList(currentUrl, [
       { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },
-      { name: "Software", url: pageUrl("/products-category/software") },
+      { name: "Software", url: pageUrl("/product-category/software") },
       { name: bind.title ?? slug, url: currentUrl },
     ]),
   ]);

@@ -59,7 +59,7 @@ export default async function ProductsCategoryRoutePage({
       ])
     : [[], []];
 
-  const currentUrl = pageUrl(`/products-category/${slug}`);
+  const currentUrl = pageUrl(`/product-category/${slug}`);
   const productsWithUrl = products
     .map((p) => ({ p, url: itemUrl(p.href) }))
     .filter((x): x is { p: (typeof products)[number]; url: string } => x.url !== null);

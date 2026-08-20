@@ -171,7 +171,7 @@ export const marketsSolutionZones: SolutionZone[] = [
         "c-dc",
         "DC Products",
         productImg.dcProducts,
-        "/products-category/dc-devices",
+        "/product-category/dc-devices",
       ),
     ],
   },

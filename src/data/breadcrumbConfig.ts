@@ -45,7 +45,7 @@ const configs: Record<string, BreadcrumbConfig> = {
     crumbs: [{ label: "Markets", href: "/markets/commercial-residential" }],
     current: "Industrial",
   },
-  "/products-category/lv-products-and-systems": {
+  "/product-category/lv-products-and-systems": {
     crumbs: [
       { label: "Products & Systems" },
     ],
@@ -65,7 +65,7 @@ const configs: Record<string, BreadcrumbConfig> = {
       { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
-        href: "/products-category/lv-products-and-systems",
+        href: "/product-category/lv-products-and-systems",
       },
     ],
     current: "Variable Frequency Drive",
@@ -75,7 +75,7 @@ const configs: Record<string, BreadcrumbConfig> = {
       { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
-        href: "/products-category/lv-products-and-systems",
+        href: "/product-category/lv-products-and-systems",
       },
       {
         label: "Variable Frequency Drive",
@@ -89,7 +89,7 @@ const configs: Record<string, BreadcrumbConfig> = {
       { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
-        href: "/products-category/lv-products-and-systems",
+        href: "/product-category/lv-products-and-systems",
       },
       {
         label: "Variable Frequency Drive",
@@ -103,7 +103,7 @@ const configs: Record<string, BreadcrumbConfig> = {
       { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
-        href: "/products-category/lv-products-and-systems",
+        href: "/product-category/lv-products-and-systems",
       },
       {
         label: "Molded Case Circuit Breaker",
@@ -112,7 +112,7 @@ const configs: Record<string, BreadcrumbConfig> = {
     ],
     current: "Susol UL Smart MCCB",
   },
-  "/products-category/software": {
+  "/product-category/software": {
     crumbs: [
       { label: "Products & Systems" },
     ],

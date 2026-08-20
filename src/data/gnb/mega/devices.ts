@@ -1,5 +1,5 @@
 
-export const SOFTWARE_HREF = "/products-category/software";
+export const SOFTWARE_HREF = "/product-category/software";
 
 export const softwareProductHrefs = {
   scada: "/product-range/scada",

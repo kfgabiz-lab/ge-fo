@@ -159,7 +159,7 @@ export function buildProductJsonLdGraph(input: {
   const crumbs = [
     { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },
     ...(lv1Name
-      ? [{ name: lv1Name, url: lv1Slug ? pageUrl(`/products-category/${lv1Slug}`) : `${currentUrl}#lv1` }]
+      ? [{ name: lv1Name, url: lv1Slug ? pageUrl(`/product-category/${lv1Slug}`) : `${currentUrl}#lv1` }]
       : []),
     ...(lv2Name
       ? [{ name: lv2Name, url: lv2Slug ? pageUrl(`/product-range/${lv2Slug}`) : `${currentUrl}#lv2` }]

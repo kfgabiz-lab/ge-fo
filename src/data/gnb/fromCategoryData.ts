@@ -91,7 +91,7 @@ export async function fetchDevicesMegaMenu(): Promise<GnbDevicesMegaMenu> {
     return {
       id: top.categorySlug || rowKey(top),
       label: top.categoryTitle ?? "",
-      href: top.categorySlug ? `/products-category/${top.categorySlug}` : "",
+      href: top.categorySlug ? `/product-category/${top.categorySlug}` : "",
       children,
     };
   });
