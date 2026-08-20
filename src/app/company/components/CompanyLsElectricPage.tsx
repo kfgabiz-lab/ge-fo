@@ -76,7 +76,10 @@ function LsElectricGlobalSection() {
       <div className="inner">
         <div className="company-ls-electric-global__head">
           <h2 className="company-ls-electric-global__tit">{lsElectricGlobal.title}</h2>
-          <p className="company-ls-electric-global__desc">{lsElectricGlobal.description}</p>
+          <p className="company-ls-electric-global__desc">
+            LS ELECTRIC builds market-specific plans to expand its global presence.<br />
+            We strengthen local operations and tailor power, automation, and energy solutions to each market.
+          </p>
         </div>
         <div className="company-ls-electric-global__visual">
           <div className="company-ls-electric-global__map">
@@ -259,7 +262,13 @@ function LsElectricPttSection() {
     <section className="company-ls-electric-ptt">
       <div className="company-ls-electric-ptt__bg" aria-hidden />
       <div className="inner">
-        <CompanyAboutSectionHead title={lsElectricPtt.title} description={lsElectricPtt.description} />
+        <div className="company-about__head">
+          <h2 className="section_tit">{lsElectricPtt.title}</h2>
+          <p className="section_desc">
+            PT&amp;T advances reliable energy systems for future generations.<br />
+            Rigorous testing validates product and system performance, quality, and certification readiness.
+          </p>
+        </div>
         <div className="company-ls-electric-ptt__cards">
           {lsElectricPtt.cards.map((card) => (
             <PttCard key={card.id} card={card} />

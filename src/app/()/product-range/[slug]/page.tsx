@@ -94,7 +94,7 @@ export default async function ProductRangeRoutePage({
       fetchLv1Parent(category.id),
     ]);
     const intro = {
-      parentLabel: "Products & Systems",
+      parentLabel: lv1.name || "Products & Systems",
       title: category.title,
       description: category.description,
     };

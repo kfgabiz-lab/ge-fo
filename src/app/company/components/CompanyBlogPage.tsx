@@ -80,7 +80,7 @@ export default function CompanyBlogPage({
       where: {
         ...BLOG_STATUS_WHERE,
         ...(categoryCode ? { "eq_blog.category": categoryCode } : {}),
-        ...(search ? { "title|content": search } : {}),
+        ...(search ? { "title|content|hashtag": search } : {}),
       },
       sort:
         sort === "oldest"

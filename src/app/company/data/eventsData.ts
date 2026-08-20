@@ -86,8 +86,8 @@ export function eventsCalendarQuery() {
   return {
     slug: "events-data",
     page: 0,
-    unpaged: true,
-    sort: "events.period_from,asc",
+    size: 2,
+    sort: "events.period_to,asc",
     where: {
       ...EVENTS_VISIBLE_WHERE,
       exclude: "content",

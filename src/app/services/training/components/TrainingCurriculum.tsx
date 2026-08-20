@@ -258,7 +258,7 @@ export default function TrainingCurriculum({
             </GuideSelect>
           </FormControl>
 
-          <FormControl className="guide_field guide_field--h50 guide_field--w200 guide_field--fill-muted">
+          <FormControl className={`guide_field guide_field--h50 guide_field--w200${lvDisabled ? " guide_field--fill-muted" : ""}`}>
             <GuideSelect
               value={lvCategoryValue}
               displayEmpty
@@ -285,7 +285,7 @@ export default function TrainingCurriculum({
             </GuideSelect>
           </FormControl>
 
-          <FormControl className="guide_field guide_field--h50 guide_field--w200 guide_field--fill-muted">
+          <FormControl  className={`guide_field guide_field--h50 guide_field--w200${subDisabled ? " guide_field--fill-muted" : ""}`}>
             <GuideSelect
               value={subCategoryValue}
               displayEmpty

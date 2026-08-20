@@ -3,8 +3,11 @@
 import { useId, useRef } from "react";
 import {
   COOKIE_CONSENT_STORAGE_KEY,
+  COOKIE_PREFERENCES_STORAGE_KEY,
+  cookiePreferencesModal,
   cookieSettingsModal,
   type CookieConsentValue,
+  type CookiePreferences,
 } from "@/data/common/cookieSettingsContent";
 import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
 import { useModalDismiss } from "@/lib/useModalDismiss";
@@ -16,10 +19,27 @@ type CookieSettingsModalProps = {
   onSettings?: () => void;
 };
 
-function persistConsent(value: CookieConsentValue) {
+function getAllPreferences(value: boolean): CookiePreferences {
+  return Object.fromEntries(
+    cookiePreferencesModal.categories.map((category) => [
+      category.id,
+      category.required ? true : value,
+    ]),
+  ) as CookiePreferences;
+}
+
+function persistConsent(
+  consent: CookieConsentValue,
+  preferences: CookiePreferences,
+) {
   try {
-    window.localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, value);
+    window.localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, consent);
+    window.localStorage.setItem(
+      COOKIE_PREFERENCES_STORAGE_KEY,
+      JSON.stringify(preferences),
+    );
   } catch {
+    // localStorage 접근 불가 시 무시
   }
 }
 
@@ -39,12 +59,12 @@ export default function CookieSettingsModal({
   if (!open) return null;
 
   const handleAccept = () => {
-    persistConsent("accepted");
+    persistConsent("accepted", getAllPreferences(true));
     onClose?.();
   };
 
   const handleReject = () => {
-    persistConsent("rejected");
+    persistConsent("rejected", getAllPreferences(false));
     onClose?.();
   };
 

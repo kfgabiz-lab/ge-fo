@@ -111,7 +111,7 @@ export const contactUsFormCopy = {
   confirmPasswordPlaceholder: "Enter Password Confirm",
   confirmPasswordMismatch: "Passwords do not match.",
   sendLabel: "Send",
-  sendLabelMobile: "LIST",
+  sendLabelMobile: "Send",
   sendingLabel: "Sending...",
   submitAck:
     'By clicking "Send", you acknowledge that your information will be processed in accordance with our {privacyPolicy}, which includes the transfer of your inquiry data to our parent company in South Korea for support purposes.',

@@ -127,6 +127,7 @@ export default function RequestForTrainingConsentSection({
           <ReCAPTCHA
             ref={recaptchaRef}
             sitekey={recaptchaSiteKey}
+            hl="en"
             onChange={(token) => {
               setStep4Field("recaptchaToken", token ?? "");
               onClearError?.("recaptcha");
