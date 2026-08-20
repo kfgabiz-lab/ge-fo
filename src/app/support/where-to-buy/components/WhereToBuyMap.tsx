@@ -137,6 +137,10 @@ export default function WhereToBuyMap({
       lastPopupPosRef.current = null;
       return;
     }
+    if (window.matchMedia("(max-width: 780px)").matches) {
+      clearPopupPositionRef.current();
+      return;
+    }
     const map = mapRef.current;
     const overlay = overlayRef.current;
     const loc = activeLocationRef.current;
@@ -437,7 +441,7 @@ export default function WhereToBuyMap({
         aria-label={`Map showing distributor locations near ${activeLocation?.name ?? ""}`}
         data-lenis-prevent-wheel
       />
-      {/* 사용자가 지도를 이동/줌한 뒤에만 노출 — 클릭 시 현재 영역 기준으로 목록을 갈아끼운다 */}
+      {/*
       {mapReady && showAreaButton ? (
         <button
           type="button"
@@ -451,6 +455,7 @@ export default function WhereToBuyMap({
           Search this area
         </button>
       ) : null}
+      */}
     </div>
   );
 }
