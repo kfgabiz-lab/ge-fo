@@ -127,15 +127,15 @@ export const marketsSolutionZones: SolutionZone[] = [
       ),
       solutionProduct(
         "c-ul1558",
-        "UL1558 Switchgear",
+        "UL 1558 Switchgear",
         productImg.ul1558,
-        "/product/ul1558-switchgear",
+        "/product/ul-1558-switchgear",
       ),
       solutionProduct(
         "c-ul67",
-        "UL67 Panelboard",
+        "UL 67 Panelboard",
         productImg.ul67Panelboard,
-        "/product/ul67-panelboard",
+        "/product/ul-67-panelboard",
       ),
       solutionProduct(
         "c-padmount",
@@ -200,9 +200,9 @@ export const marketsSolutionZones: SolutionZone[] = [
     products: [
       solutionProduct(
         "f-ul67",
-        "UL67 Panelboard",
+        "UL 67 Panelboard",
         productImg.ul67Panelboard,
-        "/product/ul67-panelboard",
+        "/product/ul-67-panelboard",
       ),
     ],
   },
