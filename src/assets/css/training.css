@@ -3723,6 +3723,10 @@
     color: #222;
   }
 
+  section.support_service_training_session_detail .support_service_training_session_detail__required {
+    color: #e60040;
+  }
+
   section.support_service_training_session_detail .support_service_training_session_detail__form-divider {
     border-top: 1px solid #e8e8e8;
   }
