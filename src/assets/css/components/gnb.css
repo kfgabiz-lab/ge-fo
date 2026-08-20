@@ -4594,10 +4594,6 @@ color: #fff;
     padding-bottom: 16px;
   }
 
-  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_list--depth3 .gnb_mobile_list__label {
-    max-width: 307px;
-  }
-
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_list__arrow--18 {
     width: 18px;
     height: 18px;
@@ -4616,6 +4612,18 @@ color: #fff;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+
+  :is(.gnb_menu_wrap, .main_header) .gnb_mobile_list--depth3 .gnb_mobile_list__label {
+    display: -webkit-box;
+    max-width: 307px;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
 
   :is(.gnb_menu_wrap, .main_header) .gnb_mobile_list__arrow {

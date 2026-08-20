@@ -11153,4 +11153,18 @@ section.devices_product_lineup
     height: auto;
     min-height: 50px;
   }
+
+  /* iOS Safari — 표 셀·자식 텍스트 자동 확대 차단 */
+  section.devices_product_lineup table th,
+  section.devices_product_lineup table td,
+  section.devices_product_lineup table th *,
+  section.devices_product_lineup table td * {
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+  }
+
+  section.devices_product_lineup table th,
+  section.devices_product_lineup table td {
+    max-height: 999999px;
+  }
 }

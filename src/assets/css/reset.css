@@ -80,15 +80,21 @@ ol {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+
+/* iOS Safari font boosting — 표 셀·자식 요소 글자 자동 확대 차단 */
+table,
+caption,
+th,
+td,
+th *,
+td * {
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
 }
 
-/* iOS Safari font boosting — 표 셀 글자만 키우는 현상 차단 */
 th,
 td {
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
   max-height: 999999px;
 }
 
