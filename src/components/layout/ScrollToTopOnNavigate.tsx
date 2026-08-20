@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { usePathname } from "next/navigation";
 import { scrollWindowTo } from "@/lib/lenisScroll";
+import {
+  consumeBackForwardNavigation,
+  isBackForwardNavigation,
+} from "@/lib/navigation/historyNavigation";
 
 function scrollToTop() {
   scrollWindowTo(0, { immediate: true });
@@ -22,25 +26,18 @@ export default function ScrollToTopOnNavigate() {
 
   useLayoutEffect(() => {
     if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
+      window.history.scrollRestoration = "auto";
     }
 
-    scrollToTopUnlessHash();
-  }, []);
-
-  useEffect(() => {
-    const onPageShow = (event: PageTransitionEvent) => {
-      if (event.persisted) {
-        scrollToTopUnlessHash();
-      }
-    };
-
-    window.addEventListener("pageshow", onPageShow);
-    return () => window.removeEventListener("pageshow", onPageShow);
+    if (!isBackForwardNavigation()) {
+      scrollToTopUnlessHash();
+    }
   }, []);
 
   useLayoutEffect(() => {
-    scrollToTopUnlessHash();
+    if (!consumeBackForwardNavigation()) {
+      scrollToTopUnlessHash();
+    }
   }, [pathname]);
 
   return null;

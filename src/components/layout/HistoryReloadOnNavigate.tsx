@@ -1,22 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
 import { dispatchGnbClose } from "@/lib/navigation/gnbCloseEvent";
-import {
-  isGuideHubPath,
-  isMainPath,
-  isPageIndexPath,
-} from "@/lib/navigation/crossSectionNav";
-import {
-  clearHistoryNavigationPending,
-  isBackForwardNavigation,
-  isHistoryNavigationPending,
-  markHistoryNavigationPending,
-} from "@/lib/navigation/historyNavigation";
-
-const IS_DEV = process.env.NODE_ENV === "development";
-const HISTORY_RELOAD_DELAY_MS = 200;
+import { markBackForwardNavigation } from "@/lib/navigation/historyNavigation";
 
 function shouldIgnoreLinkClick(event: MouseEvent, anchor: HTMLAnchorElement) {
   return (
@@ -31,18 +17,6 @@ function shouldIgnoreLinkClick(event: MouseEvent, anchor: HTMLAnchorElement) {
   );
 }
 
-function runHardNavigation() {
-  clearHistoryNavigationPending();
-  dispatchGnbClose();
-
-  if (IS_DEV) {
-    window.location.reload();
-    return;
-  }
-
-  window.location.replace(window.location.href);
-}
-
 function isHashOnlyNavigation(target: URL, current: URL) {
   return (
     target.pathname === current.pathname &&
@@ -53,115 +27,36 @@ function isHashOnlyNavigation(target: URL, current: URL) {
 }
 
 export default function HistoryReloadOnNavigate() {
-  const pathname = usePathname();
-  const pathnameRef = useRef(pathname);
-  const scheduleHardNavigationRef = useRef<() => void>(() => {});
+  const pathnameRef = useRef<string>("");
 
   useEffect(() => {
     pathnameRef.current = window.location.pathname;
   }, []);
 
   useEffect(() => {
-    let reloadTimer: number | null = null;
-
-    const scheduleHardNavigation = () => {
-      if (IS_DEV) {
-        runHardNavigation();
-        return;
-      }
-
-      if (reloadTimer !== null) return;
-
-      reloadTimer = window.setTimeout(() => {
-        reloadTimer = null;
-        runHardNavigation();
-      }, HISTORY_RELOAD_DELAY_MS);
-    };
-
-    scheduleHardNavigationRef.current = scheduleHardNavigation;
-
-    const onPopState = (event: Event) => {
+    const onPopState = () => {
       const nextPathname = window.location.pathname;
       const previousPathname = pathnameRef.current;
-
-      if (nextPathname === previousPathname) {
-        return;
-      }
-
+      if (nextPathname === previousPathname) return;
       pathnameRef.current = nextPathname;
-
-      if (isPageIndexPath(nextPathname)) {
-        markHistoryNavigationPending();
-        if (IS_DEV) {
-          event.stopImmediatePropagation();
-          runHardNavigation();
-          return;
-        }
-        scheduleHardNavigation();
-        return;
-      }
-
-      if (isGuideHubPath(nextPathname) || isGuideHubPath(previousPathname)) {
-        clearHistoryNavigationPending();
-        return;
-      }
-
-      markHistoryNavigationPending();
-
-      if (IS_DEV) {
-        event.stopImmediatePropagation();
-        runHardNavigation();
-        return;
-      }
-
-      scheduleHardNavigation();
+      markBackForwardNavigation();
+      dispatchGnbClose();
     };
 
-    const onPageShow = (event: PageTransitionEvent) => {
-      const path = window.location.pathname;
-
-      if (isPageIndexPath(path)) {
-        if (event.persisted || isBackForwardNavigation() || isHistoryNavigationPending()) {
-          markHistoryNavigationPending();
-          scheduleHardNavigation();
-        }
-        return;
-      }
-
-      if (isGuideHubPath(path)) {
-        clearHistoryNavigationPending();
-        return;
-      }
-
-      const pending = isHistoryNavigationPending();
-      const onMainViaHistory = isMainPath(path) && isBackForwardNavigation();
-
-      if (event.persisted || pending || onMainViaHistory) {
-        markHistoryNavigationPending();
-        scheduleHardNavigation();
-      }
-    };
-
-    window.addEventListener("popstate", onPopState, true);
-    window.addEventListener("pageshow", onPageShow, true);
-
-    return () => {
-      scheduleHardNavigationRef.current = () => {};
-      if (reloadTimer !== null) {
-        clearTimeout(reloadTimer);
-      }
-      window.removeEventListener("popstate", onPopState, true);
-      window.removeEventListener("pageshow", onPageShow, true);
-    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
   useEffect(() => {
-    if (!isHistoryNavigationPending()) return;
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        dispatchGnbClose();
+      }
+    };
 
-    if (isMainPath(pathname) || isPageIndexPath(pathname)) {
-      scheduleHardNavigationRef.current();
-    }
-  }, [pathname]);
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
 
   useEffect(() => {
     const onDocumentClick = (event: MouseEvent) => {
