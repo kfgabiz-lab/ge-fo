@@ -134,15 +134,17 @@ function EsgClimateSection() {
         </header>
         <div className="company-esg-climate__roadmap">
           <h3 className="company-esg-climate__roadmap-title">{esgClimate.roadmapTitle}</h3>
-          <img
-            className="company-esg-climate__roadmap-body"
-            loading="lazy"
-            decoding="async"
-            src={esgClimate.roadmapBodyImage}
-            alt={esgClimate.roadmapBodyAlt}
-          />
-          <ol className="company-esg-climate__roadmap-phases">
-            {esgClimate.roadmapPhases.map((phase) => (
+          <div className="company-esg-climate__roadmap-visual">
+            <img
+              className="company-esg-climate__roadmap-body"
+              loading="lazy"
+              decoding="async"
+              src={esgClimate.roadmapBodyImage}
+              alt=""
+              aria-hidden
+            />
+            <ol className="company-esg-climate__roadmap-phases">
+              {esgClimate.roadmapPhases.map((phase) => (
               <li
                 key={phase.id}
                 className="company-esg-climate__roadmap-phase"
@@ -183,8 +185,9 @@ function EsgClimateSection() {
                   </ul>
                 </div>
               </li>
-            ))}
-          </ol>
+              ))}
+            </ol>
+          </div>
         </div>
       </div>
     </section>

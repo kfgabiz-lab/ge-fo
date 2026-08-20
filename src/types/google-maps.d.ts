@@ -25,6 +25,7 @@ declare namespace google.maps {
   }
 
   class LatLngBounds {
+    constructor(sw?: LatLngLiteral, ne?: LatLngLiteral);
     extend(latLng: LatLngLiteral): void;
     getNorthEast(): LatLng;
     getSouthWest(): LatLng;
