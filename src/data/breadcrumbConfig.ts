@@ -203,7 +203,11 @@ const configs: Record<string, BreadcrumbConfig> = {
     current: "Blog",
   },
   "/company/blog/detail": {
-    crumbs: [{ label: "Company", href: "/company/blog" }],
+    crumbs: [
+      { label: "Company" },
+      { label: "Articles" },
+      { label: "Blog", href: "/company/blog" },
+    ],
     current: "Blog",
   },
   "/company/blog/no-data": {
@@ -219,8 +223,9 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/company/articles/detail": {
     crumbs: [
-      { label: "Company", href: "/company/blog" },
-      { label: "Media" },
+      { label: "Company" },
+      { label: "Articles" },
+      { label: "Articles", href: "/company/articles" },
     ],
     current: "Articles",
   },
@@ -240,8 +245,9 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/company/press/detail": {
     crumbs: [
-      { label: "Company", href: "/company/blog" },
-      { label: "Media" },
+      { label: "Company" },
+      { label: "Articles" },
+      { label: "Press", href: "/company/press" },
     ],
     current: "Press",
   },
@@ -261,8 +267,9 @@ const configs: Record<string, BreadcrumbConfig> = {
   },
   "/company/events/detail": {
     crumbs: [
-      { label: "Company", href: "/company/blog" },
-      { label: "Media" },
+      { label: "Company" },
+      { label: "Articles" },
+      { label: "Events", href: "/company/events" },
     ],
     current: "Events",
   },

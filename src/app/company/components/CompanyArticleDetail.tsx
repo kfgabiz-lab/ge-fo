@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 import { articleDetailClass } from "@/app/company/articleDetailClass";
 import DevicesProductVideoPlayer from "@/components/video/DevicesProductVideoPlayer";
+import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
 import { incrementViewCount } from "@/lib/pageDataApi";
 
 export type CompanyArticleDetailVariant = "blog" | "press" | "events" | "articles";
@@ -106,6 +108,13 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
     if (!slug || recordId == null || preview) return;
     void incrementViewCount(slug, recordId);
   }, [slug, recordId, preview]);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (typeof title !== "string" || !title) return;
+    seedBreadcrumbTitle(pathname, title);
+  }, [pathname, title]);
 
   const pageModifier =
     variant === "blog"
