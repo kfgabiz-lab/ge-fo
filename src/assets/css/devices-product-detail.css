@@ -4813,15 +4813,15 @@ section.devices_product_lineup .devices_product_lineup__grids--h100-plus .device
     height: auto;
     min-height: 48px;
     padding: 12px 8px;
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
     word-break: break-all;
   }
 
   section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options th *,
   section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options td * {
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
   }
 
   section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options th[rowspan="2"],
@@ -6100,7 +6100,7 @@ section.devices_product_lineup
   tbody
   td {
   font-size: 16px !important;
-  font-weight: 400 !important;
+  font-weight: 400;
   line-height: 24px !important;
 }
 
@@ -6140,9 +6140,9 @@ section.devices_product_lineup
     table
     td {
     min-width: 0;
-    font-size: 13px !important;
-    font-weight: 400 !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
   }
 
   section.devices_product_lineup
@@ -6302,8 +6302,8 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table
     td {
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
     padding: 12px 10px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -6325,9 +6325,9 @@ section.devices_product_lineup
     tbody
     td
     * {
-    font-size: 13px !important;
-    font-weight: 400 !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
   }
 
   section.devices_product_lineup [data-slugkey="product_etc.line_up"] table tbody th,
@@ -7492,8 +7492,8 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 10px;
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
@@ -7508,8 +7508,8 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:not(:has(thead)):has(.devices_product_lineup__category)
     td * {
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
   }
 
   section.devices_product_lineup
@@ -7571,8 +7571,8 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 8px;
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
@@ -7587,8 +7587,8 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:not(:has(thead)):has(.devices_product_lineup__category)
     td * {
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
   }
 
   section.devices_product_lineup
@@ -7964,9 +7964,9 @@ section.devices_product_lineup
     height: auto;
     min-height: 56px;
     padding: 12px 8px;
-    font-size: 13px !important;
-    font-weight: 400 !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
     white-space: normal;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -9269,7 +9269,7 @@ section.devices_product_lineup
   tbody
   td {
   font-size: 16px !important;
-  font-weight: 400 !important;
+  font-weight: 400;
   line-height: 24px !important;
 }
 
@@ -9309,9 +9309,9 @@ section.devices_product_lineup
     table
     td {
     min-width: 0;
-    font-size: 13px !important;
-    font-weight: 400 !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
   }
 
   section.devices_product_lineup
@@ -9471,8 +9471,8 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table
     td {
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
     padding: 12px 10px;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -9494,9 +9494,9 @@ section.devices_product_lineup
     tbody
     td
     * {
-    font-size: 13px !important;
-    font-weight: 400 !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
   }
 
   section.devices_product_lineup [data-slugkey="product_etc.line_up"] table tbody th,
@@ -10646,8 +10646,8 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 10px;
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
@@ -10662,8 +10662,8 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:not(:has(thead)):has(.devices_product_lineup__category)
     td * {
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
   }
 
   section.devices_product_lineup
@@ -10725,8 +10725,8 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 8px;
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
@@ -10741,8 +10741,8 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:not(:has(thead)):has(.devices_product_lineup__category)
     td * {
-    font-size: 13px !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    line-height: 19px;
   }
 
   section.devices_product_lineup
@@ -11118,9 +11118,9 @@ section.devices_product_lineup
     height: auto;
     min-height: 56px;
     padding: 12px 8px;
-    font-size: 13px !important;
-    font-weight: 400 !important;
-    line-height: 19px !important;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
     white-space: normal;
     word-break: break-word;
     overflow-wrap: break-word;
@@ -11187,8 +11187,8 @@ section.devices_product_lineup
     .devices_product_lineup__grids--h100-plus
     .devices_product_lineup__table--h100-plus-options
     th.devices_product_lineup__label * {
-    font-size: 13px !important;
+    font-size: 13px;
     font-weight: 600 !important;
-    line-height: 19px !important;
+    line-height: 19px;
   }
 }
