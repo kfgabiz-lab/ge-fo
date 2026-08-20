@@ -5328,6 +5328,18 @@ section.support_where_to_buy_banner .common_banner_02__link {
 
 /* Support — Contact Us (Figma 3670:30232) */
 
+section.support_contact_form .support_contact_form__consent-note-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: auto;
+}
+
+section.support_contact_form .support_contact_form__consent-note-link:visited {
+  color: inherit;
+}
+
 @media (min-width: 781px) {
 
   main.support-page--contact-us section.support_contact_title .inner,
@@ -5603,13 +5615,10 @@ section.support_where_to_buy_banner .common_banner_02__link {
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
-    color: #222;
-    opacity: 0.8;
+    color: rgba(34, 34, 34, 0.8);
   }
 
   section.support_contact_form .support_contact_form__consent-note-link {
-    color: inherit;
-    text-decoration: underline;
     text-underline-offset: 2px;
     text-decoration-thickness: 1px;
   }
@@ -5809,8 +5818,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
-    color: #222;
-    opacity: 0.8;
+    color: rgba(34, 34, 34, 0.8);
   }
 
   section.support_contact_form .support_contact_form__group {
