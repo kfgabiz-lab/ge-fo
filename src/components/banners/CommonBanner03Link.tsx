@@ -18,6 +18,24 @@ export default function CommonBanner03Link({ items }: CommonBanner03LinkProps) {
 
   return (
     <section className="common_banner_03">
+      <div className="common_banner_03__bg-wrap" aria-hidden="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          loading="lazy"
+          decoding="async"
+          className="common_banner_03__bg common_banner_03__bg--pc"
+          src="/img/main/common_banner_03.webp"
+          alt=""
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          loading="lazy"
+          decoding="async"
+          className="common_banner_03__bg common_banner_03__bg--mo"
+          src="/img/main/common_banner_03_m.webp"
+          alt=""
+        />
+      </div>
       {items.map((item, index) => {
         const isUnhover =
           hoveredIndex !== null && hoveredIndex !== index;
