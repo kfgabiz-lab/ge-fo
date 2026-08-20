@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    useLightningcss: true,
+    lightningCssFeatures: {
+      // iOS Safari용 -webkit- prefix 등 소스 그대로 유지 (자동 -moz- 추가/불필요 prefix 제거 방지)
+      exclude: ["vendor-prefixes"],
+    },
+  },
   poweredByHeader: false,
   // ge-api(SPRING_PROFILES_ACTIVE: local/developer/dev/prod)와 동일한 배포 프로필 값을
   // 클라이언트 번들에도 노출 — src/lib/deploymentProfile.ts 참고
