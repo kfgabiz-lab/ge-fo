@@ -1595,6 +1595,10 @@
     padding-bottom: calc(8px + 23px);
   }
 
+  section.support_service_training_request .support_service_training_request__field-hint+
+  .support_service_training_request__error{
+    position: relative;
+  }
   section.support_service_training_request .support_service_training_request__error {
     position: absolute;
     left: 0;
@@ -4125,7 +4129,10 @@
     gap: 0;
     padding-bottom: calc(8px + 23px);
   }
-
+  section.support_service_training_request .support_service_training_request__field-hint+
+  .support_service_training_request__error{
+    position: relative;
+  }
   section.support_service_training_request .support_service_training_request__error {
     position: absolute;
     left: 0;
