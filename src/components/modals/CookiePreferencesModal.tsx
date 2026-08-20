@@ -1,7 +1,7 @@
 "use client";
 
 import Checkbox from "@mui/material/Checkbox";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import {
   COOKIE_CONSENT_STORAGE_KEY,
   COOKIE_PREFERENCES_STORAGE_KEY,
@@ -46,6 +46,31 @@ function getAllPreferences(value: boolean): CookiePreferences {
   ) as CookiePreferences;
 }
 
+function getStoredPreferences(): CookiePreferences {
+  try {
+    const saved = window.localStorage.getItem(
+      COOKIE_PREFERENCES_STORAGE_KEY,
+    );
+
+    // 저장된 값이 없으면 categories의 defaultChecked 값 사용
+    if (!saved) {
+      return defaultCookiePreferences;
+    }
+
+    const parsed = JSON.parse(saved) as Partial<CookiePreferences>;
+
+    // 누락된 항목은 defaultChecked 값으로 보완
+    return {
+      ...defaultCookiePreferences,
+      ...parsed,
+      necessary: true, // 필수 쿠키는 항상 체크
+    };
+  } catch {
+    return defaultCookiePreferences;
+  }
+}
+
+
 export default function CookiePreferencesModal({
   open,
   onClose,
@@ -55,6 +80,12 @@ export default function CookiePreferencesModal({
   const [preferences, setPreferences] = useState<CookiePreferences>(
     defaultCookiePreferences,
   );
+
+  useEffect(() => {
+  if (!open) return;
+
+  setPreferences(getStoredPreferences());
+  }, [open]);
 
   const updatePreference = (id: CookiePreferenceId, checked: boolean) => {
     setPreferences((current) => ({ ...current, [id]: checked }));
@@ -106,7 +137,13 @@ export default function CookiePreferencesModal({
       }
     >
       <p className="cookie_preferences_modal__intro">
-        {cookiePreferencesModal.description}
+        {cookiePreferencesModal.descriptionBefore}
+        <a
+          href={cookiePreferencesModal.termsOfServiceHref}
+          className="cookie_preferences_modal__link"
+        >
+          {cookiePreferencesModal.termsOfServiceLabel}
+        </a>
       </p>
       <ul className="cookie_preferences_modal__list">
         {cookiePreferencesModal.categories.map((category) => {

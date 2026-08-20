@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { emptyStateIconSrc } from "@/data/commonAssets";
+import React from "react";
 
 type CompanyFeedEmptyVariant = "press" | "articles" | "blog";
 
 type CompanyFeedEmptyProps = {
   variant: CompanyFeedEmptyVariant;
   viewAllHref?: string;
-  onViewAllClick?: () => void;
+  onViewAllClick?: (e?: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
 export default function CompanyFeedEmpty({
@@ -29,7 +30,12 @@ export default function CompanyFeedEmpty({
       </div>
       <Link
         href={viewAllHref}
-        onClick={onViewAllClick}
+        onClick={(e) => {
+          if (onViewAllClick) {
+            e.preventDefault();
+            onViewAllClick(e);
+          }
+        }}
         className={`btn-base btn-lv01 btn-lv01--solid ${prefix}__empty-btn`}
       >
         View All

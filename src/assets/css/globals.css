@@ -3237,6 +3237,12 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
   list-style: none;
 }
 
+.cookie_preferences_modal__link {
+  color: inherit;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
 .cookie_preferences_modal__item + .cookie_preferences_modal__item {
   margin-top: 30px;
 }
