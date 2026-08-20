@@ -225,6 +225,11 @@ export default function TrainingCurriculum({
     setSearchTerm(query.trim());
     setPageIndex(0);
   };
+  const clearSearch = () => {
+    setQuery("");
+    setSearchTerm("");
+    setPageIndex(0);
+  };
 
   const handlePageChange = (page: number) => {
     setPageIndex(Math.max(0, page - 1));
@@ -319,7 +324,14 @@ export default function TrainingCurriculum({
             placeholder={curriculum.filters.searchPlaceholder}
             aria-label={curriculum.filters.searchPlaceholder}
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              const value = event.target.value;
+              setQuery(value);
+
+              if (value === "") {
+                clearSearch();
+              }
+            }}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 event.preventDefault();
@@ -339,11 +351,7 @@ export default function TrainingCurriculum({
                         type="button"
                         className="guide_field__search-clear"
                         aria-label="Clear search"
-                        onClick={() => {
-                          setQuery("");
-                          setSearchTerm("");
-                          setPageIndex(0);
-                        }}
+                        onClick={clearSearch}
                       >
                         <span className="guide_field__search-clear-icon" aria-hidden>
                           <img

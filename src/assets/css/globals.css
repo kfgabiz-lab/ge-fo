@@ -54,8 +54,6 @@ html {
   height: 100%;
   overflow-y: scroll;
   scrollbar-gutter: stable;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
 }
 
 html,

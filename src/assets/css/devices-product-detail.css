@@ -3457,6 +3457,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.devices_product_lineup .devices_product_lineup__grid--type1 table tbody td,
   section.devices_product_lineup .devices_product_lineup__grid--type1 tbody tr[data-tall] td {
+    min-width: 100px;
     min-height: 50px;
     padding: 14px 20px;
     font-weight: 400;
@@ -4812,9 +4813,15 @@ section.devices_product_lineup .devices_product_lineup__grids--h100-plus .device
     height: auto;
     min-height: 48px;
     padding: 12px 8px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-all;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options th *,
+  section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
   }
 
   section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options th[rowspan="2"],
@@ -5284,9 +5291,6 @@ section.devices_product_lineup
   color: #222;
   border-right: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  /* iOS Safari: 숫자·전압 표기 셀만 자동으로 글자 키우는 것 방지 */
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
   max-height: 999999px;
 }
 
@@ -6090,15 +6094,6 @@ section.devices_product_lineup
   }
 }
 
-/* UL1558 — iOS Safari colspan/넓은 셀 텍스트 팽창 방지 */
-section.devices_product_lineup
-  #lineup-ul1558-switchgear
-  [data-slugkey="product_etc.line_up"]
-  table {
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
-}
-
 section.devices_product_lineup
   #lineup-ul1558-switchgear
   [data-slugkey="product_etc.line_up"]
@@ -6107,8 +6102,6 @@ section.devices_product_lineup
   font-size: 16px !important;
   font-weight: 400 !important;
   line-height: 24px !important;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
 }
 
 /* UL1558 Switchgear — 모바일: 열 합=표 폭 고정 → 스크롤이 끝까지 가도록 */
@@ -6150,8 +6143,6 @@ section.devices_product_lineup
     font-size: 13px !important;
     font-weight: 400 !important;
     line-height: 19px !important;
-    -webkit-text-size-adjust: none !important;
-    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup
@@ -6317,9 +6308,6 @@ section.devices_product_lineup
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
-    /* iOS: 넓은 표·숫자 스펙 셀 자동 확대 완전 차단 */
-    -webkit-text-size-adjust: none !important;
-    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup [data-slugkey="product_etc.line_up"] table tbody td,
@@ -6340,8 +6328,6 @@ section.devices_product_lineup
     font-size: 13px !important;
     font-weight: 400 !important;
     line-height: 19px !important;
-    -webkit-text-size-adjust: none !important;
-    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup [data-slugkey="product_etc.line_up"] table tbody th,
@@ -6386,7 +6372,7 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
     tbody
-    th,
+    th:has(> img),
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
@@ -6397,7 +6383,7 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
     tbody
-    th,
+    th:has(> img),
   section.devices_product_lineup
     .devices_product_lineup__grid--type1
     [data-slugkey="product_etc.line_up"]
@@ -6406,6 +6392,21 @@ section.devices_product_lineup
     td {
     height: auto;
     min-height: 160px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:has(tbody th > img)
+    tbody
+    th:not(:has(> img)),
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table:has(tbody th > img)
+    tbody
+    th:not(:has(> img)) {
+    height: auto;
+    min-height: 50px;
   }
 
   /* 260810 start */
@@ -6583,28 +6584,28 @@ section.devices_product_lineup
 
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
-    table:has(thead .devices_product_lineup__frame-media)
+    table
     thead
-    th,
+    th:has(.devices_product_lineup__frame-media),
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
-    table:has(thead th img)
+    table
     thead
-    th,
-  section.devices_product_lineup
-    .devices_product_lineup__grid--type1
-    [data-slugkey="product_etc.line_up"]
-    table:has(thead .devices_product_lineup__frame-media)
-    thead
-    th,
+    th:has(> img),
   section.devices_product_lineup
     .devices_product_lineup__grid--type1
     [data-slugkey="product_etc.line_up"]
-    table:has(thead th img)
+    table
     thead
-    th {
-    height: 180px;
-    min-height: 180px;
+    th:has(.devices_product_lineup__frame-media),
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table
+    thead
+    th:has(> img) {
+    height: auto;
+    min-height: 160px;
   }
 
   /* Susol UL VCB / Load Interrupter — 모델명 행 높이 절반 (이미지 행 180px → 90px) */
@@ -6974,7 +6975,6 @@ section.devices_product_lineup
   [data-slugkey="product_etc.line_up"]
   table:has(thead):has(tbody th[rowspan]):not(:has(.devices_product_lineup__category)):not(:has(img))
   tbody
-section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options th.devices_product_lineup__category,
   th[rowspan],
 section.devices_product_lineup
   .devices_product_lineup__grid--type2
@@ -7492,11 +7492,24 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 10px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
+    max-height: 999999px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
   }
 
   section.devices_product_lineup
@@ -7558,11 +7571,24 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 8px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
+    max-height: 999999px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
   }
 
   section.devices_product_lineup
@@ -7945,8 +7971,6 @@ section.devices_product_lineup
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
-    -webkit-text-size-adjust: none !important;
-    text-size-adjust: none !important;
   }
 }
 
@@ -7968,6 +7992,38 @@ section.devices_product_lineup
   border-collapse: collapse;
   border-spacing: 0;
   table-layout: fixed;
+}
+
+/* 모바일: fixed 레이아웃은 td min-width를 무시하므로 auto + 셀 하한 */
+@media (max-width: 780px) {
+  section.devices_product_lineup table,
+  section.devices_product_lineup [data-slugkey="product_etc.line_up"] table,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type2
+    [data-slugkey="product_etc.line_up"]
+    table {
+    table-layout: auto;
+  }
+
+  section.devices_product_lineup td,
+  section.devices_product_lineup [data-slugkey="product_etc.line_up"] table td,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table
+    td,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type2
+    [data-slugkey="product_etc.line_up"]
+    table
+    td {
+    min-width: 100px;
+    max-width: none;
+  }
 }
 
 /* Metasol MS (/motor-control/metasol-ms) — PC에서 한 화면에 전체 표시 (가로 스크롤 없음)
@@ -8406,9 +8462,6 @@ section.devices_product_lineup
   color: #222;
   border-right: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  /* iOS Safari: 숫자·전압 표기 셀만 자동으로 글자 키우는 것 방지 */
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
   max-height: 999999px;
 }
 
@@ -9210,15 +9263,6 @@ section.devices_product_lineup
   }
 }
 
-/* UL1558 — iOS Safari colspan/넓은 셀 텍스트 팽창 방지 */
-section.devices_product_lineup
-  #lineup-ul1558-switchgear
-  [data-slugkey="product_etc.line_up"]
-  table {
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
-}
-
 section.devices_product_lineup
   #lineup-ul1558-switchgear
   [data-slugkey="product_etc.line_up"]
@@ -9227,8 +9271,6 @@ section.devices_product_lineup
   font-size: 16px !important;
   font-weight: 400 !important;
   line-height: 24px !important;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
 }
 
 /* UL1558 Switchgear — 모바일: 열 합=표 폭 고정 → 스크롤이 끝까지 가도록 */
@@ -9270,8 +9312,6 @@ section.devices_product_lineup
     font-size: 13px !important;
     font-weight: 400 !important;
     line-height: 19px !important;
-    -webkit-text-size-adjust: none !important;
-    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup
@@ -9437,9 +9477,6 @@ section.devices_product_lineup
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
-    /* iOS: 넓은 표·숫자 스펙 셀 자동 확대 완전 차단 */
-    -webkit-text-size-adjust: none !important;
-    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup [data-slugkey="product_etc.line_up"] table tbody td,
@@ -9460,8 +9497,6 @@ section.devices_product_lineup
     font-size: 13px !important;
     font-weight: 400 !important;
     line-height: 19px !important;
-    -webkit-text-size-adjust: none !important;
-    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup [data-slugkey="product_etc.line_up"] table tbody th,
@@ -9506,7 +9541,7 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
     tbody
-    th,
+    th:has(> img),
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
@@ -9517,7 +9552,7 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
     tbody
-    th,
+    th:has(> img),
   section.devices_product_lineup
     .devices_product_lineup__grid--type1
     [data-slugkey="product_etc.line_up"]
@@ -9526,6 +9561,21 @@ section.devices_product_lineup
     td {
     height: auto;
     min-height: 160px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:has(tbody th > img)
+    tbody
+    th:not(:has(> img)),
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table:has(tbody th > img)
+    tbody
+    th:not(:has(> img)) {
+    height: auto;
+    min-height: 50px;
   }
 
   /* 260810 start */
@@ -9703,28 +9753,28 @@ section.devices_product_lineup
 
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
-    table:has(thead .devices_product_lineup__frame-media)
+    table
     thead
-    th,
+    th:has(.devices_product_lineup__frame-media),
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
-    table:has(thead th img)
+    table
     thead
-    th,
-  section.devices_product_lineup
-    .devices_product_lineup__grid--type1
-    [data-slugkey="product_etc.line_up"]
-    table:has(thead .devices_product_lineup__frame-media)
-    thead
-    th,
+    th:has(> img),
   section.devices_product_lineup
     .devices_product_lineup__grid--type1
     [data-slugkey="product_etc.line_up"]
-    table:has(thead th img)
+    table
     thead
-    th {
-    height: 180px;
-    min-height: 180px;
+    th:has(.devices_product_lineup__frame-media),
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table
+    thead
+    th:has(> img) {
+    height: auto;
+    min-height: 160px;
   }
 
   /* Susol UL VCB / Load Interrupter — 모델명 행 높이 절반 (이미지 행 180px → 90px) */
@@ -10596,11 +10646,24 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 10px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
+    max-height: 999999px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
   }
 
   section.devices_product_lineup
@@ -10662,11 +10725,24 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 8px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
+    max-height: 999999px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
   }
 
   section.devices_product_lineup
@@ -11049,7 +11125,70 @@ section.devices_product_lineup
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
-    -webkit-text-size-adjust: none !important;
-    text-size-adjust: none !important;
+  }
+}
+
+/* 모바일 lineup td 최소 너비 — 파일 마지막에 두어 중복 규칙보다 우선 */
+@media (max-width: 780px) {
+  section.devices_product_lineup table,
+  section.devices_product_lineup [data-slugkey="product_etc.line_up"] table,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type2
+    [data-slugkey="product_etc.line_up"]
+    table {
+    table-layout: auto;
+  }
+
+  section.devices_product_lineup td,
+  section.devices_product_lineup [data-slugkey="product_etc.line_up"] table td,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table
+    td,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type2
+    [data-slugkey="product_etc.line_up"]
+    table
+    td {
+    min-width: 100px;
+    max-width: none;
+  }
+
+  /* 이미지 없는 th — 180px/160px 고정 높이 방지 */
+  section.devices_product_lineup th:not(:has(img)):not(:has(.devices_product_lineup__frame-media)) {
+    height: auto;
+    min-height: 50px;
+  }
+
+  section.devices_product_lineup table th,
+  section.devices_product_lineup table td {
+    max-height: 999999px;
+  }
+
+  /* Options(category) 표 — H100 Plus 라벨 th (EtherNet IP/ Modbus TCP 등) */
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th.devices_product_lineup__label,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th.devices_product_lineup__label *,
+  section.devices_product_lineup
+    .devices_product_lineup__grids--h100-plus
+    .devices_product_lineup__table--h100-plus-options
+    th.devices_product_lineup__label,
+  section.devices_product_lineup
+    .devices_product_lineup__grids--h100-plus
+    .devices_product_lineup__table--h100-plus-options
+    th.devices_product_lineup__label * {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 19px !important;
   }
 }

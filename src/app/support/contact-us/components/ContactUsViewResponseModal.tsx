@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import { contactUsViewResponseModal } from "@/data/support/contactUsContent";
 import { getWindowScrollY, lockPageScroll, unlockPageScroll } from "@/lib/lenisScroll";
@@ -36,6 +37,7 @@ export default function ContactUsViewResponseModal({
   const panelRef = useRef<HTMLDivElement>(null);
   const [inquiryNumber, setInquiryNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [checking, setChecking] = useState(false);
 
@@ -62,6 +64,7 @@ export default function ContactUsViewResponseModal({
     if (!open) {
       setInquiryNumber("");
       setPassword("");
+      setPasswordVisible(false);
       setErrors({});
       return;
     }
@@ -178,7 +181,8 @@ export default function ContactUsViewResponseModal({
                     ? " support_contact_view_response_modal__input--error"
                     : ""
                 }`}
-                value={inquiryNumber}
+                value={inquiryNumber}
+
                 onChange={(event) => {
                   setInquiryNumber(event.target.value);
                   if (errors.inquiryNumber) {
@@ -204,8 +208,8 @@ export default function ContactUsViewResponseModal({
                 className={`guide_field support_contact_view_response_modal__input${
                   errors.password ? " support_contact_view_response_modal__input--error" : ""
                 }`}
-                type="password"
-                value={password}
+                type={passwordVisible ? "text" : "password"}
+                value={password}
                 onChange={(event) => {
                   setPassword(event.target.value);
                   if (errors.password) {
@@ -213,6 +217,34 @@ export default function ContactUsViewResponseModal({
                   }
                 }}
                 error={Boolean(errors.password)}
+                slotProps={{
+                  htmlInput: {
+                    autoComplete: "off",
+                  },
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <button
+                          type="button"
+                          className="support_contact_view_response_modal__password-toggle"
+                          aria-label={passwordVisible ? "Hide password" : "Show password"}
+                          onClick={() => setPasswordVisible((open) => !open)}
+                        >
+                          <img
+                            src={
+                              passwordVisible
+                                ? "/ico/ico_password_on_22.webp"
+                                : "/ico/ico_password_off_22.webp"
+                            }
+                            alt=""
+                            width={22}
+                            height={22}
+                          />
+                        </button>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
               />
             </div>
           </div>

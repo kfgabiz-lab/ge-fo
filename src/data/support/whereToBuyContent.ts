@@ -225,7 +225,7 @@ export function filterLocationsByBounds(
 }
 
 export const whereToBuyEmptyContent = {
-  title: "No results found",
+  title: "There are no results",
   desc: "Try adjusting your filters or location.",
   viewAllLabel: "View All",
   iconSrc: emptyStateIconSrc,

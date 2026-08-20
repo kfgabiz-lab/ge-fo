@@ -126,8 +126,12 @@ export default function CompanyBlogPage({
   const handleViewAllClick = () => {
     // Clear search and reset category filter so "View All" shows full list
     setCategoryCode("");
+    // Reset sort to latest and go back to first page
+    setSort("latest");
+    setPageIndex(0);
     handleSearchSubmit("");
-  }
+  };
+  
   const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {
     setSort(value);
     setPageIndex(0);

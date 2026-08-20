@@ -138,8 +138,12 @@ export default function CompanyArticlesPage() {
     // Clear search and reset month/year filters so "View All" shows full list
     setMonth("");
     setYear("");
+    // Reset sort to latest and go back to first page
+    setSort("latest");
+    setPageIndex(0);
     handleSearchSubmit("");
   };
+  
 
   return (
     <main className="company-page company-page--articles" id="Page_company_articles">

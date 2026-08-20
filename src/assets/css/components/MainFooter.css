@@ -557,8 +557,10 @@
     flex-direction: column;
   }
   .main_footer {
-    background-position: right bottom;
     background-image: url("/img/footer/mo_bg_common_footer.webp");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: cover;
   }
   .main_footer__tit {
     font-size: 28px;

@@ -59,13 +59,13 @@ export function eventsFeaturedQuery(fallbackImage: string, now: Date = siteToday
   return {
     slug: "events-data",
     page: 0,
-    size: 100,
+    size: 2,
     sort: "events.period_from,asc",
     where: {
       ...EVENTS_VISIBLE_WHERE,
       exclude: "content",
       period_from_gte: "today()",
-      period_from_lte: nextMonthEnd(now),
+      //period_from_lte: nextMonthEnd(now),
     },
     리턴함수: (rows: PageDataItem[]): EventsFeaturedItem[] =>
       rows.map((item) => {
@@ -86,8 +86,8 @@ export function eventsCalendarQuery() {
   return {
     slug: "events-data",
     page: 0,
-    size: 2,
-    sort: "events.period_to,asc",
+    unpaged: true,
+    sort: "events.period_from,asc",
     where: {
       ...EVENTS_VISIBLE_WHERE,
       exclude: "content",
