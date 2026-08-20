@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { scrollWindowTo } from "@/lib/lenisScroll";
 import {
@@ -23,6 +23,7 @@ function scrollToTopUnlessHash() {
 
 export default function ScrollToTopOnNavigate() {
   const pathname = usePathname();
+  const isFirstRun = useRef(true);
 
   useLayoutEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -35,6 +36,11 @@ export default function ScrollToTopOnNavigate() {
   }, []);
 
   useLayoutEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+
     if (!consumeBackForwardNavigation()) {
       scrollToTopUnlessHash();
     }
