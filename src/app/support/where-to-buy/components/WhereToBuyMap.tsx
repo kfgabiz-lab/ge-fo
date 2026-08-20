@@ -13,13 +13,11 @@ import {
   whereToBuyPage,
   whereToBuyRadiusCircle,
 } from "@/data/support/whereToBuyContent";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import type { GeoCoord } from "@/lib/geo/distance";
 import {
   getGoogleMapsApiKey,
   loadGoogleMaps,
 } from "@/lib/googleMaps/loadGoogleMaps";
-import WhereToBuyMapPlaceholder from "./WhereToBuyMapPlaceholder";
 
 type PopupPixel = { x: number; y: number };
 
@@ -40,8 +38,6 @@ const mapFillStyle = {
   height: "100%",
   minHeight: "inherit",
 } as const;
-
-const MOBILE_MAP_MQ = "(max-width: 780px)";
 
 const MILES_PER_DEGREE_LAT = 69;
 
@@ -73,7 +69,6 @@ export default function WhereToBuyMap({
   radiusMiles,
 }: WhereToBuyMapProps) {
   const apiKey = getGoogleMapsApiKey();
-  const usePlaceholder = useMediaQuery(MOBILE_MAP_MQ);
   const mapCanvasRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.Marker[]>([]);
@@ -206,7 +201,7 @@ export default function WhereToBuyMap({
   };
 
   useEffect(() => {
-    if (usePlaceholder || !apiKey || !mapCanvasRef.current) {
+    if (!apiKey || !mapCanvasRef.current) {
       clearPopupPositionRef.current();
       return;
     }
@@ -344,29 +339,23 @@ export default function WhereToBuyMap({
       setShowAreaButton(false);
       setMapReady(false);
     };
-  }, [apiKey, usePlaceholder]);
+  }, [apiKey]);
 
   useEffect(() => {
-    if (usePlaceholder) {
-      return;
-    }
     if (!mapReady || !mapRef.current || !window.google?.maps) {
       return;
     }
     drawMarkersRef.current();
-  }, [locations, activeLocation, mapReady, usePlaceholder]);
+  }, [locations, activeLocation, mapReady]);
 
   useLayoutEffect(() => {
-    if (usePlaceholder || !mapReady) {
+    if (!mapReady) {
       return;
     }
     updatePopupPositionRef.current();
-  }, [activeLocation, mapReady, usePlaceholder]);
+  }, [activeLocation, mapReady]);
 
   useEffect(() => {
-    if (usePlaceholder) {
-      return;
-    }
     const circle = circleRef.current;
     if (!mapReady || !circle) {
       return;
@@ -378,12 +367,9 @@ export default function WhereToBuyMap({
     circle.setVisible(true);
     circle.setCenter(radiusOrigin);
     circle.setRadius(radiusMiles * MILES_TO_METERS);
-  }, [radiusOrigin, radiusMiles, boundsMode, mapReady, usePlaceholder]);
+  }, [radiusOrigin, radiusMiles, boundsMode, mapReady]);
 
   useEffect(() => {
-    if (usePlaceholder) {
-      return;
-    }
     const map = mapRef.current;
     if (!mapReady || !map || !window.google?.maps) {
       return;
@@ -429,22 +415,7 @@ export default function WhereToBuyMap({
         map.panTo({ lat: activeLocation.lat, lng: activeLocation.lng });
       }
     }
-  }, [
-    locations,
-    activeLocation,
-    isFiltered,
-    boundsMode,
-    mapReady,
-    usePlaceholder,
-  ]);
-
-  if (usePlaceholder) {
-    return (
-      <WhereToBuyMapPlaceholder
-        ariaLabel={`Map showing distributor locations near ${activeLocation?.name ?? ""}`}
-      />
-    );
-  }
+  }, [locations, activeLocation, isFiltered, boundsMode, mapReady]);
 
   if (!apiKey || mapError) {
     return (

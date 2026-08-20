@@ -131,7 +131,7 @@ export default function TrainingCurriculum({
   useEffect(() => {
     let alive = true;
 
-    if (lvCategoryValue !== "" || subCategoryValue !== "") {
+    if (categoryValue !== "") {
       const ids = resolveCategoryIds(
         categoryNodes,
         categoryValue,
@@ -172,9 +172,6 @@ export default function TrainingCurriculum({
       where: {
         ...trainingStatusWhere(variant),
         ...trainingHasSessionWhere(),
-        ...(categoryValue
-          ? { "eq_curriculum.product_category": categoryValue }
-          : {}),
         ...(searchTerm ? { "title|description": searchTerm } : {}),
       },
       sort: "createdAt,desc",

@@ -1,7 +1,7 @@
 "use client";
 
 import { Checkbox, MenuItem } from "@mui/material";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import {
   fetchTrainingCategories,
   type CodeItem,
@@ -68,13 +68,19 @@ function productKey(groupId: number, productId: number): string {
   return `${groupId}:${productId}`;
 }
 
+function toProductType(categoryType: TrainingCategoryType | ""): "P" | "A" {
+  return categoryType === "power" ? "P" : "A";
+}
+
 function buildProductGroups(
   items: TrainingProductTreeItem[],
   categoryType: TrainingCategoryType,
 ): ProductGroup[] {
   const groups = new Map<number, ProductGroup>();
   const seenProducts = new Set<string>();
+  const productType = toProductType(categoryType);
   for (const item of items) {
+    if ((item.productType ?? "") !== productType) continue;
     if (Number(item.categoryId ?? 0) <= 0) continue;
     const isPower = categoryType === "power";
     const groupId = Number((isPower ? item.lv1Id : item.lv2Id) ?? 0);
@@ -111,6 +117,7 @@ export default function RequestForTrainingProductSelector({
   const categoryType = step4.productCategoryType;
   const groupId = step4.productGroupId;
   const isEngineeringTrack = step1.trainingTrack === "engineering";
+  const engineeringCategoryInitializedRef = useRef(false);
 
   useEffect(() => {
     let alive = true;
@@ -141,6 +148,14 @@ export default function RequestForTrainingProductSelector({
     }
   }, [isEngineeringTrack, categoryType, setStep4Field]);
 
+  useEffect(() => {
+    if (engineeringCategoryInitializedRef.current) return;
+    engineeringCategoryInitializedRef.current = true;
+    if (isEngineeringTrack && categoryType === "") {
+      setStep4Field("productCategoryType", "power");
+    }
+  }, [isEngineeringTrack, categoryType, setStep4Field]);
+
   const groups = useMemo(
     () => (categoryType ? buildProductGroups(treeItems, categoryType) : []),
     [treeItems, categoryType],
@@ -168,7 +183,7 @@ export default function RequestForTrainingProductSelector({
     const next: RequestForTrainingSelectedProduct = {
       id,
       name,
-      type: categoryType === "power" ? "P" : "A",
+      type: toProductType(categoryType),
       groupId,
       groupTitle,
     };

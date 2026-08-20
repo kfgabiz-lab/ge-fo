@@ -111,6 +111,7 @@ export interface TrainingCategoryNode {
   depth1Title: string;
   depth2Title: string;
   productName: string;
+  productType: string;
 }
 
 function toCategoryNode(item: TrainingProductTreeItem): TrainingCategoryNode {
@@ -120,6 +121,7 @@ function toCategoryNode(item: TrainingProductTreeItem): TrainingCategoryNode {
     depth1Title: item.lv1Title ?? "",
     depth2Title: item.lv2Title ?? "",
     productName: item.productName ?? "",
+    productType: item.productType ?? "",
   };
 }
 
@@ -134,15 +136,23 @@ function distinctOptions(values: string[]): TrainingFilterOption[] {
   return out;
 }
 
+function nodesOfCategory(
+  nodes: TrainingCategoryNode[],
+  category: string,
+): TrainingCategoryNode[] {
+  return nodes.filter((n) => n.productType === category);
+}
+
 export function toLvCategoryOptions(
   nodes: TrainingCategoryNode[],
   category: string,
 ): TrainingFilterOption[] {
+  const scoped = nodesOfCategory(nodes, category);
   if (category === "P") {
-    return [{ value: "", label: "All" }, ...distinctOptions(nodes.map((n) => n.depth1Title))];
+    return [{ value: "", label: "All" }, ...distinctOptions(scoped.map((n) => n.depth1Title))];
   }
   if (category === "A") {
-    return [{ value: "", label: "All" }, ...distinctOptions(nodes.map((n) => n.depth2Title))];
+    return [{ value: "", label: "All" }, ...distinctOptions(scoped.map((n) => n.depth2Title))];
   }
   return [];
 }
@@ -152,12 +162,13 @@ export function toSubCategoryOptions(
   category: string,
   lvValue: string,
 ): TrainingFilterOption[] {
+  const scoped = nodesOfCategory(nodes, category);
   if (category === "P") {
-    const matched = nodes.filter((n) => !lvValue || n.depth1Title === lvValue);
+    const matched = scoped.filter((n) => !lvValue || n.depth1Title === lvValue);
     return [{ value: "", label: "All" }, ...distinctOptions(matched.map((n) => n.depth2Title))];
   }
   if (category === "A") {
-    const matched = nodes.filter((n) => !lvValue || n.depth2Title === lvValue);
+    const matched = scoped.filter((n) => !lvValue || n.depth2Title === lvValue);
     return [{ value: "", label: "All" }, ...distinctOptions(matched.map((n) => n.productName))];
   }
   return [];
@@ -170,7 +181,7 @@ export function resolveCategoryIds(
   subValue: string,
 ): number[] {
   if (category !== "P" && category !== "A") return [];
-  const matched = nodes.filter((n) => {
+  const matched = nodesOfCategory(nodes, category).filter((n) => {
     if (category === "P") {
       if (lvValue && n.depth1Title !== lvValue) return false;
       if (subValue && n.depth2Title !== subValue) return false;
