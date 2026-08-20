@@ -3457,6 +3457,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.devices_product_lineup .devices_product_lineup__grid--type1 table tbody td,
   section.devices_product_lineup .devices_product_lineup__grid--type1 tbody tr[data-tall] td {
+    min-width: 100px;
     min-height: 50px;
     padding: 14px 20px;
     font-weight: 400;
@@ -7970,6 +7971,38 @@ section.devices_product_lineup
   table-layout: fixed;
 }
 
+/* 모바일: fixed 레이아웃은 td min-width를 무시하므로 auto + 셀 하한 */
+@media (max-width: 780px) {
+  section.devices_product_lineup table,
+  section.devices_product_lineup [data-slugkey="product_etc.line_up"] table,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type2
+    [data-slugkey="product_etc.line_up"]
+    table {
+    table-layout: auto;
+  }
+
+  section.devices_product_lineup td,
+  section.devices_product_lineup [data-slugkey="product_etc.line_up"] table td,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table
+    td,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type2
+    [data-slugkey="product_etc.line_up"]
+    table
+    td {
+    min-width: 100px;
+    max-width: none;
+  }
+}
+
 /* Metasol MS (/motor-control/metasol-ms) — PC에서 한 화면에 전체 표시 (가로 스크롤 없음)
    lineup_lv 미리보기는 제외 — 다른 표와 동일하게 1224px 유지 */
 @media (min-width: 781px) {
@@ -11051,5 +11084,37 @@ section.devices_product_lineup
     overflow: hidden;
     -webkit-text-size-adjust: none !important;
     text-size-adjust: none !important;
+  }
+}
+
+/* 모바일 lineup td 최소 너비 — 파일 마지막에 두어 중복 규칙보다 우선 */
+@media (max-width: 780px) {
+  section.devices_product_lineup table,
+  section.devices_product_lineup [data-slugkey="product_etc.line_up"] table,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type2
+    [data-slugkey="product_etc.line_up"]
+    table {
+    table-layout: auto;
+  }
+
+  section.devices_product_lineup td,
+  section.devices_product_lineup [data-slugkey="product_etc.line_up"] table td,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table
+    td,
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type2
+    [data-slugkey="product_etc.line_up"]
+    table
+    td {
+    min-width: 100px;
+    max-width: none;
   }
 }
