@@ -623,6 +623,7 @@ export default function TrainingSessionDetailForm({
             <ReCAPTCHA
               ref={recaptchaRef}
               sitekey={recaptchaSiteKey}
+              hl="en"
               onChange={(token) => {
                 setRecaptchaToken(token);
                 clearError("recaptcha");
