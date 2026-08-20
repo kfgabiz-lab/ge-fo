@@ -11231,11 +11231,44 @@ section.devices_product_lineup
     min-height: 50px;
   }
 
-  /* iOS Safari — 표 셀·자식 텍스트 자동 확대 차단 */
+  /* iOS Safari — -webkit-text-size-adjust 로 표 셀·자식 자동 확대 차단 */
+  section.devices_product_lineup table,
   section.devices_product_lineup table th,
   section.devices_product_lineup table td,
   section.devices_product_lineup table th *,
-  section.devices_product_lineup table td * {
+  section.devices_product_lineup table td *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td *,
+  section.devices_product_lineup
+    .devices_product_lineup__grids--h100-plus
+    .devices_product_lineup__table--h100-plus-options
+    th,
+  section.devices_product_lineup
+    .devices_product_lineup__grids--h100-plus
+    .devices_product_lineup__table--h100-plus-options
+    td,
+  section.devices_product_lineup
+    .devices_product_lineup__grids--h100-plus
+    .devices_product_lineup__table--h100-plus-options
+    th *,
+  section.devices_product_lineup
+    .devices_product_lineup__grids--h100-plus
+    .devices_product_lineup__table--h100-plus-options
+    td * {
     -webkit-text-size-adjust: none !important;
     text-size-adjust: none !important;
   }
@@ -11245,7 +11278,7 @@ section.devices_product_lineup
     max-height: 999999px;
   }
 
-  /* Options(category) 표 — H100 Plus 등 라벨 th iOS 자동 확대 차단 */
+  /* Options(category) 표 — H100 Plus 라벨 th (EtherNet IP/ Modbus TCP 등) */
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:not(:has(thead)):has(.devices_product_lineup__category)
