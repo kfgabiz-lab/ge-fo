@@ -4813,9 +4813,19 @@ section.devices_product_lineup .devices_product_lineup__grids--h100-plus .device
     height: auto;
     min-height: 48px;
     padding: 12px 8px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-all;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+  }
+
+  section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options th *,
+  section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options th[rowspan="2"],
@@ -6990,7 +7000,6 @@ section.devices_product_lineup
   [data-slugkey="product_etc.line_up"]
   table:has(thead):has(tbody th[rowspan]):not(:has(.devices_product_lineup__category)):not(:has(img))
   tbody
-section.devices_product_lineup .devices_product_lineup__grids--h100-plus .devices_product_lineup__table--h100-plus-options th.devices_product_lineup__category,
   th[rowspan],
 section.devices_product_lineup
   .devices_product_lineup__grid--type2
@@ -7508,11 +7517,28 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 10px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+    max-height: 999999px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup
@@ -7574,11 +7600,28 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 8px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+    max-height: 999999px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup
@@ -10659,11 +10702,28 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 10px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+    max-height: 999999px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup
@@ -10725,11 +10785,28 @@ section.devices_product_lineup
     height: auto;
     min-height: 48px;
     padding: 12px 8px;
-    font-size: 13px;
-    line-height: 19px;
+    font-size: 13px !important;
+    line-height: 19px !important;
     word-break: break-word;
     overflow-wrap: break-word;
     overflow: hidden;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+    max-height: 999999px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th *,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    td * {
+    font-size: 13px !important;
+    line-height: 19px !important;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
   }
 
   section.devices_product_lineup
@@ -11166,5 +11243,29 @@ section.devices_product_lineup
   section.devices_product_lineup table th,
   section.devices_product_lineup table td {
     max-height: 999999px;
+  }
+
+  /* Options(category) 표 — H100 Plus 등 라벨 th iOS 자동 확대 차단 */
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th.devices_product_lineup__label,
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:not(:has(thead)):has(.devices_product_lineup__category)
+    th.devices_product_lineup__label *,
+  section.devices_product_lineup
+    .devices_product_lineup__grids--h100-plus
+    .devices_product_lineup__table--h100-plus-options
+    th.devices_product_lineup__label,
+  section.devices_product_lineup
+    .devices_product_lineup__grids--h100-plus
+    .devices_product_lineup__table--h100-plus-options
+    th.devices_product_lineup__label * {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 19px !important;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
   }
 }
