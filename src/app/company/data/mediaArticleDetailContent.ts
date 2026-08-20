@@ -27,15 +27,6 @@ export const mediaArticleDetailTailParagraphs = [
   "However, most of the control panel problems stem from a handful of recurring causes. By recognizing these common issues early and applying structured control panel troubleshooting tips, operators can minimize downtime and avoid expensive repairs.",
 ];
 
-export const mediaArticleDetailTags = [
-  "#MCCB",
-  "#Switches",
-  "#Air Circuit Breakers",
-  "#Compact Switch",
-  "#Hashtag",
-  "#Panel Control",
-];
-
 export const mediaArticleDetailPager = {
   prev: {
     href: "/company/articles/detail",
