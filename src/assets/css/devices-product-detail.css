@@ -2998,11 +2998,53 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.devices_product_downloads
     .support_download_filter-modal__panel
+    .devices_product_downloads__filter-head-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+  }
+
+  section.devices_product_downloads
+    .support_download_filter-modal__panel
     .devices_product_downloads__filter-tit {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
     color: #222;
+  }
+
+  section.devices_product_downloads
+    .support_download_filter-modal__panel
+    .devices_product_downloads__refresh {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  section.devices_product_downloads
+    .support_download_filter-modal__panel
+    .devices_product_downloads__refresh-icon {
+    display: block;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    background: url("/ico/ico_refresh_22.svg") center / contain no-repeat;
+    transform-origin: center center;
+  }
+
+  section.devices_product_downloads
+    .support_download_filter-modal__panel
+    .devices_product_downloads__refresh-icon.is-spinning {
+    animation: guide_refresh_spin 0.55s ease;
   }
 
   section.devices_product_downloads
