@@ -1,5 +1,5 @@
 import type { CommonFaqEntry } from "@/components/faq/CommonFaq";
-import { GICS_BASE_URL } from "@/lib/externalLinks";
+import { GICS_BASE_URL, GICS_INDEX_URL, GICS_ROOT_URL } from "@/lib/externalLinks";
 
 export const GICS_REQUEST_URL = `${GICS_BASE_URL}/loginForm.do?lang=ko`;
 export const GICS_KNOWLEDGE_BASE_URL = `${GICS_BASE_URL}/public/knowledgeBasePopup.do`;
@@ -44,7 +44,7 @@ export const serviceCenterPage = {
         description:
           "Need technical assistance that cannot be resolved through the Knowledge Base? Submit a service request and connect directly with our service specialists.",
         icon: "/img/services/service-center/icon-request-service.svg",
-        href: GICS_REQUEST_URL,
+        href: GICS_INDEX_URL,
         external: true,
       },
       {
@@ -137,7 +137,7 @@ export const serviceCenterPage = {
     descriptionMobile:
       "Fast, reliable support through every stage of the service process.",
     ctaLabel: "Request for Service",
-    ctaHref: GICS_REQUEST_URL,
+    ctaHref: GICS_INDEX_URL,
     backgroundImage: "/img/main/bg_section_main_info.webp",
     backgroundImageMobile:
       "/img/services/service-center/service-flow-bg-mo.webp",
@@ -196,7 +196,7 @@ export const serviceCenterPage = {
     description:
       "A centralized digital service platform for managing all your service needs—anytime, anywhere.",
     ctaLabel: "Go to G-ICS",
-    ctaHref: GICS_REQUEST_URL,
+    ctaHref: GICS_ROOT_URL,
     image: "/img/services/service-center/g-ics-hero.webp",
     imageAlt: "LS ELECTRIC technicians reviewing equipment plans on site",
     features: [
