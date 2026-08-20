@@ -30,3 +30,6 @@ export const CONNECT_PORTAL_BASE_URL = resolveExternalBaseUrl(
 
 // G-ICS index.do 진입 URL — 사용하는 곳(siteConfig/motorControl/contactUs) 전부 이 값 하나로 통일
 export const GICS_INDEX_URL = `${GICS_BASE_URL}/public/index.do?lang=en&nation=US`;
+
+// G-ICS 루트 진입 URL(경로 없이 도메인 + lang만) — Service Center 'Service Platform' Go to G-ICS 버튼 전용
+export const GICS_ROOT_URL = `${GICS_BASE_URL}?lang=en`;
