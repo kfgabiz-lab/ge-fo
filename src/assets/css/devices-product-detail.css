@@ -6387,7 +6387,7 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
     tbody
-    th,
+    th:has(> img),
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
@@ -6398,7 +6398,7 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
     tbody
-    th,
+    th:has(> img),
   section.devices_product_lineup
     .devices_product_lineup__grid--type1
     [data-slugkey="product_etc.line_up"]
@@ -6407,6 +6407,21 @@ section.devices_product_lineup
     td {
     height: auto;
     min-height: 160px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:has(tbody th > img)
+    tbody
+    th:not(:has(> img)),
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table:has(tbody th > img)
+    tbody
+    th:not(:has(> img)) {
+    height: auto;
+    min-height: 50px;
   }
 
   /* 260810 start */
@@ -6584,28 +6599,28 @@ section.devices_product_lineup
 
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
-    table:has(thead .devices_product_lineup__frame-media)
+    table
     thead
-    th,
+    th:has(.devices_product_lineup__frame-media),
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
-    table:has(thead th img)
+    table
     thead
-    th,
-  section.devices_product_lineup
-    .devices_product_lineup__grid--type1
-    [data-slugkey="product_etc.line_up"]
-    table:has(thead .devices_product_lineup__frame-media)
-    thead
-    th,
+    th:has(> img),
   section.devices_product_lineup
     .devices_product_lineup__grid--type1
     [data-slugkey="product_etc.line_up"]
-    table:has(thead th img)
+    table
     thead
-    th {
-    height: 180px;
-    min-height: 180px;
+    th:has(.devices_product_lineup__frame-media),
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table
+    thead
+    th:has(> img) {
+    height: auto;
+    min-height: 160px;
   }
 
   /* Susol UL VCB / Load Interrupter — 모델명 행 높이 절반 (이미지 행 180px → 90px) */
@@ -9539,7 +9554,7 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
     tbody
-    th,
+    th:has(> img),
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
@@ -9550,7 +9565,7 @@ section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
     table:has(tbody th > img)
     tbody
-    th,
+    th:has(> img),
   section.devices_product_lineup
     .devices_product_lineup__grid--type1
     [data-slugkey="product_etc.line_up"]
@@ -9559,6 +9574,21 @@ section.devices_product_lineup
     td {
     height: auto;
     min-height: 160px;
+  }
+
+  section.devices_product_lineup
+    [data-slugkey="product_etc.line_up"]
+    table:has(tbody th > img)
+    tbody
+    th:not(:has(> img)),
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table:has(tbody th > img)
+    tbody
+    th:not(:has(> img)) {
+    height: auto;
+    min-height: 50px;
   }
 
   /* 260810 start */
@@ -9736,28 +9766,28 @@ section.devices_product_lineup
 
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
-    table:has(thead .devices_product_lineup__frame-media)
+    table
     thead
-    th,
+    th:has(.devices_product_lineup__frame-media),
   section.devices_product_lineup
     [data-slugkey="product_etc.line_up"]
-    table:has(thead th img)
+    table
     thead
-    th,
-  section.devices_product_lineup
-    .devices_product_lineup__grid--type1
-    [data-slugkey="product_etc.line_up"]
-    table:has(thead .devices_product_lineup__frame-media)
-    thead
-    th,
+    th:has(> img),
   section.devices_product_lineup
     .devices_product_lineup__grid--type1
     [data-slugkey="product_etc.line_up"]
-    table:has(thead th img)
+    table
     thead
-    th {
-    height: 180px;
-    min-height: 180px;
+    th:has(.devices_product_lineup__frame-media),
+  section.devices_product_lineup
+    .devices_product_lineup__grid--type1
+    [data-slugkey="product_etc.line_up"]
+    table
+    thead
+    th:has(> img) {
+    height: auto;
+    min-height: 160px;
   }
 
   /* Susol UL VCB / Load Interrupter — 모델명 행 높이 절반 (이미지 행 180px → 90px) */
@@ -11116,5 +11146,11 @@ section.devices_product_lineup
     td {
     min-width: 100px;
     max-width: none;
+  }
+
+  /* 이미지 없는 th — 180px/160px 고정 높이 방지 */
+  section.devices_product_lineup th:not(:has(img)):not(:has(.devices_product_lineup__frame-media)) {
+    height: auto;
+    min-height: 50px;
   }
 }
