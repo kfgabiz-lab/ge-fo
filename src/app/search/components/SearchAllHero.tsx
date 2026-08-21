@@ -81,7 +81,7 @@ export default function SearchAllHero() {
                         type="button"
                         className="search_all_hero__clear"
                         aria-label="Clear search"
-                        onClick={() => navigateToQuery("")}
+                        onClick={() => setQuery("")}
                       >
                         <span className="search_all_hero__clear-icon" aria-hidden>
                           <img
