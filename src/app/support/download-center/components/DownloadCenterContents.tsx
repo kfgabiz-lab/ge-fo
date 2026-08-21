@@ -154,6 +154,7 @@ function DownloadCenterContentsBody({
                     <MenuItem value="newest">Newest</MenuItem>
                     <MenuItem value="oldest">Oldest</MenuItem>
                     <MenuItem value="title">Title A-Z</MenuItem>
+                    <MenuItem value="title_desc">Title Z-A</MenuItem>
                   </GuideSelect>
                 </FormControl>
               </div>
