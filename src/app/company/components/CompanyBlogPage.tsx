@@ -296,17 +296,19 @@ export default function CompanyBlogPage({
                                 {item.date}
                               </p>
                             </Link>
-                            <div className="company-blog-list__tags-row">
-                              <div className="company-blog__tags" data-slugkey="tags">
-                                {item.tags.map((tag, tagIndex) => (
-                                  <HashtagLink
-                                    key={`${item.id}-${tag}-${tagIndex}`}
-                                    tag={tag}
-                                    className="company-blog__tag"
-                                  />
-                                ))}
+                            {item.tags.length > 0 ? (
+                              <div className="company-blog-list__tags-row">
+                                <div className="company-blog__tags" data-slugkey="tags">
+                                  {item.tags.map((tag, tagIndex) => (
+                                    <HashtagLink
+                                      key={`${item.id}-${tag}-${tagIndex}`}
+                                      tag={tag}
+                                      className="company-blog__tag"
+                                    />
+                                  ))}
+                                </div>
                               </div>
-                            </div>
+                            ) : null}
                           </div>
                         </div>
                       </div>
