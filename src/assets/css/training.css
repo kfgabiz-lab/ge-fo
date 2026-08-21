@@ -2646,11 +2646,23 @@
   }
 
   section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
     padding: 60px 0;
+    text-align: center;
   }
 
   section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-icon {
     width: 110px;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-title {
