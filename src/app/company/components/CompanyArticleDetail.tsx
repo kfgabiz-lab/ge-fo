@@ -6,6 +6,7 @@ import { useEffect, type ReactNode } from "react";
 import { articleDetailClass } from "@/app/company/articleDetailClass";
 import DevicesProductVideoPlayer from "@/components/video/DevicesProductVideoPlayer";
 import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
+import { markListReturnIntent } from "@/app/company/lastListSession";
 import { incrementViewCount } from "@/lib/pageDataApi";
 
 export type CompanyArticleDetailVariant = "blog" | "press" | "events" | "articles";
@@ -201,7 +202,16 @@ export default function CompanyArticleDetail(props: CompanyArticleDetailProps) {
         </nav>
 
         <div className={articleDetailClass("btn-wrap")}>
-          <Link href={listHref} className="btn-base btn-lv01 btn-lv01--solid">
+          <Link
+            href={listHref}
+            className="btn-base btn-lv01 btn-lv01--solid"
+            onMouseDown={(event) => {
+              if (event.button === 0) markListReturnIntent(variant);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") markListReturnIntent(variant);
+            }}
+          >
             LIST
           </Link>
         </div>

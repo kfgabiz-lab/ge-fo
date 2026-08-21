@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CompanyFeedFeatured from "@/app/company/components/CompanyFeedFeatured";
 import CompanyFeedListSection from "@/app/company/components/CompanyFeedListSection";
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
@@ -12,7 +12,7 @@ import {
   toArticlesCard,
   type ArticlesRow,
 } from "@/app/company/data/articlesData";
-import { getRememberedListPage, rememberListPage } from "@/app/company/lastListSession";
+import { useListPageMemory } from "@/app/company/useListPageMemory";
 import { useFeaturedFeed } from "@/hooks/useFeaturedFeed";
 import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
@@ -40,9 +40,10 @@ function toArticlesFeaturedCard(row: ArticlesRow): ArticlesFeaturedCard {
 }
 
 export default function CompanyArticlesPage() {
-  // SSR과 최초 클라이언트 렌더가 항상 1page로 일치하도록 0으로 초기화하고,
-  // sessionStorage 복원은 하이드레이션 이후 effect에서만 수행한다(hydration mismatch 방지).
-  const [pageIndex, setPageIndex] = useState(0);
+  const { pageIndex, setPageIndex, goToPage } = useListPageMemory(
+    "articles",
+    "/company/articles",
+  );
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<ArticlesRow[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -63,11 +64,6 @@ export default function CompanyArticlesPage() {
     sort: "createdAt,desc",
     toCard: toArticlesFeaturedCard,
   });
-
-  useEffect(() => {
-    const remembered = getRememberedListPage("articles");
-    if (remembered > 1) setPageIndex(remembered - 1);
-  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -121,12 +117,6 @@ export default function CompanyArticlesPage() {
       }),
     [rows, pageIndex],
   );
-
-  const goToPage = useCallback((page: number) => {
-    const nextIndex = Math.max(0, page - 1);
-    setPageIndex(nextIndex);
-    rememberListPage("articles", nextIndex + 1);
-  }, []);
 
   const handlePageChange = (page: number) => {
     goToPage(page);

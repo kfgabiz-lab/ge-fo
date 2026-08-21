@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CompanyEventsCalendar from "@/app/company/components/CompanyEventsCalendar";
 import CompanyEventsFeatured from "@/app/company/components/CompanyEventsFeatured";
 import CompanyEventsPastSection from "@/app/company/components/CompanyEventsPastSection";
@@ -10,7 +10,7 @@ import {
   eventsFeaturedQuery,
   eventsPastQuery,
 } from "@/app/company/data/eventsData";
-import { getRememberedListPage, rememberListPage } from "@/app/company/lastListSession";
+import { useListPageMemory } from "@/app/company/useListPageMemory";
 import { fetchData } from "@/lib/pageDataApi";
 import type {
   EventsCalendarMonth,
@@ -33,16 +33,12 @@ export default function CompanyEventsPage({
   const [calendarMonths, setCalendarMonths] = useState<EventsCalendarMonth[]>([]);
 
   const [pastItems, setPastItems] = useState<EventsPastItem[]>([]);
-  // SSR과 최초 클라이언트 렌더가 항상 1page로 일치하도록 0으로 초기화하고,
-  // sessionStorage 복원은 하이드레이션 이후 effect에서만 수행한다(hydration mismatch 방지).
-  const [pastPageIndex, setPastPageIndex] = useState(0);
+  const {
+    pageIndex: pastPageIndex,
+    goToPage: goToPastPage,
+  } = useListPageMemory("events", "/company/events");
   const [pastTotalPages, setPastTotalPages] = useState(1);
   const [pastSort, setPastSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
-
-  useEffect(() => {
-    const remembered = getRememberedListPage("events");
-    if (remembered > 1) setPastPageIndex(remembered - 1);
-  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -86,12 +82,6 @@ export default function CompanyEventsPage({
       alive = false;
     };
   }, [pastPageIndex, pastSort]);
-
-  const goToPastPage = useCallback((page: number) => {
-    const nextIndex = Math.max(0, page - 1);
-    setPastPageIndex(nextIndex);
-    rememberListPage("events", nextIndex + 1);
-  }, []);
 
   const handlePastPageChange = (page: number) => {
     goToPastPage(page);
