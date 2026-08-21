@@ -13,7 +13,7 @@ export default function SkipToMainContent() {
   const pathname = usePathname();
   const [targetId, setTargetId] = useState(FALLBACK_MAIN_ID);
 
-  const prepareMain = useCallback(() => {
+  const resolveMain = useCallback(() => {
     const main = document.querySelector("main");
     if (!(main instanceof HTMLElement)) {
       setTargetId(FALLBACK_MAIN_ID);
@@ -23,22 +23,25 @@ export default function SkipToMainContent() {
     if (!main.id) {
       main.id = FALLBACK_MAIN_ID;
     }
-    if (!main.hasAttribute("tabindex")) {
-      main.tabIndex = -1;
-    }
 
     setTargetId(main.id);
     return main;
   }, []);
 
   useEffect(() => {
-    prepareMain();
-  }, [pathname, prepareMain]);
+    // Only sync the skip href target — do not mutate tabindex here.
+    // Setting tabIndex before page hydration causes a mismatch on <main>.
+    resolveMain();
+  }, [pathname, resolveMain]);
 
   const handleActivate = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    const main = prepareMain();
+    const main = resolveMain();
     if (!main) return;
+
+    if (!main.hasAttribute("tabindex")) {
+      main.tabIndex = -1;
+    }
 
     main.focus({ preventScroll: true });
     main.scrollIntoView({ block: "start" });
