@@ -11,16 +11,18 @@ type MarketsStatsProps = {
 
 type MarketsStatValueProps = {
   item: MarketStatItem;
-  isActive: boolean;
-  delay: number;
 };
 
-function MarketsStatValue({ item, isActive, delay }: MarketsStatValueProps) {
+function MarketsStatValue({ item }: MarketsStatValueProps) {
+  const { ref, isInView } = useInView<HTMLSpanElement>(
+    0.18,
+    "0px 0px -3% 0px",
+  );
   const parsed = parseNumericStatValue(item.value);
   const count = useCountUp(
     parsed?.target ?? 0,
-    isActive && parsed !== null,
-    delay,
+    isInView && parsed !== null,
+    0,
     parsed?.decimalPlaces ?? 0,
   );
   const displayValue = parsed
@@ -30,7 +32,7 @@ function MarketsStatValue({ item, isActive, delay }: MarketsStatValueProps) {
     !item.valueSuffix && item.value.trim().endsWith("+") ? "+" : null;
 
   return (
-    <span className="markets_stats__value">
+    <span ref={ref} className="markets_stats__value">
       {displayValue}
       {item.valueUnit ? (
         <span className="markets_stats__value-unit">{item.valueUnit}</span>
@@ -45,23 +47,17 @@ function MarketsStatValue({ item, isActive, delay }: MarketsStatValueProps) {
 }
 
 export default function MarketsStats({ items }: MarketsStatsProps) {
-  const { ref: panelRef, isInView } = useInView<HTMLDivElement>(0.18);
-
   return (
     <section className="markets_stats">
       <div className="inner">
-        <div ref={panelRef} className="markets_stats__panel">
+        <div className="markets_stats__panel">
           <div className="markets_stats__grid">
-            {items.map((item, index) => (
+            {items.map((item) => (
               <article key={item.id} className="markets_stats__col">
                 <h3 className="markets_stats__head">
                   <span className="markets_stats__label">{item.label}</span>
                   <div className="markets_stats__headline">
-                    <MarketsStatValue
-                      item={item}
-                      isActive={isInView}
-                      delay={index * 120}
-                    />
+                    <MarketsStatValue item={item} />
                     {item.sublabel ? (
                       <span className="markets_stats__sublabel">
                         {item.sublabel}
