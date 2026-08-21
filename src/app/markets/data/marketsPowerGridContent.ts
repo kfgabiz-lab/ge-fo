@@ -229,6 +229,11 @@ export const powerGridSustainabilityCards: SustainabilityCard[] = [
   },
 ];
 
+export const powerGridSustainabilityTitleLines = [
+  "Driving a Sustainable Energy Future by",
+  "LS ELECTRIC",
+];
+
 export const powerGridSmartGridUseCases: SmartGridUseCase[] = [
   {
     id: "pg-sg-1",

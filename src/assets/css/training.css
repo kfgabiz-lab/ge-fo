@@ -1656,7 +1656,9 @@
   }
 
   section.support_service_training_request .support_service_training_request__field-hint+
-  .support_service_training_request__error{
+  .support_service_training_request__error,
+  section.support_service_training_request .support_service_training_request__terms-link +
+  .support_service_training_request__error {
     position: relative;
   }
   section.support_service_training_request .support_service_training_request__error {
@@ -4268,7 +4270,9 @@
     padding-bottom: calc(8px + 23px);
   }
   section.support_service_training_request .support_service_training_request__field-hint+
-  .support_service_training_request__error{
+  .support_service_training_request__error,
+  section.support_service_training_request .support_service_training_request__terms-link +
+  .support_service_training_request__error {
     position: relative;
   }
   section.support_service_training_request .support_service_training_request__error {
