@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CompanyFeedFeatured from "@/app/company/components/CompanyFeedFeatured";
 import CompanyFeedListSection from "@/app/company/components/CompanyFeedListSection";
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
@@ -39,7 +40,13 @@ function toPressFeaturedCard(row: PressRow): PressFeaturedCard {
 }
 
 export default function CompanyPressPage() {
-  const [pageIndex, setPageIndex] = useState(0);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [pageIndex, setPageIndex] = useState(() => {
+    const fromUrl = Number.parseInt(searchParams.get("page") ?? "1", 10);
+    return Number.isFinite(fromUrl) && fromUrl > 1 ? fromUrl - 1 : 0;
+  });
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<PressRow[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -108,31 +115,54 @@ export default function CompanyPressPage() {
           title: card.title,
           date: card.date,
           image: card.imageSrc ?? LIST_FALLBACK_IMAGE,
-          href: pressDetailHref(card.id, card.slug),
+          href: pressDetailHref(card.id, card.slug, pageIndex + 1),
         };
       }),
-    [rows],
+    [rows, pageIndex],
+  );
+
+  const syncPageParam = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (page > 1) {
+        params.set("page", String(page));
+      } else {
+        params.delete("page");
+      }
+      const query = params.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
+
+  const goToPage = useCallback(
+    (page: number) => {
+      const nextIndex = Math.max(0, page - 1);
+      setPageIndex(nextIndex);
+      syncPageParam(nextIndex + 1);
+    },
+    [syncPageParam],
   );
 
   const handlePageChange = (page: number) => {
-    setPageIndex(Math.max(0, page - 1));
+    goToPage(page);
   };
 
   const handleSearchSubmit = (value: string) => {
     setSearch(value);
-    setPageIndex(0);
+    goToPage(1);
   };
   const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {
     setSort(value);
-    setPageIndex(0);
+    goToPage(1);
   };
   const handleMonthChange = (value: string) => {
     setMonth(value);
-    setPageIndex(0);
+    goToPage(1);
   };
   const handleYearChange = (value: string) => {
     setYear(value);
-    setPageIndex(0);
+    goToPage(1);
   };
   const handleViewAllClick = () => {
     // Clear search and reset month/year filters so "View All" shows full list

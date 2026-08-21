@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata, ResolvingMetadata } from "next";
 import CompanyBlogPage from "@/app/company/components/CompanyBlogPage";
 import {
@@ -61,7 +62,9 @@ export default async function CompanyBlogListPage() {
   return (
     <>
       <JsonLd data={graph} />
-      <CompanyBlogPage />
+      <Suspense fallback={null}>
+        <CompanyBlogPage />
+      </Suspense>
     </>
   );
 }

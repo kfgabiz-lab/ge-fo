@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata, ResolvingMetadata } from "next";
 import CompanyEventsPage from "@/app/company/components/CompanyEventsPage";
 import { eventsDetailHref } from "@/app/company/data/eventsData";
@@ -72,7 +73,9 @@ export default async function CompanyEventsListPage() {
   return (
     <>
       <JsonLd data={graph} />
-      <CompanyEventsPage />
+      <Suspense fallback={null}>
+        <CompanyEventsPage />
+      </Suspense>
     </>
   );
 }

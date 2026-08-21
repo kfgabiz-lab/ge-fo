@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata, ResolvingMetadata } from "next";
 import CompanyPressPage from "@/app/company/components/CompanyPressPage";
 import {
@@ -47,7 +48,9 @@ export default async function CompanyPressListPage() {
   return (
     <>
       <JsonLd data={graph} />
-      <CompanyPressPage />
+      <Suspense fallback={null}>
+        <CompanyPressPage />
+      </Suspense>
     </>
   );
 }

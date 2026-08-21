@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CompanyFeedEmpty from "@/app/company/components/CompanyFeedEmpty";
 import CompanyBlogListToolbar from "@/app/company/components/CompanyBlogListToolbar";
 import { blogHeroBgImage } from "@/app/company/data/blogListContent";
@@ -34,10 +35,16 @@ export default function CompanyBlogPage({
   empty = false,
   pageId = "Page_company_blog",
 }: CompanyBlogPageProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [categories, setCategories] = useState<CodeItem[]>([]);
   const [categoryMap, setCategoryMap] = useState<Map<string, string>>(new Map());
   const [categoryCode, setCategoryCode] = useState("");
-  const [pageIndex, setPageIndex] = useState(0);
+  const [pageIndex, setPageIndex] = useState(() => {
+    const fromUrl = Number.parseInt(searchParams.get("page") ?? "1", 10);
+    return Number.isFinite(fromUrl) && fromUrl > 1 ? fromUrl - 1 : 0;
+  });
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<BlogRow[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -113,14 +120,37 @@ export default function CompanyBlogPage({
     [rows, categoryMap],
   );
 
+  const syncPageParam = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (page > 1) {
+        params.set("page", String(page));
+      } else {
+        params.delete("page");
+      }
+      const query = params.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
+
+  const goToPage = useCallback(
+    (page: number) => {
+      const nextIndex = Math.max(0, page - 1);
+      setPageIndex(nextIndex);
+      syncPageParam(nextIndex + 1);
+    },
+    [syncPageParam],
+  );
+
   const handleCategoryChange = (code: string) => {
     setCategoryCode(code);
-    setPageIndex(0);
+    goToPage(1);
   };
 
   const handleSearchSubmit = (value: string) => {
     setSearch(value);
-    setPageIndex(0);
+    goToPage(1);
   };
 
   const handleViewAllClick = () => {
@@ -134,11 +164,11 @@ export default function CompanyBlogPage({
   
   const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {
     setSort(value);
-    setPageIndex(0);
+    goToPage(1);
   };
 
   const handlePageChange = (page: number) => {
-    setPageIndex(Math.max(0, page - 1));
+    goToPage(page);
   };
 
   const showEmpty = empty || (loaded && rows.length === 0);
@@ -246,7 +276,7 @@ export default function CompanyBlogPage({
                         <div className="company-blog-list__link">
                           <div className="company-blog-list__image">
                             <Link
-                              href={blogDetailHref(item.id, item.slug)}
+                              href={blogDetailHref(item.id, item.slug, pageIndex + 1)}
                               aria-label={item.title}
                               data-slugkey="id"
                               data-slugkey-attr="href"
@@ -263,7 +293,7 @@ export default function CompanyBlogPage({
                           </div>
                           <div className="company-blog-list__content">
                             <Link
-                              href={blogDetailHref(item.id, item.slug)}
+                              href={blogDetailHref(item.id, item.slug, pageIndex + 1)}
                               className="company-blog-list__content-link"
                               data-slugkey="id"
                               data-slugkey-attr="href"

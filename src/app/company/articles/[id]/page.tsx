@@ -21,6 +21,7 @@ import "@/assets/css/company.css";
 
 type CompanyArticlesDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 };
 
 export async function generateMetadata(
@@ -44,8 +45,11 @@ export async function generateMetadata(
 
 export default async function CompanyArticlesDetailPage({
   params,
+  searchParams,
 }: CompanyArticlesDetailPageProps) {
   const { id: idOrSlug } = await params;
+  const { page: pageParam } = await searchParams;
+  const listPage = Number.parseInt(pageParam ?? "1", 10);
   const id = await resolveContentId("articles-data", idOrSlug, ARTICLES_STATUS_WHERE);
   if (id == null) notFound();
   const previewToken = await getPreviewToken("articles-data", id);
@@ -80,10 +84,10 @@ export default async function CompanyArticlesDetailPage({
       : mediaArticleDetailHero;
 
   const prev = adjacent.prev
-    ? { href: articlesDetailHref(adjacent.prev.id), title: adjacent.prev.title }
+    ? { href: articlesDetailHref(adjacent.prev.id, undefined, listPage), title: adjacent.prev.title }
     : undefined;
   const next = adjacent.next
-    ? { href: articlesDetailHref(adjacent.next.id), title: adjacent.next.title }
+    ? { href: articlesDetailHref(adjacent.next.id, undefined, listPage), title: adjacent.next.title }
     : undefined;
 
   const canonicalSlug = (row["seo.slug"] as string) || id;
@@ -115,7 +119,7 @@ export default async function CompanyArticlesDetailPage({
         pagerAriaLabel="Media article navigation"
         prev={prev}
         next={next}
-        listHref="/company/articles"
+        listHref={listPage > 1 ? `/company/articles?page=${listPage}` : "/company/articles"}
       >
         <div className={articleDetailClass("body")} data-slug="articles-data">
           <div

@@ -11,8 +11,8 @@ import type {
 export const EVENTS_PAST_SIZE = 9;
 
 export const eventsImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
-export const eventsDetailHref = (id: number, slug?: string | null) =>
-  `/company/events/${slug || id}`;
+export const eventsDetailHref = (id: number, slug?: string | null, page?: number) =>
+  `/company/events/${slug || id}${page && page > 1 ? `?page=${page}` : ""}`;
 
 export type EventsRow = PageDataItem;
 
@@ -145,6 +145,7 @@ export function eventsPastQuery(params: {
         ? "events.title,desc"
         : `events.period_from,${params.sort === "oldest" ? "asc" : "desc"}`;
   const fallbackImage = params.fallbackImage;
+  const currentPage = params.page + 1;
   return {
     slug: "events-data",
     page: params.page,
@@ -159,7 +160,7 @@ export function eventsPastQuery(params: {
           title: c.title,
           dateRange: c.dateRange,
           image: c.imageSrc ?? fallbackImage,
-          href: eventsDetailHref(c.id, c.slug),
+          href: eventsDetailHref(c.id, c.slug, currentPage),
         };
       }),
   };
