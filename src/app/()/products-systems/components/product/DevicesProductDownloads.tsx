@@ -175,8 +175,8 @@ function DevicesProductDownloadsBody({
               <div className="devices_product_downloads__search-row devices_product_downloads__search-row--pc">
                 <TextField
                   className="guide_field guide_field--search"
-                  placeholder="key word"
-                  aria-label="key word downloads"
+                  placeholder="keyword"
+                  aria-label="keyword downloads"
                   value={keyword}
                   onChange={(event) => setKeyword(event.target.value)}
                   onKeyDown={(event) => {

@@ -59,7 +59,7 @@ export default function DevicesProductDownloadsMobileControls({
       <div className="devices_product_downloads__mo-controls">
         <TextField
           className="guide_field guide_field--search devices_product_downloads__mo-search"
-          placeholder="key word"
+          placeholder="keyword"
           aria-label="Search downloads"
           slotProps={{
             input: {
