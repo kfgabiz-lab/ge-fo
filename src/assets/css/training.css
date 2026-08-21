@@ -298,7 +298,11 @@
   }
 
   .support-page--engineering-training-detail section.support_service_training_detail_hero .inner,
-  .support-page--engineering-training-detail section.support_service_training_detail_schedule .inner {
+  .support-page--engineering-training-detail section.support_service_training_detail_schedule .inner,
+  .support-page--sales-training-detail section.support_service_training_detail_hero .inner,
+  .support-page--sales-training-detail section.support_service_training_detail_schedule .inner,
+  .support-page--service-training-detail section.support_service_training_detail_hero .inner,
+  .support-page--service-training-detail section.support_service_training_detail_schedule .inner {
     max-width: 1440px;
     margin: 0 auto;
     padding-left: 0;
@@ -2492,7 +2496,9 @@
     font-weight: 600;
   }
 
-  .support-page--engineering-training-detail section.support_service_training_detail_hero .inner {
+  .support-page--engineering-training-detail section.support_service_training_detail_hero .inner,
+  .support-page--sales-training-detail section.support_service_training_detail_hero .inner,
+  .support-page--service-training-detail section.support_service_training_detail_hero .inner {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -2501,7 +2507,9 @@
     padding-right: 0;
   }
 
-  .support-page--engineering-training-detail section.support_service_training_detail_schedule .inner {
+  .support-page--engineering-training-detail section.support_service_training_detail_schedule .inner,
+  .support-page--sales-training-detail section.support_service_training_detail_schedule .inner,
+  .support-page--service-training-detail section.support_service_training_detail_schedule .inner {
     display: flex;
     flex-direction: column;
     align-items: stretch;

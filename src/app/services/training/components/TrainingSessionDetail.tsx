@@ -336,9 +336,9 @@ export default function TrainingSessionDetail({
                     <h2 className="support_service_training_session_detail__block-tit">
                       {showAgendaSessions ? `Agenda / ${group.label}` : "Agenda"}
                     </h2>
-                    {/*pub 임시날짜  */}
+                    {/*pub 임시날짜 */}
                     <p className="support_service_training_session_detail__block-date">
-                      {group.date.trim() || "Jul 14, 2026"}
+                      Jul 15,2026
                     </p>
                   </div>
                   <TrainingSessionDetailTableScroll>
