@@ -50,7 +50,7 @@ function XemsEnergyDiagramMobile() {
                   <p className="devices_product_applications__diagram-level-title">{level.title}</p>
                 </div>
                 <p className="devices_product_applications__diagram-level-desc">
-                  {level.description}
+                  {renderMultilineText(level.description)}
                 </p>
               </li>
             ))}

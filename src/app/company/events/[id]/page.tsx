@@ -23,6 +23,7 @@ import "@/assets/css/company.css";
 
 type CompanyEventsDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 };
 
 export async function generateMetadata(
@@ -39,8 +40,11 @@ export async function generateMetadata(
 
 export default async function CompanyEventsDetailPage({
   params,
+  searchParams,
 }: CompanyEventsDetailPageProps) {
   const { id: idOrSlug } = await params;
+  const { page: pageParam } = await searchParams;
+  const listPage = Number.parseInt(pageParam ?? "1", 10);
   const id = await resolveContentId("events-data", idOrSlug);
   if (id == null) notFound();
   const previewToken = await getPreviewToken("events-data", id);
@@ -65,10 +69,10 @@ export default async function CompanyEventsDetailPage({
       : eventsDetailHero;
 
   const prev = adjacent.prev
-    ? { href: eventsDetailHref(adjacent.prev.id), title: adjacent.prev.title }
+    ? { href: eventsDetailHref(adjacent.prev.id, undefined, listPage), title: adjacent.prev.title }
     : undefined;
   const next = adjacent.next
-    ? { href: eventsDetailHref(adjacent.next.id), title: adjacent.next.title }
+    ? { href: eventsDetailHref(adjacent.next.id, undefined, listPage), title: adjacent.next.title }
     : undefined;
 
   const canonicalSlug = (row["seo.slug"] as string) || id;
@@ -136,7 +140,7 @@ export default async function CompanyEventsDetailPage({
         pagerAriaLabel="Events post navigation"
         prev={prev}
         next={next}
-        listHref="/company/events"
+        listHref={listPage > 1 ? `/company/events?page=${listPage}` : "/company/events"}
       >
         <div className={articleDetailClass("body")} data-slug="events-data">
           <div

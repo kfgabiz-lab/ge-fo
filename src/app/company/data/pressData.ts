@@ -6,8 +6,8 @@ export const PRESS_LIST_SIZE = 9;
 
 export const pressImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-export const pressDetailHref = (id: number, slug?: string | null) =>
-  `/company/press/${slug || id}`;
+export const pressDetailHref = (id: number, slug?: string | null, page?: number) =>
+  `/company/press/${slug || id}${page && page > 1 ? `?page=${page}` : ""}`;
 
 export type PressRow = PageDataItem;
 

@@ -232,6 +232,7 @@ function SmartFactoryDetail(props: SwDetailProps) {
       hero={{
         title: bind.title ?? "",
         description: bind.description ?? "",
+        multilineDescription: true,
         contactHref: props.contactHref,
       }}
       overview={smartFactoryOverview}

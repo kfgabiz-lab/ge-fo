@@ -124,7 +124,8 @@ function getCrumbsFromGeneralNav(
         for (const sub of section.items) {
           if (sub.href && sub.href === pathname) {
             const sectionCrumb: BreadcrumbCrumb[] =
-              section.label && section.label !== sub.title
+              section.label &&
+              (section.items.length > 1 || section.label !== sub.title)
                 ? [{ label: section.label }]
                 : [];
             return { crumbs: [topCrumb, ...sectionCrumb], current: sub.title };
@@ -203,14 +204,14 @@ function HeaderBreadcrumbContent({
             </Link>
             {showPath ? (
               <>
-                {crumbs.map((crumb) => {
+                {crumbs.map((crumb, index) => {
                   const crumbLabel =
                     activeServerOverride?.crumb &&
                     activeServerOverride.crumb.href === crumb.href
                       ? activeServerOverride.crumb.label
                       : crumb.label;
                   return (
-                    <span key={crumb.label} className="breadcrumb_nav__group">
+                    <span key={`${crumb.label}-${index}`} className="breadcrumb_nav__group">
                       <span className="breadcrumb_sep" aria-hidden="true" />
                       {crumb.href ? (
                         <Link href={crumb.href} prefetch={false}>{crumbLabel}</Link>

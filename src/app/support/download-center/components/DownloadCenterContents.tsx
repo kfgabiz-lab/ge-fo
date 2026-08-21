@@ -20,7 +20,7 @@ import {
   type DownloadCenterSort,
 } from "@/data/support/downloadCenterData";
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 10;
 
 const SORT_LABELS: Record<DownloadCenterSort, string> = {
   "": "Sort by",
@@ -154,6 +154,7 @@ function DownloadCenterContentsBody({
                     <MenuItem value="newest">Newest</MenuItem>
                     <MenuItem value="oldest">Oldest</MenuItem>
                     <MenuItem value="title">Title A-Z</MenuItem>
+                    <MenuItem value="title_desc">Title Z-A</MenuItem>
                   </GuideSelect>
                 </FormControl>
               </div>
