@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CompanyEventsCalendar from "@/app/company/components/CompanyEventsCalendar";
 import CompanyEventsFeatured from "@/app/company/components/CompanyEventsFeatured";
 import CompanyEventsPastSection from "@/app/company/components/CompanyEventsPastSection";
@@ -11,6 +10,7 @@ import {
   eventsFeaturedQuery,
   eventsPastQuery,
 } from "@/app/company/data/eventsData";
+import { getRememberedListPage, rememberListPage } from "@/app/company/lastListSession";
 import { fetchData } from "@/lib/pageDataApi";
 import type {
   EventsCalendarMonth,
@@ -29,19 +29,20 @@ type CompanyEventsPageProps = {
 export default function CompanyEventsPage({
   pageId = "Page_company_events",
 }: CompanyEventsPageProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [featuredItems, setFeaturedItems] = useState<EventsFeaturedItem[]>([]);
   const [calendarMonths, setCalendarMonths] = useState<EventsCalendarMonth[]>([]);
 
   const [pastItems, setPastItems] = useState<EventsPastItem[]>([]);
-  const [pastPageIndex, setPastPageIndex] = useState(() => {
-    const fromUrl = Number.parseInt(searchParams.get("page") ?? "1", 10);
-    return Number.isFinite(fromUrl) && fromUrl > 1 ? fromUrl - 1 : 0;
-  });
+  // SSR과 최초 클라이언트 렌더가 항상 1page로 일치하도록 0으로 초기화하고,
+  // sessionStorage 복원은 하이드레이션 이후 effect에서만 수행한다(hydration mismatch 방지).
+  const [pastPageIndex, setPastPageIndex] = useState(0);
   const [pastTotalPages, setPastTotalPages] = useState(1);
   const [pastSort, setPastSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
+
+  useEffect(() => {
+    const remembered = getRememberedListPage("events");
+    if (remembered > 1) setPastPageIndex(remembered - 1);
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -86,28 +87,11 @@ export default function CompanyEventsPage({
     };
   }, [pastPageIndex, pastSort]);
 
-  const syncPageParam = useCallback(
-    (page: number) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (page > 1) {
-        params.set("page", String(page));
-      } else {
-        params.delete("page");
-      }
-      const query = params.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-    },
-    [pathname, router, searchParams],
-  );
-
-  const goToPastPage = useCallback(
-    (page: number) => {
-      const nextIndex = Math.max(0, page - 1);
-      setPastPageIndex(nextIndex);
-      syncPageParam(nextIndex + 1);
-    },
-    [syncPageParam],
-  );
+  const goToPastPage = useCallback((page: number) => {
+    const nextIndex = Math.max(0, page - 1);
+    setPastPageIndex(nextIndex);
+    rememberListPage("events", nextIndex + 1);
+  }, []);
 
   const handlePastPageChange = (page: number) => {
     goToPastPage(page);

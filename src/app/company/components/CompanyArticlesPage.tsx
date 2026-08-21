@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CompanyFeedFeatured from "@/app/company/components/CompanyFeedFeatured";
 import CompanyFeedListSection from "@/app/company/components/CompanyFeedListSection";
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
@@ -13,6 +12,7 @@ import {
   toArticlesCard,
   type ArticlesRow,
 } from "@/app/company/data/articlesData";
+import { getRememberedListPage, rememberListPage } from "@/app/company/lastListSession";
 import { useFeaturedFeed } from "@/hooks/useFeaturedFeed";
 import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
@@ -40,13 +40,9 @@ function toArticlesFeaturedCard(row: ArticlesRow): ArticlesFeaturedCard {
 }
 
 export default function CompanyArticlesPage() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [pageIndex, setPageIndex] = useState(() => {
-    const fromUrl = Number.parseInt(searchParams.get("page") ?? "1", 10);
-    return Number.isFinite(fromUrl) && fromUrl > 1 ? fromUrl - 1 : 0;
-  });
+  // SSR과 최초 클라이언트 렌더가 항상 1page로 일치하도록 0으로 초기화하고,
+  // sessionStorage 복원은 하이드레이션 이후 effect에서만 수행한다(hydration mismatch 방지).
+  const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<ArticlesRow[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -67,6 +63,11 @@ export default function CompanyArticlesPage() {
     sort: "createdAt,desc",
     toCard: toArticlesFeaturedCard,
   });
+
+  useEffect(() => {
+    const remembered = getRememberedListPage("articles");
+    if (remembered > 1) setPageIndex(remembered - 1);
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -115,34 +116,17 @@ export default function CompanyArticlesPage() {
           title: card.title,
           date: card.date,
           image: card.imageSrc ?? LIST_FALLBACK_IMAGE,
-          href: articlesDetailHref(card.id, card.slug, pageIndex + 1),
+          href: articlesDetailHref(card.id, card.slug),
         };
       }),
     [rows, pageIndex],
   );
 
-  const syncPageParam = useCallback(
-    (page: number) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (page > 1) {
-        params.set("page", String(page));
-      } else {
-        params.delete("page");
-      }
-      const query = params.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-    },
-    [pathname, router, searchParams],
-  );
-
-  const goToPage = useCallback(
-    (page: number) => {
-      const nextIndex = Math.max(0, page - 1);
-      setPageIndex(nextIndex);
-      syncPageParam(nextIndex + 1);
-    },
-    [syncPageParam],
-  );
+  const goToPage = useCallback((page: number) => {
+    const nextIndex = Math.max(0, page - 1);
+    setPageIndex(nextIndex);
+    rememberListPage("articles", nextIndex + 1);
+  }, []);
 
   const handlePageChange = (page: number) => {
     goToPage(page);

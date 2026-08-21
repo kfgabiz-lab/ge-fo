@@ -21,7 +21,6 @@ import "@/assets/css/company.css";
 
 type CompanyPressDetailPageProps = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ page?: string }>;
 };
 
 export async function generateMetadata(
@@ -46,11 +45,8 @@ export async function generateMetadata(
 
 export default async function CompanyPressDetailPage({
   params,
-  searchParams,
 }: CompanyPressDetailPageProps) {
   const { id: idOrSlug } = await params;
-  const { page: pageParam } = await searchParams;
-  const listPage = Number.parseInt(pageParam ?? "1", 10);
   const id = await resolveContentId("press-data", idOrSlug, PRESS_STATUS_WHERE);
   if (id == null) notFound();
   const previewToken = await getPreviewToken("press-data", id);
@@ -85,10 +81,10 @@ export default async function CompanyPressDetailPage({
       : pressDetailHero;
 
   const prev = adjacent.prev
-    ? { href: pressDetailHref(adjacent.prev.id, undefined, listPage), title: adjacent.prev.title }
+    ? { href: pressDetailHref(adjacent.prev.id), title: adjacent.prev.title }
     : undefined;
   const next = adjacent.next
-    ? { href: pressDetailHref(adjacent.next.id, undefined, listPage), title: adjacent.next.title }
+    ? { href: pressDetailHref(adjacent.next.id), title: adjacent.next.title }
     : undefined;
 
   const canonicalSlug = (row["seo.slug"] as string) || id;
@@ -120,7 +116,7 @@ export default async function CompanyPressDetailPage({
         pagerAriaLabel="Press post navigation"
         prev={prev}
         next={next}
-        listHref={listPage > 1 ? `/company/press?page=${listPage}` : "/company/press"}
+        listHref="/company/press"
       >
         <div className={articleDetailClass("body")} data-slug="press-data">
           <div
