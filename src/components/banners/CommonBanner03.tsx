@@ -68,8 +68,10 @@ function BannerBody({
   return (
     <>
       <div className="common_banner_03__text">
-        <p className="common_banner_03__kicker">{titleTop}</p>
-        {title ? <h2 className="common_banner_03__tit">{title}</h2> : null}
+        <div className="common_banner_03__title">
+          <p className="common_banner_03__kicker">{titleTop}</p>
+          {title ? <h2 className="common_banner_03__tit">{title}</h2> : null}
+        </div>
         {description && description.length > 0 ? (
           <div className="common_banner_03__desc">
             {description.map((line) => (
@@ -134,6 +136,32 @@ export default function CommonBanner03({
           <BannerLink
             href={linkHref}
             linkExternal={linkExternal}
+            className="common_banner_03__body"
+          >
+            <BannerBody
+              titleTop={titleTop}
+              title={title}
+              description={description}
+              countText={countText}
+              linkLabel={linkLabel}
+            />
+          </BannerLink>
+        ) : (
+          <div className="common_banner_03__body">
+            <BannerBody
+              titleTop={titleTop}
+              title={title}
+              description={description}
+              countText={countText}
+              linkLabel={linkLabel}
+            />
+          </div>
+        )}
+
+        {linkHref ? (
+          <BannerLink
+            href={linkHref}
+            linkExternal={linkExternal}
             className="common_banner_03__img"
             ariaLabel={linkLabel}
           >
@@ -157,32 +185,6 @@ export default function CommonBanner03({
               alt=""
             />
             <div className="common_banner_03__dim" />
-          </div>
-        )}
-
-        {linkHref ? (
-          <BannerLink
-            href={linkHref}
-            linkExternal={linkExternal}
-            className="common_banner_03__body"
-          >
-            <BannerBody
-              titleTop={titleTop}
-              title={title}
-              description={description}
-              countText={countText}
-              linkLabel={linkLabel}
-            />
-          </BannerLink>
-        ) : (
-          <div className="common_banner_03__body">
-            <BannerBody
-              titleTop={titleTop}
-              title={title}
-              description={description}
-              countText={countText}
-              linkLabel={linkLabel}
-            />
           </div>
         )}
       </div>
