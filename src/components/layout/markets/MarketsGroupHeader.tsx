@@ -3,10 +3,7 @@
 import { usePathname } from "next/navigation";
 import MainHeader from "@/components/layout/main/MainHeader";
 import SubHeader from "@/components/layout/markets/SubHeader";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import type { FoGnbMenuApiNode, GnbDevicesMegaMenu } from "@/data/gnb";
-
-const MARKETS_MOBILE_MQ = "(max-width: 780px)";
 
 const MAIN_GNB_PATHS = [
   "/markets/data-center",
@@ -24,7 +21,6 @@ const BREADCRUMB_NAV_PATHS = [
   "/markets/power-grid",
   "/markets/industrial",
 ];
-const COMMERCIAL_RESIDENTIAL_PATH = "/markets/commercial-residential";
 
 function matchesPath(pathname: string, path: string) {
   return pathname === path || pathname.startsWith(`${path}/`);
@@ -40,14 +36,9 @@ export default function MarketsGroupHeader({
   devicesMegaMenu,
 }: MarketsGroupHeaderProps) {
   const pathname = usePathname();
-  const isMobile = useMediaQuery(MARKETS_MOBILE_MQ);
-  const isCommercialResidential = matchesPath(
-    pathname,
-    COMMERCIAL_RESIDENTIAL_PATH,
-  );
-  const useMainGnb =
-    MAIN_GNB_PATHS.some((path) => matchesPath(pathname, path)) &&
-    !(isCommercialResidential && isMobile);
+  // Key-visual markets (incl. commercial-residential MO) — MainHeader is-top white GNB
+  // Figma 9609:218641 GNB property1=White over dark hero
+  const useMainGnb = MAIN_GNB_PATHS.some((path) => matchesPath(pathname, path));
   const showBreadcrumbNav = BREADCRUMB_NAV_PATHS.some((path) =>
     matchesPath(pathname, path),
   );
