@@ -31,7 +31,7 @@ type TrainingCategoryType = RequestForTrainingCategoryType;
 
 type CategoryTypeOption = { id: TrainingCategoryType; label: string };
 
-const CATEGORY_PLACEHOLDER = "Category";
+const CATEGORY_PLACEHOLDER = "Lv Category";
 
 function toCategoryTypeOptions(codes: CodeItem[]): CategoryTypeOption[] {
   return (codes ?? [])
