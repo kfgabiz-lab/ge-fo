@@ -1517,10 +1517,14 @@
   section.support_service_training_request .support_service_training_request__panel-inner {
     display: flex;
     flex-direction: column;
-    gap: 60px;
     align-items: center;
     max-width: 1040px;
     margin: 0 auto;
+  }
+
+  /* Figma 8763:217339 Conts — title ↔ form 60px */
+  section.support_service_training_request .support_service_training_request__panel-inner > * + * {
+    margin-top: 60px;
   }
 
   section.support_service_training_request .support_service_training_request__intro {
@@ -1555,8 +1559,26 @@
   section.support_service_training_request .support_service_training_request__form-grid {
     display: flex;
     flex-direction: column;
-    gap: 40px;
     width: 100%;
+  }
+
+  /* Figma 9337:95109 — section spacing 40px (no gap; margin so divider/consent/recaptcha can override) */
+  section.support_service_training_request .support_service_training_request__form-grid > * + * {
+    margin-top: 40px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__form-divider
+    + .support_service_training_request__consent {
+    margin-top: 30px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__consent
+    + .support_service_training_request__recaptcha-box {
+    margin-top: 30px;
   }
 
   section.support_service_training_request .support_service_training_request__form-row {
@@ -1620,7 +1642,7 @@
 
   section.support_service_training_request .support_service_training_request__form-row--selects {
     width: 100%;
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
   }
 
   section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select {
@@ -1893,12 +1915,6 @@
     border: 1px solid #e8e8e8;
   }
 
-
-
-  section.support_service_training_request .support_service_training_request__form-grid--step4 {
-    gap: 40px;
-  }
-
   section.support_service_training_request .support_service_training_request__product-panel {
     display: flex;
     flex-direction: column;
@@ -1915,13 +1931,29 @@
     margin-top: 20px;
   }
 
-  section.support_service_training_request .support_service_training_request__product-divider,
-  section.support_service_training_request .support_service_training_request__form-divider {
+  section.support_service_training_request .support_service_training_request__product-divider {
     width: 100%;
     height: 1px;
     margin: 0;
     border: none;
     background: #ddd;
+  }
+
+  section.support_service_training_request .support_service_training_request__form-divider {
+    width: 100%;
+    height: 1px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border: none;
+    background: #ddd;
+  }
+
+  /* Figma 9337:95265 — comments ↔ divider 40px, divider ↔ consent 30px */
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__form-divider {
+    margin-top: 40px;
   }
 
   section.support_service_training_request .support_service_training_request__checkbox-group {
@@ -2084,7 +2116,8 @@
     align-self: center;
     width: fit-content;
     max-width: 100%;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -3976,10 +4009,13 @@
   section.support_service_training_request .support_service_training_request__panel-inner {
     display: flex;
     flex-direction: column;
-    gap: 40px;
     align-items: stretch;
     width: 100%;
     margin: 0 auto;
+  }
+
+  section.support_service_training_request .support_service_training_request__panel-inner > * + * {
+    margin-top: 40px;
   }
 
   section.support_service_training_request .support_service_training_request__intro {
@@ -4014,8 +4050,25 @@
   section.support_service_training_request .support_service_training_request__form-grid {
     display: flex;
     flex-direction: column;
-    gap: 24px;
     width: 100%;
+  }
+
+  section.support_service_training_request .support_service_training_request__form-grid > * + * {
+    margin-top: 24px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__form-divider
+    + .support_service_training_request__consent {
+    margin-top: 24px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__consent
+    + .support_service_training_request__recaptcha-box {
+    margin-top: 24px;
   }
 
   section.support_service_training_request .support_service_training_request__field {
@@ -4298,11 +4351,6 @@
     color: #666;
   }
 
-  /* Step 4 — Figma 6880:147748 */
-  section.support_service_training_request .support_service_training_request__form-grid--step4 {
-    gap: 24px;
-  }
-
   section.support_service_training_request .support_service_training_request__field--products {
     gap: 14px;
   }
@@ -4401,8 +4449,7 @@
     color: #888;
   }
 
-  section.support_service_training_request .support_service_training_request__product-divider,
-  section.support_service_training_request .support_service_training_request__form-divider {
+  section.support_service_training_request .support_service_training_request__product-divider {
     width: 100%;
     height: 1px;
     margin: 0;
@@ -4410,8 +4457,20 @@
     background: #ddd;
   }
 
-  section.support_service_training_request .support_service_training_request__form-grid--step4 > .support_service_training_request__form-divider {
-    margin-top: 16px;
+  section.support_service_training_request .support_service_training_request__form-divider {
+    width: 100%;
+    height: 1px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border: none;
+    background: #ddd;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__form-divider {
+    margin-top: 24px;
   }
 
   section.support_service_training_request .support_service_training_request__tags {
@@ -4499,12 +4558,13 @@
     margin: 6px auto 0;
   }
 
-  /* 모바일 — PUB __recaptcha 의 margin(6px auto 0) 을 위젯 래퍼에 동일 적용 */
+  /* 모바일 — 가로 중앙만; 세로 간격은 form-grid sibling margin */
   section.support_service_training_request .support_service_training_request__recaptcha-box {
     align-self: center;
     width: fit-content;
     max-width: 100%;
-    margin: 6px auto 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   section.support_service_training_request .support_service_training_request__input--textarea .MuiOutlinedInput-root {
