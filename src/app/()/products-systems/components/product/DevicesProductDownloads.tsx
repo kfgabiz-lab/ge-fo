@@ -23,14 +23,164 @@ import {
   PRODUCT_DOWNLOADS_PAGE_SIZE,
   productDownloadsSortLabel,
   productDownloadsSortOptions,
+  type ProductDownloadFile,
+  type ProductDownloadItem,
   type ProductDownloadsPage,
 } from "../../data/productDetailContent";
-import type { DownloadCenterSort } from "@/data/support/downloadCenterData";
+import {
+  fetchDownloadCenterFileUrl,
+  type DownloadCenterSort,
+} from "@/data/support/downloadCenterData";
 import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
 
 function fileExtensionOf(fileName: string): string {
   const dotIndex = fileName.lastIndexOf(".");
   return dotIndex === -1 ? "" : fileName.slice(dotIndex + 1).toLowerCase();
+}
+
+function DevicesProductDownloadsItem({
+  item,
+  productName,
+}: {
+  item: ProductDownloadItem;
+  productName?: string;
+}) {
+  const [selectedVersion, setSelectedVersion] = useState(item.version);
+  const [otherVersionFiles, setOtherVersionFiles] = useState<
+    ProductDownloadFile[] | null
+  >(null);
+
+  useEffect(() => {
+    if (selectedVersion === item.version) {
+      setOtherVersionFiles(null);
+      return;
+    }
+
+    const target = item.downloadVersions?.find(
+      (v) => v.versionName === selectedVersion,
+    );
+    if (!target) {
+      setOtherVersionFiles([]);
+      return;
+    }
+
+    let alive = true;
+    Promise.all(
+      target.files.map(async (file) => {
+        let url = "";
+        try {
+          url = await fetchDownloadCenterFileUrl(file.filePath);
+        } catch {
+          url = "";
+        }
+        return {
+          name: file.fileName ?? "",
+          size: file.fileSizeText ?? "",
+          url,
+        };
+      }),
+    ).then((resolved) => {
+      if (alive) setOtherVersionFiles(resolved);
+    });
+
+    return () => {
+      alive = false;
+    };
+  }, [selectedVersion, item.version, item.downloadVersions]);
+
+  const files = otherVersionFiles ?? item.files;
+
+  return (
+    <article className="devices_product_downloads__item">
+      <header className="devices_product_downloads__item-head devices_product_downloads__item-head--center">
+        <div className="devices_product_downloads__item-head-main">
+          <div className="devices_product_downloads__item-head-meta">
+            <span className="devices_product_downloads__type">{item.type}</span>
+            {item.date ? (
+              <time className="devices_product_downloads__date" dateTime={item.date}>
+                {formatDisplayDate(item.date)}
+              </time>
+            ) : null}
+          </div>
+          <div className="devices_product_downloads__item-head-title-row">
+            <h3 className="devices_product_downloads__item-tit">{item.title}</h3>
+            {item.showVersionSelect ? (
+              <div className="devices_product_downloads__item-version">
+                <FormControl className="guide_field guide_field--h38 guide_field--w120 devices_product_downloads__version-select">
+                  <GuideSelect
+                    value={selectedVersion}
+                    displayEmpty
+                    onChange={(event) =>
+                      setSelectedVersion(event.target.value as string)
+                    }
+                    IconComponent={GuideSelectIcon}
+                    inputProps={{
+                      "aria-label": `Version for ${item.title}`,
+                    }}
+                    renderValue={(value) => {
+                      const text = value ? String(value) : item.version;
+                      return (
+                        <span className="guide_field__select-value" title={text}>
+                          {text}
+                        </span>
+                      );
+                    }}
+                  >
+                    {(item.versions ?? [item.version]).map((version) => (
+                      <MenuItem key={version} value={version}>
+                        {version}
+                      </MenuItem>
+                    ))}
+                  </GuideSelect>
+                </FormControl>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </header>
+      <div className="devices_product_downloads__item-body">
+        <div className="devices_product_downloads__files-panel">
+          <ul className="devices_product_downloads__files">
+            {files.map((file) => (
+              <li key={file.name} className="devices_product_downloads__file">
+                <div className="devices_product_downloads__file-main">
+                  <span className="devices_product_downloads__pdf" aria-hidden="true">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src="/ico/ico_pdf_18.svg"
+                      alt=""
+                      width={18}
+                      height={18}
+                    />
+                  </span>
+                  <span className="devices_product_downloads__file-name">
+                    {file.name}
+                    {file.size ? ` (${file.size})` : ""}
+                  </span>
+                </div>
+                <div className="devices_product_downloads__file-actions">
+                  <DevicesProductDownloadsCopyLink url={file.url} />
+                  <DevicesProductDownloadsDownloadBtn
+                    url={file.url}
+                    onDownloaded={() => {
+                      pushDataLayerEvent({
+                        event: "file_download",
+                        file_name: file.name,
+                        product_info: productName ?? "",
+                        file_category: item.type,
+                        file_extension: fileExtensionOf(file.name),
+                      });
+                    }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </article>
+  );
 }
 
 type DevicesProductDownloadsProps = {
@@ -161,6 +311,9 @@ function DevicesProductDownloadsBody({
           <DevicesProductDownloadsMobileControls
             sort={sort}
             onSortChange={setSort}
+            keyword={keyword}
+            onKeywordChange={setKeyword}
+            onSearch={commitSearch}
           />
           <div className="devices_product_downloads__body">
             <DevicesProductDownloadsFilter className="devices_product_downloads__filter-stack--pc">
@@ -244,106 +397,11 @@ function DevicesProductDownloadsBody({
               <>
             <div className="devices_product_downloads__list">
               {items.map((item, index) => (
-                <article
+                <DevicesProductDownloadsItem
                   key={`${item.id}-${currentPage}-${index}`}
-                  className="devices_product_downloads__item"
-                >
-                  <header className="devices_product_downloads__item-head devices_product_downloads__item-head--center">
-                    <div className="devices_product_downloads__item-head-main">
-                      <div className="devices_product_downloads__item-head-meta">
-                        <span className="devices_product_downloads__type">
-                          {item.type}
-                        </span>
-                        {item.date ? (
-                          <time
-                            className="devices_product_downloads__date"
-                            dateTime={item.date}
-                          >
-                            {formatDisplayDate(item.date)}
-                          </time>
-                        ) : null}
-                      </div>
-                      <div className="devices_product_downloads__item-head-title-row">
-                        <h3 className="devices_product_downloads__item-tit">
-                          {item.title}
-                        </h3>
-                        {item.showVersionSelect ? (
-                          <div className="devices_product_downloads__item-version">
-                            <FormControl className="guide_field guide_field--h38 guide_field--w120 devices_product_downloads__version-select">
-                              <GuideSelect
-                                defaultValue={item.version}
-                                displayEmpty
-                                IconComponent={GuideSelectIcon}
-                                inputProps={{
-                                  "aria-label": `Version for ${item.title}`,
-                                }}
-                                renderValue={(value) => {
-                                  const text = value ? String(value) : item.version;
-                                  return (
-                                    <span
-                                      className="guide_field__select-value"
-                                      title={text}
-                                    >
-                                      {text}
-                                    </span>
-                                  );
-                                }}
-                              >
-                                {(item.versions ?? [item.version]).map((version) => (
-                                  <MenuItem key={version} value={version}>
-                                    {version}
-                                  </MenuItem>
-                                ))}
-                              </GuideSelect>
-                            </FormControl>
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  </header>
-                  <div className="devices_product_downloads__item-body">
-                    <div className="devices_product_downloads__files-panel">
-                      <ul className="devices_product_downloads__files">
-                        {item.files.map((file) => (
-                          <li key={file.name} className="devices_product_downloads__file">
-                            <div className="devices_product_downloads__file-main">
-                              <span
-                                className="devices_product_downloads__pdf"
-                                aria-hidden="true"
-                              >
-                                <img loading="lazy" decoding="async"
-                                  src="/ico/ico_pdf_18.svg"
-                                  alt=""
-                                  width={18}
-                                  height={18}
-                                />
-                              </span>
-                              <span className="devices_product_downloads__file-name">
-                                {file.name}
-                                {file.size ? ` (${file.size})` : ""}
-                              </span>
-                            </div>
-                            <div className="devices_product_downloads__file-actions">
-                              <DevicesProductDownloadsCopyLink url={file.url} />
-                              <DevicesProductDownloadsDownloadBtn
-                                url={file.url}
-                                onDownloaded={() => {
-                                  pushDataLayerEvent({
-                                    event: "file_download",
-                                    file_name: file.name,
-                                    product_info: productName ?? "",
-                                    file_category: item.type,
-                                    file_extension: fileExtensionOf(file.name),
-                                  });
-                                }}
-                              />
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </article>
+                  item={item}
+                  productName={productName}
+                />
               ))}
             </div>
             <PageNumbering

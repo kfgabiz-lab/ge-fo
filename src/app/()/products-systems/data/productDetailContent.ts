@@ -5,6 +5,7 @@ import {
   hasSelectableVersions,
   type DownloadCenterItem,
   type DownloadCenterSort,
+  type DownloadCenterVersion,
 } from "@/data/support/downloadCenterData";
 import type { DownloadFilterOption } from "@/data/support/downloadCenterContent";
 import { CONNECT_PORTAL_BASE_URL } from "@/lib/externalLinks";
@@ -56,6 +57,7 @@ export type ProductDownloadItem = {
   date: string;
   version: string;
   versions?: string[];
+  downloadVersions?: DownloadCenterVersion[];
   showVersionSelect?: boolean;
   files: ProductDownloadFile[];
   description?: ProductDownloadDescription;
@@ -96,6 +98,7 @@ export async function mapDownloadCenterItemsToProductDownloads(
         date: item.date ?? "",
         version: latestVersion?.versionName ?? "",
         versions: versionNames,
+        downloadVersions: item.versions,
         showVersionSelect: hasSelectableVersions(item),
         files: mappedFiles,
       } satisfies ProductDownloadItem;
