@@ -4,17 +4,18 @@ import type { HvdcApplication, HvdcWhyBlock } from "./hvdcContent";
 const smartFactoryImg = (file: string) => `/img/devices-systems/smart-factory/${file}`;
 
 export const smartFactoryHero = {
-  title: "Smart Factory",
+  title: "Diagnosis System",
   description:
-    "LS ELECTRIC Diagnosis is a condition monitoring and diagnostic solution for power equipment. It monitors, diagnoses, and predicts potential failures caused by major component defects, natural aging, or unexpected system conditions during operation. The solution helps improve power supply reliability and support stable equipment operation.",
+    "LS ELECTRIC Diagnosis is a condition monitoring and diagnostic solution for power equipment.\nThe solution monitors, diagnoses, and predicts potential failures caused by major component defects, natural aging, or unexpected system conditions during operation. User-friendly software tools help improve power supply reliability and support stable equipment operation.",
 };
 
 export const smartFactoryOverview = {
   image: smartFactoryImg("overview_hero.webp"),
   imageAlt: "Smart factory diagnostic monitoring control room",
-  title: "Predictive Asset Diagnostics:\nEnhancing Reliability Through Intelligent Monitoring",
+  title:
+    "Predictive Asset Diagnostics:\nEnhancing Reliability Through Intelligent Monitoring",
   description:
-    "Diagnosis detects abnormalities and predicts potential failures through real-time equipment monitoring. It helps improve reliability and ensure stable operation of power assets.",
+    "The Diagnosis solution detects abnormalities and predicts potential failures through real-time equipment monitoring. It helps improve the reliability of power assets and support stable operation.",
 };
 
 export const smartFactoryBenefitsSection = {
@@ -52,7 +53,7 @@ export const smartFactoryBenefitsSection = {
 };
 
 export const smartFactoryApplicationsSection = {
-  title: "Main Applied Area",
+  title: "System Configuration",
   description: "",
   items: [
     {
@@ -68,12 +69,12 @@ export const smartFactoryApplicationsSection = {
       title: "Distribution-Level Diagnosis System",
       subtitle: "(MV/LV CMD)",
       description:
-        "Provides condition monitoring and diagnostics for medium and low voltage equipment, including cast resin transformers, switchboards, and distribution systems.",
+        "Provides condition monitoring and diagnostics for medium- and low-voltage equipment, including cast resin transformers, switchboards, and distribution systems.",
       image: smartFactoryImg("application_distribution.webp"),
     },
     {
       id: "app-3",
-      title: "Centralised Monitoring System",
+      title: "Centralized Monitoring System",
       subtitle: "(CMS)",
       description:
         "An integrated monitoring and management platform that connects with up to 200 CMD systems, enabling centralised supervision of substation assets across domestic and international sites.",
@@ -85,12 +86,12 @@ export const smartFactoryApplicationsSection = {
 export const smartFactoryWhySection = {
   title: "System Architecture",
   description:
-    "Diagnosis System architecture from data acquisition to centralised monitoring and remote operation.",
+    "The diagnosis system architecture covers the entire process from data acquisition to centralized monitoring and remote operation.",
   blocks: [
     {
       id: "why-dau",
-      title: "DAU (Data Acquisition Unit)",
-      lead: "Collects diagnostic data from power equipment through a compact and flexible hardware platform designed for easy installation and maintenance.",
+      title: "Data Acquisition Unit (DAU)",
+      lead: "Collects diagnostic data from power equipment through a compact and flexible hardware platform that supports easy installation and maintenance.",
       cards: [
         { title: "", description: "", image: smartFactoryImg("why_dau_01.webp") },
         { title: "", description: "", image: smartFactoryImg("why_dau_02.webp") },
@@ -98,7 +99,7 @@ export const smartFactoryWhySection = {
     },
     {
       id: "why-cmd",
-      title: "CMD (Condition Monitoring & Diagnostic System)",
+      title: "Condition Monitoring and Diagnostic System (CMD)",
       lead: "Provides AI-based condition monitoring, diagnostics, trend analysis, alarm management, and reporting at the local site level.",
       cards: [
         { title: "", description: "", image: smartFactoryImg("why_cmd_01.webp") },
@@ -107,8 +108,8 @@ export const smartFactoryWhySection = {
     },
     {
       id: "why-cms",
-      title: "CMS (Centralised Management System)",
-      lead: "Enables centralised monitoring and management of up to 200 substations through integrated diagnostics and reporting.",
+      title: "Centralized Management System (CMS)",
+      lead: "Enables centralized monitoring and management of up to 200 substations through integrated diagnostics and reporting.",
       cards: [
         { title: "", description: "", image: smartFactoryImg("why_cms_01.webp") },
         { title: "", description: "", image: smartFactoryImg("why_cms_02.webp") },
@@ -119,7 +120,7 @@ export const smartFactoryWhySection = {
       title: "Mobile HMI",
       layout: "split",
       lead:
-        "Provides real-time access to equipment status, alarms,\nand diagnostic information anytime and anywhere through\na web-based mobile interface.",
+        "Provides 24/7 real-time access to equipment status, alarms,\nand diagnostic information through a web-based mobile interface.",
       cards: [{ title: "", description: "", image: smartFactoryImg("why_mobile_01.webp") }],
     },
   ] satisfies HvdcWhyBlock[],

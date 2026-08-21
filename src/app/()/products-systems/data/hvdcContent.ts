@@ -6,16 +6,16 @@ export const hvdcHero = {
   tagline: null,
   title: "SCADA",
   description:
-    "LS ELECTRIC\u2019s Beyond X SCADA system provides seamless data interface from field devices to power SCADA operation systems through integrated engineering of key unit systems (DPR, DPM, UPS, BATTERY, GEN, etc.) for reliable power supply.",
+    "LS ELECTRIC\u2019s Beyond X SCADA system provides seamless data interfacing from field devices to power SCADA systems through integrated engineering of key power system components, including DPR, DPM, uninterruptible power supply (UPS), energy storage systems (ESS), generators, and more, supporting reliable power supply.",
 };
 
 export const hvdcOverview = {
   image: hvdcImg("overview_hero.webp"),
   imageAlt: "SCADA control room monitoring systems",
   title:
-    "Beyond Monitoring: Driving Grid\nResiliency through Intelligent Automation.",
+    "Beyond Monitoring: Driving Grid Resiliency through Intelligent Automation",
   description:
-    "GridSol Care SCADA delivers real-time power data analysis and operator-centric control for stable, reliable grid operations.\nBy combining advanced monitoring, automation, and rapid response capabilities,\nit enhances power system reliability and operational efficiency.",
+    "GridSol Care SCADA provides real-time power data analysis and operator-centric control to support stable and reliable grid operations.\n By combining advanced monitoring, automation, and rapid response capabilities, the solution enhances power system reliability and operational efficiency.",
 };
 
 export const hvdcBenefitsSection = {
@@ -69,7 +69,7 @@ export const hvdcApplicationsSection = {
       title: "ECMS",
       subtitle: "(Electrical Equipment Control Monitoring System)",
       description:
-        "ECMS is designed for power plants to support the operation, management, monitoring, and control of power generation equipment.",
+        "ECMS supports power plants in the operation, management, monitoring, and control of power generation equipment.",
       image: hvdcImg("application_ecms.webp"),
     },
     {
@@ -85,7 +85,7 @@ export const hvdcApplicationsSection = {
       title: "SAS",
       subtitle: "(Substation Automation System)",
       description:
-        "SAS provides a digital substation automation solution for unmanned operation at individual substations.",
+        "SAS provides a digital substation automation solution that enables unmanned operation of substations.",
       image: hvdcImg("application_sas.webp"),
     },
   ] satisfies HvdcApplication[],
@@ -100,34 +100,34 @@ export type HvdcWhyBlock = {
 };
 
 export const hvdcWhySection = {
-  title: "Highlights & Capabilities",
+  title: "Highlights and Capabilities",
   blocks: [
     {
       id: "why-pq",
       title: "Enhanced PQ analysis function",
-      lead: "By real-time monitoring of the substation/substation power system, when a grid accident or power quality event occurs, event information is transmitted in real time and additional information is provided.\nWe provide services for stable facility operation by accurately recognizing the abnormal state of the system.",
+      lead: "Real-time monitoring of substation power systems enables real-time event transmission and provides critical information when grid faults or power quality issues occur. The system supports stable facility operation by accurately identifying abnormal system conditions.",
       cards: [
         {
           title: "PQ waveform data analysis",
           description:
-            "Supports PQ instantaneous value waveform analysis and harmonic, phase angle, RMS analysis function (Two cursor analysis function is provided)",
+            "Supports analysis of PQ instantaneous waveforms, harmonics, phase angles, and RMS values, with a two-cursor analysis function.",
           image: hvdcImg("why_pq_01.webp"),
         },
         {
           title: "PQ data analysis",
-          description: "Provides easy data extraction of analysis results",
+          description: "Enables easy extraction of analysis results.",
           image: hvdcImg("why_pq_02.webp"),
         },
         {
           title: "Trend analysis of PQ event occurrence",
           description:
-            "Provides event occurrence trend by time (specific time period, daily event, daily event occurrence)",
+            "Provides event occurrence trends by time period, including specific time periods, daily events, and daily event counts.",
           image: hvdcImg("why_pq_03.webp"),
         },
         {
           title: "Standard curve analysis (CBEMA, ITIC, SEMI)",
           description:
-            "Provides CBEMA, ITIC, SEMI standard curve analysis function according to power quality standards",
+            "Supports CBEMA, ITIC, and SEMI standard curve analysis for power quality assessment.",
           image: hvdcImg("why_pq_04.webp"),
         },
       ],
@@ -139,13 +139,13 @@ export const hvdcWhySection = {
         {
           title: "Historical data",
           description:
-            "The PSDR function saves all analog and digital data every 2 seconds and manages them as files,and the user can select a file at a specific point in time. Provides a function to replay historical data for that time",
+            "The PSDR function records all analog and digital data every two seconds and stores the data in files. Users can select a file based on a specific time and replay historical data for the selected period.",
           image: hvdcImg("why_psdr_01.webp"),
         },
         {
           title: "Create database",
           description:
-            "It provides PSDR viewport and PSDR database creation functions independently of the real-time operating system",
+            "Provides PSDR viewport and creation functions independently of the real-time operating system.",
           image: hvdcImg("why_psdr_02.webp"),
         },
       ],

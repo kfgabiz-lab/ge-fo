@@ -6,15 +6,15 @@ const xemsImg = (file: string) => `/img/devices-systems/xems/${file}`;
 export const xemsHero = {
   title: "xEMS",
   description:
-    "LS ELECTRIC Beyond X™ xEMS provides energy management solutions for energy generation, storage, and consumption. Through FEMS and BEMS solutions, xEMS supports energy savings, efficient operation, demand management, and alternatives to emergency generator operation.",
+    "The LS ELECTRIC Beyond X\u2122 xEMS provides energy management solutions for energy generation, storage, and consumption. Through FEMS and BEMS solutions, xEMS helps optimize energy use, improve operational efficiency, manage demand, and reduce reliance on emergency generators.",
 };
 
 export const xemsOverview = {
   image: xemsImg("overview_hero.webp"),
   imageAlt: "Industrial control room with energy monitoring dashboards",
-  title: "Integrated Energy Management for\nSmarter Operations.",
+  title: "Integrated Energy Management for\nSmart Operations.",
   description:
-    "xEMS combines FEMS and BEMS capabilities into a unified platform for monitoring, analysing, and optimising energy use. It helps maximise efficiency while supporting sustainable operations.",
+    "The xEMS combines FEMS and BEMS capabilities into a unified platform for monitoring, analyzing, and optimizing energy use. This solution helps maximize energy efficiency while supporting sustainable operations.",
 };
 
 export const xemsBenefitsSection = {
@@ -77,7 +77,7 @@ export const xemsEnergySolutionsSection = {
     "Energy diagnostic analysis",
     "Energy Acquisition Management",
     "Maintenance education",
-    "Standard protocol interconnection",
+    "Standard protocol intercon-nection",
     "Operation / Interface",
     "Equipment / System Management",
   ],
@@ -99,7 +99,7 @@ export const xemsEnergySolutionsSection = {
       id: "level-3",
       label: "Energy Management",
       title: "Level 3",
-      description: "Setting of energy Baseline by site hierarchy",
+      description: "Setting of energy Baseline\nby site hierarchy",
     },
     {
       id: "level-4",
@@ -113,18 +113,18 @@ export const xemsEnergySolutionsSection = {
       label: "Energy Management",
       title: "Level 5",
       description:
-        "Energy goal setting, communication, KPI, EnPI setting, energy management activities",
+        "Energy goal setting,\ncommunication, KPI, EnPI setting, energy management activities",
     },
   ],
 };
 
 export const xemsWhySection = {
-  title: "Highlights & Capabilities",
+  title: "Highlights and Capabilities",
   blocks: [
     {
       id: "why-acquisition",
-      title: "Energy Information Acquisition / Management",
-      lead: "Collects various energy data scattered around buildings/factories in real-time, enabling objectification, quantification, and history inquiry of the data.",
+      title: "Energy Information Acquisition/Management",
+      lead: "Collects various energy data from buildings and factories in real time, enabling data visualization, quantification, and historical data retrieval.",
       cards: [
         { title: "", description: "", image: xemsImg("why_acquisition_01.webp") },
         { title: "", description: "", image: xemsImg("why_acquisition_02.webp") },
@@ -132,8 +132,8 @@ export const xemsWhySection = {
     },
     {
       id: "why-diagnosis",
-      title: "Energy Diagnosis / Analysis",
-      lead: "Diagnoses and analyzes energy data collected in various ways, using various analysis tools to analyze energy usage information.",
+      title: "Energy Diagnosis/Analysis",
+      lead: "Analyzes collected energy data using various analysis tools to identify energy usage patterns and opportunities for improvement.",
       cards: [
         { title: "", description: "", image: xemsImg("why_diagnosis_01.webp") },
         { title: "", description: "", image: xemsImg("why_diagnosis_02.webp") },
@@ -141,8 +141,8 @@ export const xemsWhySection = {
     },
     {
       id: "why-efficiency",
-      title: "Energy Efficiency & Saving",
-      lead: "Sets a baseline using analyzed data on energy usage and conducts efficiency activities to find and manage energy reduction items objectively.",
+      title: "Energy Efficiency and Saving",
+      lead: "Establishes energy usage baselines based on analyzed data and identifies and manages energy-saving opportunities to improve energy efficiency.",
       cards: [
         { title: "", description: "", image: xemsImg("why_efficiency_01.webp") },
         { title: "", description: "", image: xemsImg("why_efficiency_02.webp") },
@@ -150,8 +150,8 @@ export const xemsWhySection = {
     },
     {
       id: "why-pq",
-      title: "Power Quality Monitoring / Analysis",
-      lead: "Utilizes the platform of Power SCADA to apply key functions of existing SCADA to the FEMS Web solution, and includes proprietary communication protocols such as DNP 3.0, IEC61850, and standard communication protocols like MODBUS TCP.",
+      title: "Power Quality Monitoring/Analysis",
+      lead: "Integrates key functions of existing SCADA data points into the FEMS Web solution through the Power SCADA platform. It supports proprietary communication protocols such as DNP 3.0 and IEC 61850, as well as standard protocols such as Modbus TCP.",
       cards: [
         { title: "", description: "", image: xemsImg("why_pq_01.webp") },
         { title: "", description: "", image: xemsImg("why_pq_02.webp") },
