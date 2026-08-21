@@ -15,11 +15,17 @@ const MOBILE_MAX_WIDTH_QUERY = "(max-width: 780px)";
 type DevicesProductDownloadsMobileControlsProps = {
   sort: DownloadCenterSort;
   onSortChange: (sort: DownloadCenterSort) => void;
+  keyword: string;
+  onKeywordChange: (keyword: string) => void;
+  onSearch: () => void;
 };
 
 export default function DevicesProductDownloadsMobileControls({
   sort,
   onSortChange,
+  keyword,
+  onKeywordChange,
+  onSearch,
 }: DevicesProductDownloadsMobileControlsProps) {
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
@@ -61,6 +67,11 @@ export default function DevicesProductDownloadsMobileControls({
           className="guide_field guide_field--search devices_product_downloads__mo-search"
           placeholder="keyword"
           aria-label="Search downloads"
+          value={keyword}
+          onChange={(event) => onKeywordChange(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") onSearch();
+          }}
           slotProps={{
             input: {
               endAdornment: (
@@ -72,6 +83,7 @@ export default function DevicesProductDownloadsMobileControls({
                     type="button"
                     className="guide_field__search-icon-button"
                     aria-label="Search"
+                    onClick={onSearch}
                   >
                     <img
                       loading="lazy"
