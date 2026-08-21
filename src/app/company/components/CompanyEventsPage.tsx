@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import CompanyEventsCalendar from "@/app/company/components/CompanyEventsCalendar";
 import CompanyEventsFeatured from "@/app/company/components/CompanyEventsFeatured";
 import CompanyEventsPastSection from "@/app/company/components/CompanyEventsPastSection";
@@ -28,11 +29,17 @@ type CompanyEventsPageProps = {
 export default function CompanyEventsPage({
   pageId = "Page_company_events",
 }: CompanyEventsPageProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [featuredItems, setFeaturedItems] = useState<EventsFeaturedItem[]>([]);
   const [calendarMonths, setCalendarMonths] = useState<EventsCalendarMonth[]>([]);
 
   const [pastItems, setPastItems] = useState<EventsPastItem[]>([]);
-  const [pastPageIndex, setPastPageIndex] = useState(0);
+  const [pastPageIndex, setPastPageIndex] = useState(() => {
+    const fromUrl = Number.parseInt(searchParams.get("page") ?? "1", 10);
+    return Number.isFinite(fromUrl) && fromUrl > 1 ? fromUrl - 1 : 0;
+  });
   const [pastTotalPages, setPastTotalPages] = useState(1);
   const [pastSort, setPastSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
 
@@ -79,12 +86,35 @@ export default function CompanyEventsPage({
     };
   }, [pastPageIndex, pastSort]);
 
+  const syncPageParam = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (page > 1) {
+        params.set("page", String(page));
+      } else {
+        params.delete("page");
+      }
+      const query = params.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
+
+  const goToPastPage = useCallback(
+    (page: number) => {
+      const nextIndex = Math.max(0, page - 1);
+      setPastPageIndex(nextIndex);
+      syncPageParam(nextIndex + 1);
+    },
+    [syncPageParam],
+  );
+
   const handlePastPageChange = (page: number) => {
-    setPastPageIndex(Math.max(0, page - 1));
+    goToPastPage(page);
   };
   const handlePastSortChange = (value: "latest" | "oldest" | "az" | "za") => {
     setPastSort(value);
-    setPastPageIndex(0);
+    goToPastPage(1);
   };
 
   return (

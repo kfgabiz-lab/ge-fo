@@ -7,8 +7,8 @@ export const BLOG_LIST_SIZE = 10;
 
 export const blogImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-export const blogDetailHref = (id: number, slug?: string | null) =>
-  `/company/blog/${slug || id}`;
+export const blogDetailHref = (id: number, slug?: string | null, page?: number) =>
+  `/company/blog/${slug || id}${page && page > 1 ? `?page=${page}` : ""}`;
 
 export type BlogRow = PageDataItem;
 

@@ -25,6 +25,7 @@ import "@/assets/css/company.css";
 
 type CompanyBlogDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
 };
 
 export async function generateMetadata(
@@ -48,8 +49,11 @@ export async function generateMetadata(
 
 export default async function CompanyBlogDetailPage({
   params,
+  searchParams,
 }: CompanyBlogDetailPageProps) {
   const { id: idOrSlug } = await params;
+  const { page: pageParam } = await searchParams;
+  const listPage = Number.parseInt(pageParam ?? "1", 10);
   const id = await resolveContentId("blog-data", idOrSlug, BLOG_STATUS_WHERE);
   if (id == null) notFound();
   const previewToken = await getPreviewToken("blog-data", id);
@@ -89,10 +93,10 @@ export default async function CompanyBlogDetailPage({
       : blogDetailHero;
 
   const prev = adjacent.prev
-    ? { href: blogDetailHref(adjacent.prev.id), title: adjacent.prev.title }
+    ? { href: blogDetailHref(adjacent.prev.id, undefined, listPage), title: adjacent.prev.title }
     : undefined;
   const next = adjacent.next
-    ? { href: blogDetailHref(adjacent.next.id), title: adjacent.next.title }
+    ? { href: blogDetailHref(adjacent.next.id, undefined, listPage), title: adjacent.next.title }
     : undefined;
 
   const publishDttm = (pickField(row, "publish_dttm", "publishDttm") as string) ?? "";
@@ -128,7 +132,7 @@ export default async function CompanyBlogDetailPage({
       pagerAriaLabel="Blog post navigation"
       prev={prev}
       next={next}
-      listHref="/company/blog"
+      listHref={listPage > 1 ? `/company/blog?page=${listPage}` : "/company/blog"}
     >
       <div data-slug="blog-data">
         <div
