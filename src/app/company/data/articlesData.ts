@@ -6,8 +6,8 @@ export const ARTICLES_LIST_SIZE = 9;
 
 export const articlesImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-export const articlesDetailHref = (id: number, slug?: string | null, page?: number) =>
-  `/company/articles/${slug || id}${page && page > 1 ? `?page=${page}` : ""}`;
+export const articlesDetailHref = (id: number, slug?: string | null) =>
+  `/company/articles/${slug || id}`;
 
 export type ArticlesRow = PageDataItem;
 

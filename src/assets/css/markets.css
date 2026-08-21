@@ -2394,7 +2394,9 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
 
   section.markets_benefits .markets_benefits__item .capabilities_label {
     font-size: 14px;
-    line-height: 14px;
+    font-weight: 600;
+    line-height: 1;
+    color: #0f1f45;
   }
 
   section.markets_benefits .markets_benefits__item .capabilities_txt {
