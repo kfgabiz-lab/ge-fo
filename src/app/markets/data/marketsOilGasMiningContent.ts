@@ -15,8 +15,9 @@ export const oilGasMiningHero = {
 
 export const oilGasMiningIntro = {
   titleLines: [
-    "Powering Critical Energy &",
-    "Resource Industries with", "Robust and Intelligent Solutions",
+    "Powering Critical Energy & ",
+    "Resource Industries with ",
+    "Robust and Intelligent Solutions",
   ],
   text: "LS ELECTRIC supports critical industries, including Petroleum & Chemical Refineries, Metals & Mining, and Marine, with reliable power distribution and advanced automation solutions. Designed for harsh and hazardous environments, our portfolio ensures safety, system stability, and continuous uptime. From explosion-proof systems and heavy-duty switchgear to integrated automation and monitoring platforms, we improve efficiency, reduce downtime, and enable safe, sustainable operations across complex industrial processes.",
 };
