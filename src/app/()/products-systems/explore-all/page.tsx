@@ -1,4 +1,3 @@
-import CommonBanner04 from "@/components/banners/CommonBanner04";
 import DevicesExploreAll from "../components/DevicesExploreAll";
 import type { GnbExploreProduct } from "@/data/gnbExploreAllProducts";
 import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
@@ -146,7 +145,6 @@ export default async function ExploreAllProductsPage() {
           />
         </div>
       </section>
-      <CommonBanner04 linkHref="/support/contact-us" />
     </main>
   );
 }

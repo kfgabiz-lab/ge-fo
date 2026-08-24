@@ -2056,7 +2056,7 @@ section.common_faq .faq_item.is-open .faq_answer {
   }
 
   section.common_faq .common_faq__head {
-    max-width: 815px;
+    /* max-width: 815px; */
     margin-bottom: 40px;
   }
 
