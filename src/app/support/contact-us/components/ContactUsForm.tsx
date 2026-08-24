@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useId, useMemo, useState } from "react";
+import { Suspense, useEffect, useId, useMemo, useRef, useState } from "react";
 import {
   GuideCheckboxIcon,
   GuideSelectIcon,
@@ -250,7 +250,7 @@ function ContactUsFormContent() {
   const [lastName, setLastName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [country, setCountry] = useState("");
-  const [description, setDescription] = useState("");
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMismatch, setPasswordMismatch] = useState(false);
@@ -401,6 +401,7 @@ function ContactUsFormContent() {
     event.preventDefault();
     if (submitting) return;
 
+    const descriptionValue = descriptionRef.current?.value ?? "";
     const emailValid =
       email.trim() !== "" && EMAIL_FORMAT_REGEX.test(email.trim());
     const nextErrors: ContactFieldErrors = {
@@ -409,7 +410,7 @@ function ContactUsFormContent() {
       lastName: lastName.trim() === "",
       companyName: companyName.trim() === "",
       country: country.trim() === "",
-      description: description.trim() === "",
+      description: descriptionValue.trim() === "",
       password: password.trim() === "",
       confirmPassword: confirmPassword.trim() === "",
       productCategory: productCategoryRequired && categoryIds.lv3.trim() === "",
@@ -423,7 +424,7 @@ function ContactUsFormContent() {
       lastName.trim() !== "" &&
       companyName.trim() !== "" &&
       country.trim() !== "" &&
-      description.trim() !== "" &&
+      descriptionValue.trim() !== "" &&
       password.trim() !== "" &&
       confirmPassword.trim() !== "" &&
       (!productCategoryRequired || categoryIds.lv3.trim() !== "");
@@ -452,7 +453,7 @@ function ContactUsFormContent() {
       lastName,
       companyName,
       country,
-      description,
+      description: descriptionValue,
       password,
       confirmPassword,
       marketingOptInFlag: Boolean(consent[CONSENT_MARKETING_ID]),
@@ -714,20 +715,25 @@ function ContactUsFormContent() {
               >
                 {contactUsFormCopy.inquiryDetails}
               </ContactUsFieldLabel>
-              <TextField
+              <textarea
                 id={`${formId}-details`}
-                className="guide_field support_contact_form__input support_contact_form__input--textarea"
+                ref={descriptionRef}
+                className={[
+                  "support_contact_form__textarea",
+                  errors.description ? "support_contact_form__textarea--error" : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 placeholder={contactUsFormCopy.inquiryDetailsPlaceholder}
-                multiline
                 rows={5}
                 required
-                error={Boolean(errors.description)}
-                value={description}
-                onChange={(event) => {
-                  setDescription(event.target.value);
-                  if (errors.description) {
-                    setErrors((prev) => ({ ...prev, description: undefined }));
-                  }
+                defaultValue=""
+                onChange={() => {
+                  setErrors((prev) =>
+                    prev.description
+                      ? { ...prev, description: undefined }
+                      : prev,
+                  );
                 }}
               />
             </div>

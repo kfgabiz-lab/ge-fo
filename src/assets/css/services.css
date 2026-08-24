@@ -1140,14 +1140,21 @@
   }
 
   section.support_service_cards .support_service_cards__tit-group {
+    display: inline-flex;
+    align-items: center;
     gap: 8px;
   }
 
+  section.support_service_cards .support_service_cards__tit-part {
+    white-space: nowrap;
+  }
+
+  /* Figma 7619:328730 — divider Gray 04 */
   section.support_service_cards .support_service_cards__tit-divider {
     flex: none;
     width: 1px;
     height: 14px;
-    background: #222;
+    background: #e8e8e8;
   }
 
   section.support_service_cards .support_service_cards__card:hover,
