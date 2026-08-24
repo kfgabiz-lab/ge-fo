@@ -69,7 +69,7 @@ export function DownloadCenterFilterProvider({
   const [popularKeywords, setPopularKeywords] = useState<string[]>([]);
   const [query, setQueryState] = useState("");
   const [page, setPage] = useState(1);
-  const [sort, setSortState] = useState<DownloadCenterSort>("");
+  const [sort, setSortState] = useState<DownloadCenterSort>("doctype");
 
   useEffect(() => {
     let alive = true;

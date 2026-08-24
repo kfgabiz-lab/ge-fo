@@ -20,13 +20,6 @@ export const downloadCenterPage = {
   filterByLabel: "Filter by",
   sortByLabel: "Sort by",
   applyLabel: "Apply",
-  mobileSortDefault: "Document Type",
-  mobileSortOptions: [
-    "Document Type",
-    "Most Recent",
-    "A to Z",
-    "Z to A",
-  ] as const,
   popularTags: ["MCCB", "AC Drives", "VCB", "PLC", "How to size a contactor for motor control?"],
   popularTagsMobile: {
     row1: ["MCCB", "AC Drives", "VCB", "PLC"],
