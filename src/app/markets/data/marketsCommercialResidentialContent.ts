@@ -15,7 +15,7 @@ export const commercialResidentialIntro = {
 export const commercialResidentialStats: MarketStatItem[] = [
   {
     id: "cr-power",
-    label: "Power consumption",
+    label: "Power Consumption",
     value: "Saved up to 25%",
     sublabel: "",
     description:
@@ -23,7 +23,7 @@ export const commercialResidentialStats: MarketStatItem[] = [
   },
   {
     id: "cr-energy",
-    label: "Energy usage",
+    label: "Energy Usage",
     value: "Reduced Operating Costs",
     sublabel: "",
     description:
@@ -32,7 +32,7 @@ export const commercialResidentialStats: MarketStatItem[] = [
   {
     id: "cr-stable",
     label: "Stable System Performance",
-    value: "Reliable&Efficient",
+    value: "Reliable & Efficient",
     sublabel: "",
     description:
       "Dedicated HVAC control and fan/pump optimization functions help maintain stable system performance while improving operational efficiency.",
