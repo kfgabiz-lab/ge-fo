@@ -3,7 +3,7 @@ import {
   softwareProductHrefs,
 } from "@/data/gnb/mega/devices";
 
-const TRAINING_VARIANT_LABELS: Record<string, string> = {
+export const TRAINING_VARIANT_LABELS: Record<string, string> = {
   sales: "Sales Training",
   engineering: "Engineering Training",
   service: "Service Training",
