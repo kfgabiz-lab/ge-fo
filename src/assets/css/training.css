@@ -1682,7 +1682,13 @@
 
   section.support_service_training_request .support_service_training_request__form-row--selects {
     width: 100%;
-    /* margin-bottom: 16px; */
+  }
+
+  /* selects ↔ product panel 16px (field gap 10 + 6) */
+  section.support_service_training_request
+    .support_service_training_request__form-row--selects
+    + .support_service_training_request__product-panel {
+    margin-top: 6px;
   }
 
   section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select {
@@ -4444,11 +4450,11 @@
     gap: 10px;
   }
 
-  /* Figma 8763:218317 — selects ↔ product panel 14px */
+  /* selects ↔ product panel 16px (field gap 10 + 6) */
   section.support_service_training_request
     .support_service_training_request__field--products
     > .support_service_training_request__product-panel {
-    margin-top: 4px;
+    margin-top: 6px;
   }
 
   section.support_service_training_request .support_service_training_request__field-label--products {
