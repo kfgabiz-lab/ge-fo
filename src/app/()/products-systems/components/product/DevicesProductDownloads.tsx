@@ -213,7 +213,6 @@ export default function DevicesProductDownloads({
     <DevicesProductDownloadsFilterBoundary
       productCodes={productCodes}
       docTypeOptions={docTypeOptions}
-      keyword={appliedKeyword}
     >
       <DevicesProductDownloadsBody
         initial={initial}

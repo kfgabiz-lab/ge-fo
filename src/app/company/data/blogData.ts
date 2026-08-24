@@ -1,4 +1,5 @@
 import { fetchApi } from "@/lib/api";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 import { stripHtmlText } from "@/lib/stripHtmlText";
@@ -7,8 +8,8 @@ export const BLOG_LIST_SIZE = 10;
 
 export const blogImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-export const blogDetailHref = (id: number, slug?: string | null) =>
-  `/company/blog/${slug || id}`;
+export const blogDetailHref = (id: string | number, slug?: string | null) =>
+  contentDetailPath("/company/blog", id, slug);
 
 export type BlogRow = PageDataItem;
 

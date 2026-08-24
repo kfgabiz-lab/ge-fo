@@ -10,6 +10,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import TabButton from "@/components/ui/TabButton";
 import { getProductBadgeType } from "@/lib/productBadge";
 import { handleHorizontalTabListKeyDown } from "@/lib/tabKeyboardNav";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import type {
   FoProductGroupItem,
   FoProductGroupResponse,
@@ -32,7 +33,7 @@ type ProductItem = {
 function toProductItem(item: FoProductGroupItem): ProductItem {
   return {
     id: String(item.id),
-    href: item.slug ? `/product/${item.slug}` : "",
+    href: item.slug ? contentDetailPath("/product", item.id, item.slug) : "",
     image: item.image ?? PRODUCT_IMAGE_FALLBACK,
     imageAlt: item.productNm,
     title: item.productNm,

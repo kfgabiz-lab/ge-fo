@@ -1,8 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { TrainingCardItem } from "../data/trainingData";
-import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
+import {
+  seedBreadcrumbCrumbHref,
+  seedBreadcrumbTitle,
+} from "@/components/layout/shared/breadcrumbTitleStore";
 
 const CARD_FALLBACK_IMAGE = "/img/services/engineering-training/course-01.webp";
 
@@ -13,13 +17,19 @@ export default function TrainingCard({
   course: TrainingCardItem;
   detailHref: string;
 }) {
+  const listPathname = usePathname();
+  const handleCardClick = () => {
+    seedBreadcrumbTitle(detailHref, "Course");
+    seedBreadcrumbCrumbHref(detailHref, "Training", listPathname);
+  };
+
   return (
     <Link
       href={detailHref}
       className="support_service_training_card"
       data-slugkey="id"
       data-slugkey-attr="href"
-      onClick={() => seedBreadcrumbTitle(detailHref, "Course")}
+      onClick={handleCardClick}
     >
       <div className="support_service_training_card__media">
         <img

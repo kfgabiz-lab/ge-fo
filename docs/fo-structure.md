@@ -49,22 +49,20 @@ src/app/
 │   ├── layout.tsx                # SubHeader + {children} + SubFooter (markets와 동일 컴포넌트 재사용)
 │   ├── components/               # CompanyXxxPage 조립 컴포넌트 + Feed(press/blog 공용 리스트) 컴포넌트 22개
 │   ├── data/                     # 페이지별 Content/List/Detail 데이터 24개 + fetchPressList/fetchBlogList/fetchArticlesList/fetchEventsList
-│   ├── press/page.tsx, press/detail/[id]/page.tsx
-│   ├── blog/page.tsx, blog/detail/page.tsx, blog/detail/[id]/page.tsx
-│   ├── articles/page.tsx, articles/detail/page.tsx, articles/detail/[id]/page.tsx
-│   ├── events/page.tsx, events/detail/[id]/page.tsx
+│   ├── press/page.tsx, press/[id]/[slug]/page.tsx
+│   ├── blog/page.tsx, blog/[id]/[slug]/page.tsx
+│   ├── articles/page.tsx, articles/[id]/[slug]/page.tsx
+│   ├── events/page.tsx, events/[id]/[slug]/page.tsx
 │   ├── esg/page.tsx, ls-electric/page.tsx, ls-electric-america/page.tsx, affiliate-in-america/page.tsx
-│   # ⚠ blog/detail/page.tsx·articles/detail/page.tsx: [id] 없는 정적 목업(하드코딩 데이터)이 [id]/page.tsx(실 API 연동)와 동시 존재.
-│   #    라우팅 충돌은 없으나(각기 다른 URL) 목업 페이지 정리 대상인지 원 담당자 확인 필요
+│   # 상세 라우트는 `{id}/{slug}` 2세그먼트 고정(옛 `detail/[id]` 1세그먼트 및 정적 목업 `detail/page.tsx`는 전부 정리됨) — 원칙은 fo-data-binding.md 1-4절 하단 참고
 │
 ├── services/                   # 서비스 — 5개 메뉴
 │   ├── layout.tsx                # SubHeader + {children} + SubFooter
 │   ├── service-center/page.tsx + components/(Banner/Cards/Flow/Gics/Offering/Title 6개)
 │   ├── warranty-policy/page.tsx + components/(FeatureCards/Apply/Banner/Coverage/Extension/Title 6개) + data/warrantyPolicyData.ts
 │   ├── training/components/(TrainingCurriculumPage/Title/Curriculum/Card 4개) + data/trainingContent.ts   # sales/engineering/service-training 공용, variant 패턴(company/press의 CompanyFeedPage와 동일 구조)
-│   └── sales-training/page.tsx, engineering-training/page.tsx, service-training/page.tsx   # 각각 TrainingCurriculumPage에 variant만 주입하는 3줄 래퍼
-│       # ⚠ engineering-training 코스/세션 상세([courseId], [courseId]/[sessionId])는 ls-publish에만 존재, 소스머지 스코프 제외
-│       #    사유: fo의 기존 세션 상세 데이터가 ls-publish 원본보다 먼저 개선 설계됨(탭/아젠다/공유링크 등) → 원본 세션 컴포넌트를 그대로 가져오면 그 데이터와 계약이 맞지 않아 컴파일 실패. 재작업 시 fo 데이터 계약에 맞는 세션 컴포넌트를 별도 설계해야 함
+│   ├── sales-training/page.tsx, engineering-training/page.tsx, service-training/page.tsx   # 각각 TrainingCurriculumPage에 variant만 주입하는 3줄 래퍼
+│   └── training/course/[id]/[slug]/page.tsx, training/session/[id]/[slug]/page.tsx   # 코스/세션 상세 — `{id}/{slug}` 2세그먼트 고정, course와 session은 완전히 분리된 최상위 경로(중첩 아님)
 │
 ├── support/                     # 고객지원 — 3개 메뉴
 │   ├── layout.tsx                # SubHeader + {children} + SubFooter
@@ -170,7 +168,9 @@ fo/
 │   │
 │   ├── lib/                         # 순수 유틸리티 함수
 │   │   ├── api.ts                    # API fetch 공통 유틸 (X-Site-Id 헤더 주입 포함)
-│   │   ├── pageData.ts               # PageData 조회 공통 유틸
+│   │   ├── pageData.ts               # PageData 조회 공통 유틸(seoSlug(row) 등)
+│   │   ├── contentDetailPath.ts      # 콘텐츠 상세 URL 생성 공통 유틸 — contentDetailPath(basePath, id, slug?)로 `{id}/{slug}` 2세그먼트 경로 조립
+│   │   ├── isNumericId.ts            # id 세그먼트가 숫자인지 가드하는 공통 유틸 — 아니면 각 상세 라우트에서 notFound() 처리
 │   │   ├── formatDate.ts             # 날짜 표시 포맷 공통 함수(formatDisplayDate/formatDisplayDateRange) — "YYYY-MM-DD" → "Mon D, YYYY"
 │   │   ├── googleMaps/loadGoogleMaps.ts   # Google Maps JS API 부트스트랩 로더 (where-to-buy 전용, 신규)
 │   │   ├── navigation/                # crossSectionNav, gnbCloseEvent, historyNavigation

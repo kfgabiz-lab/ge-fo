@@ -161,6 +161,7 @@ interface ProductInsightRow {
   title: string;
   publishDttm: string;
   image: string | null;
+  slug: string | null;
 }
 
 function resolveInsightMeta(slug: string) {
@@ -192,7 +193,7 @@ function toHighlightNewsItems(rows: ProductInsightRow[]): HighlightNewsItem[] {
       }
       return {
         id: `${meta.tag.toLowerCase()}-${row.id}`,
-        href: meta.href(row.id),
+        href: meta.href(row.id, row.slug),
         image: imageSrc,
         imageAlt: row.title,
         tag: meta.tag,

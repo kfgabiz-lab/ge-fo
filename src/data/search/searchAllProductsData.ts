@@ -1,5 +1,6 @@
 import { fetchApi } from "@/lib/api";
 import { fetchDevicesTreeRows, type DevicesTreeRow } from "@/data/gnb/devicesTree";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import type { SearchProductItem } from "@/data/search/searchAllContent";
 import type { DownloadCategoryOption } from "@/data/support/downloadCenterContent";
 
@@ -51,7 +52,7 @@ export async function fetchSearchAllProducts(
     const apiItems = Array.isArray(res?.items) ? res.items : [];
     const items: SearchProductItem[] = apiItems.map((it) => ({
       id: String(it.id),
-      href: it.slug ? `/product/${it.slug}` : "",
+      href: it.slug ? contentDetailPath("/product", it.id, it.slug) : "",
       image: it.image ?? "",
       category: it.category ?? "",
       highlight: it.highlight ?? "",

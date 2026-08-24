@@ -18,7 +18,14 @@ import {
   type EngineeringTrainingAgendaRow,
   type EngineeringTrainingSessionDetail,
 } from "@/data/services/engineeringTrainingSessionDetailContent";
-import { type CodeItem, TRAINING_SLUG, trainingImageSrc } from "./trainingData";
+import { contentDetailPath } from "@/lib/contentDetailPath";
+import {
+  type CodeItem,
+  TRAINING_COURSE_DETAIL_HREF_PREFIX,
+  TRAINING_SLUG,
+  TRAINING_VARIANT_BY_COURSE_CODE,
+  trainingImageSrc,
+} from "./trainingData";
 
 export const TRAINING_DETAIL_SLUG = "currDtlMgmt-data";
 
@@ -358,7 +365,7 @@ function toCourseCard(
 
 export function toTrainingSessionDetail(
   rows: PageDataItem[],
-  courseId: string,
+  courseHref: string,
   curriculumId: string,
   sessionId: string,
   curriculum: ParentCurriculum,
@@ -381,6 +388,7 @@ export function toTrainingSessionDetail(
   const productNames = extractProductNames(json, productNameMap);
   const productsCovered = productNames.join(", ");
   const dateDisplay = formatDisplayDate(d2.training_date_from ?? "");
+  const dateToDisplay = formatDisplayDate(d2.training_date_to ?? "");
   const showAddress = shouldShowAddress(d1.training_type);
   const addressFull = showAddress
     ? [d2.address, d2.address_detail]
@@ -411,7 +419,7 @@ export function toTrainingSessionDetail(
   const lastSch = scheduleSorted[scheduleSorted.length - 1];
 
   return {
-    courseId,
+    courseHref,
     curriculumId,
     sessionId,
     category: categoryLabel,
@@ -444,6 +452,7 @@ export function toTrainingSessionDetail(
     countdownTo: d2.register_period_to || undefined,
     sidebar: {
       date: dateDisplay,
+      dateTo: dateToDisplay && dateToDisplay !== dateDisplay ? dateToDisplay : undefined,
       eventDateToAttend: dateDisplay,
       duration: formatDurationHours(d2.duration),
       classSize: toDisplayString(d2.capacity),
@@ -474,6 +483,46 @@ export async function fetchTrainingDetailRows(
     리턴함수: (rows) => rows,
   });
   return result.content;
+}
+
+export async function fetchTrainingCourseIdBySession(
+  sessionId: string,
+): Promise<string | null> {
+  const raw = await fetchData<PageDataItem>({
+    slug: TRAINING_DETAIL_SLUG,
+    id: sessionId,
+    리턴함수: (item) => item,
+  });
+  if (!raw) return null;
+  const json = (raw.dataJson ?? {}) as CurrDtlDataJson;
+  const curriculumId = json.curriculum_detail1?.curriculum_id;
+  const value = curriculumId != null ? String(curriculumId).trim() : "";
+  return value || null;
+}
+
+export async function resolveTrainingSessionCourseHref(
+  sessionId: string,
+): Promise<string | null> {
+  const courseId = await fetchTrainingCourseIdBySession(sessionId);
+  if (courseId == null) return null;
+  const curriculum = await fetchTrainingCurriculum(courseId);
+  if (!curriculum || !isCurriculumVisible(curriculum)) return null;
+  return contentDetailPath(
+    TRAINING_COURSE_DETAIL_HREF_PREFIX,
+    courseId,
+    curriculum.slug,
+  );
+}
+
+/** courseId가 속한 Training 목록 페이지(Sales/Engineering/Service Training) href — 브레드크럼 "Training" 링크에 사용 */
+export async function resolveTrainingVariantListHref(
+  courseId: string,
+): Promise<string | null> {
+  const curriculum = await fetchTrainingCurriculum(courseId);
+  if (!curriculum || !isCurriculumVisible(curriculum)) return null;
+  const variant =
+    TRAINING_VARIANT_BY_COURSE_CODE[curriculum.training_course ?? ""] ?? "sales";
+  return `/services/training/${variant}`;
 }
 
 export async function fetchTrainingCurriculum(
@@ -554,10 +603,11 @@ export async function buildCourseMetadata(
 }
 
 export async function buildSessionMetadata(
-  courseId: string,
   sessionId: string,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const courseId = await fetchTrainingCourseIdBySession(sessionId);
+  if (courseId == null) return {};
   const [rows, curriculum, previous] = await Promise.all([
     fetchTrainingDetailRows(courseId),
     fetchTrainingCurriculum(courseId),

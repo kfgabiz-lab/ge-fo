@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import type { TrainingVariant } from "../data/trainingContent";
 import {
+  TRAINING_COURSE_DETAIL_HREF_PREFIX,
+  TRAINING_SESSION_DETAIL_HREF_PREFIX,
   TRAINING_VARIANT_BY_COURSE_CODE,
   fetchTrainingCategories,
   toCategoryMap,
@@ -13,7 +15,7 @@ import {
   isCurriculumVisible,
   toTrainingCourseDetail,
 } from "../data/trainingDetailData";
-import { resolveContentId } from "@/lib/contentSlugOrId";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import TrainingDetailHero from "./TrainingDetailHero";
 import TrainingDetailSchedule from "./TrainingDetailSchedule";
 import JsonLd from "@/components/seo/JsonLd";
@@ -28,13 +30,10 @@ const VARIANT_LABELS: Record<TrainingVariant, string> = {
 };
 
 export default async function TrainingDetailPage({
-  courseId: courseIdOrSlug,
+  courseId,
 }: {
   courseId: string;
 }) {
-  const courseId = await resolveContentId("currMgmt-data", courseIdOrSlug);
-  if (courseId == null) notFound();
-
   const [rows, curriculum, categoryCodes, trainingTypeCodes] =
     await Promise.all([
       fetchTrainingDetailRows(courseId),
@@ -67,7 +66,13 @@ export default async function TrainingDetailPage({
   const hrefPrefix = "/services/training";
   const variantListHref = `${hrefPrefix}/${variant}`;
 
-  const currentUrl = pageUrl(`${hrefPrefix}/${canonicalCourseSlug}`);
+  const currentUrl = pageUrl(
+    contentDetailPath(
+      TRAINING_COURSE_DETAIL_HREF_PREFIX,
+      courseId,
+      curriculum.slug,
+    ),
+  );
   const courseNode = {
     "@type": "Course",
     "@id": `${currentUrl}#course`,
@@ -97,7 +102,13 @@ export default async function TrainingDetailPage({
       offers: {
         "@type": "Offer",
         availability: "https://schema.org/InStock",
-        url: `${pageUrl(`${hrefPrefix}/${canonicalCourseSlug}/${s.slug || s.id}`)}#session-registration`,
+        url: `${pageUrl(
+          contentDetailPath(
+            TRAINING_SESSION_DETAIL_HREF_PREFIX,
+            s.id,
+            s.slug,
+          ),
+        )}#session-registration`,
       },
     })),
   };
@@ -129,7 +140,6 @@ export default async function TrainingDetailPage({
       <TrainingDetailHero detail={detail} />
       <TrainingDetailSchedule
         detail={detail}
-        hrefPrefix={hrefPrefix}
         trainingTypeCodes={trainingTypeCodes}
       />
     </main>

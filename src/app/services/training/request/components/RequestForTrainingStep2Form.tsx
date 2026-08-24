@@ -5,6 +5,7 @@ import { useId } from "react";
 import GuideDatePicker from "@/components/form/GuideDatePicker";
 import GuideDatePickerProvider from "@/components/form/GuideDatePickerProvider";
 import { requestForTrainingStep2Copy } from "@/data/services/requestForTrainingContent";
+import { isComposingEvent } from "@/lib/formInputFilters";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import RequestForTrainingQuestionnaireIntro from "./RequestForTrainingQuestionnaireIntro";
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
@@ -95,7 +96,15 @@ export default function RequestForTrainingStep2Form({
                   value={step2.sessionCount}
                   error={Boolean(errors.sessionCount)}
                   onChange={(event) => {
+                    if (isComposingEvent(event)) {
+                      setStep2Field("sessionCount", event.target.value);
+                      return;
+                    }
                     setStep2Field("sessionCount", filterLettersAndDigits(event.target.value));
+                    onClearError("sessionCount");
+                  }}
+                  onCompositionEnd={(event) => {
+                    setStep2Field("sessionCount", filterLettersAndDigits((event.target as HTMLInputElement).value));
                     onClearError("sessionCount");
                   }}
                 />

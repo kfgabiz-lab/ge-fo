@@ -19,6 +19,7 @@ import {
 } from "@/data/support/techHubData";
 import { fetchProductInsights } from "@/data/highlightNews/highlightNewsData";
 import { withProductInquiryContext } from "@/lib/navigation/categoryContext";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import type { HighlightNewsItem } from "@/types/highlightNews";
 import {
   fetchProductDownloadsInitialData,
@@ -304,7 +305,7 @@ export default async function SwProductDetail({
   const Detail = SW_DETAIL_COMPONENTS[productCode]!;
 
   const bind = bindSwDetail(row);
-  const currentUrl = pageUrl(`/product/${slug}`);
+  const currentUrl = pageUrl(contentDetailPath("/product", productId ?? 0, slug));
   const metaTitle = (row?.["seo.meta_title"] as string) || bind.title || slug;
   const metaDescription =
     (row?.["seo.meta_description"] as string) || bind.description || "";

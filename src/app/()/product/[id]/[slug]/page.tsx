@@ -2,27 +2,27 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import ProductDetailRouter from "@/app/()/products-systems/components/product/ProductDetailRouter";
 import {
-  fetchProductBySlug,
-  fetchProductSeoBySlug,
+  fetchProductDetailById,
+  fetchProductSeoById,
 } from "@/app/()/products-systems/data/productsSystemsData";
 import { parseCategoryContext } from "@/lib/navigation/categoryContext";
 import { mergeSeoMetadata } from "@/lib/pageDataSeo";
+import { isNumericId } from "@/lib/isNumericId";
 
 type ProductPageProps = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string; slug: string }>;
   searchParams: Promise<{ category?: string }>;
 };
 
 export async function generateMetadata(
-  { params, searchParams }: ProductPageProps,
+  { params }: ProductPageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { slug } = await params;
-  const { category } = await searchParams;
-  const categoryId = parseCategoryContext(category);
+  const { id } = await params;
+  if (!isNumericId(id)) notFound();
 
   const [seo, previous] = await Promise.all([
-    fetchProductSeoBySlug(slug, { categoryId }),
+    fetchProductSeoById(Number(id)),
     parent,
   ]);
   return mergeSeoMetadata(
@@ -36,11 +36,12 @@ export default async function ProductDetailRoutePage({
   params,
   searchParams,
 }: ProductPageProps) {
-  const { slug } = await params;
+  const { id, slug } = await params;
+  if (!isNumericId(id)) notFound();
   const { category } = await searchParams;
   const categoryId = parseCategoryContext(category);
 
-  const row = await fetchProductBySlug(slug, { categoryId });
+  const row = await fetchProductDetailById(Number(id));
   if (!row) notFound();
 
   return <ProductDetailRouter slug={slug} row={row} categoryId={categoryId} />;

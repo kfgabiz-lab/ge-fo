@@ -103,3 +103,7 @@ export function pickField(
   }
   return undefined;
 }
+
+export function seoSlug(row: Record<string, unknown>): string | null {
+  return (pickField(row, "seo.slug", "seoSlug") as string) || null;
+}

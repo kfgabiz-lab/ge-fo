@@ -1,5 +1,6 @@
 import { fetchApi } from "@/lib/api";
 import { resolveImageUrlFromJsonText } from "@/app/()/products-systems/data/productsSystemsData";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import type { ProductItem } from "./marketsContent";
 
 export const MARKETS_PRODUCTS_NAME = {
@@ -25,9 +26,9 @@ interface MarketProductRow {
   awards: string | null;
 }
 
-function resolveHref(type: string | null, slug: string | null): string {
+function resolveHref(type: string | null, id: number, slug: string | null): string {
   if (!slug) return "";
-  if (type === "product") return `/product/${slug}`;
+  if (type === "product") return contentDetailPath("/product", id, slug);
   if (type === "category") return `/product-range/${slug}`;
   return "";
 }
@@ -41,7 +42,7 @@ export async function fetchMarketProducts(
     );
     return rows.map((row) => ({
       id: `${row.type ?? "item"}-${row.id}`,
-      href: resolveHref(row.type, row.slug),
+      href: resolveHref(row.type, row.id, row.slug),
       image: resolveImageUrlFromJsonText(row.image) ?? "",
       title: row.title ?? "",
       category: row.categoryTitle ?? "",

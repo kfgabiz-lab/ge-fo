@@ -1,22 +1,32 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   engineeringTrainingDetailAssets,
   type EngineeringTrainingSession,
 } from "@/data/services/engineeringTrainingDetailContent";
+import { contentDetailPath } from "@/lib/contentDetailPath";
+import { seedBreadcrumbCrumbHref } from "@/components/layout/shared/breadcrumbTitleStore";
+import { TRAINING_SESSION_DETAIL_HREF_PREFIX } from "../data/trainingData";
 
 const { type: typeIcon, duration: durationIcon, location: locationIcon } =
   engineeringTrainingDetailAssets.scheduleMetaIcons;
 
 export default function TrainingDetailSession({
-  courseId,
   session,
-  hrefPrefix,
 }: {
-  courseId: string;
   session: EngineeringTrainingSession;
-  hrefPrefix: string;
 }) {
-  const sessionHref = `${hrefPrefix}/${courseId}/${session.slug || session.id}`;
+  const coursePathname = usePathname();
+  const sessionHref = contentDetailPath(
+    TRAINING_SESSION_DETAIL_HREF_PREFIX,
+    session.id,
+    session.slug,
+  );
+  const handleSessionLinkClick = () => {
+    seedBreadcrumbCrumbHref(sessionHref, "Course", coursePathname);
+  };
 
   return (
     <li className="support_service_training_detail_schedule__item" data-slug-item>
@@ -40,7 +50,7 @@ export default function TrainingDetailSession({
               className="support_service_training_detail_session__title"
               data-slugkey="curriculum_detail2.title"
             >
-              <Link href={sessionHref}>{session.title}</Link>
+              <Link href={sessionHref} onClick={handleSessionLinkClick}>{session.title}</Link>
             </h2>
             <p className="support_service_training_detail_session__products">
               {session.productsCovered}
@@ -105,6 +115,7 @@ export default function TrainingDetailSession({
           aria-label={`View ${session.title} on ${session.date}`}
           data-slugkey="id"
           data-slugkey-attr="href"
+          onClick={handleSessionLinkClick}
         />
       </article>
     </li>

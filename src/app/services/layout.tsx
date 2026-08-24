@@ -3,14 +3,17 @@ import SubHeader from "@/components/layout/markets/SubHeader";
 import SubFooter from "@/components/layout/markets/SubFooter";
 import type { BreadcrumbServerOverride } from "@/components/layout/shared/HeaderBreadcrumb";
 import { fetchDevicesMegaMenu, fetchGnbMenuData } from "@/data/gnb";
+import {
+  fetchTrainingCourseIdBySession,
+  resolveTrainingSessionCourseHref,
+  resolveTrainingVariantListHref,
+} from "@/app/services/training/data/trainingDetailData";
+import { isNumericId } from "@/lib/isNumericId";
 
-const TRAINING_RESERVED_TOP = "sales|engineering|service|request";
-const TRAINING_DETAIL_PATH_RE = new RegExp(
-  `^/services/training/(?!(?:${TRAINING_RESERVED_TOP})$)([^/]+)$`,
-);
-const TRAINING_SESSION_PATH_RE = new RegExp(
-  `^/services/training/(?!(?:${TRAINING_RESERVED_TOP})(?:/|$))([^/]+)/[^/]+$`,
-);
+const TRAINING_DETAIL_PATH_RE =
+  /^\/services\/training\/course\/([^/]+)\/[^/]+$/;
+const TRAINING_SESSION_PATH_RE =
+  /^\/services\/training\/session\/([^/]+)\/[^/]+$/;
 const TRAINING_REQUEST_PATH_RE =
   /^\/services\/training\/request(\/step-(2|3|4)(-type_01)?)?$/;
 
@@ -22,16 +25,38 @@ async function resolveBreadcrumbOverride(): Promise<BreadcrumbServerOverride> {
     return { pathname, current: "Training Request" };
   }
 
-  const sessionMatch = pathname.match(TRAINING_SESSION_PATH_RE);
-  if (sessionMatch) {
-    const [, courseId] = sessionMatch;
-    const courseHref = `/services/training/${courseId}`;
-    return { pathname, crumb: { href: courseHref, label: "Course" } };
-  }
+  /* 브레드크럼은 부가 정보라 조회 실패가 페이지 렌더링 자체를 막으면 안 됨 —
+     courseId/sessionId가 존재하지 않거나 API 오류가 나도 여기서 흡수하고 override 없이 진행 */
+  try {
+    const courseDetailMatch = pathname.match(TRAINING_DETAIL_PATH_RE);
+    if (courseDetailMatch) {
+      const [, courseId] = courseDetailMatch;
+      if (!isNumericId(courseId)) return null;
+      const variantHref = await resolveTrainingVariantListHref(courseId);
+      return {
+        pathname,
+        current: "Course",
+        crumbs: variantHref ? [{ href: variantHref, label: "Training" }] : undefined,
+      };
+    }
 
-  const detailMatch = pathname.match(TRAINING_DETAIL_PATH_RE);
-  if (detailMatch) {
-    return { pathname, current: "Course" };
+    const sessionMatch = pathname.match(TRAINING_SESSION_PATH_RE);
+    if (sessionMatch) {
+      const [, sessionId] = sessionMatch;
+      if (!isNumericId(sessionId)) return null;
+      const courseId = await fetchTrainingCourseIdBySession(sessionId);
+      if (courseId == null) return null;
+      const [courseHref, variantHref] = await Promise.all([
+        resolveTrainingSessionCourseHref(sessionId),
+        resolveTrainingVariantListHref(courseId),
+      ]);
+      const crumbs: { href: string; label: string }[] = [];
+      if (variantHref) crumbs.push({ href: variantHref, label: "Training" });
+      if (courseHref) crumbs.push({ href: courseHref, label: "Course" });
+      return crumbs.length > 0 ? { pathname, crumbs } : null;
+    }
+  } catch {
+    return null;
   }
 
   return null;

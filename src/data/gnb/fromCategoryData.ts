@@ -11,6 +11,7 @@ import type {
 } from "@/data/gnb/types";
 import { resolveFirstImageUrl } from "@/app/()/products-systems/data/productsSystemsData";
 import { withCategoryContext } from "@/lib/navigation/categoryContext";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 
 function resolveProductImage(productImage: string | null): string | null {
   if (!productImage) return null;
@@ -56,7 +57,9 @@ function toMegaProduct(row: DevicesTreeRow): GnbMegaProduct {
     subtitle: row.productDescription ?? "",
     image: resolveProductImage(row.productImage),
     href: withCategoryContext(
-      row.productSlug ? `/product/${row.productSlug}` : "",
+      row.productSlug && row.productId != null
+        ? contentDetailPath("/product", row.productId, row.productSlug)
+        : "",
       row.parentId,
     ),
   };

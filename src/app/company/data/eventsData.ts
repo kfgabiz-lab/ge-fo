@@ -1,3 +1,4 @@
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import { formatDisplayDateRange, formatMonthLabel } from "@/lib/formatDate";
 import { siteToday } from "@/lib/siteTime";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
@@ -11,8 +12,8 @@ import type {
 export const EVENTS_PAST_SIZE = 9;
 
 export const eventsImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
-export const eventsDetailHref = (id: number, slug?: string | null) =>
-  `/company/events/${slug || id}`;
+export const eventsDetailHref = (id: string | number, slug?: string | null) =>
+  contentDetailPath("/company/events", id, slug);
 
 export type EventsRow = PageDataItem;
 
@@ -183,6 +184,7 @@ export function eventsAdjacentQuery(id: string | number) {
     adjacent: true as const,
     sortField: "events.period_from",
     titleField: "events.title",
+    slugField: "seo.slug",
     where: { ...EVENTS_VISIBLE_WHERE, ...EVENTS_PAST_WHERE },
   };
 }

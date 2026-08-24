@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 export interface AdjacentNeighbor {
   id: number;
   title: string;
+  slug: string | null;
 }
 
 export interface AdjacentResult {
@@ -40,6 +41,7 @@ interface FetchDataAdjacentParams extends FetchDataCommonParams {
   adjacent: true;
   sortField?: string;
   titleField?: string;
+  slugField?: string;
 }
 
 interface FetchDataDetailParams<T> extends FetchDataCommonParams {
@@ -79,6 +81,7 @@ export async function fetchData(params: {
   sort?: string;
   sortField?: string;
   titleField?: string;
+  slugField?: string;
   리턴함수?:
     | ((raw: PageDataItem) => unknown)
     | ((rows: PageDataItem[]) => unknown[]);
@@ -95,6 +98,7 @@ export async function fetchData(params: {
     sort,
     sortField,
     titleField,
+    slugField,
     리턴함수,
     datetimeRange,
   } = params;
@@ -110,6 +114,7 @@ export async function fetchData(params: {
   if (id != null && adjacent) {
     if (sortField) sp.set("sortField", sortField);
     if (titleField) sp.set("titleField", titleField);
+    if (slugField) sp.set("slugField", slugField);
     appendWhere();
     try {
       return await fetchApi<AdjacentResult>(

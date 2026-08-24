@@ -56,12 +56,10 @@ export function DevicesProductDownloadsFilterBoundary({
   children,
   productCodes = [],
   docTypeOptions = [],
-  keyword = "",
 }: {
   children: ReactNode;
   productCodes?: string[];
   docTypeOptions?: DownloadFilterOption[];
-  keyword?: string;
 }) {
   const context = useContext(DevicesProductDownloadsFilterContext);
 
@@ -73,7 +71,6 @@ export function DevicesProductDownloadsFilterBoundary({
     <DevicesProductDownloadsFilterProvider
       productCodes={productCodes}
       docTypeOptions={docTypeOptions}
-      keyword={keyword}
     >
       {children}
     </DevicesProductDownloadsFilterProvider>
@@ -84,12 +81,10 @@ export function DevicesProductDownloadsFilterProvider({
   children,
   productCodes = [],
   docTypeOptions = [],
-  keyword = "",
 }: {
   children: ReactNode;
   productCodes?: string[];
   docTypeOptions?: DownloadFilterOption[];
-  keyword?: string;
 }) {
   const [documentTypes, setDocumentTypes] =
     useState<DownloadFilterOption[]>(docTypeOptions);
@@ -99,12 +94,13 @@ export function DevicesProductDownloadsFilterProvider({
 
   const productCodeKey = [...productCodes].sort().join(",");
 
+  /* LV3(제품 상세) 페이지 진입 자체가 1차검색이므로 Document type 개수는 productCodes 기준으로 고정된다 —
+     Downloads 영역 내 키워드 검색은 결과 목록/Total에만 반영하고, 이 개수는 절대 재계산하지 않는다 */
   useEffect(() => {
     let alive = true;
     const codes = productCodeKey ? productCodeKey.split(",") : [];
     fetchDownloadDocTypeFilters({
       productCodes: codes,
-      q: keyword,
       fallbackCount: 0,
     }).then((options) => {
       if (!alive) return;
@@ -119,7 +115,7 @@ export function DevicesProductDownloadsFilterProvider({
     return () => {
       alive = false;
     };
-  }, [productCodeKey, keyword]);
+  }, [productCodeKey]);
 
   const isChecked = useCallback((id: string) => Boolean(checked[id]), [checked]);
 

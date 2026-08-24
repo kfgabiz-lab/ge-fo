@@ -68,7 +68,15 @@ export default function TrainingSessionDetailAside({
                 className="support_service_training_session_detail__meta-value"
                 data-slugkey="curriculum_detail2.training_date_from"
               >
-                {sidebar.date}
+                {sidebar.dateTo ? `${sidebar.date} -` : sidebar.date}
+                {sidebar.dateTo ? (
+                  <>
+                    <br />
+                    <span data-slugkey="curriculum_detail2.training_date_to">
+                      {sidebar.dateTo}
+                    </span>
+                  </>
+                ) : null}
               </p>
             </div>
             <div className="support_service_training_session_detail__meta-item">

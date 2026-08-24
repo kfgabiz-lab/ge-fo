@@ -1,71 +1,69 @@
-import { notFound } from "next/navigation";
 import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
-import { pressDetailHero } from "@/app/company/data/pressDetailContent";
+import { mediaArticleDetailHero } from "@/app/company/data/mediaArticleDetailContent";
 import {
-  PRESS_STATUS_WHERE,
-  pressDetailHref,
-  pressImageSrc,
-} from "@/app/company/data/pressData";
+  ARTICLES_STATUS_WHERE,
+  articlesDetailHref,
+  articlesImageSrc,
+} from "@/app/company/data/articlesData";
 import { fetchData } from "@/lib/pageDataApi";
 import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
-import { flattenPageDataItem, pickField } from "@/lib/pageData";
+import { flattenPageDataItem, pickField, seoSlug } from "@/lib/pageData";
 import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { getPreviewToken } from "@/lib/previewMode";
-import { resolveContentId } from "@/lib/contentSlugOrId";
+import { isNumericId } from "@/lib/isNumericId";
 import type { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildContentDetailGraph } from "@/lib/structuredData/contentGraph";
 import "@/assets/css/company.css";
 
-type CompanyPressDetailPageProps = {
-  params: Promise<{ id: string }>;
+type CompanyArticlesDetailPageProps = {
+  params: Promise<{ id: string; slug: string }>;
 };
 
 export async function generateMetadata(
-  { params }: CompanyPressDetailPageProps,
+  { params }: CompanyArticlesDetailPageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id: idOrSlug } = await params;
-  const id = await resolveContentId("press-data", idOrSlug, PRESS_STATUS_WHERE);
-  if (id == null) notFound();
-  const previewToken = await getPreviewToken("press-data", id);
-  const preview = previewToken !== null;
+  const { id } = await params;
+  if (!isNumericId(id)) notFound();
+  const previewToken = await getPreviewToken("articles-data", id);
 
   return buildPageDataSeoMetadata(
     {
-      slug: "press-data",
+      slug: "articles-data",
       id,
-      where: previewToken ? { previewToken } : { ...PRESS_STATUS_WHERE },
+      where: previewToken ? { previewToken } : { ...ARTICLES_STATUS_WHERE },
     },
     parent,
   );
 }
 
-export default async function CompanyPressDetailPage({
+export default async function CompanyArticlesDetailPage({
   params,
-}: CompanyPressDetailPageProps) {
-  const { id: idOrSlug } = await params;
-  const id = await resolveContentId("press-data", idOrSlug, PRESS_STATUS_WHERE);
-  if (id == null) notFound();
-  const previewToken = await getPreviewToken("press-data", id);
+}: CompanyArticlesDetailPageProps) {
+  const { id } = await params;
+  if (!isNumericId(id)) notFound();
+  const previewToken = await getPreviewToken("articles-data", id);
   const preview = previewToken !== null;
 
   const [detail, adjacent] = await Promise.all([
     fetchData({
-      slug: "press-data",
+      slug: "articles-data",
       id,
-      where: previewToken ? { previewToken } : { ...PRESS_STATUS_WHERE },
+      where: previewToken ? { previewToken } : { ...ARTICLES_STATUS_WHERE },
       리턴함수: (x) => x,
     }),
     fetchData({
-      slug: "press-data",
+      slug: "articles-data",
       id,
       adjacent: true,
       sortField: "createdAt",
-      titleField: "press.title",
-      where: { ...PRESS_STATUS_WHERE },
+      titleField: "articles.title",
+      slugField: "seo.slug",
+      where: { ...ARTICLES_STATUS_WHERE },
     }),
   ]);
 
@@ -77,48 +75,53 @@ export default async function CompanyPressDetailPage({
     Array.isArray(imageArr) && imageArr.length > 0 ? (imageArr[0] as number) : null;
   const heroImage =
     mediaId != null
-      ? { src: pressImageSrc(mediaId), alt: (row.title as string) ?? "" }
-      : pressDetailHero;
+      ? { src: articlesImageSrc(mediaId), alt: (row.title as string) ?? "" }
+      : mediaArticleDetailHero;
 
   const prev = adjacent.prev
-    ? { href: pressDetailHref(adjacent.prev.id), title: adjacent.prev.title }
+    ? {
+        href: articlesDetailHref(adjacent.prev.id, adjacent.prev.slug),
+        title: adjacent.prev.title,
+      }
     : undefined;
   const next = adjacent.next
-    ? { href: pressDetailHref(adjacent.next.id), title: adjacent.next.title }
+    ? {
+        href: articlesDetailHref(adjacent.next.id, adjacent.next.slug),
+        title: adjacent.next.title,
+      }
     : undefined;
 
-  const canonicalSlug = (row["seo.slug"] as string) || id;
   const jsonLdGraph = buildContentDetailGraph({
-    postType: "NewsArticle",
-    detailPathname: `/company/press/${canonicalSlug}`,
-    listPathname: "/company/press",
-    breadcrumbLabel: "Press",
+    postType: "Article",
+    detailPathname: articlesDetailHref(id, seoSlug(row)),
+    listPathname: "/company/articles",
+    breadcrumbLabel: "Articles",
     title: (row.title as string) ?? "",
     metaDescription: (row["seo.meta_description"] as string) ?? "",
     contentHtml,
     publishedAt: (pickField(row, "publish_dttm", "publishDttm") as string) ?? "",
     updatedAt: (row.updatedAt as string) ?? "",
-    imagePath: mediaId != null ? pressImageSrc(mediaId) : null,
+    imagePath: mediaId != null ? articlesImageSrc(mediaId) : null,
   });
 
   return (
     <>
       <JsonLd data={jsonLdGraph} />
       <CompanyArticleDetail
-        variant="press"
-        pageId="Page_company_press_detail"
-        slug="press-data"
+        variant="articles"
+        pageId="Page_company_articles_detail"
+        slug="articles-data"
         recordId={id}
         preview={preview}
         title={(row.title as string) ?? ""}
         date={formatDisplayDate((pickField(row, "publish_dttm", "publishDttm") as string) ?? "")}
         heroImage={heroImage}
-        pagerAriaLabel="Press post navigation"
+        pagerAriaLabel="Media article navigation"
         prev={prev}
         next={next}
-        listHref="/company/press"
+        listHref="/company/articles"
       >
-        <div className={articleDetailClass("body")} data-slug="press-data">
+        <div className={articleDetailClass("body")} data-slug="articles-data">
           <div
             data-slugkey="content"
             dangerouslySetInnerHTML={{ __html: contentHtml }}

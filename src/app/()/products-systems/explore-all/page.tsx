@@ -3,6 +3,7 @@ import DevicesExploreAll from "../components/DevicesExploreAll";
 import type { GnbExploreProduct } from "@/data/gnbExploreAllProducts";
 import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
 import { withCategoryContext } from "@/lib/navigation/categoryContext";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbList, buildPageGraph, pageUrl } from "@/lib/structuredData/builders";
 import { SITE_URL, WEBSITE_ID } from "@/lib/structuredData/siteConfig";
@@ -68,7 +69,7 @@ export default async function ExploreAllProductsPage() {
       label: source.title,
       href: source.slug
         ? withCategoryContext(
-            `/product/${source.slug}`,
+            contentDetailPath("/product", source.productId, source.slug),
             resolvePrimaryLv2Id(source.lv2Ids),
           )
         : "#",

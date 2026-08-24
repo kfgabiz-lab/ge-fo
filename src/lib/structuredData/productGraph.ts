@@ -2,6 +2,7 @@ import type { CommonFaqEntry } from "@/components/faq/CommonFaq";
 import type { HighlightNewsItem } from "@/types/highlightNews";
 import type { ProductOtherItem } from "@/app/()/products-systems/data/productDetailContent";
 import { breadcrumbList, buildPageGraph, itemUrl, pageUrl, type JsonLdNode } from "./builders";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import {
   SITE_URL,
   WEBSITE_ID,
@@ -59,6 +60,7 @@ function faqPage(items: CommonFaqEntry[]): JsonLdNode {
 }
 
 export function buildProductJsonLdGraph(input: {
+  id: number;
   slug: string;
   row: Record<string, unknown> | null;
   detail: { series: string; description: string; connectPortal?: string; specs: { label: string; value: string }[] };
@@ -70,8 +72,8 @@ export function buildProductJsonLdGraph(input: {
   insights: HighlightNewsItem[];
   faqItems: CommonFaqEntry[];
 }): { "@context": string; "@graph": JsonLdNode[] } {
-  const { slug, row, detail, lv1Name, lv1Slug, lv2Name, lv2Slug, otherProducts, insights, faqItems } = input;
-  const currentUrl = pageUrl(`/product/${slug}`);
+  const { id, slug, row, detail, lv1Name, lv1Slug, lv2Name, lv2Slug, otherProducts, insights, faqItems } = input;
+  const currentUrl = pageUrl(contentDetailPath("/product", id, slug));
   const metaTitle = (row?.["seo.meta_title"] as string) || detail.series;
   const metaDescription = (row?.["seo.meta_description"] as string) || detail.description;
   const connectPortalUrl = detail.connectPortal || CONNECT_PORTAL_EXTERNAL_URL;

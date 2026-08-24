@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { articleDetailClass } from "@/app/company/articleDetailClass";
 import CompanyArticleDetail from "@/app/company/components/CompanyArticleDetail";
 import { blogDetailHero } from "@/app/company/data/blogDetailContent";
@@ -13,27 +12,27 @@ import {
 import { fetchData } from "@/lib/pageDataApi";
 import { buildPageDataSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
-import { flattenPageDataItem, pickField } from "@/lib/pageData";
+import { flattenPageDataItem, pickField, seoSlug } from "@/lib/pageData";
 import { sanitizeHtml } from "@/lib/sanitizeHtml";
 import { getPreviewToken } from "@/lib/previewMode";
-import { resolveContentId } from "@/lib/contentSlugOrId";
+import { isNumericId } from "@/lib/isNumericId";
 import type { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
 import HashtagLink from "@/components/ui/HashtagLink";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildContentDetailGraph } from "@/lib/structuredData/contentGraph";
 import "@/assets/css/company.css";
 
 type CompanyBlogDetailPageProps = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; slug: string }>;
 };
 
 export async function generateMetadata(
   { params }: CompanyBlogDetailPageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { id: idOrSlug } = await params;
-  const id = await resolveContentId("blog-data", idOrSlug, BLOG_STATUS_WHERE);
-  if (id == null) notFound();
+  const { id } = await params;
+  if (!isNumericId(id)) notFound();
   const previewToken = await getPreviewToken("blog-data", id);
 
   return buildPageDataSeoMetadata(
@@ -49,9 +48,8 @@ export async function generateMetadata(
 export default async function CompanyBlogDetailPage({
   params,
 }: CompanyBlogDetailPageProps) {
-  const { id: idOrSlug } = await params;
-  const id = await resolveContentId("blog-data", idOrSlug, BLOG_STATUS_WHERE);
-  if (id == null) notFound();
+  const { id } = await params;
+  if (!isNumericId(id)) notFound();
   const previewToken = await getPreviewToken("blog-data", id);
   const preview = previewToken !== null;
 
@@ -69,6 +67,7 @@ export default async function CompanyBlogDetailPage({
       adjacent: true,
       sortField: "createdAt",
       titleField: "blog.title",
+      slugField: "seo.slug",
       where: { ...BLOG_STATUS_WHERE },
     }),
   ]);
@@ -89,17 +88,22 @@ export default async function CompanyBlogDetailPage({
       : blogDetailHero;
 
   const prev = adjacent.prev
-    ? { href: blogDetailHref(adjacent.prev.id), title: adjacent.prev.title }
+    ? {
+        href: blogDetailHref(adjacent.prev.id, adjacent.prev.slug),
+        title: adjacent.prev.title,
+      }
     : undefined;
   const next = adjacent.next
-    ? { href: blogDetailHref(adjacent.next.id), title: adjacent.next.title }
+    ? {
+        href: blogDetailHref(adjacent.next.id, adjacent.next.slug),
+        title: adjacent.next.title,
+      }
     : undefined;
 
   const publishDttm = (pickField(row, "publish_dttm", "publishDttm") as string) ?? "";
-  const canonicalSlug = (row["seo.slug"] as string) || id;
   const jsonLdGraph = buildContentDetailGraph({
     postType: "BlogPosting",
-    detailPathname: `/company/blog/${canonicalSlug}`,
+    detailPathname: blogDetailHref(id, seoSlug(row)),
     listPathname: "/company/blog",
     breadcrumbLabel: "Blog",
     title: (row.title as string) ?? "",

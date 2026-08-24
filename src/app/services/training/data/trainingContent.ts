@@ -1,6 +1,7 @@
 import { salesTrainingPage } from "@/data/services/salesTrainingContent";
 import { serviceTrainingPage } from "@/data/services/serviceTrainingContent";
 import { engineeringTrainingPage } from "@/data/services/engineeringTrainingContent";
+import { TRAINING_COURSE_DETAIL_HREF_PREFIX } from "./trainingData";
 
 export type TrainingVariant = "sales" | "engineering" | "service";
 
@@ -42,7 +43,7 @@ export const trainingContent: Record<TrainingVariant, TrainingContentEntry> = {
     mainClassName: "support-page support-page--sales-training",
     sectionId: "sales-training-curriculum",
     ariaLabel: "Sales training curriculum pages",
-    detailHrefPrefix: "/services/training",
+    detailHrefPrefix: TRAINING_COURSE_DETAIL_HREF_PREFIX,
   },
   engineering: {
     ...engineeringTrainingPage,
@@ -50,7 +51,7 @@ export const trainingContent: Record<TrainingVariant, TrainingContentEntry> = {
     mainClassName: "support-page support-page--engineering-training",
     sectionId: "engineering-training-curriculum",
     ariaLabel: "Training curriculum pages",
-    detailHrefPrefix: "/services/training",
+    detailHrefPrefix: TRAINING_COURSE_DETAIL_HREF_PREFIX,
   },
   service: {
     ...serviceTrainingPage,
@@ -58,6 +59,6 @@ export const trainingContent: Record<TrainingVariant, TrainingContentEntry> = {
     mainClassName: "support-page support-page--service-training",
     sectionId: "service-training-curriculum",
     ariaLabel: "Service training curriculum pages",
-    detailHrefPrefix: "/services/training",
+    detailHrefPrefix: TRAINING_COURSE_DETAIL_HREF_PREFIX,
   },
 };

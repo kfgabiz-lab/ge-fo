@@ -8,7 +8,7 @@ import {
   fetchPlaceSuggestions,
   type PlaceSuggestion,
 } from "@/lib/geo/places";
-import { filterEmail, filterLetters } from "@/lib/formInputFilters";
+import { filterEmail, filterLetters, isComposingEvent } from "@/lib/formInputFilters";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import RequestForTrainingQuestionnaireIntro from "./RequestForTrainingQuestionnaireIntro";
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
@@ -186,11 +186,22 @@ export default function RequestForTrainingStep3Form({
                     id={`${formId}-location-name`}
                     className="guide_field guide_field--h50 support_service_training_request__input"
                     value={step3.locationName}
-                    error={Boolean(errors.locationName)}
+                    error={Boolean(errors.locationName)}
                     onChange={(event) => {
+                      if (isComposingEvent(event)) {
+                        setStep3Field("locationName", event.target.value);
+                        return;
+                      }
                       setStep3Field(
                         "locationName",
                         filterLetters(event.target.value, LOCATION_NAME_MAX),
+                      );
+                      onClearError("locationName");
+                    }}
+                    onCompositionEnd={(event) => {
+                      setStep3Field(
+                        "locationName",
+                        filterLetters((event.target as HTMLInputElement).value, LOCATION_NAME_MAX),
                       );
                       onClearError("locationName");
                     }}
@@ -215,7 +226,7 @@ export default function RequestForTrainingStep3Form({
                           onChange={(event) =>
                             setStep3Field("streetAddress", event.target.value)
                           }
-                          slotProps={{
+                          slotProps={{
                             input: {
                               endAdornment: (
                                 <InputAdornment
@@ -294,7 +305,7 @@ export default function RequestForTrainingStep3Form({
                       id={`${formId}-city`}
                       className="guide_field guide_field--h50 support_service_training_request__input"
                       placeholder={fields.city.placeholder}
-                      value={step3.city}
+                      value={step3.city}
                       onChange={(event) => setStep3Field("city", event.target.value)}
                     />
                   </div>
@@ -306,7 +317,7 @@ export default function RequestForTrainingStep3Form({
                       id={`${formId}-state`}
                       className="guide_field guide_field--h50 support_service_training_request__input"
                       placeholder={fields.state.placeholder}
-                      value={step3.state}
+                      value={step3.state}
                       onChange={(event) => setStep3Field("state", event.target.value)}
                     />
                   </div>
@@ -320,7 +331,7 @@ export default function RequestForTrainingStep3Form({
                     id={`${formId}-zip`}
                     className="guide_field guide_field--h50 support_service_training_request__input"
                     placeholder={fields.zip.placeholder}
-                    value={step3.zip}
+                    value={step3.zip}
                     onChange={(event) => setStep3Field("zip", event.target.value)}
                   />
                 </div>
@@ -332,7 +343,7 @@ export default function RequestForTrainingStep3Form({
                   <TextField
                     id={`${formId}-contact-person`}
                     className="guide_field guide_field--h50 support_service_training_request__input"
-                    value={step3.contactPerson}
+                    value={step3.contactPerson}
                     onChange={(event) =>
                       setStep3Field("contactPerson", filterContactPerson(event.target.value))
                     }
@@ -350,11 +361,22 @@ export default function RequestForTrainingStep3Form({
                     id={`${formId}-contact-details`}
                     className="guide_field guide_field--h50 support_service_training_request__input"
                     value={step3.contactDetails}
-                    error={Boolean(errors.contactDetails)}
+                    error={Boolean(errors.contactDetails)}
                     onChange={(event) => {
+                      if (isComposingEvent(event)) {
+                        setStep3Field("contactDetails", event.target.value);
+                        return;
+                      }
                       setStep3Field(
                         "contactDetails",
                         filterEmail(event.target.value, CONTACT_DETAILS_MAX),
+                      );
+                      onClearError("contactDetails");
+                    }}
+                    onCompositionEnd={(event) => {
+                      setStep3Field(
+                        "contactDetails",
+                        filterEmail((event.target as HTMLInputElement).value, CONTACT_DETAILS_MAX),
                       );
                       onClearError("contactDetails");
                     }}

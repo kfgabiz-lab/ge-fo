@@ -28,6 +28,7 @@ import {
   filterEmail,
   filterLetters,
   filterPhoneDigits,
+  isComposingEvent,
 } from "@/lib/formInputFilters";
 import {
   type CodeItem,
@@ -301,7 +302,15 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.studentName)}
               value={studentName}
               onChange={(event) => {
+                if (isComposingEvent(event)) {
+                  setStudentName(event.target.value);
+                  return;
+                }
                 setStudentName(filterLetters(event.target.value, 100));
+                clearError("studentName");
+              }}
+              onCompositionEnd={(event) => {
+                setStudentName(filterLetters((event.target as HTMLInputElement).value, 100));
                 clearError("studentName");
               }}
               slotProps={{ htmlInput: { maxLength: 100 } }}
@@ -319,7 +328,15 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.email)}
               value={email}
               onChange={(event) => {
+                if (isComposingEvent(event)) {
+                  setEmail(event.target.value);
+                  return;
+                }
                 setEmail(filterEmail(event.target.value, 255));
+                clearError("email");
+              }}
+              onCompositionEnd={(event) => {
+                setEmail(filterEmail((event.target as HTMLInputElement).value, 255));
                 clearError("email");
               }}
               slotProps={{ htmlInput: { maxLength: 255 } }}
@@ -339,7 +356,15 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.jobTitle)}
               value={jobTitle}
               onChange={(event) => {
+                if (isComposingEvent(event)) {
+                  setJobTitle(event.target.value);
+                  return;
+                }
                 setJobTitle(filterLetters(event.target.value, 100));
+                clearError("jobTitle");
+              }}
+              onCompositionEnd={(event) => {
+                setJobTitle(filterLetters((event.target as HTMLInputElement).value, 100));
                 clearError("jobTitle");
               }}
               slotProps={{ htmlInput: { maxLength: 100 } }}
@@ -378,7 +403,15 @@ export default function TrainingSessionDetailForm({
               error={Boolean(errors.companyName)}
               value={companyName}
               onChange={(event) => {
+                if (isComposingEvent(event)) {
+                  setCompanyName(event.target.value);
+                  return;
+                }
                 setCompanyName(filterLetters(event.target.value, 100));
+                clearError("companyName");
+              }}
+              onCompositionEnd={(event) => {
+                setCompanyName(filterLetters((event.target as HTMLInputElement).value, 100));
                 clearError("companyName");
               }}
               slotProps={{ htmlInput: { maxLength: 100 } }}
@@ -476,7 +509,14 @@ export default function TrainingSessionDetailForm({
               placeholder="Apartment, suite, etc"
               value={apartment}
               onChange={(event) => {
+                if (isComposingEvent(event)) {
+                  setApartment(event.target.value);
+                  return;
+                }
                 setApartment(filterLetters(event.target.value, 100));
+              }}
+              onCompositionEnd={(event) => {
+                setApartment(filterLetters((event.target as HTMLInputElement).value, 100));
               }}
               slotProps={{ htmlInput: { maxLength: 100 } }}
             />

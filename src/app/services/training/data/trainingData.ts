@@ -8,15 +8,11 @@ import type { TrainingFilterOption, TrainingVariant } from "./trainingContent";
 
 export const TRAINING_SLUG = "currMgmt-data";
 export const TRAINING_LIST_SIZE = 10;
+export const TRAINING_COURSE_DETAIL_HREF_PREFIX = "/services/training/course";
+export const TRAINING_SESSION_DETAIL_HREF_PREFIX = "/services/training/session";
 
 export const trainingImageSrc = (mediaId: number) =>
   `/api/v1/fo/page-files/${mediaId}`;
-
-export const trainingDetailHref = (
-  prefix: string,
-  id: number,
-  slug?: string | null,
-) => `${prefix}/${slug || id}`;
 
 export const TRAINING_COURSE_BY_VARIANT: Record<TrainingVariant, string> = {
   engineering: "01",

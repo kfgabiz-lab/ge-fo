@@ -7,6 +7,7 @@ import {
   type DevicesTreeRow,
 } from "@/data/gnb/devicesTree";
 import { withCategoryContext } from "@/lib/navigation/categoryContext";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import type { ProductOtherItem } from "./productDetailContent";
 import type { DevicesProductItem } from "./motorControlContent";
 import type { DevicesCategoryProduct } from "./vfdContent";
@@ -218,7 +219,10 @@ export async function fetchCategoryLv2Products(
     );
     return rows.map((row) => ({
       id: String(row.id),
-      href: withCategoryContext(row.slug ? `/product/${row.slug}` : "", categoryId),
+      href: withCategoryContext(
+        row.slug ? contentDetailPath("/product", row.id, row.slug) : "",
+        categoryId,
+      ),
       image: resolveImageUrlFromJsonText(row.image),
       title: row.productName ?? "",
       description: row.infoDescription ?? "",
@@ -349,7 +353,7 @@ export async function fetchProductDetailBySlug(
   }
 }
 
-async function fetchProductDetailById(
+export async function fetchProductDetailById(
   productId: number,
 ): Promise<Record<string, unknown> | null> {
   try {
@@ -425,15 +429,33 @@ export async function fetchProductSeoBySlug(
   return row ? toProductSeoRow(row) : null;
 }
 
-async function resolveLv2IdOfProductSlug(slug: string): Promise<number | null> {
-  const rows = await fetchDevicesTreeRows();
-  const productId = findProductIdInRows(rows, slug);
-  if (productId == null) return null;
+export async function fetchProductSeoById(
+  id: number,
+): Promise<ProductSeoRow | null> {
+  const row = await fetchProductDetailById(id);
+  return row ? toProductSeoRow(row) : null;
+}
+
+function lv2IdOfProductIdInRows(
+  rows: DevicesTreeRow[],
+  productId: number,
+): number | null {
   const matched = rows.find(
     (r) => r.depth === "3" && r.productId === productId && r.parentId,
   );
   const parentId = Number(matched?.parentId);
   return Number.isInteger(parentId) && parentId > 0 ? parentId : null;
+}
+
+async function resolveLv2IdOfProductSlug(slug: string): Promise<number | null> {
+  const rows = await fetchDevicesTreeRows();
+  const productId = findProductIdInRows(rows, slug);
+  if (productId == null) return null;
+  return lv2IdOfProductIdInRows(rows, productId);
+}
+
+async function resolveLv2IdOfProductId(productId: number): Promise<number | null> {
+  return lv2IdOfProductIdInRows(await fetchDevicesTreeRows(), productId);
 }
 
 export async function resolveFallbackCategoryId(
@@ -448,9 +470,9 @@ export async function resolveFallbackCategoryId(
       return await resolveLv2IdOfProductSlug(slug);
     }
 
-    const productMatch = pathname.match(/^\/product\/([^/]+)$/);
+    const productMatch = pathname.match(/^\/product\/(\d+)\/[^/]+$/);
     if (productMatch) {
-      return await resolveLv2IdOfProductSlug(decodeURIComponent(productMatch[1]));
+      return await resolveLv2IdOfProductId(Number(productMatch[1]));
     }
 
     return null;
@@ -605,7 +627,11 @@ export async function fetchSwRelevantProducts(
     );
     return rows.map((r) => ({
       id: r.slug || `product-${r.id}`,
-      href: r.slug ? (r.level === "LV2" ? `/product-range/${r.slug}` : `/product/${r.slug}`) : "",
+      href: r.slug
+        ? r.level === "LV2"
+          ? `/product-range/${r.slug}`
+          : contentDetailPath("/product", r.id, r.slug)
+        : "",
       image: resolveImageUrlFromJsonText(r.image) ?? "",
       title: r.title ?? "",
       subtitle: "",
@@ -669,7 +695,9 @@ export async function fetchProductLv2Context(
       otherProducts.push({
         id: r.productSlug || `product-${r.productId}`,
         href: withCategoryContext(
-          r.productSlug ? `/product/${r.productSlug}` : "",
+          r.productSlug
+            ? contentDetailPath("/product", r.productId, r.productSlug)
+            : "",
           r.parentId,
         ),
         image: resolveImageUrlFromJsonText(r.productImage) ?? "",

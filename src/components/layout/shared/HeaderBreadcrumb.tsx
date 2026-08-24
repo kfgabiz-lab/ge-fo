@@ -9,6 +9,8 @@ import {
   type BreadcrumbCrumb,
 } from "@/data/breadcrumbConfig";
 import {
+  getBreadcrumbCrumbHrefsServerSnapshot,
+  getBreadcrumbCrumbHrefsSnapshot,
   getBreadcrumbTitlesServerSnapshot,
   getBreadcrumbTitlesSnapshot,
   subscribeBreadcrumbTitles,
@@ -31,7 +33,7 @@ import type {
 export type BreadcrumbServerOverride = {
   pathname: string;
   current?: string;
-  crumb?: { href: string; label: string };
+  crumbs?: { href: string; label: string }[];
 } | null;
 
 export type BreadcrumbCategoryFallback = {
@@ -166,7 +168,13 @@ function HeaderBreadcrumbContent({
     getBreadcrumbTitlesSnapshot,
     getBreadcrumbTitlesServerSnapshot,
   );
+  const clientCrumbHrefs = useSyncExternalStore(
+    subscribeBreadcrumbTitles,
+    getBreadcrumbCrumbHrefsSnapshot,
+    getBreadcrumbCrumbHrefsServerSnapshot,
+  );
   const clientOverride = clientTitles.get(pathname);
+  const clientCrumbHrefOverride = clientCrumbHrefs.get(pathname);
   const fromMegaMenu = devicesMegaMenu
     ? (categoryId !== null
         ? getCrumbsFromMegaMenu(devicesMegaMenu, pathname, categoryId)
@@ -205,18 +213,20 @@ function HeaderBreadcrumbContent({
             {showPath ? (
               <>
                 {crumbs.map((crumb, index) => {
-                  const crumbLabel =
-                    activeServerOverride?.crumb &&
-                    activeServerOverride.crumb.href === crumb.href
-                      ? activeServerOverride.crumb.label
-                      : crumb.label;
+                  const overrideCrumb = activeServerOverride?.crumbs?.find(
+                    (c) => c.label === crumb.label,
+                  );
+                  const crumbHref =
+                    overrideCrumb?.href ??
+                    clientCrumbHrefOverride?.get(crumb.label) ??
+                    crumb.href;
                   return (
                     <span key={`${crumb.label}-${index}`} className="breadcrumb_nav__group">
                       <span className="breadcrumb_sep" aria-hidden="true" />
-                      {crumb.href ? (
-                        <Link href={crumb.href} prefetch={false}>{crumbLabel}</Link>
+                      {crumbHref ? (
+                        <Link href={crumbHref} prefetch={false}>{crumb.label}</Link>
                       ) : (
-                        <span>{crumbLabel}</span>
+                        <span>{crumb.label}</span>
                       )}
                     </span>
                   );

@@ -68,13 +68,13 @@
 | Company Affiliate in America 페이지 | `src/app/company/affiliate-in-america/page.tsx` | CompanyAffiliateAmericaPage를 렌더하고 company.css를 로드하는 About Us > Affiliate in America 라우트 진입점 | TODO |
 | Company ESG 페이지 | `src/app/company/esg/page.tsx` | CompanyEsgPage를 렌더하고 company.css를 로드하는 About Us > ESG 라우트 진입점 | TODO |
 | Company Blog 목록 페이지 | `src/app/company/blog/page.tsx` | CompanyBlogPage를 렌더하는 블로그 목록 라우트 진입점 | blog-data (승인됨 — `fo/docs/dev/company/blog-data.md` 참고) |
-| Company Blog 상세 페이지 | `src/app/company/blog/detail/[id]/page.tsx` | id 기반 동적 라우트 — `fetchData`로 상세 단건+인접글(이전/다음)을 조회해 CompanyArticleDetail(variant="blog")을 조립하는 서버 컴포넌트. 고정 경로 `blog/detail/page.tsx`는 정리됨(2026-07-22) | blog-data (승인됨 — `fo/docs/dev/company/blog-data.md` 참고) |
+| Company Blog 상세 페이지 | `src/app/company/blog/[id]/[slug]/page.tsx` | `{id}/{slug}` 2세그먼트 고정 라우트 — id로 상세 단건+인접글(이전/다음)을 조회해 CompanyArticleDetail(variant="blog")을 조립하는 서버 컴포넌트. slug는 표시/SEO용일 뿐 검증하지 않음(URL 구조 원칙은 1-4절 하단 참고) | blog-data (승인됨 — `fo/docs/dev/company/blog-data.md` 참고) |
 | Company Press 목록 페이지 | `src/app/company/press/page.tsx` | 공통 CompanyFeedPage(variant="press")를 렌더하는 보도자료 목록 라우트 진입점 | press-data (승인됨 — `fo/docs/dev/company/press-data.md` 참고) |
-| Company Press 상세 페이지 | `src/app/company/press/detail/[id]/page.tsx` | id 기반 동적 라우트 — `fetchData`로 상세 단건+인접글(이전/다음)을 조회해 CompanyArticleDetail(variant="press")을 조립하는 서버 컴포넌트. 고정 경로 `press/detail/page.tsx`는 이미 삭제된 상태 | press-data (승인됨 — `fo/docs/dev/company/press-data.md` 참고) |
+| Company Press 상세 페이지 | `src/app/company/press/[id]/[slug]/page.tsx` | `{id}/{slug}` 2세그먼트 고정 라우트 — id로 상세 단건+인접글(이전/다음)을 조회해 CompanyArticleDetail(variant="press")을 조립하는 서버 컴포넌트 | press-data (승인됨 — `fo/docs/dev/company/press-data.md` 참고) |
 | Company Articles 목록 페이지 | `src/app/company/articles/page.tsx` | `articles-data` 실데이터 연동 완료 — Featured(정렬 1번째 글)+리스트, 검색/정렬(latest/oldest/A-Z/Z-A)/월별/연도별 필터까지 구현(공통 CompanyFeed* 컴포넌트 재사용, press와 동일 패턴) | articles-data (구현완료 — ⚠️ 작업단위 문서(`fo/docs/dev/company/articles-data.md`) 없음, STEP3 생략된 채 개발된 것으로 추정) |
-| Company Articles 상세 페이지 | `src/app/company/articles/detail/[id]/page.tsx` | id 기반 동적 라우트 — `fetchData`로 상세 단건+인접글(이전/다음)을 조회해 CompanyArticleDetail(variant="articles")을 조립하는 서버 컴포넌트. 고정 경로 `articles/detail/page.tsx`는 정리됨(2026-07-22) | articles-data (구현완료 — 위와 동일 사유로 작업단위 문서 없음) |
+| Company Articles 상세 페이지 | `src/app/company/articles/[id]/[slug]/page.tsx` | `{id}/{slug}` 2세그먼트 고정 라우트 — id로 상세 단건+인접글(이전/다음)을 조회해 CompanyArticleDetail(variant="articles")을 조립하는 서버 컴포넌트 | articles-data (구현완료 — 위와 동일 사유로 작업단위 문서 없음) |
 | Company Events 목록 페이지 | `src/app/company/events/page.tsx` | CompanyEventsPage를 렌더하는 이벤트 목록 라우트 진입점 | events-data (승인됨 — `fo/docs/dev/company/events-data.md` 참고) |
-| Company Events 상세 페이지 | `src/app/company/events/detail/[id]/page.tsx` | id 기반 동적 라우트 — `fetchData`로 상세 단건+인접 이벤트(이전/다음)를 조회해 CompanyArticleDetail(variant="events")을 조립하는 서버 컴포넌트. 고정 경로 `events/detail/page.tsx`는 처음부터 신규 생성이 아니라 `[id]`로만 만들어짐 | events-data (승인됨 — `fo/docs/dev/company/events-data.md` 참고) |
+| Company Events 상세 페이지 | `src/app/company/events/[id]/[slug]/page.tsx` | `{id}/{slug}` 2세그먼트 고정 라우트 — id로 상세 단건+인접 이벤트(이전/다음)를 조회해 CompanyArticleDetail(variant="events")을 조립하는 서버 컴포넌트 | events-data (승인됨 — `fo/docs/dev/company/events-data.md` 참고) |
 | Company LS ELECTRIC Page | `src/app/company/components/CompanyLsElectricPage.tsx` | About Us > LS ELECTRIC 페이지 본문 — Title/Intro/Highlights(카운트업)/Business/Global(지도+카운트업)/PTT/R&D/History 타임라인/Mission 섹션 조립. `previewSection` prop으로 개별 섹션 단독 렌더 지원 | TODO |
 | Company America Page | `src/app/company/components/CompanyAmericaPage.tsx` | About Us > LS ELECTRIC America 페이지 본문 — Title/Intro(+통계)/Shaping/Business/Careers 배너(CommonBanner04)/Operate(지점 지도·연락처 카드)/Leaders/Mission/Follow 섹션 조립. `previewSection` 단독 렌더 지원 | TODO |
 | Company Affiliate America Page | `src/app/company/components/CompanyAffiliateAmericaPage.tsx` | About Us > Affiliate in America 페이지 본문 — Title/Intro/Affiliate 리스트(로고·설립연도·웹사이트·사업영역·주소) 조립. `previewSection` 단독 렌더 지원 | TODO |
@@ -103,6 +103,7 @@
 
 > Company 하위 서브메뉴 중 `careers`는 2026-07-15 별도 세션에서 ls-publish 원본 그대로 정적 이관됐으나, 이후 2026-07-21 세션에서 채용공고 카드 목록(`company-careers-jobs__grid`)이 BO `careers-data` slug(PAGE_DATA)로 데이터바인딩 전환됨(상세: `fo/docs/dev/company/careers-data.md`). 상단 타이틀(`CareersTitleSection`)과 LinkedIn 배너(`CareersLinkedInSection`)는 여전히 정적 콘텐츠로 유지. Blog/Press/Articles/Events(구 articles feed)는 이번 마이그레이션으로 모두 이관되었습니다.
 > `src/app/company/articleDetailClass.ts`와 `src/app/company/data/*.ts`는 tsx가 아니므로(BEM 헬퍼·데이터 파일) 본 표에서 제외했습니다.
+> **콘텐츠 상세 URL 구조 원칙**: blog/articles/press/events(본 절) 및 training course/session(1-5절), product(products-systems 절)는 전부 `{id}/{slug}` 2세그먼트 동적 라우트로 고정되어 있습니다. id는 실제 조회 키(항상 신뢰), slug는 표시/SEO용일 뿐 검증하지 않으며 실제 DB의 slug와 달라도 그대로 렌더링합니다(canonical 리다이렉트 없음). 레거시 1세그먼트 URL(`/company/blog/{slug}` 단독)은 지원하지 않고 404 처리됩니다. id가 숫자가 아니면 `fo/src/lib/isNumericId.ts`로 가드해 404 처리합니다. 상세 링크 생성은 `fo/src/lib/contentDetailPath.ts`의 `contentDetailPath(basePath, id, slug?)`를 재사용합니다. 목록→상세로 클라이언트 사이드 이동(새로고침 없는 카드 클릭) 시 상위 브레드크럼의 href가 유지되어야 하면 `fo/src/components/layout/shared/breadcrumbTitleStore.ts`의 `seedBreadcrumbCrumbHref(pathname, label, href)`로 클릭 시점에 미리 심어둡니다(공유 레이아웃은 클라이언트 네비게이션 시 재실행되지 않아 서버에서 만든 href만으론 부족함). slug가 비어있는 콘텐츠의 URL 처리 정책(필수화/자동생성/마이그레이션 여부)은 아직 미확정 상태입니다.
 
 ### 1-5. services
 
@@ -127,7 +128,9 @@
 | Training Curriculum Page | `src/app/services/training/components/TrainingCurriculumPage.tsx` | sales/engineering/service-training 3개 메뉴가 공유하는 조립 래퍼 — variant로 데이터/클래스/pageId 분기(company/press의 CompanyFeedPage와 동일 패턴) | TODO(정적) |
 | Training Title | `src/app/services/training/components/TrainingTitle.tsx` | 페이지 상단 대제목/설명(`company-about-title` 공통 스타일, CompanyAboutTitleSection 재사용) | TODO(정적) |
 | Training Curriculum | `src/app/services/training/components/TrainingCurriculum.tsx` | 필터(select 3개)+검색+커리큘럼 카드 목록+페이지네이션 섹션 | TODO(정적) |
-| Training Card | `src/app/services/training/components/TrainingCard.tsx` | 커리큘럼 카드 1건(이미지/카테고리/제목/설명), 상세 링크는 variant별 prefix | TODO(정적) |
+| Training Card | `src/app/services/training/components/TrainingCard.tsx` | 커리큘럼 카드 1건(이미지/카테고리/제목/설명), 상세 링크는 variant별 prefix. 카드 클릭 시 `seedBreadcrumbCrumbHref`로 상위(Training) 크럼 href를 미리 심음(클라이언트 네비게이션 대응) | TODO(정적) |
+| Training Course 상세 페이지 | `src/app/services/training/course/[id]/[slug]/page.tsx` | `{id}/{slug}` 2세그먼트 고정 라우트 — id로 커리큘럼 상세를 조회해 TrainingDetailPage를 렌더. Session 카드 클릭 시 `seedBreadcrumbCrumbHref`로 상위(Course) 크럼 href를 미리 심음 | currMgmt-data |
+| Training Session 상세 페이지 | `src/app/services/training/session/[id]/[slug]/page.tsx` | `{id}/{slug}` 2세그먼트 고정 라우트, course와 완전히 분리된 최상위 경로. id로 단건 조회해 `curriculum_detail1.curriculum_id`로 소속 course id를 역참조한 뒤, 기존 `fetchTrainingDetailRows(courseId)`/`fetchTrainingCurriculum(courseId)` 흐름을 그대로 태워 TrainingSessionPage를 렌더 | currDtlMgmt-data |
 
 > Service Center의 FAQ 영역은 별도 컴포넌트가 아니라 공통 `CommonFaq`(2-3절)를 페이지에서 직접 사용합니다(`sectionId="service-center-faq"` 앵커 지정).
 > Warranty Policy는 제품 보증표(`WarrantyPolicyCoverage`의 tableRows)만 `warrantyPolicy-data` slug로 bo 연동하며(공개=is_visible 001 필터, product_type 코드→영문 라벨 변환, id ASC), 그 외 섹션은 fo 정적 데이터(`warrantyPolicyContent.ts`)로 유지합니다.
@@ -136,13 +139,13 @@
 search, support(contact-us·where-to-buy만 이관), guide — 아직 fo에 마이그레이션되지 않았습니다(company/services는 이관 완료, 나머지 하위 메뉴는 미이관). 필요 시 fo-orchestrator의 STEP 0-0(페이지 분석)부터 시작합니다.
 
 ### products-systems (데이터바인딩 완료 + URL 라우팅 개편 완료)
-카테고리(1depth/2depth)·제품상세는 `category-data`/`product-data`를 seo.slug 기준으로 조회하는 **3계층 동적 라우트**로 재구성됐습니다: `src/app/()/product-category/[slug]`(1depth) · `src/app/()/product-range/[slug]`(2depth 카테고리 또는 제품) · `src/app/()/product/[slug]`(제품). 과거의 `motor-control`/`lv-automation`/`variable-frequency-drive`/`software` 폴더 기반 라우트, 그리고 구 1depth 경로 `products-category`는 삭제/변경됐고, 해당 구 URL들은 모두 `next.config.ts`의 `redirects()`로 현재 URL(`product-category/*`)에 매핑돼 있습니다(seo.slug 확정분만 — 미입력분은 매핑 없음, 데이터 보정 후 수동 추가 필요).
+카테고리(1depth/2depth)·제품상세는 `category-data`/`product-data`를 seo.slug 기준으로 조회하는 **3계층 동적 라우트**로 재구성됐습니다: `src/app/()/product-category/[slug]`(1depth) · `src/app/()/product-range/[slug]`(2depth 카테고리 또는 제품) · `src/app/()/product/[id]/[slug]`(제품, `{id}/{slug}` 2세그먼트 고정 — 1-4절 하단 "콘텐츠 상세 URL 구조 원칙" 참고). 과거의 `motor-control`/`lv-automation`/`variable-frequency-drive`/`software` 폴더 기반 라우트, 그리고 구 1depth 경로 `products-category`는 삭제/변경됐고, 해당 구 URL들은 모두 `next.config.ts`의 `redirects()`로 현재 URL(`product-category/*`)에 매핑돼 있습니다(seo.slug 확정분만 — 미입력분은 매핑 없음, 데이터 보정 후 수동 추가 필요). `product-range/[slug]`는 카테고리 매칭에 실패하면 devicesTree 기반 slug 매칭으로 SW 제품(scada/xems/micro-grid/smart-factory) 상세를 폴백 렌더링하는 예외 경로가 남아있어(`fetchProductBySlug` 계열), 신규 `product/[id]/[slug]`와 별개로 계속 공존합니다.
 
 제품상세는 slug별 예외 없이 `GenericProductDetail`(`src/app/()/products-systems/components/product/GenericProductDetail.tsx`) 하나로 렌더됩니다 — DB에 없는 리치 섹션(다운로드/Applications/Why 등)은 안 나오고 제네릭 템플릿 기본값으로 폴백하며, 데이터가 채워지면 코드 수정 없이 자동 반영됩니다.
 
 `explore-all`(제품 sitemap)만 `src/app/()/products-systems/explore-all`에 그대로 유지되며 URL 불변입니다. `src/app/()/products-systems/{components,data,lib}`는 신규 라우트가 재사용하는 공용 모듈로 유지됩니다.
 
-상세 설계·seo.slug 매핑표·결정 이력은 `fo/docs/dev/products-systems/route-restructure.md` 참고.
+상세 설계·seo.slug 매핑표·결정 이력을 담은 별도 문서는 없습니다 — 실제 라우트 파일과 위 서술이 최신 상태입니다.
 
 ---
 

@@ -2288,11 +2288,21 @@
   }
 
   section.support_service_training_curriculum .support_service_training_curriculum__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 60px 0;
   }
 
   section.support_service_training_curriculum .support_service_training_curriculum__empty-icon {
     width: 110px;
+  }
+
+  section.support_service_training_curriculum .support_service_training_curriculum__empty-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   section.support_service_training_curriculum .support_service_training_curriculum__empty-title {

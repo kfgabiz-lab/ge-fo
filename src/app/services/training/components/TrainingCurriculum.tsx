@@ -24,12 +24,12 @@ import {
   toLvCategoryOptions,
   toSubCategoryOptions,
   toTrainingCard,
-  trainingDetailHref,
   trainingHasSessionWhere,
   trainingStatusWhere,
   type TrainingCategoryNode,
   type TrainingRow,
 } from "../data/trainingData";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import TrainingCard from "./TrainingCard";
 
 function renderFilterSelectValue(label: string, optionLabel: string) {
@@ -419,7 +419,7 @@ export default function TrainingCurriculum({
                 >
                   <TrainingCard
                     course={item}
-                    detailHref={trainingDetailHref(detailHrefPrefix, item.id, item.slug)}
+                    detailHref={contentDetailPath(detailHrefPrefix, item.id, item.slug)}
                   />
                 </li>
               ))}

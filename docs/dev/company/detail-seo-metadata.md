@@ -1,12 +1,13 @@
 # Company 상세 페이지(articles/blog/press/events) SEO 메타데이터 데이터 바인딩 설계
 
 > 대상 파일:
-> - `fo/src/app/company/articles/detail/[id]/page.tsx`
-> - `fo/src/app/company/blog/detail/[id]/page.tsx`
-> - `fo/src/app/company/press/detail/[id]/page.tsx`
-> - `fo/src/app/company/events/detail/[id]/page.tsx`
+> - `fo/src/app/company/articles/[id]/[slug]/page.tsx`
+> - `fo/src/app/company/blog/[id]/[slug]/page.tsx`
+> - `fo/src/app/company/press/[id]/[slug]/page.tsx`
+> - `fo/src/app/company/events/[id]/[slug]/page.tsx`
 > - (공통 헬퍼) `fo/src/lib/pageDataSeo.ts`
 > 상태: 개발완료 (문서 작성 시점 실제 코드 상태 기준 — 하단 "6. 비고" 참고)
+> ⚠️ 라우트 경로는 이후 별도 작업(FO 콘텐츠 상세 URL을 `{id}/{slug}` 2세그먼트로 전환)으로 `detail/[id]` → `[id]/[slug]`로 바뀌었다(2026-08-24). 본 문서의 SEO 메타데이터 설계 자체(필드 매핑/조회조건/공통헬퍼)는 그 작업의 영향을 받지 않아 변경 없음 — 경로 표기만 최신화했다.
 
 ## ⚠️ 연동 방식 — data-slug/data-slugKey DOM 마크업 태깅이 아님
 이 작업 단위는 화면에 표시되는 콘텐츠를 `data-slug`/`data-slugKey` 속성으로 JSX에 태깅해 클라이언트 렌더 트리에 값을 바인딩하는 일반적인 FO 데이터 바인딩 방식이 아니다. Next.js의 `generateMetadata` 서버 함수에서 page_data를 조회해 `<head>`(title/description/OG/Twitter)에 값을 넣는 방식이며, DOM에 `data-slug`/`data-slugKey` 속성을 추가하지 않는다.
@@ -14,10 +15,10 @@
 ## 1. 대상 slug (4개, 단건)
 | 라우트 | data-slug | where 상수 | 다건 여부 |
 |---|---|---|---|
-| `articles/detail/[id]` | `articles-data` | `ARTICLES_STATUS_WHERE` (`@/app/company/data/articlesData`) | 단건 |
-| `blog/detail/[id]` | `blog-data` | `BLOG_STATUS_WHERE` (`@/app/company/data/blogData`) | 단건 |
-| `press/detail/[id]` | `press-data` | `PRESS_STATUS_WHERE` (`@/app/company/data/pressData`) | 단건 |
-| `events/detail/[id]` | `events-data` | `eventsDetailQuery(id, { preview })` (`@/app/company/data/eventsData`) — 내부적으로 `EVENTS_VISIBLE_WHERE` 사용 | 단건 |
+| `articles/[id]/[slug]` | `articles-data` | `ARTICLES_STATUS_WHERE` (`@/app/company/data/articlesData`) | 단건 |
+| `blog/[id]/[slug]` | `blog-data` | `BLOG_STATUS_WHERE` (`@/app/company/data/blogData`) | 단건 |
+| `press/[id]/[slug]` | `press-data` | `PRESS_STATUS_WHERE` (`@/app/company/data/pressData`) | 단건 |
+| `events/[id]/[slug]` | `events-data` | `eventsDetailQuery(id, { preview })` (`@/app/company/data/eventsData`) — 내부적으로 `EVENTS_VISIBLE_WHERE` 사용 | 단건 |
 
 ## 2. 필드 매핑 (dataJson → Metadata, DOM data-slugKey 아님)
 | dataJson 필드(flatten 기준) | Metadata 필드 | 타입 | 설명 |
@@ -28,7 +29,7 @@
 - 공통 헬퍼: `fo/src/lib/pageDataSeo.ts`의 `buildPageDataSeoMetadata(params: { slug: string; id: string | number; where?: Record<string,string> }): Promise<Metadata>`
 - 내부 처리: 공통함수 `fetchData`(`fo/src/lib/pageDataApi.ts`)로 PK 단건 조회 → `flattenPageDataItem`(`fo/src/lib/pageData.ts`)로 평탄화 → `row["seo.meta_title"]`/`row["seo.meta_description"]` 추출
 - 라우트별 전용 SEO 함수는 신규로 만들지 않는다(product의 `fetchProductSeoBySlug`처럼 4개를 각각 만드는 방식 미채택). 4개 라우트 모두 이 공통 헬퍼 하나를 호출한다.
-- OG/Twitter 범위: title/description만 채운다. `product/[slug]/page.tsx` 패턴과 동일. training(`buildOgMetadata`)이 채우는 images/card 등 풀세트는 채택하지 않는다.
+- OG/Twitter 범위: title/description만 채운다. `product/[id]/[slug]/page.tsx` 패턴과 동일. training(`buildOgMetadata`)이 채우는 images/card 등 풀세트는 채택하지 않는다.
 
 ## 3. API 확인 (최종 체크)
 - 신규 API 필요 여부: **기존 활용 가능** (신규 API 불필요)
@@ -65,7 +66,7 @@
 - **상태를 "개발완료"로 기재한 근거**: 이 문서 작성 중 대상 파일 4개(`.../page.tsx`)와 공통 헬퍼(`fo/src/lib/pageDataSeo.ts`)를 직접 Read로 확인한 결과, 4개 라우트 모두 이미 `generateMetadata`를 export하고 있고 `buildPageDataSeoMetadata`를 호출하며, 이 문서에 기술된 설계(공통 헬퍼 1개, 빈값 그대로 반환, title/description만 OG/Twitter 채움, preview 분기)와 정확히 일치했다. 애초 지시는 "상태: 승인됨"이었으나, 실제 코드 상태를 그대로 반영해야 한다는 원칙에 따라 "개발완료"로 기재한다. 이 상태 판단(설계 문서 작성 시점에 이미 코드가 존재하는 상황)이 맞는지는 fo-orchestrator/사용자 확인이 필요하다.
 - **확인 필요 — Request Memoization 실측 미완료**: generateMetadata와 페이지 컴포넌트가 각각 `buildPageDataSeoMetadata`/`fetchData`로 같은 PK 상세 엔드포인트를 호출한다(동일 URL). `fo/src/lib/pageDataSeo.ts`는 React `cache()`로 감싸져 있지 않고, `fo/src/lib/api.ts`의 `fetchApi`는 표준 fetch에 `cache: "no-store"`를 기본 적용한다. Next.js Request Memoization이 이 구성에서 실제로 요청을 1회로 합쳐주는지, 아니면 2회 호출되는지는 코드만으로 확정할 수 없어 **실제 네트워크 요청 횟수 실측이 필요**하다(설계상 정해둔 것은 "2회로 확인되면 헬퍼를 `cache()`로 감싼다"는 조건부 대응뿐, 실측 결과에 따른 코드 변경 여부는 별도 확인 필요).
 - 데이터 실존 확인 결과(page_data 직접 조회, 사용자 제공): articles-detail 22건 중 21건, blog-detail 25건 중 19건, press-detail 27건 중 25건, events-detail 17건 중 16건에 seo 값 존재. 나머지(총 10건)는 빈 값 → "7. 데이터 없음 시 동작"의 빈 문자열 반환 정책 적용 대상.
-- 빈 SEO값 폴백 정책은 product 라우트(`fo/src/app/()/product/[slug]/page.tsx`, `toProductSeoRow`)와 동일하게 **빈 문자열 그대로 반환**하며, layout.tsx의 기본 title("LS ELECTRIC | Smart Energy Global Leader")로 폴백시키지 않는다(training의 `buildCourseMetadata`가 `{}`를 반환해 layout 기본값으로 폴백시키는 방식은 이번 작업에서 미채택).
+- 빈 SEO값 폴백 정책은 product 라우트(`fo/src/app/()/product/[id]/[slug]/page.tsx`, `toProductSeoRow`)와 동일하게 **빈 문자열 그대로 반환**하며, layout.tsx의 기본 title("LS ELECTRIC | Smart Energy Global Leader")로 폴백시키지 않는다(training의 `buildCourseMetadata`가 `{}`를 반환해 layout 기본값으로 폴백시키는 방식은 이번 작업에서 미채택).
 - 검증 계획(문서화 대상 — 이번 STEP에서 실행하지 않음): fo(3002) 4개 상세 페이지에서 `<title>`/`<meta name="description">`/`og:title`/`og:description` 실반영 확인, 빈 SEO값 레코드에서 빈 문자열 처리 확인, preview 모드 동작 확인, 네트워크 요청 횟수 실측.
 
 ## 7. 데이터 없음(빈 값/매칭 0건) 시 동작

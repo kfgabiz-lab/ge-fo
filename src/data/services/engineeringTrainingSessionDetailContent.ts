@@ -25,9 +25,9 @@ export type EngineeringTrainingSessionEvent = {
 };
 
 export type EngineeringTrainingSessionDetail = {
-  /** URL/표시용 슬러그(없으면 숫자 id 문자열) — 링크 생성 등 사람이 보는 경로에 사용 */
-  courseId: string;
-  /** 신청 폼에서 서버로 보내는 실제 커리큘럼 숫자 id(문자열) — courseId 와 달리 항상 숫자만 담긴다 */
+  /** 소속 코스 상세 경로(/services/training/course/{id}/{slug}) — 브레드크럼 등 화면 링크에 사용 */
+  courseHref: string;
+  /** 신청 폼에서 서버로 보내는 실제 커리큘럼 숫자 id(문자열) */
   curriculumId: string;
   sessionId: string;
   category: string;
@@ -48,6 +48,7 @@ export type EngineeringTrainingSessionDetail = {
   countdownTo?: string;
   sidebar: {
     date: string;
+    dateTo?: string;
     eventDateToAttend: string;
     duration: string;
     classSize: string;

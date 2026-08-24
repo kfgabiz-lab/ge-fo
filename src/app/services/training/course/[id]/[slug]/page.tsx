@@ -1,24 +1,24 @@
-import { notFound } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
 import TrainingDetailPage from "@/app/services/training/components/TrainingDetailPage";
 import { buildCourseMetadata } from "@/app/services/training/data/trainingDetailData";
-import { resolveContentId } from "@/lib/contentSlugOrId";
+import { isNumericId } from "@/lib/isNumericId";
 
 type PageProps = {
-  params: Promise<{ courseId: string }>;
+  params: Promise<{ id: string; slug: string }>;
 };
 
 export async function generateMetadata(
   { params }: PageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { courseId: courseIdOrSlug } = await params;
-  const courseId = await resolveContentId("currMgmt-data", courseIdOrSlug);
-  if (courseId == null) return {};
-  return buildCourseMetadata(courseId, parent);
+  const { id } = await params;
+  if (!isNumericId(id)) notFound();
+  return buildCourseMetadata(id, parent);
 }
 
 export default async function TrainingCourseRoute({ params }: PageProps) {
-  const { courseId } = await params;
-  return <TrainingDetailPage courseId={courseId} />;
+  const { id } = await params;
+  if (!isNumericId(id)) notFound();
+  return <TrainingDetailPage courseId={id} />;
 }

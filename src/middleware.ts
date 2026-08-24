@@ -9,9 +9,9 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/services/training/:courseId",
-    "/services/training/:courseId/:sessionId",
+    "/services/training/course/:id/:slug",
+    "/services/training/session/:id/:slug",
     "/product-range/:slug",
-    "/product/:slug",
+    "/product/:id/:slug",
   ],
 };

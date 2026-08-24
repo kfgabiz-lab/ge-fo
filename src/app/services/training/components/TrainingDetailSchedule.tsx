@@ -27,11 +27,9 @@ const MONTH_OPTIONS = [
 
 export default function TrainingDetailSchedule({
   detail,
-  hrefPrefix,
   trainingTypeCodes,
 }: {
   detail: EngineeringTrainingDetail;
-  hrefPrefix: string;
   trainingTypeCodes: CodeItem[];
 }) {
   const { trainingTypeFilter, monthFilter, sessions } = detail.schedule;
@@ -145,12 +143,7 @@ export default function TrainingDetailSchedule({
             data-slug-repeat="true"
           >
             {filteredSessions.map((session) => (
-              <TrainingDetailSession
-                key={session.id}
-                courseId={detail.courseId}
-                session={session}
-                hrefPrefix={hrefPrefix}
-              />
+              <TrainingDetailSession key={session.id} session={session} />
             ))}
           </ul>
         )}

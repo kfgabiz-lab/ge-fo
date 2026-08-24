@@ -1,6 +1,10 @@
 import { fetchApi } from "@/lib/api";
 import { stripHtmlText } from "@/lib/stripHtmlText";
 import type { SearchMediaItem } from "@/data/search/searchAllContent";
+import { blogDetailHref } from "@/app/company/data/blogData";
+import { pressDetailHref } from "@/app/company/data/pressData";
+import { articlesDetailHref } from "@/app/company/data/articlesData";
+import { eventsDetailHref } from "@/app/company/data/eventsData";
 
 
 export type MediaSourceType = "TECH_HUB" | "BLOG" | "PRESS" | "ARTICLE" | "EVENT";
@@ -66,7 +70,7 @@ interface MediaSearchApiItem {
   snippet: string | null;
   imageUrl: string | null;
   sortDate: string | null;
-  link: string | null;
+  slug: string | null;
 }
 
 interface MediaSearchApiResponse {
@@ -106,6 +110,23 @@ function toOptionCounts(
   return counts;
 }
 
+function toMediaHref(item: MediaSearchApiItem): string {
+  switch (item.sourceType as MediaSourceType) {
+    case "TECH_HUB":
+      return `/support/tech-hub/view/${item.id}`;
+    case "BLOG":
+      return blogDetailHref(item.id, item.slug);
+    case "PRESS":
+      return pressDetailHref(item.id, item.slug);
+    case "ARTICLE":
+      return articlesDetailHref(item.id, item.slug);
+    case "EVENT":
+      return eventsDetailHref(item.id, item.slug);
+    default:
+      return "";
+  }
+}
+
 function toMediaCard(
   item: MediaSearchApiItem,
   highlight: string,
@@ -116,7 +137,7 @@ function toMediaCard(
 
   return {
     id: `${item.sourceType}-${item.id}`,
-    href: item.link ?? "",
+    href: toMediaHref(item),
     image: item.imageUrl ?? "",
     category: meta?.categoryLabel ?? "",
     title: item.title ?? "",

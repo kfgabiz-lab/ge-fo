@@ -16,6 +16,7 @@ import {
   filterEmail,
   filterLetters,
   filterPhoneDigits,
+  isComposingEvent,
 } from "@/lib/formInputFilters";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import RequestForTrainingQuestionnaireIntro from "./RequestForTrainingQuestionnaireIntro";
@@ -218,9 +219,17 @@ export default function RequestForTrainingStep1Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.firstName.placeholder}
                   value={step1.firstName}
-                  error={Boolean(errors.firstName)}
+                  error={Boolean(errors.firstName)}
                   onChange={(event) => {
+                    if (isComposingEvent(event)) {
+                      setStep1Field("firstName", event.target.value);
+                      return;
+                    }
                     setStep1Field("firstName", filterLetters(event.target.value, LETTERS_MAX));
+                    onClearError("firstName");
+                  }}
+                  onCompositionEnd={(event) => {
+                    setStep1Field("firstName", filterLetters((event.target as HTMLInputElement).value, LETTERS_MAX));
                     onClearError("firstName");
                   }}
                 />
@@ -233,9 +242,16 @@ export default function RequestForTrainingStep1Form({
                   id={`${formId}-last-name`}
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.lastName.placeholder}
-                  value={step1.lastName}
-                  onChange={(event) =>
-                    setStep1Field("lastName", filterLetters(event.target.value, LETTERS_MAX))
+                  value={step1.lastName}
+                  onChange={(event) => {
+                    if (isComposingEvent(event)) {
+                      setStep1Field("lastName", event.target.value);
+                      return;
+                    }
+                    setStep1Field("lastName", filterLetters(event.target.value, LETTERS_MAX));
+                  }}
+                  onCompositionEnd={(event) =>
+                    setStep1Field("lastName", filterLetters((event.target as HTMLInputElement).value, LETTERS_MAX))
                   }
                 />
               </div>
@@ -250,9 +266,17 @@ export default function RequestForTrainingStep1Form({
                 className="guide_field guide_field--h50 support_service_training_request__input"
                 placeholder={fields.company.placeholder}
                 value={step1.company}
-                error={Boolean(errors.company)}
+                error={Boolean(errors.company)}
                 onChange={(event) => {
+                  if (isComposingEvent(event)) {
+                    setStep1Field("company", event.target.value);
+                    return;
+                  }
                   setStep1Field("company", filterLetters(event.target.value, LETTERS_MAX));
+                  onClearError("company");
+                }}
+                onCompositionEnd={(event) => {
+                  setStep1Field("company", filterLetters((event.target as HTMLInputElement).value, LETTERS_MAX));
                   onClearError("company");
                 }}
               />
@@ -280,7 +304,7 @@ export default function RequestForTrainingStep1Form({
                         setStep1Field("streetAddress", event.target.value);
                         onClearError("streetAddress");
                       }}
-                      slotProps={{
+                      slotProps={{
                         input: {
                           endAdornment: (
                             <InputAdornment
@@ -364,7 +388,7 @@ export default function RequestForTrainingStep1Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.city.placeholder}
                   value={step1.city}
-                  error={Boolean(errors.city)}
+                  error={Boolean(errors.city)}
                   onChange={(event) => {
                     setStep1Field("city", event.target.value);
                     onClearError("city");
@@ -380,7 +404,7 @@ export default function RequestForTrainingStep1Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.state.placeholder}
                   value={step1.state}
-                  error={Boolean(errors.state)}
+                  error={Boolean(errors.state)}
                   onChange={(event) => {
                     setStep1Field("state", event.target.value);
                     onClearError("state");
@@ -399,7 +423,7 @@ export default function RequestForTrainingStep1Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.zip.placeholder}
                   value={step1.zip}
-                  error={Boolean(errors.zip)}
+                  error={Boolean(errors.zip)}
                   onChange={(event) => {
                     setStep1Field("zip", filterDigitsOnly(event.target.value));
                     onClearError("zip");
@@ -416,7 +440,7 @@ export default function RequestForTrainingStep1Form({
                   placeholder={fields.phone.placeholder}
                   type="tel"
                   value={step1.phone}
-                  error={Boolean(errors.phone)}
+                  error={Boolean(errors.phone)}
                   onChange={(event) => {
                     setStep1Field("phone", filterPhoneDigits(event.target.value));
                     onClearError("phone");
@@ -435,9 +459,17 @@ export default function RequestForTrainingStep1Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.email.placeholder}
                   value={step1.email}
-                  error={Boolean(errors.email)}
+                  error={Boolean(errors.email)}
                   onChange={(event) => {
+                    if (isComposingEvent(event)) {
+                      setStep1Field("email", event.target.value);
+                      return;
+                    }
                     setStep1Field("email", filterEmail(event.target.value, EMAIL_MAX));
+                    onClearError("email");
+                  }}
+                  onCompositionEnd={(event) => {
+                    setStep1Field("email", filterEmail((event.target as HTMLInputElement).value, EMAIL_MAX));
                     onClearError("email");
                   }}
                 />
@@ -450,9 +482,16 @@ export default function RequestForTrainingStep1Form({
                   id={`${formId}-title`}
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.title.placeholder}
-                  value={step1.title}
-                  onChange={(event) =>
-                    setStep1Field("title", filterLetters(event.target.value, LETTERS_MAX))
+                  value={step1.title}
+                  onChange={(event) => {
+                    if (isComposingEvent(event)) {
+                      setStep1Field("title", event.target.value);
+                      return;
+                    }
+                    setStep1Field("title", filterLetters(event.target.value, LETTERS_MAX));
+                  }}
+                  onCompositionEnd={(event) =>
+                    setStep1Field("title", filterLetters((event.target as HTMLInputElement).value, LETTERS_MAX))
                   }
                 />
               </div>
@@ -468,7 +507,7 @@ export default function RequestForTrainingStep1Form({
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.cellPhone.placeholder}
                   type="tel"
-                  value={step1.cellPhone}
+                  value={step1.cellPhone}
                   onChange={(event) =>
                     setStep1Field("cellPhone", filterPhoneDigits(event.target.value))
                   }
@@ -482,7 +521,7 @@ export default function RequestForTrainingStep1Form({
                   id={`${formId}-sales-contact`}
                   className="guide_field guide_field--h50 support_service_training_request__input"
                   placeholder={fields.salesContact.placeholder}
-                  value={step1.salesContact}
+                  value={step1.salesContact}
                   onChange={(event) =>
                     setStep1Field(
                       "salesContact",

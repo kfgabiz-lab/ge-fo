@@ -379,32 +379,18 @@ const configs: Record<string, BreadcrumbConfig> = {
 };
 
 export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
-  const trainingReserved = "sales|engineering|service|request";
-
-  const sessionMatch = pathname.match(
-    new RegExp(
-      `^/services/training/(?!(?:${trainingReserved})(?:/|$))([^/]+)/([^/]+)$`,
-    ),
-  );
-  if (sessionMatch) {
-    const [, courseId] = sessionMatch;
+  if (/^\/services\/training\/session\/[^/]+\/[^/]+$/.test(pathname)) {
     return {
       crumbs: [
         { label: "Services" },
         { label: "Training" },
-        {
-          label: "Curriculum Detail",
-          href: `/services/training/${courseId}`,
-        },
+        { label: "Course" },
       ],
       current: "Session",
     };
   }
 
-  const detailMatch = pathname.match(
-    new RegExp(`^/services/training/(?!(?:${trainingReserved})$)([^/]+)$`),
-  );
-  if (detailMatch) {
+  if (/^\/services\/training\/course\/[^/]+\/[^/]+$/.test(pathname)) {
     return {
       crumbs: [{ label: "Services" }, { label: "Training" }],
       current: "Curriculum Detail",
@@ -422,24 +408,29 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     };
   }
 
-  if (/^\/company\/blog\/(?!detail$|no-data$)[^/]+$/.test(pathname)) {
+  if (/^\/company\/blog\/[^/]+\/[^/]+$/.test(pathname)) {
     return configs["/company/blog/detail"];
   }
 
-  if (/^\/company\/press\/(?!detail$|no-data$)[^/]+$/.test(pathname)) {
+  if (/^\/company\/press\/[^/]+\/[^/]+$/.test(pathname)) {
     return configs["/company/press/detail"];
   }
 
-  if (/^\/company\/articles\/(?!detail$|no-data$)[^/]+$/.test(pathname)) {
+  if (/^\/company\/articles\/[^/]+\/[^/]+$/.test(pathname)) {
     return configs["/company/articles/detail"];
   }
 
-  if (/^\/company\/events\/(?!detail$)[^/]+$/.test(pathname)) {
+  if (/^\/company\/events\/[^/]+\/[^/]+$/.test(pathname)) {
     return configs["/company/events/detail"];
   }
 
   if (/^\/support\/tech-hub\/view\/[^/]+$/.test(pathname)) {
     return configs["/support/tech-hub/view"];
+  }
+
+  const productMatch = pathname.match(/^\/product\/[^/]+\/([^/]+)$/);
+  if (productMatch) {
+    return configs[`/product/${productMatch[1]}`] ?? { crumbs: [], current: "" };
   }
 
   return (

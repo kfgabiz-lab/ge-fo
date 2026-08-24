@@ -1,19 +1,22 @@
 import { notFound } from "next/navigation";
 import type { TrainingVariant } from "../data/trainingContent";
 import {
+  TRAINING_COURSE_DETAIL_HREF_PREFIX,
+  TRAINING_SESSION_DETAIL_HREF_PREFIX,
   TRAINING_VARIANT_BY_COURSE_CODE,
   fetchTrainingCategories,
   toCategoryMap,
 } from "../data/trainingData";
 import {
   fetchProductNamesForRows,
+  fetchTrainingCourseIdBySession,
   fetchTrainingCurriculum,
   fetchTrainingDetailRows,
   fetchTrainingTypeCodes,
   isCurriculumVisible,
   toTrainingSessionDetail,
 } from "../data/trainingDetailData";
-import { resolveContentId } from "@/lib/contentSlugOrId";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import type { PageDataItem } from "@/lib/pageData";
 import TrainingSessionDetail from "./TrainingSessionDetail";
 import JsonLd from "@/components/seo/JsonLd";
@@ -33,18 +36,12 @@ function slugOf(raw: PageDataItem | undefined): string | null {
 }
 
 export default async function TrainingSessionPage({
-  courseId: courseIdOrSlug,
-  sessionId: sessionIdOrSlug,
+  sessionId,
 }: {
-  courseId: string;
   sessionId: string;
 }) {
-  const courseId = await resolveContentId("currMgmt-data", courseIdOrSlug);
-  const sessionId = await resolveContentId(
-    "currDtlMgmt-data",
-    sessionIdOrSlug,
-  );
-  if (courseId == null || sessionId == null) notFound();
+  const courseId = await fetchTrainingCourseIdBySession(sessionId);
+  if (courseId == null) notFound();
 
   const [rows, curriculum, categoryCodes, trainingTypeCodes] =
     await Promise.all([
@@ -60,9 +57,12 @@ export default async function TrainingSessionPage({
 
   const variant: TrainingVariant =
     TRAINING_VARIANT_BY_COURSE_CODE[curriculum.training_course ?? ""] ?? "sales";
-  const canonicalCourseSlug = curriculum.slug || courseId;
-  const canonicalSessionSlug =
-    slugOf(rows.find((r) => String(r.id) === sessionId)) || sessionId;
+  const sessionSlug = slugOf(rows.find((r) => String(r.id) === sessionId));
+  const courseHref = contentDetailPath(
+    TRAINING_COURSE_DETAIL_HREF_PREFIX,
+    courseId,
+    curriculum.slug,
+  );
 
   const productNameMap = await fetchProductNamesForRows(rows);
   const categoryMap = toCategoryMap(categoryCodes);
@@ -70,7 +70,7 @@ export default async function TrainingSessionPage({
 
   const session = toTrainingSessionDetail(
     rows,
-    canonicalCourseSlug,
+    courseHref,
     courseId,
     sessionId,
     curriculum,
@@ -84,9 +84,13 @@ export default async function TrainingSessionPage({
 
   const hrefPrefix = "/services/training";
   const variantListHref = `${hrefPrefix}/${variant}`;
-  const courseUrl = pageUrl(`${hrefPrefix}/${canonicalCourseSlug}`);
+  const courseUrl = pageUrl(courseHref);
   const currentUrl = pageUrl(
-    `${hrefPrefix}/${canonicalCourseSlug}/${canonicalSessionSlug}`,
+    contentDetailPath(
+      TRAINING_SESSION_DETAIL_HREF_PREFIX,
+      sessionId,
+      sessionSlug,
+    ),
   );
   const sessionHasAddress = Boolean(session.sidebar.location.address);
   const sessionNode = {

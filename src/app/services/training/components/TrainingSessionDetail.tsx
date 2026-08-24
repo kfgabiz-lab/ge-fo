@@ -148,11 +148,8 @@ export default function TrainingSessionDetail({
   }, []);
 
   useEffect(() => {
-    seedBreadcrumbTitle(
-      `/services/training/${session.courseId}`,
-      "Course",
-    );
-  }, [variant, session.courseId, session.courseTitle]);
+    seedBreadcrumbTitle(session.courseHref, "Course");
+  }, [session.courseHref]);
 
   const handleRegister = useCallback(() => {
     setActiveTab("registration");

@@ -97,8 +97,9 @@ export default async function GenericProductDetail({
     return true;
   });
 
-  const jsonLdGraph = slug
+  const jsonLdGraph = slug && productId != null
     ? buildProductJsonLdGraph({
+        id: productId,
         slug,
         row,
         detail,

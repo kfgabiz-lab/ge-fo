@@ -1,3 +1,4 @@
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { flattenPageDataItem, pickField, type PageDataItem } from "@/lib/pageData";
 import { LIST_DESCRIPTION_MAX_LENGTH, stripHtmlText } from "@/lib/stripHtmlText";
@@ -6,8 +7,8 @@ export const ARTICLES_LIST_SIZE = 9;
 
 export const articlesImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 
-export const articlesDetailHref = (id: number, slug?: string | null) =>
-  `/company/articles/${slug || id}`;
+export const articlesDetailHref = (id: string | number, slug?: string | null) =>
+  contentDetailPath("/company/articles", id, slug);
 
 export type ArticlesRow = PageDataItem;
 
