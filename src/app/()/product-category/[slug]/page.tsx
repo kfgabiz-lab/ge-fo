@@ -1,4 +1,5 @@
 import type { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
 import DevicesHelp from "@/app/()/products-systems/components/DevicesHelp";
 import DevicesHero from "@/app/()/products-systems/components/DevicesHero";
 import DevicesMarkets from "@/app/()/products-systems/components/DevicesMarkets";
@@ -38,10 +39,11 @@ export async function generateMetadata(
     fetchCategoryBySlug(slug, { depth: 1 }),
     parent,
   ]);
+  if (!category) notFound();
   return mergeSeoMetadata(
     previous,
-    category?.metaTitle ?? "",
-    category?.metaDescription ?? "",
+    category.metaTitle ?? "",
+    category.metaDescription ?? "",
   );
 }
 
@@ -51,13 +53,12 @@ export default async function ProductsCategoryRoutePage({
   const { slug } = await params;
 
   const category = await fetchCategoryBySlug(slug, { depth: 1 });
+  if (!category) notFound();
 
-  const [products, highlightItems] = category
-    ? await Promise.all([
-        fetchVisibleLv2Categories(category.id),
-        fetchCategoryInsights(category.id),
-      ])
-    : [[], []];
+  const [products, highlightItems] = await Promise.all([
+    fetchVisibleLv2Categories(category.id),
+    fetchCategoryInsights(category.id),
+  ]);
 
   const currentUrl = pageUrl(`/product-category/${slug}`);
   const productsWithUrl = products
@@ -143,15 +144,15 @@ export default async function ProductsCategoryRoutePage({
       {jsonLdGraph ? <JsonLd data={jsonLdGraph} /> : null}
       <DevicesHero
         withProducts
-        title={category?.title ?? ""}
-        description={category?.description ?? ""}
+        title={category.title}
+        description={category.description}
         products={products}
       />
       <DevicesMarkets />
       <DevicesHelp variant="overlay" />
       <DevicesPageFooter
         highlightItems={highlightItems}
-        bannerLinkHref={withCategoryContext("/support/contact-us", category?.id)}
+        bannerLinkHref={withCategoryContext("/support/contact-us", category.id)}
       />
     </main>
   );
