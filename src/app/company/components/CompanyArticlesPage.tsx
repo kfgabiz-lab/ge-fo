@@ -160,6 +160,7 @@ export default function CompanyArticlesPage() {
           date={featured.date}
           image={featured.image}
           href={featured.href}
+          highlight={search}
         />
       ) : null}
       <CompanyFeedListSection

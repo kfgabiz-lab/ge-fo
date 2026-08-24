@@ -22,6 +22,10 @@ import { fetchData } from "@/lib/pageDataApi";
 import { handleImageFallback } from "@/lib/imageFallback";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import HashtagLink from "@/components/ui/HashtagLink";
+import {
+  renderInlineTextHighlight,
+  renderTitleTextHighlight,
+} from "@/app/search/components/renderSearchTextHighlight";
 import "@/assets/css/company.css";
 
 const LIST_FALLBACK_IMAGE = "/img/devices/product/list_no_data.svg";
@@ -148,6 +152,8 @@ export default function CompanyBlogPage({
     ? "company-blog-list company-blog-list--no-data"
     : "company-blog-list";
 
+  const highlight = search.trim() || undefined;
+
   return (
     <main className="company-page company-page--blog" id={pageId}>
       <section className="company-blog-title">
@@ -191,7 +197,11 @@ export default function CompanyBlogPage({
                     {featured.categoryLabel}
                   </p>
                   <h2 className="company-blog-featured__title" data-slugkey="title">
-                    {featured.title}
+                    {renderTitleTextHighlight(
+                      featured.title,
+                      highlight,
+                      "company-blog-featured__mark",
+                    )}
                   </h2>
                   <p className="company-blog-featured__desc" data-slugkey="description">
                     {featured.description}
@@ -274,10 +284,20 @@ export default function CompanyBlogPage({
                                 {item.categoryLabel}
                               </p>
                               <h3 className="company-blog-list__title" data-slugkey="title">
-                                {item.title}
+                                {renderTitleTextHighlight(
+                                  item.title,
+                                  highlight,
+                                  "company-blog__mark",
+                                )}
                               </h3>
                               <p className="company-blog-list__desc" data-slugkey="description">
-                                {item.description}
+                                {highlight
+                                  ? renderInlineTextHighlight(
+                                      item.description,
+                                      highlight,
+                                      "company-blog__desc-mark",
+                                    )
+                                  : item.description}
                               </p>
                               <p className="company-blog__date" data-slugkey="date">
                                 {item.date}
@@ -291,6 +311,8 @@ export default function CompanyBlogPage({
                                       key={`${item.id}-${tag}-${tagIndex}`}
                                       tag={tag}
                                       className="company-blog__tag"
+                                      highlight={highlight}
+                                      markClassName="company-blog__mark"
                                     />
                                   ))}
                                 </div>
