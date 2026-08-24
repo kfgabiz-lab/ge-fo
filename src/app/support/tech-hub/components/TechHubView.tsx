@@ -9,6 +9,7 @@ import {
 } from "@/lib/youtubeEmbed";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
+import { markScrollReturnIntent } from "@/lib/navigation/scrollPositionMemory";
 import TechHubViewPlayer from "./TechHubViewPlayer";
 import type { TechHubDetail } from "@/data/support/techHubData";
 
@@ -179,6 +180,12 @@ export default function TechHubView({ detail }: TechHubViewProps) {
           <Link
             href="/support/tech-hub"
             className="btn-base btn-lv01 btn-lv01--solid support_tech_hub_view__list-btn"
+            onMouseDown={(event) => {
+              if (event.button === 0) markScrollReturnIntent();
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") markScrollReturnIntent();
+            }}
           >
             LIST
           </Link>
