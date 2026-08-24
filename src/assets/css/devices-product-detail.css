@@ -18,7 +18,7 @@
   scroll-margin-top: 200px;
 }
 .common_banner_03 + #product-markets {
-    margin-top: 200px;
+  margin-top: 150px;
 }
 /* Applications — section padding-top 150px; align native hash to .section_tit */
 #product-applications {
@@ -3563,6 +3563,10 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
 
   section.common_banner_03 + section.devices_product_video,
   section.common_banner_03 + section.devices_product_other {
+    margin-top: 70px;
+  }
+
+  .common_banner_03 + #product-markets {
     margin-top: 70px;
   }
 

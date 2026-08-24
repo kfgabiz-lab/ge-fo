@@ -204,6 +204,15 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
     setCookiePreferencesOpen(true);
   };
 
+  const handleLogoClick = (
+      event: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
+    if (window.location.pathname === logoHref) {
+      event.preventDefault();
+      window.location.href = logoHref;
+    }
+  };
+
   return (
     <footer className="main_footer">
       <div className="main_footer__inner">
@@ -307,7 +316,7 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
       <div className="main_footer_02">
         <div className="main_footer_02__inner">
           <div className="main_footer_02__left">
-            <Link href={logoHref} className="main_footer_02__logo">
+            <Link href={logoHref} className="main_footer_02__logo" onClick={handleLogoClick}>
               <img loading="lazy" decoding="async" src="/img/logo_white.svg" alt="LS ELECTRIC" />
             </Link>
             <p className="main_footer_02__copyright">

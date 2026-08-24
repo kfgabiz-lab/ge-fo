@@ -3,8 +3,8 @@ import Script from "next/script";
 
 import HistoryReloadOnNavigate from "@/components/layout/HistoryReloadOnNavigate";
 import LenisScrollProvider from "@/components/layout/LenisScrollProvider";
+import ScrollPositionManager from "@/components/layout/ScrollPositionManager";
 import ScrollToTopButton from "@/components/layout/ScrollToTopButton";
-import ScrollToTopOnNavigate from "@/components/layout/ScrollToTopOnNavigate";
 import SiteLocaleSync from "@/components/layout/SiteLocaleSync";
 import SkipToMainContent from "@/components/layout/SkipToMainContent";
 import { loadSiteSettings, SITE_LOCALE } from "@/lib/siteTime";
@@ -95,7 +95,7 @@ export default async function RootLayout({
           {children}
           <SiteLocaleSync locale={SITE_LOCALE} />
           <HistoryReloadOnNavigate />
-          <ScrollToTopOnNavigate />
+          <ScrollPositionManager />
           <ScrollToTopButton />
         </LenisScrollProvider>
       </body>

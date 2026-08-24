@@ -298,7 +298,11 @@
   }
 
   .support-page--engineering-training-detail section.support_service_training_detail_hero .inner,
-  .support-page--engineering-training-detail section.support_service_training_detail_schedule .inner {
+  .support-page--engineering-training-detail section.support_service_training_detail_schedule .inner,
+  .support-page--sales-training-detail section.support_service_training_detail_hero .inner,
+  .support-page--sales-training-detail section.support_service_training_detail_schedule .inner,
+  .support-page--service-training-detail section.support_service_training_detail_hero .inner,
+  .support-page--service-training-detail section.support_service_training_detail_schedule .inner {
     max-width: 1440px;
     margin: 0 auto;
     padding-left: 0;
@@ -774,13 +778,36 @@
     margin-bottom: 120px;
   }
 
+  /* Figma 9888:173895 — Headline3/34px/Semi Bold (Pretendard) */
   section.support_service_training_session_detail .support_service_training_session_detail__block-tit {
     margin: 0;
+    font-family: var(--font-body);
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.34px;
     color: #222;
+  }
+
+  /* Agenda title + date — PC는 한 줄, MO는 분리 노출 */
+  section.support_service_training_session_detail .support_service_training_session_detail__block-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__block-date {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 44px;
+    letter-spacing: -0.34px;
+    color: #222;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__block-date::before {
+    content: " / ";
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__bullets {
@@ -884,7 +911,7 @@
 
   section.support_service_training_session_detail
     .support_service_training_session_detail__agenda-list
-    + .support_service_training_session_detail__block-tit {
+    + .support_service_training_session_detail__block-head {
     margin-top: calc(60px - 20px);
   }
 
@@ -1210,12 +1237,23 @@
   section.support_service_training_session_detail .support_service_training_session_detail__meta-row {
     display: flex;
     align-items: flex-start;
+    gap: 20px;
     width: 100%;
   }
 
-  section.support_service_training_session_detail .support_service_training_session_detail__meta-row .support_service_training_session_detail__meta-item {
-    flex: 0 0 180px;
-    width: 180px;
+  /* Figma 9888:174252 — DATE/Type 200px, DURATION/CLASS SIZE 140px */
+  section.support_service_training_session_detail
+    .support_service_training_session_detail__meta-row
+    .support_service_training_session_detail__meta-item:first-child {
+    flex: 0 0 200px;
+    width: 200px;
+  }
+
+  section.support_service_training_session_detail
+    .support_service_training_session_detail__meta-row
+    .support_service_training_session_detail__meta-item:last-child {
+    flex: 0 0 140px;
+    width: 140px;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__meta-item {
@@ -1517,10 +1555,14 @@
   section.support_service_training_request .support_service_training_request__panel-inner {
     display: flex;
     flex-direction: column;
-    gap: 60px;
     align-items: center;
     max-width: 1040px;
     margin: 0 auto;
+  }
+
+  /* Figma 8763:217339 Conts — title ↔ form 60px */
+  section.support_service_training_request .support_service_training_request__panel-inner > * + * {
+    margin-top: 60px;
   }
 
   section.support_service_training_request .support_service_training_request__intro {
@@ -1555,8 +1597,26 @@
   section.support_service_training_request .support_service_training_request__form-grid {
     display: flex;
     flex-direction: column;
-    gap: 40px;
     width: 100%;
+  }
+
+  /* Figma 9337:95109 — section spacing 40px (no gap; margin so divider/consent/recaptcha can override) */
+  section.support_service_training_request .support_service_training_request__form-grid > * + * {
+    margin-top: 40px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__form-divider
+    + .support_service_training_request__consent {
+    margin-top: 30px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__consent
+    + .support_service_training_request__recaptcha-box {
+    margin-top: 30px;
   }
 
   section.support_service_training_request .support_service_training_request__form-row {
@@ -1596,7 +1656,9 @@
   }
 
   section.support_service_training_request .support_service_training_request__field-hint+
-  .support_service_training_request__error{
+  .support_service_training_request__error,
+  section.support_service_training_request .support_service_training_request__terms-link +
+  .support_service_training_request__error {
     position: relative;
   }
   section.support_service_training_request .support_service_training_request__error {
@@ -1620,7 +1682,13 @@
 
   section.support_service_training_request .support_service_training_request__form-row--selects {
     width: 100%;
-    margin-bottom: 16px;
+  }
+
+  /* selects ↔ product panel 16px (field gap 10 + 6) */
+  section.support_service_training_request
+    .support_service_training_request__form-row--selects
+    + .support_service_training_request__product-panel {
+    margin-top: 6px;
   }
 
   section.support_service_training_request .support_service_training_request__form-row--selects .support_service_training_request__select {
@@ -1893,12 +1961,6 @@
     border: 1px solid #e8e8e8;
   }
 
-
-
-  section.support_service_training_request .support_service_training_request__form-grid--step4 {
-    gap: 40px;
-  }
-
   section.support_service_training_request .support_service_training_request__product-panel {
     display: flex;
     flex-direction: column;
@@ -1915,13 +1977,29 @@
     margin-top: 20px;
   }
 
-  section.support_service_training_request .support_service_training_request__product-divider,
-  section.support_service_training_request .support_service_training_request__form-divider {
+  section.support_service_training_request .support_service_training_request__product-divider {
     width: 100%;
     height: 1px;
     margin: 0;
     border: none;
     background: #ddd;
+  }
+
+  section.support_service_training_request .support_service_training_request__form-divider {
+    width: 100%;
+    height: 1px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border: none;
+    background: #ddd;
+  }
+
+  /* Figma 9337:95265 — comments ↔ divider 40px, divider ↔ consent 30px */
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__form-divider {
+    margin-top: 40px;
   }
 
   section.support_service_training_request .support_service_training_request__checkbox-group {
@@ -2084,7 +2162,8 @@
     align-self: center;
     width: fit-content;
     max-width: 100%;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -2435,7 +2514,9 @@
     font-weight: 600;
   }
 
-  .support-page--engineering-training-detail section.support_service_training_detail_hero .inner {
+  .support-page--engineering-training-detail section.support_service_training_detail_hero .inner,
+  .support-page--sales-training-detail section.support_service_training_detail_hero .inner,
+  .support-page--service-training-detail section.support_service_training_detail_hero .inner {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -2444,7 +2525,9 @@
     padding-right: 0;
   }
 
-  .support-page--engineering-training-detail section.support_service_training_detail_schedule .inner {
+  .support-page--engineering-training-detail section.support_service_training_detail_schedule .inner,
+  .support-page--sales-training-detail section.support_service_training_detail_schedule .inner,
+  .support-page--service-training-detail section.support_service_training_detail_schedule .inner {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -2581,11 +2664,23 @@
   }
 
   section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
     padding: 60px 0;
+    text-align: center;
   }
 
   section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-icon {
     width: 110px;
+  }
+
+  section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   section.support_service_training_detail_schedule .support_service_training_detail_schedule__empty-title {
@@ -3273,11 +3368,35 @@
 
   section.support_service_training_session_detail .support_service_training_session_detail__block-tit {
     margin: 0;
+    font-family: var(--font-body);
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.24px;
     color: #222;
+  }
+
+  /* Figma 9888:174860 — title 24 SemiBold + date 18 Medium, gap 10 */
+  section.support_service_training_session_detail .support_service_training_session_detail__block-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__block-date {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 28px;
+    letter-spacing: 0;
+    color: #222;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__block-date::before {
+    content: none;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__bullets {
@@ -3342,8 +3461,8 @@
 
   section.support_service_training_session_detail
     .support_service_training_session_detail__agenda-list
-    + .support_service_training_session_detail__block-tit {
-    margin-top: calc(60px - 24px);
+    + .support_service_training_session_detail__block-head {
+    margin-top: calc(40px - 24px);
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__agenda-list::before {
@@ -3986,10 +4105,13 @@
   section.support_service_training_request .support_service_training_request__panel-inner {
     display: flex;
     flex-direction: column;
-    gap: 40px;
     align-items: stretch;
     width: 100%;
     margin: 0 auto;
+  }
+
+  section.support_service_training_request .support_service_training_request__panel-inner > * + * {
+    margin-top: 40px;
   }
 
   section.support_service_training_request .support_service_training_request__intro {
@@ -4024,8 +4146,32 @@
   section.support_service_training_request .support_service_training_request__form-grid {
     display: flex;
     flex-direction: column;
-    gap: 24px;
     width: 100%;
+  }
+
+  section.support_service_training_request .support_service_training_request__form-grid > * + * {
+    margin-top: 24px;
+  }
+
+  /* Figma 8763:218308 — comments group ↔ consent 40px, divider ↔ consent 24px, consent ↔ captcha 30px */
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__form-divider {
+    margin-top: 40px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__form-divider
+    + .support_service_training_request__consent {
+    margin-top: 24px;
+  }
+
+  section.support_service_training_request
+    .support_service_training_request__form-grid
+    > .support_service_training_request__consent
+    + .support_service_training_request__recaptcha-box {
+    margin-top: 30px;
   }
 
   section.support_service_training_request .support_service_training_request__field {
@@ -4140,7 +4286,9 @@
     padding-bottom: calc(8px + 23px);
   }
   section.support_service_training_request .support_service_training_request__field-hint+
-  .support_service_training_request__error{
+  .support_service_training_request__error,
+  section.support_service_training_request .support_service_training_request__terms-link +
+  .support_service_training_request__error {
     position: relative;
   }
   section.support_service_training_request .support_service_training_request__error {
@@ -4308,13 +4456,15 @@
     color: #666;
   }
 
-  /* Step 4 — Figma 6880:147748 */
-  section.support_service_training_request .support_service_training_request__form-grid--step4 {
-    gap: 24px;
+  section.support_service_training_request .support_service_training_request__field--products {
+    gap: 10px;
   }
 
-  section.support_service_training_request .support_service_training_request__field--products {
-    gap: 14px;
+  /* selects ↔ product panel 16px (field gap 10 + 6) */
+  section.support_service_training_request
+    .support_service_training_request__field--products
+    > .support_service_training_request__product-panel {
+    margin-top: 6px;
   }
 
   section.support_service_training_request .support_service_training_request__field-label--products {
@@ -4367,6 +4517,7 @@
     flex-wrap: nowrap;
     align-items: flex-start;
     gap: 18px;
+    margin-bottom: 18px;
   }
 
   section.support_service_training_request .support_service_training_request__checkbox-label {
@@ -4382,6 +4533,7 @@
   section.support_service_training_request .support_service_training_request__checkbox.MuiCheckbox-root {
     padding: 0;
     margin-top: 1px;
+    min-width: 22px;
   }
 
   section.support_service_training_request
@@ -4411,8 +4563,7 @@
     color: #888;
   }
 
-  section.support_service_training_request .support_service_training_request__product-divider,
-  section.support_service_training_request .support_service_training_request__form-divider {
+  section.support_service_training_request .support_service_training_request__product-divider {
     width: 100%;
     height: 1px;
     margin: 0;
@@ -4420,8 +4571,14 @@
     background: #ddd;
   }
 
-  section.support_service_training_request .support_service_training_request__form-grid--step4 > .support_service_training_request__form-divider {
-    margin-top: 16px;
+  section.support_service_training_request .support_service_training_request__form-divider {
+    width: 100%;
+    height: 1px;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border: none;
+    background: #ddd;
   }
 
   section.support_service_training_request .support_service_training_request__tags {
@@ -4509,12 +4666,13 @@
     margin: 6px auto 0;
   }
 
-  /* 모바일 — PUB __recaptcha 의 margin(6px auto 0) 을 위젯 래퍼에 동일 적용 */
+  /* 모바일 — 가로 중앙만; 세로 간격은 form-grid sibling margin */
   section.support_service_training_request .support_service_training_request__recaptcha-box {
     align-self: center;
     width: fit-content;
     max-width: 100%;
-    margin: 6px auto 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   section.support_service_training_request .support_service_training_request__input--textarea .MuiOutlinedInput-root {

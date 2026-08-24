@@ -16,7 +16,7 @@ import {
   type BlogRow,
   type CodeItem,
 } from "@/app/company/data/blogData";
-import { getRememberedListPage, rememberListPage } from "@/app/company/lastListSession";
+import { useListPageMemory } from "@/app/company/useListPageMemory";
 import { useFeaturedFeed } from "@/hooks/useFeaturedFeed";
 import { fetchData } from "@/lib/pageDataApi";
 import { handleImageFallback } from "@/lib/imageFallback";
@@ -38,9 +38,7 @@ export default function CompanyBlogPage({
   const [categories, setCategories] = useState<CodeItem[]>([]);
   const [categoryMap, setCategoryMap] = useState<Map<string, string>>(new Map());
   const [categoryCode, setCategoryCode] = useState("");
-  // SSR과 최초 클라이언트 렌더가 항상 1page로 일치하도록 0으로 초기화하고,
-  // sessionStorage 복원은 하이드레이션 이후 effect에서만 수행한다(hydration mismatch 방지).
-  const [pageIndex, setPageIndex] = useState(0);
+  const { pageIndex, setPageIndex, goToPage } = useListPageMemory("blog", "/company/blog");
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<BlogRow[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -73,11 +71,6 @@ export default function CompanyBlogPage({
     sort: "createdAt,desc",
     toCard: toFeaturedCard,
   });
-
-  useEffect(() => {
-    const remembered = getRememberedListPage("blog");
-    if (remembered > 1) setPageIndex(remembered - 1);
-  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -120,12 +113,6 @@ export default function CompanyBlogPage({
     () => rows.map((row) => toBlogCard(row, categoryMap)),
     [rows, categoryMap],
   );
-
-  const goToPage = useCallback((page: number) => {
-    const nextIndex = Math.max(0, page - 1);
-    setPageIndex(nextIndex);
-    rememberListPage("blog", nextIndex + 1);
-  }, []);
 
   const handleCategoryChange = (code: string) => {
     setCategoryCode(code);
@@ -296,17 +283,19 @@ export default function CompanyBlogPage({
                                 {item.date}
                               </p>
                             </Link>
-                            <div className="company-blog-list__tags-row">
-                              <div className="company-blog__tags" data-slugkey="tags">
-                                {item.tags.map((tag, tagIndex) => (
-                                  <HashtagLink
-                                    key={`${item.id}-${tag}-${tagIndex}`}
-                                    tag={tag}
-                                    className="company-blog__tag"
-                                  />
-                                ))}
+                            {item.tags.length > 0 ? (
+                              <div className="company-blog-list__tags-row">
+                                <div className="company-blog__tags" data-slugkey="tags">
+                                  {item.tags.map((tag, tagIndex) => (
+                                    <HashtagLink
+                                      key={`${item.id}-${tag}-${tagIndex}`}
+                                      tag={tag}
+                                      className="company-blog__tag"
+                                    />
+                                  ))}
+                                </div>
                               </div>
-                            </div>
+                            ) : null}
                           </div>
                         </div>
                       </div>

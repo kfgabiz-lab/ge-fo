@@ -13,9 +13,9 @@ export const hvdcOverview = {
   image: hvdcImg("overview_hero.webp"),
   imageAlt: "SCADA control room monitoring systems",
   title:
-    "Beyond Monitoring: Driving Grid Resiliency through Intelligent Automation",
+    "Beyond Monitoring: Driving Grid \nResiliency through Intelligent Automation",
   description:
-    "GridSol Care SCADA provides real-time power data analysis and operator-centric control to support stable and reliable grid operations.\n By combining advanced monitoring, automation, and rapid response capabilities, the solution enhances power system reliability and operational efficiency.",
+    "Beyond X SCADA provides real-time power data analysis and operator-centric control to support stable and reliable grid operations.\nBy combining advanced monitoring, automation, and rapid response capabilities, the solution enhances power system reliability and operational efficiency.",
 };
 
 export const hvdcBenefitsSection = {

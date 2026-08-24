@@ -248,6 +248,7 @@ function DevicesProductDownloadsBody({
   const [sort, setSort] = useState<DownloadCenterSort>(
     PRODUCT_DOWNLOADS_DEFAULT_SORT,
   );
+  const [sortOpen, setSortOpen] = useState(false);
 
   const commitSearch = () => {
     setAppliedKeyword(keyword.trim());
@@ -368,12 +369,16 @@ function DevicesProductDownloadsBody({
                     onChange={(event) =>
                       setSort(event.target.value as DownloadCenterSort)
                     }
+                    onOpen={() => setSortOpen(true)}
+                    onClose={() => setSortOpen(false)}
                     IconComponent={GuideSelectIcon}
                     inputProps={{ "aria-label": "Sort by" }}
                     renderValue={(value) => {
-                      const text = productDownloadsSortLabel(
-                        value as DownloadCenterSort,
-                      );
+                      const text = sortOpen
+                        ? "Sort by"
+                        : productDownloadsSortLabel(
+                            value as DownloadCenterSort,
+                          );
                       return (
                         <span className="guide_field__select-value" title={text}>
                           {text}

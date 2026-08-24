@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CompanyFeedFeatured from "@/app/company/components/CompanyFeedFeatured";
 import CompanyFeedListSection from "@/app/company/components/CompanyFeedListSection";
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
@@ -12,7 +12,7 @@ import {
   toPressCard,
   type PressRow,
 } from "@/app/company/data/pressData";
-import { getRememberedListPage, rememberListPage } from "@/app/company/lastListSession";
+import { useListPageMemory } from "@/app/company/useListPageMemory";
 import { useFeaturedFeed } from "@/hooks/useFeaturedFeed";
 import { fetchData } from "@/lib/pageDataApi";
 import "@/assets/css/company.css";
@@ -40,9 +40,7 @@ function toPressFeaturedCard(row: PressRow): PressFeaturedCard {
 }
 
 export default function CompanyPressPage() {
-  // SSR과 최초 클라이언트 렌더가 항상 1page로 일치하도록 0으로 초기화하고,
-  // sessionStorage 복원은 하이드레이션 이후 effect에서만 수행한다(hydration mismatch 방지).
-  const [pageIndex, setPageIndex] = useState(0);
+  const { pageIndex, setPageIndex, goToPage } = useListPageMemory("press", "/company/press");
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<PressRow[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -63,11 +61,6 @@ export default function CompanyPressPage() {
     sort: "createdAt,desc",
     toCard: toPressFeaturedCard,
   });
-
-  useEffect(() => {
-    const remembered = getRememberedListPage("press");
-    if (remembered > 1) setPageIndex(remembered - 1);
-  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -121,12 +114,6 @@ export default function CompanyPressPage() {
       }),
     [rows, pageIndex],
   );
-
-  const goToPage = useCallback((page: number) => {
-    const nextIndex = Math.max(0, page - 1);
-    setPageIndex(nextIndex);
-    rememberListPage("press", nextIndex + 1);
-  }, []);
 
   const handlePageChange = (page: number) => {
     goToPage(page);

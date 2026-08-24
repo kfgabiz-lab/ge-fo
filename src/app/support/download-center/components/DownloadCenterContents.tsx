@@ -19,17 +19,18 @@ import {
   type DownloadCenterItem,
   type DownloadCenterSort,
 } from "@/data/support/downloadCenterData";
+import { downloadCenterPage } from "@/data/support/downloadCenterContent";
+import {
+  productDownloadsSortLabel,
+  productDownloadsSortOptions,
+} from "@/app/()/products-systems/data/productDetailContent";
 
 const PAGE_SIZE = 10;
 
-const SORT_LABELS: Record<DownloadCenterSort, string> = {
-  "": "Sort by",
-  doctype: "Document Type",
-  newest: "Newest",
-  oldest: "Oldest",
-  title: "Title A-Z",
-  title_desc: "Title Z-A",
-};
+function downloadCenterSortLabel(sort: DownloadCenterSort): string {
+  if (!sort) return downloadCenterPage.sortByLabel;
+  return productDownloadsSortLabel(sort);
+}
 
 type DownloadCenterContentsProps = {
   empty?: boolean;
@@ -63,6 +64,7 @@ function DownloadCenterContentsBody({
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [sortOpen, setSortOpen] = useState(false);
 
   const firstResetRef = useRef(true);
   useEffect(() => {
@@ -140,10 +142,14 @@ function DownloadCenterContentsBody({
                     onChange={(event) =>
                       setSort(event.target.value as DownloadCenterSort)
                     }
+                    onOpen={() => setSortOpen(true)}
+                    onClose={() => setSortOpen(false)}
                     IconComponent={GuideSelectIcon}
-                    inputProps={{ "aria-label": "Sort by" }}
+                    inputProps={{ "aria-label": downloadCenterPage.sortByLabel }}
                     renderValue={(value) => {
-                      const label = SORT_LABELS[value as DownloadCenterSort] ?? "Sort by";
+                      const label = sortOpen
+                        ? downloadCenterPage.sortByLabel
+                        : downloadCenterSortLabel(value as DownloadCenterSort);
                       return (
                         <span className="guide_field__select-value" title={label}>
                           {label}
@@ -151,10 +157,11 @@ function DownloadCenterContentsBody({
                       );
                     }}
                   >
-                    <MenuItem value="newest">Newest</MenuItem>
-                    <MenuItem value="oldest">Oldest</MenuItem>
-                    <MenuItem value="title">Title A-Z</MenuItem>
-                    <MenuItem value="title_desc">Title Z-A</MenuItem>
+                    {productDownloadsSortOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
                   </GuideSelect>
                 </FormControl>
               </div>

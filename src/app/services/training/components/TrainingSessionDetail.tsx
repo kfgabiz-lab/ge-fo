@@ -329,9 +329,15 @@ export default function TrainingSessionDetail({
             >
               {agendaRenderGroups.map((group) => (
                 <Fragment key={group.date || group.label}>
-                  <h2 className="support_service_training_session_detail__block-tit">
-                    {showAgendaSessions ? `Agenda / ${group.label}` : "Agenda"}
-                  </h2>
+                  <div className="support_service_training_session_detail__block-head">
+                    <h2 className="support_service_training_session_detail__block-tit">
+                      {showAgendaSessions ? `Agenda / ${group.label}` : "Agenda"}
+                    </h2>
+                    {/*pub 임시날짜 */}
+                    <p className="support_service_training_session_detail__block-date">
+                      Jul 15,2026
+                    </p>
+                  </div>
                   <TrainingSessionDetailTableScroll>
                     <table className="support_service_training_session_detail__table">
                       <thead>

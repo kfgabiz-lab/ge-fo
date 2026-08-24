@@ -20,6 +20,7 @@ import {
   powerGridSmartGridOperation,
   powerGridSmartGridUseCases,
   powerGridSustainabilityCards,
+  powerGridSustainabilityTitleLines,
   powerGridWhyItems,
 } from "../data/marketsPowerGridContent";
 import { fetchMarketsFaqItems, MARKETS_FAQ_CODE } from "../data/marketsFaqData";
@@ -77,7 +78,10 @@ export default async function MarketsPowerGridPage() {
       <MarketsExplore tabs={powerGridIndustryTabs} layout="wide-tabs" />
       <MarketsReferences items={powerGridReferences} />
       <MarketsBenefits items={powerGridBenefits} />
-      <MarketsSustainability cards={powerGridSustainabilityCards} />
+      <MarketsSustainability
+        titleLines={powerGridSustainabilityTitleLines}
+        cards={powerGridSustainabilityCards}
+      />
       <MarketsSmartGrid
         useCases={powerGridSmartGridUseCases}
         operationItems={powerGridSmartGridOperation}

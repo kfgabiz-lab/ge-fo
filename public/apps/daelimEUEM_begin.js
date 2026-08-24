@@ -16,7 +16,7 @@ window.daelimEUEMConf = {
                     onerror: true,
                     xhr: {
                         use: true,
-                        exceptionFilters: ['css?postfix','.wq?','xml?postfix', 'js?postfix', 'common.js', 'googleapis.com', 'gstatic.com', 'google.com/recaptcha']
+                        exceptionFilters: ['css?postfix','.wq?','xml?postfix', 'js?postfix', 'common.js', 'googleapis.com', 'gstatic.com', 'google.com/recaptcha', 'nahpdev-web.ls-electric.com', 'nahpdev.ls-electric.com', 'nahp.ls-electric.com']
                     },
                     E2E: {
                         use: true,
