@@ -176,6 +176,40 @@ export async function fetchCategoryChildrenBatch(
   }
 }
 
+export interface CategoryByCode {
+  id: number;
+  code: string;
+  slug: string;
+}
+
+export async function fetchCategoriesByCode(
+  codes: string[],
+): Promise<Map<string, CategoryByCode>> {
+  const map = new Map<string, CategoryByCode>();
+  const uniqueCodes = [...new Set(codes)];
+  if (uniqueCodes.length === 0) return map;
+
+  try {
+    const res = await fetchData<Record<string, unknown>>({
+      slug: "category-data",
+      where: { "in_category.code": uniqueCodes.join(",") },
+      unpaged: true,
+      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
+    });
+    for (const row of res.content) {
+      const code = row["category.code"] as string | undefined;
+      const slug = (row["seo.slug"] as string) ?? "";
+      const id = Number(row._id);
+      if (code && slug && Number.isFinite(id)) {
+        map.set(code, { id, code, slug });
+      }
+    }
+  } catch {
+    return map;
+  }
+  return map;
+}
+
 interface CategoryLv2Row {
   id: number;
   title: string;
@@ -192,7 +226,10 @@ export async function fetchVisibleLv2Categories(
     );
     return rows.map((row) => ({
       id: String(row.id),
-      href: withCategoryContext(row.slug ? `/product-range/${row.slug}` : "", row.id),
+      href: withCategoryContext(
+        row.slug ? contentDetailPath("/product-range", row.id, row.slug) : "",
+        row.id,
+      ),
       image: resolveImageUrlFromJsonText(row.image),
       title: row.title ?? "",
     }));
@@ -322,37 +359,6 @@ export const SW_PRODUCT_SLUGS = [
   "smart-factory",
 ] as const;
 
-function isSwProductSlug(slug: string): boolean {
-  return (SW_PRODUCT_SLUGS as readonly string[]).includes(slug);
-}
-
-export async function fetchProductDetailBySlug(
-  slug: string,
-): Promise<Record<string, unknown> | null> {
-  try {
-    if (isSwProductSlug(slug)) {
-      const swRes = await fetchData<Record<string, unknown>>({
-        slug: "product-data",
-        where: { "eq_seo.slug": slug, eq_page_type: "SW" },
-        size: 1,
-        리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
-      });
-      const swRow = swRes.content[0];
-      if (swRow) return swRow;
-    }
-
-    const res = await fetchData<Record<string, unknown>>({
-      slug: "product-data",
-      where: { "eq_seo.slug": slug },
-      size: 1,
-      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
-    });
-    return res.content[0] ?? null;
-  } catch {
-    return null;
-  }
-}
-
 export async function fetchProductDetailById(
   productId: number,
 ): Promise<Record<string, unknown> | null> {
@@ -367,48 +373,6 @@ export async function fetchProductDetailById(
   }
 }
 
-function findProductIdInRows(
-  rows: DevicesTreeRow[],
-  slug: string,
-  categoryId?: number,
-): number | null {
-  const matched = rows.find(
-    (row) =>
-      row.depth === "3" &&
-      row.productSlug === slug &&
-      row.productId != null &&
-      (categoryId === undefined || row.parentId === String(categoryId)),
-  );
-  return matched?.productId ?? null;
-}
-
-async function resolveProductIdInCategory(
-  slug: string,
-  categoryId: number,
-): Promise<number | null> {
-  return findProductIdInRows(await fetchDevicesTreeRows(), slug, categoryId);
-}
-
-async function resolveProductIdBySlug(slug: string): Promise<number | null> {
-  return findProductIdInRows(await fetchDevicesTreeRows(), slug);
-}
-
-export async function fetchProductBySlug(
-  slug: string,
-  opts?: { categoryId?: number },
-): Promise<Record<string, unknown> | null> {
-  const productIdInCategory =
-    opts?.categoryId !== undefined
-      ? await resolveProductIdInCategory(slug, opts.categoryId)
-      : null;
-  const productId = productIdInCategory ?? (await resolveProductIdBySlug(slug));
-  if (productId != null) {
-    const row = await fetchProductDetailById(productId);
-    if (row && row["seo.slug"] === slug) return row;
-  }
-  return fetchProductDetailBySlug(slug);
-}
-
 export interface ProductSeoRow {
   metaTitle: string;
   metaDescription: string;
@@ -419,14 +383,6 @@ function toProductSeoRow(row: Record<string, unknown>): ProductSeoRow {
     metaTitle: (row["seo.meta_title"] as string) ?? "",
     metaDescription: (row["seo.meta_description"] as string) ?? "",
   };
-}
-
-export async function fetchProductSeoBySlug(
-  slug: string,
-  opts?: { categoryId?: number },
-): Promise<ProductSeoRow | null> {
-  const row = await fetchProductBySlug(slug, opts);
-  return row ? toProductSeoRow(row) : null;
 }
 
 export async function fetchProductSeoById(
@@ -447,13 +403,6 @@ function lv2IdOfProductIdInRows(
   return Number.isInteger(parentId) && parentId > 0 ? parentId : null;
 }
 
-async function resolveLv2IdOfProductSlug(slug: string): Promise<number | null> {
-  const rows = await fetchDevicesTreeRows();
-  const productId = findProductIdInRows(rows, slug);
-  if (productId == null) return null;
-  return lv2IdOfProductIdInRows(rows, productId);
-}
-
 async function resolveLv2IdOfProductId(productId: number): Promise<number | null> {
   return lv2IdOfProductIdInRows(await fetchDevicesTreeRows(), productId);
 }
@@ -462,12 +411,16 @@ export async function resolveFallbackCategoryId(
   pathname: string,
 ): Promise<number | null> {
   try {
-    const rangeMatch = pathname.match(/^\/product-range\/([^/]+)$/);
+    const rangeMatch = pathname.match(/^\/product-range\/(\d+)\/([^/]+)$/);
     if (rangeMatch) {
-      const slug = decodeURIComponent(rangeMatch[1]);
-      const category = await fetchCategoryBySlug(slug, { depth: 2 });
-      if (category) return category.id;
-      return await resolveLv2IdOfProductSlug(slug);
+      const id = Number(rangeMatch[1]);
+      const slug = decodeURIComponent(rangeMatch[2]);
+      const category = await fetchCategoryBySlug(slug, {
+        depth: 2,
+        categoryId: id,
+      });
+      if (category && category.id === id) return category.id;
+      return await resolveLv2IdOfProductId(id);
     }
 
     const productMatch = pathname.match(/^\/product\/(\d+)\/[^/]+$/);
@@ -593,21 +546,6 @@ function collectProductLv2Ids(
   );
 }
 
-function pickLv2NameFromTreeRows(
-  rows: DevicesTreeRow[],
-  myLv2: Set<string>,
-): string {
-  return (
-    rows.find(
-      (r) =>
-        r.depth === "2" &&
-        r.rowId != null &&
-        myLv2.has(String(r.rowId)) &&
-        (r.categoryTitle ?? "") !== "",
-    )?.categoryTitle ?? ""
-  );
-}
-
 interface SwRelevantProductRow {
   id: number;
   title: string | null;
@@ -629,7 +567,7 @@ export async function fetchSwRelevantProducts(
       id: r.slug || `product-${r.id}`,
       href: r.slug
         ? r.level === "LV2"
-          ? `/product-range/${r.slug}`
+          ? contentDetailPath("/product-range", r.id, r.slug)
           : contentDetailPath("/product", r.id, r.slug)
         : "",
       image: resolveImageUrlFromJsonText(r.image) ?? "",
@@ -643,8 +581,10 @@ export async function fetchSwRelevantProducts(
 }
 
 export interface ProductLv2Context {
+  lv2Id: number | null;
   lv2Name: string;
   lv2Slug: string;
+  lv1Id: number | null;
   lv1Name: string;
   lv1Slug: string;
   otherProducts: ProductOtherItem[];
@@ -652,10 +592,13 @@ export interface ProductLv2Context {
 
 export async function fetchProductLv2Context(
   currentProductId: number,
+  preferredLv2Id?: number,
 ): Promise<ProductLv2Context> {
   const empty: ProductLv2Context = {
+    lv2Id: null,
     lv2Name: "",
     lv2Slug: "",
+    lv1Id: null,
     lv1Name: "",
     lv1Slug: "",
     otherProducts: [],
@@ -669,10 +612,17 @@ export async function fetchProductLv2Context(
     const myLv2 = collectProductLv2Ids(rows, currentProductId);
     if (myLv2.size === 0) return empty;
 
-    const lv2Name = pickLv2NameFromTreeRows(rows, myLv2);
-    const lv2Row = rows.find(
-      (r) => r.depth === "2" && r.rowId != null && myLv2.has(String(r.rowId)),
-    );
+    const lv2Row =
+      (preferredLv2Id != null && myLv2.has(String(preferredLv2Id))
+        ? rows.find(
+            (r) => r.depth === "2" && String(r.rowId) === String(preferredLv2Id),
+          )
+        : undefined) ??
+      rows.find(
+        (r) => r.depth === "2" && r.rowId != null && myLv2.has(String(r.rowId)),
+      );
+    const lv2Id = lv2Row?.rowId ?? null;
+    const lv2Name = lv2Row?.categoryTitle ?? "";
     const lv2Slug = lv2Row?.categorySlug ?? "";
     const lv1Row = lv2Row
       ? rows.find(
@@ -682,6 +632,7 @@ export async function fetchProductLv2Context(
             String(r.rowId) === lv2Row.parentId,
         )
       : undefined;
+    const lv1Id = lv1Row?.rowId ?? null;
     const lv1Name = lv1Row?.categoryTitle ?? "";
     const lv1Slug = lv1Row?.categorySlug ?? "";
 
@@ -706,7 +657,7 @@ export async function fetchProductLv2Context(
         badge: awardsMap.get(r.productId) === "01",
       });
     }
-    return { lv2Name, lv2Slug, lv1Name, lv1Slug, otherProducts };
+    return { lv2Id, lv2Name, lv2Slug, lv1Id, lv1Name, lv1Slug, otherProducts };
   } catch {
     return empty;
   }

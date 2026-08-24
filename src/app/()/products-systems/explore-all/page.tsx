@@ -112,7 +112,10 @@ export default async function ExploreAllProductsPage() {
           item: {
             "@type": "Product",
             name: r.categoryTitle ?? "",
-            url: r.categorySlug ? pageUrl(`/product-category/${r.categorySlug}`) : currentUrl,
+            url:
+              r.categorySlug && r.rowId != null
+                ? pageUrl(contentDetailPath("/product-category", r.rowId, r.categorySlug))
+                : currentUrl,
           },
         })),
       },

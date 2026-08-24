@@ -8,8 +8,8 @@ import ProductDetailRouter from "@/app/()/products-systems/components/product/Pr
 import {
   fetchCategoryBySlug,
   fetchCategoryLv2Products,
-  fetchProductBySlug,
-  fetchProductSeoBySlug,
+  fetchProductDetailById,
+  fetchProductSeoById,
 } from "@/app/()/products-systems/data/productsSystemsData";
 import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
 import {
@@ -17,6 +17,8 @@ import {
   withCategoryContext,
 } from "@/lib/navigation/categoryContext";
 import { fetchCategoryInsightsLv2 } from "@/data/highlightNews";
+import { contentDetailPath } from "@/lib/contentDetailPath";
+import { isNumericId } from "@/lib/isNumericId";
 import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbList, buildPageGraph, itemUrl, pageUrl } from "@/lib/structuredData/builders";
@@ -36,30 +38,46 @@ const ACTION_PLATFORMS = [
 
 async function fetchLv1Parent(
   lv2CategoryId: number,
-): Promise<{ name: string; slug: string }> {
+): Promise<{ id: number | null; name: string; slug: string }> {
   const rows = await fetchDevicesTreeRows();
   const lv2Row = rows.find((r) => r.depth === "2" && r.rowId === lv2CategoryId);
   const lv1Row = lv2Row
     ? rows.find((r) => r.depth === "1" && String(r.rowId) === lv2Row.parentId)
     : undefined;
-  return { name: lv1Row?.categoryTitle ?? "", slug: lv1Row?.categorySlug ?? "" };
+  return {
+    id: lv1Row?.rowId ?? null,
+    name: lv1Row?.categoryTitle ?? "",
+    slug: lv1Row?.categorySlug ?? "",
+  };
 }
 
 type ProductRangePageProps = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string; slug: string }>;
   searchParams: Promise<{ category?: string }>;
 };
 
+async function resolveRangeCategory(id: string, slug: string) {
+  const category = await fetchCategoryBySlug(slug, {
+    depth: 2,
+    categoryId: Number(id),
+  });
+  return category && category.id === Number(id) ? category : null;
+}
+
+async function resolveRangeProduct(id: string, slug: string) {
+  const row = await fetchProductDetailById(Number(id));
+  return row && row["seo.slug"] === slug ? row : null;
+}
+
 export async function generateMetadata(
-  { params, searchParams }: ProductRangePageProps,
+  { params }: ProductRangePageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { slug } = await params;
-  const { category: categoryParam } = await searchParams;
-  const categoryId = parseCategoryContext(categoryParam);
+  const { id, slug } = await params;
+  if (!isNumericId(id)) notFound();
 
   const [category, previous] = await Promise.all([
-    fetchCategoryBySlug(slug, { depth: 2, categoryId }),
+    resolveRangeCategory(id, slug),
     parent,
   ]);
   if (category) {
@@ -70,7 +88,7 @@ export async function generateMetadata(
     );
   }
 
-  const seo = await fetchProductSeoBySlug(slug, { categoryId });
+  const seo = await fetchProductSeoById(Number(id));
   return mergeSeoMetadata(
     previous,
     seo?.metaTitle ?? "",
@@ -82,11 +100,12 @@ export default async function ProductRangeRoutePage({
   params,
   searchParams,
 }: ProductRangePageProps) {
-  const { slug } = await params;
+  const { id, slug } = await params;
+  if (!isNumericId(id)) notFound();
   const { category: categoryParam } = await searchParams;
   const categoryId = parseCategoryContext(categoryParam);
 
-  const category = await fetchCategoryBySlug(slug, { depth: 2, categoryId });
+  const category = await resolveRangeCategory(id, slug);
   if (category) {
     const [productCards, highlightItems, lv1] = await Promise.all([
       fetchCategoryLv2Products(category.id),
@@ -98,7 +117,7 @@ export default async function ProductRangeRoutePage({
       title: category.title,
       description: category.description,
     };
-    const currentUrl = pageUrl(`/product-range/${slug}`);
+    const currentUrl = pageUrl(contentDetailPath("/product-range", id, slug));
     const highlightsWithUrl = highlightItems
       .map((a) => ({ a, url: itemUrl(a.href) }))
       .filter((x): x is { a: (typeof highlightItems)[number]; url: string } => x.url !== null);
@@ -179,7 +198,10 @@ export default async function ProductRangeRoutePage({
           ? [
               {
                 name: lv1.name,
-                url: lv1.slug ? pageUrl(`/product-category/${lv1.slug}`) : currentUrl,
+                url:
+                  lv1.id !== null && lv1.slug
+                    ? pageUrl(contentDetailPath("/product-category", lv1.id, lv1.slug))
+                    : currentUrl,
               },
             ]
           : []),
@@ -207,7 +229,7 @@ export default async function ProductRangeRoutePage({
     );
   }
 
-  const row = await fetchProductBySlug(slug, { categoryId });
+  const row = await resolveRangeProduct(id, slug);
   if (!row) notFound();
 
   return <ProductDetailRouter slug={slug} row={row} categoryId={categoryId} />;

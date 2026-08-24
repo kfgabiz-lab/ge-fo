@@ -54,10 +54,12 @@ export default async function GenericProductDetail({
   ] = await Promise.all([
     productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
     productId
-      ? fetchProductLv2Context(productId)
+      ? fetchProductLv2Context(productId, categoryId)
       : Promise.resolve({
+          lv2Id: null,
           lv2Name: "",
           lv2Slug: "",
+          lv1Id: null,
           lv1Name: "",
           lv1Slug: "",
           otherProducts: [],
@@ -72,7 +74,8 @@ export default async function GenericProductDetail({
 
   const { docTypeOptions, page: downloadsPage } = downloadsData;
 
-  const { lv2Name, lv2Slug, lv1Name, lv1Slug, otherProducts } = lv2Context;
+  const { lv2Id, lv2Name, lv2Slug, lv1Id, lv1Name, lv1Slug, otherProducts } =
+    lv2Context;
   const heroDetail = { ...detail, category: lv2Name };
   const inquiryHref = withProductInquiryContext(
     detail.expertBannerHref ?? "/support/contact-us",
@@ -103,8 +106,10 @@ export default async function GenericProductDetail({
         slug,
         row,
         detail,
+        lv1Id,
         lv1Name,
         lv1Slug,
+        lv2Id,
         lv2Name,
         lv2Slug,
         otherProducts,

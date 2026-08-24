@@ -1,5 +1,6 @@
 ﻿import type { HighlightNewsItem } from "@/types/highlightNews";
 import { GICS_INDEX_URL } from "@/lib/externalLinks";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 
 export const motorControlHero = {
   title: "LV Products and Systems",
@@ -38,7 +39,11 @@ export type DevicesHelpCard = {
 const productImg = (file: string) =>
   `/img/devices-systems/products/${file}`;
 
-const LV_AUTOMATION_HREF = "/product-range/variable-frequency-drive";
+const LV_AUTOMATION_HREF = contentDetailPath(
+  "/product-range",
+  587,
+  "variable-frequency-drive",
+);
 
 export const motorControlProducts: DevicesProductItem[] = [
   {

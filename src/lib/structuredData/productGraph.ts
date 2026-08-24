@@ -64,15 +64,31 @@ export function buildProductJsonLdGraph(input: {
   slug: string;
   row: Record<string, unknown> | null;
   detail: { series: string; description: string; connectPortal?: string; specs: { label: string; value: string }[] };
+  lv1Id: number | null;
   lv1Name: string;
   lv1Slug: string;
+  lv2Id: number | null;
   lv2Name: string;
   lv2Slug: string;
   otherProducts: ProductOtherItem[];
   insights: HighlightNewsItem[];
   faqItems: CommonFaqEntry[];
 }): { "@context": string; "@graph": JsonLdNode[] } {
-  const { id, slug, row, detail, lv1Name, lv1Slug, lv2Name, lv2Slug, otherProducts, insights, faqItems } = input;
+  const {
+    id,
+    slug,
+    row,
+    detail,
+    lv1Id,
+    lv1Name,
+    lv1Slug,
+    lv2Id,
+    lv2Name,
+    lv2Slug,
+    otherProducts,
+    insights,
+    faqItems,
+  } = input;
   const currentUrl = pageUrl(contentDetailPath("/product", id, slug));
   const metaTitle = (row?.["seo.meta_title"] as string) || detail.series;
   const metaDescription = (row?.["seo.meta_description"] as string) || detail.description;
@@ -161,10 +177,26 @@ export function buildProductJsonLdGraph(input: {
   const crumbs = [
     { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },
     ...(lv1Name
-      ? [{ name: lv1Name, url: lv1Slug ? pageUrl(`/product-category/${lv1Slug}`) : `${currentUrl}#lv1` }]
+      ? [
+          {
+            name: lv1Name,
+            url:
+              lv1Id !== null && lv1Slug
+                ? pageUrl(contentDetailPath("/product-category", lv1Id, lv1Slug))
+                : `${currentUrl}#lv1`,
+          },
+        ]
       : []),
     ...(lv2Name
-      ? [{ name: lv2Name, url: lv2Slug ? pageUrl(`/product-range/${lv2Slug}`) : `${currentUrl}#lv2` }]
+      ? [
+          {
+            name: lv2Name,
+            url:
+              lv2Id !== null && lv2Slug
+                ? pageUrl(contentDetailPath("/product-range", lv2Id, lv2Slug))
+                : `${currentUrl}#lv2`,
+          },
+        ]
       : []),
     { name: detail.series, url: currentUrl },
   ];

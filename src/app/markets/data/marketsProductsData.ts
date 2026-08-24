@@ -29,7 +29,7 @@ interface MarketProductRow {
 function resolveHref(type: string | null, id: number, slug: string | null): string {
   if (!slug) return "";
   if (type === "product") return contentDetailPath("/product", id, slug);
-  if (type === "category") return `/product-range/${slug}`;
+  if (type === "category") return contentDetailPath("/product-range", id, slug);
   return "";
 }
 

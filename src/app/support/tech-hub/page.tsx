@@ -2,22 +2,12 @@ import type { Metadata, ResolvingMetadata } from "next";
 import TechHubPageShell from "./components/TechHubPageShell";
 import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
 import { fetchTechHubContents } from "@/data/support/techHubData";
-import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
+import { fetchCategoriesByCode } from "@/app/()/products-systems/data/productsSystemsData";
+import { contentDetailPath } from "@/lib/contentDetailPath";
 import { getYoutubeIdFromUrl, getYoutubePosterSrc } from "@/lib/youtubeEmbed";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildSimpleWebPageGraph, pageUrl } from "@/lib/structuredData/builders";
 import { ORG_ID } from "@/lib/structuredData/siteConfig";
-
-async function fetchLv2SlugMap(): Promise<Map<string, string>> {
-  const rows = await fetchDevicesTreeRows();
-  const map = new Map<string, string>();
-  for (const r of rows) {
-    if (r.depth === "2" && r.rowId != null && r.categorySlug) {
-      map.set(String(r.rowId), r.categorySlug);
-    }
-  }
-  return map;
-}
 
 const PATHNAME = "/support/tech-hub";
 
@@ -39,17 +29,23 @@ export default async function TechHubPage({
     .map((code) => code.trim())
     .filter((code) => code !== "");
 
-  const [meta, contents, lv2SlugMap] = await Promise.all([
+  const [meta, contents] = await Promise.all([
     fetchMenuMeta(PATHNAME),
     fetchTechHubContents({ size: 12 }),
-    fetchLv2SlugMap(),
   ]);
+  const lv2Codes = contents.content
+    .map((card) => card.categoryL2Id)
+    .filter((code): code is string => Boolean(code));
+  const lv2CategoryMap = await fetchCategoriesByCode(lv2Codes);
+
   const graph = buildSimpleWebPageGraph(PATHNAME, meta, {
     type: "CollectionPage",
     extra: {
       hasPart: contents.content.map((card) => {
         const videoId = card.videoUrl ? getYoutubeIdFromUrl(card.videoUrl) : "";
-        const lv2Slug = card.categoryL2Id ? lv2SlugMap.get(card.categoryL2Id) : undefined;
+        const lv2Category = card.categoryL2Id
+          ? lv2CategoryMap.get(card.categoryL2Id)
+          : undefined;
         return {
           "@type": "VideoObject",
           name: card.title,
@@ -57,8 +53,18 @@ export default async function TechHubPage({
           uploadDate: card.sourceUpdatedAt ?? "",
           embedUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : "",
           publisher: { "@id": ORG_ID },
-          ...(lv2Slug
-            ? { about: { "@id": `${pageUrl(`/product-range/${lv2Slug}`)}#productgroup` } }
+          ...(lv2Category
+            ? {
+                about: {
+                  "@id": `${pageUrl(
+                    contentDetailPath(
+                      "/product-range",
+                      lv2Category.id,
+                      lv2Category.slug,
+                    ),
+                  )}#productgroup`,
+                },
+              }
             : {}),
         };
       }),

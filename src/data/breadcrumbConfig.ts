@@ -1,7 +1,4 @@
-import {
-  SOFTWARE_HREF,
-  softwareProductHrefs,
-} from "@/data/gnb/mega/devices";
+import { softwareProductHrefs } from "@/data/gnb/mega/devices";
 
 const TRAINING_VARIANT_LABELS: Record<string, string> = {
   sales: "Sales Training",
@@ -65,7 +62,6 @@ const configs: Record<string, BreadcrumbConfig> = {
       { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
-        href: "/product-category/lv-products-and-systems",
       },
     ],
     current: "Variable Frequency Drive",
@@ -75,11 +71,9 @@ const configs: Record<string, BreadcrumbConfig> = {
       { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
-        href: "/product-category/lv-products-and-systems",
       },
       {
         label: "Variable Frequency Drive",
-        href: "/product-range/variable-frequency-drive",
       },
     ],
     current: "H100 Plus",
@@ -89,11 +83,9 @@ const configs: Record<string, BreadcrumbConfig> = {
       { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
-        href: "/product-category/lv-products-and-systems",
       },
       {
         label: "Variable Frequency Drive",
-        href: "/product-range/variable-frequency-drive",
       },
     ],
     current: "H100 Plus",
@@ -103,11 +95,9 @@ const configs: Record<string, BreadcrumbConfig> = {
       { label: "Products & Systems" },
       {
         label: "LV Products and Systems",
-        href: "/product-category/lv-products-and-systems",
       },
       {
         label: "Molded Case Circuit Breaker",
-        href: "/product-range/molded-case-circuit-breaker",
       },
     ],
     current: "Susol UL Smart MCCB",
@@ -121,60 +111,60 @@ const configs: Record<string, BreadcrumbConfig> = {
   [softwareProductHrefs.scada]: {
     crumbs: [
       { label: "Products & Systems" },
-      { label: "Software", href: SOFTWARE_HREF },
+      { label: "Software" },
     ],
     current: "SCADA",
   },
   [softwareProductHrefs.xems]: {
     crumbs: [
       { label: "Products & Systems" },
-      { label: "Software", href: SOFTWARE_HREF },
+      { label: "Software" },
     ],
     current: "xEMS",
   },
   [softwareProductHrefs.microGrid]: {
     crumbs: [
       { label: "Products & Systems" },
-      { label: "Software", href: SOFTWARE_HREF },
+      { label: "Software" },
     ],
     current: "Micro Grid",
   },
   [softwareProductHrefs.smartFactory]: {
     crumbs: [
       { label: "Products & Systems" },
-      { label: "Software", href: SOFTWARE_HREF },
+      { label: "Software" },
     ],
     current: "Smart Factory",
   },
   "/product/scada": {
     crumbs: [
       { label: "Products & Systems" },
-      { label: "Software", href: SOFTWARE_HREF },
-      { label: "SCADA", href: softwareProductHrefs.scada },
+      { label: "Software" },
+      { label: "SCADA" },
     ],
     current: "SCADA",
   },
   "/product/xems": {
     crumbs: [
       { label: "Products & Systems" },
-      { label: "Software", href: SOFTWARE_HREF },
-      { label: "xEMS", href: softwareProductHrefs.xems },
+      { label: "Software" },
+      { label: "xEMS" },
     ],
     current: "xEMS",
   },
   "/product/micro-grid": {
     crumbs: [
       { label: "Products & Systems" },
-      { label: "Software", href: SOFTWARE_HREF },
-      { label: "Micro Grid", href: softwareProductHrefs.microGrid },
+      { label: "Software" },
+      { label: "Micro Grid" },
     ],
     current: "Micro Grid",
   },
   "/product/smart-factory": {
     crumbs: [
       { label: "Products & Systems" },
-      { label: "Software", href: SOFTWARE_HREF },
-      { label: "Smart Factory", href: softwareProductHrefs.smartFactory },
+      { label: "Software" },
+      { label: "Smart Factory" },
     ],
     current: "Smart Factory",
   },
@@ -431,6 +421,22 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
   const productMatch = pathname.match(/^\/product\/[^/]+\/([^/]+)$/);
   if (productMatch) {
     return configs[`/product/${productMatch[1]}`] ?? { crumbs: [], current: "" };
+  }
+
+  const categoryMatch = pathname.match(
+    /^\/(product-category|product-range)\/[^/]+\/([^/]+)$/,
+  );
+  if (categoryMatch) {
+    return (
+      configs[`/${categoryMatch[1]}/${categoryMatch[2]}`] ?? {
+        crumbs: [],
+        current: "",
+      }
+    );
+  }
+
+  if (/^\/(product-category|product-range)\/[^/]+$/.test(pathname)) {
+    return { crumbs: [], current: "" };
   }
 
   return (

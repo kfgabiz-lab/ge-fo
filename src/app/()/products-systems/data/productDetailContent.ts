@@ -354,60 +354,6 @@ const metasolMsDownloads: ProductDownloadItem[] = [
   },
 ];
 
-const metasolMsKeyFeatures: ProductKeyFeature[] = [
-  {
-    id: "kf-1",
-    title: "Control Performance",
-    description:
-      "Provides reliable switching control for industrial motor and load circuits. Designed for dependable control performance across various operating environments.",
-  },
-  {
-    id: "kf-2",
-    title: "Safety Design",
-    description:
-      "Enclosed construction helps minimize arc exposure. Finger-proof design helps enhance operator safety during installation and maintenance.",
-  },
-  {
-    id: "kf-3",
-    title: "Wide Product Lineup",
-    description:
-      "Available in 9 frame sizes and 25 current ratings. Allows flexible product selection for different equipment capacities.",
-  },
-  {
-    id: "kf-4",
-    title: "Configuration Efficiency",
-    description:
-      "Compact design helps improve space efficiency in control panels. Easily configured with accessories such as auxiliary contacts, interlocks, and surge units.",
-  },
-];
-
-export const metasolMsDetail: ProductDetail = {
-  slug: "metasol-ms",
-  parentHref: "/product-range/magnetic-contactor",
-  parentLabel: "Magnetic Contactor",
-  category: "Magnetic Contactor",
-  series: "Metasol MS",
-  subtitle: "",
-  description:
-    "Metasol MS is a high-reliability motor starter solution designed for stable control and protection of industrial motor circuits. It provides dependable switching and protection functions required for motor operation, while its enclosed structure helps minimize arc exposure. With a compact design, Metasol MS supports safer operation and efficient control panel configuration. A wide range of ratings, various accessories, and support for global standards make it suitable for industrial motor control applications.",
-  image: "/img/devices-systems/product/product_metasol_ms_hero.webp",
-  specs: [
-    { label: "Rated Current", value: "6 ~ 2650 A" },
-    { label: "Rated Operational Voltage", value: "690, 1000 V" },
-    { label: "Standard", value: "UL 60947-4-1" },
-  ],
-  keyFeatures: metasolMsKeyFeatures,
-  lineUp: "",
-  downloads: metasolMsDownloads,
-  youtubeVideoId: "E3wi6qPy1Cc",
-  configuratorHref: `${CONNECT_PORTAL_BASE_URL}/product/config?id=a0TTJ00000uqvlV2AQ`,
-  configuratorExternal: true,
-  configuratorBannerBg: "/img/devices/product/banner_configurator_bg.webp",
-  expertBannerHref: "/support/contact-us",
-  expertContactEmail: "automation_support.us@lselectricamerica.com",
-  otherProducts: [],
-};
-
 export const metasolMsFaqItems = [
   {
     question:
@@ -429,7 +375,7 @@ export const metasolMsFaqItems = [
 
 export const h100PlusDetail: ProductDetail = {
   slug: "h100_plus",
-  parentHref: "/product-range/variable-frequency-drive",
+  parentHref: "",
   parentLabel: "Variable Frequency Drive",
   category: "Variable Frequency Drive",
   series: "H100 Plus",
@@ -465,7 +411,7 @@ export const productTemplateDetail: ProductDetail = {
   series: "Product Template",
   category: "Product Category",
   parentLabel: "Product Category",
-  parentHref: "/product-category/lv-products-and-systems",
+  parentHref: "",
   description:
     "Product detail page template based on the H100 Plus layout. Replace hero copy, specs, key features, lineup, downloads, video, and other products for each new product page.",
   otherProducts: [
@@ -506,81 +452,6 @@ export const productTemplateDetail: ProductDetail = {
     },
   ],
 };
-
-export const productTemplateFaqItems = h100PlusFaqItems;
-
-const susolUlSmartMccbKeyFeatures: ProductKeyFeature[] = [
-  {
-    id: "kf-1",
-    title: "Efficiency",
-    description:
-      "Modular, compact design improves space efficiency. High interrupting performance and low power loss support stable power management.",
-  },
-  {
-    id: "kf-2",
-    title: "Convenience",
-    description:
-      "Replaceable Trip Units and Plugs simplify maintenance. Multiple connection options and draw-out construction provide design flexibility. Field-installable accessories help improve installation efficiency.",
-  },
-  {
-    id: "kf-3",
-    title: "Reliability",
-    description:
-      "Supports performance ratings up to 130 kA and 847 Vac. Electronic Trip technology enables precise protection and metering. Tested for industrial environmental conditions to support reliable application.",
-  },
-  {
-    id: "kf-4",
-    title: "Smart Features",
-    description:
-      "Supports Modbus, BLE, NFC, and USB connectivity. Integrates protection, metering, diagnostics, and communication functions.",
-  },
-];
-
-export const susolUlSmartMccbDetail: ProductDetail = {
-  slug: "susol-ul-smart-mccb",
-  parentHref: "/product-range/air-circuit-breaker-power-circuit-breaker",
-  parentLabel: "Air Circuit Breaker / Power Circuit Breaker",
-  category: "Air Circuit Breaker / Power Circuit Breaker",
-  series: "Susol UL ACB",
-  subtitle: "",
-  description:
-    "The premium Susol UL Air Circuit Breaker (ACB) is designed to meet customer requirements with high interrupting capacity, a lineup up to 6000 A, and a frame structure optimized for switchboard design. The Susol UL ACB is equipped with advanced Trip Relays that support measurement, diagnostics, analysis, and communication. Together with a complete power monitoring and protection coordination system, it provides an integrated solution for power distribution applications.",
-  image: "/img/devices-systems/product/product_susol_ul_smart_mccb_hero.webp",
-  specs: [
-    { label: "Rated Current", value: "400~6000 A" },
-    {
-      label: "Rated Short Circuit Current (Sym.)",
-      value: "Up to 130 kA (at 508 Vac, 6000 A)\nUp to 85 kA (at 847 Vac, 4000 A)",
-    },
-    {
-      label: "Standard",
-      value: "UL 489 (C-frame), UL 1066 (D, E, G-frame)",
-    },
-  ],
-  keyFeatures: susolUlSmartMccbKeyFeatures,
-  lineUp: "",
-  downloads: metasolMsDownloads,
-  youtubeVideoId: "",
-  configuratorHref: `${CONNECT_PORTAL_BASE_URL}/product/config?id=a0TTJ00000uqvlV2AQ`,
-  configuratorExternal: true,
-  configuratorBannerBg: "/img/devices/product/banner_configurator_bg.webp",
-  expertBannerHref: "/support/contact-us",
-  expertContactEmail: "automation_support.us@lselectricamerica.com",
-  otherProducts: [],
-};
-
-export const susolUlSmartMccbFaqItems = metasolMsFaqItems;
-
-export const productDetailsBySlug: Record<string, ProductDetail> = {
-  "metasol-ms": metasolMsDetail,
-  h100_plus: h100PlusDetail,
-  "susol-ul-smart-mccb": susolUlSmartMccbDetail,
-  template: productTemplateDetail,
-};
-
-export function getProductDetail(slug: string): ProductDetail | undefined {
-  return productDetailsBySlug[slug];
-}
 
 export const productDetailNavItems = [
   { id: "product-key-feature", label: "Key Features" },

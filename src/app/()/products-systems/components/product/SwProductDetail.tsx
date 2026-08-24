@@ -10,6 +10,7 @@ import SwProductDetailShell, {
 import {
   mapHwProductData,
   fetchProductFaqItems,
+  fetchProductLv2Context,
   fetchSwRelevantProducts,
   SW_PRODUCT_SLUGS,
 } from "../../data/productsSystemsData";
@@ -286,7 +287,7 @@ export default async function SwProductDetail({
   const productCode = row ? String(row["product.product_code"] ?? "").trim() : "";
   const productCodes = productCode ? [productCode] : [];
   const isSwSlug = (SW_PRODUCT_SLUGS as readonly string[]).includes(slug);
-  const [dbFaq, downloadsData, techHubBanner, highlights, otherProducts] =
+  const [dbFaq, downloadsData, techHubBanner, highlights, otherProducts, lv2Context] =
     await Promise.all([
       productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
       fetchProductDownloadsInitialData(productCodes),
@@ -295,6 +296,9 @@ export default async function SwProductDetail({
         : Promise.resolve(null),
       productId ? fetchProductInsights(productId) : Promise.resolve([]),
       fetchSwRelevantProducts(slug),
+      productId
+        ? fetchProductLv2Context(productId, categoryId)
+        : Promise.resolve(null),
     ]);
   const contactHref = withProductInquiryContext(
     "/support/contact-us",
@@ -396,7 +400,19 @@ export default async function SwProductDetail({
     productNode,
     breadcrumbList(currentUrl, [
       { name: "Products & Systems", url: `${SITE_URL}#products-and-systems` },
-      { name: "Software", url: pageUrl("/product-category/software") },
+      {
+        name: "Software",
+        url:
+          lv2Context?.lv1Id != null && lv2Context.lv1Slug
+            ? pageUrl(
+                contentDetailPath(
+                  "/product-category",
+                  lv2Context.lv1Id,
+                  lv2Context.lv1Slug,
+                ),
+              )
+            : `${currentUrl}#lv1`,
+      },
       { name: bind.title ?? slug, url: currentUrl },
     ]),
   ]);

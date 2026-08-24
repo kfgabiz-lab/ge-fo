@@ -84,7 +84,9 @@ export async function fetchDevicesMegaMenu(): Promise<GnbDevicesMegaMenu> {
         panelTitle: child.categoryTitle ?? "",
         description: splitDescription(child.categoryDescription),
         href: withCategoryContext(
-          child.categorySlug ? `/product-range/${child.categorySlug}` : "",
+          child.categorySlug && child.rowId != null
+            ? contentDetailPath("/product-range", child.rowId, child.categorySlug)
+            : "",
           child.rowId,
         ),
         product: productRows.map(toMegaProduct),
@@ -94,7 +96,10 @@ export async function fetchDevicesMegaMenu(): Promise<GnbDevicesMegaMenu> {
     return {
       id: top.categorySlug || rowKey(top),
       label: top.categoryTitle ?? "",
-      href: top.categorySlug ? `/product-category/${top.categorySlug}` : "",
+      href:
+        top.categorySlug && top.rowId != null
+          ? contentDetailPath("/product-category", top.rowId, top.categorySlug)
+          : "",
       children,
     };
   });
