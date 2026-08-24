@@ -90,7 +90,7 @@ export const marketsSolutionZones: SolutionZone[] = [
     description:
       "The operational brain of the facility. Advanced SCADA software monitors and optimizes the entire power infrastructure.",
     products: [
-      solutionProduct("a-scada", "SCADA", productImg.scada, "/product/scada"),
+      solutionProduct("a-scada", "SCADA", productImg.scada, "/product/1727/scada"),
     ],
   },
   {
@@ -117,55 +117,55 @@ export const marketsSolutionZones: SolutionZone[] = [
         "c-mcsg",
         "Metal Clad Switchgear",
         productImg.metalClad,
-        "/product/metal-clad-switchgear",
+        "/product/1691/metal-clad-switchgear",
       ),
       solutionProduct(
         "c-metal-enclosed",
         "Metal Enclosed Load Interrupter Switchgear",
         productImg.metalEnclosed,
-        "/product/metal-enclosed-load-interrupter-switchgear",
+        "/product/1692/metal-enclosed-load-interrupter-switchgear",
       ),
       solutionProduct(
         "c-ul1558",
         "UL 1558 Switchgear",
         productImg.ul1558,
-        "/product/ul-1558-switchgear",
+        "/product/1674/ul-1558-switchgear",
       ),
       solutionProduct(
         "c-ul67",
         "UL 67 Panelboard",
         productImg.ul67Panelboard,
-        "/product/ul-67-panelboard",
+        "/product/1671/ul-67-panelboard",
       ),
       solutionProduct(
         "c-padmount",
         "Padmount Transformer",
         productImg.padmount,
-        "/product/padmount-transformer",
+        "/product/1693/padmount-transformer",
       ),
       solutionProduct(
         "c-cast-resin",
         "Cast Resin Transformer",
         productImg.castResin,
-        "/product/cast-resin-transformer",
+        "/product/1694/cast-resin-transformer",
       ),
       solutionProduct(
         "c-lis",
         "Load Interrupter Switch",
         productImg.loadInterrupter,
-        "/product/load-interrupter-switch",
+        "/product/1690/load-interrupter-switch",
       ),
       solutionProduct(
         "c-vcb",
         "Susol UL VCB",
         productImg.susolVcb,
-        "/product/susol-ul-vcb",
+        "/product/1689/susol-ul-vcb",
       ),
       solutionProduct(
         "c-mccb",
         "Susol UL MCCB",
         productImg.susolMccb,
-        "/product/susol-ul-mccb",
+        "/product/1665/susol-ul-mccb",
       ),
       solutionProduct(
         "c-dc",
@@ -185,7 +185,7 @@ export const marketsSolutionZones: SolutionZone[] = [
     description:
       "A scalable, pre-fabricated power solution. Our integrated E-House delivers fast deployment and space efficiency.",
     products: [
-      solutionProduct("d-ehouse", "E-House", productImg.eHouse, "/product/e-house"),
+      solutionProduct("d-ehouse", "E-House", productImg.eHouse, "/product/1695/e-house"),
     ],
   },
   {
@@ -202,7 +202,7 @@ export const marketsSolutionZones: SolutionZone[] = [
         "f-ul67",
         "UL 67 Panelboard",
         productImg.ul67Panelboard,
-        "/product/ul-67-panelboard",
+        "/product/1671/ul-67-panelboard",
       ),
     ],
   },
@@ -221,7 +221,7 @@ export const marketsSolutionZones: SolutionZone[] = [
         "g-power-transformer",
         "Power Transformer",
         productImg.powerTransformer,
-        "/product/power-transformer",
+        "/product/1696/power-transformer",
       ),
     ],
   },

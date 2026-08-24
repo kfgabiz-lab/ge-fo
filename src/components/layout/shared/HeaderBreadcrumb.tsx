@@ -34,6 +34,7 @@ export type BreadcrumbServerOverride = {
   pathname: string;
   current?: string;
   crumbs?: { href: string; label: string }[];
+  replaceCrumbs?: BreadcrumbCrumb[];
 } | null;
 
 export type BreadcrumbCategoryFallback = {
@@ -193,6 +194,7 @@ function HeaderBreadcrumbContent({
   } = fromMegaMenu ?? fromGeneralNav ?? getBreadcrumbConfig(pathname);
   const activeServerOverride =
     serverOverride && serverOverride.pathname === pathname ? serverOverride : null;
+  const displayCrumbs = activeServerOverride?.replaceCrumbs ?? crumbs;
   const current = activeServerOverride?.current ?? clientOverride ?? baseCurrent;
   const showNav = Boolean(current) || homeOnly;
   const showPath = Boolean(current);
@@ -212,19 +214,23 @@ function HeaderBreadcrumbContent({
             </Link>
             {showPath ? (
               <>
-                {crumbs.map((crumb, index) => {
+                {displayCrumbs.map((crumb, index) => {
                   const overrideCrumb = activeServerOverride?.crumbs?.find(
                     (c) => c.label === crumb.label,
                   );
+
                   const crumbHref =
                     overrideCrumb?.href ??
                     clientCrumbHrefOverride?.get(crumb.label) ??
                     crumb.href;
+
                   return (
                     <span key={`${crumb.label}-${index}`} className="breadcrumb_nav__group">
                       <span className="breadcrumb_sep" aria-hidden="true" />
                       {crumbHref ? (
-                        <Link href={crumbHref} prefetch={false}>{crumb.label}</Link>
+                        <Link href={crumbHref} prefetch={false}>
+                          {crumb.label}
+                        </Link>
                       ) : (
                         <span>{crumb.label}</span>
                       )}

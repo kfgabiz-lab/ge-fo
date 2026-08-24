@@ -397,19 +397,19 @@ export const americaFollow = {
     {
       id: "instagram",
       label: "INSTAGRAM",
-      href: "https://www.instagram.com/lselectric_official",
+      href: "https://www.instagram.com/lselectricamerica/",
       icon: `${IMG}/follow-insta.svg`,
     },
     {
       id: "linkedin",
       label: "LINKEDIN",
-      href: "https://www.linkedin.com/company/lselectricamerica/jobs/",
+      href: "https://www.linkedin.com/company/lselectricamerica/posts",
       icon: `${IMG}/follow-linkedin.svg`,
     },
     {
       id: "youtube",
       label: "YOUTUBE",
-      href: "https://www.youtube.com/channel/UCS4SwwqhnNK4072O8BDZtLg",
+      href: "https://www.youtube.com/@lselectricamerica",
       icon: `${IMG}/follow-youtube.svg`,
     },
   ] satisfies AmericaSocialLink[],

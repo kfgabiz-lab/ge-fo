@@ -146,7 +146,7 @@ export default async function ExploreAllProductsPage() {
           />
         </div>
       </section>
-      <CommonBanner04 />
+      <CommonBanner04 linkHref="/support/contact-us" />
     </main>
   );
 }

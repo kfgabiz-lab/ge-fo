@@ -938,7 +938,7 @@
   section.support_download_contents.devices_product_downloads--center.devices_product_downloads--no-data .devices_product_downloads__main {
     display: flex;
     flex-direction: column;
-    gap: 150px;
+    /* gap: 150px; */
     min-width: 0;
   }
 
@@ -953,7 +953,7 @@
     align-items: center;
     gap: 60px;
     width: 100%;
-    margin: 0;
+    margin-top: 150px; 
     padding: 0 60px;
   }
 

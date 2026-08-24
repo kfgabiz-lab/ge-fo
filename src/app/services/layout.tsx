@@ -9,6 +9,26 @@ import {
   resolveTrainingVariantListHref,
 } from "@/app/services/training/data/trainingDetailData";
 import { isNumericId } from "@/lib/isNumericId";
+import { TRAINING_VARIANT_LABELS } from "@/data/breadcrumbConfig";
+
+function getTrainingVariantCrumb(variantHref: string | null) {
+  if (!variantHref) return null;
+
+  const variant = variantHref.split("/").pop();
+
+  if (
+    variant !== "sales" &&
+    variant !== "engineering" &&
+    variant !== "service"
+  ) {
+    return null;
+  }
+
+  return {
+    label: TRAINING_VARIANT_LABELS[variant],
+    href: variantHref,
+  };
+}
 
 const TRAINING_DETAIL_PATH_RE =
   /^\/services\/training\/course\/([^/]+)\/[^/]+$/;
@@ -32,29 +52,49 @@ async function resolveBreadcrumbOverride(): Promise<BreadcrumbServerOverride> {
     if (courseDetailMatch) {
       const [, courseId] = courseDetailMatch;
       if (!isNumericId(courseId)) return null;
+
       const variantHref = await resolveTrainingVariantListHref(courseId);
+      const variantCrumb = getTrainingVariantCrumb(variantHref);
+
       return {
         pathname,
         current: "Course",
-        crumbs: variantHref ? [{ href: variantHref, label: "Training" }] : undefined,
+        replaceCrumbs: [
+          { label: "Services" },
+          { label: "Training" },
+          ...(variantCrumb ? [variantCrumb] : []),
+        ],
       };
     }
+
 
     const sessionMatch = pathname.match(TRAINING_SESSION_PATH_RE);
     if (sessionMatch) {
       const [, sessionId] = sessionMatch;
       if (!isNumericId(sessionId)) return null;
+
       const courseId = await fetchTrainingCourseIdBySession(sessionId);
       if (courseId == null) return null;
+
       const [courseHref, variantHref] = await Promise.all([
         resolveTrainingSessionCourseHref(sessionId),
         resolveTrainingVariantListHref(courseId),
       ]);
-      const crumbs: { href: string; label: string }[] = [];
-      if (variantHref) crumbs.push({ href: variantHref, label: "Training" });
-      if (courseHref) crumbs.push({ href: courseHref, label: "Course" });
-      return crumbs.length > 0 ? { pathname, crumbs } : null;
+
+      const variantCrumb = getTrainingVariantCrumb(variantHref);
+
+      return {
+        pathname,
+        current: "Session",
+        replaceCrumbs: [
+          { label: "Services" },
+          { label: "Training" },
+          ...(variantCrumb ? [variantCrumb] : []),
+          ...(courseHref ? [{ label: "Course", href: courseHref }] : []),
+        ],
+      };
     }
+
   } catch {
     return null;
   }

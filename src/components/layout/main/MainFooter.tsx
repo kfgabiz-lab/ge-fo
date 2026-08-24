@@ -33,19 +33,19 @@ const legalLinks = [
 const snsLinks = [
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/company/lselectricamerica/jobs/",
+    href: "https://www.linkedin.com/company/lselectricamerica/posts",
     className: "link_linkedin",
     icon: "/img/footer/ico_linkedin_40.svg",
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/lselectric_official",
+    href: "https://www.instagram.com/lselectricamerica/",
     className: "link_insta",
     icon: "/img/footer/ico_insta_40.svg",
   },
   {
     label: "YouTube",
-    href: "https://www.youtube.com/channel/UCS4SwwqhnNK4072O8BDZtLg",
+    href: "https://www.youtube.com/@lselectricamerica",
     className: "link_youtube",
     icon: "/img/footer/ico_youtube_40.svg",
   },
