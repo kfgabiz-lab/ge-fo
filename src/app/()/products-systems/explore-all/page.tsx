@@ -1,6 +1,6 @@
 import DevicesExploreAll from "../components/DevicesExploreAll";
 import type { GnbExploreProduct } from "@/data/gnbExploreAllProducts";
-import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
+import { fetchDevicesExploreAll } from "@/data/gnb/devicesTree";
 import { withCategoryContext } from "@/lib/navigation/categoryContext";
 import { contentDetailPath } from "@/lib/contentDetailPath";
 import JsonLd from "@/components/seo/JsonLd";
@@ -29,7 +29,8 @@ type ExploreProductSource = {
 };
 
 export default async function ExploreAllProductsPage() {
-  const deviceRows = await fetchDevicesTreeRows();
+  //기존 단종 제품 제외한 제품 리스트를 가져오고 있음. 단종 제품 포함한 전체 제품 리스트로 표출되어야 하므로 explore-all 전용 api 추가하여 호출
+  const deviceRows = await fetchDevicesExploreAll();
 
   const visibleLv1Ids = new Set(
     deviceRows.filter((r) => r.depth === "1").map((r) => String(r.rowId)),
@@ -76,7 +77,6 @@ export default async function ExploreAllProductsPage() {
       lv2Ids: source.lv2Ids,
     }),
   );
-
   const lv1Rows = deviceRows.filter((r) => r.depth === "1");
   const lv1Categories = lv1Rows.map((r) => ({
     id: String(r.rowId),

@@ -79,7 +79,12 @@ export function loadGoogleMaps(apiKey: string): Promise<typeof google.maps> {
 
   loadPromise = (async () => {
     if (!bootstrapInstalled) {
-      installBootstrapLoader({ key: apiKey, v: "weekly", language: getClientSiteLocale() });
+      installBootstrapLoader({
+        key: apiKey,
+        v: "weekly",
+        language: getClientSiteLocale(),
+        region: "KR",
+      });
       bootstrapInstalled = true;
     }
     await window.google!.maps.importLibrary("maps");

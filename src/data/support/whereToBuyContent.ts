@@ -117,7 +117,8 @@ export async function fetchWhereToBuyLocations(): Promise<WhereToBuyLocation[]> 
 }
 
 
-const GOOGLE_MAPS_DIRECTIONS_BASE = "https://www.google.com/maps/dir/?api=1";
+const GOOGLE_MAPS_DIRECTIONS_BASE =
+  "https://www.google.com/maps/dir/?api=1&hl=en&gl=kr";
 
 function toDirectionsPoint(
   coord: GeoCoord | null | undefined,
