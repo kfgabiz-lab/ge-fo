@@ -47,7 +47,8 @@ export interface TrainingRequestSubmitPayload {
   vfdUnderstandingTopics: string[];
   comments: string;
   consentChecked: boolean;
-  recaptchaToken: string;
+  captchaCode: string;
+  captchaToken: string;
 }
 
 export interface TrainingRequestSubmitResponse {

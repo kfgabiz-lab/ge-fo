@@ -7,8 +7,7 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import ReCAPTCHA from "react-google-recaptcha";
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import {
   GuideCheckboxIcon,
   GuideSelectIcon,
@@ -36,6 +35,8 @@ import {
   fetchBusinessTypes,
   submitTrainingRegistration,
 } from "../data/trainingRegistrationData";
+import { fetchCaptcha, type Captcha } from "@/lib/captcha";
+import { ApiError } from "@/lib/api";
 
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
@@ -52,7 +53,7 @@ type SessionFieldErrors = {
   phone?: boolean;
   companyName?: boolean;
   privacyConsent?: boolean;
-  recaptcha?: boolean;
+  captcha?: boolean;
 };
 
 function SessionFieldLabel({
@@ -109,9 +110,16 @@ export default function TrainingSessionDetailForm({
 
   const [businessTypes, setBusinessTypes] = useState<CodeItem[]>([]);
 
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+  const [captcha, setCaptcha] = useState<Captcha | null>(null);
+  const [captchaCode, setCaptchaCode] = useState("");
+
+  const loadCaptcha = useCallback(async () => {
+    try {
+      setCaptcha(await fetchCaptcha());
+    } catch {
+      setCaptcha(null);
+    }
+  }, []);
 
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -134,6 +142,10 @@ export default function TrainingSessionDetailForm({
       alive = false;
     };
   }, []);
+
+  useEffect(() => {
+    loadCaptcha();
+  }, [loadCaptcha]);
 
   useEffect(() => {
     if (suppressFetchRef.current) {
@@ -214,7 +226,7 @@ export default function TrainingSessionDetailForm({
 
     const emailValid =
       email.trim() !== "" && EMAIL_FORMAT_REGEX.test(email.trim());
-    const recaptchaValid = Boolean(recaptchaToken);
+    const captchaValid = Boolean(captcha) && /^\d{4}$/.test(captchaCode.trim());
     const nextErrors: SessionFieldErrors = {
       studentName: studentName.trim() === "",
       email: !emailValid,
@@ -222,7 +234,7 @@ export default function TrainingSessionDetailForm({
       phone: phone.trim() === "",
       companyName: companyName.trim() === "",
       privacyConsent: !privacyConsent,
-      recaptcha: !recaptchaValid,
+      captcha: !captchaValid,
     };
     setErrors(nextErrors);
 
@@ -243,8 +255,8 @@ export default function TrainingSessionDetailForm({
       return;
     }
 
-    if (!recaptchaToken) {
-      alert("Please complete the reCAPTCHA verification.");
+    if (!captchaValid || !captcha) {
+      alert("Please complete the CAPTCHA verification.");
       return;
     }
 
@@ -260,7 +272,8 @@ export default function TrainingSessionDetailForm({
       companyName,
       eventDate: eventDateValue,
       privacyConsentFlag: privacyConsent,
-      recaptchaToken,
+      captchaCode: captchaCode.trim(),
+      captchaToken: captcha.captchaToken,
     };
     if (streetAddress.trim()) payload.streetAddress = streetAddress.trim();
     if (address2.trim()) payload.address2 = address2.trim();
@@ -273,10 +286,20 @@ export default function TrainingSessionDetailForm({
     try {
       await submitTrainingRegistration(payload);
       alert(SUBMIT_SUCCESS_MESSAGE);
-    } catch {
+    } catch (error) {
+      console.error("[training-session-detail] submit failed", error);
+      if (error instanceof ApiError && error.code === "CAPTCHA_FAILED") {
+        setErrors((prev) => ({ ...prev, captcha: true }));
+        alert("The CAPTCHA code is incorrect. Please try again.");
+      } else if (error instanceof ApiError && error.code === "CAPTCHA_EXPIRED") {
+        setErrors((prev) => ({ ...prev, captcha: true }));
+        alert("The CAPTCHA has expired. Please try again.");
+      } else {
+        alert("Something went wrong while submitting. Please try again.");
+      }
     } finally {
-      recaptchaRef.current?.reset();
-      setRecaptchaToken(null);
+      setCaptchaCode("");
+      loadCaptcha();
       setSubmitting(false);
     }
   }
@@ -658,25 +681,44 @@ export default function TrainingSessionDetailForm({
           </div>
         </div>
 
-        {recaptchaSiteKey ? (
-          <div className="support_service_training_session_detail__recaptcha-box">
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={recaptchaSiteKey}
-              hl="en"
-              onChange={(token) => {
-                setRecaptchaToken(token);
-                clearError("recaptcha");
+        <div className="support_service_training_session_detail__recaptcha-box">
+          <div className="support_service_training_session_detail__captcha-row">
+            {captcha ? (
+              <img
+                src={captcha.captchaImage}
+                alt="CAPTCHA"
+                className="support_service_training_session_detail__captcha-image"
+              />
+            ) : (
+              <div className="support_service_training_session_detail__captcha-image support_service_training_session_detail__captcha-image--loading" />
+            )}
+            <button
+              type="button"
+              onClick={() => loadCaptcha()}
+              className="support_service_training_session_detail__captcha-refresh"
+              aria-label="Refresh CAPTCHA"
+            >
+              <img src="/ico/ico_refresh_22.svg" alt="" width={18} height={18} />
+            </button>
+            <TextField
+              className="guide_field guide_field--h50 support_service_training_session_detail__input support_service_training_session_detail__captcha-input"
+              placeholder="CAPTCHA"
+              error={Boolean(errors.captcha)}
+              value={captchaCode}
+              inputMode="numeric"
+              onChange={(event) => {
+                setCaptchaCode(event.target.value.replace(/[^0-9]/g, "").slice(0, 4));
+                clearError("captcha");
               }}
-              onExpired={() => setRecaptchaToken(null)}
+              slotProps={{ htmlInput: { maxLength: 4 } }}
             />
-            {errors.recaptcha ? (
-              <p className="guide_checkbox__error">
-                Please complete the reCAPTCHA verification.
-              </p>
-            ) : null}
           </div>
-        ) : null}
+          {errors.captcha ? (
+            <p className="guide_checkbox__error">
+              Please complete the CAPTCHA verification.
+            </p>
+          ) : null}
+        </div>
       </div>
 
       <button

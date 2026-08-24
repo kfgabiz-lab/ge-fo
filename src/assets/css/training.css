@@ -4902,3 +4902,47 @@ section.support_service_training_request .support_service_training_request__sugg
   background: #f4f6fa;
   color: #0f1f45;
 }
+
+/* 자체 캡차(이미지 + 새로고침 + 4자리 입력) — reCAPTCHA 위젯 대체.
+   기존 __recaptcha-box 컨테이너(중앙정렬/폭 규칙)는 그대로 재사용하고, 내부 레이아웃만 추가한다. */
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-row,
+section.support_service_training_request .support_service_training_request__captcha-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-image,
+section.support_service_training_request .support_service_training_request__captcha-image {
+  flex-shrink: 0;
+  width: 150px;
+  height: 40px;
+  border: 1px solid #e2e4e9;
+  border-radius: 6px;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-image--loading,
+section.support_service_training_request .support_service_training_request__captcha-image--loading {
+  background: #f4f6fa;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-refresh,
+section.support_service_training_request .support_service_training_request__captcha-refresh {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-input,
+section.support_service_training_request .support_service_training_request__captcha-input {
+  flex-shrink: 0;
+  width: 120px;
+}

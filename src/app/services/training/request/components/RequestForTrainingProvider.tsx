@@ -151,7 +151,8 @@ export type RequestForTrainingStep4Values = {
   vfdUnderstandingTopics: string[];
   comments: string;
   consentChecked: boolean;
-  recaptchaToken: string;
+  captchaCode: string;
+  captchaToken: string;
 };
 
 export type RequestForTrainingStep4FieldKey = keyof RequestForTrainingStep4Values;
@@ -166,7 +167,8 @@ const STEP4_INITIAL: RequestForTrainingStep4Values = {
   vfdUnderstandingTopics: [],
   comments: "",
   consentChecked: false,
-  recaptchaToken: "",
+  captchaCode: "",
+  captchaToken: "",
 };
 
 const STORAGE_KEY = "request-for-training-form";

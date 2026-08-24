@@ -20,7 +20,8 @@ export interface TrainingRegistrationRequest {
   zipCode?: string;
   typeOfBusiness?: string;
   privacyConsentFlag: boolean;
-  recaptchaToken: string;
+  captchaCode: string;
+  captchaToken: string;
 }
 
 export interface TrainingRegistrationResponse {

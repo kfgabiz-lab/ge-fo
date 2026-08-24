@@ -7,6 +7,7 @@ import {
   requestForTrainingRoutes,
 } from "@/data/services/requestForTrainingContent";
 import { submitTrainingRequest } from "@/lib/training/trainingRequestSubmit";
+import { ApiError } from "@/lib/api";
 import RequestForTraining from "./RequestForTraining";
 import {
   isStep1Complete,
@@ -42,13 +43,15 @@ export default function RequestForTrainingStep4() {
     const hasVfdProduct = step4.selectedProducts.some(
       (product) => product.type === "A" && product.groupTitle === VFD_GROUP_TITLE,
     );
+    const captchaValid =
+      step4.captchaToken.trim() !== "" && /^\d{4}$/.test(step4.captchaCode.trim());
     const nextErrors: RequestForTrainingStep4Errors = {
       products: step4.selectedProducts.length === 0,
       jobTitles: hasVfdProduct && step4.jobTitles.length === 0,
       studentInvolvement: hasVfdProduct && step4.studentInvolvement.length === 0,
       vfdUnderstanding: hasVfdProduct && step4.vfdUnderstanding === "",
       consent: !step4.consentChecked,
-      recaptcha: step4.recaptchaToken.trim() === "",
+      captcha: !captchaValid,
     };
     setErrors(nextErrors);
 
@@ -61,7 +64,7 @@ export default function RequestForTrainingStep4() {
       step4.selectedProducts.length > 0 &&
       vfdFilled &&
       step4.consentChecked &&
-      step4.recaptchaToken.trim() !== "";
+      captchaValid;
 
     if (!step1Filled || !step2Filled || !step3Filled || !step4Filled) {
       return;
@@ -105,13 +108,23 @@ export default function RequestForTrainingStep4() {
         vfdUnderstandingTopics: step4.vfdUnderstandingTopics,
         comments: step4.comments,
         consentChecked: step4.consentChecked,
-        recaptchaToken: step4.recaptchaToken,
+        captchaCode: step4.captchaCode,
+        captchaToken: step4.captchaToken,
       });
       alert(SUCCESS_ALERT);
       resetForm();
       router.push(requestForTrainingRoutes.step1);
     } catch (error) {
       console.error("[request-for-training] submit failed", error);
+      if (error instanceof ApiError && error.code === "CAPTCHA_FAILED") {
+        setErrors((prev) => ({ ...prev, captcha: true }));
+        alert("The CAPTCHA code is incorrect. Please try again.");
+      } else if (error instanceof ApiError && error.code === "CAPTCHA_EXPIRED") {
+        setErrors((prev) => ({ ...prev, captcha: true }));
+        alert("The CAPTCHA has expired. Please try again.");
+      } else {
+        alert("Something went wrong while submitting. Please try again.");
+      }
     } finally {
       setSubmitting(false);
     }
