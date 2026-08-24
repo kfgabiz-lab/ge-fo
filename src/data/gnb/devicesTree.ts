@@ -24,6 +24,14 @@ export async function fetchDevicesTreeRows(): Promise<DevicesTreeRow[]> {
     return [];
   }
 }
+//단종 제품 포함하여 전체 제품 리스트를 가져오기 위해 explore-all 전용 api 추가
+export async function fetchDevicesExploreAll(): Promise<DevicesTreeRow[]> {
+  try {
+    return await fetchApi<DevicesTreeRow[]>("/api/v1/fo/gnb/devices-explore-all");
+  } catch {
+    return [];
+  }
+}
 
 export interface DevicesCategorySelection {
   lv1: string;
