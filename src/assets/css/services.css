@@ -2003,6 +2003,10 @@
     line-height: 26px;
   }
 
+  .support_service_warranty_table thead th:last-child {
+    border-right: 0;
+  }
+
   .support_service_warranty_table tbody th[scope="row"],
   .support_service_warranty_table tbody td {
     padding: 20px 16px;
@@ -2015,6 +2019,11 @@
     text-align: center;
     vertical-align: middle;
     word-break: break-word;
+  }
+
+  .support_service_warranty_table tbody th[scope="row"]:last-child,
+  .support_service_warranty_table tbody td:last-child {
+    border-right: 0;
   }
 
   .support_service_warranty_table tbody tr:first-child th,
@@ -2579,6 +2588,10 @@
     word-break: break-word;
   }
 
+  .support_service_warranty_table thead th:last-child {
+    border-right: 0;
+  }
+
   .support_service_warranty_table--2col thead th {
     font-size: 14px;
   }
@@ -2595,6 +2608,11 @@
     text-align: center;
     vertical-align: middle;
     word-break: break-word;
+  }
+
+  .support_service_warranty_table tbody th[scope="row"]:last-child,
+  .support_service_warranty_table tbody td:last-child {
+    border-right: 0;
   }
 
   .support_service_warranty_table--2col tbody th[scope="row"],

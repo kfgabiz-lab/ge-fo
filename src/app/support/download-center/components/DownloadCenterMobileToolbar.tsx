@@ -2,6 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { downloadCenterPage } from "@/data/support/downloadCenterContent";
+import {
+  productDownloadsSortLabel,
+  productDownloadsSortOptions,
+} from "@/app/()/products-systems/data/productDetailContent";
+import type { DownloadCenterSort } from "@/data/support/downloadCenterData";
+import { useDownloadCenterQuery } from "./DownloadCenterFilterProvider";
 
 type DownloadCenterMobileToolbarProps = {
   onFilterOpen: () => void;
@@ -10,10 +16,8 @@ type DownloadCenterMobileToolbarProps = {
 export default function DownloadCenterMobileToolbar({
   onFilterOpen,
 }: DownloadCenterMobileToolbarProps) {
+  const { sort, setSort } = useDownloadCenterQuery();
   const [sortOpen, setSortOpen] = useState(false);
-  const [sortValue, setSortValue] = useState<
-    (typeof downloadCenterPage.mobileSortOptions)[number]
-  >(downloadCenterPage.mobileSortDefault);
   const sortRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -28,6 +32,10 @@ export default function DownloadCenterMobileToolbar({
     window.addEventListener("mousedown", onPointerDown);
     return () => window.removeEventListener("mousedown", onPointerDown);
   }, [sortOpen]);
+
+  const closedLabel = sort
+    ? productDownloadsSortLabel(sort)
+    : downloadCenterPage.sortByLabel;
 
   return (
     <div className="support_download_mo-toolbar">
@@ -60,7 +68,7 @@ export default function DownloadCenterMobileToolbar({
           onClick={() => setSortOpen((open) => !open)}
         >
           <span className="support_download_mo-toolbar__sort-label">
-            {sortOpen ? downloadCenterPage.sortByLabel : sortValue}
+            {sortOpen ? downloadCenterPage.sortByLabel : closedLabel}
           </span>
           <span className="support_download_mo-toolbar__sort-icon" aria-hidden>
             <img src="/ico/ico_down_16.svg" alt="" width={14} height={14} />
@@ -74,23 +82,23 @@ export default function DownloadCenterMobileToolbar({
             role="listbox"
             aria-label={downloadCenterPage.sortByLabel}
           >
-            {downloadCenterPage.mobileSortOptions.map((option) => (
-              <li key={option}>
+            {productDownloadsSortOptions.map((option) => (
+              <li key={option.value}>
                 <button
                   type="button"
                   className={`support_download_mo-toolbar__sort-option${
-                    sortValue === option
+                    sort === option.value
                       ? " support_download_mo-toolbar__sort-option--active"
                       : ""
                   }`}
                   role="option"
-                  aria-selected={sortValue === option}
+                  aria-selected={sort === option.value}
                   onClick={() => {
-                    setSortValue(option);
+                    setSort(option.value as DownloadCenterSort);
                     setSortOpen(false);
                   }}
                 >
-                  {option}
+                  {option.label}
                 </button>
               </li>
             ))}
