@@ -9,6 +9,7 @@ import {
   isBackForwardNavigation,
 } from "@/lib/navigation/historyNavigation";
 import {
+  consumeScrollReturnIntent,
   getSavedScrollPosition,
   saveScrollPosition,
 } from "@/lib/navigation/scrollPositionMemory";
@@ -27,30 +28,22 @@ function currentPathWithSearch() {
   return window.location.pathname + window.location.search;
 }
 
-function scrollToTop() {
-  scrollWindowTo(0, { immediate: true });
-}
-
 function scrollToTopUnlessHash() {
   if (window.location.hash) {
     return;
   }
 
-  scrollToTop();
-  requestAnimationFrame(scrollToTop);
+  restoreScrollWhenReady(0);
 }
 
 /**
  * 목표 위치로 즉시 스크롤을 시도하고, 콘텐츠가 client fetch로 늦게 채워지는
  * 페이지를 위해 문서 높이가 목표에 도달할 때까지(또는 시간 제한까지) 재시도한다.
+ * target이 0(top)이어도 동일한 메커니즘을 타는데, Lenis가 준비되기 전
+ * scrollTo(0) 단발 호출이 조용히 씹혀 그 자리에 남아있는 경우가 있어서다.
  * 사용자가 직접 스크롤/터치를 하면 그 의도를 존중해 즉시 포기한다.
  */
 function restoreScrollWhenReady(targetY: number) {
-  if (targetY <= 0) {
-    scrollToTop();
-    return;
-  }
-
   let attempts = 0;
   let cancelled = false;
   let observer: MutationObserver | null = null;
@@ -156,7 +149,10 @@ export default function ScrollPositionManager() {
       window.history.scrollRestoration = "manual";
     }
 
-    handleEntry(isBackForwardNavigation());
+    // consumeScrollReturnIntent()는 플래그를 소모하므로 단락 평가로 건너뛰지
+    // 않도록 항상 먼저 호출한다.
+    const hasReturnIntent = consumeScrollReturnIntent();
+    handleEntry(isBackForwardNavigation() || hasReturnIntent);
   }, []);
 
   useLayoutEffect(() => {
@@ -165,7 +161,8 @@ export default function ScrollPositionManager() {
       return;
     }
 
-    handleEntry(consumeBackForwardNavigation());
+    const hasReturnIntent = consumeScrollReturnIntent();
+    handleEntry(consumeBackForwardNavigation() || hasReturnIntent);
   }, [pathname]);
 
   // beforeunload/pagehide 타이밍에만 기대지 않고, 스크롤할 때마다 현재 위치를 계속 기억해 둔다.
@@ -181,6 +178,39 @@ export default function ScrollPositionManager() {
       window.removeEventListener("scroll", throttledSave);
       window.removeEventListener("pagehide", save);
     };
+  }, [pathname]);
+
+  // 이미 이 페이지에 있는 채로 GNB 등에서 같은 URL을 다시 클릭하면
+  // HistoryReloadOnNavigate가 "이미 그 페이지"라고 보고 아무 것도 안 하고 넘겨버려
+  // (리로드도 리마운트도 없음) 스크롤이 그 자리에 그대로 남는다. 그 클릭을 여기서
+  // 직접 감지해 새로 진입한 것처럼 top으로 되돌린다.
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      const anchor = (event.target as Element | null)?.closest("a[href]");
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+
+      let targetUrl: URL;
+      try {
+        targetUrl = new URL(anchor.href, window.location.href);
+      } catch {
+        return;
+      }
+
+      if (targetUrl.origin !== window.location.origin) return;
+      if (targetUrl.hash) return; // 페이지 내 앵커 이동은 top으로 되돌리지 않는다.
+      if (
+        targetUrl.pathname !== window.location.pathname ||
+        targetUrl.search !== window.location.search
+      ) {
+        return;
+      }
+
+      saveScrollPosition(currentPathWithSearch(), 0);
+      scrollToTopUnlessHash();
+    };
+
+    document.addEventListener("click", handleClick, true);
+    return () => document.removeEventListener("click", handleClick, true);
   }, [pathname]);
 
   return null;
