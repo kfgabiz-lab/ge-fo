@@ -118,10 +118,10 @@ export const productDownloadsSortOptions = [
 export const PRODUCT_DOWNLOADS_DEFAULT_SORT: DownloadCenterSort = "";
 
 export function productDownloadsSortLabel(sort: DownloadCenterSort): string {
-  if (!sort) return "Select";
+  if (!sort) return "Sort by";
   return (
     productDownloadsSortOptions.find((option) => option.value === sort)?.label ??
-    "Select"
+    "Sort by"
   );
 }
 
