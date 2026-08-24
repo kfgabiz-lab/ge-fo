@@ -3928,9 +3928,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
 }
 
 .markets_references_modal__reference-nav-btn.is-disabled {
-  opacity: 0.4;
-  cursor: default;
-  pointer-events: none;
+  display: none;
 }
 
 .markets_references_modal__reference-nav-btn--prev {
