@@ -82,7 +82,12 @@ export default function CompanyFeedListSection({
             <CompanyFeedEmpty variant={variant} viewAllHref={viewAllHref} onViewAllClick={onViewAllClick}/>
           ) : (
             <>
-              <CompanyFeedListGrid variant={variant} items={items} detailHref={detailHref} />
+              <CompanyFeedListGrid
+                variant={variant}
+                items={items}
+                detailHref={detailHref}
+                highlight={searchValue}
+              />
               <PageNumbering
                 className={`${prefix}__pagination`}
                 currentPage={currentPage}

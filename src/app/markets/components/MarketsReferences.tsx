@@ -20,7 +20,7 @@ export default function MarketsReferences({
         <div className="markets_references__head">
           <h2 className="section_tit">References</h2>
           <p className="section_desc">
-            Trusted by leading organizations across the globe see how we deliver results.
+          Trusted by leading organizations across the globe. See how we deliver results.
           </p>
         </div>
         <div className="markets_references__list">

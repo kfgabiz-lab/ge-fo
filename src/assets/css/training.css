@@ -3622,6 +3622,43 @@
     -webkit-overflow-scrolling: touch;
     padding: 0 var(--inner-padding-x-mobile);
     padding-bottom: 30px;
+    /* iOS: hide native bar — DOM scrollbar below */
+    scrollbar-width: none;
+  }
+
+  section.support_service_training_session_detail
+    .support_service_training_session_detail__table-wrap::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  /* Lineup-style DOM scrollbar (track #888 · thumb #222 · 2px) — iOS visible */
+  section.support_service_training_session_detail
+    .support_service_training_session_detail__table-scrollbar {
+    position: absolute;
+    left: var(--inner-padding-x-mobile);
+    right: var(--inner-padding-x-mobile);
+    bottom: 14px;
+    z-index: 2;
+    height: 2px;
+    pointer-events: none;
+  }
+
+  section.support_service_training_session_detail
+    .support_service_training_session_detail__table-scrollbar-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #888;
+  }
+
+  section.support_service_training_session_detail
+    .support_service_training_session_detail__table-scrollbar-thumb {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: #222;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__table {
@@ -4901,4 +4938,48 @@ section.support_service_training_request .support_service_training_request__sugg
 section.support_service_training_request .support_service_training_request__suggestion-button:focus-visible {
   background: #f4f6fa;
   color: #0f1f45;
+}
+
+/* 자체 캡차(이미지 + 새로고침 + 4자리 입력) — reCAPTCHA 위젯 대체.
+   기존 __recaptcha-box 컨테이너(중앙정렬/폭 규칙)는 그대로 재사용하고, 내부 레이아웃만 추가한다. */
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-row,
+section.support_service_training_request .support_service_training_request__captcha-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-image,
+section.support_service_training_request .support_service_training_request__captcha-image {
+  flex-shrink: 0;
+  width: 150px;
+  height: 40px;
+  border: 1px solid #e2e4e9;
+  border-radius: 6px;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-image--loading,
+section.support_service_training_request .support_service_training_request__captcha-image--loading {
+  background: #f4f6fa;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-refresh,
+section.support_service_training_request .support_service_training_request__captcha-refresh {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+section.support_service_training_session_detail .support_service_training_session_detail__captcha-input,
+section.support_service_training_request .support_service_training_request__captcha-input {
+  flex-shrink: 0;
+  width: 120px;
 }

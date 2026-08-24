@@ -10,8 +10,11 @@ import {
 import { formatDisplayDate } from "@/lib/formatDate";
 import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleStore";
 import { markScrollReturnIntent } from "@/lib/navigation/scrollPositionMemory";
+import { markListReturnIntent } from "@/lib/navigation/listPageMemory";
 import TechHubViewPlayer from "./TechHubViewPlayer";
 import type { TechHubDetail } from "@/data/support/techHubData";
+
+const TECH_HUB_PATHNAME = "/support/tech-hub";
 
 type TechHubViewProps = {
   detail: TechHubDetail;
@@ -181,10 +184,16 @@ export default function TechHubView({ detail }: TechHubViewProps) {
             href="/support/tech-hub"
             className="btn-base btn-lv01 btn-lv01--solid support_tech_hub_view__list-btn"
             onMouseDown={(event) => {
-              if (event.button === 0) markScrollReturnIntent();
+              if (event.button === 0) {
+                markScrollReturnIntent();
+                markListReturnIntent(TECH_HUB_PATHNAME);
+              }
             }}
             onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") markScrollReturnIntent();
+              if (event.key === "Enter" || event.key === " ") {
+                markScrollReturnIntent();
+                markListReturnIntent(TECH_HUB_PATHNAME);
+              }
             }}
           >
             LIST

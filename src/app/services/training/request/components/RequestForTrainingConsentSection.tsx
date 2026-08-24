@@ -1,14 +1,14 @@
 "use client";
 
 import { Checkbox, TextField } from "@mui/material";
-import ReCAPTCHA from "react-google-recaptcha";
-import { useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 import {
   GuideCheckboxIcon,
   guideCheckboxIconsContactConsent,
 } from "@/components/form/GuideFieldIcons";
 import ContactUsTermsModal from "@/app/support/contact-us/components/ContactUsTermsModal";
 import { requestForTrainingStep4Copy } from "@/data/services/requestForTrainingContent";
+import { fetchCaptcha, type Captcha } from "@/lib/captcha";
 import RequestForTrainingFieldError from "./RequestForTrainingFieldError";
 import RequestForTrainingFieldLabel from "./RequestForTrainingFieldLabel";
 import { useRequestForTrainingForm } from "./RequestForTrainingProvider";
@@ -40,7 +40,7 @@ function filterComments(value: string): string {
 
 export type RequestForTrainingConsentErrors = {
   consent?: boolean;
-  recaptcha?: boolean;
+  captcha?: boolean;
 };
 
 export default function RequestForTrainingConsentSection({
@@ -56,8 +56,22 @@ export default function RequestForTrainingConsentSection({
 
   const [termsModalOpen, setTermsModalOpen] = useState(false);
 
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+  const [captcha, setCaptcha] = useState<Captcha | null>(null);
+
+  const loadCaptcha = useCallback(async () => {
+    try {
+      const next = await fetchCaptcha();
+      setCaptcha(next);
+      setStep4Field("captchaToken", next.captchaToken);
+    } catch {
+      setCaptcha(null);
+      setStep4Field("captchaToken", "");
+    }
+  }, [setStep4Field]);
+
+  useEffect(() => {
+    loadCaptcha();
+  }, [loadCaptcha]);
 
   return (
     <>
@@ -70,7 +84,7 @@ export default function RequestForTrainingConsentSection({
           className="guide_field support_service_training_request__input support_service_training_request__input--textarea"
           placeholder={fields.comments.placeholder}
           multiline
-          value={step4.comments}
+          value={step4.comments}
           onChange={(event) =>
             setStep4Field("comments", filterComments(event.target.value))
           }
@@ -91,7 +105,7 @@ export default function RequestForTrainingConsentSection({
           <Checkbox
             className="guide_checkbox support_service_training_request__checkbox"
             disableRipple
-            checked={step4.consentChecked}
+            checked={step4.consentChecked}
             onChange={(event) => {
               setStep4Field("consentChecked", event.target.checked);
               onClearError?.("consent");
@@ -115,30 +129,52 @@ export default function RequestForTrainingConsentSection({
         ) : null}
       </div>
 
-      {recaptchaSiteKey ? (
-        <div
-          className={[
-            "support_service_training_request__recaptcha-box",
-            errors.recaptcha ? "support_service_training_request__field--error" : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-        >
-          <ReCAPTCHA
-            ref={recaptchaRef}
-            sitekey={recaptchaSiteKey}
-            hl="en"
-            onChange={(token) => {
-              setStep4Field("recaptchaToken", token ?? "");
-              onClearError?.("recaptcha");
+      <div
+        className={[
+          "support_service_training_request__recaptcha-box",
+          errors.captcha ? "support_service_training_request__field--error" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        <div className="support_service_training_request__captcha-row">
+          {captcha ? (
+            <img
+              src={captcha.captchaImage}
+              alt="CAPTCHA"
+              className="support_service_training_request__captcha-image"
+            />
+          ) : (
+            <div className="support_service_training_request__captcha-image support_service_training_request__captcha-image--loading" />
+          )}
+          <button
+            type="button"
+            onClick={() => loadCaptcha()}
+            className="support_service_training_request__captcha-refresh"
+            aria-label="Refresh CAPTCHA"
+          >
+            <img src="/ico/ico_refresh_22.svg" alt="" width={18} height={18} />
+          </button>
+          <TextField
+            className="guide_field guide_field--h50 support_service_training_request__input support_service_training_request__captcha-input"
+            placeholder="CAPTCHA"
+            error={Boolean(errors.captcha)}
+            value={step4.captchaCode}
+            inputMode="numeric"
+            onChange={(event) => {
+              setStep4Field(
+                "captchaCode",
+                event.target.value.replace(/[^0-9]/g, "").slice(0, 4),
+              );
+              onClearError?.("captcha");
             }}
-            onExpired={() => setStep4Field("recaptchaToken", "")}
+            slotProps={{ htmlInput: { maxLength: 4 } }}
           />
-          {errors.recaptcha ? (
-            <RequestForTrainingFieldError message="Please complete the reCAPTCHA verification." />
-          ) : null}
         </div>
-      ) : null}
+        {errors.captcha ? (
+          <RequestForTrainingFieldError message="Please complete the CAPTCHA verification." />
+        ) : null}
+      </div>
 
       <ContactUsTermsModal
         open={termsModalOpen}

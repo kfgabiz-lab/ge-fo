@@ -89,10 +89,12 @@ export async function generateMetadata(
   }
 
   const seo = await fetchProductSeoById(Number(id));
+  if (!seo) notFound();
+
   return mergeSeoMetadata(
     previous,
-    seo?.metaTitle ?? "",
-    seo?.metaDescription ?? "",
+    seo.metaTitle ?? "",
+    seo.metaDescription ?? "",
   );
 }
 

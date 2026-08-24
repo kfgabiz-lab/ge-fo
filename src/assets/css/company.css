@@ -779,6 +779,17 @@ section.company-blog-list .company-blog-list__content:hover .company-blog-list__
   text-underline-offset: 4px;
 }
 
+/* Search highlight — title match 800 (list + featured) */
+section.company-blog-list .company-blog__mark,
+section.company-blog-top .company-blog-featured__mark {
+  font-weight: 800;
+}
+
+section.company-blog-list .company-blog__desc-mark {
+  font-weight: 800;
+  color: #222;
+}
+
 section.company-blog-list .company-blog__tag:hover {
   border-color: #0f1f45;
   background: #0f1f45;

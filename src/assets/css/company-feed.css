@@ -1221,6 +1221,14 @@ section.company-articles-list .company-articles-list__card:hover .company-articl
   text-underline-offset: 4px;
 }
 
+/* Search highlight — title only, 800 */
+section.company-press-list .company-press-list__mark,
+section.company-articles-list .company-articles-list__mark,
+section.company-press-featured .company-press-featured__mark,
+section.company-articles-featured .company-articles-featured__mark {
+  font-weight: 800;
+}
+
 @media (min-width: 600px) and (max-width: 780px) {
   .company-page--press section.company-press-list .company-press-list__grid,
   .company-page--articles section.company-articles-list .company-articles-list__grid {

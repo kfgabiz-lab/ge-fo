@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CompanyFeedVariant } from "@/app/company/data/companyFeedContent";
+import { renderTitleTextHighlight } from "@/app/search/components/renderSearchTextHighlight";
 import { handleImageFallback } from "@/lib/imageFallback";
 
 type CompanyFeedFeaturedProps = {
@@ -9,6 +10,7 @@ type CompanyFeedFeaturedProps = {
   date: string;
   image: string;
   href: string;
+  highlight?: string;
 };
 
 export default function CompanyFeedFeatured({
@@ -18,8 +20,10 @@ export default function CompanyFeedFeatured({
   date,
   image,
   href,
+  highlight,
 }: CompanyFeedFeaturedProps) {
   const prefix = `company-${variant}-featured`;
+  const searchHighlight = highlight?.trim() || undefined;
 
   return (
     <section className={prefix}>
@@ -30,7 +34,13 @@ export default function CompanyFeedFeatured({
           </div>
           <div className={`${prefix}__content`}>
             <div className={`${prefix}__text`}>
-              <h2 className={`${prefix}__title`}>{title}</h2>
+              <h2 className={`${prefix}__title`}>
+                {renderTitleTextHighlight(
+                  title,
+                  searchHighlight,
+                  `${prefix}__mark`,
+                )}
+              </h2>
               <p className={`${prefix}__desc`}>{description}</p>
               <p className={`${prefix}__date`}>{date}</p>
             </div>

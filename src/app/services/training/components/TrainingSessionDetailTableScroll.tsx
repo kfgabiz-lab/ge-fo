@@ -8,7 +8,7 @@ export default function TrainingSessionDetailTableScroll({
 }: {
   children: ReactNode;
 }) {
-  const { scrollRef, swipeHidden } = useTableSwipeHint();
+  const { scrollRef, swipeHidden, scrollbar } = useTableSwipeHint();
 
   return (
     <div className="support_service_training_session_detail__table-viewport">
@@ -18,6 +18,22 @@ export default function TrainingSessionDetailTableScroll({
       >
         {children}
       </div>
+      {scrollbar.scrollable ? (
+        <div
+          className="support_service_training_session_detail__table-scrollbar"
+          aria-hidden="true"
+        >
+          <div className="support_service_training_session_detail__table-scrollbar-track">
+            <div
+              className="support_service_training_session_detail__table-scrollbar-thumb"
+              style={{
+                width: `${scrollbar.thumbWidthPct}%`,
+                left: `${scrollbar.thumbLeftPct}%`,
+              }}
+            />
+          </div>
+        </div>
+      ) : null}
       <div
         className={`support_service_training_session_detail__table-swipe${
           swipeHidden ? " is-hidden" : ""

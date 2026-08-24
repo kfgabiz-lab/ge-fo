@@ -14,7 +14,7 @@ export default function WarrantyTableScroll({
   withSwipe = false,
   stickyFirstCol = false,
 }: WarrantyTableScrollProps) {
-  const { scrollRef, swipeHidden } = useTableSwipeHint(withSwipe);
+  const { scrollRef, swipeHidden, scrollbar } = useTableSwipeHint(withSwipe);
 
   return (
     <div
@@ -27,6 +27,22 @@ export default function WarrantyTableScroll({
       <div ref={scrollRef} className="support_service_warranty_table-wrap">
         {children}
       </div>
+      {scrollbar.scrollable ? (
+        <div
+          className="support_service_warranty_table-scrollbar"
+          aria-hidden="true"
+        >
+          <div className="support_service_warranty_table-scrollbar__track">
+            <div
+              className="support_service_warranty_table-scrollbar__thumb"
+              style={{
+                width: `${scrollbar.thumbWidthPct}%`,
+                left: `${scrollbar.thumbLeftPct}%`,
+              }}
+            />
+          </div>
+        </div>
+      ) : null}
       {withSwipe ? (
         <div
           className={

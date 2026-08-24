@@ -43,10 +43,12 @@ export async function generateMetadata(
     fetchCategoryBySlug(slug, { depth: 1, categoryId: Number(id) }),
     parent,
   ]);
+  if (!category || category.id !== Number(id)) notFound();
+
   return mergeSeoMetadata(
     previous,
-    category?.metaTitle ?? "",
-    category?.metaDescription ?? "",
+    category.metaTitle ?? "",
+    category.metaDescription ?? "",
   );
 }
 
