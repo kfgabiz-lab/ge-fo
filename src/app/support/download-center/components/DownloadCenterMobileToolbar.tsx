@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { downloadCenterPage } from "@/data/support/downloadCenterContent";
 import {
-  productDownloadsSortLabel,
-  productDownloadsSortOptions,
-} from "@/app/()/products-systems/data/productDetailContent";
+  downloadCenterPage,
+  downloadCenterSortLabel,
+  downloadCenterSortOptionsFor,
+} from "@/data/support/downloadCenterContent";
 import type { DownloadCenterSort } from "@/data/support/downloadCenterData";
 import { useDownloadCenterQuery } from "./DownloadCenterFilterProvider";
 
@@ -16,7 +16,7 @@ type DownloadCenterMobileToolbarProps = {
 export default function DownloadCenterMobileToolbar({
   onFilterOpen,
 }: DownloadCenterMobileToolbarProps) {
-  const { sort, setSort } = useDownloadCenterQuery();
+  const { query, sort, setSort } = useDownloadCenterQuery();
   const [sortOpen, setSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
 
@@ -33,9 +33,8 @@ export default function DownloadCenterMobileToolbar({
     return () => window.removeEventListener("mousedown", onPointerDown);
   }, [sortOpen]);
 
-  const closedLabel = sort
-    ? productDownloadsSortLabel(sort)
-    : downloadCenterPage.sortByLabel;
+  const closedLabel = downloadCenterSortLabel(sort);
+  const sortOptions = downloadCenterSortOptionsFor(query.trim().length > 0);
 
   return (
     <div className="support_download_mo-toolbar">
@@ -82,7 +81,7 @@ export default function DownloadCenterMobileToolbar({
             role="listbox"
             aria-label={downloadCenterPage.sortByLabel}
           >
-            {productDownloadsSortOptions.map((option) => (
+            {sortOptions.map((option) => (
               <li key={option.value}>
                 <button
                   type="button"

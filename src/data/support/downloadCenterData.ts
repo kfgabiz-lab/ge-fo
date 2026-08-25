@@ -53,9 +53,9 @@ export function hasSelectableVersions(item: DownloadCenterItem): boolean {
 
 export type DownloadCenterSort =
   | ""
+  | "relevance"
   | "doctype"
   | "newest"
-  | "oldest"
   | "title"
   | "title_desc";
 
@@ -65,6 +65,7 @@ export interface DownloadCenterFilterParams {
   parentCategories?: string[];
   docTypes?: string[];
   productCodes?: string[];
+  includeFileContent?: boolean;
 }
 
 export interface DownloadCenterContentsParams extends DownloadCenterFilterParams {
@@ -90,6 +91,7 @@ function buildDownloadCenterFilterQuery(
   if (params.productCodes && params.productCodes.length > 0) {
     sp.set("productCodes", params.productCodes.join(","));
   }
+  if (params.includeFileContent) sp.set("includeFileContent", "true");
   return sp;
 }
 

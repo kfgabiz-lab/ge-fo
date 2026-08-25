@@ -19,18 +19,13 @@ import {
   type DownloadCenterItem,
   type DownloadCenterSort,
 } from "@/data/support/downloadCenterData";
-import { downloadCenterPage } from "@/data/support/downloadCenterContent";
 import {
-  productDownloadsSortLabel,
-  productDownloadsSortOptions,
-} from "@/app/()/products-systems/data/productDetailContent";
+  downloadCenterPage,
+  downloadCenterSortLabel,
+  downloadCenterSortOptionsFor,
+} from "@/data/support/downloadCenterContent";
 
 const PAGE_SIZE = 10;
-
-function downloadCenterSortLabel(sort: DownloadCenterSort): string {
-  if (!sort) return downloadCenterPage.sortByLabel;
-  return productDownloadsSortLabel(sort);
-}
 
 type DownloadCenterContentsProps = {
   empty?: boolean;
@@ -66,6 +61,9 @@ function DownloadCenterContentsBody({
   const [loading, setLoading] = useState(true);
   const [sortOpen, setSortOpen] = useState(false);
 
+  const hasKeyword = query.trim().length > 0;
+  const sortOptions = downloadCenterSortOptionsFor(hasKeyword);
+
   const firstResetRef = useRef(true);
   useEffect(() => {
     if (firstResetRef.current) {
@@ -92,6 +90,7 @@ function DownloadCenterContentsBody({
       parentCategories: selectedCategoryParentCodes,
       docTypes: selectedDocTypes,
       sort,
+      includeFileContent: true,
       page: page - 1,
       size: PAGE_SIZE,
     })
@@ -157,7 +156,7 @@ function DownloadCenterContentsBody({
                       );
                     }}
                   >
-                    {productDownloadsSortOptions.map((option) => (
+                    {sortOptions.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
