@@ -11,6 +11,7 @@ import {
   mapHwProductData,
   fetchProductFaqItems,
   fetchProductLv2Context,
+  fetchProductManagerEmail,
   fetchSwRelevantProducts,
   SW_PRODUCT_SLUGS,
 } from "../../data/productsSystemsData";
@@ -79,6 +80,7 @@ type SwDetailProps = {
   techHubBanner: ProductTechHubBanner | null;
   highlights: HighlightNewsItem[];
   contactHref: string;
+  managerEmail: string;
   otherProducts: ProductOtherItem[];
 };
 
@@ -106,6 +108,7 @@ function swShellCommonProps(
     faqItems: props.dbFaq,
     connectPortalHref: bind.connectPortal,
     contactHref: props.contactHref,
+    managerEmail: props.managerEmail,
     otherProducts: props.otherProducts,
   };
 }
@@ -287,19 +290,27 @@ export default async function SwProductDetail({
   const productCode = row ? String(row["product.product_code"] ?? "").trim() : "";
   const productCodes = productCode ? [productCode] : [];
   const isSwSlug = (SW_PRODUCT_SLUGS as readonly string[]).includes(slug);
-  const [dbFaq, downloadsData, techHubBanner, highlights, otherProducts, lv2Context] =
-    await Promise.all([
-      productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
-      fetchProductDownloadsInitialData(productCodes),
-      isSwSlug && productId
-        ? fetchProductTechHubBanner(productId, categoryId)
-        : Promise.resolve(null),
-      productId ? fetchProductInsights(productId) : Promise.resolve([]),
-      fetchSwRelevantProducts(slug),
-      productId
-        ? fetchProductLv2Context(productId, categoryId)
-        : Promise.resolve(null),
-    ]);
+  const [
+    dbFaq,
+    downloadsData,
+    techHubBanner,
+    highlights,
+    otherProducts,
+    lv2Context,
+    managerEmail,
+  ] = await Promise.all([
+    productId ? fetchProductFaqItems(productId) : Promise.resolve([]),
+    fetchProductDownloadsInitialData(productCodes),
+    isSwSlug && productId
+      ? fetchProductTechHubBanner(productId, categoryId)
+      : Promise.resolve(null),
+    productId ? fetchProductInsights(productId) : Promise.resolve([]),
+    fetchSwRelevantProducts(slug),
+    productId
+      ? fetchProductLv2Context(productId, categoryId)
+      : Promise.resolve(null),
+    productId ? fetchProductManagerEmail(productId) : Promise.resolve(""),
+  ]);
   const contactHref = withProductInquiryContext(
     "/support/contact-us",
     categoryId,
@@ -429,6 +440,7 @@ export default async function SwProductDetail({
         techHubBanner={techHubBanner}
         highlights={highlights}
         contactHref={contactHref}
+        managerEmail={managerEmail}
         otherProducts={otherProducts}
       />
     </>
