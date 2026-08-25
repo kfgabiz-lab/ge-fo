@@ -207,6 +207,35 @@ function formatSessionDateRange(from?: string, to?: string): string {
   return `${MONTH_ABBR[only.m]} ${only.d}, ${only.y}`;
 }
 
+function pad2(n: number): string {
+  return String(n).padStart(2, "0");
+}
+
+function formatCompactDateRange(
+  from?: string,
+  to?: string,
+): { primary: string; secondary?: string } {
+  const f = parseYmd(from);
+  const t = parseYmd(to);
+  const only = f ?? t;
+  if (!f || !t || (f.y === t.y && f.m === t.m && f.d === t.d)) {
+    if (!only) return { primary: "" };
+    return { primary: `${MONTH_ABBR[only.m]} ${pad2(only.d)}, ${only.y}` };
+  }
+  if (f.y === t.y && f.m === t.m) {
+    return { primary: `${MONTH_ABBR[f.m]} ${pad2(f.d)}-${pad2(t.d)}, ${f.y}` };
+  }
+  if (f.y === t.y) {
+    return {
+      primary: `${MONTH_ABBR[f.m]} ${pad2(f.d)}-${MONTH_ABBR[t.m]} ${pad2(t.d)}, ${f.y}`,
+    };
+  }
+  return {
+    primary: `${MONTH_ABBR[f.m]} ${pad2(f.d)}, ${f.y}`,
+    secondary: `${MONTH_ABBR[t.m]} ${pad2(t.d)}, ${t.y}`,
+  };
+}
+
 function sortSchedule(
   items: TrainingScheduleItemRaw[],
 ): TrainingScheduleItemRaw[] {
@@ -388,7 +417,7 @@ export function toTrainingSessionDetail(
   const productNames = extractProductNames(json, productNameMap);
   const productsCovered = productNames.join(", ");
   const dateDisplay = formatDisplayDate(d2.training_date_from ?? "");
-  const dateToDisplay = formatDisplayDate(d2.training_date_to ?? "");
+  const compactDateRange = formatCompactDateRange(d2.training_date_from, d2.training_date_to);
   const showAddress = shouldShowAddress(d1.training_type);
   const addressFull = showAddress
     ? [d2.address, d2.address_detail]
@@ -451,9 +480,11 @@ export function toTrainingSessionDetail(
     },
     countdownTo: d2.register_period_to || undefined,
     sidebar: {
-      date: dateDisplay,
-      dateTo: dateToDisplay && dateToDisplay !== dateDisplay ? dateToDisplay : undefined,
-      eventDateToAttend: dateDisplay,
+      date: compactDateRange.primary,
+      dateTo: compactDateRange.secondary,
+      eventDateToAttend: compactDateRange.secondary
+        ? `${compactDateRange.primary} - ${compactDateRange.secondary}`
+        : compactDateRange.primary,
       duration: formatDurationHours(d2.duration),
       classSize: toDisplayString(d2.capacity),
       location: {

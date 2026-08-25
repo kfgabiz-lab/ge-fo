@@ -25,6 +25,7 @@ import {
   type CalendarEvent,
 } from "@/lib/eventShare";
 import { stripHtmlText } from "@/lib/stripHtmlText";
+import { formatDisplayDate } from "@/lib/formatDate";
 
 const SESSION_TAB_SCROLL_OFFSET = 150;
 const SESSION_TAB_SCROLL_DURATION_MS = 300;
@@ -333,9 +334,8 @@ export default function TrainingSessionDetail({
                     <h2 className="support_service_training_session_detail__block-tit">
                       {showAgendaSessions ? `Agenda / ${group.label}` : "Agenda"}
                     </h2>
-                    {/*pub 임시날짜 */}
                     <p className="support_service_training_session_detail__block-date">
-                      Jul 15,2026
+                      {formatDisplayDate(group.date)}
                     </p>
                   </div>
                   <TrainingSessionDetailTableScroll>
