@@ -52,6 +52,7 @@ export default function WhereToBuyLocationCard({
 
         <div className="support_where_to_buy_card__meta">
           <p data-slugkey="address">{location.address}</p>
+          <p data-slugkey="address_detail">{location.addressDetail}</p>
           <p data-slugkey="office_number">{location.phone}</p>
         </div>
       </button>

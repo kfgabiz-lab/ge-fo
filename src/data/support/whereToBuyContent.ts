@@ -64,6 +64,7 @@ export type WhereToBuyLocation = {
   badges: WhereToBuyBadge[];
   name: string;
   address: string;
+  addressDetail: String;
   phone: string;
   website: string;
   websiteLabel: string;
@@ -90,13 +91,14 @@ export function hasValidCoords(location: WhereToBuyLocation): boolean {
 export function toWhereToBuyLocation(item: PageDataItem): WhereToBuyLocation {
   const row = flattenPageDataItem(item);
   const address = (row.address as string) ?? "";
+  const addressDetail = (row.address_detail as string) ?? "";
   const phone = (row.office_number as string) ?? "";
   const homepage = (row.homepage as string) ?? "";
   return {
     id: String(item.id),
     badges: [],
     name: (row.agency_name as string) ?? "",
-    address,
+    address,addressDetail,
     phone: formatPhoneDisplay(phone),
     website: homepage,
     websiteLabel: homepage,
