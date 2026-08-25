@@ -418,7 +418,7 @@
     overflow: hidden;
     width: 100%;
     box-shadow: 18px 26px 30px rgb(0 0 0 / 10%);
-    aspect-ratio: 335/216;
+    aspect-ratio: 335/215;
   }
 
   section.company-blog-top .company-blog-featured__image img {
@@ -610,7 +610,7 @@
     border: 1px solid #e8e8e8;
     border-radius: 0;
     overflow: hidden;
-    aspect-ratio: 335 / 216;
+    aspect-ratio: 335 / 215;
     background: #f5f5f5;
   }
 
