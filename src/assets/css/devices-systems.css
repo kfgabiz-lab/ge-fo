@@ -303,6 +303,7 @@
     font-size: 18px;
     line-height: 28px;
     color: #666;
+    white-space: pre-line;
   }
 
   section.devices_hero .devices_hero__btns {

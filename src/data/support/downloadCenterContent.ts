@@ -3,6 +3,7 @@ import {
   type ProductDownloadFile,
   type ProductDownloadItem,
 } from "@/app/()/products-systems/data/productDetailContent";
+import { type DownloadCenterSort } from "@/data/support/downloadCenterData";
 import { emptyStateIconSrc } from "@/data/commonAssets";
 
 type DownloadCenterItem = Omit<ProductDownloadItem, "files"> & {
@@ -28,6 +29,36 @@ export const downloadCenterPage = {
   totalResults: 2658,
   pageSize: 10,
 } as const;
+
+export type DownloadCenterSortOption = {
+  value: DownloadCenterSort;
+  label: string;
+};
+
+export const downloadCenterSortOptions = [
+  { value: "relevance", label: "Relevance" },
+  { value: "newest", label: "Most Recent" },
+  { value: "doctype", label: "Document Type" },
+  { value: "title", label: "Title A-Z" },
+  { value: "title_desc", label: "Title Z-A" },
+] as const satisfies ReadonlyArray<DownloadCenterSortOption>;
+
+export function downloadCenterSortOptionsFor(
+  hasKeyword: boolean,
+): ReadonlyArray<DownloadCenterSortOption> {
+  if (hasKeyword) return downloadCenterSortOptions;
+  return downloadCenterSortOptions.filter(
+    (option) => option.value !== "relevance",
+  );
+}
+
+export function downloadCenterSortLabel(sort: DownloadCenterSort): string {
+  if (!sort) return downloadCenterPage.sortByLabel;
+  return (
+    downloadCenterSortOptions.find((option) => option.value === sort)?.label ??
+    downloadCenterPage.sortByLabel
+  );
+}
 
 export type DownloadFilterOption = {
   id: string;

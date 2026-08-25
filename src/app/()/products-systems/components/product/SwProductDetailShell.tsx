@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import HighlightNewsSection from "@/components/content/HighlightNewsSection";
+import CommonBanner02 from "@/components/banners/CommonBanner02";
 import CommonBanner03 from "@/components/banners/CommonBanner03";
 import CommonBanner04 from "@/components/banners/CommonBanner04";
 import CommonFaq, { type CommonFaqEntry } from "@/components/faq/CommonFaq";
@@ -72,6 +73,7 @@ export type SwProductDetailShellProps = {
   faqItems: CommonFaqEntry[];
   connectPortalHref?: string;
   contactHref?: string;
+  managerEmail?: string;
   otherProducts: ProductOtherItem[];
 };
 
@@ -106,6 +108,7 @@ export default function SwProductDetailShell({
   faqItems,
   connectPortalHref,
   contactHref,
+  managerEmail,
   otherProducts,
 }: SwProductDetailShellProps) {
   const showFeatures = features.items.length > 0;
@@ -140,6 +143,11 @@ export default function SwProductDetailShell({
             />
           )
         ) : null}
+        <CommonBanner02
+          variant="expert"
+          linkHref={contactHref}
+          contactEmail={managerEmail}
+        />
         {applicationsSlot}
         {whySlot}
         {showDownloads ? (

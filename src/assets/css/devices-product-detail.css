@@ -254,6 +254,7 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     font-size: 18px;
     line-height: 28px;
     color: #666;
+    white-space: pre-line;
   }
 
   section.devices_product_hero .devices_product_hero__line {
@@ -384,6 +385,7 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     line-height: 24px;
     color: #222;
     max-width: 572px;
+    white-space: pre-line;
   }
 
   /* Figma 3871:112429 — HVDC Benefits list variant */
@@ -433,6 +435,13 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
 
   .devices-page--product section.common_banner_02 + section.common_banner_02 {
     margin-top: 40px;
+  }
+
+  /* expert banner → applications: 간격 150px (banner mb + applications pt 중복 제거) */
+  .devices-page--product
+    section.common_banner_02.common_banner_02--expert
+    + section.devices_product_applications {
+    padding-top: 0;
   }
 
   /* Figma 3871:113566 — expert banner (product page) */
@@ -2136,6 +2145,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 16px;
     line-height: 24px;
     color: #666;
+    white-space: pre-line;
   }
 
   section.devices_product_hero .devices_product_hero__line {
@@ -2286,6 +2296,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     line-height: 23px;
     color: #222;
     max-width: none;
+    white-space: pre-line;
   }
 
   section.devices_product_features.devices_product_features--list

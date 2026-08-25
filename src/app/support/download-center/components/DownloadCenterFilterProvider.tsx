@@ -69,7 +69,7 @@ export function DownloadCenterFilterProvider({
   const [popularKeywords, setPopularKeywords] = useState<string[]>([]);
   const [query, setQueryState] = useState("");
   const [page, setPage] = useState(1);
-  const [sort, setSortState] = useState<DownloadCenterSort>("");
+  const [sort, setSortState] = useState<DownloadCenterSort>("newest");
 
   useEffect(() => {
     let alive = true;
@@ -83,8 +83,15 @@ export function DownloadCenterFilterProvider({
   }, []);
 
   const setQuery = (q: string) => {
+    const hadKeyword = query.trim().length > 0;
+    const hasKeyword = q.trim().length > 0;
     setQueryState(q);
     setPage(1);
+    if (hasKeyword) {
+      if (!hadKeyword) setSortState("relevance");
+    } else {
+      setSortState("");
+    }
   };
   const setSort = (s: DownloadCenterSort) => {
     setSortState(s);
@@ -120,6 +127,7 @@ export function DownloadCenterFilterProvider({
       <store.Provider categories={categories} secondaryOptions={documentTypes}>
         <SupportDownloadFilterOptionsLoader
           query={query}
+          includeFileContent
           onCategoriesChange={setCategories}
           onDocumentTypesChange={setDocumentTypes}
           onCategoriesLoadedChange={setCategoriesLoaded}

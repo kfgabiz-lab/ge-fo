@@ -13,6 +13,7 @@ import {
 
 type SupportDownloadFilterOptionsLoaderProps = {
   query?: string;
+  includeFileContent?: boolean;
   onCategoriesChange: (options: DownloadCategoryOption[]) => void;
   onDocumentTypesChange: (options: DownloadFilterOption[]) => void;
   onCategoriesLoadedChange?: (loaded: boolean) => void;
@@ -20,6 +21,7 @@ type SupportDownloadFilterOptionsLoaderProps = {
 
 export default function SupportDownloadFilterOptionsLoader({
   query = "",
+  includeFileContent = false,
   onCategoriesChange,
   onDocumentTypesChange,
   onCategoriesLoadedChange,
@@ -41,7 +43,7 @@ export default function SupportDownloadFilterOptionsLoader({
   });
 
   useEffect(() => {
-    const params: DownloadCenterFilterParams = { q };
+    const params: DownloadCenterFilterParams = { q, includeFileContent };
     let alive = true;
     fetchDownloadCenterCategoryTree(params)
       .then((tree) => {
@@ -55,10 +57,10 @@ export default function SupportDownloadFilterOptionsLoader({
     return () => {
       alive = false;
     };
-  }, [q]);
+  }, [q, includeFileContent]);
 
   useEffect(() => {
-    const params: DownloadCenterFilterParams = { q };
+    const params: DownloadCenterFilterParams = { q, includeFileContent };
     let alive = true;
     fetchDownloadDocTypeFilters(params).then((options) => {
       if (!alive) return;
@@ -67,7 +69,7 @@ export default function SupportDownloadFilterOptionsLoader({
     return () => {
       alive = false;
     };
-  }, [q]);
+  }, [q, includeFileContent]);
 
   return null;
 }
