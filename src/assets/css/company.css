@@ -32,7 +32,7 @@
   section.company-blog-top {
     position: relative;
     min-height: 653px;
-    padding: 0;
+    margin: 0 0 80px;
   }
 
   section.company-blog-top .company-blog-top__bg {
@@ -84,7 +84,7 @@
     box-shadow: 18px 26px 30px rgb(0 0 0 / 10%);
     overflow: hidden;
     width: 700px;
-    height: 453px;
+    height: 525px;
     flex-shrink: 0;
   }
 
@@ -205,7 +205,7 @@
     border: 1px solid #e8e8e8;
     border-radius: 0;
     overflow: hidden;
-    aspect-ratio: 380 / 246;
+    aspect-ratio: 380 / 285;
     background: #f5f5f5;
   }
 
