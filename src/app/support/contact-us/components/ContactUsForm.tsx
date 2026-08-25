@@ -33,22 +33,27 @@ import {
   contactUsCategoryLevels,
   contactUsConsentItems,
   contactUsFormCopy,
+  contactUsInquiryTypeLabels,
   contactUsTechnicalInquiry,
 } from "@/data/support/contactUsContent";
 import {
   type CodeItem,
   type ContactUsInquiryRequest,
   fetchCountries,
-  fetchInquiryTypes,
   submitContactUs,
 } from "../data/contactUsData";
 
 const CONSENT_MARKETING_ID = "newsletter";
+// 문의 유형 — CTP(Salesforce) Type 필드 picklist에 고정된 값이라 공통코드 대신 고정 목록으로 관리
+// (contactUsInquiryTypeLabels가 이미 이 PascalCase 값들의 단일 소스라 그대로 재사용)
+const INQUIRY_TYPES: CodeItem[] = Object.entries(contactUsInquiryTypeLabels).map(
+  ([code, name]) => ({ code, name }),
+);
 const PRODUCT_CATEGORY_REQUIRED_INQUIRY_TYPES = [
-  "PRODUCT_INFORMATION",
-  "QUOTATION_REQUEST",
+  "ProductInformation",
+  "QuotationRequest",
 ];
-const QUOTATION_REQUEST_INQUIRY_TYPE = "QUOTATION_REQUEST";
+const QUOTATION_REQUEST_INQUIRY_TYPE = "QuotationRequest";
 const ORDERABLE_PRODUCT_ORDER_METHOD = "01";
 const DISCONTINUED_PRODUCT_ORDER_STATUS = "99";
 const EMAIL_FORMAT_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -233,10 +238,9 @@ function ContactUsFormContent() {
   const sendLabel = isMobile
     ? contactUsFormCopy.sendLabelMobile
     : contactUsFormCopy.sendLabel;
-  const [inquiryTypes, setInquiryTypes] = useState<CodeItem[]>([]);
   const [countries, setCountries] = useState<CodeItem[]>([]);
 
-  const [inquiryType, setInquiryType] = useState("");
+  const [inquiryType, setInquiryType] = useState(INQUIRY_TYPES[0]?.code ?? "");
   const productCategoryRequired =
     PRODUCT_CATEGORY_REQUIRED_INQUIRY_TYPES.includes(inquiryType);
   const [rawDeviceRows, setRawDeviceRows] = useState<DevicesTreeRow[]>([]);
@@ -266,15 +270,6 @@ function ContactUsFormContent() {
 
   useEffect(() => {
     let alive = true;
-    fetchInquiryTypes()
-      .then((codes) => {
-        if (!alive) return;
-        setInquiryTypes(codes);
-        if (codes.length > 0) setInquiryType((prev) => prev || codes[0].code);
-      })
-      .catch(() => {
-        if (alive) setInquiryTypes([]);
-      });
     fetchCountries()
       .then((codes) => {
         if (alive) setCountries(codes);
@@ -480,12 +475,13 @@ function ContactUsFormContent() {
         event: "generate_lead",
         form_name: "Contact Us",
         inquiry_type:
-          inquiryTypes.find((option) => option.code === inquiryType)?.name ??
+          INQUIRY_TYPES.find((option) => option.code === inquiryType)?.name ??
           inquiryType,
       });
       alert(contactUsFormCopy.submitSuccess);
       window.location.href = "/support/contact-us";
     } catch {
+      alert(contactUsFormCopy.submitFail);
     } finally {
       setSubmitting(false);
     }
@@ -510,7 +506,7 @@ function ContactUsFormContent() {
                   className="support_contact_form__radios"
                   role="radiogroup"
                 >
-                  {inquiryTypes.map((option) => {
+                  {INQUIRY_TYPES.map((option) => {
                     const inputId = `${formId}-${option.code}`;
                     return (
                       <label
@@ -530,7 +526,7 @@ function ContactUsFormContent() {
                             setCategoryIds({ lv1: "", lv2: "", lv3: "" });
                           }}
                         />
-                        <span>{option.name}</span>
+                        <span>{contactUsInquiryTypeLabels[option.name] ?? option.name}</span>
                       </label>
                     );
                   })}
