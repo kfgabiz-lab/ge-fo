@@ -35,8 +35,6 @@ export const TRAINING_DETAIL_SORT = "curriculum_detail2.training_date_from,asc";
 export function trainingDetailWhere(courseId: string): Record<string, string> {
   return {
     "eq_curriculum_detail1.curriculum_id": courseId,
-    "condexpr_training_date_to": "training_date_to>=today()?'valid':'past'",
-    "condval_training_date_to": "valid",
   };
 }
 
