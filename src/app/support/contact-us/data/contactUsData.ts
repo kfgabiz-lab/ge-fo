@@ -27,10 +27,6 @@ export interface ContactUsInquiryResponse {
   message: string;
 }
 
-export async function fetchInquiryTypes(): Promise<CodeItem[]> {
-  return fetchApi<CodeItem[]>("/api/v1/fo/codes/INQUIRY_TYPE");
-}
-
 export async function fetchCountries(): Promise<CodeItem[]> {
   return fetchApi<CodeItem[]>("/api/v1/fo/codes/COUNTRYNAME");
 }
