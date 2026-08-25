@@ -12,7 +12,7 @@ type TechHubSearchProps = {
 export default function TechHubSearch({
   initialQuery = techHubPage.defaultSearchQuery,
 }: TechHubSearchProps) {
-  const { setQuery, resetSignal } = useTechHubQuery();
+  const { query, setQuery, resetSignal } = useTechHubQuery();
   const [value, setValue] = useState<string>(initialQuery);
   const [isMobile, setIsMobile] = useState(false);
   const hasQuery = value.length > 0;
@@ -23,6 +23,12 @@ export default function TechHubSearch({
     prevResetSignal.current = resetSignal;
     setValue("");
   }, [resetSignal]);
+
+  // LIST 버튼 복귀·뒤로가기로 검색어가 복원되는 경우처럼, 입력창 밖에서 query가
+  // 바뀌면 그 값을 그대로 반영한다(타이핑 중 draft는 query가 바뀌지 않는 한 유지됨).
+  useEffect(() => {
+    setValue(query);
+  }, [query]);
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 780px)");

@@ -1,6 +1,7 @@
 import { isBackForwardNavigation } from "@/lib/navigation/historyNavigation";
 
 const STORAGE_PREFIX = "list-page:";
+const QUERY_STORAGE_PREFIX = "list-query:";
 const RETURN_INTENT_PREFIX = "list-page-return-intent:";
 
 /**
@@ -34,6 +35,29 @@ export function getRememberedListPage(pathname: string): number {
   }
 }
 
+/** 목록 페이지의 검색어를 경로별로 기억해 둔다 — page와 동일한 목적. */
+export function rememberListQuery(pathname: string, query: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (query) {
+      window.sessionStorage.setItem(`${QUERY_STORAGE_PREFIX}${pathname}`, query);
+    } else {
+      window.sessionStorage.removeItem(`${QUERY_STORAGE_PREFIX}${pathname}`);
+    }
+  } catch {
+    // 프라이빗 모드 등 sessionStorage 접근 불가 시 조용히 무시
+  }
+}
+
+export function getRememberedListQuery(pathname: string): string {
+  if (typeof window === "undefined") return "";
+  try {
+    return window.sessionStorage.getItem(`${QUERY_STORAGE_PREFIX}${pathname}`) ?? "";
+  } catch {
+    return "";
+  }
+}
+
 /** 상세 화면의 LIST 버튼 클릭 시 호출 — "목록으로 돌아가는 중"임을 1회성으로 표시한다. */
 export function markListReturnIntent(pathname: string): void {
   if (typeof window === "undefined") return;
@@ -58,19 +82,27 @@ function consumeListReturnIntent(pathname: string): boolean {
 
 /**
  * 목록 페이지 마운트 시 호출 — LIST 버튼 또는 브라우저 뒤로가기로 돌아온 경우에만
- * 기억된 페이지 번호로 apply를 호출한다(GNB 등 새 진입 시에는 호출하지 않음).
+ * 기억된 페이지 번호·검색어로 apply를 호출한다(GNB 등 새 진입 시에는 호출하지 않음).
+ * 반환 의도 플래그는 1회성이라 page/query를 각각 따로 판정하면 두 번째 호출에서
+ * 소비되어 버리므로, 한 번만 판정해 두 값 모두에 적용한다.
  */
-export function restoreListPageIfReturning(
+export function restoreListStateIfReturning(
   pathname: string,
-  apply: (page: number) => void,
+  apply: { page?: (page: number) => void; query?: (query: string) => void },
 ): void {
   if (typeof window === "undefined") return;
 
   const isReturning = consumeListReturnIntent(pathname) || isBackForwardNavigation();
   if (!isReturning) return;
 
-  const remembered = getRememberedListPage(pathname);
-  if (remembered > 1) apply(remembered);
+  if (apply.page) {
+    const rememberedPage = getRememberedListPage(pathname);
+    if (rememberedPage > 1) apply.page(rememberedPage);
+  }
+  if (apply.query) {
+    const rememberedQuery = getRememberedListQuery(pathname);
+    if (rememberedQuery) apply.query(rememberedQuery);
+  }
 }
 
 /**
@@ -103,6 +135,7 @@ export function watchForFreshListEntryClicks(
     if (targetUrl.pathname !== pathname) return;
 
     rememberListPage(pathname, 1);
+    rememberListQuery(pathname, "");
     onFreshEntry();
   };
 

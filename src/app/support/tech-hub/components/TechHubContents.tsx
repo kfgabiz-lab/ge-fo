@@ -45,6 +45,9 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
 
+  // query 변경 시 페이지 초기화는 setQuery(provider)가 이미 처리한다 — 여기서도
+  // query를 deps에 넣으면 LIST 버튼 복귀/뒤로가기로 검색어와 페이지가 함께
+  // 복원될 때 이 effect가 복원된 페이지를 다시 1로 덮어써 버린다.
   const firstResetRef = useRef(true);
   useEffect(() => {
     if (firstResetRef.current) {
@@ -53,7 +56,7 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
     }
     setPage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, codesKey, certsKey]);
+  }, [codesKey, certsKey]);
 
   useEffect(() => {
     if (empty) {
