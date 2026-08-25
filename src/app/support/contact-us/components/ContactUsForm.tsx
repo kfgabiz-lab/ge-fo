@@ -486,6 +486,7 @@ function ContactUsFormContent() {
       alert(contactUsFormCopy.submitSuccess);
       window.location.href = "/support/contact-us";
     } catch {
+      alert(contactUsFormCopy.submitFail);
     } finally {
       setSubmitting(false);
     }

@@ -118,4 +118,6 @@ export const contactUsFormCopy = {
   submitAckLinkLabel: "Privacy Policy",
   submitSuccess:
     "Your inquiry has been submitted. A confirmation number has been sent to your email",
+  submitFail:
+    "Unable to submit the inquiry. Please try again in a moment.",
 } as const;
