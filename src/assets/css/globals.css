@@ -1987,6 +1987,7 @@ section.common_faq .faq_question {
   background: none;
   border: none;
   cursor: pointer;
+  transition: padding 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 section.common_faq .faq_question .txt {
@@ -2010,9 +2011,9 @@ section.common_faq .faq_icon {
   border: 1px solid #ddd;
   border-radius: 50%;
   transition:
-    transform 0.35s ease,
-    background-color 0.35s ease,
-    border-color 0.35s ease;
+    transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.22s ease,
+    border-color 0.22s ease;
 }
 section.common_faq .faq_item.is-open .faq_icon {
   transform: rotate(-180deg);
@@ -2030,7 +2031,7 @@ section.common_faq .faq_item:hover .faq_icon {
 section.common_faq .faq_answer_wrap {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s ease;
+  transition: grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 section.common_faq .faq_item.is-open .faq_answer_wrap {
@@ -2039,15 +2040,23 @@ section.common_faq .faq_item.is-open .faq_answer_wrap {
 
 section.common_faq .faq_answer_inner {
   overflow: hidden;
+  min-height: 0;
 }
 
 section.common_faq .faq_answer {
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.14s cubic-bezier(0.4, 0, 1, 1),
+    transform 0.14s cubic-bezier(0.4, 0, 1, 1);
 }
 
 section.common_faq .faq_item.is-open .faq_answer {
   opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1) 0.05s,
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1) 0.04s;
 }
 
 @media (min-width: 781px) {
@@ -3868,10 +3877,15 @@ section.highlight_news--markets .section_tit {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  section.common_faq .faq_question,
   section.common_faq .faq_answer_wrap,
   section.common_faq .faq_answer,
   section.common_faq .faq_icon {
     transition: none;
+  }
+
+  section.common_faq .faq_answer {
+    transform: none;
   }
 
   .common_modal__dim,
