@@ -38,6 +38,7 @@ export default function MarketsReferencesModal({
   const fallbackDialogId = useId();
   const resolvedDialogId = dialogId ?? fallbackDialogId;
   const modalRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const [referenceIndex, setReferenceIndex] = useState(0);
   const [imageIndex, setImageIndex] = useState(0);
@@ -121,6 +122,7 @@ export default function MarketsReferencesModal({
       setReferenceIndex(nextIndex);
       setImageIndex(0);
       swiperRef.current?.slideTo(0, 0);
+      bodyRef.current?.scrollTo({ top: 0 });
       onActiveItemChange?.(nextItem);
     },
     [onActiveItemChange, referenceItems],
@@ -187,7 +189,10 @@ export default function MarketsReferencesModal({
           <hr className="common_modal__line" />
         </header>
 
-        <div className="common_modal__body markets_references_modal__body">
+        <div
+          ref={bodyRef}
+          className="common_modal__body markets_references_modal__body"
+        >
           <div className="markets_references_modal__media">
             <div className="markets_references_modal__img">
               {imageCount > 1 ? (

@@ -3856,6 +3856,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
 .markets_references_modal__overview p {
   margin: 0;
   color: #666;
+  white-space: pre-line;
 }
 
 .markets_references_modal__table {

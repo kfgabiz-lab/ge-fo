@@ -86,25 +86,31 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
     id: "pi-ref-1",
     href: "",
     image: "/img/markets/public-infrastructure/references/ref_01.webp",
-    title: "HV-LV Integrated Turnkey Supply",
+    title: "Large-scale HVAC control for Incheon International Airport",
     description:
-      "The rapid expansion of AI data centers has increased demand for reliable and integrated power infrastructure solutions. This project focused on providing a comprehensive electrical package to support a large-scale data center facility with high-voltage and low-voltage equipment.",
-    location: "United States",
+      "LS ELECTRIC supplied HVAC control solutions for Incheon International Airport, one of the world's busiest aviation hubs, helping ensure stable and energy-efficient operation of large-scale heating, ventilation, and air conditioning systems. Designed for continuous 24/7 operation, the solution supports reliable climate control across airport terminals while improving energy efficiency and operational stability.",
+    location: "South Korea",
     country: "",
     modal: {
-      modalTitle: "HV-LV Integrated Turnkey Supply",
+      modalTitle: "Large-scale HVAC control for Incheon International Airport",
       images: ["/img/markets/public-infrastructure/references/ref_01.webp"],
       overview: [
-        "The rapid expansion of AI data centers has increased demand for reliable and integrated power infrastructure solutions. This project focused on providing a comprehensive electrical package to support a large-scale data center facility with high-voltage and low-voltage equipment.",
-        "To meet the customer's aggressive schedule and requirement for streamlined project execution, a single-source supply approach was implemented. The solution included 180 medium-voltage switchgear panels and 120 unit substations, combining coordinated engineering, procurement, manufacturing, and delivery processes to reduce integration complexity and accelerate project progress.",
-        "Through integrated project management and close technical coordination, the project was successfully delivered within the required timeline. This approach helped minimize coordination risks, simplify execution for the end user, and demonstrate the value of turnkey power solutions for mission-critical data center applications.",
+        "LS ELECTRIC supplied HVAC control solutions for Incheon International Airport, one of the world's busiest aviation hubs, helping ensure stable and energy-efficient operation of large-scale heating, ventilation, and air conditioning systems. Designed for continuous 24/7 operation, the solution supports reliable climate control across airport terminals while improving energy efficiency and operational stability.\n- Continuous operation for mission-critical airport facilities\n- Optimized energy consumption through variable-speed control\n- Stable indoor climate for passenger terminals\n- Reduced maintenance through intelligent drive control\n- Reliable operation of large-scale HVAC equipment",
       ],
       keyInfo: [
-        { label: "Location", value: "United States" },
-        { label: "Application", value: "Data Center" },
+        { label: "Location", value: "South Korea" },
+        {
+          label: "Application",
+          lines: [
+            "Fan & Pump Control",
+            "HVAC Control System",
+            "BACnet-based Building Communication",
+            "Energy-efficient Motor Control",
+          ],
+        },
         {
           label: "Scope of Work",
-          value: "180 MV switchgear panels and 120 unit substations",
+          value: "Fan & Pump Drive (VFD), Motor Control, Industrial Networks",
         },
       ],
       ctaLabel: "Discuss your Project",
@@ -115,26 +121,32 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
     id: "pi-ref-2",
     href: "",
     image: "/img/markets/public-infrastructure/references/ref_02.webp",
-    title: "Australian Data Center Project",
+    title: "K-water Metropolitan Water Management System",
     description:
-      "PROJECT DUNE is a data center project in Australia aimed at providing an integrated solution by combining advanced power infrastructure and building automation capabilities. The project focuses on delivering reliable and cost-effective solutions for global colocation data center customers.",
-    location: "Australia",
+      "LS ELECTRIC delivered an integrated monitoring and control system for K-water's metropolitan water supply network, one of Korea's largest public water infrastructure projects. The solution centralizes the operation of multiple intake facilities, water treatment plants, pumping stations, and transmission pipelines into a single operation center, enabling real-time monitoring, remote control, and stable water supply management across the metropolitan region.",
+    location: "South Korea",
     country: "",
     modal: {
-      modalTitle: "Australian Data Center Project",
+      modalTitle: "K-water Metropolitan Water Management System",
       images: ["/img/markets/public-infrastructure/references/ref_02.webp"],
       overview: [
-        "PROJECT DUNE is a data center project in Australia aimed at providing an integrated solution by combining advanced power infrastructure and building automation capabilities. The project focuses on delivering reliable and cost-effective solutions for global colocation data center customers.",
-        "To meet customer requirements for competitive pricing and high-quality electrical systems, an alternative sourcing strategy was reviewed by utilizing an established supplier network. Based on this approach, a competitive electrical package including medium-voltage switchgear, transformer solutions, and low-voltage switchgear was proposed.",
-        "Through PROJECT DUNE, the company aims to strengthen its position in the Australian data center market and expand future opportunities with global customers by delivering optimized power solutions.",
+        "LS ELECTRIC delivered an integrated monitoring and control system for K-water's metropolitan water supply network, one of Korea's largest public water infrastructure projects. The solution centralizes the operation of multiple intake facilities, water treatment plants, pumping stations, and transmission pipelines into a single operation center, enabling real-time monitoring, remote control, and stable water supply management across the metropolitan region.\n\nDesigned for mission-critical infrastructure, the system incorporates redundant control architecture and industrial communication networks to ensure continuous operation while improving operational efficiency and response to system events.\n\n- Centralized management of geographically distributed water facilities\n- Reliable 24/7 operation through redundant control architecture\n- Real-time visibility across the entire water supply network\n- Faster response to abnormal operating conditions\n- Improved operational efficiency through remote monitoring and control\n- Stable water supply for millions of residents\n- Scalable architecture supporting future network expansion",
       ],
       keyInfo: [
-        { label: "Location", value: "Australia" },
-        { label: "Application", value: "Data Center" },
+        { label: "Location", value: "South Korea" },
+        {
+          label: "Application",
+          lines: [
+            "Centralized Water Management",
+            "Redundant Control System",
+            "Integrated Monitoring & Control",
+            "Asset Monitoring",
+            "Alarm & Event Management",
+          ],
+        },
         {
           label: "Scope of Work",
-          value:
-            "Medium-voltage switchgear, transformer solutions, and low-voltage switchgear package",
+          value: "PLC, Redundant PLC, SCADA, Industrial Networks, RTUs",
         },
       ],
       ctaLabel: "Discuss your Project",
@@ -145,26 +157,24 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
     id: "pi-ref-3",
     href: "",
     image: "/img/markets/public-infrastructure/references/ref_03.webp",
-    title: "AI Data Center Demonstration Testbed",
+    title: "Thailand Railway Signaling System Modernization",
     description:
-      "To address the rapid expansion of the global data center market, the company and a strategic partner established a collaborative demonstration testbed. This facility aims to strengthen validation capabilities in power and cooling infrastructure, supporting joint market entry into the emerging AI data center sector.",
-    location: "South Korea",
+      "To support the modernization of Thailand's national railway network, LS ELECTRIC delivered advanced railway signaling solutions for multiple phases of the country's railway infrastructure program. The project aimed to improve operational safety, efficiency, and reliability while supporting future railway network expansion.",
+    location: "Thailand",
     country: "",
     modal: {
-      modalTitle: "AI Data Center Demonstration Testbed",
+      modalTitle: "Thailand Railway Signaling System Modernization",
       images: ["/img/markets/public-infrastructure/references/ref_03.webp"],
       overview: [
-        "To address the rapid expansion of the global data center market, the company and a strategic partner established a collaborative demonstration testbed. This facility aims to strengthen validation capabilities in power and cooling infrastructure, supporting joint market entry into the emerging AI data center sector.",
-        "To meet requirements for a high-efficiency, high-density AI data center model, the solution integrates liquid cooling and advanced power systems. The company is delivering a power quality monitoring system and an optimized DC power architecture, combined with the partner's specialized high-density racks.",
-        "This initiative establishes a valuable technical reference for next-generation data center stability and efficiency. It also strengthens long-term business cooperation between both parties, creating a solid foundation to capture future opportunities in the rapidly evolving AI infrastructure market.",
+        "To support the modernization of Thailand's national railway network, LS ELECTRIC delivered advanced railway signaling solutions for multiple phases of the country's railway infrastructure program. The project aimed to improve operational safety, efficiency, and reliability while supporting future railway network expansion.\n\nLS ELECTRIC provided engineering, system design, and supervision, along with advanced signaling technologies including Computer-Based Interlocking (CBI), Centralized Traffic Control (CTC), and ETCS Level 1. Through the successful execution of multiple railway projects over two decades, LS ELECTRIC established a strong track record in delivering reliable transportation infrastructure solutions across Thailand.",
       ],
       keyInfo: [
-        { label: "Location", value: "South Korea" },
-        { label: "Application", value: "AI Data Center Infrastructure" },
+        { label: "Location", value: "Thailand" },
+        { label: "Application", value: "Public Railway Infrastructure" },
         {
           label: "Scope of Work",
           value:
-            "Power quality monitoring, DC power architecture, and high-density rack integration",
+            "Engineering & design, Railway signaling system (CBI, CTC, ETCS Level 1), Wayside equipment",
         },
       ],
       ctaLabel: "Discuss your Project",

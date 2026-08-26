@@ -92,25 +92,31 @@ export const industrialReferences: ReferenceItem[] = [
     id: "ind-ref-1",
     href: "",
     image: "/img/markets/industrial/references/ref_01.webp",
-    title: "Lotte Hanoi Mall",
+    title: "Automation Solutions for Hyundai Motor's EV Dedicated Plant",
     description:
-      "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears",
-    location: "Vietnam",
-     country: "",
+      "Hyundai Motor is developing its first new manufacturing plant in Ulsan in more than three decades, designed exclusively for next-generation electric vehicles. The facility incorporates advanced smart factory technologies to enhance manufacturing efficiency, product quality, and production flexibility.",
+    location: "Ulsan, South Korea",
+    country: "",
     modal: {
-      modalTitle: "Lotte Hanoi Mall",
+      modalTitle: "Automation Solutions for Hyundai Motor's EV Dedicated Plant",
       images: ["/img/markets/industrial/references/ref_01.webp"],
       overview: [
-        "LS ELECTRIC ultimately succeeded in winning the contract to supply EHV switchgears, LV switchgears, and integrated power distribution for this large-scale commercial development.",
-        "The project required coordinated high-voltage and low-voltage equipment engineered for reliable operation across a complex mixed-use facility with demanding load profiles.",
-        "Through integrated engineering and supply, LS ELECTRIC helped the customer streamline installation, reduce coordination risk, and deliver a stable power infrastructure foundation.",
+        "Hyundai Motor is developing its first new manufacturing plant in Ulsan in more than three decades, designed exclusively for next-generation electric vehicles. The facility incorporates advanced smart factory technologies to enhance manufacturing efficiency, product quality, and production flexibility.\n\nAs a key automation partner, LS ELECTRIC supplied an integrated automation platform encompassing PLCs, Safety PLCs, HMIs, Servo Systems, AC Drives, and industrial networking technologies. These solutions enable centralized machine control, functional safety, high-speed motion control, and seamless communication across production equipment, supporting a highly automated and reliable EV manufacturing environment.",
       ],
       keyInfo: [
-        { label: "Location", value: "Vietnam" },
-        { label: "Application", value: "Commercial Complex" },
+        { label: "Location", value: "Ulsan, South Korea" },
+        {
+          label: "Application",
+          lines: [
+            "Body Shop automation",
+            "Assembly Shop automation",
+            "Material handling systems",
+            "Automated production equipment control",
+          ],
+        },
         {
           label: "Scope of Work",
-          value: "EHV switchgears and LV switchgears supply",
+          value: "PLC, Servo & Motion Systems, VFDs, HMIs, Industrial Networks",
         },
       ],
       ctaLabel: "Discuss your Project",
@@ -121,25 +127,33 @@ export const industrialReferences: ReferenceItem[] = [
     id: "ind-ref-2",
     href: "",
     image: "/img/markets/industrial/references/ref_02.webp",
-    title: "LG USA New Headquarters",
+    title: "Gwangju Global Motors (GGM) Smart Manufacturing Automation",
     description:
-      "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears",
-     location: "United States",
-     country: "",
+      "LS ELECTRIC delivered a full suite of automation solutions for Gwangju Global Motors (GGM). The project integrated PLCs, HMIs, servo systems, AC drives, and the company's proprietary RAPIEnet industrial Ethernet across the body, paint, and assembly lines, establishing a benchmark for high-performance automotive manufacturing automation.",
+    location: "Gwangju, South Korea",
+    country: "",
     modal: {
-      modalTitle: "LG USA New Headquarters",
+      modalTitle: "Gwangju Global Motors (GGM) Smart Manufacturing Automation",
       images: ["/img/markets/industrial/references/ref_02.webp"],
       overview: [
-        "As such, we supplied various equipment such as 38kV MV switchgears, MV transformers, UL 891 switchgears, and coordinated low-voltage distribution for the new headquarters campus.",
-        "The solution was designed to meet North American standards while supporting the customer's goals for energy efficiency and operational reliability across the facility.",
-        "Integrated delivery of medium-voltage and low-voltage systems helped accelerate commissioning and ensure consistent performance across the campus power architecture.",
+        "LS ELECTRIC delivered a full suite of automation solutions for Gwangju Global Motors (GGM). The project integrated PLCs, HMIs, servo systems, AC drives, and the company's proprietary RAPIEnet industrial Ethernet across the body, paint, and assembly lines, establishing a benchmark for high-performance automotive manufacturing automation.\n\n- End-to-end automation across body, paint, and assembly lines\n- High-speed, deterministic industrial communication with RAPIEnet\n- Stable and reliable production line operation\n- Seamless integration of PLC, HMI, Servo, and Drives\n- Increased productivity and operational efficiency\n- Reduced dependence on proprietary overseas automation platforms",
       ],
       keyInfo: [
-        { label: "Location", value: "United States" },
-        { label: "Application", value: "Corporate Headquarters" },
+        { label: "Location", value: "Gwangju, South Korea" },
+        {
+          label: "Application",
+          lines: [
+            "Automotive Production Line Automation",
+            "Body, Paint & Assembly Line Control",
+            "Material Handling & Conveyor Systems",
+            "Industrial Motion Control",
+            "Factory-wide Equipment Automation",
+          ],
+        },
         {
           label: "Scope of Work",
-          value: "38kV MV switchgears, MV transformers, UL 891 switchgears",
+          value:
+            "PLC, HMI, Servo & Motion, AC Drives, Industrial Ethernet (RAPIEnet)",
         },
       ],
       ctaLabel: "Discuss your Project",
@@ -150,25 +164,24 @@ export const industrialReferences: ReferenceItem[] = [
     id: "ind-ref-3",
     href: "",
     image: "/img/markets/industrial/references/ref_03.webp",
-    title: "KPX Energy Management System",
+    title: "1st Battery Cell Manufacturing Facility",
     description:
-      "Owing to the next-generation EMS constructed at the operators can now optimally manage power generation, analyze systems",
-     location: "South Korea",
-     country: "",
+      "LS ELECTRIC supported the development of one of North America's largest EV battery cell manufacturing facilities by delivering a comprehensive power distribution solution for a high-capacity production plant. The project required reliable electrical infrastructure to ensure stable operation of mission-critical battery manufacturing processes.",
+    location: "United States",
+    country: "",
     modal: {
-      modalTitle: "KPX Energy Management System",
+      modalTitle: "1st Battery Cell Manufacturing Facility",
       images: ["/img/markets/industrial/references/ref_03.webp"],
       overview: [
-        "Owing to the next-generation EMS constructed at the site, operators can now optimally manage power generation, analyze systems, and improve grid-wide operational visibility.",
-        "The energy management system integrates real-time monitoring, analytics, and control capabilities to support efficient power operations across the network.",
-        "This project demonstrates LS ELECTRIC's ability to deliver advanced digital platforms that enhance reliability and decision-making for mission-critical energy infrastructure.",
+        "LS ELECTRIC supported the development of one of North America's largest EV battery cell manufacturing facilities by delivering a comprehensive power distribution solution for a high-capacity production plant. The project required reliable electrical infrastructure to ensure stable operation of mission-critical battery manufacturing processes.\n\nLS ELECTRIC supplied key power equipment, including high-voltage power transformers, medium-voltage switchgear, medium-voltage transformers, and panel boards. Leveraging proven expertise in industrial power systems, the project reinforced LS ELECTRIC's capabilities in delivering reliable power infrastructure for large-scale battery manufacturing facilities in the U.S.",
       ],
       keyInfo: [
-        { label: "Location", value: "South Korea" },
-        { label: "Application", value: "Energy Management System" },
+        { label: "Location", value: "United States" },
+        { label: "Application", value: "EV Battery Manufacturing Facility" },
         {
           label: "Scope of Work",
-          value: "Next-generation EMS design and implementation",
+          value:
+            "HV power transformers, MV switchgear, MV transformers, and panel boards",
         },
       ],
       ctaLabel: "Discuss your Project",
