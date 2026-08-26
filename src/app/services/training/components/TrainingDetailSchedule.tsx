@@ -42,19 +42,30 @@ export default function TrainingDetailSchedule({
   const [typeValue, setTypeValue] = useState("");
   const [monthValue, setMonthValue] = useState("");
 
-  const filteredSessions = useMemo(
-    () =>
-      sessions.filter((s) => {
-        if (typeValue && !(s.typeCodes ?? []).includes(typeValue)) return false;
-        if (monthValue) {
-          const fromMonth = (s.isoDate ?? "").slice(5, 7);
-          const toMonth = (s.isoDateTo ?? "").slice(5, 7);
-          if (fromMonth !== monthValue && toMonth !== monthValue) return false;
+  const filteredSessions = useMemo(() => {
+    const monthOf = (value?: string) => {
+      const month = Number((value ?? "").slice(5, 7));
+      return Number.isInteger(month) && month >= 1 && month <= 12 ? month : null;
+    };
+    const selectedMonth = monthValue ? monthOf(`0000-${monthValue}-00`) : null;
+
+    return sessions.filter((s) => {
+      if (typeValue && !(s.typeCodes ?? []).includes(typeValue)) return false;
+      if (selectedMonth != null) {
+        const fromMonth = monthOf(s.isoDate);
+        const toMonth = monthOf(s.isoDateTo);
+        if (fromMonth == null && toMonth == null) return false;
+        if (fromMonth == null) return toMonth === selectedMonth;
+        if (toMonth == null) return fromMonth === selectedMonth;
+        if (fromMonth <= toMonth) {
+          if (selectedMonth < fromMonth || selectedMonth > toMonth) return false;
+        } else if (selectedMonth < fromMonth && selectedMonth > toMonth) {
+          return false;
         }
-        return true;
-      }),
-    [sessions, typeValue, monthValue],
-  );
+      }
+      return true;
+    });
+  }, [sessions, typeValue, monthValue]);
 
   const typeDisplayLabel = typeValue
     ? (typeOptions.find((o) => o.value === typeValue)?.label ?? trainingTypeFilter.label)
