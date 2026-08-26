@@ -72,7 +72,7 @@ export default function CompanyBlogPage({
   const { featured } = useFeaturedFeed<BlogCardItem>({
     slug: "blog-data",
     where: BLOG_STATUS_WHERE,
-    sort: "createdAt,desc",
+    sort: "blog.publish_dttm,desc",
     toCard: toFeaturedCard,
   });
 
@@ -89,12 +89,12 @@ export default function CompanyBlogPage({
       },
       sort:
         sort === "oldest"
-          ? "createdAt,asc"
+          ? "blog.publish_dttm,asc"
           : sort === "az"
             ? "blog.title,asc"
             : sort === "za"
               ? "blog.title,desc"
-              : undefined,
+              : "blog.publish_dttm,desc",
       리턴함수: (rows) => rows,
     })
       .then((res) => {

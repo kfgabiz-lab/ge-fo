@@ -61,7 +61,7 @@ export default function CompanyArticlesPage() {
   const { featured } = useFeaturedFeed<ArticlesFeaturedCard>({
     slug: "articles-data",
     where: ARTICLES_STATUS_WHERE,
-    sort: "createdAt,desc",
+    sort: "articles.publish_dttm,desc",
     toCard: toArticlesFeaturedCard,
   });
 
@@ -79,12 +79,12 @@ export default function CompanyArticlesPage() {
       },
       sort:
         sort === "oldest"
-          ? "createdAt,asc"
+          ? "articles.publish_dttm,asc"
           : sort === "az"
             ? "articles.title,asc"
             : sort === "za"
               ? "articles.title,desc"
-              : undefined,
+              : "articles.publish_dttm,desc",
       리턴함수: (rows) => rows,
     })
       .then((res) => {
