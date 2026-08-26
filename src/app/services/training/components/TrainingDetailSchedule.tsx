@@ -49,8 +49,13 @@ export default function TrainingDetailSchedule({
         if (monthValue) {
           const fromMonth = (s.isoDate ?? "").slice(5, 7);
           const toMonth = (s.isoDateTo ?? "").slice(5, 7);
-          if (fromMonth !== monthValue && toMonth !== monthValue) return false;
-        }
+          const selectedMonth = Number(monthValue);
+
+          if (monthValue < fromMonth || monthValue > toMonth) {
+            return false;
+          }
+          
+         }
         return true;
       }),
     [sessions, typeValue, monthValue],
