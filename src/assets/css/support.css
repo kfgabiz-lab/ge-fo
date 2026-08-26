@@ -228,6 +228,10 @@
     object-position: top center;
   }
 
+  section.support_connect_features .support_connect_features__bg-img--mo {
+    display: none;
+  }
+
   section.support_connect_features .support_connect_features__inner {
     position: relative;
     z-index: 1;
@@ -541,6 +545,10 @@
 
   section.support_connect_features .support_connect_features__bg-img--pc {
     display: none;
+  }
+
+  section.support_connect_features .support_connect_features__bg-img--mo {
+    display: block;
   }
 
   section.support_connect_features .support_connect_features__inner {

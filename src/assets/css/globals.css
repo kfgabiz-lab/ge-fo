@@ -1988,6 +1988,7 @@ section.common_faq .faq_question {
   border: none;
   cursor: pointer;
   transition: padding 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
 }
 
 section.common_faq .faq_question .txt {
@@ -2021,11 +2022,13 @@ section.common_faq .faq_item.is-open .faq_icon {
   background-image: url("/ico/ico_down_16_white.svg");
   border-color: #e60040; */
 }
-section.common_faq .faq_item:hover .faq_icon {
-  /* transform: rotate(-180deg); */
-  background-color: #e60040;
-  background-image: url("/ico/ico_down_16_white.svg");
-  border-color: #e60040;
+@media (hover: hover) {
+  section.common_faq .faq_item:hover .faq_icon {
+    /* transform: rotate(-180deg); */
+    background-color: #e60040;
+    background-image: url("/ico/ico_down_16_white.svg");
+    border-color: #e60040;
+  }
 }
 
 section.common_faq .faq_answer_wrap {
@@ -2875,6 +2878,13 @@ section.company-blog-list .guide_field .MuiOutlinedInput-root:has(.MuiSelect-ico
     font-size: 18px;
     line-height: 26px;
     position: static;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  section.common_faq .faq_question:focus,
+  section.common_faq .faq_question:focus-visible {
+    outline: none;
+    box-shadow: none;
   }
 
   section.common_faq .faq_item.is-open .faq_question {

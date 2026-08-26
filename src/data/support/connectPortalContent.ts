@@ -30,7 +30,7 @@ export const connectPortalPage = {
   },
   featuresBg: {
     pc: "/img/support/connect-portal/bg_section_support.webp",
-    mobile: "/img/main/bg_section_main_info_mo.webp",
+    mobile: "/img/support/connect-portal/bg_section_support_mo.webp",
   },
   featureCards: [
     {
