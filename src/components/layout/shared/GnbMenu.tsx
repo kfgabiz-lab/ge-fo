@@ -809,7 +809,12 @@ export default function GnbMenu({
           <div className="main_header__inner">
             {!isPanel ? (
               <LogoTag className="main_header__logo">
-                <Link href={logoHref} prefetch={false} onClick={handleLogoClick}>
+                <Link
+                  href={logoHref}
+                  prefetch={false}
+                  onClick={handleLogoClick}
+                  aria-label="LS ELECTRIC home"
+                >
                   <img loading="eager" decoding="async"
                     src="/img/logo_white.svg"
                     alt=""
