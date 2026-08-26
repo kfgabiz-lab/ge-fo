@@ -741,7 +741,7 @@
   section.support_service_training_session_detail #session-training,
   section.support_service_training_session_detail #session-agenda,
   section.support_service_training_session_detail #session-registration {
-    scroll-margin-top: 120px;
+    scroll-margin-top: 140px;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__layout {
@@ -3350,7 +3350,8 @@
   section.support_service_training_session_detail #session-training,
   section.support_service_training_session_detail #session-agenda,
   section.support_service_training_session_detail #session-registration {
-    scroll-margin-top: 100px;
+    /* sticky header(~60) + gap — JS도 동적 측정 */
+    scroll-margin-top: 72px;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__section-group {

@@ -25,12 +25,21 @@ function getSlidesPerView(swiper: SwiperType): number {
   return 1;
 }
 
-function getPageCount(slideCount: number, slidesPerView: number) {
+function getLinearPageCount(slideCount: number, slidesPerView: number) {
   return Math.max(1, Math.ceil(slideCount - slidesPerView + 1));
 }
 
 function canEnableProductLoop(slideCount: number, slidesPerView: number) {
-  return slideCount > 1 && slideCount > slidesPerView * 2;
+  return slideCount > 1 && slideCount > Math.ceil(slidesPerView);
+}
+
+function getPageCount(
+  slideCount: number,
+  slidesPerView: number,
+  loopEnabled: boolean,
+) {
+  if (loopEnabled) return Math.max(1, slideCount);
+  return getLinearPageCount(slideCount, slidesPerView);
 }
 
 function getActivePageIndex(
@@ -38,13 +47,12 @@ function getActivePageIndex(
   slideCount: number,
   loopEnabled: boolean,
 ) {
-  const perView = getSlidesPerView(swiper);
-  const pageCount = getPageCount(slideCount, perView);
-
   if (loopEnabled) {
-    return Math.min(swiper.realIndex, pageCount - 1);
+    return swiper.realIndex;
   }
 
+  const perView = getSlidesPerView(swiper);
+  const pageCount = getLinearPageCount(slideCount, perView);
   return Math.min(swiper.snapIndex, pageCount - 1);
 }
 
@@ -53,13 +61,12 @@ export default function DevicesProductOtherProducts({
   title = "Other Products",
 }: DevicesProductOtherProductsProps) {
   const isDesktop = useMediaQuery(DESKTOP_MQ);
-  const loopEnabled = canEnableProductLoop(
-    items.length,
-    isDesktop ? DESKTOP_SLIDES_PER_VIEW : 1,
-  );
+  const layoutSlidesPerView = isDesktop ? DESKTOP_SLIDES_PER_VIEW : 1;
+  const loopEnabled = canEnableProductLoop(items.length, layoutSlidesPerView);
   const pageCount = getPageCount(
     items.length,
-    isDesktop ? DESKTOP_SLIDES_PER_VIEW : 1,
+    layoutSlidesPerView,
+    loopEnabled,
   );
 
   const swiperRef = useRef<SwiperType | null>(null);
@@ -87,51 +94,13 @@ export default function DevicesProductOtherProducts({
     [syncPagination],
   );
 
-  const getLastPageIndex = useCallback(
-    (swiper: SwiperType) =>
-      getPageCount(items.length, getSlidesPerView(swiper)) - 1,
-    [items.length],
-  );
-
   const handlePrev = useCallback(() => {
-    const swiper = swiperRef.current;
-    if (!swiper) return;
-
-    const lastPage = getLastPageIndex(swiper);
-    const isAtFirst = loopEnabled ? swiper.realIndex === 0 : swiper.isBeginning;
-
-    if (isAtFirst) {
-      if (loopEnabled) {
-        swiper.slideToLoop(lastPage);
-      } else {
-        swiper.slideTo(lastPage);
-      }
-      return;
-    }
-
-    swiper.slidePrev();
-  }, [getLastPageIndex, loopEnabled]);
+    swiperRef.current?.slidePrev();
+  }, []);
 
   const handleNext = useCallback(() => {
-    const swiper = swiperRef.current;
-    if (!swiper) return;
-
-    const lastPage = getLastPageIndex(swiper);
-    const isAtLast = loopEnabled
-      ? swiper.realIndex >= lastPage
-      : swiper.isEnd;
-
-    if (isAtLast) {
-      if (loopEnabled) {
-        swiper.slideToLoop(0);
-      } else {
-        swiper.slideTo(0);
-      }
-      return;
-    }
-
-    swiper.slideNext();
-  }, [getLastPageIndex, loopEnabled]);
+    swiperRef.current?.slideNext();
+  }, []);
 
   const handlePaginationClick = (index: number) => {
     const swiper = swiperRef.current;
@@ -165,7 +134,6 @@ export default function DevicesProductOtherProducts({
               spaceBetween={24}
               speed={400}
               loop={loopEnabled}
-              rewind={!loopEnabled && items.length > 1}
               watchOverflow
               breakpoints={{
                 0: {
@@ -211,8 +179,8 @@ export default function DevicesProductOtherProducts({
               variant="swiper_type_01"
               count={pageCount}
               activeIndex={activeIndex}
-              isPrevDisabled={false}
-              isNextDisabled={false}
+              isPrevDisabled={!loopEnabled && activeIndex <= 0}
+              isNextDisabled={!loopEnabled && activeIndex >= pageCount - 1}
               onSelect={handlePaginationClick}
               onPrev={handlePrev}
               onNext={handleNext}

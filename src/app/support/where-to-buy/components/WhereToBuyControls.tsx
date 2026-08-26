@@ -46,7 +46,10 @@ export default function WhereToBuyControls({
         onTextFallback={onTextFallback}
         onReset={onReset}
       />
-      <div className="support_where_to_buy_contents__filters">
+      <div
+        id="support-where-to-buy-filters"
+        className="support_where_to_buy_contents__filters"
+      >
         <FormControl className="guide_field">
           <GuideSelect
             value={radiusValue}
