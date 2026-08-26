@@ -1856,23 +1856,27 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     appearance: none;
+    -webkit-appearance: none;
     cursor: pointer;
   }
 
   main.support-page--download-center .support_download_mo-toolbar__sort-trigger {
+    display: block;
     width: 100%;
+    padding-right: 44px;
+    text-align: left;
   }
 
-  main.support-page--download-center .support_download_mo-toolbar__sort--open {
-    overflow: hidden;
-    border: 1px solid #888;
-    border-radius: 4px;
-    background: #fff;
+  main.support-page--download-center .support_download_mo-toolbar__sort-trigger:focus,
+  main.support-page--download-center .support_download_mo-toolbar__sort-trigger:focus-visible {
+    border-color: #888;
+    outline: none;
+    box-shadow: none;
   }
 
-  main.support-page--download-center .support_download_mo-toolbar__sort--open .support_download_mo-toolbar__sort-trigger {
-    border: none;
-    border-radius: 0;
+  main.support-page--download-center .support_download_mo-toolbar__sort-trigger option {
+    color: #222;
+    background-color: #fff;
   }
 
   main.support-page--download-center .support_download_mo-toolbar__filter-label,
@@ -1894,20 +1898,23 @@
 
   main.support-page--download-center .support_download_mo-toolbar__sort {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: block;
   }
 
   main.support-page--download-center .support_download_mo-toolbar__sort-icon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    z-index: 1;
     display: flex;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
     width: 14px;
     height: 14px;
+    margin-top: -7px;
     background: none;
-    transition: transform 0.2s ease;
-    transform-origin: center;
+    pointer-events: none;
   }
 
   main.support-page--download-center .support_download_mo-toolbar__sort-icon img {
@@ -1916,50 +1923,6 @@
     height: 14px;
     position: relative;
     top: 2px;
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort--open .support_download_mo-toolbar__sort-icon {
-    transform: rotate(180deg);
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort-list {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort-list li {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort-option {
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    width: 100%;
-    height: 50px;
-    min-height: 50px;
-    margin: 0;
-    padding: 0 20px;
-    font: inherit;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 23px;
-    color: #222;
-    text-align: left;
-    background: #fff;
-    border: none;
-    border-radius: 0;
-    appearance: none;
-    cursor: pointer;
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort-option--active {
-    background: #f5f7fa;
   }
 
   main.support-page--download-center .support_download_filter-modal,
@@ -4677,7 +4640,12 @@ section.support_where_to_buy_banner .common_banner_02__link {
     border-color: #ddd;
   }
 
-  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiSelect-select {
+  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset {
+    border-color: var(--color-text-muted, #666);
+  }
+
+  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiSelect-select,
+  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiNativeSelect-select {
     height: 50px;
     min-height: 50px;
     padding: 0 44px 0 20px;
@@ -4685,6 +4653,11 @@ section.support_where_to_buy_banner .common_banner_02__link {
     font-weight: 400;
     line-height: 23px;
     color: #222;
+  }
+
+  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiNativeSelect-select option {
+    color: #222;
+    background-color: #fff;
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiSelect-icon {
@@ -5557,6 +5530,8 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
     resize: none;
     overflow-x: hidden;
     overflow-y: auto;
+    appearance: none;
+    -webkit-appearance: none;
   }
 
   section.support_contact_form .support_contact_form__textarea::placeholder {
@@ -5568,7 +5543,7 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
   section.support_contact_form .support_contact_form__textarea:focus-visible {
     outline: none;
     box-shadow: none;
-    border-color: var(--color-text-muted);
+    border: 1px solid var(--color-text-muted, #666);
   }
 
   section.support_contact_form .support_contact_form__textarea--error {
@@ -5577,7 +5552,7 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
 
   section.support_contact_form .support_contact_form__textarea--error:focus,
   section.support_contact_form .support_contact_form__textarea--error:focus-visible {
-    border-color: var(--color-error);
+    border: 1px solid var(--color-error);
   }
 
   section.support_contact_form .guide_field .MuiOutlinedInput-input::placeholder {
@@ -6010,10 +5985,48 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
   }
 
   section.support_contact_form .support_contact_form__textarea {
+    display: block;
+    width: 100%;
     height: 180px;
     min-height: 180px;
     max-height: 180px;
+    margin: 0;
     padding: 16px 20px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #222;
+    resize: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  section.support_contact_form .support_contact_form__textarea::placeholder {
+    color: #888;
+    opacity: 1;
+  }
+
+  section.support_contact_form .support_contact_form__textarea:focus,
+  section.support_contact_form .support_contact_form__textarea:focus-visible {
+    outline: none;
+    box-shadow: none;
+    border: 1px solid var(--color-text-muted, #666);
+  }
+
+  section.support_contact_form .support_contact_form__textarea--error {
+    border-color: var(--color-error);
+  }
+
+  section.support_contact_form .support_contact_form__textarea--error:focus,
+  section.support_contact_form .support_contact_form__textarea--error:focus-visible {
+    border: 1px solid var(--color-error);
   }
 
   section.support_contact_form .support_contact_form__password-toggle {

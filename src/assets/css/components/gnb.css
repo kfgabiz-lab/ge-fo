@@ -173,6 +173,15 @@
 .sub_header-wrap:not(.is-at-top)
   .gnb_menu_wrap.sub_header.is-gnb-hidden
   .sub_breadcrumb
+  .breadcrumb_nav
+  a:hover {
+  color: #fff;
+  opacity: 0.8;
+}
+
+.sub_header-wrap:not(.is-at-top)
+  .gnb_menu_wrap.sub_header.is-gnb-hidden
+  .sub_breadcrumb
   .breadcrumb_links
   a {
     opacity: .7;
