@@ -11,6 +11,11 @@ export const industrialHero = {
   subtitle: "Smart, Efficient & Sustainable Industrial Operations",
   title: "Industrial",
   heroImage: "/img/markets/industrial/hero/hero.webp",
+  secondaryCta: {
+    label: "Get the Whitepaper",
+    href: "/docs/Industrial.pdf",
+    icon: "download" as const,
+  },
 };
 
 export const industrialIntro = {

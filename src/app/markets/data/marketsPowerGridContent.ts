@@ -13,6 +13,11 @@ export const powerGridHero = {
     "Reliable, Intelligent & Sustainable Power Infrastructure for Modern Energy Systems",
   title: "Power Grid",
   heroImage: "/img/markets/power-grid/hero/hero.webp",
+  secondaryCta: {
+    label: "Get the Whitepaper",
+    href: "/docs/PowerGrid.pdf",
+    icon: "download" as const,
+  },
 };
 
 export const powerGridIntro = {

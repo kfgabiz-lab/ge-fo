@@ -11,6 +11,11 @@ export const oilGasMiningHero = {
     "Reliable, Safe & High-Performance Solutions for Harsh Industrial Environments",
   title: "Oil & Gas, Mining Industries",
   heroImage: "/img/markets/oil-gas-mining/hero/hero.webp",
+  secondaryCta: {
+    label: "Get the Whitepaper",
+    href: "/docs/Oil_Gas_Mining.pdf",
+    icon: "download" as const,
+  },
 };
 
 export const oilGasMiningIntro = {

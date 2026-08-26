@@ -70,6 +70,7 @@ export default async function MarketsPowerGridPage() {
         subtitle={powerGridHero.subtitle}
         title={powerGridHero.title}
         heroImage={powerGridHero.heroImage}
+        secondaryCta={powerGridHero.secondaryCta}
       />
       <MarketsIntro
         titleLines={powerGridIntro.titleLines}

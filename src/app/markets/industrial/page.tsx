@@ -65,6 +65,7 @@ export default async function MarketsIndustrialPage() {
         subtitle={industrialHero.subtitle}
         title={industrialHero.title}
         heroImage={industrialHero.heroImage}
+        secondaryCta={industrialHero.secondaryCta}
       />
       <MarketsIntro
         titleLines={industrialIntro.titleLines}
