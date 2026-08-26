@@ -85,10 +85,6 @@ export default function CompanyFeedListToolbar({
   // 검색어 초기화 — 입력값과 적용된 검색 조건을 함께 비운다
   const clearSearch = () => {
     setSearchDraft("");
-    onSearchSubmit?.("");
-    // Reset month/year selects too so "View all" shows full list
-    onMonthChange?.("");
-    onYearChange?.("");
   };
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") submitSearch();
