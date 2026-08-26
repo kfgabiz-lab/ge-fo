@@ -44,9 +44,44 @@ button {
   cursor: pointer;
 }
 
+/* Tap / touch highlight — same for all buttons & links (mobile gray flash) */
+a,
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+summary,
+label {
+  -webkit-tap-highlight-color: transparent;
+}
+
 :focus:not(:focus-visible) {
   outline: none;
   box-shadow: none;
+}
+
+/* Mobile: suppress tap focus ring flash on buttons & links (keyboard PC focus kept) */
+@media (max-width: 780px) {
+  a:focus,
+  a:focus-visible,
+  button:focus,
+  button:focus-visible,
+  [role="button"]:focus,
+  [role="button"]:focus-visible,
+  input[type="button"]:focus,
+  input[type="button"]:focus-visible,
+  input[type="submit"]:focus,
+  input[type="submit"]:focus-visible,
+  input[type="reset"]:focus,
+  input[type="reset"]:focus-visible,
+  summary:focus,
+  summary:focus-visible,
+  label:focus,
+  label:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
 }
 
 a {

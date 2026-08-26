@@ -92,7 +92,7 @@ export const esgClimate = {
       id: "phase-2",
       phaseLabel: "Phase 2 (2026–2035)",
       title: "Implement decarbonization strategies",
-      lineProgressHeight: 163,
+      lineProgressHeight: 74,
       items: [
         {
           text: "Expand renewable energy sourcing",

@@ -6,6 +6,14 @@ export const contactUsPage = {
   viewResponseCtaLabel: "View Response",
 } as const;
 
+/** 문의유형 표시 라벨. 폼(codes/INQUIRY_TYPE)과 CTP 응답 모두 이 PascalCase 값을 그대로 내려준다. */
+export const contactUsInquiryTypeLabels: Record<string, string> = {
+  ProductInformation: "Product Information",
+  QuotationRequest: "Quotation Request",
+  Purchase: "Purchase",
+  Others: "Others",
+} as const;
+
 export const contactUsViewResponseModal = {
   title: "View Response",
   heading: "Check your inquiry.",

@@ -22,6 +22,7 @@ import {
   type WhereToBuyLocation,
 } from "@/data/support/whereToBuyContent";
 import type { GeoCoord } from "@/lib/geo/distance";
+import { getLenisInstance, getWindowScrollY, scrollWindowTo } from "@/lib/lenisScroll";
 
 type WhereToBuyContentsProps = {
   showNoDataPreview?: boolean;
@@ -45,6 +46,10 @@ export default function WhereToBuyContents({
   >(null);
   const [activeId, setActiveId] = useState<string>("");
   const popupAnchorRef = useRef<HTMLDivElement>(null);
+  const mapColRef = useRef<HTMLDivElement>(null);
+  const listColRef = useRef<HTMLDivElement>(null);
+  const viewToggleRef = useRef<HTMLButtonElement>(null);
+  const pendingScrollViewRef = useRef<WhereToBuyMobileView | null>(null);
   const [refreshSpin, setRefreshSpin] = useState(false);
   const [searchResetKey, setSearchResetKey] = useState(0);
   const [mobileView, setMobileView] = useState<WhereToBuyMobileView>(
@@ -159,6 +164,65 @@ export default function WhereToBuyContents({
   const activeLocation = filtered.find((item) => item.id === activeId);
   const hasResults = filtered.length > 0;
 
+  const scrollElementToTop = (el: HTMLElement | null, offsetPx = 0) => {
+    if (!el) return;
+
+    const top = Math.max(
+      0,
+      el.getBoundingClientRect().top + getWindowScrollY() - offsetPx,
+    );
+    const lenis = getLenisInstance();
+    if (lenis) {
+      lenis.scrollTo(top, { programmatic: true, force: true });
+      return;
+    }
+    scrollWindowTo(top);
+  };
+
+  const handleViewToggle = () => {
+    setMobileView((current) => {
+      const next = current === "map" ? "list" : "map";
+      pendingScrollViewRef.current = next;
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    const target = pendingScrollViewRef.current;
+    if (!target || target !== mobileView) return;
+    pendingScrollViewRef.current = null;
+
+    let cancelled = false;
+    const scrollToTarget = () => {
+      if (cancelled) return;
+      // View Map / View List 공통 — search 위치 + 입력 포커스
+      const searchEl = document.getElementById("support-where-to-buy-search");
+      scrollElementToTop(
+        searchEl ??
+          (mobileView === "map" ? mapColRef.current : listColRef.current),
+      );
+      const input = searchEl?.querySelector<HTMLInputElement>(
+        "input:not([type='hidden'])",
+      );
+      input?.focus({ preventScroll: true });
+    };
+
+    // map↔list 레이아웃 반영 후 스크롤 (이중 rAF + timeout)
+    let timeoutId = 0;
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        scrollToTarget();
+        timeoutId = window.setTimeout(scrollToTarget, 50);
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(frame);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [mobileView]);
+
   return (
     <section
       className={`support_where_to_buy_contents support_where_to_buy_contents--mobile-${mobileView}${
@@ -167,7 +231,10 @@ export default function WhereToBuyContents({
       id="support-where-to-buy-contents"
     >
       <div className="support_where_to_buy_contents__shell">
-        <div className="support_where_to_buy_contents__list-col">
+        <div
+          ref={listColRef}
+          className="support_where_to_buy_contents__list-col"
+        >
           <WhereToBuyControls
             searchResetKey={searchResetKey}
             radiusValue={radiusValue}
@@ -225,7 +292,17 @@ export default function WhereToBuyContents({
           </div>
         </div>
 
-        <div id="store_locator_main" className="support_where_to_buy_contents__map-col">
+        <WhereToBuyViewToggle
+          ref={viewToggleRef}
+          view={mobileView}
+          onToggle={handleViewToggle}
+        />
+
+        <div
+          id="store_locator_main"
+          ref={mapColRef}
+          className="support_where_to_buy_contents__map-col"
+        >
           <WhereToBuyMap
             locations={filtered}
             activeLocation={activeLocation}
@@ -247,13 +324,6 @@ export default function WhereToBuyContents({
           ) : null}
         </div>
       </div>
-
-      <WhereToBuyViewToggle
-        view={mobileView}
-        onToggle={() =>
-          setMobileView((current) => (current === "map" ? "list" : "map"))
-        }
-      />
     </section>
   );
 }

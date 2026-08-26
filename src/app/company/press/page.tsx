@@ -29,7 +29,7 @@ export default async function CompanyPressListPage() {
       page: 0,
       size: PRESS_LIST_SIZE,
       where: PRESS_STATUS_WHERE,
-      sort: "createdAt,desc",
+      sort: "press.publish_dttm,desc",
       리턴함수: (rows) => rows.map(toPressCard),
     }),
   ]);

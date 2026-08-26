@@ -402,6 +402,17 @@
   width: 100%;
 }
 
+.main_footer_02__affiliate-desktop {
+  position: relative;
+  width: 100%;
+}
+
+.main_footer_02__affiliate-native {
+  display: none;
+  position: relative;
+  width: 100%;
+}
+
 .main_footer_02__affiliate .main_footer__select-menu--affiliate {
   --main-footer-affiliate-option-h: 50px;
   --main-footer-affiliate-option-count: 13;
@@ -621,6 +632,44 @@
   .main_footer_02__affiliate {
     width: 100%;
   }
+
+  .main_footer_02__affiliate-desktop {
+    display: none;
+  }
+
+  .main_footer_02__affiliate-native {
+    display: block;
+  }
+
+  .main_footer_02__affiliate-native .main_footer_02__affiliate-trigger {
+    display: block;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 4px;
+    color: #fff;
+  }
+
+  .main_footer_02__affiliate-native .main_footer_02__affiliate-trigger option {
+    color: #222;
+    background-color: #fff;
+  }
+
+  .main_footer_02__affiliate-native .main_footer_02__affiliate-trigger option:disabled {
+    color: #888;
+  }
+
+  .main_footer_02__affiliate-native .main_footer_02__affiliate-trigger:focus,
+  .main_footer_02__affiliate-native .main_footer_02__affiliate-trigger:focus-visible {
+    border-color: #fff;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .main_footer_02__affiliate-native .main_footer_02__affiliate-trigger__icon {
+    transform: none;
+  }
+
   .main_footer__field-label,
   .main_footer__interests-tit {
     font-size: 16px;

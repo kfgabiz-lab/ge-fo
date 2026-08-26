@@ -60,7 +60,7 @@ export default async function CompanyPressDetailPage({
       slug: "press-data",
       id,
       adjacent: true,
-      sortField: "createdAt",
+      sortField: "press.publish_dttm",
       titleField: "press.title",
       slugField: "seo.slug",
       where: { ...PRESS_STATUS_WHERE },

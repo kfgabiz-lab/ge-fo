@@ -32,7 +32,7 @@ export default async function CompanyBlogListPage() {
     page: 0,
     size: BLOG_LIST_SIZE,
     where: BLOG_STATUS_WHERE,
-    sort: "createdAt,desc",
+    sort: "blog.publish_dttm,desc",
     리턴함수: (rows) => rows.map((row) => toBlogCard(row, categoryMap)),
   });
   const currentUrl = pageUrl(PATHNAME);

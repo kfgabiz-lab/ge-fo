@@ -424,6 +424,7 @@ export default function WhereToBuyMap({
   if (!apiKey || mapError) {
     return (
       <div
+        className="support_where_to_buy_map support_where_to_buy_map--placeholder"
         style={mapFillStyle}
         role="img"
         aria-label={`Map showing distributor locations near ${activeLocation?.name ?? ""}`}

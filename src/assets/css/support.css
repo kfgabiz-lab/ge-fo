@@ -228,6 +228,10 @@
     object-position: top center;
   }
 
+  section.support_connect_features .support_connect_features__bg-img--mo {
+    display: none;
+  }
+
   section.support_connect_features .support_connect_features__inner {
     position: relative;
     z-index: 1;
@@ -541,6 +545,10 @@
 
   section.support_connect_features .support_connect_features__bg-img--pc {
     display: none;
+  }
+
+  section.support_connect_features .support_connect_features__bg-img--mo {
+    display: block;
   }
 
   section.support_connect_features .support_connect_features__inner {
@@ -1856,23 +1864,27 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     appearance: none;
+    -webkit-appearance: none;
     cursor: pointer;
   }
 
   main.support-page--download-center .support_download_mo-toolbar__sort-trigger {
+    display: block;
     width: 100%;
+    padding-right: 44px;
+    text-align: left;
   }
 
-  main.support-page--download-center .support_download_mo-toolbar__sort--open {
-    overflow: hidden;
-    border: 1px solid #888;
-    border-radius: 4px;
-    background: #fff;
+  main.support-page--download-center .support_download_mo-toolbar__sort-trigger:focus,
+  main.support-page--download-center .support_download_mo-toolbar__sort-trigger:focus-visible {
+    border-color: #888;
+    outline: none;
+    box-shadow: none;
   }
 
-  main.support-page--download-center .support_download_mo-toolbar__sort--open .support_download_mo-toolbar__sort-trigger {
-    border: none;
-    border-radius: 0;
+  main.support-page--download-center .support_download_mo-toolbar__sort-trigger option {
+    color: #222;
+    background-color: #fff;
   }
 
   main.support-page--download-center .support_download_mo-toolbar__filter-label,
@@ -1894,20 +1906,23 @@
 
   main.support-page--download-center .support_download_mo-toolbar__sort {
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: block;
   }
 
   main.support-page--download-center .support_download_mo-toolbar__sort-icon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    z-index: 1;
     display: flex;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
     width: 14px;
     height: 14px;
+    margin-top: -7px;
     background: none;
-    transition: transform 0.2s ease;
-    transform-origin: center;
+    pointer-events: none;
   }
 
   main.support-page--download-center .support_download_mo-toolbar__sort-icon img {
@@ -1916,50 +1931,6 @@
     height: 14px;
     position: relative;
     top: 2px;
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort--open .support_download_mo-toolbar__sort-icon {
-    transform: rotate(180deg);
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort-list {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort-list li {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort-option {
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    width: 100%;
-    height: 50px;
-    min-height: 50px;
-    margin: 0;
-    padding: 0 20px;
-    font: inherit;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 23px;
-    color: #222;
-    text-align: left;
-    background: #fff;
-    border: none;
-    border-radius: 0;
-    appearance: none;
-    cursor: pointer;
-  }
-
-  main.support-page--download-center .support_download_mo-toolbar__sort-option--active {
-    background: #f5f7fa;
   }
 
   main.support-page--download-center .support_download_filter-modal,
@@ -4553,6 +4524,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_contents__shell {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -4677,7 +4649,12 @@ section.support_where_to_buy_banner .common_banner_02__link {
     border-color: #ddd;
   }
 
-  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiSelect-select {
+  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiOutlinedInput-root.Mui-focused:not(.Mui-error) fieldset {
+    border-color: var(--color-text-muted, #666);
+  }
+
+  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiSelect-select,
+  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiNativeSelect-select {
     height: 50px;
     min-height: 50px;
     padding: 0 44px 0 20px;
@@ -4685,6 +4662,11 @@ section.support_where_to_buy_banner .common_banner_02__link {
     font-weight: 400;
     line-height: 23px;
     color: #222;
+  }
+
+  section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiNativeSelect-select option {
+    color: #222;
+    background-color: #fff;
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_contents__controls .support_where_to_buy_contents__filters .guide_field .MuiSelect-icon {
@@ -4748,7 +4730,9 @@ section.support_where_to_buy_banner .common_banner_02__link {
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_contents__shell {
     gap: 30px;
-    padding: 0 20px 0;
+    /* sticky 토글이 맵 끝에서 멈출 때 하단 20px */
+    padding: 0 20px 20px;
+    margin-bottom: 110px;
   }
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_contents__list-col {
@@ -4759,15 +4743,28 @@ section.support_where_to_buy_banner .common_banner_02__link {
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_contents__map-col {
     position: relative;
+    display: flex;
+    flex-direction: column;
     width: calc(100% + 40px);
     min-height: 708px;
     margin: 0 -20px;
     background: #eee;
-    overflow: hidden;
+    box-sizing: border-box;
   }
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_contents__map-col>.support_where_to_buy_map {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     min-height: 708px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_map__canvas {
+    flex: 1 1 auto;
+    min-height: 708px;
+    overflow: hidden;
   }
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_map--placeholder {
@@ -4904,7 +4901,9 @@ section.support_where_to_buy_banner .common_banner_02__link {
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-list .support_where_to_buy_contents__shell {
     gap: 0;
-    padding: 0 20px 100px;
+    /* sticky 토글이 멈출 때 shell 하단 20px */
+    padding: 0 20px 20px;
+    margin-bottom: 90px;
   }
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-list .support_where_to_buy_contents__list-col {
@@ -4914,6 +4913,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
     width: 100%;
     height: auto;
     padding-right: 0;
+  margin-bottom: 10px;
   }
 
 
@@ -5103,15 +5103,20 @@ section.support_where_to_buy_banner .common_banner_02__link {
 
   /* Figma 6561:74461 — View List / View Map FAB */
   section.support_where_to_buy_contents .support_where_to_buy_view-toggle {
-    position: fixed;
-    left: 50%;
-    bottom: 30px;
+    position: sticky;
+    /* list: 하단 스티키 (shell 앞단 order로 올림) */
+    top: calc(100dvh - 80px);
     z-index: 20;
+    box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    align-self: center;
+    order: -1;
     gap: 6px;
+    max-width: calc(100% - 40px);
     height: 50px;
+    margin: 0 0 -50px;
     padding: 12px 24px;
     border: 0;
     border-radius: 100px;
@@ -5123,14 +5128,81 @@ section.support_where_to_buy_banner .common_banner_02__link {
     color: #fff;
     white-space: nowrap;
     cursor: pointer;
-    transform: translateX(-50%);
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_view-toggle__icon {
     display: block;
+    position: relative;
     flex-shrink: 0;
     width: 24px;
     height: 24px;
+    overflow: hidden;
+  }
+
+  section.support_where_to_buy_contents .support_where_to_buy_view-toggle__icon img {
+    display: block;
+  }
+
+  /* Figma 10180:150501 — Icon / 20px / List (24px frame) */
+  section.support_where_to_buy_contents .support_where_to_buy_view-toggle__icon--list {
+    width: 24px;
+    height: 24px;
+  }
+
+  section.support_where_to_buy_contents .support_where_to_buy_view-toggle__icon-list-frame {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    box-sizing: border-box;
+    width: 18px;
+    height: 20px;
+    border: 1.5px solid #fff;
+    border-radius: 1px;
+  }
+
+  section.support_where_to_buy_contents .support_where_to_buy_view-toggle__icon-list-dots {
+    position: absolute;
+    top: 7.5px;
+    left: 7.5px;
+    width: 8.5px;
+    height: 8.5px;
+  }
+
+  /* Figma 10180:150515 — Icon / 20px / Map (24px frame) */
+  section.support_where_to_buy_contents .support_where_to_buy_view-toggle__icon--map {
+    width: 24px;
+    height: 24px;
+  }
+
+  section.support_where_to_buy_contents .support_where_to_buy_view-toggle__icon--map img {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* list: sticky가 멈출 때 shell 하단 20px */
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-list .support_where_to_buy_view-toggle {
+    bottom: 20px;
+  }
+
+  /* map: 토글은 shell 자식 — 하단 sticky, 맵과 20px 간격 */
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_view-toggle {
+    position: sticky;
+    /* 버튼 50px + 맵(하단) 여백 20px */
+    top: calc(100dvh - 80px);
+    bottom: 20px;
+    z-index: 20;
+    order: 0;
+    align-self: center;
+    margin: 0 0 -70px;
+    transform: none;
+  }
+
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_contents__list-col {
+    order: -1;
+  }
+
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_contents__map-col {
+    order: 1;
   }
 
   section.support_where_to_buy_contents .support_where_to_buy_map__popup-name {
@@ -5260,14 +5332,10 @@ section.support_where_to_buy_banner .common_banner_02__link {
     line-height: 20px;
   }
 
-  /* 모바일 map 뷰에서는 배너 숨김 — View List(--mobile-list)일 때만 표시 */
+  /* Figma 6561:74243 — mobile banner (map/list 공통 표시) */
   main.support-page--where-to-buy section.support_where_to_buy_banner {
-    display: none;
-    padding: 0 0 80px;
-  }
-
-  main.support-page--where-to-buy:has(#support-where-to-buy-contents.support_where_to_buy_contents--mobile-list) section.support_where_to_buy_banner {
     display: block;
+    padding: 0 0 80px;
   }
 
   main.support-page--where-to-buy section.support_where_to_buy_banner .inner,
@@ -5557,6 +5625,8 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
     resize: none;
     overflow-x: hidden;
     overflow-y: auto;
+    appearance: none;
+    -webkit-appearance: none;
   }
 
   section.support_contact_form .support_contact_form__textarea::placeholder {
@@ -5568,7 +5638,7 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
   section.support_contact_form .support_contact_form__textarea:focus-visible {
     outline: none;
     box-shadow: none;
-    border-color: var(--color-text-muted);
+    border: 1px solid var(--color-text-muted, #666);
   }
 
   section.support_contact_form .support_contact_form__textarea--error {
@@ -5577,7 +5647,7 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
 
   section.support_contact_form .support_contact_form__textarea--error:focus,
   section.support_contact_form .support_contact_form__textarea--error:focus-visible {
-    border-color: var(--color-error);
+    border: 1px solid var(--color-error);
   }
 
   section.support_contact_form .guide_field .MuiOutlinedInput-input::placeholder {
@@ -6010,10 +6080,48 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
   }
 
   section.support_contact_form .support_contact_form__textarea {
+    display: block;
+    width: 100%;
     height: 180px;
     min-height: 180px;
     max-height: 180px;
+    margin: 0;
     padding: 16px 20px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #222;
+    resize: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  section.support_contact_form .support_contact_form__textarea::placeholder {
+    color: #888;
+    opacity: 1;
+  }
+
+  section.support_contact_form .support_contact_form__textarea:focus,
+  section.support_contact_form .support_contact_form__textarea:focus-visible {
+    outline: none;
+    box-shadow: none;
+    border: 1px solid var(--color-text-muted, #666);
+  }
+
+  section.support_contact_form .support_contact_form__textarea--error {
+    border-color: var(--color-error);
+  }
+
+  section.support_contact_form .support_contact_form__textarea--error:focus,
+  section.support_contact_form .support_contact_form__textarea--error:focus-visible {
+    border: 1px solid var(--color-error);
   }
 
   section.support_contact_form .support_contact_form__password-toggle {

@@ -66,6 +66,7 @@ export default async function MarketsOilGasMiningPage() {
         subtitle={oilGasMiningHero.subtitle}
         title={oilGasMiningHero.title}
         heroImage={oilGasMiningHero.heroImage}
+        secondaryCta={oilGasMiningHero.secondaryCta}
       />
       <MarketsIntro
         titleLines={oilGasMiningIntro.titleLines}

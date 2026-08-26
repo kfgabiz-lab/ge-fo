@@ -1159,7 +1159,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   }
 
   section.markets_references .img_area {
-    aspect-ratio: 464 / 500;
+    aspect-ratio: 464 / 480;
     margin-bottom: 20px;
     overflow: hidden;
     background: #f0f0f0;
@@ -3856,6 +3856,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
 .markets_references_modal__overview p {
   margin: 0;
   color: #666;
+  white-space: pre-line;
 }
 
 .markets_references_modal__table {

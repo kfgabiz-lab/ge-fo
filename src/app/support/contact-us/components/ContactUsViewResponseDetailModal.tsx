@@ -2,12 +2,18 @@
 
 import { useEffect, useId, useRef } from "react";
 import {
+  contactUsInquiryTypeLabels,
   contactUsViewResponseDetailSample,
   contactUsViewResponseModal,
 } from "@/data/support/contactUsContent";
 import { getWindowScrollY, lockPageScroll, unlockPageScroll } from "@/lib/lenisScroll";
 import { useModalFocusTrap } from "@/lib/useModalFocusTrap";
 import type { ContactUsDetailResponse } from "../data/contactUsData";
+
+function formatInquiryType(value: string | null | undefined): string {
+  if (!value) return "";
+  return contactUsInquiryTypeLabels[value] ?? value;
+}
 
 function formatCtpDate(value: string | null | undefined): string {
   if (!value) return "";
@@ -43,7 +49,7 @@ export default function ContactUsViewResponseDetailModal({
   const panelRef = useRef<HTMLDivElement>(null);
   const sample = detail
     ? {
-        inquiryType: detail.type,
+        inquiryType: formatInquiryType(detail.type),
         submittedAt: formatCtpDate(detail.inquiryDate),
         respondedAt: formatCtpDate(detail.replyDate),
         productTrail: [
@@ -204,18 +210,15 @@ export default function ContactUsViewResponseDetailModal({
               ) : null}
             </div>
             {variant === "answered" ? (
-              <>
-                {productTrail}
-                <div className="support_contact_view_response_detail_modal__text">
-                  {sample.responseBody.map((line, index) =>
-                    line ? (
-                      <p key={`${line}-${index}`}>{line}</p>
-                    ) : (
-                      <p key={`spacer-${index}`} aria-hidden>&nbsp;</p>
-                    ),
-                  )}
-                </div>
-              </>
+              <div className="support_contact_view_response_detail_modal__text">
+                {sample.responseBody.map((line, index) =>
+                  line ? (
+                    <p key={`${line}-${index}`}>{line}</p>
+                  ) : (
+                    <p key={`spacer-${index}`} aria-hidden>&nbsp;</p>
+                  ),
+                )}
+              </div>
             ) : (
               <div className="support_contact_view_response_detail_modal__pending">
                 <p className="support_contact_view_response_detail_modal__pending-tit">

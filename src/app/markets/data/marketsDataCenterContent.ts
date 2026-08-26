@@ -12,7 +12,7 @@ export const dataCenterHero = {
   heroImage: "/img/markets/data-center/hero.webp",
   secondaryCta: {
     label: "Get the Whitepaper",
-    href: "/docs/DataCenter-Whitepaper.pdf",
+    href: "/docs/DataCenter.pdf",
     icon: "download" as const,
   },
 };

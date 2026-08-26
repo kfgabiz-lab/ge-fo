@@ -323,53 +323,78 @@ export default function MainFooter({ logoHref = "/main" }: MainFooterProps) {
               © 2026 LS ELECTRIC Co., Ltd. All Rights Reserved.
             </p>
             <div className="main_footer_02__affiliate">
-              <ClickAwayListener onClickAway={closeAffiliateMenu}>
-                <div className="main_footer_02__affiliate-inner">
-                  <button
-                    type="button"
-                    className="main_footer_02__affiliate-trigger"
-                    aria-haspopup="listbox"
-                    aria-expanded={affiliateOpen}
-                    aria-controls="main-footer-affiliate-listbox"
-                    onClick={toggleAffiliateMenu}
-                  >
-                    LS ELECTRIC Affiliated &amp; Subsidiaries
-                    <FooterSelectIcon className="main_footer_02__affiliate-trigger__icon" />
-                  </button>
-                  {affiliateOpen ? (
-                    <div
-                      className="main_footer__select-menu main_footer__select-menu--affiliate"
-                      style={
-                        {
-                          "--main-footer-affiliate-option-count":
-                            footerAffiliateOptions.length,
-                        } as React.CSSProperties
-                      }
+              <div className="main_footer_02__affiliate-inner">
+                <ClickAwayListener onClickAway={closeAffiliateMenu}>
+                  <div className="main_footer_02__affiliate-desktop">
+                    <button
+                      type="button"
+                      className="main_footer_02__affiliate-trigger"
+                      aria-haspopup="listbox"
+                      aria-expanded={affiliateOpen}
+                      aria-controls="main-footer-affiliate-listbox"
+                      onClick={toggleAffiliateMenu}
                     >
-                      <ul
-                        id="main-footer-affiliate-listbox"
-                        className="main_footer__select-menu-list"
-                        role="listbox"
-                        aria-label="Affiliated and subsidiaries"
+                      LS ELECTRIC Affiliated &amp; Subsidiaries
+                      <FooterSelectIcon className="main_footer_02__affiliate-trigger__icon" />
+                    </button>
+                    {affiliateOpen ? (
+                      <div
+                        className="main_footer__select-menu main_footer__select-menu--affiliate"
+                        style={
+                          {
+                            "--main-footer-affiliate-option-count":
+                              footerAffiliateOptions.length,
+                          } as React.CSSProperties
+                        }
                       >
-                        {footerAffiliateOptions.map((option) => (
-                          <li key={option.value} role="none">
-                            <button
-                              type="button"
-                              role="option"
-                              aria-selected={false}
-                              className="main_footer__select-menu__option"
-                              onClick={() => handleAffiliateSelect(option.value)}
-                            >
-                              {option.label}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : null}
+                        <ul
+                          id="main-footer-affiliate-listbox"
+                          className="main_footer__select-menu-list"
+                          role="listbox"
+                          aria-label="Affiliated and subsidiaries"
+                        >
+                          {footerAffiliateOptions.map((option) => (
+                            <li key={option.value} role="none">
+                              <button
+                                type="button"
+                                role="option"
+                                aria-selected={false}
+                                className="main_footer__select-menu__option"
+                                onClick={() => handleAffiliateSelect(option.value)}
+                              >
+                                {option.label}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </div>
+                </ClickAwayListener>
+                <div className="main_footer_02__affiliate-native">
+                  <select
+                    className="main_footer_02__affiliate-trigger"
+                    aria-label="LS ELECTRIC Affiliated & Subsidiaries"
+                    defaultValue=""
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      if (!value) return;
+                      handleAffiliateSelect(value);
+                      event.target.value = "";
+                    }}
+                  >
+                    <option value="" disabled>
+                      LS ELECTRIC Affiliated &amp; Subsidiaries
+                    </option>
+                    {footerAffiliateOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <FooterSelectIcon className="main_footer_02__affiliate-trigger__icon" />
                 </div>
-              </ClickAwayListener>
+              </div>
             </div>
           </div>
 

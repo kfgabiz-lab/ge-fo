@@ -29,7 +29,7 @@ export default async function CompanyArticlesListPage() {
       page: 0,
       size: ARTICLES_LIST_SIZE,
       where: ARTICLES_STATUS_WHERE,
-      sort: "createdAt,desc",
+      sort: "articles.publish_dttm,desc",
       리턴함수: (rows) => rows.map(toArticlesCard),
     }),
   ]);
