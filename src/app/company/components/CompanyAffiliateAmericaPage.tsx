@@ -27,6 +27,7 @@ function AffiliateIntroSection() {
   return (
     <CompanyAboutIntroSection
       heroImage={affiliateIntro.heroImage}
+      heroImageMobile={affiliateIntro.heroImageMobile}
       headlineLines={affiliateIntro.headlineLines}
       paragraphs={affiliateIntro.paragraphs}
       heroImagePosition="center bottom"
