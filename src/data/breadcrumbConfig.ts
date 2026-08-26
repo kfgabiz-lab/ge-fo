@@ -369,7 +369,7 @@ const configs: Record<string, BreadcrumbConfig> = {
 };
 
 export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
-  if (/^\/services\/training\/session\/[^/]+\/[^/]+$/.test(pathname)) {
+  if (/^\/services\/training\/session\/[^/]+(?:\/[^/]+)?$/.test(pathname)) {
     return {
       crumbs: [
         { label: "Services" },
@@ -380,7 +380,7 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     };
   }
 
-  if (/^\/services\/training\/course\/[^/]+\/[^/]+$/.test(pathname)) {
+  if (/^\/services\/training\/course\/[^/]+(?:\/[^/]+)?$/.test(pathname)) {
     return {
       crumbs: [{ label: "Services" }, { label: "Training" }],
       current: "Curriculum Detail",
@@ -398,19 +398,19 @@ export function getBreadcrumbConfig(pathname: string): BreadcrumbConfig {
     };
   }
 
-  if (/^\/company\/blog\/[^/]+\/[^/]+$/.test(pathname)) {
+  if (/^\/company\/blog\/[^/]+(?:\/[^/]+)?$/.test(pathname)) {
     return configs["/company/blog/detail"];
   }
 
-  if (/^\/company\/press\/[^/]+\/[^/]+$/.test(pathname)) {
+  if (/^\/company\/press\/[^/]+(?:\/[^/]+)?$/.test(pathname)) {
     return configs["/company/press/detail"];
   }
 
-  if (/^\/company\/articles\/[^/]+\/[^/]+$/.test(pathname)) {
+  if (/^\/company\/articles\/[^/]+(?:\/[^/]+)?$/.test(pathname)) {
     return configs["/company/articles/detail"];
   }
 
-  if (/^\/company\/events\/[^/]+\/[^/]+$/.test(pathname)) {
+  if (/^\/company\/events\/[^/]+(?:\/[^/]+)?$/.test(pathname)) {
     return configs["/company/events/detail"];
   }
 

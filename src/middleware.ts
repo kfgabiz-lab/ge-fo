@@ -10,7 +10,9 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/services/training/course/:id/:slug",
+    "/services/training/course/:id",
     "/services/training/session/:id/:slug",
+    "/services/training/session/:id",
     "/product-range/:id/:slug",
     "/product/:id/:slug",
   ],

@@ -31,9 +31,9 @@ function getTrainingVariantCrumb(variantHref: string | null) {
 }
 
 const TRAINING_DETAIL_PATH_RE =
-  /^\/services\/training\/course\/([^/]+)\/[^/]+$/;
+  /^\/services\/training\/course\/([^/]+)(?:\/[^/]+)?$/;
 const TRAINING_SESSION_PATH_RE =
-  /^\/services\/training\/session\/([^/]+)\/[^/]+$/;
+  /^\/services\/training\/session\/([^/]+)(?:\/[^/]+)?$/;
 const TRAINING_REQUEST_PATH_RE =
   /^\/services\/training\/request(\/step-(2|3|4)(-type_01)?)?$/;
 
