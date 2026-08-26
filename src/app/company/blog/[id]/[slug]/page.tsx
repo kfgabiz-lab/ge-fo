@@ -65,7 +65,7 @@ export default async function CompanyBlogDetailPage({
       slug: "blog-data",
       id,
       adjacent: true,
-      sortField: "createdAt",
+      sortField: "blog.publish_dttm",
       titleField: "blog.title",
       slugField: "seo.slug",
       where: { ...BLOG_STATUS_WHERE },

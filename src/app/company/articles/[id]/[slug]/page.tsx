@@ -60,7 +60,7 @@ export default async function CompanyArticlesDetailPage({
       slug: "articles-data",
       id,
       adjacent: true,
-      sortField: "createdAt",
+      sortField: "articles.publish_dttm",
       titleField: "articles.title",
       slugField: "seo.slug",
       where: { ...ARTICLES_STATUS_WHERE },
