@@ -934,7 +934,7 @@ export default function VideoSwiper({ heroItems }: VideoSwiperProps) {
                   ? "video-pagination__num is-active"
                   : "video-pagination__num"
               }
-              aria-label={`Slide ${index + 1}`}
+              aria-label={`${index + 1 < 10 ? "0" : ""}${index + 1},Slide ${index + 1}`}
               aria-current={activeIndex === index ? "true" : undefined}
               onClick={() => handlePaginationClick(index)}
             >
