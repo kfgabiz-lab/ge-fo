@@ -140,11 +140,12 @@ export const warrantyPolicyPage = {
     ] satisfies WarrantyTableRow[],
     notesTitle: "Notes & Conditions",
     notes: [
-      "The warranty period for exported PLC, HMI, and INV products is two years from the date of manufacture.",
+      "The warranty period for exported PLC and HMI products is two years from the date of manufacture.",
       "For domestic and international solar PCUs, the warranty period is 4.5 years from the date of purchase.\n(However, for 3kW products purchased before July 2012, the warranty is 2.5 years, and for products bound for Japan, the warranty is 3 years from the date of manufacture.)",
       "For other products not specified: the warranty is 1 year from the date of purchase or 1.5 years from the date of manufacture.",
       "Even within the warranty period, if the issue is caused by the customer's fault, the repair will be charged.",
       "Product quality is not guaranteed in the event of external factors such as fire, abnormal voltage, or natural disasters such as earthquakes, lightning strikes, or storms.",
+      "The warranty period is extended to 48 months for variable frequency drives when installed using a LS ELECTRIC America Certified Start-Up Partner.",
     ],
   },
   /* 260811 start */
