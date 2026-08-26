@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   EngineeringTrainingAgendaRow,
   EngineeringTrainingSessionDetail,
@@ -16,7 +16,7 @@ import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleS
 import TrainingSessionDetailForm from "./TrainingSessionDetailForm";
 import TrainingSessionDetailAside from "./TrainingSessionDetailAside";
 import TrainingSessionDetailTableScroll from "./TrainingSessionDetailTableScroll";
-import { getLenisInstance } from "@/lib/lenisScroll";
+import { getLenisInstance, getWindowScrollY } from "@/lib/lenisScroll";
 import {
   buildGoogleCalendarUrl,
   buildShareHref,
@@ -27,66 +27,84 @@ import {
 import { stripHtmlText } from "@/lib/stripHtmlText";
 import { formatDisplayDate } from "@/lib/formatDate";
 
-const SESSION_TAB_SCROLL_OFFSET = 150;
+/** Fallback when sticky header can't be measured */
+const SESSION_TAB_SCROLL_OFFSET_DESKTOP = 140;
+const SESSION_TAB_SCROLL_OFFSET_MOBILE = 72;
 const SESSION_TAB_SCROLL_DURATION_MS = 300;
+const SESSION_TAB_ALIGN_GAP_PX = 12;
+
+function getSessionTabScrollOffset() {
+  const fixedHeader = document.querySelector<HTMLElement>(
+    ".sub_header-wrap:not(.is-at-top) .gnb_menu_wrap.sub_header",
+  );
+  if (fixedHeader) {
+    const bottom = fixedHeader.getBoundingClientRect().bottom;
+    if (bottom > 0) return bottom + SESSION_TAB_ALIGN_GAP_PX;
+  }
+
+  return window.matchMedia("(max-width: 780px)").matches
+    ? SESSION_TAB_SCROLL_OFFSET_MOBILE
+    : SESSION_TAB_SCROLL_OFFSET_DESKTOP;
+}
+
+function getSectionDocumentTop(element: HTMLElement) {
+  return element.getBoundingClientRect().top + getWindowScrollY();
+}
 
 function scrollToSection(id: string) {
   const target = document.getElementById(id);
   if (!target) return;
 
+  const immediate = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const lenis = getLenisInstance();
+
+  const scrollToY = (y: number, instant: boolean) => {
+    if (lenis) {
+      lenis.scrollTo(y, {
+        immediate: instant,
+        duration: SESSION_TAB_SCROLL_DURATION_MS / 1000,
+        programmatic: true,
+        force: true,
+      });
+      return;
+    }
+    if (instant) {
+      window.scrollTo({ top: y, behavior: "auto" });
+      return;
+    }
+    const start = getWindowScrollY();
+    const distance = y - start;
+    const startTime = performance.now();
+
+    function step(currentTime: number) {
+      const progress = Math.min(
+        (currentTime - startTime) / SESSION_TAB_SCROLL_DURATION_MS,
+        1,
+      );
+      const eased = 1 - (1 - progress) ** 3;
+      window.scrollTo(0, start + distance * eased);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  };
+
   const top = Math.max(
     0,
-    target.getBoundingClientRect().top + window.scrollY - SESSION_TAB_SCROLL_OFFSET,
+    getSectionDocumentTop(target) - getSessionTabScrollOffset(),
   );
-  const immediate = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const lenis = getLenisInstance();
+  scrollToY(top, immediate);
 
-  if (lenis) {
-    lenis.scrollTo(top, {
-      immediate,
-      duration: SESSION_TAB_SCROLL_DURATION_MS / 1000,
-      programmatic: true,
-      force: true,
-    });
-    return;
-  }
-
-  if (immediate) {
-    window.scrollTo({ top, behavior: "auto" });
-    return;
-  }
-
-  const start = window.scrollY;
-  const distance = top - start;
-  const startTime = performance.now();
-
-  function step(currentTime: number) {
-    const progress = Math.min((currentTime - startTime) / SESSION_TAB_SCROLL_DURATION_MS, 1);
-    const eased = 1 - (1 - progress) ** 3;
-
-    window.scrollTo(0, start + distance * eased);
-
-    if (progress < 1) {
-      requestAnimationFrame(step);
-    }
-  }
-
-  requestAnimationFrame(step);
-}
-
-function scrollToTop() {
-  const immediate = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const lenis = getLenisInstance();
-  if (lenis) {
-    lenis.scrollTo(0, {
-      immediate,
-      duration: SESSION_TAB_SCROLL_DURATION_MS / 1000,
-      programmatic: true,
-      force: true,
-    });
-    return;
-  }
-  window.scrollTo({ top: 0, behavior: immediate ? "auto" : "smooth" });
+  // 헤더 fixed 전환 후 오차 보정
+  window.setTimeout(
+    () => {
+      const liveOffset = getSessionTabScrollOffset();
+      const delta = target.getBoundingClientRect().top - liveOffset;
+      if (Math.abs(delta) <= 2) return;
+      scrollToY(Math.max(0, getWindowScrollY() + delta), true);
+    },
+    immediate ? 0 : SESSION_TAB_SCROLL_DURATION_MS + 40,
+  );
 }
 
 type AgendaGroup = {
@@ -134,6 +152,7 @@ export default function TrainingSessionDetail({
     tabs[0].id,
   );
   const [shareUrl, setShareUrl] = useState("");
+  const ignoreScrollSpyUntilRef = useRef(0);
 
   const agendaGroups = useMemo(() => toAgendaGroups(session.agenda), [
     session.agenda,
@@ -144,6 +163,13 @@ export default function TrainingSessionDetail({
       ? agendaGroups
       : [{ date: "", label: "Session 1", rows: [] }];
 
+  const scrollToTabSection = useCallback((tabId: EngineeringTrainingSessionTabId) => {
+    setActiveTab(tabId);
+    ignoreScrollSpyUntilRef.current =
+      performance.now() + SESSION_TAB_SCROLL_DURATION_MS + 120;
+    scrollToSection(`session-${tabId}`);
+  }, []);
+
   useEffect(() => {
     setShareUrl(window.location.href);
   }, []);
@@ -153,9 +179,8 @@ export default function TrainingSessionDetail({
   }, [session.courseHref]);
 
   const handleRegister = useCallback(() => {
-    setActiveTab("registration");
-    scrollToSection("session-registration");
-  }, []);
+    scrollToTabSection("registration");
+  }, [scrollToTabSection]);
 
   const calendarEvent: CalendarEvent | null =
     session.event && hasValidEventDate(session.event)
@@ -178,12 +203,14 @@ export default function TrainingSessionDetail({
 
   useEffect(() => {
     const onScroll = () => {
-      const offset = window.scrollY + SESSION_TAB_SCROLL_OFFSET;
+      if (performance.now() < ignoreScrollSpyUntilRef.current) return;
+
+      const marker = getWindowScrollY() + getSessionTabScrollOffset() + 1;
       let current: EngineeringTrainingSessionTabId = tabs[0].id;
 
       for (const tab of tabs) {
         const element = document.getElementById(`session-${tab.id}`);
-        if (element && element.offsetTop <= offset) {
+        if (element && getSectionDocumentTop(element) <= marker) {
           current = tab.id;
         }
       }
@@ -191,10 +218,15 @@ export default function TrainingSessionDetail({
       setActiveTab(current);
     };
 
+    const lenis = getLenisInstance();
     window.addEventListener("scroll", onScroll, { passive: true });
+    lenis?.on("scroll", onScroll);
     onScroll();
 
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      lenis?.off("scroll", onScroll);
+    };
   }, [tabs]);
 
   return (
@@ -288,13 +320,13 @@ export default function TrainingSessionDetail({
                     className={`support_service_training_session_detail__tab${
                       isActive ? " is-active" : ""
                     }`}
-                    onClick={() => {
-                      setActiveTab(tab.id);
-                      if (tab.id === "agenda" && !hasContent) {
-                        scrollToTop();
-                      } else {
-                        scrollToSection(`session-${tab.id}`);
-                      }
+                    onClick={(event) => {
+                      scrollToTabSection(tab.id);
+                      event.currentTarget.scrollIntoView({
+                        inline: "center",
+                        block: "nearest",
+                        behavior: "smooth",
+                      });
                     }}
                   >
                     {tab.label}
