@@ -13,7 +13,7 @@ type DownloadCenterItem = Omit<ProductDownloadItem, "files"> & {
 export const downloadCenterPage = {
   title: "Download Center",
   description:
-    "You can download manuals and various files related to LS ELECTRIC products.",
+    "Download manuals and files related to LS ELECTRIC products.",
   searchPlaceholder: "Find products, solutions, or resources for your business",
   searchPlaceholderMobile: "Find products, solutions, or...",
   popularSearchLabel: "Popular Keywords :",

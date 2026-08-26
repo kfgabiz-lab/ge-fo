@@ -29,7 +29,7 @@ export const whereToBuyRadiusCircle = {
 
 export const whereToBuyPage = {
   title: "Where to Buy",
-  description: "LS ELECTRIC America Sales Team and Distributors Around the U.S",
+  description: "Locate LS ELECTRIC Sales Teams and Distributors near you",
   searchPlaceholder: "Enter city, state, or ZIP code",
   useMyLocationLabel: "use my location",
   viewListLabel: "View List",

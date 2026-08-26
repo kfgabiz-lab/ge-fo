@@ -58,7 +58,7 @@ export type EsgRoadmapPhase = {
 export const esgClimate = {
   titleLines: ["Climate Change Response", "- 2040 Carbon Neutrality"],
   description:
-    "To take part actively in the climate change response, LS ELECTRIC aims to achieve carbon neutrality in relation to Scope 1 and Scope 2 emissions by 2040. According to our business’s characteristic of having a higher rate of Scope 2 emissions, we plan to strengthen our renewable energy sourcing capacity and continuously monitor the carbon neutrality promotion status.",
+    "To actively take part in the climate change response, LS ELECTRIC aims to achieve carbon neutrality in relation to Scope 1 and Scope 2 emissions by 2040. According to our business’s characteristic of having a higher rate of Scope 2 emissions, we plan to strengthen our renewable energy sourcing capacity and continuously monitor the carbon neutrality promotion status. ",
   roadmapTitle: "Roadmap for Achieving Carbon Neutrality",
   roadmapBodyImage: `${IMG}/roadmap-body.svg`,
   roadmapBodyAlt:

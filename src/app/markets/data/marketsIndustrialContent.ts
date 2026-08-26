@@ -36,8 +36,8 @@ export const industrialStats: MarketStatItem[] = [
   },
   {
     id: "ind-energy",
-    label: "Process stability​",
-    value: "Stable&\nContinuous​​",
+    label: "Process stability",
+    value: "Stable &\nContinuous",
     sublabel: "",
     description:
       "Reliable operation with minimized downtime and enhanced process stability.",

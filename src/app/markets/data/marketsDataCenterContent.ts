@@ -135,17 +135,17 @@ export const dataCenterStats: MarketStatItem[] = [
   },
   {
     id: "powerone",
-    label: "Reduce installation time by up to",
+    label: "Expedited installation time",
     value: "30",
     valueUnit: "%",
-    valueSuffix: " Reduce",
-    sublabel: "with our modular solution",
+    valueSuffix: " Reduction",
+    sublabel: "in construction lead times",
     description:
       'Our modular "Beyond PowerONE" solution streamlines engineering and installation, reducing construction lead times by up to 30% while maximizing space efficiency through compact design.',
   },
   {
     id: "monitoring",
-    label: "Real-time monitoring of",
+    label: "Real-time monitoring",
     value: "1,000,000",
     valueSuffix: "+",
     sublabel: "tags per second for AI workloads",
