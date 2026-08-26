@@ -31,6 +31,7 @@ export default function WhereToBuyMapPopup({ location }: WhereToBuyMapPopupProps
 
         <div className="support_where_to_buy_map__popup-meta">
           <p data-slugkey="address">{location.address}</p>
+          <p data-slugKey="addressDeatil">{location.addressDetail}</p>
           <p data-slugkey="office_number">{location.phone}</p>
           <a
             href={location.website}
