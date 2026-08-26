@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useState } from "react";
+import CommonBanner02CopyLink from "@/components/banners/CommonBanner02CopyLink";
 import {
   marketsSolutionMobileOrder,
   marketsSolutionZones,
@@ -50,6 +51,38 @@ function ZonePanelBody({
         <h3 className="markets_solutions__panel-tit">{heading}</h3>
         <p className="markets_solutions__panel-desc">{zone.description}</p>
       </div>
+      {zone.cta ? (
+        <>
+          <hr className="markets_solutions__panel-divider" />
+          <div className="markets_solutions__panel-cta">
+            <p className="markets_solutions__panel-cta-tit">{zone.cta.title}</p>
+            <div className="markets_solutions__panel-cta-row">
+              <span className="markets_solutions__panel-cta-email">
+                {zone.cta.email}
+              </span>
+              <CommonBanner02CopyLink
+                value={zone.cta.email}
+                variant="default"
+                className="markets_solutions__panel-cta-copy"
+                label={
+                  zone.cta.copyLabelMobile ? (
+                    <>
+                      <span className="markets_solutions__panel-cta-copy-pc">
+                        {zone.cta.copyLabel ?? "Copy Email"}
+                      </span>
+                      <span className="markets_solutions__panel-cta-copy-mo">
+                        {zone.cta.copyLabelMobile}
+                      </span>
+                    </>
+                  ) : (
+                    (zone.cta.copyLabel ?? "Copy Email")
+                  )
+                }
+              />
+            </div>
+          </div>
+        </>
+      ) : null}
       {zone.products && zone.products.length > 0 ? (
         <ul className="markets_solutions__products">
           {zone.products.map((product, index) => (

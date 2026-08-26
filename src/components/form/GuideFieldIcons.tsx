@@ -15,9 +15,9 @@ export const guideCheckboxIconsDownloads = {
 } as const;
 
 export const guideCheckboxIconsContactConsent = {
-  uncheckedSrc: "/ico/ico_checkbox_off_22.webp",
-  checkedSrc: "/ico/ico_checkbox_on_22.webp",
-  disabledCheckedSrc: "/ico/ico_checkbox_disabled_on_22.webp",
+  uncheckedSrc: "/ico/ico_checkbox_off_22.svg",
+  checkedSrc: "/ico/ico_checkbox_on_22.svg",
+  disabledCheckedSrc: "/ico/ico_checkbox_disabled_on_22.svg",
 } as const;
 
 export function GuideSelectIcon({ className }: SvgIconProps) {

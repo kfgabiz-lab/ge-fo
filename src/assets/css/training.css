@@ -1759,16 +1759,15 @@
     width: 22px;
     height: 22px;
     margin: 1px 0 0;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    background: #fff;
+    border: none;
+    border-radius: 0;
+    background: url("/ico/ico_radio_off_22.svg") center / 22px 22px no-repeat;
     cursor: pointer;
     box-sizing: border-box;
   }
 
   section.support_service_training_request .support_service_training_request__radio:checked {
-    border-color: #0f1f45;
-    background: radial-gradient(circle, #0f1f45 0, #0f1f45 6px, #fff 6px);
+    background-image: url("/ico/ico_radio_on_22.svg");
   }
 
   section.support_service_training_request .support_service_training_request__input,
@@ -4266,16 +4265,15 @@
     width: 22px;
     height: 22px;
     margin: 1px 0 0;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    background: #fff;
+    border: none;
+    border-radius: 0;
+    background: url("/ico/ico_radio_off_22.svg") center / 22px 22px no-repeat;
     cursor: pointer;
     box-sizing: border-box;
   }
 
   section.support_service_training_request .support_service_training_request__radio:checked {
-    border-color: #0f1f45;
-    background: radial-gradient(circle, #0f1f45 0, #0f1f45 6px, #fff 6px);
+    background-image: url("/ico/ico_radio_on_22.svg");
   }
 
   section.support_service_training_request .support_service_training_request__input,

@@ -45,7 +45,6 @@ export default function TechHubSearch({
   const commit = () => setQuery(value.trim());
   const clear = () => {
     setValue("");
-    setQuery("");
   };
 
   return (

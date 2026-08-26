@@ -39,7 +39,6 @@ export default function DownloadCenterSearch({
   };
   const clearAll = () => {
     setQuery("");
-    commitQuery("");
   };
   const selectTag = (tag: string) => {
     setQuery(tag);

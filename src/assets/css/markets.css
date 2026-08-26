@@ -1526,6 +1526,52 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     color: #222;
   }
 
+  /* Figma 10227:166718 — BESS panel contact + Copy Email */
+  section.markets_solutions .markets_solutions__panel-divider {
+    display: block;
+    width: 100%;
+    max-width: 340px;
+    height: 1px;
+    margin: 0;
+    border: none;
+    background: #e8e8e8;
+  }
+
+  section.markets_solutions .markets_solutions__panel-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  section.markets_solutions .markets_solutions__panel-cta-tit {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #222;
+  }
+
+  section.markets_solutions .markets_solutions__panel-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  section.markets_solutions .markets_solutions__panel-cta-email {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #222;
+  }
+
+  section.markets_solutions .markets_solutions__panel-cta-copy-mo {
+    display: none;
+  }
+
   section.markets_solutions .markets_solutions__products {
     display: flex;
     flex-direction: column;
@@ -3575,6 +3621,62 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-weight: 400;
     line-height: 23px;
     color: #222;
+  }
+
+  /* Figma 10227:168184 — BESS panel contact stacked · Copy Link */
+  section.markets_solutions .markets_solutions__accordion-panel .markets_solutions__panel-divider {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: 1px;
+    margin: 0;
+    border: none;
+    background: #e8e8e8;
+  }
+
+  section.markets_solutions .markets_solutions__accordion-panel .markets_solutions__panel-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+    width: 100%;
+    max-width: none;
+  }
+
+  section.markets_solutions .markets_solutions__accordion-panel .markets_solutions__panel-cta-tit {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 23px;
+    color: #222;
+  }
+
+  section.markets_solutions .markets_solutions__accordion-panel .markets_solutions__panel-cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  section.markets_solutions .markets_solutions__accordion-panel .markets_solutions__panel-cta-email {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #222;
+  }
+
+  section.markets_solutions .markets_solutions__accordion-panel .markets_solutions__panel-cta-copy {
+    height: 32px;
+    min-height: 32px;
+    padding: 8px 18px;
+  }
+
+  section.markets_solutions .markets_solutions__accordion-panel .markets_solutions__panel-cta-copy-pc {
+    display: none;
+  }
+
+  section.markets_solutions .markets_solutions__accordion-panel .markets_solutions__panel-cta-copy-mo {
+    display: inline;
   }
 
   section.markets_solutions .markets_solutions__accordion-panel .markets_solutions__products {

@@ -81,17 +81,17 @@ export const americaIntro = {
   stats: [
     {
       value: "UL-Certified",
-      label: "for reliability and compliance",
+      label: "for Reliability and compliance",
       desc: "The first and only Asian provider of a full UL-certified switchgear line-up.",
     },
     {
       value: "World's 6th",
-      label: "largest power-system testing-capacity lab",
+      label: "Largest power-system testing-capacity lab",
       desc: "Globally ranked testing infrastructure guaranteeing power system resilience",
     },
     {
       value: "1,000+",
-      label: "Power Infrastructure Projects",
+      label: "Power infrastructure Projects",
       desc: "Proven track record of over 1,000 global power deployments",
     },
   ] satisfies AmericaStatItem[],
@@ -296,8 +296,8 @@ export const americaOperate = {
               { type: "phone", text: "435-865-0125" },
               {
                 type: "website",
-                text: "https://mcmeng2.com/",
-                href: "https://mcmeng2.com/",
+                text: "https://lselectricutah.com",
+                href: "https://lselectricutah.com",
               },
             ],
           },

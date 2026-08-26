@@ -1173,7 +1173,8 @@ section.main_notic .txt:before {
   }
 
   section.common_banner_03 .item + .item {
-    border-top: 1px solid rgb(255 255 255 / 20%);
+    border-top: 1px solid;
+border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
   }
 
   section.common_banner_03 .item .inner {
@@ -2435,7 +2436,8 @@ section.main_notic .txt:before {
   }
 
   section.common_banner_03 .item + .item {
-    border-top: 1px solid rgb(255 255 255 / 20%);
+    border-top: 1px solid;
+    border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
   }
 
   section.common_banner_03 .item:hover {

@@ -1833,6 +1833,13 @@
     padding-bottom: 20px;
   }
 
+  main.support-page--tech-hub
+    section.support_tech_hub_mo-controls:has(
+      ~ section.support_tech_hub_contents .support_download_active-filters
+    ) {
+    padding-bottom: 20px;
+  }
+
   main.support-page--download-center .support_download_filter--pc {
     display: none;
   }
@@ -2261,13 +2268,13 @@
     gap: 0;
   }
 
-  section.support_tech_hub_contents.devices_product_downloads--tech-hub .support_download_active-filters,
   section.support_download_contents.devices_product_downloads--center .support_download_sort--pc {
     display: none;
   }
 
   /* Figma 6064:27382 / 6316:228900 — mobile active filter chips */
-  section.support_download_contents.devices_product_downloads--center .support_download_active-filters {
+  section.support_download_contents.devices_product_downloads--center .support_download_active-filters,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub .support_download_active-filters {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -2275,7 +2282,8 @@
     min-width: 0;
   }
 
-  section.support_download_contents.devices_product_downloads--center .support_download_active-filters__chips {
+  section.support_download_contents.devices_product_downloads--center .support_download_active-filters__chips,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub .support_download_active-filters__chips {
     display: flex;
     flex: 1;
     flex-wrap: nowrap;
@@ -2291,11 +2299,14 @@
   }
 
   section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__chips::-webkit-scrollbar,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub
     .support_download_active-filters__chips::-webkit-scrollbar {
     display: none;
   }
 
-  section.support_download_contents.devices_product_downloads--center .support_download_active-filters__chip {
+  section.support_download_contents.devices_product_downloads--center .support_download_active-filters__chip,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub .support_download_active-filters__chip {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
@@ -2310,6 +2321,8 @@
   }
 
   section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__chip-text,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub
     .support_download_active-filters__chip-text {
     font-size: 12px;
     font-weight: 400;
@@ -2319,6 +2332,8 @@
   }
 
   section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__chip-icon,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub
     .support_download_active-filters__chip-icon {
     display: inline-flex;
     flex-shrink: 0;
@@ -2329,13 +2344,16 @@
   }
 
   section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__chip-icon img,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub
     .support_download_active-filters__chip-icon img {
     display: block;
     width: 12px;
     height: 12px;
   }
 
-  section.support_download_contents.devices_product_downloads--center .support_download_active-filters__clear {
+  section.support_download_contents.devices_product_downloads--center .support_download_active-filters__clear,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub .support_download_active-filters__clear {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
@@ -2350,6 +2368,8 @@
   }
 
   section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__clear-icon,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub
     .support_download_active-filters__clear-icon {
     display: flex;
     align-items: center;
@@ -2359,6 +2379,8 @@
   }
 
   section.support_download_contents.devices_product_downloads--center
+    .support_download_active-filters__clear-icon img,
+  section.support_tech_hub_contents.devices_product_downloads--tech-hub
     .support_download_active-filters__clear-icon img {
     display: block;
     width: 12px;
@@ -4913,7 +4935,7 @@ section.support_where_to_buy_banner .common_banner_02__link {
     width: 100%;
     height: auto;
     padding-right: 0;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   }
 
 
@@ -5538,12 +5560,12 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
     margin: 1px 0 0;
     border: none;
     border-radius: 0;
-    background: url("/ico/ico_radio_off_22.webp") center / 22px 22px no-repeat;
+    background: url("/ico/ico_radio_off_22.svg") center / 22px 22px no-repeat;
     cursor: pointer;
   }
 
   section.support_contact_form .support_contact_form__radio:checked {
-    background-image: url("/ico/ico_radio_on_22.webp");
+    background-image: url("/ico/ico_radio_on_22.svg");
   }
 
   section.support_contact_form .support_contact_form__external-link {
@@ -5986,12 +6008,12 @@ section.support_contact_form .support_contact_form__consent-note-link:visited {
     margin: 0;
     border: none;
     border-radius: 0;
-    background: url("/ico/ico_radio_off_22.webp") center / 22px 22px no-repeat;
+    background: url("/ico/ico_radio_off_22.svg") center / 22px 22px no-repeat;
     cursor: pointer;
   }
 
   section.support_contact_form .support_contact_form__radio:checked {
-    background-image: url("/ico/ico_radio_on_22.webp");
+    background-image: url("/ico/ico_radio_on_22.svg");
   }
 
   section.support_contact_form .support_contact_form__radio-label span {

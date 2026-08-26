@@ -113,7 +113,7 @@ export const industryTabs: IndustryTab[] = [
     label: "Retail Stores",
     title: "Retail Stores",
     description:
-      "For retail environments, LS ELECTRIC provides stable power distribution and smart energy management to support seamless store operations. Its solutions enable efficient lighting and HVAC control, reduce energy consumption, and enhance operational efficiency across single stores and multi-site retail chains.",
+      "For retail environments, LS ELECTRIC provides stable power distribution and smart energy management to support seamless store operations.\nOur solutions enable efficient lighting and HVAC control, reduce energy consumption, and enhance operational efficiency across single stores and multi-site retail chains.",
     image: "/img/markets/explore/img_retail.webp",
   },
   {

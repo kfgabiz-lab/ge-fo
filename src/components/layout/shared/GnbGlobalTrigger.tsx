@@ -109,7 +109,7 @@ export default function GnbGlobalTrigger({
         className={
           isOpen ? `${buttonClassName} is-active` : buttonClassName
         }
-        aria-label={isOpen ? "Close global sites menu" : "Open global sites menu"}
+        aria-label={isOpen ? "America, Close global sites menu" : "America, Open global sites menu"}
         aria-expanded={isOpen}
         aria-controls="gnb-global-menu"
         aria-haspopup="menu"

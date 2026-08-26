@@ -26,6 +26,13 @@ export type SolutionZone = {
   mobileMapY?: number;
   description: string;
   products?: SolutionProduct[];
+  /** BESS panel — Contact + Copy Email / Copy Link */
+  cta?: {
+    title: string;
+    email: string;
+    copyLabel?: string;
+    copyLabelMobile?: string;
+  };
 };
 
 export const marketsSolutionMobileOrder = [
@@ -268,6 +275,12 @@ export const marketsSolutionZones: SolutionZone[] = [
     mobileMapY: 48.6,
     description:
       "Stores renewable energy to reduce peak loads and provide backup power, maximizing data center energy flexibility.",
+    cta: {
+      title: "Contact LS Energy Solutions for BESS",
+      email: "sales@ls-es.com",
+      copyLabel: "Copy Email",
+      copyLabelMobile: "Copy Link",
+    },
   },
   {
     id: "J",

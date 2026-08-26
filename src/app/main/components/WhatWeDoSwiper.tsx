@@ -3,12 +3,11 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { A11y, Autoplay } from "swiper/modules";
+import { A11y } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import SwiperBarControls from "@/components/swiper/SwiperBarControls";
 import "swiper/css";
 
-const AUTOPLAY_DELAY_MS = 4000;
 const WHAT_WE_DO_SLIDE_SPEED = 500;
 const WHAT_WE_DO_EXPLORE_HREF = "/company/ls-electric-america";
 
@@ -56,15 +55,6 @@ export default function WhatWeDoSwiper() {
     setActiveIndex(swiper.realIndex);
   }, []);
 
-  const handleMouseEnter = () => {
-    swiperRef.current?.autoplay?.stop();
-  };
-
-  const handleMouseLeave = () => {
-    if (prefersReducedMotion) return;
-    swiperRef.current?.autoplay?.start();
-  };
-
   const handleSlideChange = useCallback((swiper: SwiperType) => {
     setActiveIndex(swiper.realIndex);
   }, []);
@@ -91,17 +81,11 @@ export default function WhatWeDoSwiper() {
     return null;
   }
 
-  const autoplayEnabled = loopEnabled && !prefersReducedMotion;
-
   return (
     <section className="what_we_do__inner">
       <h2 className="tit_area">What We Do</h2>
 
-      <div
-        className="swiper_type_01_area"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
+      <div className="swiper_type_01_area">
         <div className="what_we_do__stage">
           <Link href={WHAT_WE_DO_EXPLORE_HREF} className="btn-text-30 link_more">
             Explore
@@ -113,16 +97,11 @@ export default function WhatWeDoSwiper() {
           <div className="what_we_do__media">
             <Swiper
               className="swiper_type_01 what_we_do__media-swiper"
-              modules={[A11y, Autoplay]}
+              modules={[A11y]}
               slidesPerView={1}
               speed={prefersReducedMotion ? 0 : WHAT_WE_DO_SLIDE_SPEED}
               loop={loopEnabled}
               watchOverflow
-              autoplay={
-                autoplayEnabled
-                  ? { delay: AUTOPLAY_DELAY_MS, disableOnInteraction: false }
-                  : false
-              }
               onSwiper={handleSwiper}
               onSlideChange={handleSlideChange}
               onSlideChangeTransitionEnd={handleSlideChange}

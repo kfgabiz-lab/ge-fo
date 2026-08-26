@@ -227,8 +227,6 @@ export default function TrainingCurriculum({
   };
   const clearSearch = () => {
     setQuery("");
-    setSearchTerm("");
-    setPageIndex(0);
   };
 
   const handlePageChange = (page: number) => {

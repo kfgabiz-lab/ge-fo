@@ -167,7 +167,7 @@ export const oilGasMiningBenefits: BenefitItem[] = [
     description:
       "Engineered for oil, gas, and mining sites, LS ELECTRIC solutions are designed to operate safely in explosive and high-risk environments, ensuring compliance with global standards while protecting personnel and assets.",
     capabilities:
-      "Explosion-proof compatible systems, high-reliability switchgear, protection devices, and solutions designed for hazardous and high-risk industrial zones",
+      "Explosion-proof systems, high-reliability switchgear, protection devices, and solutions designed for hazardous and high-risk industrial zones",
     image: "/img/markets/oil-gas-mining/benefits/benefit_01.webp",
   },
   {
