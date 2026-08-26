@@ -58,7 +58,7 @@ export default function CompanyPressPage() {
   const { featured } = useFeaturedFeed<PressFeaturedCard>({
     slug: "press-data",
     where: PRESS_STATUS_WHERE,
-    sort: "createdAt,desc",
+    sort: "press.publish_dttm,desc",
     toCard: toPressFeaturedCard,
   });
 
@@ -75,13 +75,13 @@ export default function CompanyPressPage() {
         ...(year ? { year_publish_dttm: year } : {}),
       },
       sort:
-        sort === "oldest"
-          ? "createdAt,asc"
-          : sort === "az"
-            ? "press.title,asc"
-            : sort === "za"
-              ? "press.title,desc"
-              : undefined,
+          sort === "oldest"
+              ? "press.publish_dttm,asc"
+              : sort === "az"
+                  ? "press.title,asc"
+                  : sort === "za"
+                      ? "press.title,desc"
+                      : "press.publish_dttm,desc",
       리턴함수: (rows) => rows,
     })
       .then((res) => {
