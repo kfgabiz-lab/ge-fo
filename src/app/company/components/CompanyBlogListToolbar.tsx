@@ -52,7 +52,6 @@ export default function CompanyBlogListToolbar({
   // 검색어 초기화 — 입력값과 적용된 검색 조건을 함께 비운다
   const clearSearch = () => {
     setSearchDraft("");
-    onSearchSubmit?.("");
   };
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") submitSearch();
