@@ -173,7 +173,7 @@ export const industrialReferences: ReferenceItem[] = [
       modalTitle: "1st Battery Cell Manufacturing Facility",
       images: ["/img/markets/industrial/references/ref_03.webp"],
       overview: [
-        "LS ELECTRIC supported the development of one of North America's largest EV battery cell manufacturing facilities by delivering a comprehensive power distribution solution for a high-capacity production plant. The project required reliable electrical infrastructure to ensure stable operation of mission-critical battery manufacturing processes.\n\nLS ELECTRIC supplied key power equipment, including high-voltage power transformers, medium-voltage switchgear, medium-voltage transformers, and panel boards. Leveraging proven expertise in industrial power systems, the project reinforced LS ELECTRIC's capabilities in delivering reliable power infrastructure for large-scale battery manufacturing facilities in the U.S.",
+        "LS ELECTRIC supported the development of one of North America's largest EV battery cell manufacturing facilities by delivering a comprehensive power distribution solution for a high-capacity production plant. The project required reliable electrical infrastructure to ensure stable operation of mission-critical battery manufacturing processes.\n\nLS ELECTRIC supplied key power equipment, including high-voltage power transformers, medium-voltage switchgear, medium-voltage transformers, and panelboards. Leveraging proven expertise in industrial power systems, the project reinforced LS ELECTRIC's capabilities in delivering reliable power infrastructure for large-scale battery manufacturing facilities in the U.S.",
       ],
       keyInfo: [
         { label: "Location", value: "United States" },

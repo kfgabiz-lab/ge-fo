@@ -140,11 +140,11 @@ export function eventsPastQuery(params: {
   if (params.month) where["month_period_from"] = params.month;
   if (params.year) where["year_period_from"] = params.year;
   const sort =
-    params.sort === "az"
-      ? "events.title,asc"
-      : params.sort === "za"
-        ? "events.title,desc"
-        : `events.period_from,${params.sort === "oldest" ? "asc" : "desc"}`;
+      params.sort === "az"
+          ? "events.title,asc"
+          : params.sort === "za"
+              ? "events.title,desc"
+              : `events.period_from,${params.sort === "oldest" ? "asc" : "desc"}`;
   const fallbackImage = params.fallbackImage;
   return {
     slug: "events-data",
@@ -153,16 +153,42 @@ export function eventsPastQuery(params: {
     sort,
     where,
     리턴함수: (rows: PageDataItem[]): EventsPastItem[] =>
-      rows.map((item) => {
-        const c = toEventsCommon(item);
-        return {
-          id: String(c.id),
-          title: c.title,
-          dateRange: c.dateRange,
-          image: c.imageSrc ?? fallbackImage,
-          href: eventsDetailHref(c.id, c.slug),
-        };
-      }),
+        [...rows]
+            .sort((a, b) => {
+              // A-Z / Z-A는 서버 정렬 그대로 사용
+              if (params.sort === "az" || params.sort === "za") {
+                return 0;
+              }
+
+              const aRow = flattenPageDataItem(a);
+              const bRow = flattenPageDataItem(b);
+
+              const aPeriodFrom =
+                  (pickField(aRow, "period_from", "periodFrom") as string) ?? "";
+              const bPeriodFrom =
+                  (pickField(bRow, "period_from", "periodFrom") as string) ?? "";
+
+              // 날짜가 다르면 서버에서 정렬한 순서 유지
+              if (aPeriodFrom !== bPeriodFrom) {
+                return 0;
+              }
+
+              // 동일 날짜일 때만 보조 정렬
+              return params.sort === "oldest"
+                  ? Number(a.id) - Number(b.id) // Oldest: id ASC
+                  : Number(b.id) - Number(a.id); // Latest: id DESC
+            })
+            .map((item) => {
+              const c = toEventsCommon(item);
+
+              return {
+                id: String(c.id),
+                title: c.title,
+                dateRange: c.dateRange,
+                image: c.imageSrc ?? fallbackImage,
+                href: eventsDetailHref(c.id, c.slug),
+              };
+            }),
   };
 }
 

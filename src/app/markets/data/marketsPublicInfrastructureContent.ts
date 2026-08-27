@@ -95,7 +95,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
       modalTitle: "Large-scale HVAC control for Incheon International Airport",
       images: ["/img/markets/public-infrastructure/references/ref_01.webp"],
       overview: [
-        "LS ELECTRIC supplied HVAC control solutions for Incheon International Airport, one of the world's busiest aviation hubs, helping ensure stable and energy-efficient operation of large-scale heating, ventilation, and air conditioning systems. Designed for continuous 24/7 operation, the solution supports reliable climate control across airport terminals while improving energy efficiency and operational stability.\n- Continuous operation for mission-critical airport facilities\n- Optimized energy consumption through variable-speed control\n- Stable indoor climate for passenger terminals\n- Reduced maintenance through intelligent drive control\n- Reliable operation of large-scale HVAC equipment",
+        "LS ELECTRIC supplied HVAC control solutions for Incheon International Airport, one of the world's busiest aviation hubs, helping ensure stable and energy-efficient operation of large-scale heating, ventilation, and air conditioning systems. Designed for continuous 24/7 operation, the solution supports reliable climate control across airport terminals while improving energy efficiency and operational stability.\n\n- Continuous operation for mission-critical airport facilities\n- Optimized energy consumption through variable-speed control\n- Stable indoor climate for passenger terminals\n- Reduced maintenance through intelligent drive control\n- Reliable operation of large-scale HVAC equipment",
       ],
       keyInfo: [
         { label: "Location", value: "South Korea" },
