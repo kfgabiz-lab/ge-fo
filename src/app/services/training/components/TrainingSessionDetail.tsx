@@ -392,14 +392,24 @@ export default function TrainingSessionDetail({
                                 className="support_service_training_session_detail__table-tit"
                                 data-slugkey="title"
                               >
-                                {row.title}
+                                {row.title.split("\n").map((line, index) => (
+                                  <span key={`${row.id}-tit-${index}`}>
+                                    {index > 0 ? <br /> : null}
+                                    {line}
+                                  </span>
+                                ))}
                               </p>
                               {row.description ? (
                                 <p
                                   className="support_service_training_session_detail__table-desc"
                                   data-slugkey="description"
                                 >
-                                  {row.description}
+                                  {row.description.split("\n").map((line, index) => (
+                                    <span key={`${row.id}-desc-${index}`}>
+                                      {index > 0 ? <br /> : null}
+                                      {line}
+                                    </span>
+                                  ))}
                                 </p>
                               ) : null}
                             </td>

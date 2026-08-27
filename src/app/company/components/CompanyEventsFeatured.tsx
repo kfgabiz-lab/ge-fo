@@ -65,6 +65,7 @@ export default function CompanyEventsFeatured({ items }: CompanyEventsFeaturedPr
   const slidesPerGroup = isDesktop ? DESKTOP_SLIDES_PER_GROUP : MOBILE_SLIDES_PER_GROUP;
   const pageCount = getPageCount(items.length, slidesPerGroup);
   const loopEnabled = pageCount > 1;
+  const showControls = isDesktop ? items.length >= 3 : items.length >= 2;
 
   const swiperRef = useRef<SwiperType | null>(null);
   const [activePage, setActivePage] = useState(0);
@@ -141,20 +142,22 @@ export default function CompanyEventsFeatured({ items }: CompanyEventsFeaturedPr
             ))}
           </Swiper>
 
-          <SwiperBarControls
-            variant="swiper_type_01"
-            count={pageCount}
-            activeIndex={activePage}
-            isPrevDisabled={!loopEnabled && activePage <= 0}
-            isNextDisabled={!loopEnabled && activePage >= pageCount - 1}
-            onSelect={handleSelect}
-            onPrev={handlePrev}
-            onNext={handleNext}
-            ariaLabel="Featured events slides"
-            paginationAriaLabel="Featured events pagination"
-            prevLabel="Previous featured events"
-            nextLabel="Next featured events"
-          />
+          {showControls ? (
+            <SwiperBarControls
+              variant="swiper_type_01"
+              count={pageCount}
+              activeIndex={activePage}
+              isPrevDisabled={!loopEnabled && activePage <= 0}
+              isNextDisabled={!loopEnabled && activePage >= pageCount - 1}
+              onSelect={handleSelect}
+              onPrev={handlePrev}
+              onNext={handleNext}
+              ariaLabel="Featured events slides"
+              paginationAriaLabel="Featured events pagination"
+              prevLabel="Previous featured events"
+              nextLabel="Next featured events"
+            />
+          ) : null}
         </div>
       </div>
     </section>

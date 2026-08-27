@@ -4,7 +4,7 @@
   margin-top: auto;
   color: #fff;
   background-color: var(--color-primary, #0f1f45);
-  background-image: url("/img/footer/bg_common_footer.webp");
+  background-image: url("/img/footer/bg_common_footer.webp?1");
   background-repeat: no-repeat;
   background-position: right bottom;
   background-size: cover;
@@ -568,7 +568,7 @@
     flex-direction: column;
   }
   .main_footer {
-    background-image: url("/img/footer/mo_bg_common_footer.webp");
+    background-image: url("/img/footer/mo_bg_common_footer.webp?1");
     background-repeat: no-repeat;
     background-position: center bottom;
     background-size: cover;

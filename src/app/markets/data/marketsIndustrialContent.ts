@@ -91,7 +91,7 @@ export const industrialReferences: ReferenceItem[] = [
   {
     id: "ind-ref-1",
     href: "",
-    image: "/img/markets/industrial/references/ref_01.webp",
+    image: "/img/markets/industrial/references/ref_01.webp?27",
     title: "Automation Solutions for Hyundai Motor's EV Dedicated Plant",
     description:
       "Hyundai Motor is developing its first new manufacturing plant in Ulsan in more than three decades, designed exclusively for next-generation electric vehicles. The facility incorporates advanced smart factory technologies to enhance manufacturing efficiency, product quality, and production flexibility.",
@@ -99,7 +99,7 @@ export const industrialReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Automation Solutions for Hyundai Motor's EV Dedicated Plant",
-      images: ["/img/markets/industrial/references/ref_01.webp"],
+      images: ["/img/markets/industrial/references/ref_01.webp?27"],
       overview: [
         "Hyundai Motor is developing its first new manufacturing plant in Ulsan in more than three decades, designed exclusively for next-generation electric vehicles. The facility incorporates advanced smart factory technologies to enhance manufacturing efficiency, product quality, and production flexibility.\n\nAs a key automation partner, LS ELECTRIC supplied an integrated automation platform encompassing PLCs, Safety PLCs, HMIs, Servo Systems, AC Drives, and industrial networking technologies. These solutions enable centralized machine control, functional safety, high-speed motion control, and seamless communication across production equipment, supporting a highly automated and reliable EV manufacturing environment.",
       ],
@@ -126,7 +126,7 @@ export const industrialReferences: ReferenceItem[] = [
   {
     id: "ind-ref-2",
     href: "",
-    image: "/img/markets/industrial/references/ref_02.webp",
+    image: "/img/markets/industrial/references/ref_02.webp?27",
     title: "Gwangju Global Motors (GGM) Smart Manufacturing Automation",
     description:
       "LS ELECTRIC delivered a full suite of automation solutions for Gwangju Global Motors (GGM). The project integrated PLCs, HMIs, servo systems, AC drives, and the company's proprietary RAPIEnet industrial Ethernet across the body, paint, and assembly lines, establishing a benchmark for high-performance automotive manufacturing automation.",
@@ -134,7 +134,7 @@ export const industrialReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Gwangju Global Motors (GGM) Smart Manufacturing Automation",
-      images: ["/img/markets/industrial/references/ref_02.webp"],
+      images: ["/img/markets/industrial/references/ref_02.webp?27"],
       overview: [
         "LS ELECTRIC delivered a full suite of automation solutions for Gwangju Global Motors (GGM). The project integrated PLCs, HMIs, servo systems, AC drives, and the company's proprietary RAPIEnet industrial Ethernet across the body, paint, and assembly lines, establishing a benchmark for high-performance automotive manufacturing automation.\n\n- End-to-end automation across body, paint, and assembly lines\n- High-speed, deterministic industrial communication with RAPIEnet\n- Stable and reliable production line operation\n- Seamless integration of PLC, HMI, Servo, and Drives\n- Increased productivity and operational efficiency\n- Reduced dependence on proprietary overseas automation platforms",
       ],
@@ -163,7 +163,7 @@ export const industrialReferences: ReferenceItem[] = [
   {
     id: "ind-ref-3",
     href: "",
-    image: "/img/markets/industrial/references/ref_03.webp",
+    image: "/img/markets/industrial/references/ref_03.webp?27",
     title: "1st Battery Cell Manufacturing Facility",
     description:
       "LS ELECTRIC supported the development of one of North America's largest EV battery cell manufacturing facilities by delivering a comprehensive power distribution solution for a high-capacity production plant. The project required reliable electrical infrastructure to ensure stable operation of mission-critical battery manufacturing processes.",
@@ -171,7 +171,7 @@ export const industrialReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "1st Battery Cell Manufacturing Facility",
-      images: ["/img/markets/industrial/references/ref_03.webp"],
+      images: ["/img/markets/industrial/references/ref_03.webp?27"],
       overview: [
         "LS ELECTRIC supported the development of one of North America's largest EV battery cell manufacturing facilities by delivering a comprehensive power distribution solution for a high-capacity production plant. The project required reliable electrical infrastructure to ensure stable operation of mission-critical battery manufacturing processes.\n\nLS ELECTRIC supplied key power equipment, including high-voltage power transformers, medium-voltage switchgear, medium-voltage transformers, and panelboards. Leveraging proven expertise in industrial power systems, the project reinforced LS ELECTRIC's capabilities in delivering reliable power infrastructure for large-scale battery manufacturing facilities in the U.S.",
       ],

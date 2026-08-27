@@ -1334,9 +1334,10 @@
   section.support_service_training_session_detail .support_service_training_session_detail__meta-bullets li {
     position: relative;
     padding-left: 12px;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 18px;
+    line-height: 28px;
     color: #222;
+    font-weight: 500;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__meta-bullets li::before {
@@ -1365,9 +1366,10 @@
 
   section.support_service_training_session_detail .support_service_training_session_detail__meta-text {
     margin: 0;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 18px;
+    line-height: 28px;
     color: #222;
+    font-weight: 500;
   }
 
   section.support_service_training_session_detail
@@ -3203,9 +3205,9 @@
   section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-bullets li {
     position: relative;
     padding-left: 9px;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 23px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
     letter-spacing: 0;
     color: #222;
     overflow-wrap: anywhere;
@@ -3240,9 +3242,9 @@
 
   section.support_service_training_session_detail .support_service_training_session_detail__aside--mo .support_service_training_session_detail__meta-text {
     margin: 0;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 23px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
     letter-spacing: 0;
     color: #222;
   }

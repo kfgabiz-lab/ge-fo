@@ -41,6 +41,10 @@ export default function HistoryReloadOnNavigate() {
       pathnameRef.current = nextPathname;
       markBackForwardNavigation();
       dispatchGnbClose();
+      // 링크 클릭과 동일하게 뒤로/앞으로가기도 하드 리로드시킨다 — Next.js 소프트
+      // 네비게이션이 이전 컴포넌트 인스턴스를 그대로 재사용해 목록 페이지의
+      // 검색어/페이지 복원 로직(마운트 시 1회 실행)이 아예 실행되지 않는 문제 때문.
+      window.location.reload();
     };
 
     window.addEventListener("popstate", onPopState);

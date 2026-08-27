@@ -85,7 +85,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
   {
     id: "pi-ref-1",
     href: "",
-    image: "/img/markets/public-infrastructure/references/ref_01.webp",
+    image: "/img/markets/public-infrastructure/references/ref_01.webp?27",
     title: "Large-scale HVAC control for Incheon International Airport",
     description:
       "LS ELECTRIC supplied HVAC control solutions for Incheon International Airport, one of the world's busiest aviation hubs, helping ensure stable and energy-efficient operation of large-scale heating, ventilation, and air conditioning systems. Designed for continuous 24/7 operation, the solution supports reliable climate control across airport terminals while improving energy efficiency and operational stability.",
@@ -93,7 +93,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Large-scale HVAC control for Incheon International Airport",
-      images: ["/img/markets/public-infrastructure/references/ref_01.webp"],
+      images: ["/img/markets/public-infrastructure/references/ref_01.webp?27"],
       overview: [
         "LS ELECTRIC supplied HVAC control solutions for Incheon International Airport, one of the world's busiest aviation hubs, helping ensure stable and energy-efficient operation of large-scale heating, ventilation, and air conditioning systems. Designed for continuous 24/7 operation, the solution supports reliable climate control across airport terminals while improving energy efficiency and operational stability.\n\n- Continuous operation for mission-critical airport facilities\n- Optimized energy consumption through variable-speed control\n- Stable indoor climate for passenger terminals\n- Reduced maintenance through intelligent drive control\n- Reliable operation of large-scale HVAC equipment",
       ],
@@ -120,7 +120,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
   {
     id: "pi-ref-2",
     href: "",
-    image: "/img/markets/public-infrastructure/references/ref_02.webp",
+    image: "/img/markets/public-infrastructure/references/ref_02.webp?27",
     title: "K-water Metropolitan Water Management System",
     description:
       "LS ELECTRIC delivered an integrated monitoring and control system for K-water's metropolitan water supply network, one of Korea's largest public water infrastructure projects. The solution centralizes the operation of multiple intake facilities, water treatment plants, pumping stations, and transmission pipelines into a single operation center, enabling real-time monitoring, remote control, and stable water supply management across the metropolitan region.",
@@ -128,7 +128,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "K-water Metropolitan Water Management System",
-      images: ["/img/markets/public-infrastructure/references/ref_02.webp"],
+      images: ["/img/markets/public-infrastructure/references/ref_02.webp?27"],
       overview: [
         "LS ELECTRIC delivered an integrated monitoring and control system for K-water's metropolitan water supply network, one of Korea's largest public water infrastructure projects. The solution centralizes the operation of multiple intake facilities, water treatment plants, pumping stations, and transmission pipelines into a single operation center, enabling real-time monitoring, remote control, and stable water supply management across the metropolitan region.\n\nDesigned for mission-critical infrastructure, the system incorporates redundant control architecture and industrial communication networks to ensure continuous operation while improving operational efficiency and response to system events.\n\n- Centralized management of geographically distributed water facilities\n- Reliable 24/7 operation through redundant control architecture\n- Real-time visibility across the entire water supply network\n- Faster response to abnormal operating conditions\n- Improved operational efficiency through remote monitoring and control\n- Stable water supply for millions of residents\n- Scalable architecture supporting future network expansion",
       ],
@@ -156,7 +156,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
   {
     id: "pi-ref-3",
     href: "",
-    image: "/img/markets/public-infrastructure/references/ref_03.webp",
+    image: "/img/markets/public-infrastructure/references/ref_03.webp?27",
     title: "Thailand Railway Signaling System Modernization",
     description:
       "To support the modernization of Thailand's national railway network, LS ELECTRIC delivered advanced railway signaling solutions for multiple phases of the country's railway infrastructure program. The project aimed to improve operational safety, efficiency, and reliability while supporting future railway network expansion.",
@@ -164,7 +164,7 @@ export const publicInfrastructureReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Thailand Railway Signaling System Modernization",
-      images: ["/img/markets/public-infrastructure/references/ref_03.webp"],
+      images: ["/img/markets/public-infrastructure/references/ref_03.webp?27"],
       overview: [
         "To support the modernization of Thailand's national railway network, LS ELECTRIC delivered advanced railway signaling solutions for multiple phases of the country's railway infrastructure program. The project aimed to improve operational safety, efficiency, and reliability while supporting future railway network expansion.\n\nLS ELECTRIC provided engineering, system design, and supervision, along with advanced signaling technologies including Computer-Based Interlocking (CBI), Centralized Traffic Control (CTC), and ETCS Level 1. Through the successful execution of multiple railway projects over two decades, LS ELECTRIC established a strong track record in delivering reliable transportation infrastructure solutions across Thailand.",
       ],

@@ -48,14 +48,16 @@ export default function CompanyPressPage({
   initialRows = [],
   initialTotalPages = 1,
 }: CompanyPressPageProps) {
-  const { pageIndex, setPageIndex, goToPage } = useListPageMemory("press", "/company/press");
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [rows, setRows] = useState<PressRow[]>(initialRows);
   const [loaded, setLoaded] = useState(initialRows.length > 0);
-  const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const { pageIndex, setPageIndex, goToPage, search, submitSearch } = useListPageMemory(
+    "press",
+    "/company/press",
+  );
 
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from(
@@ -141,7 +143,7 @@ export default function CompanyPressPage({
   };
 
   const handleSearchSubmit = (value: string) => {
-    setSearch(value);
+    submitSearch(value);
     goToPage(1);
   };
   const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {

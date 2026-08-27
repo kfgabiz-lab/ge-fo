@@ -58,7 +58,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
   {
     id: "ogm-ref-1",
     href: "",
-    image: "/img/markets/oil-gas-mining/references/ref_01.webp",
+    image: "/img/markets/oil-gas-mining/references/ref_01.webp?27",
     title: "Oil Production Pump Jack Automation",
     description:
       "LS ELECTRIC provides advanced Pump Jack automation solutions for oil production applications using its iS7 Variable Frequency Drive. Through firmware-based regenerative energy avoidance and optional iRU regenerative units, the solution enhances production reliability, optimizes energy efficiency, and ensures stable operation in demanding oil field environments.",
@@ -66,7 +66,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Oil Production Pump Jack Automation",
-      images: ["/img/markets/oil-gas-mining/references/ref_01.webp"],
+      images: ["/img/markets/oil-gas-mining/references/ref_01.webp?27"],
       overview: [
         "LS ELECTRIC provides advanced Pump Jack automation solutions for oil production applications using its iS7 Variable Frequency Drive. Through firmware-based regenerative energy avoidance and optional iRU regenerative units, the solution enhances production reliability, optimizes energy efficiency, and ensures stable operation in demanding oil field environments.\n\n- Constant production speed\n- Improved energy efficiency\n- Reduced wasted regenerative energy\n- Higher production stability",
       ],
@@ -95,7 +95,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
   {
     id: "ogm-ref-2",
     href: "",
-    image: "/img/markets/oil-gas-mining/references/ref_02.webp",
+    image: "/img/markets/oil-gas-mining/references/ref_02.webp?27",
     title: "220/33kV AIS Turnkey Substation",
     description:
       "To strengthen Sri Lanka's national power transmission grid, LS ELECTRIC executed a turnkey EPC contract for a major 220/33 kV substation in Mannar. The facility plays a critical role in supporting stable regional power distribution through an integrated high-voltage system equipped with advanced grid automation.",
@@ -103,7 +103,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "220/33kV AIS Turnkey Substation",
-      images: ["/img/markets/oil-gas-mining/references/ref_02.webp"],
+      images: ["/img/markets/oil-gas-mining/references/ref_02.webp?27"],
       overview: [
         "To strengthen Sri Lanka's national power transmission grid, LS ELECTRIC executed a turnkey EPC contract for a major 220/33 kV substation in Mannar. The facility plays a critical role in supporting stable regional power distribution through an integrated high-voltage system equipped with advanced grid automation.",
         "LS ELECTRIC managed complete end-to-end delivery—overseeing engineering, procurement, construction, and commissioning. The technical scope included high-voltage Air-Insulated Switchgear (AIS) and Gas-Insulated Switchgear (GIS), power transformers, protection and control panels, and a state-of-the-art Substation Automation System (SAS). The successful delivery established LS ELECTRIC's footprint in the Sri Lankan energy sector while highlighting its turnkey execution capabilities for large-scale utility infrastructure projects.",
@@ -124,7 +124,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
   {
     id: "ogm-ref-3",
     href: "",
-    image: "/img/markets/oil-gas-mining/references/ref_03.webp",
+    image: "/img/markets/oil-gas-mining/references/ref_03.webp?27",
     title: "Large-scale EV Battery Manufacturing Facility",
     description:
       "Following the successful delivery of the first phase of a major EV battery manufacturing facility in the United States, LS ELECTRIC secured the second-phase project to support the expansion of one of North America's largest battery production sites. The project required a reliable and integrated power distribution system to ensure stable operation of high-capacity manufacturing lines.",
@@ -132,7 +132,7 @@ export const oilGasMiningReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Large-scale EV Battery Manufacturing Facility",
-      images: ["/img/markets/oil-gas-mining/references/ref_03.webp"],
+      images: ["/img/markets/oil-gas-mining/references/ref_03.webp?27"],
       overview: [
         "Following the successful delivery of the first phase of a major EV battery manufacturing facility in the United States, LS ELECTRIC secured the second-phase project to support the expansion of one of North America's largest battery production sites. The project required a reliable and integrated power distribution system to ensure stable operation of high-capacity manufacturing lines.",
         "LS ELECTRIC supplied a comprehensive electrical package, including medium-voltage switchgear, low-voltage switchboards, cast resin transformers, UPS systems, and busducts. The project further demonstrated the company's ability to deliver integrated power infrastructure solutions for large-scale battery manufacturing facilities and strengthened its position in the rapidly growing EV battery industry.",
