@@ -1,6 +1,5 @@
 import {
   fetchDownloadCenterContents,
-  fetchDownloadCenterFileUrl,
   fetchDownloadDocTypes,
   hasSelectableVersions,
   type DownloadCenterItem,
@@ -24,7 +23,8 @@ export type ProductKeyFeature = {
 export type ProductDownloadFile = {
   name: string;
   size: string;
-  url: string;
+  url?: string;
+  filePath: string | null;
 };
 
 export const PRODUCT_DOWNLOAD_LINK_BASE =
@@ -41,7 +41,7 @@ export function productDownloadFile({
   size,
   url = `${PRODUCT_DOWNLOAD_LINK_BASE}/${encodeURIComponent(name)}`,
 }: ProductDownloadFileInput): ProductDownloadFile {
-  return { name, size, url };
+  return { name, size, url, filePath: null };
 }
 
 export type ProductDownloadDescription = {
@@ -67,43 +67,31 @@ export type ProductDownloadItem = {
 export async function mapDownloadCenterItemsToProductDownloads(
   items: DownloadCenterItem[],
 ): Promise<ProductDownloadItem[]> {
-  return Promise.all(
-    items.map(async (item) => {
-      const latestVersion = item.versions.reduce<
-        (typeof item.versions)[number] | null
-      >((latest, v) => (!latest || v.sortKey > latest.sortKey ? v : latest), null);
-      const files = latestVersion?.files ?? [];
-      const mappedFiles: ProductDownloadFile[] = await Promise.all(
-        files.map(async (file) => {
-          let url = "";
-          try {
-            url = await fetchDownloadCenterFileUrl(file.filePath);
-          } catch {
-            url = "";
-          }
-          return {
-            name: file.fileName ?? "",
-            size: file.fileSizeText ?? "",
-            url,
-          };
-        }),
-      );
-      const versionNames = item.versions
-        .map((v) => v.versionName)
-        .filter((name): name is string => Boolean(name));
-      return {
-        id: String(item.id),
-        type: item.docTypeLabel || item.docType || "",
-        title: item.title ?? "",
-        date: item.date ?? "",
-        version: latestVersion?.versionName ?? "",
-        versions: versionNames,
-        downloadVersions: item.versions,
-        showVersionSelect: hasSelectableVersions(item),
-        files: mappedFiles,
-      } satisfies ProductDownloadItem;
-    }),
-  );
+  return items.map((item) => {
+    const latestVersion = item.versions.reduce<
+      (typeof item.versions)[number] | null
+    >((latest, v) => (!latest || v.sortKey > latest.sortKey ? v : latest), null);
+    const files = latestVersion?.files ?? [];
+    const mappedFiles: ProductDownloadFile[] = files.map((file) => ({
+      name: file.fileName ?? "",
+      size: file.fileSizeText ?? "",
+      filePath: file.filePath,
+    }));
+    const versionNames = item.versions
+      .map((v) => v.versionName)
+      .filter((name): name is string => Boolean(name));
+    return {
+      id: String(item.id),
+      type: item.docTypeLabel || item.docType || "",
+      title: item.title ?? "",
+      date: item.date ?? "",
+      version: latestVersion?.versionName ?? "",
+      versions: versionNames,
+      downloadVersions: item.versions,
+      showVersionSelect: hasSelectableVersions(item),
+      files: mappedFiles,
+    } satisfies ProductDownloadItem;
+  });
 }
 
 export const PRODUCT_DOWNLOADS_PAGE_SIZE = 5;

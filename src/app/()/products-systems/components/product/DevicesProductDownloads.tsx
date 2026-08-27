@@ -64,28 +64,13 @@ function DevicesProductDownloadsItem({
       return;
     }
 
-    let alive = true;
-    Promise.all(
-      target.files.map(async (file) => {
-        let url = "";
-        try {
-          url = await fetchDownloadCenterFileUrl(file.filePath);
-        } catch {
-          url = "";
-        }
-        return {
-          name: file.fileName ?? "",
-          size: file.fileSizeText ?? "",
-          url,
-        };
-      }),
-    ).then((resolved) => {
-      if (alive) setOtherVersionFiles(resolved);
-    });
-
-    return () => {
-      alive = false;
-    };
+    setOtherVersionFiles(
+      target.files.map((file) => ({
+        name: file.fileName ?? "",
+        size: file.fileSizeText ?? "",
+        filePath: file.filePath,
+      })),
+    );
   }, [selectedVersion, item.version, item.downloadVersions]);
 
   const files = otherVersionFiles ?? item.files;
@@ -160,9 +145,11 @@ function DevicesProductDownloadsItem({
                   </span>
                 </div>
                 <div className="devices_product_downloads__file-actions">
-                  <DevicesProductDownloadsCopyLink url={file.url} />
+                  <DevicesProductDownloadsCopyLink
+                    resolveUrl={() => fetchDownloadCenterFileUrl(file.filePath)}
+                  />
                   <DevicesProductDownloadsDownloadBtn
-                    url={file.url}
+                    resolveUrl={() => fetchDownloadCenterFileUrl(file.filePath)}
                     onDownloaded={() => {
                       pushDataLayerEvent({
                         event: "file_download",

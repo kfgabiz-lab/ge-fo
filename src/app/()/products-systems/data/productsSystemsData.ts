@@ -501,28 +501,6 @@ export async function fetchProductFaqItems(
   }
 }
 
-async function fetchProductAwardsMap(): Promise<Map<number, string>> {
-  const map = new Map<number, string>();
-  try {
-    const res = await fetchData<{ id: number; awards: string }>({
-      slug: "product-data",
-      where: { "eq_product.is_visible": "001" },
-      unpaged: true,
-      리턴함수: (rows) =>
-        rows.map((item) => {
-          const row = flattenPageDataItem(item);
-          return {
-            id: Number(row._id),
-            awards: (row["product.awards"] as string) ?? "",
-          };
-        }),
-    });
-    for (const p of res.content) map.set(p.id, p.awards);
-  } catch {
-  }
-  return map;
-}
-
 export async function fetchProductManagerEmail(productId: number): Promise<string> {
   try {
     const res = await fetchApi<{ email: string | null }>(
@@ -604,10 +582,7 @@ export async function fetchProductLv2Context(
     otherProducts: [],
   };
   try {
-    const [rows, awardsMap] = await Promise.all([
-      fetchDevicesTreeRows(),
-      fetchProductAwardsMap(),
-    ]);
+    const rows = await fetchDevicesTreeRows();
     const depth3 = rows.filter((r) => r.depth === "3");
     const myLv2 = collectProductLv2Ids(rows, currentProductId);
     if (myLv2.size === 0) return empty;
@@ -654,7 +629,6 @@ export async function fetchProductLv2Context(
         image: resolveImageUrlFromJsonText(r.productImage) ?? "",
         title: r.productTitle ?? "",
         subtitle: r.productDescription ?? "",
-        badge: awardsMap.get(r.productId) === "01",
       });
     }
     return { lv2Id, lv2Name, lv2Slug, lv1Id, lv1Name, lv1Slug, otherProducts };

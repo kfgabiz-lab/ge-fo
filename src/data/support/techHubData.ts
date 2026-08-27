@@ -235,7 +235,7 @@ export async function fetchProductTechHubBanner(
 
     const categoryRes = await fetchData<Record<string, unknown>>({
       slug: "category-data",
-      where: { "eq_category.depth": "2" },
+      where: { in_id: [...lv2Ids].join(",") },
       unpaged: true,
       리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
     });

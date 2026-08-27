@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CommonBanner02CopyLink from "@/components/banners/CommonBanner02CopyLink";
 import { handleHorizontalTabListKeyDown } from "@/lib/tabKeyboardNav";
 import { industryTabs, type IndustryTab } from "../data/marketsContent";
@@ -33,7 +33,12 @@ export default function MarketsExplore({
 }: MarketsExploreProps) {
   const initialTabId = defaultTabId ?? tabs[0]?.id ?? "";
   const [activeTab, setActiveTab] = useState(initialTabId);
+  const [othersReady, setOthersReady] = useState(false);
   const active = tabs.find((tab) => tab.id === activeTab) ?? tabs[0];
+
+  useEffect(() => {
+    setOthersReady(true);
+  }, []);
 
   if (!active) {
     return null;
@@ -122,14 +127,14 @@ export default function MarketsExplore({
           <div className="markets_explore__img">
             {tabs.map((tab) => {
               const isActive = tab.id === active.id;
+              const shouldLoad = isActive || othersReady;
               return (
                 <img
                   key={tab.id}
                   className={isActive ? "is-active" : undefined}
-                  loading="eager"
                   fetchPriority={isActive ? "high" : "low"}
                   decoding="async"
-                  src={tab.image}
+                  src={shouldLoad ? tab.image : undefined}
                   alt={isActive ? stripHtml(tab.title) : ""}
                   aria-hidden={isActive ? undefined : true}
                 />

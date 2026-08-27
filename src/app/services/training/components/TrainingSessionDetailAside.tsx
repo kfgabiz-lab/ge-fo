@@ -123,7 +123,16 @@ export default function TrainingSessionDetailAside({
           </div>
           <ul className="support_service_training_session_detail__meta-bullets">
             {sidebar.location.address.trim() ? (
-              <li data-slugkey="curriculum_detail2.address">{sidebar.location.address}</li>
+              <li>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(sidebar.location.address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-slugkey="curriculum_detail2.address"
+                >
+                  {sidebar.location.address}
+                </a>
+              </li>
             ) : null}
             <li data-slugkey="curriculum_detail2.phone">
               {phoneHref ? (
