@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import CompanyFeedFeatured from "@/app/company/components/CompanyFeedFeatured";
 import CompanyFeedListSection from "@/app/company/components/CompanyFeedListSection";
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
@@ -39,10 +39,18 @@ function toArticlesFeaturedCard(row: ArticlesRow): ArticlesFeaturedCard {
   };
 }
 
-export default function CompanyArticlesPage() {
-  const [totalPages, setTotalPages] = useState(1);
-  const [rows, setRows] = useState<ArticlesRow[]>([]);
-  const [loaded, setLoaded] = useState(false);
+type CompanyArticlesPageProps = {
+  initialRows?: ArticlesRow[];
+  initialTotalPages?: number;
+};
+
+export default function CompanyArticlesPage({
+  initialRows = [],
+  initialTotalPages = 1,
+}: CompanyArticlesPageProps) {
+  const [totalPages, setTotalPages] = useState(initialTotalPages);
+  const [rows, setRows] = useState<ArticlesRow[]>(initialRows);
+  const [loaded, setLoaded] = useState(initialRows.length > 0);
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
@@ -64,7 +72,20 @@ export default function CompanyArticlesPage() {
     toCard: toArticlesFeaturedCard,
   });
 
+  const skipInitialFetch = useRef(
+    initialRows.length > 0 &&
+      pageIndex === 0 &&
+      !search &&
+      sort === "latest" &&
+      !month &&
+      !year,
+  );
+
   useEffect(() => {
+    if (skipInitialFetch.current) {
+      skipInitialFetch.current = false;
+      return;
+    }
     let alive = true;
     fetchData({
       slug: "articles-data",

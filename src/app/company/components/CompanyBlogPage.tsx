@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import CompanyFeedEmpty from "@/app/company/components/CompanyFeedEmpty";
 import CompanyBlogListToolbar from "@/app/company/components/CompanyBlogListToolbar";
@@ -33,18 +33,26 @@ const LIST_FALLBACK_IMAGE = "/img/devices/product/list_no_data.svg";
 type CompanyBlogPageProps = {
   empty?: boolean;
   pageId?: string;
+  initialRows?: BlogRow[];
+  initialTotalPages?: number;
+  initialCategories?: CodeItem[];
 };
 
 export default function CompanyBlogPage({
   empty = false,
   pageId = "Page_company_blog",
+  initialRows = [],
+  initialTotalPages = 1,
+  initialCategories = [],
 }: CompanyBlogPageProps) {
-  const [categories, setCategories] = useState<CodeItem[]>([]);
-  const [categoryMap, setCategoryMap] = useState<Map<string, string>>(new Map());
+  const [categories, setCategories] = useState<CodeItem[]>(initialCategories);
+  const [categoryMap, setCategoryMap] = useState<Map<string, string>>(
+    toCategoryMap(initialCategories),
+  );
   const [categoryCode, setCategoryCode] = useState("");
-  const [totalPages, setTotalPages] = useState(1);
-  const [rows, setRows] = useState<BlogRow[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  const [totalPages, setTotalPages] = useState(initialTotalPages);
+  const [rows, setRows] = useState<BlogRow[]>(initialRows);
+  const [loaded, setLoaded] = useState(initialRows.length > 0);
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const { pageIndex, setPageIndex, goToPage, search, submitSearch } = useListPageMemory(
     "blog",
@@ -52,6 +60,7 @@ export default function CompanyBlogPage({
   );
 
   useEffect(() => {
+    if (initialCategories.length > 0) return;
     let alive = true;
     fetchBlogCategories()
       .then((codes) => {
@@ -78,7 +87,15 @@ export default function CompanyBlogPage({
     toCard: toFeaturedCard,
   });
 
+  const skipInitialFetch = useRef(
+    initialRows.length > 0 && pageIndex === 0 && !categoryCode && !search && sort === "latest",
+  );
+
   useEffect(() => {
+    if (skipInitialFetch.current) {
+      skipInitialFetch.current = false;
+      return;
+    }
     let alive = true;
     fetchData({
       slug: "blog-data",

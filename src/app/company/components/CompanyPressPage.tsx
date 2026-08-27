@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import CompanyFeedFeatured from "@/app/company/components/CompanyFeedFeatured";
 import CompanyFeedListSection from "@/app/company/components/CompanyFeedListSection";
 import CompanyFeedTitle from "@/app/company/components/CompanyFeedTitle";
@@ -39,10 +39,18 @@ function toPressFeaturedCard(row: PressRow): PressFeaturedCard {
   };
 }
 
-export default function CompanyPressPage() {
-  const [totalPages, setTotalPages] = useState(1);
-  const [rows, setRows] = useState<PressRow[]>([]);
-  const [loaded, setLoaded] = useState(false);
+type CompanyPressPageProps = {
+  initialRows?: PressRow[];
+  initialTotalPages?: number;
+};
+
+export default function CompanyPressPage({
+  initialRows = [],
+  initialTotalPages = 1,
+}: CompanyPressPageProps) {
+  const [totalPages, setTotalPages] = useState(initialTotalPages);
+  const [rows, setRows] = useState<PressRow[]>(initialRows);
+  const [loaded, setLoaded] = useState(initialRows.length > 0);
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
@@ -64,7 +72,20 @@ export default function CompanyPressPage() {
     toCard: toPressFeaturedCard,
   });
 
+  const skipInitialFetch = useRef(
+    initialRows.length > 0 &&
+      pageIndex === 0 &&
+      !search &&
+      sort === "latest" &&
+      !month &&
+      !year,
+  );
+
   useEffect(() => {
+    if (skipInitialFetch.current) {
+      skipInitialFetch.current = false;
+      return;
+    }
     let alive = true;
     fetchData({
       slug: "press-data",

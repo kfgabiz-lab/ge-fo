@@ -30,14 +30,15 @@ export default async function CompanyPressListPage() {
       size: PRESS_LIST_SIZE,
       where: PRESS_STATUS_WHERE,
       sort: "press.publish_dttm,desc",
-      리턴함수: (rows) => rows.map(toPressCard),
+      리턴함수: (rows) => rows,
     }),
   ]);
+  const cards = res.content.map(toPressCard);
   const graph = buildContentListGraph({
     itemType: "NewsArticle",
     pathname: PATHNAME,
     meta,
-    items: res.content.map((item) => ({
+    items: cards.map((item) => ({
       id: item.id,
       title: item.title,
       description: item.description,
@@ -49,7 +50,10 @@ export default async function CompanyPressListPage() {
     <>
       <JsonLd data={graph} />
       <Suspense fallback={null}>
-        <CompanyPressPage />
+        <CompanyPressPage
+          initialRows={res.content}
+          initialTotalPages={res.totalPages}
+        />
       </Suspense>
     </>
   );

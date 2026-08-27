@@ -11,6 +11,8 @@ import type {
 
 export const EVENTS_PAST_SIZE = 9;
 
+export const EVENTS_FALLBACK_IMAGE = "/img/devices/product/list_no_data.svg";
+
 export const eventsImageSrc = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
 export const eventsDetailHref = (id: string | number, slug?: string | null) =>
   contentDetailPath("/company/events", id, slug);
@@ -56,6 +58,44 @@ function toEventsCommon(item: EventsRow) {
   };
 }
 
+export function toFeaturedItem(item: EventsRow, fallbackImage: string): EventsFeaturedItem {
+  const c = toEventsCommon(item);
+  return {
+    id: String(c.id),
+    title: c.title,
+    dateRange: c.dateRange,
+    venue: c.venue,
+    image: c.imageSrc ?? fallbackImage,
+    href: eventsDetailHref(c.id, c.slug),
+  };
+}
+
+export function toCalendarMonths(rows: EventsRow[]): EventsCalendarMonth[] {
+  const monthMap = new Map<string, EventsCalendarEntry[]>();
+  for (const item of rows) {
+    const c = toEventsCommon(item);
+    if (!c.periodFrom) continue;
+    const monthKey = c.periodFrom.slice(0, 7);
+    const entry: EventsCalendarEntry = {
+      id: String(c.id),
+      title: c.title,
+      venue: c.venue,
+      dates: c.dates,
+      href: eventsDetailHref(c.id, c.slug),
+    };
+    const list = monthMap.get(monthKey) ?? [];
+    list.push(entry);
+    monthMap.set(monthKey, list);
+  }
+  return Array.from(monthMap.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([monthKey, events]) => ({
+      id: monthKey,
+      label: formatMonthLabel(monthKey),
+      events,
+    }));
+}
+
 export function eventsFeaturedQuery(fallbackImage: string, now: Date = siteToday()) {
   return {
     slug: "events-data",
@@ -69,17 +109,7 @@ export function eventsFeaturedQuery(fallbackImage: string, now: Date = siteToday
       //period_from_lte: nextMonthEnd(now),
     },
     리턴함수: (rows: PageDataItem[]): EventsFeaturedItem[] =>
-      rows.map((item) => {
-        const c = toEventsCommon(item);
-        return {
-          id: String(c.id),
-          title: c.title,
-          dateRange: c.dateRange,
-          venue: c.venue,
-          image: c.imageSrc ?? fallbackImage,
-          href: eventsDetailHref(c.id, c.slug),
-        };
-      }),
+      rows.map((item) => toFeaturedItem(item, fallbackImage)),
   };
 }
 
@@ -95,31 +125,7 @@ export function eventsCalendarQuery() {
       condexpr_upcoming: "period_to>=today()?'upcoming':'past'",
       condval_upcoming: "upcoming",
     },
-    리턴함수: (rows: PageDataItem[]): EventsCalendarMonth[] => {
-      const monthMap = new Map<string, EventsCalendarEntry[]>();
-      for (const item of rows) {
-        const c = toEventsCommon(item);
-        if (!c.periodFrom) continue;
-        const monthKey = c.periodFrom.slice(0, 7);
-        const entry: EventsCalendarEntry = {
-          id: String(c.id),
-          title: c.title,
-          venue: c.venue,
-          dates: c.dates,
-          href: eventsDetailHref(c.id, c.slug),
-        };
-        const list = monthMap.get(monthKey) ?? [];
-        list.push(entry);
-        monthMap.set(monthKey, list);
-      }
-      return Array.from(monthMap.entries())
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([monthKey, events]) => ({
-          id: monthKey,
-          label: formatMonthLabel(monthKey),
-          events,
-        }));
-    },
+    리턴함수: (rows: PageDataItem[]): EventsCalendarMonth[] => toCalendarMonths(rows),
   };
 }
 
