@@ -143,16 +143,16 @@ export const powerGridReferences: ReferenceItem[] = [
     image: "/img/markets/power-grid/references/ref_03.webp",
     title: "QCELLS Redeemer Project",
     description:
-      "The Qcells Redeemer Project is one of the largest integrated solar manufacturing facilities in North America, located in Cartersville, Georgia, USA. The facility encompasses the entire solar manufacturing process, including ingot, wafer, cell, and module production.",
+      "The Qcells Redeemer Project, located in Cartersville, Georgia, is one of North America's largest integrated solar manufacturing facilities. The site encompasses the complete solar supply chain, from ingot and wafer production to cell and module assembly.",
     location: "United States",
     country: "",
     modal: {
       modalTitle: "QCELLS Redeemer Project",
       images: ["/img/markets/power-grid/references/ref_03.webp"],
       overview: [
-        "The Qcells Redeemer Project is one of the largest integrated solar manufacturing facilities in North America, located in Cartersville, Georgia, USA. The facility encompasses the entire solar manufacturing process, including ingot, wafer, cell, and module production.",
-        "To ensure the stable operation of its large-scale production lines, the project required a highly reliable power distribution system and a trusted partner with proven experience in similar manufacturing projects. Building on the successful completion of the nearby Qcells Eagle Project in Dalton, Georgia, LS ELECTRIC earned the customer's confidence through its proven expertise and strong local execution capabilities, ultimately being selected as the power infrastructure partner for the Redeemer Project.",
-        "LS ELECTRIC supplied medium- and low-voltage switchgear and distribution panels, while also providing engineering, on-site technical support, and commissioning services to deliver a reliable power distribution system for this large-scale solar manufacturing facility.",
+        "The Qcells Redeemer Project, located in Cartersville, Georgia, is one of North America's largest integrated solar manufacturing facilities. The site encompasses the complete solar supply chain, from ingot and wafer production to cell and module assembly.",
+        "Operating a facility of this scale requires an exceptionally reliable power distribution system and a partner with a proven track record in heavy industrial manufacturing. Building on its successful execution of the nearby Qcells Eagle Project in Dalton, Georgia, LS ELECTRIC earned the client's trust through demonstrated technical expertise and robust local capabilities, securing its role as the primary power infrastructure partner for the Redeemer Project.",
+        "LS ELECTRIC provided a complete power solution—supplying medium and low-voltage switchgear and distribution panels, alongside comprehensive engineering, on-site technical support, and commissioning services to ensure seamless power reliability.",
       ],
       keyInfo: [
         { label: "Location", value: "United States" },

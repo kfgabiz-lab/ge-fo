@@ -224,7 +224,11 @@ export const americaOperate = {
             name: "LS ELECTRIC America Inc.",
             role: "Sales, Warehouse",
             contacts: [
-              { type: "address", text: "625 Heathrow Dr, Lincolnshire, IL 60069" },
+              {
+                type: "address",
+                text: "625 Heathrow Dr, Lincolnshire, IL 60069",
+                href: "https://maps.app.goo.gl/MdahH2KN3HEopCvj7",
+              },
               { type: "phone", text: "224-352-2265" },
             ],
           },
@@ -242,7 +246,11 @@ export const americaOperate = {
             name: "LS ELECTRIC America Bastrop Center",
             role: "Service, Training / Manufacturing",
             contacts: [
-              { type: "address", text: "409 Technology Dr, Bastrop, TX 78602" },
+              {
+                type: "address",
+                text: "409 Technology Dr, Bastrop, TX 78602",
+                href: "https://maps.app.goo.gl/umXyQpytNzE153Fa7",
+              },
               { type: "phone", text: "800-891-2941" },
             ],
           },
@@ -255,6 +263,7 @@ export const americaOperate = {
               {
                 type: "address",
                 text: "9647 Santa Fe Springs Rd, Santa Fe Springs, CA 90670",
+                href: "https://maps.app.goo.gl/d2a7bg57KEghM8by7",
               },
               { type: "phone", text: "949-333-3140" },
             ],
@@ -267,7 +276,11 @@ export const americaOperate = {
             name: "LS ELECTRIC America Atlanta Office",
             role: "Sales",
             contacts: [
-              { type: "address", text: "3176 Main St. Suite 201, Duluth, GA 30096" },
+              {
+                type: "address",
+                text: "3176 Main St. Suite 201, Duluth, GA 30096",
+                href: "https://maps.app.goo.gl/WrGAc9eRMs7MwGdh7",
+              },
               { type: "phone", text: "512-230-3873" },
             ],
           },
@@ -276,7 +289,13 @@ export const americaOperate = {
             badge: "Office",
             name: "LS ELECTRIC America Dallas Office",
             role: "Sales",
-            contacts: [{ type: "address", text: "320 Decker Dr, Irving, TX 75062" }],
+            contacts: [
+              {
+                type: "address",
+                text: "320 Decker Dr, Irving, TX 75062",
+                href: "https://maps.app.goo.gl/1h13afiB86wzsw1W7",
+              },
+            ],
           },
         ],
       ],
@@ -292,7 +311,11 @@ export const americaOperate = {
             name: "LS ELECTRIC Utah Inc.",
             role: "Sales, Manufacturing",
             contacts: [
-              { type: "address", text: "655 E 4930 N, Enoch, UT 84721" },
+              {
+                type: "address",
+                text: "655 E 4930 N, Enoch, UT 84721",
+                href: "https://maps.app.goo.gl/oqWsfJnVjXXdZbBa8",
+              },
               { type: "phone", text: "435-865-0125" },
               {
                 type: "website",
@@ -310,6 +333,7 @@ export const americaOperate = {
               {
                 type: "address",
                 text: "9201 Forsyth Park Dr., Charlotte, NC 28273",
+                href: "https://maps.app.goo.gl/tNsViuLJvkXXntb57",
               },
               { type: "phone", text: "980-221-0654" },
               {

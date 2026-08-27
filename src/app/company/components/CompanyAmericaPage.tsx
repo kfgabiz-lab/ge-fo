@@ -184,7 +184,7 @@ function LocationCard({ item }: { item: AmericaLocationItem }) {
                 >
                   {contact.text}
                 </a>
-              ) : contact.type === "website" ? (
+              ) : contact.type === "website" || contact.href ? (
                 <a
                   href={contact.href ?? contact.text}
                   className="company-america-operate__contact-link"
