@@ -3309,7 +3309,8 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     align-items: center;
     margin-left: -20px;
     margin-right: -20px;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 240px;
     gap: 6px;
     background: rgb(34 34 34 / 80%);
     pointer-events: none;
