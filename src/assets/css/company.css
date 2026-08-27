@@ -2730,9 +2730,10 @@ section.company-blog-list .company-blog__tag:hover {
 
   section.company-events-calendar .company-events-calendar__meta-group {
     display: inline-flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
-    white-space: nowrap;
+    min-width: 0;
+    max-width: 100%;
   }
 
   section.company-events-calendar .company-events-calendar__meta-label {
@@ -2745,10 +2746,15 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-events-calendar .company-events-calendar__meta-value {
+    min-width: 0;
+    flex: 1;
     font-size: 15px;
     font-weight: 400;
     line-height: 23px;
     color: #666;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   section.company-events-calendar .company-events-calendar__meta-sep {

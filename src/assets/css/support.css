@@ -4950,9 +4950,36 @@ section.support_where_to_buy_banner .common_banner_02__link {
   }
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-list .support_where_to_buy_contents__count-row {
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
     margin: 0;
     min-height: auto;
+  }
+
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-list .support_where_to_buy_contents__refresh {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-list .support_where_to_buy_contents__refresh-icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+    background: url("/ico/ico_refresh_22.svg") center / contain no-repeat;
+    transform-origin: center center;
+  }
+
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-list .support_where_to_buy_contents__refresh-icon.is-spinning {
+    animation: guide_refresh_spin 0.55s ease;
   }
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-list .support_where_to_buy_contents__count {
@@ -5250,7 +5277,9 @@ section.support_where_to_buy_banner .common_banner_02__link {
   }
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-list .support_where_to_buy_contents__no-data .support_where_to_buy_contents__count-row {
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
     margin: 0;
     min-height: auto;
   }
