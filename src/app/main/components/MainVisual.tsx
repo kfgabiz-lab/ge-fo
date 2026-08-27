@@ -25,7 +25,7 @@ export default async function MainVisual() {
           <div className="inner">
             <a
               href={noticeItem.url}
-              className="item"
+              className={noticeItem.url ? "item" : "item item--no-url"}
               data-slug="banner-data"
               data-slugkey="url"
               data-slugkey-attr="href"
@@ -45,14 +45,16 @@ export default async function MainVisual() {
                   {noticeItem.bottomText}
                 </p>
               </div>
-              <div className="btn_area">
-                <span className="btn-text-30">
-                  More
-                  <span className="btn-text-30__icon" aria-hidden="true">
-                    <span className="icon_arrow-14" aria-hidden="true" />
+              {noticeItem.url && (
+                <div className="btn_area">
+                  <span className="btn-text-30">
+                    More
+                    <span className="btn-text-30__icon" aria-hidden="true">
+                      <span className="icon_arrow-14" aria-hidden="true" />
+                    </span>
                   </span>
-                </span>
-              </div>
+                </div>
+              )}
             </a>
           </div>
         </section>
