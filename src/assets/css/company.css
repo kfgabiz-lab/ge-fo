@@ -2341,7 +2341,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-weight: 500;
     line-height: 30px;
     color: #222;
-    width: 540px;
+    /* width: 540px; */
   }
 
   section.company-events-calendar .company-events-calendar__meta {
