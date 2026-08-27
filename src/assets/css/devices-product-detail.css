@@ -3252,10 +3252,16 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     margin-bottom: 0;
   }
 
+  /* Overlay container — sized to grid (scroll is in-flow sibling) for height @container */
   section.devices_product_lineup .devices_product_lineup__grid-viewport {
-    position: relative;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
     max-width: 100%;
     min-width: 0;
+    container-type: size;
+    container-name: devices-lineup-viewport;
+    pointer-events: none;
   }
 
   section.devices_product_lineup .devices_product_lineup__grid-scroll {
@@ -3317,6 +3323,13 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     transition:
       opacity 0.3s ease,
       visibility 0.3s ease;
+  }
+
+  @container devices-lineup-viewport (max-height: 480px) {
+    section.devices_product_lineup .devices_product_lineup__swipe {
+      padding: 0;
+      justify-content: center;
+    }
   }
 
   section.devices_product_lineup .devices_product_lineup__swipe.is-hidden {

@@ -88,16 +88,16 @@ export default function DevicesProductLineupGrid({
       className={`devices_product_lineup__grid devices_product_lineup__grid--${modifier}`}
       data-layout={layoutAttr}
     >
+      <div
+        ref={scrollRef}
+        className="devices_product_lineup__grid-scroll"
+        tabIndex={0}
+        role="region"
+        aria-label="Product lineup. Swipe or scroll horizontally to see more."
+      >
+        {children}
+      </div>
       <div className="devices_product_lineup__grid-viewport">
-        <div
-          ref={scrollRef}
-          className="devices_product_lineup__grid-scroll"
-          tabIndex={0}
-          role="region"
-          aria-label="Product lineup. Swipe or scroll horizontally to see more."
-        >
-          {children}
-        </div>
         {scrollbar.scrollable ? (
           <div
             className="devices_product_lineup__scrollbar"
