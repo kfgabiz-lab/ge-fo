@@ -30,14 +30,15 @@ export default async function CompanyArticlesListPage() {
       size: ARTICLES_LIST_SIZE,
       where: ARTICLES_STATUS_WHERE,
       sort: "articles.publish_dttm,desc",
-      리턴함수: (rows) => rows.map(toArticlesCard),
+      리턴함수: (rows) => rows,
     }),
   ]);
+  const cards = res.content.map(toArticlesCard);
   const graph = buildContentListGraph({
     itemType: "Article",
     pathname: PATHNAME,
     meta,
-    items: res.content.map((item) => ({
+    items: cards.map((item) => ({
       id: item.id,
       title: item.title,
       description: item.description,
@@ -49,7 +50,10 @@ export default async function CompanyArticlesListPage() {
     <>
       <JsonLd data={graph} />
       <Suspense fallback={null}>
-        <CompanyArticlesPage />
+        <CompanyArticlesPage
+          initialRows={res.content}
+          initialTotalPages={res.totalPages}
+        />
       </Suspense>
     </>
   );

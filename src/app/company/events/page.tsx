@@ -1,7 +1,14 @@
 import { Suspense } from "react";
 import type { Metadata, ResolvingMetadata } from "next";
 import CompanyEventsPage from "@/app/company/components/CompanyEventsPage";
-import { eventsDetailHref } from "@/app/company/data/eventsData";
+import {
+  EVENTS_FALLBACK_IMAGE,
+  eventsCalendarQuery,
+  eventsDetailHref,
+  eventsPastQuery,
+  toCalendarMonths,
+  toFeaturedItem,
+} from "@/app/company/data/eventsData";
 import { fetchData } from "@/lib/pageDataApi";
 import { flattenPageDataItem, pickField } from "@/lib/pageData";
 import { buildMenuSeoMetadata, fetchMenuMeta } from "@/lib/menuSeo";
@@ -19,7 +26,7 @@ export async function generateMetadata(
 }
 
 export default async function CompanyEventsListPage() {
-  const [meta, res] = await Promise.all([
+  const [meta, res, calendarRes, pastRes] = await Promise.all([
     fetchMenuMeta(PATHNAME),
     fetchData({
       slug: "events-data",
@@ -40,7 +47,13 @@ export default async function CompanyEventsListPage() {
           };
         }),
     }),
+    fetchData({ ...eventsCalendarQuery(), 리턴함수: (rows) => rows }),
+    fetchData(eventsPastQuery({ page: 0, sort: "latest", fallbackImage: EVENTS_FALLBACK_IMAGE })),
   ]);
+  const calendarMonths = toCalendarMonths(calendarRes.content);
+  const featuredItems = calendarRes.content
+    .slice(0, 2)
+    .map((row) => toFeaturedItem(row, EVENTS_FALLBACK_IMAGE));
   const currentUrl = pageUrl(PATHNAME);
   const graph = buildPageGraph([
     {
@@ -74,7 +87,12 @@ export default async function CompanyEventsListPage() {
     <>
       <JsonLd data={graph} />
       <Suspense fallback={null}>
-        <CompanyEventsPage />
+        <CompanyEventsPage
+          initialFeaturedItems={featuredItems}
+          initialCalendarMonths={calendarMonths}
+          initialPastItems={pastRes.content}
+          initialPastTotalPages={pastRes.totalPages}
+        />
       </Suspense>
     </>
   );

@@ -25,16 +25,20 @@ export async function generateMetadata(
 }
 
 export default async function CompanyBlogListPage() {
-  const [meta, categories] = await Promise.all([fetchMenuMeta(PATHNAME), fetchBlogCategories()]);
+  const [meta, categories, res] = await Promise.all([
+    fetchMenuMeta(PATHNAME),
+    fetchBlogCategories(),
+    fetchData({
+      slug: "blog-data",
+      page: 0,
+      size: BLOG_LIST_SIZE,
+      where: BLOG_STATUS_WHERE,
+      sort: "blog.publish_dttm,desc",
+      리턴함수: (rows) => rows,
+    }),
+  ]);
   const categoryMap = toCategoryMap(categories);
-  const res = await fetchData({
-    slug: "blog-data",
-    page: 0,
-    size: BLOG_LIST_SIZE,
-    where: BLOG_STATUS_WHERE,
-    sort: "blog.publish_dttm,desc",
-    리턴함수: (rows) => rows.map((row) => toBlogCard(row, categoryMap)),
-  });
+  const cards = res.content.map((row) => toBlogCard(row, categoryMap));
   const currentUrl = pageUrl(PATHNAME);
   const graph = buildPageGraph([
     {
@@ -45,7 +49,7 @@ export default async function CompanyBlogListPage() {
       description: meta.metaDescription,
       isPartOf: { "@id": WEBSITE_ID },
       breadcrumb: { "@id": `${currentUrl}#breadcrumb` },
-      blogPost: res.content.map((item, index) => ({
+      blogPost: cards.map((item, index) => ({
         "@type": "BlogPosting",
         "@id": `${pageUrl(blogDetailHref(item.id, item.slug))}#post`,
         headline: item.title,
@@ -63,7 +67,11 @@ export default async function CompanyBlogListPage() {
     <>
       <JsonLd data={graph} />
       <Suspense fallback={null}>
-        <CompanyBlogPage />
+        <CompanyBlogPage
+          initialRows={res.content}
+          initialTotalPages={res.totalPages}
+          initialCategories={categories}
+        />
       </Suspense>
     </>
   );
