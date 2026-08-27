@@ -86,7 +86,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
   {
     id: "cr-ref-1",
     href: "",
-    image: "/img/markets/commercial-residential/references/ref_01.webp",
+    image: "/img/markets/commercial-residential/references/ref_01.webp?27",
     title: "HVAC System for IFC Mall",
     description:
       "LS ELECTRIC delivered a high-efficiency HVAC drive solution for the IFC Seoul complex, one of Korea's premier mixed-use commercial developments. By deploying 406 HVAC variable frequency drives (VFDs) with intelligent fan and pump control, the project significantly improved energy efficiency while ensuring reliable climate control across office towers, retail facilities, and hotel operations. The system achieves approximately 35% electricity cost savings, annual power consumption reduction by 14 GWh, and operating cost reduction by KRW 1.4 billion.",
@@ -94,7 +94,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "HVAC System for IFC Mall",
-      images: ["/img/markets/commercial-residential/references/ref_01.webp"],
+      images: ["/img/markets/commercial-residential/references/ref_01.webp?27"],
       overview: [
         "LS ELECTRIC delivered a high-efficiency HVAC drive solution for the IFC Seoul complex, one of Korea's premier mixed-use commercial developments. By deploying 406 HVAC variable frequency drives (VFDs) with intelligent fan and pump control, the project significantly improved energy efficiency while ensuring reliable climate control across office towers, retail facilities, and hotel operations. The system achieves approximately 35% electricity cost savings, annual power consumption reduction by 14 GWh, and operating cost reduction by KRW 1.4 billion.\n\n- High-efficiency HVAC operation\n- Approximately 35% reduction in electricity costs\n- Annual energy savings of approximately 14 GWh\n- Reduced operating expenses\n- Stable climate control for a mixed-use commercial complex\n- Optimized fan and pump performance\n- Reliable 24/7 building operation",
       ],
@@ -129,7 +129,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
   {
     id: "cr-ref-2",
     href: "",
-    image: "/img/markets/commercial-residential/references/ref_02.webp",
+    image: "/img/markets/commercial-residential/references/ref_02.webp?27",
     title: "Corporate Headquarters Power Infrastructure",
     description:
       "LS ELECTRIC delivered an integrated power distribution solution for a large-scale corporate headquarters and business campus in the United States. Designed to support a modern, energy-efficient workplace, the project required reliable electrical infrastructure capable of ensuring stable power supply for mission-critical office and facility operations.",
@@ -137,7 +137,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Corporate Headquarters Power Infrastructure",
-      images: ["/img/markets/commercial-residential/references/ref_02.webp"],
+      images: ["/img/markets/commercial-residential/references/ref_02.webp?27"],
       overview: [
         "LS ELECTRIC delivered an integrated power distribution solution for a large-scale corporate headquarters and business campus in the United States. Designed to support a modern, energy-efficient workplace, the project required reliable electrical infrastructure capable of ensuring stable power supply for mission-critical office and facility operations.",
         "LS ELECTRIC supplied a comprehensive range of medium- and low-voltage power equipment, including medium-voltage switchgear, transformers, low-voltage switchgear, power factor correction systems, and panelboards. The project demonstrated LS ELECTRIC's capability to deliver reliable and energy-efficient power infrastructure for large commercial and corporate facilities.",
@@ -164,7 +164,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
   {
     id: "cr-ref-3",
     href: "",
-    image: "/img/markets/commercial-residential/references/ref_03.webp",
+    image: "/img/markets/commercial-residential/references/ref_03.webp?27",
     title: "Lotte Hanoi Mall",
     description:
       "Lotte E&C (Engineering & Construction), one of Korea's leading EPC companies, developed Lotte Mall in Hanoi, Vietnam. As part of Lotte Group's continued expansion in Vietnam, the project created a major commercial landmark featuring retail, dining, and entertainment facilities.",
@@ -172,7 +172,7 @@ export const commercialResidentialReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Lotte Hanoi Mall",
-      images: ["/img/markets/commercial-residential/references/ref_03.webp"],
+      images: ["/img/markets/commercial-residential/references/ref_03.webp?27"],
       overview: [
         "Lotte E&C (Engineering & Construction), one of Korea's leading EPC companies, developed Lotte Mall in Hanoi, Vietnam. As part of Lotte Group's continued expansion in Vietnam, the project created a major commercial landmark featuring retail, dining, and entertainment facilities.",
         "After a three-year competitive bidding process, LS ELECTRIC secured the contract to supply EHV switchgear, LV switchgear, cast resin transformers, MCCs, distribution panels, and energization services.",

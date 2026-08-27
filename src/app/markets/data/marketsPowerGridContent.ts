@@ -82,7 +82,7 @@ export const powerGridReferences: ReferenceItem[] = [
   {
     id: "pg-ref-1",
     href: "",
-    image: "/img/markets/power-grid/references/ref_01.webp",
+    image: "/img/markets/power-grid/references/ref_01.webp?27",
     title: "200MW Solar Power Plant and Grid Connection Infrastructure",
     description:
       "As South Korea accelerates its renewable energy transition under the national Renewable Energy 2030 initiative, large-scale solar power projects require reliable grid connection infrastructure and integrated engineering capabilities. This project supported the development of a 200MW solar power plant on Bigeum Island by delivering a comprehensive power transmission solution from engineering to commissioning.",
@@ -90,7 +90,7 @@ export const powerGridReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "200MW Solar Power Plant and Grid Connection Infrastructure",
-      images: ["/img/markets/power-grid/references/ref_01.webp"],
+      images: ["/img/markets/power-grid/references/ref_01.webp?27"],
       overview: [
         "As South Korea accelerates its renewable energy transition under the national Renewable Energy 2030 initiative, large-scale solar power projects require reliable grid connection infrastructure and integrated engineering capabilities. This project supported the development of a 200MW solar power plant on Bigeum Island by delivering a comprehensive power transmission solution from engineering to commissioning.",
         "To ensure stable power transmission to the national grid, LS ELECTRIC provided a complete EPC solution covering transmission infrastructure, substations, and grid interconnection systems, including engineering, installation, testing, commissioning, and safety inspections.",
@@ -112,7 +112,7 @@ export const powerGridReferences: ReferenceItem[] = [
   {
     id: "pg-ref-2",
     href: "",
-    image: "/img/markets/power-grid/references/ref_02.webp",
+    image: "/img/markets/power-grid/references/ref_02.webp?27",
     title: "50MW Utility-scale Solar Power Plant EPC",
     description:
       "To support Japan's growing renewable energy market, LS ELECTRIC participated in the development of the 50MW Morioka Solar Power Station through a turnkey EPC and O&M project. Delivered in partnership with Dohwa Engineering, the project provides reliable and efficient solar power generation for approximately 16,000 households.",
@@ -120,7 +120,7 @@ export const powerGridReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "50MW Utility-scale Solar Power Plant EPC",
-      images: ["/img/markets/power-grid/references/ref_02.webp"],
+      images: ["/img/markets/power-grid/references/ref_02.webp?27"],
       overview: [
         "To support Japan's growing renewable energy market, LS ELECTRIC participated in the development of the 50MW Morioka Solar Power Station through a turnkey EPC and O&M project. Delivered in partnership with Dohwa Engineering, the project provides reliable and efficient solar power generation for approximately 16,000 households.",
         "LS ELECTRIC supplied key electrical equipment, including transformers and DC junction boxes, while managing EPC execution, construction supervision, power generation performance, and long-term operation and maintenance. The successful delivery further strengthened the company's track record in utility-scale solar power projects and expanded its renewable energy presence in the Japanese market.",
@@ -140,7 +140,7 @@ export const powerGridReferences: ReferenceItem[] = [
   {
     id: "pg-ref-3",
     href: "",
-    image: "/img/markets/power-grid/references/ref_03.webp",
+    image: "/img/markets/power-grid/references/ref_03.webp?27",
     title: "QCELLS Redeemer Project",
     description:
       "The Qcells Redeemer Project, located in Cartersville, Georgia, is one of North America's largest integrated solar manufacturing facilities. The site encompasses the complete solar supply chain, from ingot and wafer production to cell and module assembly.",
@@ -148,7 +148,7 @@ export const powerGridReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "QCELLS Redeemer Project",
-      images: ["/img/markets/power-grid/references/ref_03.webp"],
+      images: ["/img/markets/power-grid/references/ref_03.webp?27"],
       overview: [
         "The Qcells Redeemer Project, located in Cartersville, Georgia, is one of North America's largest integrated solar manufacturing facilities. The site encompasses the complete solar supply chain, from ingot and wafer production to cell and module assembly.",
         "Operating a facility of this scale requires an exceptionally reliable power distribution system and a partner with a proven track record in heavy industrial manufacturing. Building on its successful execution of the nearby Qcells Eagle Project in Dalton, Georgia, LS ELECTRIC earned the client's trust through demonstrated technical expertise and robust local capabilities, securing its role as the primary power infrastructure partner for the Redeemer Project.",

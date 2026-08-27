@@ -36,7 +36,7 @@ export const dataCenterReferences: ReferenceItem[] = [
   {
     id: "dc-ref-1",
     href: "",
-    image: "/img/markets/data-center/references/ref_01.webp",
+    image: "/img/markets/data-center/references/ref_01.webp?27",
     title: "AI Hyperscale Data Center Power Distribution Project",
     description:
       "LS ELECTRIC delivered an integrated power distribution solution for a large-scale AI hyperscale data center project in the United States.",
@@ -44,7 +44,7 @@ export const dataCenterReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "AI Hyperscale Data Center Power Distribution Project",
-      images: ["/img/markets/data-center/references/ref_01.webp"],
+      images: ["/img/markets/data-center/references/ref_01.webp?27"],
       overview: [
         "LS ELECTRIC delivered an integrated power distribution solution for a large-scale AI hyperscale data center project in the United States.",
         "Facing an exceptionally aggressive construction schedule, the project required large volumes of critical electrical equipment to be engineered, manufactured, and delivered within a significantly shortened timeframe. LS ELECTRIC responded with its Quick Ship capabilities and integrated supply approach, accelerating engineering and production while closely coordinating procurement and logistics.",
@@ -70,7 +70,7 @@ export const dataCenterReferences: ReferenceItem[] = [
   {
     id: "dc-ref-2",
     href: "",
-    image: "/img/markets/data-center/references/ref_02.webp",
+    image: "/img/markets/data-center/references/ref_02.webp?27",
     title: "Large-Scale AI Data Center Power Distribution Project",
     description:
       "LS ELECTRIC secured a major multi-million dollar supply contract with one of the world's leading technology and cloud service companies for a large scale AI data center project in North America.",
@@ -78,7 +78,7 @@ export const dataCenterReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Large-Scale AI Data Center Power Distribution Project",
-      images: ["/img/markets/data-center/references/ref_02.webp"],
+      images: ["/img/markets/data-center/references/ref_02.webp?27"],
       overview: [
         "LS ELECTRIC secured a major multi-million dollar supply contract with one of the world's leading technology and cloud service companies for a large scale AI data center project in North America.",
         "LS ELECTRIC will provide highly reliable medium voltage power distribution solutions to support the intensive power demands and continuous operation of AI infrastructure. By leveraging an expanding North American production and service network, LS ELECTRIC will also enhance supply flexibility and significantly shorten delivery lead times to support the accelerated data center deployment.",
@@ -105,7 +105,7 @@ export const dataCenterReferences: ReferenceItem[] = [
   {
     id: "dc-ref-3",
     href: "",
-    image: "/img/markets/data-center/references/ref_03.webp",
+    image: "/img/markets/data-center/references/ref_03.webp?27",
     title: "Clean Energy Power Distribution Project",
     description:
       "LS ELECTRIC partnered with a leading North American clean energy technology provider to supply power distribution equipment supporting its rapidly growing data center business.",
@@ -113,7 +113,7 @@ export const dataCenterReferences: ReferenceItem[] = [
     country: "",
     modal: {
       modalTitle: "Clean Energy Power Distribution Project",
-      images: ["/img/markets/data-center/references/ref_03.webp"],
+      images: ["/img/markets/data-center/references/ref_03.webp?27"],
       overview: [
         "LS ELECTRIC partnered with a leading North American clean energy technology provider to supply power distribution equipment supporting its rapidly growing data center business.",
         "To meet demanding project schedules and recurring orders, LS ELECTRIC developed standardized switchboard designs and proactively secured critical components in advance. This streamlined engineering and production, significantly reduced lead times and enabled faster, more flexible delivery as customer demand increased.",
