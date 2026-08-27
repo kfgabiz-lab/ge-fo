@@ -2183,6 +2183,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     line-height: 34px;
     letter-spacing: -0.24px;
     color: #222;
+    white-space: pre-line;
   }
 
   section.devices_product_hero .devices_product_hero__btns {
