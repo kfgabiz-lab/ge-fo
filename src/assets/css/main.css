@@ -455,7 +455,7 @@
       border-color 0.2s ease;
   }
 
-  section.main_notic:has(.item:hover) {
+  section.main_notic:has(.item:not(.item--no-url):hover) {
     background: #FFFFFF;
   }
 
@@ -478,7 +478,11 @@
     transition: background-color 0.2s ease;
   }
 
-  section.main_notic .item:hover {
+  section.main_notic .item--no-url {
+    cursor: default;
+  }
+
+  section.main_notic .item:not(.item--no-url):hover {
     background-color: transparent;
     color: #222;
   }
@@ -533,18 +537,18 @@ section.main_notic .txt:before {
   top: 50%;
   transform: translateY(-50%);
 }
-  section.main_notic .item:hover .txt:before {
+  section.main_notic .item:not(.item--no-url):hover .txt:before {
     background: rgb(34 34 34 / 30%);
 }
-  section.main_notic .item:hover .tit_area .tit {
+  section.main_notic .item:not(.item--no-url):hover .tit_area .tit {
     color: inherit;
   }
 
-  section.main_notic .item:hover .tit_area img {
+  section.main_notic .item:not(.item--no-url):hover .tit_area img {
     filter: none;
   }
 
-  section.main_notic .item:hover .txt {
+  section.main_notic .item:not(.item--no-url):hover .txt {
     color: inherit;
     border-left-color: rgb(255 255 255 / 30%);
   }
