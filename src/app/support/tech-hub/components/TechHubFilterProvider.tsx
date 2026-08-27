@@ -19,9 +19,10 @@ import {
   fetchTechHubCertCounts,
 } from "@/data/support/techHubData";
 import {
+  computeInitialListState,
+  markReturnIntentOnLeavingToDetail,
   rememberListPage,
   rememberListQuery,
-  restoreListStateIfReturning,
   watchForFreshListEntryClicks,
 } from "@/lib/navigation/listPageMemory";
 
@@ -81,23 +82,17 @@ export function TechHubFilterProvider({
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [certifications, setCertifications] =
     useState<DownloadFilterOption[]>(CERTS_PENDING);
-  const [query, setQueryState] = useState("");
-  const [page, setPageState] = useState(1);
+  // LIST 버튼 복귀·브라우저 뒤로가기 여부는 렌더 중(lazy initializer)에 동기적으로 확정한다 —
+  // useEffect에서 복원하면 라우터 캐시 재사용 등으로 effect가 안 붙는 경우 복원이 누락될 수 있다.
+  const [initial] = useState(() => computeInitialListState(TECH_HUB_PATHNAME));
+  const [query, setQueryState] = useState(initial.query);
+  const [page, setPageState] = useState(initial.page);
   const [resetSignal, setResetSignal] = useState(0);
 
   const setPage = (p: number) => {
     setPageState(p);
     rememberListPage(TECH_HUB_PATHNAME, p);
   };
-
-  // LIST 버튼으로 돌아왔거나(markListReturnIntent) 브라우저 뒤로가기일 때만
-  // 기억된 페이지·검색어로 복원한다 — GNB 등으로 새로 진입한 경우는 항상 1페이지·빈 검색어.
-  useEffect(() => {
-    restoreListStateIfReturning(TECH_HUB_PATHNAME, {
-      page: setPageState,
-      query: setQueryState,
-    });
-  }, []);
 
   // 이미 이 목록 페이지에 있는 채로 GNB 등에서 같은 URL을 다시 클릭하면
   // 하드 리로드도 리마운트도 안 일어나 페이지 번호가 그대로 남는다 — 그 클릭을
@@ -110,6 +105,11 @@ export function TechHubFilterProvider({
       }),
     [],
   );
+
+  // 목록에 머무는 동안 자기 상세 페이지로 향하는 링크를 클릭하면 "복귀 의도"를 남긴다 —
+  // LIST 버튼뿐 아니라 카드를 직접 클릭해 상세로 들어간 뒤 브라우저 뒤로가기로 돌아오는
+  // 경우도 페이지/검색어를 복원하기 위함.
+  useEffect(() => markReturnIntentOnLeavingToDetail(TECH_HUB_PATHNAME), []);
 
   const initialCategoryKey = initialCategories.join(",");
   const q = query.trim();
