@@ -6,6 +6,7 @@ import { getLenisInstance, scrollWindowTo } from "@/lib/lenisScroll";
 const SCROLL_THRESHOLD_PX = 400;
 const BASE_BOTTOM_DESKTOP_PX = 40;
 const BASE_BOTTOM_MOBILE_PX = 20;
+/** Pin relative to the footer’s bottom edge (allow sitting over the footer down to +40px). */
 const FOOTER_SELECTOR = ".main_footer";
 
 function getBaseBottomPx() {
@@ -20,8 +21,10 @@ function getFooterAwareBottomPx(baseBottom: number) {
     return baseBottom;
   }
 
-  const footerTop = footer.getBoundingClientRect().top;
-  return Math.max(baseBottom, window.innerHeight - footerTop + baseBottom);
+  // Stay at baseBottom until the footer bottom approaches the viewport bottom;
+  // then keep baseBottom (40 desktop / 20 mobile) above the footer bottom.
+  const footerBottom = footer.getBoundingClientRect().bottom;
+  return Math.max(baseBottom, window.innerHeight - footerBottom + baseBottom);
 }
 
 function scrollToTopSmooth() {
