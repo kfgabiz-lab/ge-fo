@@ -40,17 +40,16 @@ function toArticlesFeaturedCard(row: ArticlesRow): ArticlesFeaturedCard {
 }
 
 export default function CompanyArticlesPage() {
-  const { pageIndex, setPageIndex, goToPage } = useListPageMemory(
-    "articles",
-    "/company/articles",
-  );
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<ArticlesRow[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const { pageIndex, setPageIndex, goToPage, search, submitSearch } = useListPageMemory(
+    "articles",
+    "/company/articles",
+  );
 
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from(
@@ -123,7 +122,7 @@ export default function CompanyArticlesPage() {
   };
 
   const handleSearchSubmit = (value: string) => {
-    setSearch(value);
+    submitSearch(value);
     goToPage(1);
   };
   const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {

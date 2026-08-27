@@ -42,12 +42,14 @@ export default function CompanyBlogPage({
   const [categories, setCategories] = useState<CodeItem[]>([]);
   const [categoryMap, setCategoryMap] = useState<Map<string, string>>(new Map());
   const [categoryCode, setCategoryCode] = useState("");
-  const { pageIndex, setPageIndex, goToPage } = useListPageMemory("blog", "/company/blog");
   const [totalPages, setTotalPages] = useState(1);
   const [rows, setRows] = useState<BlogRow[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
+  const { pageIndex, setPageIndex, goToPage, search, submitSearch } = useListPageMemory(
+    "blog",
+    "/company/blog",
+  );
 
   useEffect(() => {
     let alive = true;
@@ -124,7 +126,7 @@ export default function CompanyBlogPage({
   };
 
   const handleSearchSubmit = (value: string) => {
-    setSearch(value);
+    submitSearch(value);
     goToPage(1);
   };
 
