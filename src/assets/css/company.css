@@ -3059,6 +3059,17 @@ section.company-blog-list .company-blog__tag:hover {
     color: #ddd;
   }
 
+  section.company-america-shaping .company-america-shaping__location-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.company-america-shaping .company-america-shaping__location-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    opacity: 0.8;
+  }
+
   section.company-america-shaping .company-america-shaping__highlights {
     display: flex;
     flex-direction: column;
@@ -3925,6 +3936,17 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 15px;
     line-height: 23px;
     color: #ddd;
+  }
+
+  section.company-america-shaping .company-america-shaping__location-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.company-america-shaping .company-america-shaping__location-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    opacity: 0.8;
   }
 
   section.company-america-shaping .company-america-shaping__highlights {

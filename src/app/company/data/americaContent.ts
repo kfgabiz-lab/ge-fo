@@ -17,6 +17,7 @@ export type AmericaShapingBlock = {
   video?: string;
   titleLines: string[];
   location: string;
+  locationHref?: string;
   highlights: AmericaShapingHighlight[];
 };
 
@@ -111,6 +112,7 @@ export const americaShaping = {
         "infrastructure.",
       ],
       location: "LS ELECTRIC America Bastrop Center",
+      locationHref: "https://maps.app.goo.gl/umXyQpytNzE153Fa7",
       highlights: [
         {
           title: "State-of-the-Art Facility",
@@ -139,6 +141,7 @@ export const americaShaping = {
         "Our Expanding U.S. Footprint",
       ],
       location: "LS ELECTRIC Utah Inc.",
+      locationHref: "https://maps.app.goo.gl/oqWsfJnVjXXdZbBa8",
       highlights: [
         {
           title: "Western United States Hub",
