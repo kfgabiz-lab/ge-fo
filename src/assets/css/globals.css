@@ -28,7 +28,7 @@
   --btn-lv01-h: 52px;
   --btn-lv01-min-w: 220px;
   --btn-lv01-px: 24px;
-  --btn-lv02-h: 46px;
+  --btn-lv02-h: 42px;
   --btn-lv02-min-w: 150px;
   --btn-lv02-px: 24px;
   --btn-lv03-h: 42px;
@@ -854,7 +854,7 @@ section .icon_arrow-18 {
   section.common_banner_01 .btn_area {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 14px;
     margin-top: 40px;
     width: 100%;
     justify-content: center;
@@ -3673,7 +3673,7 @@ section.highlight_news--markets .section_tit {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 

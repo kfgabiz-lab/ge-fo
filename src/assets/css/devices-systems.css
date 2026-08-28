@@ -662,12 +662,30 @@
     object-position: center;
   }
 
+  section.devices_help .devices_help__card--overlay .icon_devices-help-link-14,
+  section.devices_help .devices_help__card--overlay .icon_devices-help-arrow-14 {
+    display: block;
+    width: 14px;
+    height: 14px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  section.devices_help .devices_help__card--overlay .icon_devices-help-link-14 {
+    background-image: url("/ico/ico_devices_help_link_14.svg");
+  }
+
+  section.devices_help .devices_help__card--overlay .icon_devices-help-arrow-14 {
+    background-image: url("/ico/ico_devices_help_arrow_14.svg");
+  }
+
   section.devices_help .devices_help__card--overlay:hover .btn-text-30__icon {
     background: var(--color-accent);
   }
 
-  section.devices_help .devices_help__card--overlay:hover .icon_external-18,
-  section.devices_help .devices_help__card--overlay:hover .icon_arrow-18 {
+  section.devices_help .devices_help__card--overlay:hover .icon_devices-help-link-14,
+  section.devices_help .devices_help__card--overlay:hover .icon_devices-help-arrow-14 {
     filter: brightness(0) invert(1);
   }
 }
@@ -1152,20 +1170,31 @@
     background: transparent;
   }
 
-  .devices-page section.devices_help .devices_help__card--overlay .icon_external-18,
-  .devices-page section.devices_help .devices_help__card--overlay .icon_arrow-18 {
+  .devices-page section.devices_help .devices_help__card--overlay .icon_devices-help-link-14,
+  .devices-page section.devices_help .devices_help__card--overlay .icon_devices-help-arrow-14 {
     display: block;
     width: 14px;
     height: 14px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
     filter: none;
+  }
+
+  .devices-page section.devices_help .devices_help__card--overlay .icon_devices-help-link-14 {
+    background-image: url("/ico/ico_devices_help_link_14.svg");
+  }
+
+  .devices-page section.devices_help .devices_help__card--overlay .icon_devices-help-arrow-14 {
+    background-image: url("/ico/ico_devices_help_arrow_14.svg");
   }
 
   .devices-page section.devices_help .devices_help__card--overlay:hover .btn-text-30__icon {
     background: transparent;
   }
 
-  .devices-page section.devices_help .devices_help__card--overlay:hover .icon_external-18,
-  .devices-page section.devices_help .devices_help__card--overlay:hover .icon_arrow-18 {
+  .devices-page section.devices_help .devices_help__card--overlay:hover .icon_devices-help-link-14,
+  .devices-page section.devices_help .devices_help__card--overlay:hover .icon_devices-help-arrow-14 {
     filter: none;
   }
 

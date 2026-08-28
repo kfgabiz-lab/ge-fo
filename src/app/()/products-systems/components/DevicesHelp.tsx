@@ -25,6 +25,12 @@ function getHelpCtaIconClass(ctaIcon?: DevicesHelpCard["ctaIcon"]) {
   return ctaIcon === "arrow" ? "icon_arrow-18" : "icon_external-18";
 }
 
+function getHelpOverlayCtaIconClass(ctaIcon?: DevicesHelpCard["ctaIcon"]) {
+  return ctaIcon === "arrow"
+    ? "icon_devices-help-arrow-14"
+    : "icon_devices-help-link-14";
+}
+
 export default function DevicesHelp({
   variant = "default",
   sectionId,
@@ -99,7 +105,7 @@ export default function DevicesHelp({
                       {card.cta}
                       <span className="btn-text-30__icon">
                         <span
-                          className={getHelpCtaIconClass(card.ctaIcon)}
+                          className={getHelpOverlayCtaIconClass(card.ctaIcon)}
                           aria-hidden="true"
                         />
                       </span>

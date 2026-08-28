@@ -154,17 +154,17 @@ export const warrantyPolicyPage = {
       "View and download the warranty policies applicable to LS ELECTRIC America Power and Automation products.",
     ctaLabel: "Download",
     items: [
-      {
-        id: "automation-policy",
-        name: "Automation Product Warranty Policy",
-        format: "PDF",
-        downloadHref: "/docs/LS Electric Automation Warranty Policy Rev B_20260827(automation).pdf",
-      },
+     
       {
         id: "power-policy",
         name: "Power Product Warranty Policy",
         format: "PDF",
         downloadHref: "/docs/LS Electric Warranty Policy Rev.3 (power).pdf",
+      }, {
+        id: "automation-policy",
+        name: "Automation Product Warranty Policy",
+        format: "PDF",
+        downloadHref: "/docs/LS Electric Automation Warranty Policy Rev B_20260827(automation).pdf",
       },
     ] satisfies WarrantyDocumentItem[],
   },
