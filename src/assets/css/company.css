@@ -6518,7 +6518,7 @@ section.company-blog-list .company-blog__tag:hover {
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__bg-img {
     position: absolute;
-    opacity: 0.8;
+    /* opacity: 0.8; */
     object-fit: cover;
   }
 
@@ -6527,15 +6527,14 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__bg-img--mo {
-    width: 100%;
-    max-width: none;
-    height: auto;
+    object-fit: cover;        width: 100%;
+    height: 100%;
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__overlay {
     position: absolute;
     inset: 0;
-    background: rgb(12 22 45 / 76%);
+    /* background: rgb(12 22 45 / 76%); */
   }
 
   section.company-ls-electric-highlights .inner {
