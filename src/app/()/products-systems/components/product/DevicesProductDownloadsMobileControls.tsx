@@ -1,13 +1,10 @@
 "use client";
 
 import { TextField, InputAdornment } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import DevicesProductDownloadsDocumentFilter from "./DevicesProductDownloadsDocumentFilter";
-import {
-  productDownloadsSortLabel,
-  productDownloadsSortOptions,
-} from "../../data/productDetailContent";
+import { productDownloadsSortOptions } from "../../data/productDetailContent";
 import type { DownloadCenterSort } from "@/data/support/downloadCenterData";
 
 const MOBILE_MAX_WIDTH_QUERY = "(max-width: 780px)";
@@ -28,8 +25,6 @@ export default function DevicesProductDownloadsMobileControls({
   onSearch,
 }: DevicesProductDownloadsMobileControlsProps) {
   const [filterOpen, setFilterOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
-  const sortRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const media = window.matchMedia(MOBILE_MAX_WIDTH_QUERY);
@@ -38,7 +33,6 @@ export default function DevicesProductDownloadsMobileControls({
       if (media.matches) return;
 
       setFilterOpen(false);
-      setSortOpen(false);
     };
 
     closeMobilePanels();
@@ -46,19 +40,6 @@ export default function DevicesProductDownloadsMobileControls({
 
     return () => media.removeEventListener("change", closeMobilePanels);
   }, []);
-
-  useEffect(() => {
-    if (!sortOpen) return;
-
-    const onPointerDown = (event: MouseEvent) => {
-      if (!sortRef.current?.contains(event.target as Node)) {
-        setSortOpen(false);
-      }
-    };
-
-    window.addEventListener("mousedown", onPointerDown);
-    return () => window.removeEventListener("mousedown", onPointerDown);
-  }, [sortOpen]);
 
   return (
     <>
@@ -101,58 +82,24 @@ export default function DevicesProductDownloadsMobileControls({
         />
 
         <div className="devices_product_downloads__mo-toolbar">
-          <div
-            ref={sortRef}
-            className={`devices_product_downloads__mo-sort${
-              sortOpen ? " devices_product_downloads__mo-sort--open" : ""
-            }`}
-          >
-            <button
-              type="button"
+          <div className="devices_product_downloads__mo-sort">
+            <select
               className="devices_product_downloads__mo-sort-trigger"
-              aria-expanded={sortOpen}
-              aria-haspopup="listbox"
-              aria-controls="devices-downloads-sort-listbox"
               aria-label="Sort by"
-              onClick={() => setSortOpen((open) => !open)}
+              value={sort}
+              onChange={(event) => {
+                onSortChange(event.target.value as DownloadCenterSort);
+              }}
             >
-              <span className="devices_product_downloads__mo-sort-label">
-                {sortOpen ? "Sort by" : productDownloadsSortLabel(sort)}
-              </span>
-              <span className="devices_product_downloads__mo-sort-icon" aria-hidden>
-                <img src="/ico/ico_down_16.svg" alt="" width={14} height={14} />
-              </span>
-            </button>
-
-            {sortOpen ? (
-              <ul
-                id="devices-downloads-sort-listbox"
-                className="devices_product_downloads__mo-sort-list"
-                role="listbox"
-                aria-label="Sort by"
-              >
-                {productDownloadsSortOptions.map((option) => (
-                  <li key={option.value}>
-                    <button
-                      type="button"
-                      className={`devices_product_downloads__mo-sort-option${
-                        sort === option.value
-                          ? " devices_product_downloads__mo-sort-option--active"
-                          : ""
-                      }`}
-                      role="option"
-                      aria-selected={sort === option.value}
-                      onClick={() => {
-                        onSortChange(option.value);
-                        setSortOpen(false);
-                      }}
-                    >
-                      {option.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+              {productDownloadsSortOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <span className="devices_product_downloads__mo-sort-icon" aria-hidden>
+              <img src="/ico/ico_down_16.svg" alt="" width={14} height={14} />
+            </span>
           </div>
 
           <button
@@ -182,4 +129,3 @@ export default function DevicesProductDownloadsMobileControls({
     </>
   );
 }
-

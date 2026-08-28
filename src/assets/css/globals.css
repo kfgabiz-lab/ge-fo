@@ -951,7 +951,7 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   flex-shrink: 0;
 }
 
-/* common_banner_03 ??Figma 3082:53145 ## 05_HUB Banner */
+/* common_banner_03 — Figma 10334:303128 ## 05_HUB Banner (PC) */
 @media (min-width: 781px) {
   section.common_banner_03 {
     padding: 0;
@@ -960,9 +960,10 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   section.common_banner_03 .common_banner_03__panel {
     position: relative;
     max-width: 1224px;
-    min-height: 316px;
+    min-height: 280px;
     margin: 0 auto;
     overflow: hidden;
+    background: #0c1625;
   }
 
   section.common_banner_03 .common_banner_03__bg {
@@ -982,42 +983,20 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     display: block;
   }
 
-  section.common_banner_03 .common_banner_03__img {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    width: 562px;
-    height: 316px;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    transform: translate(0, -50%);
-  }
-
-  section.common_banner_03 .common_banner_03__img > img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  section.common_banner_03 .common_banner_03__dim {
-    position: absolute;
-    inset: 0;
-    background: rgb(0 0 0 / 60%);
+  section.common_banner_03 .common_banner_03__content {
+    position: relative;
+    z-index: 1;
+    min-height: 280px;
   }
 
   section.common_banner_03 .common_banner_03__body {
-    position: relative;
-    z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 30px;
     align-items: flex-start;
     justify-content: center;
-    min-height: 316px;
-    max-width: 600px;
-    padding: 60px 0px 60px 60px;
+    min-height: 280px;
+    max-width: 790px;
+    padding: 60px 0 60px 60px;
     text-decoration: none;
     color: inherit;
   }
@@ -1032,18 +1011,18 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   section.common_banner_03 .common_banner_03__title {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 10px;
     width: 100%;
   }
 
-  section.common_banner_03 a.common_banner_03__body:hover .btn-text-30__icon {
+  section.common_banner_03 a.common_banner_03__link-wrap:hover .btn-text-30__icon {
     background: var(--color-accent);
   }
 
   section.common_banner_03 .common_banner_03__kicker {
     margin: 0;
     font-size: 14px;
-    line-height: 20px;
+    line-height: 1;
     color: #fff;
   }
 
@@ -1052,7 +1031,7 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
     color: #fff;
   }
 
@@ -1060,19 +1039,29 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     margin: 0;
     font-size: 16px;
     line-height: 24px;
-    color: rgb(255 255 255 / 70%);
+    color: rgb(255 255 255 / 80%);
   }
 
   section.common_banner_03 .common_banner_03__desc p {
     margin: 0;
   }
 
-  /* Tech Hub 영상 건수 문구 — 본문 아래, CTA 위 */
   section.common_banner_03 .common_banner_03__count {
     margin: 0;
     font-size: 14px;
     line-height: 20px;
-    color: rgb(255 255 255 / 70%);
+    color: rgb(255 255 255 / 80%);
+  }
+
+  section.common_banner_03 .common_banner_03__link-wrap {
+    position: absolute;
+    top: 50%;
+    right: 60px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transform: translateY(-50%);
   }
 
   section.common_banner_03 .common_banner_03__link {
@@ -1083,23 +1072,24 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     background: url("/ico/ico_arrow_right_14_white.svg") center / contain no-repeat;
   }
 
-  section.common_banner_03 a.common_banner_03__body:hover .common_banner_03__link .icon_arrow-18 {
+  section.common_banner_03 a.common_banner_03__link-wrap:hover .common_banner_03__link .icon_arrow-18 {
     filter: none;
   }
 }
 
 @media (max-width: 780px) {
-  /* common_banner_03 — Figma 9776:156816 ## 05_HUB Banner (mobile) */
+  /* common_banner_03 — Figma 10334:304301 ## 05_HUB Banner (mobile) */
   section.common_banner_03 .common_banner_03__panel {
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 466px;
+    min-height: 350px;
     overflow: hidden;
     padding-left: 0;
     padding-right: 0;
     margin-left: 20px;
     margin-right: 20px;
+    background: #0c1625;
   }
 
   section.common_banner_03 .common_banner_03__bg {
@@ -1119,7 +1109,7 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     display: block;
   }
 
-  section.common_banner_03 .common_banner_03__body {
+  section.common_banner_03 .common_banner_03__content {
     position: relative;
     z-index: 1;
     display: flex;
@@ -1128,7 +1118,16 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     gap: 30px;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 40px 24px 40px;
+    min-height: 350px;
+    padding: 50px 24px 80px;
+  }
+
+  section.common_banner_03 .common_banner_03__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0;
     text-decoration: none;
     color: inherit;
   }
@@ -1136,7 +1135,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
   section.common_banner_03 .common_banner_03__text {
     display: flex;
     flex-direction: column;
-    gap: 20px;
     width: 100%;
   }
 
@@ -1147,7 +1145,7 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     width: 100%;
   }
 
-  section.common_banner_03 a.common_banner_03__body:hover .btn-text-30__icon {
+  section.common_banner_03 a.common_banner_03__link-wrap:hover .btn-text-30__icon {
     background: var(--color-accent);
   }
 
@@ -1163,12 +1161,12 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
   section.common_banner_03 .common_banner_03__desc {
-    margin: 0;
+    margin: 20px 0 0;
     font-size: 15px;
     line-height: 23px;
     color: rgb(255 255 255 / 70%);
@@ -1178,12 +1176,18 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     margin: 0;
   }
 
-  /* Tech Hub 영상 건수 문구 — 본문 아래, CTA 위 */
   section.common_banner_03 .common_banner_03__count {
-    margin: 0;
+    margin: 20px 0 0;
     font-size: 13px;
     line-height: 19px;
     color: rgb(255 255 255 / 70%);
+  }
+
+  section.common_banner_03 .common_banner_03__link-wrap {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
   }
 
   section.common_banner_03 .common_banner_03__link {
@@ -1202,34 +1206,8 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     background: url("/ico/ico_arrow_right_14_white.svg") center / contain no-repeat;
   }
 
-  section.common_banner_03 a.common_banner_03__body:hover .common_banner_03__link .icon_arrow-18 {
+  section.common_banner_03 a.common_banner_03__link-wrap:hover .common_banner_03__link .icon_arrow-18 {
     filter: none;
-  }
-
-  section.common_banner_03 .common_banner_03__img {
-    position: relative;
-    z-index: 1;
-    display: block;
-    /* flex: 0 0 188px; */
-    width: 100%;
-    /* height: auto; */
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    aspect-ratio: 335/288;
-  }
-
-  section.common_banner_03 .common_banner_03__img > img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  section.common_banner_03 .common_banner_03__dim {
-    position: absolute;
-    inset: 0;
-    background: rgb(0 0 0 / 60%);
   }
 }
 
