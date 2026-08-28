@@ -6597,6 +6597,8 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wrap:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
     margin-bottom: 0;
   }
 
