@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import {
-  computeInitialListState,
   markReturnIntentOnLeavingToDetail,
   rememberListPage,
   rememberListSearch,
+  restoreListStateIfReturning,
   watchForFreshListEntryClicks,
   type CompanyListVariant,
 } from "@/app/company/lastListSession";
@@ -16,13 +16,22 @@ import {
  * 복원하고, GNB 등으로 새로 진입(같은 페이지에 있는 채로 재클릭한 경우 포함)하면 1페이지·빈
  * 검색어로 초기화한다. 자세한 판단 기준은 lastListSession.ts 참고.
  *
- * 복원 여부는 렌더 중(useState lazy initializer)에 동기적으로 확정한다 — useEffect에서
- * 복원하면 라우터 캐시 재사용 등으로 effect가 안 붙는 경우 복원이 아예 누락될 수 있다.
+ * 초기 state는 항상 서버와 동일하게 1페이지·빈 검색어로 시작하고, 복원은 마운트 직후
+ * useEffect에서 patch한다 — 렌더 중 sessionStorage 값으로 초기 state를 계산하면 SSR과
+ * 달라져 하이드레이션 불일치가 나기 때문(자세한 이유는 restoreListStateIfReturning 참고).
+ * 모든 관련 네비게이션이 하드 리로드(완전한 새 마운트)라 effect 기반 복원이 안전하다.
  */
 export function useListPageMemory(variant: CompanyListVariant, basePath: string) {
-  const [initial] = useState(() => computeInitialListState(variant));
-  const [pageIndex, setPageIndex] = useState(initial.pageIndex);
-  const [search, setSearch] = useState(initial.search);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    restoreListStateIfReturning(variant, basePath, {
+      pageIndex: setPageIndex,
+      search: setSearch,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [variant, basePath]);
 
   useEffect(
     () =>
