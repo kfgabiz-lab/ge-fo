@@ -620,22 +620,23 @@
 
   section.support_service_training_session_detail .support_service_training_session_detail__title-row {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 30px;
+    flex-direction: column;
+    gap: 10px;
     width: 100%;
   }
 
-  section.support_service_training_session_detail .support_service_training_session_detail__title-wrap {
+  section.support_service_training_session_detail .support_service_training_session_detail__title-line {
     display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
     min-width: 0;
+    overflow: visible;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__category {
-    margin: 0 0 10px;
+    margin: 0;
     font-size: 15px;
     line-height: 23px;
     color: #0f1f45;
@@ -643,8 +644,8 @@
 
   section.support_service_training_session_detail .support_service_training_session_detail__title {
     margin: 0;
-    flex: none;
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     max-width: 1180px;
     font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
     font-size: 42px;
@@ -654,12 +655,119 @@
     color: #222;
   }
 
+  section.support_service_training_session_detail .support_service_training_session_detail__share-wrap {
+    position: relative;
+    flex-shrink: 0;
+    overflow: visible;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-trigger:hover {
+    opacity: 0.75;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-trigger:focus-visible {
+    outline: 2px solid #0f1f45;
+    outline-offset: 2px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-trigger img {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover {
+    position: absolute;
+    top: calc(100% + 18px);
+    right: 0;
+    z-index: 20;
+    box-sizing: border-box;
+    width: 288px;
+    padding: 24px 30px;
+    overflow: visible;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 4px 4px 10px rgb(0 0 0 / 12%);
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-arrow {
+    position: absolute;
+    top: -10px;
+    right: 18px;
+    z-index: 1;
+    width: 22px;
+    height: 10px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-arrow::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    transform: translateX(-50%) rotate(45deg);
+    box-shadow: -2px -2px 6px rgb(0 0 0 / 8%);
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    color: #222;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-close img {
+    display: block;
+    width: 18px;
+    height: 18px;
+  }
+
   section.support_service_training_session_detail .support_service_training_session_detail__share {
     display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    gap: 18px;
-    margin: 4px 0 0;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 30px;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
@@ -670,13 +778,11 @@
 
   section.support_service_training_session_detail .support_service_training_session_detail__share-link {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #f5f5f5;
+    gap: 4px;
+    width: 56px;
+    text-decoration: none;
     transition: opacity 0.2s ease;
   }
 
@@ -687,12 +793,27 @@
   section.support_service_training_session_detail .support_service_training_session_detail__share-link:focus-visible {
     outline: 2px solid #0f1f45;
     outline-offset: 2px;
+    border-radius: 4px;
   }
 
-  section.support_service_training_session_detail .support_service_training_session_detail__share-link img {
+  section.support_service_training_session_detail .support_service_training_session_detail__share-link-icon {
     display: block;
-    width: 20px;
-    height: 20px;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-link-icon img {
+    display: block;
+    width: 52px;
+    height: 52px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-link-label {
+    font-size: 15px;
+    line-height: 23px;
+    color: #666;
+    text-align: center;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__divider {
@@ -2891,18 +3012,18 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 20px;
+    gap: 4px;
     width: 100%;
   }
 
-  section.support_service_training_session_detail .support_service_training_session_detail__title-wrap {
+  section.support_service_training_session_detail .support_service_training_session_detail__title-line {
     display: flex;
-    flex: none;
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
+    gap: 20px;
     width: 100%;
     min-width: 0;
+    overflow: visible;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__category {
@@ -2928,12 +3049,109 @@
     color: #222;
   }
 
+  section.support_service_training_session_detail .support_service_training_session_detail__share-wrap {
+    position: relative;
+    flex-shrink: 0;
+    overflow: visible;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #f5f5f5;
+    cursor: pointer;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-trigger img {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover {
+    position: absolute;
+    top: calc(100% + 18px);
+    left: 0;
+    z-index: 20;
+    box-sizing: border-box;
+    width: 288px;
+    max-width: calc(100vw - 40px);
+    padding: 20px 24px;
+    overflow: visible;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 4px 4px 10px rgb(0 0 0 / 12%);
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-arrow {
+    position: absolute;
+    top: -10px;
+    left: 11px;
+    z-index: 1;
+    width: 22px;
+    height: 10px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-arrow::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    transform: translateX(-50%) rotate(45deg);
+    box-shadow: -2px -2px 6px rgb(0 0 0 / 8%);
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+    color: #222;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-popover-close img {
+    display: block;
+    width: 18px;
+    height: 18px;
+  }
+
   section.support_service_training_session_detail .support_service_training_session_detail__share {
     display: flex;
-    flex-shrink: 0;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
-    gap: 14px;
+    gap: 30px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -2945,18 +3163,33 @@
 
   section.support_service_training_session_detail .support_service_training_session_detail__share-link {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #f5f5f5;
+    gap: 4px;
+    width: 56px;
+    text-decoration: none;
   }
 
-  section.support_service_training_session_detail .support_service_training_session_detail__share-link img {
+  section.support_service_training_session_detail .support_service_training_session_detail__share-link-icon {
+    display: flex;
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-link-icon img {
     display: block;
-    width: 20px;
-    height: 20px;
+    width: 44px;
+    height: 44px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-link-label {
+    font-size: 13px;
+    line-height: 19px;
+    color: #666;
+    text-align: center;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__divider {

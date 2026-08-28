@@ -8,7 +8,6 @@ import type {
 import {
   buildSessionTabs,
   engineeringTrainingSessionAssets,
-  engineeringTrainingSessionShareLinks,
   type EngineeringTrainingSessionTabId,
 } from "@/data/services/engineeringTrainingSessionDetailContent";
 import type { TrainingVariant } from "../data/trainingContent";
@@ -16,10 +15,10 @@ import { seedBreadcrumbTitle } from "@/components/layout/shared/breadcrumbTitleS
 import TrainingSessionDetailForm from "./TrainingSessionDetailForm";
 import TrainingSessionDetailAside from "./TrainingSessionDetailAside";
 import TrainingSessionDetailTableScroll from "./TrainingSessionDetailTableScroll";
+import TrainingSessionShare from "./TrainingSessionShare";
 import { getLenisInstance, getWindowScrollY } from "@/lib/lenisScroll";
 import {
   buildGoogleCalendarUrl,
-  buildShareHref,
   downloadIcs,
   hasValidEventDate,
   type CalendarEvent,
@@ -237,63 +236,24 @@ export default function TrainingSessionDetail({
       <div className="inner">
                 <header className="support_service_training_session_detail__head">
           <div className="support_service_training_session_detail__title-row">
-            <div className="support_service_training_session_detail__title-wrap">
-              <p
-                className="support_service_training_session_detail__category"
-                data-slugkey="_fetchedRel8.curriculum.product_category"
-              >
-                {session.category}
-              </p>
+            <p
+              className="support_service_training_session_detail__category"
+              data-slugkey="_fetchedRel8.curriculum.product_category"
+            >
+              {session.category}
+            </p>
+            <div className="support_service_training_session_detail__title-line">
               <h1
                 className="support_service_training_session_detail__title"
                 data-slugkey="curriculum_detail2.title"
               >
                 {session.title}
               </h1>
+              <TrainingSessionShare
+                shareUrl={shareUrl}
+                title={session.title}
+              />
             </div>
-            <ul
-              className="support_service_training_session_detail__share"
-              aria-label="Share"
-            >
-              {engineeringTrainingSessionShareLinks.map((link) => {
-                const href = shareUrl
-                  ? buildShareHref(link.id, shareUrl, session.title)
-                  : link.href;
-                return (
-                  <li key={link.id}>
-                    <a
-                      href={href}
-                      className="support_service_training_session_detail__share-link"
-                      aria-label={link.label}
-                      {...(link.external
-                        ? { target: "_blank", rel: "noopener noreferrer" }
-                        : {})}
-                      {...(link.id === "x"
-                        ? {
-                            onClick: (event: React.MouseEvent<HTMLAnchorElement>) => {
-                              event.preventDefault();
-                              window.open(
-                                href,
-                                "",
-                                "menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=500",
-                              );
-                            },
-                          }
-                        : {})}
-                    >
-                      <img
-                        src={link.icon}
-                        alt=""
-                        width={20}
-                        height={20}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
           </div>
           <hr className="support_service_training_session_detail__divider" />
         </header>
