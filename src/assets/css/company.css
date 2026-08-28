@@ -5293,6 +5293,10 @@ section.company-blog-list .company-blog__tag:hover {
     object-fit: cover;
   }
 
+  section.company-ls-electric-global .company-ls-electric-global__bg-texture--mo {
+    display: none;
+  }
+
   section.company-ls-electric-global .company-ls-electric-global__head {
     max-width: 1320px;
   }
@@ -6859,15 +6863,16 @@ section.company-blog-list .company-blog__tag:hover {
     pointer-events: none;
   }
 
-  section.company-ls-electric-global .company-ls-electric-global__bg-texture {
+  section.company-ls-electric-global .company-ls-electric-global__bg-texture--pc {
+    display: none;
+  }
+
+  section.company-ls-electric-global .company-ls-electric-global__bg-texture--mo {
     position: absolute;
-    top: 0;
-    left: -424%;
-    width: 948%;
-    height: 227%;
-    max-width: none;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    object-position: center top;
   }
 
   section.company-ls-electric-global .company-ls-electric-global__head {

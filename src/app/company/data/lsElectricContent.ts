@@ -161,6 +161,7 @@ export const lsElectricGlobal = {
   description:
     "LS ELECTRIC builds market-specific plans to expand its global presence. We strengthen local operations and tailor power, automation, and energy solutions to each market.",
   bgTexture: `${IMG}/global-bg.webp`,
+  bgTextureMo: `${IMG}/global-bg_mo.webp`,
   mapImage: `${IMG}/global-map.webp`,
   stats: [
     { id: "network", label: "Global Network", value: "14", unit: "Countries" },
