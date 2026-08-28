@@ -81,10 +81,21 @@ export async function generateMetadata(
     parent,
   ]);
   if (category) {
+    const mediaId =
+        Array.isArray(category.image) && category.image.length > 0
+            ? Number(category.image[0])
+            : null;
+
+    const imageUrl =
+        mediaId != null && !Number.isNaN(mediaId)
+            ? `${SITE_URL}/api/v1/fo/page-files/${mediaId}`
+            : undefined;
+
     return mergeSeoMetadata(
       previous,
       category.metaTitle ?? "",
       category.metaDescription ?? "",
+      imageUrl,
     );
   }
 

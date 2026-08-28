@@ -12,6 +12,7 @@ import "../assets/css/reset.css";
 import "../assets/css/fonts.css";
 import "../assets/css/globals.css";
 import "../assets/css/components/product-award-badge.css";
+import { SITE_URL } from "@/lib/structuredData/siteConfig";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -39,9 +40,9 @@ export const metadata: Metadata = {
     siteName: "LS ELECTRIC",
     images: [
       {
-        url: "https://www.ls-electric.com/assets/img/common/logo3.png",
-        width: 400,
-        height: 80,
+        url: `${SITE_URL}/img/OM_IMG.png`,
+        width: 1200,
+        height: 630,
         alt: "LS ELECTRIC Logo",
       },
     ],
@@ -53,7 +54,7 @@ export const metadata: Metadata = {
     title: "LS ELECTRIC | Smart Energy Global Leader",
     description:
       "LS ELECTRIC is starting a new chapter to bring smart energy to light everywhere around the world. We deliver safe, clean energy and innovative solutions for a sustainable future.",
-    images: ["https://www.ls-electric.com/assets/img/common/logo3.png"],
+    images: [`${SITE_URL}/img/OM_IMG.png`],
     site: "@lselectricglobal",
   },
   other: {

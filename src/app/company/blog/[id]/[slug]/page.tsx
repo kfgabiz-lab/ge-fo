@@ -22,26 +22,41 @@ import HashtagLink from "@/components/ui/HashtagLink";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildContentDetailGraph } from "@/lib/structuredData/contentGraph";
 import "@/assets/css/company.css";
+import { SITE_URL } from "@/lib/structuredData/siteConfig";
 
 type CompanyBlogDetailPageProps = {
   params: Promise<{ id: string; slug: string }>;
 };
 
 export async function generateMetadata(
-  { params }: CompanyBlogDetailPageProps,
-  parent: ResolvingMetadata,
+    { params }: CompanyBlogDetailPageProps,
+    parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { id } = await params;
   if (!isNumericId(id)) notFound();
   const previewToken = await getPreviewToken("blog-data", id);
 
   return buildPageDataSeoMetadata(
-    {
-      slug: "blog-data",
-      id,
-      where: previewToken ? { previewToken } : { ...BLOG_STATUS_WHERE },
-    },
-    parent,
+      {
+        slug: "blog-data",
+        id,
+        where: previewToken ? { previewToken } : { ...BLOG_STATUS_WHERE },
+        imageResolver: (row) => {
+          const imageArr = row.image;
+
+          const mediaId =
+              Array.isArray(imageArr) && imageArr.length > 0
+                  ? Number(imageArr[0])
+                  : null;
+
+          if (mediaId == null || Number.isNaN(mediaId)) {
+            return undefined;
+          }
+
+          return `${SITE_URL}${blogImageSrc(mediaId)}`;
+        },
+      },
+      parent,
   );
 }
 
