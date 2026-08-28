@@ -76,8 +76,8 @@ export const lsElectricHighlights = {
   title: "2025 Highlights",
   ctaLabel: "View IR infomation",
   ctaHref: "https://www.ls-electric.com/about-us/investor-relations/ir-materials",
-  bgImage: `${IMG}/highlights-bg.webp`,
-  bgImageMo: `${IMG}/highlights-bg-mo.webp`,
+  bgImage: `${IMG}/highlights-bg.webp?1`,
+  bgImageMo: `${IMG}/highlights-bg-mo.webp?1`,
   footnote: "*Financial figures in 2025",
   stats: [
     {
