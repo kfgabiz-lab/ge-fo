@@ -35,10 +35,11 @@ export async function buildPageDataSeoMetadata(
     slug: string;
     id: string | number;
     where?: Record<string, string>;
+    imageResolver?: (row: Record<string, unknown>) => string | undefined;
   },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const { slug, id, where } = params;
+  const { slug, id, where, imageResolver } = params;
 
   const [detail, previous] = await Promise.all([
     fetchData({
@@ -50,9 +51,19 @@ export async function buildPageDataSeoMetadata(
     parent,
   ]);
 
-  const row: Record<string, unknown> = detail ? flattenPageDataItem(detail) : {};
+  const row: Record<string, unknown> = detail
+      ? flattenPageDataItem(detail)
+      : {};
+
   const title = (row["seo.meta_title"] as string) ?? "";
   const description = (row["seo.meta_description"] as string) ?? "";
 
-  return mergeSeoMetadata(previous, title, description);
+  const image = imageResolver?.(row);
+
+  return mergeSeoMetadata(
+      previous,
+      title,
+      description,
+      image,
+  );
 }

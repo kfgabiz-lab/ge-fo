@@ -8,6 +8,7 @@ import {
 import { parseCategoryContext } from "@/lib/navigation/categoryContext";
 import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import { isNumericId } from "@/lib/isNumericId";
+import { SITE_URL } from "@/lib/structuredData/siteConfig";
 
 type ProductPageProps = {
   params: Promise<{ id: string; slug: string }>;
@@ -21,14 +22,29 @@ export async function generateMetadata(
   const { id } = await params;
   if (!isNumericId(id)) notFound();
 
-  const [seo, previous] = await Promise.all([
+  const [seo, row, previous] = await Promise.all([
     fetchProductSeoById(Number(id)),
+    fetchProductDetailById(Number(id)),
     parent,
   ]);
+
+  if(!row) notFound();
+  const imageArr = row["product_info.image"];
+  const mediaId =
+      Array.isArray(imageArr) && imageArr.length > 0
+          ? Number(imageArr[0])
+          : null;
+
+  const imageUrl =
+      mediaId != null && !Number.isNaN(mediaId)
+          ? `${SITE_URL}/api/v1/fo/page-files/${mediaId}`
+          : undefined;
+
   return mergeSeoMetadata(
     previous,
     seo?.metaTitle ?? "",
     seo?.metaDescription ?? "",
+    imageUrl,
   );
 }
 
