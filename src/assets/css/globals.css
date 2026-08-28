@@ -996,7 +996,7 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
     justify-content: center;
     min-height: 280px;
     max-width: 790px;
-    padding: 60px 0 60px 60px;
+    padding: 50px 0 60px 50px;
     text-decoration: none;
     color: inherit;
   }
@@ -1044,13 +1044,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
 
   section.common_banner_03 .common_banner_03__desc p {
     margin: 0;
-  }
-
-  section.common_banner_03 .common_banner_03__count {
-    margin: 0;
-    font-size: 14px;
-    line-height: 20px;
-    color: rgb(255 255 255 / 80%);
   }
 
   section.common_banner_03 .common_banner_03__link-wrap {
@@ -1174,13 +1167,6 @@ section.common_banner_01 .btn-lv01--line-solid .icon_arrow-18 {
 
   section.common_banner_03 .common_banner_03__desc p {
     margin: 0;
-  }
-
-  section.common_banner_03 .common_banner_03__count {
-    margin: 20px 0 0;
-    font-size: 13px;
-    line-height: 19px;
-    color: rgb(255 255 255 / 70%);
   }
 
   section.common_banner_03 .common_banner_03__link-wrap {

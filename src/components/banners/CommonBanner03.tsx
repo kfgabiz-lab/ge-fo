@@ -5,7 +5,6 @@ type CommonBanner03Props = {
   titleTop?: string;
   title?: string;
   description?: string[];
-  countText?: string;
   linkHref?: string;
   linkLabel?: string;
   linkExternal?: boolean;
@@ -56,12 +55,10 @@ function BannerText({
   titleTop,
   title,
   description,
-  countText,
 }: {
   titleTop: string;
   title?: string;
   description?: string[];
-  countText?: string;
 }) {
   return (
     <div className="common_banner_03__text">
@@ -75,9 +72,6 @@ function BannerText({
             <p key={line}>{line}</p>
           ))}
         </div>
-      ) : null}
-      {countText ? (
-        <p className="common_banner_03__count">{countText}</p>
       ) : null}
     </div>
   );
@@ -101,7 +95,6 @@ export default function CommonBanner03({
   titleTop = "Tech Hub Video Guide",
   title,
   description,
-  countText,
   linkHref = "/support/tech-hub",
   linkLabel = "Explore Tech Hub",
   linkExternal,
@@ -141,7 +134,6 @@ export default function CommonBanner03({
                 titleTop={titleTop}
                 title={title}
                 description={description}
-                countText={countText}
               />
             </BannerLink>
           ) : (
@@ -150,7 +142,6 @@ export default function CommonBanner03({
                 titleTop={titleTop}
                 title={title}
                 description={description}
-                countText={countText}
               />
             </div>
           )}
