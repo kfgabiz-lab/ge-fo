@@ -6527,11 +6527,9 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__bg-img--mo {
-    top: 0.04%;
-    left: -167.92%;
-    width: 278.57%;
-    height: 122.18%;
+    width: 100%;
     max-width: none;
+    height: auto;
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__overlay {
