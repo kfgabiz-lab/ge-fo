@@ -188,7 +188,7 @@
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -278,7 +278,7 @@
     font-size: 42px;
     font-weight: 700;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -325,7 +325,7 @@
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -431,7 +431,7 @@
     font-size: 70px;
     font-weight: 800;
     line-height: 80px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #e8e8e8;
   }
 
@@ -440,7 +440,7 @@
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -531,7 +531,7 @@
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -660,7 +660,7 @@
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -716,7 +716,7 @@
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -829,7 +829,7 @@
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -886,7 +886,7 @@
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -922,7 +922,7 @@
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -1232,7 +1232,7 @@
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -1287,7 +1287,7 @@
     margin-bottom: 0;
     font-size: 30px;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.support_service_offering .support_service_offering__head .section_desc {
@@ -1350,7 +1350,7 @@
   section.support_service_offering .support_service_offering__slide-tit {
     font-size: 24px;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     font-weight: 600;
     margin-top: 8px;
   }
@@ -1426,7 +1426,7 @@
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -1605,7 +1605,7 @@
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -1849,7 +1849,7 @@
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -1865,7 +1865,7 @@
     font-size: 22px;
     font-weight: 500;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -2078,7 +2078,7 @@
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #0f1f45;
   }
 
@@ -2250,7 +2250,7 @@
     font-size: 42px;
     font-weight: 700;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -2287,7 +2287,7 @@
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -2323,7 +2323,7 @@
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #0f1f45;
   }
 
@@ -2355,7 +2355,7 @@
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -2398,7 +2398,7 @@
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -2936,7 +2936,7 @@
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -2978,7 +2978,7 @@
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -3051,7 +3051,7 @@
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 

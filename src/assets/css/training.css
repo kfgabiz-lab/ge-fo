@@ -274,7 +274,7 @@
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -365,7 +365,7 @@
     font-size: 42px;
     font-weight: 700;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -468,7 +468,7 @@
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -526,7 +526,7 @@
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -651,7 +651,7 @@
     font-size: 42px;
     font-weight: 700;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -1319,7 +1319,7 @@
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__countdown-name {
@@ -1335,7 +1335,7 @@
     font-size: 28px;
     font-weight: 700;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     opacity: 0.3;
   }
 
@@ -1702,7 +1702,7 @@
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -2583,7 +2583,7 @@
     font-size: 20px;
     font-weight: 600;
     line-height: 28px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -2703,7 +2703,7 @@
     font-size: 28px;
     font-weight: 800;
     line-height: 38px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     margin-bottom: 10px;
   }
 
@@ -2831,7 +2831,7 @@
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -2909,7 +2909,7 @@
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -3045,7 +3045,7 @@
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -3303,7 +3303,7 @@
     font-size: 24px;
     font-weight: 700;
     line-height: 34px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     opacity: 0.3;
   }
 
@@ -3556,7 +3556,7 @@
     font-size: 18px;
     font-weight: 700;
     line-height: 28px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     white-space: nowrap;
     cursor: pointer;
@@ -3800,7 +3800,7 @@
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -4401,7 +4401,7 @@
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 

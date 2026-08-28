@@ -84,7 +84,7 @@
     padding: 0;
     font-size: 24px;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -354,7 +354,7 @@
     font-size: 22px;
     line-height: 32px;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -410,7 +410,7 @@
     font-size: 28px;
     line-height: 36px;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -419,7 +419,7 @@
     font-size: 20px;
     line-height: 28px;
     font-weight: 700;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -666,7 +666,7 @@
     font-size: 34px;
     line-height: 44px;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -793,7 +793,7 @@
     font-size: 24px;
     line-height: 34px;
     font-weight: 500;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     word-break: break-word;
     transition:
@@ -2258,7 +2258,7 @@
     font-size: 24px;
     line-height: 34px;
     /* font-weight: 600; */
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     word-break: break-word;
     transition:
@@ -3030,7 +3030,7 @@
     font-size: 22px;
     line-height: 30px;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.search_all .search_all__ai-list-text h2 {

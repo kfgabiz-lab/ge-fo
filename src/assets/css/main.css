@@ -139,7 +139,7 @@
       font-weight: 800;
       font-size: 82px;
       line-height: 96px;
-      letter-spacing: -0.02em;
+      letter-spacing: -2%;
       margin-bottom: 60px;
     }
 
@@ -607,7 +607,7 @@ section.main_notic .txt:before {
       font-size: 42px;
       font-weight: 500;
       line-height: 54px;
-      letter-spacing: -0.02em;
+      letter-spacing: -2%;
       color: #fff;
       margin-bottom: 100px;
     }
@@ -636,7 +636,7 @@ section.main_notic .txt:before {
     .info_box .tit strong {
       font-size: 82px;
       font-weight: 600;
-      letter-spacing: -0.02em;
+      letter-spacing: -2%;
       line-height: 80px;
       font-variant-numeric: tabular-nums;
     }
@@ -707,7 +707,7 @@ section.main_notic .txt:before {
       font-size: 50px;
       font-weight: 700;
       line-height: 62px;
-      letter-spacing: -0.02em;
+      letter-spacing: -2%;
       color: #fff;
       font-family: jaka;
     }
@@ -785,7 +785,7 @@ section.main_notic .txt:before {
       font-size: 34px;
       font-weight: 600;
       line-height: 44px;
-      letter-spacing: -0.01em;
+      letter-spacing: -1%;
       color: #222;
       margin-bottom: 20px;
     }
@@ -833,7 +833,7 @@ section.main_notic .txt:before {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     margin-bottom: 120px;
   }
@@ -950,7 +950,7 @@ section.main_notic .txt:before {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -1051,7 +1051,7 @@ section.main_notic .txt:before {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -1234,7 +1234,7 @@ border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -1354,7 +1354,7 @@ border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
     font-size: 24px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     margin-bottom: 10px;
   }
@@ -2034,7 +2034,7 @@ border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
       font-size: 28px;
       font-weight: 500;
       line-height: 38px;
-      letter-spacing: -0.02em;
+      letter-spacing: -2%;
       color: #fff;
       margin-bottom: 40px;
     }
@@ -2064,7 +2064,7 @@ border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
     .info_box .tit strong {
       font-size: 50px;
       font-weight: 700;
-      letter-spacing: -0.02em;
+      letter-spacing: -2%;
       line-height: 60px;
       font-variant-numeric: tabular-nums;
     }
@@ -2106,7 +2106,7 @@ border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -2185,7 +2185,7 @@ border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -2296,7 +2296,7 @@ border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     word-break: break-word;
     -webkit-box-orient: vertical;
@@ -2478,7 +2478,7 @@ border-image: linear-gradient(90deg, #fff3, #fff2, #fff1, #fff0, #fff0) 1;
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 

@@ -25,7 +25,7 @@
     font-family: jaka;
     font-size: 70px;
     line-height: 80px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     font-weight: 800;
   }
@@ -92,7 +92,7 @@
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
     margin-bottom: 10px;
     display: -webkit-box;
@@ -196,7 +196,7 @@
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -474,7 +474,7 @@
     font-family: jaka;
     font-size: 36px;
     line-height: 46px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     font-weight: 800;
   }
@@ -713,13 +713,13 @@
   .company-page--press section.company-press-title .company-press-title__heading {
     font-size: 36px;
     line-height: 46px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   .company-page--articles section.company-articles-title .company-articles-title__heading {
     font-size: 36px;
     line-height: 46px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   .company-page--articles section.company-articles-title .company-articles-title__desc {
@@ -778,7 +778,7 @@
     min-height: 67px;
     font-size: 24px;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   .company-page--articles section.company-articles-featured .company-articles-featured__title {
@@ -786,7 +786,7 @@
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   .company-page--press section.company-press-featured .company-press-featured__desc,
@@ -916,7 +916,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-clamp: 2;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     font-size: 18px;
     font-weight: 600;
     line-height: 26px;
@@ -932,7 +932,7 @@
     font-size: 18px;
     font-weight: 600;
     line-height: 26px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 

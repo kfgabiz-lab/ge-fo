@@ -144,7 +144,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 24px;
     font-weight: 300;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #666;
   }
 
@@ -153,7 +153,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 82px;
     font-weight: 800;
     line-height: 96px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -254,7 +254,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 20px;
     font-weight: 300;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -462,7 +462,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 42px;
     font-weight: 700;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     white-space: pre-line;
     max-width:360px;
@@ -474,7 +474,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 34px;
     font-weight: 800;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.markets_stats .markets_stats__value-suffix {
@@ -517,7 +517,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 60px;
     font-weight: 700;
     line-height: 80px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     justify-content: flex-start;
     display: flex;
@@ -615,7 +615,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -741,7 +741,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -810,7 +810,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -841,7 +841,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -934,7 +934,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.markets_solutions_panel .markets_solutions_panel__block-body {
@@ -1294,7 +1294,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -1351,7 +1351,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     max-width: 1178px;
     font-size: 50px;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.markets_solutions .markets_solutions__stage {
@@ -1743,7 +1743,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.markets_why .markets_why__item .txt {
@@ -1869,7 +1869,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 40px;
     font-weight: 800;
     line-height: 50px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     text-align: center;
   }
 
@@ -2052,7 +2052,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     display: block;
     font-size: 28px;
     line-height: 38px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     font-weight: 700;
     white-space: pre-line;
   }
@@ -2097,7 +2097,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     line-height: 40px;
     font-weight: 700;
     font-family: "jaka";
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   .markets-page--oil-gas-mining section.markets_intro .markets_intro__tit br {
@@ -2206,7 +2206,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -2334,7 +2334,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     text-align: left;
     white-space: nowrap;
@@ -2466,7 +2466,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -2511,7 +2511,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -2613,7 +2613,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     overflow-wrap: break-word;
   }
@@ -2653,7 +2653,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 18px;
     font-weight: 600;
     line-height: 26px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     overflow-wrap: break-word;
   }
@@ -2704,7 +2704,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   section.markets_solutions_panel .markets_solutions_panel__head .section_tit {
     margin: 0;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     font-feature-settings: "liga" 0;
   }
 
@@ -2811,7 +2811,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.markets_solutions_panel .markets_solutions_panel__block-text {
@@ -3133,7 +3133,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   section.markets_why .markets_why__head .section_tit {
     font-size: 30px;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.markets_why .markets_why__head .section_desc {
@@ -3171,7 +3171,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.markets_why .markets_why__item .txt {
@@ -3189,7 +3189,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
 
   section.markets_products .section_tit {
     margin-bottom: 30px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.markets_products .markets_products__grid {
@@ -3460,7 +3460,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   section.markets_solutions .markets_solutions__head .section_tit {
     font-size: 30px;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.markets_solutions .markets_solutions__stage {
