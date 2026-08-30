@@ -159,7 +159,7 @@ export const warrantyPolicyPage = {
         id: "power-policy",
         name: "Power Product Warranty Policy",
         format: "PDF",
-        downloadHref: "/docs/LS Electric Warranty Policy Rev.3 (power).pdf",
+        downloadHref: "/docs/LS Electric Warranty Policy Rev.3_20260831(power).pdf",
       }, {
         id: "automation-policy",
         name: "Automation Product Warranty Policy",
