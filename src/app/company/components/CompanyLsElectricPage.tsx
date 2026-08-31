@@ -70,7 +70,14 @@ function LsElectricGlobalSection() {
           decoding="async"
           src={lsElectricGlobal.bgTexture}
           alt=""
-          className="company-ls-electric-global__bg-texture"
+          className="company-ls-electric-global__bg-texture company-ls-electric-global__bg-texture--pc"
+        />
+        <img
+          loading="lazy"
+          decoding="async"
+          src={lsElectricGlobal.bgTextureMo}
+          alt=""
+          className="company-ls-electric-global__bg-texture company-ls-electric-global__bg-texture--mo"
         />
       </div>
       <div className="inner">

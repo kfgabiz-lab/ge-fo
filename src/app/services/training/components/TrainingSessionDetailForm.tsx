@@ -286,6 +286,7 @@ export default function TrainingSessionDetailForm({
     try {
       await submitTrainingRegistration(payload);
       alert(SUBMIT_SUCCESS_MESSAGE);
+      window.location.reload();
     } catch (error) {
       console.error("[training-session-detail] submit failed", error);
       if (error instanceof ApiError && error.code === "CAPTCHA_FAILED") {

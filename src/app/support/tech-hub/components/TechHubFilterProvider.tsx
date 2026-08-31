@@ -19,10 +19,10 @@ import {
   fetchTechHubCertCounts,
 } from "@/data/support/techHubData";
 import {
-  computeInitialListState,
   markReturnIntentOnLeavingToDetail,
   rememberListPage,
   rememberListQuery,
+  restoreListStateIfReturning,
   watchForFreshListEntryClicks,
 } from "@/lib/navigation/listPageMemory";
 
@@ -82,17 +82,26 @@ export function TechHubFilterProvider({
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [certifications, setCertifications] =
     useState<DownloadFilterOption[]>(CERTS_PENDING);
-  // LIST 버튼 복귀·브라우저 뒤로가기 여부는 렌더 중(lazy initializer)에 동기적으로 확정한다 —
-  // useEffect에서 복원하면 라우터 캐시 재사용 등으로 effect가 안 붙는 경우 복원이 누락될 수 있다.
-  const [initial] = useState(() => computeInitialListState(TECH_HUB_PATHNAME));
-  const [query, setQueryState] = useState(initial.query);
-  const [page, setPageState] = useState(initial.page);
+  const [query, setQueryState] = useState("");
+  const [page, setPageState] = useState(1);
   const [resetSignal, setResetSignal] = useState(0);
 
   const setPage = (p: number) => {
     setPageState(p);
     rememberListPage(TECH_HUB_PATHNAME, p);
   };
+
+  // 초기 state는 항상 서버와 동일하게 1페이지·빈 검색어로 시작하고, LIST 버튼 복귀·브라우저
+  // 뒤로가기로 돌아온 경우에만 마운트 직후 patch한다 — 렌더 중 sessionStorage 값으로 초기
+  // state를 계산하면 SSR과 달라져 하이드레이션 불일치가 난다(자세한 이유는
+  // listPageMemory.ts의 restoreListStateIfReturning 참고). 모든 관련 네비게이션이 하드
+  // 리로드(완전한 새 마운트)라 effect 기반 복원이 안전하다.
+  useEffect(() => {
+    restoreListStateIfReturning(TECH_HUB_PATHNAME, {
+      page: setPageState,
+      query: setQueryState,
+    });
+  }, []);
 
   // 이미 이 목록 페이지에 있는 채로 GNB 등에서 같은 URL을 다시 클릭하면
   // 하드 리로드도 리마운트도 안 일어나 페이지 번호가 그대로 남는다 — 그 클릭을

@@ -181,7 +181,6 @@ export interface ProductTechHubBanner {
 export interface ProductTechHubBannerCopy {
   title?: string;
   description?: string[];
-  countText?: string;
 }
 
 export function buildHwProductTechHubBannerCopy(
@@ -195,7 +194,6 @@ export function buildHwProductTechHubBannerCopy(
       "Need help with installation, configuration, troubleshooting, or maintenance?",
       `Watch step-by-step video guides for the ${name} series in our Tech Hub.`,
     ],
-    countText: `${banner.totalCount} ${name} Video Tutorials Available`,
   };
 }
 

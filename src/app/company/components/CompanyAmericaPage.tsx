@@ -75,7 +75,18 @@ function ShapingBlock({ block }: { block: AmericaShapingBlock }) {
                 className="company-america-shaping__location-icon"
                 aria-hidden
               />
-              {block.location}
+              {block.locationHref ? (
+                <a
+                  href={block.locationHref}
+                  className="company-america-shaping__location-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {block.location}
+                </a>
+              ) : (
+                block.location
+              )}
             </p>
           </div>
           <div className="company-america-shaping__highlights">

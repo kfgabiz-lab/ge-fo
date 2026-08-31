@@ -295,7 +295,7 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     line-height: 40px;
     color: #222;
     white-space: pre-line;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.devices_product_hero .devices_product_hero__btns {
@@ -376,7 +376,7 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -1486,7 +1486,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -1560,7 +1560,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -1639,7 +1639,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 70px;
     font-weight: 800;
     line-height: 80px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -1685,7 +1685,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -1724,7 +1724,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -1942,7 +1942,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     font-feature-settings: "liga" 0;
   }
@@ -1957,7 +1957,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     font-feature-settings: "liga" 0;
   }
@@ -1986,7 +1986,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -2025,7 +2025,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -2433,27 +2433,37 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     border: 1px solid #ddd;
     border-radius: 4px;
     appearance: none;
+    -webkit-appearance: none;
     cursor: pointer;
   }
 
-  section.devices_product_downloads .devices_product_downloads__mo-sort--open {
-    overflow: hidden;
-    border: 1px solid #888;
-    border-radius: 4px;
-    background: #fff;
+  section.devices_product_downloads .devices_product_downloads__mo-sort-trigger {
+    display: block;
+    width: 100%;
+    padding-right: 44px;
+    text-align: left;
   }
 
-  section.devices_product_downloads
-    .devices_product_downloads__mo-sort--open
-    .devices_product_downloads__mo-sort-trigger {
-    border: none;
-    border-radius: 0;
+  section.devices_product_downloads .devices_product_downloads__mo-sort-trigger:focus,
+  section.devices_product_downloads .devices_product_downloads__mo-sort-trigger:focus-visible {
+    border-color: #888;
+    outline: none;
+    box-shadow: none;
   }
 
-  section.devices_product_downloads .devices_product_downloads__mo-filter-label,
-  section.devices_product_downloads .devices_product_downloads__mo-sort-label {
+  section.devices_product_downloads .devices_product_downloads__mo-sort-trigger option {
+    color: #222;
+    background-color: #fff;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__mo-filter-label {
     min-width: 0;
     text-align: left;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__mo-sort {
+    position: relative;
+    display: block;
   }
 
   section.devices_product_downloads .devices_product_downloads__mo-filter-icon,
@@ -2465,8 +2475,15 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     width: 14px;
     height: 14px;
     background: none;
-    transition: transform 0.2s ease;
-    transform-origin: center;
+  }
+
+  section.devices_product_downloads .devices_product_downloads__mo-sort-icon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    z-index: 1;
+    margin-top: -7px;
+    pointer-events: none;
   }
 
   section.devices_product_downloads .devices_product_downloads__mo-filter-icon img,
@@ -2476,53 +2493,6 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     height: 14px;
     position: relative;
     top: 2px;
-  }
-
-  section.devices_product_downloads
-    .devices_product_downloads__mo-sort--open
-    .devices_product_downloads__mo-sort-icon {
-    transform: rotate(180deg);
-  }
-
-  section.devices_product_downloads .devices_product_downloads__mo-sort-list {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  section.devices_product_downloads .devices_product_downloads__mo-sort-list li {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-
-  section.devices_product_downloads .devices_product_downloads__mo-sort-option {
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    width: 100%;
-    height: 50px;
-    min-height: 50px;
-    margin: 0;
-    padding: 0 20px;
-    font: inherit;
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 23px;
-    color: #222;
-    text-align: left;
-    background: #fff;
-    border: none;
-    border-radius: 0;
-    appearance: none;
-    cursor: pointer;
-  }
-
-  section.devices_product_downloads
-    .devices_product_downloads__mo-sort-option--active {
-    background: #f5f7fa;
   }
 
   section.devices_product_downloads .devices_product_downloads__filter-stack--pc {

@@ -41,6 +41,7 @@ export interface CategoryRow {
   slug: string;
   metaTitle?: string;
   metaDescription?: string;
+  image: number[];
 }
 
 function toCategoryRow(row: Record<string, unknown>, slug: string): CategoryRow {
@@ -52,6 +53,9 @@ function toCategoryRow(row: Record<string, unknown>, slug: string): CategoryRow 
     slug: (row["seo.slug"] as string) ?? slug,
     metaTitle: (row["seo.meta_title"] as string) ?? "",
     metaDescription: (row["seo.meta_description"] as string) ?? "",
+    image: Array.isArray(row["device_systems.image"])
+        ? (row["device_systems.image"] as number[])
+        : [],
   };
 }
 

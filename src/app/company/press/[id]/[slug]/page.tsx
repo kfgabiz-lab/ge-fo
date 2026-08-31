@@ -18,6 +18,7 @@ import { notFound } from "next/navigation";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildContentDetailGraph } from "@/lib/structuredData/contentGraph";
 import "@/assets/css/company.css";
+import { SITE_URL } from "@/lib/structuredData/siteConfig";
 
 type CompanyPressDetailPageProps = {
   params: Promise<{ id: string; slug: string }>;
@@ -32,12 +33,26 @@ export async function generateMetadata(
   const previewToken = await getPreviewToken("press-data", id);
 
   return buildPageDataSeoMetadata(
-    {
-      slug: "press-data",
-      id,
-      where: previewToken ? { previewToken } : { ...PRESS_STATUS_WHERE },
-    },
-    parent,
+      {
+        slug: "press-data",
+        id,
+        where: previewToken ? { previewToken } : { ...PRESS_STATUS_WHERE },
+        imageResolver: (row) => {
+          const imageArr = row.image;
+
+          const mediaId =
+              Array.isArray(imageArr) && imageArr.length > 0
+                  ? Number(imageArr[0])
+                  : null;
+
+          if (mediaId == null || Number.isNaN(mediaId)) {
+            return undefined;
+          }
+
+          return `${SITE_URL}${pressImageSrc(mediaId)}`;
+        },
+      },
+      parent,
   );
 }
 

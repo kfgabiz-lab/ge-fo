@@ -99,8 +99,8 @@ export const PRODUCT_DOWNLOADS_PAGE_SIZE = 5;
 export const productDownloadsSortOptions = [
   { value: "doctype", label: "Document Type" },
   { value: "newest", label: "Most Recent" },
-  { value: "title", label: "A to Z" },
-  { value: "title_desc", label: "Z to A" },
+  { value: "title", label: "Title A-Z" },
+  { value: "title_desc", label: "Title Z-A" },
 ] as const satisfies ReadonlyArray<{ value: DownloadCenterSort; label: string }>;
 
 export const PRODUCT_DOWNLOADS_DEFAULT_SORT: DownloadCenterSort = "doctype";

@@ -76,8 +76,8 @@ export const lsElectricHighlights = {
   title: "2025 Highlights",
   ctaLabel: "View IR infomation",
   ctaHref: "https://www.ls-electric.com/about-us/investor-relations/ir-materials",
-  bgImage: `${IMG}/highlights-bg.webp`,
-  bgImageMo: `${IMG}/highlights-bg-mo.webp`,
+  bgImage: `${IMG}/highlights-bg.webp?1`,
+  bgImageMo: `${IMG}/highlights-bg-mo.webp?1`,
   footnote: "*Financial figures in 2025",
   stats: [
     {
@@ -161,6 +161,7 @@ export const lsElectricGlobal = {
   description:
     "LS ELECTRIC builds market-specific plans to expand its global presence. We strengthen local operations and tailor power, automation, and energy solutions to each market.",
   bgTexture: `${IMG}/global-bg.webp`,
+  bgTextureMo: `${IMG}/global-bg_mo.webp`,
   mapImage: `${IMG}/global-map.webp`,
   stats: [
     { id: "network", label: "Global Network", value: "14", unit: "Countries" },

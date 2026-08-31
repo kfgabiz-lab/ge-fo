@@ -17,7 +17,7 @@
     font-family: jaka;
     font-size: 70px;
     line-height: 80px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     font-weight: 800;
   }
@@ -112,7 +112,7 @@
     font-family: jaka;
     font-size: 42px;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
     font-weight: 700;
     margin-bottom: 10px;
@@ -251,7 +251,7 @@
   section.company-blog-list .company-blog-list__title {
     font-size: 24px;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     font-weight: 600;
     margin-top: 10px;
@@ -348,7 +348,7 @@
     font-family: jaka;
     font-size: 36px;
     line-height: 46px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
     font-weight: 800;
   }
@@ -444,7 +444,7 @@
     font-family: jaka;
     font-size: 28px;
     line-height: 38px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
     font-weight: 700;
     display: -webkit-box;
@@ -651,7 +651,7 @@
     margin-top: 4px;
     font-size: 20px;
     line-height: 28px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     font-weight: 600;
     max-width: 100%;
@@ -825,7 +825,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 42px;
     font-weight: 700;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-article-detail.company-article-detail--blog .company-article-detail__title {
@@ -876,7 +876,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 42px;
     font-weight: 700;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   .company-page--press-detail section.company-article-detail .company-article-detail__date {
@@ -1032,7 +1032,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-article-detail.company-article-detail--articles .company-article-detail__subsection-title {
@@ -1042,7 +1042,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-article-detail.company-article-detail--articles .company-article-detail__subsection-title:not(:first-child) {
@@ -1056,7 +1056,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-article-detail.company-article-detail--articles .company-article-detail__content-img {
@@ -1324,7 +1324,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-article-detail.company-article-detail--blog .company-article-detail__title {
@@ -1577,7 +1577,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   .company-page--press-detail section.company-article-detail .company-article-detail__title {
@@ -1681,7 +1681,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   .company-page--blog-detail section.company-article-detail .company-article-detail__date {
@@ -2192,7 +2192,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -2237,7 +2237,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -2301,7 +2301,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #0f1f45;
   }
 
@@ -2388,7 +2388,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -2466,7 +2466,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -2587,7 +2587,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.company-events-featured .company-events-featured__venue {
@@ -2608,7 +2608,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -2617,7 +2617,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-events-calendar .company-events-calendar__months {
@@ -2878,7 +2878,7 @@ section.company-blog-list .company-blog__tag:hover {
   .company-page--events section.company-press-title .company-press-title__heading {
     font-size: 36px;
     line-height: 46px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   .company-page--events section.company-press-title .company-press-title__desc {
@@ -2947,7 +2947,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 70px;
     font-weight: 800;
     line-height: 80px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -2981,7 +2981,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -3042,7 +3042,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.company-america-shaping .company-america-shaping__tit span {
@@ -3057,6 +3057,17 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 15px;
     line-height: 23px;
     color: #ddd;
+  }
+
+  section.company-america-shaping .company-america-shaping__location-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.company-america-shaping .company-america-shaping__location-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    opacity: 0.8;
   }
 
   section.company-america-shaping .company-america-shaping__highlights {
@@ -3082,7 +3093,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.company-america-shaping .company-america-shaping__highlight-desc {
@@ -3101,7 +3112,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-america-business .company-america-business__list {
@@ -3144,7 +3155,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -3164,7 +3175,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-america-operate .company-america-operate__map {
@@ -3200,7 +3211,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -3330,7 +3341,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-america-leaders .company-about__head .section_desc {
@@ -3451,7 +3462,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.company-america-leaders .company-america-leaders__role {
@@ -3459,7 +3470,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     opacity: 0.7;
     white-space: pre-line;
   }
@@ -3509,7 +3520,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-mission .company-mission__body {
@@ -3673,7 +3684,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -3732,7 +3743,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 500;
     line-height: 1;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #666;
   }
 
@@ -3776,7 +3787,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 500;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     text-align: center;
     color: #222;
   }
@@ -3848,7 +3859,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -3912,7 +3923,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
   section.company-america-shaping .company-america-shaping__tit span {
     display: block;
@@ -3925,6 +3936,17 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 15px;
     line-height: 23px;
     color: #ddd;
+  }
+
+  section.company-america-shaping .company-america-shaping__location-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  section.company-america-shaping .company-america-shaping__location-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    opacity: 0.8;
   }
 
   section.company-america-shaping .company-america-shaping__highlights {
@@ -3967,7 +3989,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-america-business .company-about__head .section_desc {
@@ -4011,7 +4033,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -4069,7 +4091,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   .company-page--america section.common_banner_04 .common_banner_04__desc {
@@ -4087,7 +4109,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-america-operate .company-about__head .section_desc {
@@ -4116,7 +4138,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -4228,7 +4250,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-america-leaders .company-about__head .section_desc {
@@ -4357,7 +4379,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     opacity: 0.7;
     white-space: pre-line;
   }
@@ -4407,7 +4429,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-mission .company-about__head .section_desc {
@@ -4596,7 +4618,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     align-self: center;
   }
@@ -4724,7 +4746,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 500;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     text-align: center;
     color: #222;
     word-break: break-word;
@@ -4873,7 +4895,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 60px;
     font-weight: 700;
     line-height: 80px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -4959,7 +4981,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 42px;
     font-weight: 700;
     line-height: 52px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -5023,7 +5045,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -5071,7 +5093,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 600;
     line-height: 28px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     text-transform: uppercase;
     color: #fff;
   }
@@ -5100,7 +5122,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 40px;
     font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -5109,7 +5131,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -5117,7 +5139,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -5127,7 +5149,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 500;
     line-height: 1;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__divider {
@@ -5156,7 +5178,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-ls-electric-business .company-ls-electric-business__grid {
@@ -5206,7 +5228,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.company-ls-electric-business .company-ls-electric-business__card-line {
@@ -5271,6 +5293,10 @@ section.company-blog-list .company-blog__tag:hover {
     object-fit: cover;
   }
 
+  section.company-ls-electric-global .company-ls-electric-global__bg-texture--mo {
+    display: none;
+  }
+
   section.company-ls-electric-global .company-ls-electric-global__head {
     max-width: 1320px;
   }
@@ -5281,7 +5307,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -5352,7 +5378,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 70px;
     font-weight: 800;
     line-height: 80px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -5391,7 +5417,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-ls-electric-ptt .company-ls-electric-ptt__cards {
@@ -5431,7 +5457,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -5470,7 +5496,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
   section.company-ls-electric-rnd .company-about__head .section_desc {
     margin-top: 20px;
@@ -5523,7 +5549,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 18px;
     font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -5532,7 +5558,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -5557,7 +5583,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -5716,7 +5742,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 34px;
     font-weight: 600;
     line-height: 44px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -5753,7 +5779,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: rgb(15 31 69 / 10%);
   }
 
@@ -6066,7 +6092,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 22px;
     font-weight: 600;
     line-height: 32px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -6091,7 +6117,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -6116,7 +6142,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -6278,7 +6304,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -6351,7 +6377,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 36px;
     font-weight: 800;
     line-height: 46px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -6406,7 +6432,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -6464,7 +6490,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -6496,7 +6522,7 @@ section.company-blog-list .company-blog__tag:hover {
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__bg-img {
     position: absolute;
-    opacity: 0.8;
+    /* opacity: 0.8; */
     object-fit: cover;
   }
 
@@ -6505,17 +6531,14 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__bg-img--mo {
-    top: 0.04%;
-    left: -167.92%;
-    width: 278.57%;
-    height: 122.18%;
-    max-width: none;
+    object-fit: cover;        width: 100%;
+    height: 100%;
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__overlay {
     position: absolute;
     inset: 0;
-    background: rgb(12 22 45 / 76%);
+    /* background: rgb(12 22 45 / 76%); */
   }
 
   section.company-ls-electric-highlights .inner {
@@ -6535,7 +6558,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -6578,6 +6601,8 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__stat-wrap:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
     margin-bottom: 0;
   }
 
@@ -6606,7 +6631,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 18px;
     font-weight: 600;
     line-height: 26px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     text-transform: uppercase;
     color: #fff;
   }
@@ -6631,7 +6656,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 26px;
     font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -6640,7 +6665,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -6648,7 +6673,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -6658,7 +6683,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 500;
     line-height: 1;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-ls-electric-highlights .company-ls-electric-highlights__footnote {
@@ -6686,7 +6711,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -6759,7 +6784,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
     word-break: break-word;
   }
@@ -6838,15 +6863,16 @@ section.company-blog-list .company-blog__tag:hover {
     pointer-events: none;
   }
 
-  section.company-ls-electric-global .company-ls-electric-global__bg-texture {
+  section.company-ls-electric-global .company-ls-electric-global__bg-texture--pc {
+    display: none;
+  }
+
+  section.company-ls-electric-global .company-ls-electric-global__bg-texture--mo {
     position: absolute;
-    top: 0;
-    left: -424%;
-    width: 948%;
-    height: 227%;
-    max-width: none;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    object-position: center top;
   }
 
   section.company-ls-electric-global .company-ls-electric-global__head {
@@ -6862,7 +6888,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -6943,7 +6969,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 40px;
     font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #fff;
   }
 
@@ -6972,7 +6998,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-ls-electric-ptt .company-about__head .section_desc {
@@ -7011,7 +7037,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.company-ls-electric-ptt .company-ls-electric-ptt__card-sub {
@@ -7049,7 +7075,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-ls-electric-rnd .company-about__head .section_desc {
@@ -7103,7 +7129,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 14px;
     font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -7112,7 +7138,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
     word-break: break-word;
   }
@@ -7135,7 +7161,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
   }
 
   section.company-ls-electric-history .company-ls-electric-history__desc {
@@ -7200,7 +7226,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 24px;
     font-weight: 600;
     line-height: 34px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
   }
 
   section.company-ls-electric-history .company-ls-electric-history__era-sub {
@@ -7236,7 +7262,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: rgb(15 31 69 / 10%);
   }
 
@@ -7262,7 +7288,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 18px;
     font-weight: 700;
     line-height: 28px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #0f1f45;
   }
 
@@ -7271,7 +7297,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 16px;
     font-weight: 400;
     line-height: 26px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -7567,7 +7593,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 18px;
     font-weight: 600;
     line-height: 28px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #fff;
   }
 
@@ -7591,7 +7617,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -7615,7 +7641,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -7694,7 +7720,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #0f1f45;
   }
 
@@ -7777,7 +7803,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -7855,7 +7881,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 70px;
     font-weight: 800;
     line-height: 80px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -7913,7 +7939,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 50px;
     font-weight: 700;
     line-height: 62px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -7943,7 +7969,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 28px;
     font-weight: 600;
     line-height: 38px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
@@ -8102,7 +8128,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 36px;
     line-height: 46px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     font-weight: 800;
     max-width: 220px;
   }
@@ -8155,7 +8181,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;
-    letter-spacing: -0.02em;
+    letter-spacing: -2%;
     color: #222;
   }
 
@@ -8187,7 +8213,7 @@ section.company-blog-list .company-blog__tag:hover {
     font-size: 20px;
     font-weight: 600;
     line-height: 30px;
-    letter-spacing: -0.01em;
+    letter-spacing: -1%;
     color: #222;
   }
 
