@@ -8,10 +8,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useSearchParams } from "next/navigation";
 import { createSupportFilterStore } from "@/app/support/components/createSupportFilterStore";
 import type { DownloadCategoryOption } from "@/data/support/downloadCenterContent";
 import { fetchSearchProductCategoryTree } from "@/data/search/searchAllProductsData";
+import { useSearchQuery } from "./SearchQueryContext";
 
 const store = createSupportFilterStore({
   displayName: "SearchProducts",
@@ -50,18 +50,18 @@ export function SearchProductsFilterProvider({
   children: ReactNode;
 }) {
   const [categories, setCategories] = useState<DownloadCategoryOption[]>([]);
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q") ?? "";
+  const { effectiveQuery, ready } = useSearchQuery();
 
   useEffect(() => {
+    if (!ready) return;
     let alive = true;
-    fetchSearchProductCategoryTree(query).then((tree) => {
+    fetchSearchProductCategoryTree(effectiveQuery).then((tree) => {
       if (alive) setCategories(tree);
     });
     return () => {
       alive = false;
     };
-  }, [query]);
+  }, [effectiveQuery, ready]);
 
   const value = useMemo(() => ({ categories }), [categories]);
 

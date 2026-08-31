@@ -44,7 +44,8 @@ export default function DownloadCenterContents({
 function DownloadCenterContentsBody({
   empty = false,
 }: DownloadCenterContentsProps) {
-  const { query, page, setPage, sort, setSort } = useDownloadCenterQuery();
+  const { query, page, setPage, sort, setSort, initialContents } =
+    useDownloadCenterQuery();
   const { getSelectedCategoryValues, getSelectedCategoryParentValues } =
     useDownloadCenterFilter();
 
@@ -55,10 +56,16 @@ function DownloadCenterContentsBody({
   const selectedDocTypes = getSelectedCategoryValues("document");
   const docTypeKey = [...selectedDocTypes].sort().join(",");
 
-  const [items, setItems] = useState<DownloadCenterItem[]>([]);
-  const [totalElements, setTotalElements] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<DownloadCenterItem[]>(
+    initialContents?.content ?? [],
+  );
+  const [totalElements, setTotalElements] = useState(
+    initialContents?.totalElements ?? 0,
+  );
+  const [totalPages, setTotalPages] = useState(
+    Math.max(1, initialContents?.totalPages ?? 1),
+  );
+  const [loading, setLoading] = useState(!initialContents);
   const [sortOpen, setSortOpen] = useState(false);
 
   const hasKeyword = query.trim().length > 0;
@@ -74,7 +81,21 @@ function DownloadCenterContentsBody({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, categoryKey, parentCategoryKey, docTypeKey, sort]);
 
+  const skipInitialFetch = useRef(
+    Boolean(initialContents) &&
+      page === 1 &&
+      query.trim().length === 0 &&
+      selectedCategoryCodes.length === 0 &&
+      selectedCategoryParentCodes.length === 0 &&
+      selectedDocTypes.length === 0 &&
+      sort === "newest",
+  );
+
   useEffect(() => {
+    if (skipInitialFetch.current) {
+      skipInitialFetch.current = false;
+      return;
+    }
     if (empty) {
       setItems([]);
       setTotalElements(0);

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
 import {
   type DevicesTreeRow,
@@ -65,7 +66,7 @@ function toMegaProduct(row: DevicesTreeRow): GnbMegaProduct {
   };
 }
 
-export async function fetchDevicesMegaMenu(): Promise<GnbDevicesMegaMenu> {
+export const fetchDevicesMegaMenu = cache(async (): Promise<GnbDevicesMegaMenu> => {
   const rows = await fetchDevicesTreeRows();
 
   const depth1Rows = rows.filter((row) => row.depth === "1");
@@ -109,4 +110,4 @@ export async function fetchDevicesMegaMenu(): Promise<GnbDevicesMegaMenu> {
     panelId: GNB_MEGA_PANEL_ID.devices,
     categories,
   };
-}
+});

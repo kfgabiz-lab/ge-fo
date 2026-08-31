@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import SearchEmptyResult from "./SearchEmptyResult";
@@ -13,9 +12,11 @@ import {
 } from "./SearchPagesFilterProvider";
 import { searchPagesPage } from "@/data/search/searchPagesContent";
 import {
+  EMPTY_SEARCH_PAGES_RESULT,
   fetchSearchPages,
   type SearchPagesResult,
 } from "@/data/search/searchPagesData";
+import { useSearchQuery } from "./SearchQueryContext";
 
 const { pageSize: PAGE_SIZE } = searchPagesPage;
 
@@ -38,8 +39,7 @@ function SearchPagesPanelContent({
   });
   const [loaded, setLoaded] = useState(false);
 
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q") ?? "";
+  const { query, effectiveQuery, ready } = useSearchQuery();
 
   const { getSelectedCategoryValues } = useSearchPagesFilter();
   const selectedSections = getSelectedCategoryValues("document");
@@ -59,18 +59,26 @@ function SearchPagesPanelContent({
       return;
     }
     setCurrentPage(1);
-  }, [query, sectionsKey]);
+  }, [effectiveQuery, sectionsKey]);
 
   useEffect(() => {
     onFilteredChange?.(isFiltered);
   }, [isFiltered, onFilteredChange]);
 
   useEffect(() => {
+    if (!ready) return;
+    if (!effectiveQuery) {
+      setResult(EMPTY_SEARCH_PAGES_RESULT);
+      setLoaded(true);
+      onTotalChange?.(0, isFiltered);
+      return;
+    }
     let alive = true;
-    void fetchSearchPages(query, {
+    void fetchSearchPages(effectiveQuery, {
       sections: selectedSections,
       page: currentPage - 1,
       size: PAGE_SIZE,
+      highlightTerm: query,
     }).then((res) => {
       if (!alive) return;
       setResult(res);
@@ -81,7 +89,7 @@ function SearchPagesPanelContent({
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, sectionsKey, currentPage]);
+  }, [ready, effectiveQuery, query, sectionsKey, currentPage]);
 
   return (
     <section className="search_pages devices_product_downloads" id="search-pages">

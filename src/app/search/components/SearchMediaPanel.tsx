@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import SearchMediaFilterPanel from "./SearchMediaFilterPanel";
@@ -13,9 +12,11 @@ import SearchEmptyResult from "./SearchEmptyResult";
 import SearchMediaList from "./SearchMediaList";
 import { searchMediaPage } from "@/data/search/searchMediaContent";
 import {
+  EMPTY_SEARCH_MEDIA_RESULT,
   fetchSearchMedia,
   type SearchMediaResult,
 } from "@/data/search/searchMediaData";
+import { useSearchQuery } from "./SearchQueryContext";
 
 const { pageSize: PAGE_SIZE } = searchMediaPage;
 
@@ -38,8 +39,7 @@ function SearchMediaPanelContent({
   });
   const [loaded, setLoaded] = useState(false);
 
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q") ?? "";
+  const { query, effectiveQuery, ready } = useSearchQuery();
 
   const { getSelectedCategoryValues } = useSearchMediaFilter();
   const selectedSources = getSelectedCategoryValues("document");
@@ -59,18 +59,26 @@ function SearchMediaPanelContent({
       return;
     }
     setCurrentPage(1);
-  }, [query, sourcesKey]);
+  }, [effectiveQuery, sourcesKey]);
 
   useEffect(() => {
     onFilteredChange?.(isFiltered);
   }, [isFiltered, onFilteredChange]);
 
   useEffect(() => {
+    if (!ready) return;
+    if (!effectiveQuery) {
+      setResult(EMPTY_SEARCH_MEDIA_RESULT);
+      setLoaded(true);
+      onTotalChange?.(0, isFiltered);
+      return;
+    }
     let alive = true;
-    void fetchSearchMedia(query, {
+    void fetchSearchMedia(effectiveQuery, {
       sources: selectedSources,
       page: currentPage - 1,
       size: PAGE_SIZE,
+      highlightTerm: query,
     }).then((res) => {
       if (!alive) return;
       setResult(res);
@@ -81,7 +89,7 @@ function SearchMediaPanelContent({
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, sourcesKey, currentPage]);
+  }, [ready, effectiveQuery, query, sourcesKey, currentPage]);
 
   return (
     <section className="search_media devices_product_downloads" id="search-media">

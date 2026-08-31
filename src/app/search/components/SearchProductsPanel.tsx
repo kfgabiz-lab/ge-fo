@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import SearchEmptyResult from "./SearchEmptyResult";
@@ -17,6 +16,7 @@ import {
   type SearchAllProductsResult,
 } from "@/data/search/searchAllProductsData";
 import { searchAllListClasses } from "./searchAllListClasses";
+import { useSearchQuery } from "./SearchQueryContext";
 
 const PAGE_SIZE = 10;
 
@@ -37,8 +37,7 @@ function SearchProductsPanelContent({
   });
   const [loaded, setLoaded] = useState(false);
 
-  const searchParams = useSearchParams();
-  const query = searchParams.get("q") ?? "";
+  const { query, effectiveQuery, ready } = useSearchQuery();
 
   const { getSelectedCategoryValues } = useSearchProductsFilter();
   const selectedCategories = getSelectedCategoryValues("category");
@@ -58,15 +57,22 @@ function SearchProductsPanelContent({
       return;
     }
     setCurrentPage(1);
-  }, [query, categoriesKey]);
+  }, [effectiveQuery, categoriesKey]);
 
   useEffect(() => {
     onFilteredChange?.(isFiltered);
   }, [isFiltered, onFilteredChange]);
 
   useEffect(() => {
+    if (!ready) return;
+    if (!effectiveQuery) {
+      setResult({ total: 0, items: [] });
+      setLoaded(true);
+      onTotalChange?.(0, isFiltered);
+      return;
+    }
     let alive = true;
-    void fetchSearchAllProducts(query, {
+    void fetchSearchAllProducts(effectiveQuery, {
       categories: selectedCategories,
       offset: (currentPage - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
@@ -80,7 +86,7 @@ function SearchProductsPanelContent({
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, categoriesKey, currentPage]);
+  }, [ready, effectiveQuery, categoriesKey, currentPage]);
 
   return (
     <section

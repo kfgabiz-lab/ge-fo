@@ -152,14 +152,16 @@ export interface SearchMediaQueryOptions {
   sources?: string[];
   page?: number;
   size?: number;
+  highlightTerm?: string;
 }
 
 export async function fetchSearchMedia(
   query: string,
   options: SearchMediaQueryOptions = {},
 ): Promise<SearchMediaResult> {
-  const { sources = [], page = 0, size = 10 } = options;
+  const { sources = [], page = 0, size = 10, highlightTerm } = options;
   const q = query.trim();
+  const highlight = (highlightTerm ?? query).trim();
   if (!q && sources.length === 0) return EMPTY_SEARCH_MEDIA_RESULT;
 
   try {
@@ -176,7 +178,7 @@ export async function fetchSearchMedia(
 
     const content = Array.isArray(res?.content) ? res.content : [];
     return {
-      items: content.map((item) => toMediaCard(item, q)),
+      items: content.map((item) => toMediaCard(item, highlight)),
       totalElements:
         typeof res?.totalElements === "number" ? res.totalElements : 0,
       totalPages: typeof res?.totalPages === "number" ? res.totalPages : 0,

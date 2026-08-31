@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchApi } from "@/lib/api";
 
 export interface DevicesTreeRow {
@@ -17,13 +18,15 @@ export interface DevicesTreeRow {
   productOrderMethod: string | null;
 }
 
-export async function fetchDevicesTreeRows(): Promise<DevicesTreeRow[]> {
-  try {
-    return await fetchApi<DevicesTreeRow[]>("/api/v1/fo/gnb/devices-tree");
-  } catch {
-    return [];
-  }
-}
+export const fetchDevicesTreeRows = cache(
+  async (): Promise<DevicesTreeRow[]> => {
+    try {
+      return await fetchApi<DevicesTreeRow[]>("/api/v1/fo/gnb/devices-tree");
+    } catch {
+      return [];
+    }
+  },
+);
 //단종 제품 포함하여 전체 제품 리스트를 가져오기 위해 explore-all 전용 api 추가
 export async function fetchDevicesExploreAll(): Promise<DevicesTreeRow[]> {
   try {

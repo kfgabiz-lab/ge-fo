@@ -100,14 +100,16 @@ export interface SearchPagesQueryOptions {
   sections?: string[];
   page?: number;
   size?: number;
+  highlightTerm?: string;
 }
 
 export async function fetchSearchPages(
   query: string,
   options: SearchPagesQueryOptions = {},
 ): Promise<SearchPagesResult> {
-  const { sections = [], page = 0, size = 10 } = options;
+  const { sections = [], page = 0, size = 10, highlightTerm } = options;
   const q = query.trim();
+  const highlight = (highlightTerm ?? query).trim();
   if (!q && sections.length === 0) return EMPTY_SEARCH_PAGES_RESULT;
 
   try {
@@ -124,7 +126,7 @@ export async function fetchSearchPages(
 
     const content = Array.isArray(res?.content) ? res.content : [];
     return {
-      items: content.map((item) => toPageItem(item, q)),
+      items: content.map((item) => toPageItem(item, highlight)),
       totalElements:
         typeof res?.totalElements === "number" ? res.totalElements : 0,
       totalPages: typeof res?.totalPages === "number" ? res.totalPages : 0,

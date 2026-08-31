@@ -132,50 +132,6 @@ export async function fetchCategoryChildren(
   }
 }
 
-export async function fetchCategoryChildrenBatch(
-  parentIds: number[],
-): Promise<Map<number, CategoryChild[]>> {
-  const grouped = new Map<number, CategoryChild[]>();
-  for (const parentId of parentIds) grouped.set(parentId, []);
-  if (parentIds.length === 0) return grouped;
-
-  try {
-    const res = await fetchData<Record<string, unknown>>({
-      slug: "category-data",
-      where: { "in_category.parentId": parentIds.join(",") },
-      unpaged: true,
-      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
-    });
-
-    const buckets = new Map<number, Array<CategoryChild & { sortOrder: number }>>();
-    for (const row of res.content) {
-      const parentId = Number(row["category.parentId"]);
-      if (!grouped.has(parentId)) continue;
-      const bucket = buckets.get(parentId) ?? [];
-      bucket.push({
-        id: Number(row._id),
-        code: String(row["category.code"] ?? ""),
-        title: (row["category.title"] as string) ?? "",
-        image: resolveFirstImageUrl(row["device_systems.image"]),
-        slug: (row["seo.slug"] as string) ?? "",
-        sortOrder: Number(row["sortOrder"] ?? 0),
-      });
-      buckets.set(parentId, bucket);
-    }
-
-    for (const [parentId, bucket] of buckets) {
-      bucket.sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
-      grouped.set(
-        parentId,
-        bucket.map(({ sortOrder: _sortOrder, ...rest }) => rest),
-      );
-    }
-    return grouped;
-  } catch {
-    return grouped;
-  }
-}
-
 export interface CategoryByCode {
   id: number;
   code: string;
@@ -296,6 +252,67 @@ export async function fetchTopCategories(): Promise<TopCategory[]> {
     return mapped.map(({ sortOrder: _sortOrder, ...rest }) => rest);
   } catch {
     return [];
+  }
+}
+
+export interface TopCategoriesWithChildren {
+  tops: TopCategory[];
+  childrenByParentId: Map<number, CategoryChild[]>;
+}
+
+export async function fetchTopCategoriesWithChildren(): Promise<TopCategoriesWithChildren> {
+  try {
+    const res = await fetchData<Record<string, unknown>>({
+      slug: "category-data",
+      where: { "in_category.depth": "1,2" },
+      unpaged: true,
+      리턴함수: (rows) => rows.map((item) => flattenPageDataItem(item)),
+    });
+
+    const mappedTops = res.content
+      .filter((row) => row["category.depth"] === "1")
+      .map((row) => ({
+        id: Number(row._id),
+        code: String(row["category.code"] ?? ""),
+        title: (row["category.title"] as string) ?? "",
+        slug: (row["seo.slug"] as string) ?? "",
+        sortOrder: Number(row["sortOrder"] ?? 0),
+      }));
+    mappedTops.sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
+    const tops = mappedTops.map(({ sortOrder: _sortOrder, ...rest }) => rest);
+
+    const topIds = new Set(tops.map((top) => top.id));
+    const grouped = new Map<number, CategoryChild[]>();
+    for (const id of topIds) grouped.set(id, []);
+
+    const buckets = new Map<number, Array<CategoryChild & { sortOrder: number }>>();
+    for (const row of res.content) {
+      if (row["category.depth"] !== "2") continue;
+      const parentId = Number(row["category.parentId"]);
+      if (!topIds.has(parentId)) continue;
+      const bucket = buckets.get(parentId) ?? [];
+      bucket.push({
+        id: Number(row._id),
+        code: String(row["category.code"] ?? ""),
+        title: (row["category.title"] as string) ?? "",
+        image: resolveFirstImageUrl(row["device_systems.image"]),
+        slug: (row["seo.slug"] as string) ?? "",
+        sortOrder: Number(row["sortOrder"] ?? 0),
+      });
+      buckets.set(parentId, bucket);
+    }
+
+    for (const [parentId, bucket] of buckets) {
+      bucket.sort((a, b) => a.sortOrder - b.sortOrder || a.id - b.id);
+      grouped.set(
+        parentId,
+        bucket.map(({ sortOrder: _sortOrder, ...rest }) => rest),
+      );
+    }
+
+    return { tops, childrenByParentId: grouped };
+  } catch {
+    return { tops: [], childrenByParentId: new Map() };
   }
 }
 

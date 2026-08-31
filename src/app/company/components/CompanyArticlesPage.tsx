@@ -60,10 +60,35 @@ export default function CompanyArticlesPage({
   );
 
   const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from(
-    { length: currentYear - 2025 + 1 },
-    (_, i) => String(currentYear - i),
-  );
+  const [yearOptions, setYearOptions] = useState<string[]>([String(currentYear)]);
+
+  useEffect(() => {
+    let alive = true;
+    fetchData({
+      slug: "articles-data",
+      page: 0,
+      size: 1,
+      where: ARTICLES_STATUS_WHERE,
+      sort: "articles.publish_dttm,asc",
+      리턴함수: (rows) => rows,
+    })
+      .then((res) => {
+        if (!alive) return;
+        const earliest = res.content[0];
+        const earliestYear = earliest ? Number(toArticlesCard(earliest).rawDate.slice(0, 4)) : NaN;
+        const minYear =
+          Number.isInteger(earliestYear) && earliestYear > 0 && earliestYear <= currentYear
+            ? earliestYear
+            : currentYear;
+        setYearOptions(
+          Array.from({ length: currentYear - minYear + 1 }, (_, i) => String(currentYear - i)),
+        );
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [currentYear]);
 
   const { featured } = useFeaturedFeed<ArticlesFeaturedCard>({
     slug: "articles-data",

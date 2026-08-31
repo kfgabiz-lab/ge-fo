@@ -1,8 +1,5 @@
 import { fetchApi, fetchApiText } from "@/lib/api";
-import {
-  fetchTopCategories,
-  fetchCategoryChildrenBatch,
-} from "@/app/()/products-systems/data/productsSystemsData";
+import { fetchTopCategoriesWithChildren } from "@/app/()/products-systems/data/productsSystemsData";
 import type {
   DownloadCategoryOption,
   DownloadFilterOption,
@@ -341,10 +338,7 @@ export async function fetchDownloadCenterBaseCategoryTree(): Promise<
   DownloadCategoryOption[]
 > {
   try {
-    const tops = await fetchTopCategories();
-    const childrenByParentId = await fetchCategoryChildrenBatch(
-      tops.map((top) => top.id),
-    );
+    const { tops, childrenByParentId } = await fetchTopCategoriesWithChildren();
     return tops.map((top) => {
       const children = childrenByParentId.get(top.id) ?? [];
       const nested = children.map((child) => ({

@@ -35,6 +35,7 @@ import SearchMediaPanel from "./SearchMediaPanel";
 import SearchPageList from "./SearchPageList";
 import SearchPagesPanel from "./SearchPagesPanel";
 import SearchProductsPanel from "./SearchProductsPanel";
+import { SearchQueryProvider } from "./SearchQueryContext";
 import { handleHorizontalTabListKeyDown } from "@/lib/tabKeyboardNav";
 
 import {
@@ -115,6 +116,19 @@ export default function SearchAllTabContent({
   const [aiAnswer, setAiAnswer] = useState("");
   const [chatbotKeyword, setChatbotKeyword] = useState("");
   const [chatbotSettled, setChatbotSettled] = useState(false);
+  const [chatbotQuery, setChatbotQuery] = useState(query);
+
+  if (chatbotQuery !== query) {
+    setChatbotQuery(query);
+    setAiAnswer("");
+    setChatbotKeyword("");
+    setChatbotSettled(false);
+  }
+
+  const effectiveQuery = (chatbotKeyword || query).trim();
+  const searchReady = Boolean(chatbotKeyword) || chatbotSettled;
+  const searchCacheKey = chatbotKeyword || `__query__:${query}`;
+
   const isAllTab = activeTab === "all";
   const [documentsFilterMounted, setDocumentsFilterMounted] = useState(
     () => activeTab === "documents",
@@ -171,7 +185,20 @@ export default function SearchAllTabContent({
     pages: false,
   });
 
+  const previewQueryRef = useRef<{
+    products: string | null;
+    documents: string | null;
+    media: string | null;
+    pages: string | null;
+  }>({ products: null, documents: null, media: null, pages: null });
+
   useEffect(() => {
+    previewQueryRef.current = {
+      products: null,
+      documents: null,
+      media: null,
+      pages: null,
+    };
     setLoaded({
       products: false,
       documents: false,
@@ -179,13 +206,6 @@ export default function SearchAllTabContent({
       pages: false,
     });
   }, [query]);
-
-  const previewQueryRef = useRef<{
-    products: string | null;
-    documents: string | null;
-    media: string | null;
-    pages: string | null;
-  }>({ products: null, documents: null, media: null, pages: null });
 
   const [panelFiltered, setPanelFiltered] = useState({
     products: false,
@@ -239,31 +259,30 @@ export default function SearchAllTabContent({
 
   useEffect(() => {
     if (skipProductsPreview) return;
-    if (previewQueryRef.current.products === query) return;
+    if (!searchReady) return;
+    if (previewQueryRef.current.products === searchCacheKey) return;
     let alive = true;
-    void fetchSearchAllProducts(query, { limit: 4 }).then((result) => {
+    void fetchSearchAllProducts(effectiveQuery, { limit: 4 }).then((result) => {
       if (!alive) return;
-      previewQueryRef.current.products = query;
+      previewQueryRef.current.products = searchCacheKey;
       setProductResult(result);
       setLoaded((prev) => ({ ...prev, products: true }));
     });
     return () => {
       alive = false;
     };
-  }, [query, skipProductsPreview]);
+  }, [effectiveQuery, searchCacheKey, searchReady, skipProductsPreview]);
 
   useEffect(() => {
-    if (!chatbotKeyword && !chatbotSettled) return;
-
-    const cacheKey = chatbotKeyword || `__query__:${query}`;
-    if (previewQueryRef.current.documents === cacheKey) return;
+    if (!searchReady) return;
+    if (previewQueryRef.current.documents === searchCacheKey) return;
 
     let alive = true;
 
     void fetchDownloadCenterContentsByKeyword(chatbotKeyword, query).then(
       (result) => {
         if (!alive) return;
-        previewQueryRef.current.documents = cacheKey;
+        previewQueryRef.current.documents = searchCacheKey;
         setKeywordDocuments(result.items);
         setDocumentResult({
           total: result.total,
@@ -275,37 +294,45 @@ export default function SearchAllTabContent({
     return () => {
       alive = false;
     };
-  }, [chatbotKeyword, chatbotSettled, query]);
+  }, [chatbotKeyword, query, searchCacheKey, searchReady]);
 
   useEffect(() => {
     if (skipMediaPreview) return;
-    if (previewQueryRef.current.media === query) return;
+    if (!searchReady) return;
+    if (previewQueryRef.current.media === searchCacheKey) return;
     let alive = true;
-    void fetchSearchMedia(query, { size: 4 }).then((result) => {
+    void fetchSearchMedia(effectiveQuery, {
+      size: 4,
+      highlightTerm: query,
+    }).then((result) => {
       if (!alive) return;
-      previewQueryRef.current.media = query;
+      previewQueryRef.current.media = searchCacheKey;
       setMediaResult(result);
       setLoaded((prev) => ({ ...prev, media: true }));
     });
     return () => {
       alive = false;
     };
-  }, [query, skipMediaPreview]);
+  }, [effectiveQuery, query, searchCacheKey, searchReady, skipMediaPreview]);
 
   useEffect(() => {
     if (skipPagesPreview) return;
-    if (previewQueryRef.current.pages === query) return;
+    if (!searchReady) return;
+    if (previewQueryRef.current.pages === searchCacheKey) return;
     let alive = true;
-    void fetchSearchPages(query, { size: 4 }).then((result) => {
+    void fetchSearchPages(effectiveQuery, {
+      size: 4,
+      highlightTerm: query,
+    }).then((result) => {
       if (!alive) return;
-      previewQueryRef.current.pages = query;
+      previewQueryRef.current.pages = searchCacheKey;
       setPagesResult(result);
       setLoaded((prev) => ({ ...prev, pages: true }));
     });
     return () => {
       alive = false;
     };
-  }, [query, skipPagesPreview]);
+  }, [effectiveQuery, query, searchCacheKey, searchReady, skipPagesPreview]);
 
   useEffect(() => {
     const trimmedQuery = query.trim();
@@ -334,11 +361,7 @@ export default function SearchAllTabContent({
               return;
             }
 
-            const relatedKeywords = Array.isArray(keywordEvent.related_keywords)
-                ? keywordEvent.related_keywords.filter(Boolean)
-                : [];
-
-            setChatbotKeyword([keyword, ...relatedKeywords].join(","));
+            setChatbotKeyword(keyword);
             void logSearchKeyword("UNIFIED_SEARCH", keyword);
           },
 
@@ -390,186 +413,192 @@ export default function SearchAllTabContent({
     pagesResult.items.length === 0;
 
   return (
-    <section className="search_all" id="search-all">
-      <div className="inner">
-        <div
-          ref={tabsRef}
-          className="search_all__tabs"
-          role="tablist"
-          aria-label="Search results"
-          onKeyDown={handleHorizontalTabListKeyDown}
-        >
-          {searchAllTabs.map((tab) => {
-            const isActive = activeTab === tab.id;
-            const countLabel =
-              tab.id === "all"
-                ? isAllLoaded
-                  ? formatSearchCount(allTotal)
-                  : "0"
-                : tab.id === "products"
-                  ? formatSearchCount(productResult.total)
-                  : tab.id === "documents"
-                    ? formatSearchCount(documentResult.total)
-                    : tab.id === "media"
-                      ? formatSearchCount(mediaResult.totalElements)
-                      : tab.id === "pages"
-                        ? formatSearchCount(pagesResult.totalElements)
-                        : "";
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                role="tab"
-                id={`search-tab-${tab.id}`}
-                aria-controls={`search-panel-${tab.id}`}
-                aria-selected={isActive}
-                tabIndex={isActive ? 0 : -1}
-                className={isActive ? "search_all__tab is-active" : "search_all__tab"}
-                onClick={() => handleTabClick(tab.id)}
-              >
-                {tab.label} ({countLabel})
-              </button>
-            );
-          })}
+    <SearchQueryProvider
+      query={query}
+      effectiveQuery={effectiveQuery}
+      ready={searchReady}
+    >
+      <section className="search_all" id="search-all">
+        <div className="inner">
+          <div
+            ref={tabsRef}
+            className="search_all__tabs"
+            role="tablist"
+            aria-label="Search results"
+            onKeyDown={handleHorizontalTabListKeyDown}
+          >
+            {searchAllTabs.map((tab) => {
+              const isActive = activeTab === tab.id;
+              const countLabel =
+                tab.id === "all"
+                  ? isAllLoaded
+                    ? formatSearchCount(allTotal)
+                    : "0"
+                  : tab.id === "products"
+                    ? formatSearchCount(productResult.total)
+                    : tab.id === "documents"
+                      ? formatSearchCount(documentResult.total)
+                      : tab.id === "media"
+                        ? formatSearchCount(mediaResult.totalElements)
+                        : tab.id === "pages"
+                          ? formatSearchCount(pagesResult.totalElements)
+                          : "";
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  id={`search-tab-${tab.id}`}
+                  aria-controls={`search-panel-${tab.id}`}
+                  aria-selected={isActive}
+                  tabIndex={isActive ? 0 : -1}
+                  className={isActive ? "search_all__tab is-active" : "search_all__tab"}
+                  onClick={() => handleTabClick(tab.id)}
+                >
+                  {tab.label} ({countLabel})
+                </button>
+              );
+            })}
+          </div>
+
+          {activeTab === "products" ? (
+            <div
+              role="tabpanel"
+              id="search-panel-products"
+              aria-labelledby="search-tab-products"
+            >
+              <SearchProductsPanel
+                onTotalChange={handleProductsTotal}
+                onFilteredChange={handleProductsFiltered}
+              />
+            </div>
+          ) : null}
+          {documentsFilterMounted ? (
+            <SearchDocumentsFilterProvider items={keywordDocuments}>
+              {activeTab === "documents" ? (
+                <div
+                  role="tabpanel"
+                  id="search-panel-documents"
+                  aria-labelledby="search-tab-documents"
+                >
+                  <SearchDocumentsPanel
+                    items={keywordDocuments}
+                    loaded={loaded.documents}
+                  />
+                </div>
+              ) : null}
+            </SearchDocumentsFilterProvider>
+          ) : null}
+          {activeTab === "media" ? (
+            <div
+              role="tabpanel"
+              id="search-panel-media"
+              aria-labelledby="search-tab-media"
+            >
+              <SearchMediaPanel
+                onTotalChange={handleMediaTotal}
+                onFilteredChange={handleMediaFiltered}
+              />
+            </div>
+          ) : null}
+          {activeTab === "pages" ? (
+            <div
+              role="tabpanel"
+              id="search-panel-pages"
+              aria-labelledby="search-tab-pages"
+            >
+              <SearchPagesPanel
+                onTotalChange={handlePagesTotal}
+                onFilteredChange={handlePagesFiltered}
+              />
+            </div>
+          ) : null}
+
+          {isAllTab ? (
+            <div
+              role="tabpanel"
+              id="search-panel-all"
+              aria-labelledby="search-tab-all"
+            >
+              {!isAllTabEmpty ? (
+                <SearchAllAi
+                  loading={!chatbotKeyword && !chatbotSettled}
+                  settled={chatbotSettled}
+                >
+                  {aiAnswer ? (
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiAnswer}</ReactMarkdown>
+                  ) : (
+                    "AI response waiting..."
+                  )}
+                </SearchAllAi>
+              ) : null}
+
+              {productResult.items.length > 0 ? (
+                <div className="search_all__section">
+                  <SearchSectionHead
+                    title="Product"
+                    count={formatSearchCount(productResult.total)}
+                    onExplore={() => handleTabClick("products")}
+                  />
+                  <div className="search_all__products">
+                    {productResult.items.map((item) => (
+                      <SearchProductCard
+                        key={item.id}
+                        item={item}
+                        searchTerm={query}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {documentResult.items.length > 0 ? (
+                <div className="search_all__section search_all__section--documents devices_product_downloads">
+                  <SearchSectionHead
+                    title="Documents"
+                    count={formatSearchCount(documentResult.total)}
+                    onExplore={() => handleTabClick("documents")}
+                  />
+                  <div className="search_all__documents-grid">
+                    {documentResult.items.map((item) => (
+                      <SearchDocumentsCard key={item.id} item={item} searchTerm={query} />
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {mediaResult.items.length > 0 ? (
+                <div className="search_all__section">
+                  <SearchSectionHead
+                    title="Media"
+                    count={formatSearchCount(mediaResult.totalElements)}
+                    onExplore={() => handleTabClick("media")}
+                  />
+                  <SearchMediaList items={mediaResult.items} variant="card" />
+                </div>
+              ) : null}
+
+              {pagesResult.items.length > 0 ? (
+                <div className="search_all__section">
+                  <SearchSectionHead
+                    title="Pages"
+                    count={formatSearchCount(pagesResult.totalElements)}
+                    onExplore={() => handleTabClick("pages")}
+                  />
+                  <SearchPageList
+                    items={pagesResult.items}
+                    listClassName="search_all__pages"
+                    itemClassName="search_all__page-item"
+                    variant="pages"
+                  />
+                </div>
+              ) : null}
+
+              {isAllTabEmpty ? <SearchEmptyResult /> : null}
+            </div>
+          ) : null}
         </div>
-
-        {activeTab === "products" ? (
-          <div
-            role="tabpanel"
-            id="search-panel-products"
-            aria-labelledby="search-tab-products"
-          >
-            <SearchProductsPanel
-              onTotalChange={handleProductsTotal}
-              onFilteredChange={handleProductsFiltered}
-            />
-          </div>
-        ) : null}
-        {documentsFilterMounted ? (
-          <SearchDocumentsFilterProvider items={keywordDocuments}>
-            {activeTab === "documents" ? (
-              <div
-                role="tabpanel"
-                id="search-panel-documents"
-                aria-labelledby="search-tab-documents"
-              >
-                <SearchDocumentsPanel
-                  items={keywordDocuments}
-                  loaded={loaded.documents}
-                />
-              </div>
-            ) : null}
-          </SearchDocumentsFilterProvider>
-        ) : null}
-        {activeTab === "media" ? (
-          <div
-            role="tabpanel"
-            id="search-panel-media"
-            aria-labelledby="search-tab-media"
-          >
-            <SearchMediaPanel
-              onTotalChange={handleMediaTotal}
-              onFilteredChange={handleMediaFiltered}
-            />
-          </div>
-        ) : null}
-        {activeTab === "pages" ? (
-          <div
-            role="tabpanel"
-            id="search-panel-pages"
-            aria-labelledby="search-tab-pages"
-          >
-            <SearchPagesPanel
-              onTotalChange={handlePagesTotal}
-              onFilteredChange={handlePagesFiltered}
-            />
-          </div>
-        ) : null}
-
-        {isAllTab ? (
-          <div
-            role="tabpanel"
-            id="search-panel-all"
-            aria-labelledby="search-tab-all"
-          >
-            {!isAllTabEmpty ? (
-              <SearchAllAi
-                loading={!chatbotKeyword && !chatbotSettled}
-                settled={chatbotSettled}
-              >
-                {aiAnswer ? (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiAnswer}</ReactMarkdown>
-                ) : (
-                  "AI response waiting..."
-                )}
-              </SearchAllAi>
-            ) : null}
-
-            {productResult.items.length > 0 ? (
-              <div className="search_all__section">
-                <SearchSectionHead
-                  title="Product"
-                  count={formatSearchCount(productResult.total)}
-                  onExplore={() => handleTabClick("products")}
-                />
-                <div className="search_all__products">
-                  {productResult.items.map((item) => (
-                    <SearchProductCard
-                      key={item.id}
-                      item={item}
-                      searchTerm={query}
-                    />
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            {documentResult.items.length > 0 ? (
-              <div className="search_all__section search_all__section--documents devices_product_downloads">
-                <SearchSectionHead
-                  title="Documents"
-                  count={formatSearchCount(documentResult.total)}
-                  onExplore={() => handleTabClick("documents")}
-                />
-                <div className="search_all__documents-grid">
-                  {documentResult.items.map((item) => (
-                    <SearchDocumentsCard key={item.id} item={item} searchTerm={query} />
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            {mediaResult.items.length > 0 ? (
-              <div className="search_all__section">
-                <SearchSectionHead
-                  title="Media"
-                  count={formatSearchCount(mediaResult.totalElements)}
-                  onExplore={() => handleTabClick("media")}
-                />
-                <SearchMediaList items={mediaResult.items} variant="card" />
-              </div>
-            ) : null}
-
-            {pagesResult.items.length > 0 ? (
-              <div className="search_all__section">
-                <SearchSectionHead
-                  title="Pages"
-                  count={formatSearchCount(pagesResult.totalElements)}
-                  onExplore={() => handleTabClick("pages")}
-                />
-                <SearchPageList
-                  items={pagesResult.items}
-                  listClassName="search_all__pages"
-                  itemClassName="search_all__page-item"
-                  variant="pages"
-                />
-              </div>
-            ) : null}
-
-            {isAllTabEmpty ? <SearchEmptyResult /> : null}
-          </div>
-        ) : null}
-      </div>
-    </section>
+      </section>
+    </SearchQueryProvider>
   );
 }

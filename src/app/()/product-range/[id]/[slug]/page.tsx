@@ -107,13 +107,14 @@ export default async function ProductRangeRoutePage({
   const { category: categoryParam } = await searchParams;
   const categoryId = parseCategoryContext(categoryParam);
 
-  const category = await resolveRangeCategory(id, slug);
+  const numId = Number(id);
+  const [category, productCards, highlightItems, lv1] = await Promise.all([
+    resolveRangeCategory(id, slug),
+    fetchCategoryLv2Products(numId),
+    fetchCategoryInsightsLv2(numId),
+    fetchLv1Parent(numId),
+  ]);
   if (category) {
-    const [productCards, highlightItems, lv1] = await Promise.all([
-      fetchCategoryLv2Products(category.id),
-      fetchCategoryInsightsLv2(category.id),
-      fetchLv1Parent(category.id),
-    ]);
     const intro = {
       parentLabel: lv1.name || "Products & Systems",
       title: category.title,

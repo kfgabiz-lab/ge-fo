@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { fetchApi } from "@/lib/api";
 import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
 import type {
@@ -36,14 +37,16 @@ function toSimpleItem(node: FoGnbMenuApiNode): GnbSimpleMegaItem {
   };
 }
 
-export async function fetchGnbMenuData(): Promise<FoGnbMenuApiNode[]> {
-  try {
-    return await fetchApi<FoGnbMenuApiNode[]>("/api/v1/fo/menus/gnb");
-  } catch (error) {
-    console.error("[GNB] menus/gnb 조회 실패, 정적 데이터로 폴백:", error);
-    return [];
-  }
-}
+export const fetchGnbMenuData = cache(
+  async (): Promise<FoGnbMenuApiNode[]> => {
+    try {
+      return await fetchApi<FoGnbMenuApiNode[]>("/api/v1/fo/menus/gnb");
+    } catch (error) {
+      console.error("[GNB] menus/gnb 조회 실패, 정적 데이터로 폴백:", error);
+      return [];
+    }
+  },
+);
 
 const SECTIONS_PANEL_IDS_BY_POSITION = [
   GNB_MEGA_PANEL_ID.services,

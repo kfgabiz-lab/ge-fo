@@ -9,6 +9,7 @@ import { TechHubFilterProvider } from "@/app/support/tech-hub/components/TechHub
 import TechHubMobileControls from "@/app/support/tech-hub/components/TechHubMobileControls";
 import TechHubSearch from "@/app/support/tech-hub/components/TechHubSearch";
 import TechHubTitle from "@/app/support/tech-hub/components/TechHubTitle";
+import type { DownloadCenterContentsPage } from "@/data/support/downloadCenterData";
 import "@/assets/css/devices-product-detail.css";
 import "@/assets/css/support.css";
 
@@ -49,6 +50,7 @@ export type SupportFilterPageShellProps = {
   pageId: string;
   initialQuery?: string;
   initialCategories?: string[];
+  downloadCenterInitialContents?: DownloadCenterContentsPage;
 };
 
 export default function SupportFilterPageShell({
@@ -57,6 +59,7 @@ export default function SupportFilterPageShell({
   pageId,
   initialQuery = "",
   initialCategories = [],
+  downloadCenterInitialContents,
 }: SupportFilterPageShellProps) {
   const { pageClass, Title, Search, MobileControls, Contents } =
     supportFilterPageParts[variant];
@@ -72,7 +75,9 @@ export default function SupportFilterPageShell({
 
   if (variant === "download-center") {
     return (
-      <DownloadCenterFilterProvider>{page}</DownloadCenterFilterProvider>
+      <DownloadCenterFilterProvider initialContents={downloadCenterInitialContents}>
+        {page}
+      </DownloadCenterFilterProvider>
     );
   }
 

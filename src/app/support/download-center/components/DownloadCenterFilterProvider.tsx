@@ -14,7 +14,10 @@ import {
   type DownloadCategoryOption,
   type DownloadFilterOption,
 } from "@/data/support/downloadCenterContent";
-import { type DownloadCenterSort } from "@/data/support/downloadCenterData";
+import {
+  type DownloadCenterContentsPage,
+  type DownloadCenterSort,
+} from "@/data/support/downloadCenterData";
 import { fetchPopularKeywords } from "@/data/search/searchKeywordData";
 
 const store = createSupportFilterStore({
@@ -43,6 +46,7 @@ type DownloadCenterQueryContextValue = {
   categoriesLoaded: boolean;
   documentTypes: DownloadFilterOption[];
   popularKeywords: string[];
+  initialContents?: DownloadCenterContentsPage;
 };
 
 const DownloadCenterQueryContext =
@@ -60,8 +64,10 @@ export function useDownloadCenterQuery(): DownloadCenterQueryContextValue {
 
 export function DownloadCenterFilterProvider({
   children,
+  initialContents,
 }: {
   children: ReactNode;
+  initialContents?: DownloadCenterContentsPage;
 }) {
   const [categories, setCategories] = useState<DownloadCategoryOption[]>([]);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
@@ -110,6 +116,7 @@ export function DownloadCenterFilterProvider({
       categoriesLoaded,
       documentTypes,
       popularKeywords,
+      initialContents,
     }),
     [
       query,
@@ -119,6 +126,7 @@ export function DownloadCenterFilterProvider({
       categoriesLoaded,
       documentTypes,
       popularKeywords,
+      initialContents,
     ],
   );
 

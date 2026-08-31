@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { fetchApi, SITE_ID } from "@/lib/api";
+import { fetchApi } from "@/lib/api";
 import { pickField } from "@/lib/pageData";
 import { fetchData } from "@/lib/pageDataApi";
 import { getPreviewBannerId } from "@/lib/previewMode";
@@ -21,23 +21,22 @@ export interface HeroItem {
   updatedAt: string | null;
 }
 
-const PAGE_FILE_ENDPOINT = (mediaId: number) => `/api/v1/fo/page-files/${mediaId}`;
+interface PageFileMeta {
+  id: number;
+  mimeType: string | null;
+}
 
-async function fetchMediaMimeType(mediaId: number): Promise<string | null> {
-  const isServer = typeof window === "undefined";
-  const base = isServer
-    ? process.env.API_PROXY_TARGET || "http://localhost:8080"
-    : "";
+async function fetchMediaMimeTypeMap(
+  mediaIds: number[],
+): Promise<Map<number, string | null>> {
+  if (mediaIds.length === 0) return new Map();
   try {
-    const res = await fetch(`${base}${PAGE_FILE_ENDPOINT(mediaId)}`, {
-      method: "HEAD",
-      headers: { "X-Site-Id": SITE_ID },
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    return res.headers.get("content-type");
+    const metas = await fetchApi<PageFileMeta[]>(
+      `/api/v1/fo/page-files/meta?ids=${mediaIds.join(",")}`,
+    );
+    return new Map((metas ?? []).map((meta) => [meta.id, meta.mimeType]));
   } catch {
-    return null;
+    return new Map();
   }
 }
 
@@ -55,28 +54,37 @@ export async function fetchHeroItems(): Promise<HeroItem[]> {
     datetimeRange: true,
   });
 
-  const items: HeroItem[] = await Promise.all(
-    (res.content ?? []).map(async (row) => {
-      const contentArr = row.content;
-      const mediaId =
-        Array.isArray(contentArr) && contentArr.length > 0
-          ? (contentArr[0] as number)
-          : null;
-      const mediaMimeType =
-        mediaId != null ? await fetchMediaMimeType(mediaId) : null;
-      return {
-        id: row._id as number,
-        sub: (pickField(row, "sub_title", "sub") as string) ?? "",
-        titleText: (pickField(row, "hero_title", "titleText") as string) ?? "",
-        btnUrl: (pickField(row, "button_url", "btnUrl") as string) ?? "",
-        btnText: (pickField(row, "button_text", "btnText") as string) ?? "",
-        orderNo: (pickField(row, "sort_order", "orderNo") as string) ?? "",
-        mediaId,
-        mediaMimeType,
-        updatedAt: (row.updatedAt as string) ?? null,
-      };
-    }),
+  const rows = (res.content ?? []).map((row) => {
+    const contentArr = row.content;
+    const mediaId =
+      Array.isArray(contentArr) && contentArr.length > 0
+        ? (contentArr[0] as number)
+        : null;
+    return { row, mediaId };
+  });
+
+  const mediaIds = Array.from(
+    new Set(
+      rows
+        .map(({ mediaId }) => mediaId)
+        .filter((mediaId): mediaId is number => mediaId != null),
+    ),
   );
+
+  const mimeTypeMap = await fetchMediaMimeTypeMap(mediaIds);
+
+  const items: HeroItem[] = rows.map(({ row, mediaId }) => ({
+    id: row._id as number,
+    sub: (pickField(row, "sub_title", "sub") as string) ?? "",
+    titleText: (pickField(row, "hero_title", "titleText") as string) ?? "",
+    btnUrl: (pickField(row, "button_url", "btnUrl") as string) ?? "",
+    btnText: (pickField(row, "button_text", "btnText") as string) ?? "",
+    orderNo: (pickField(row, "sort_order", "orderNo") as string) ?? "",
+    mediaId,
+    mediaMimeType:
+      mediaId != null ? (mimeTypeMap.get(mediaId) ?? null) : null,
+    updatedAt: (row.updatedAt as string) ?? null,
+  }));
 
   items.sort((a, b) => {
     const av = orderNoValue(a.orderNo);

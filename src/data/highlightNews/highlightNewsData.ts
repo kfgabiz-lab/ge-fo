@@ -1,32 +1,17 @@
 import type { HighlightNewsItem } from "@/types/highlightNews";
 import { fetchApi } from "@/lib/api";
-import { fetchData } from "@/lib/pageDataApi";
 import {
-  PRESS_LIST_SIZE,
-  PRESS_STATUS_WHERE,
   pressDetailHref,
   pressImageSrc,
-  toPressCard,
-  type PressRow,
 } from "@/app/company/data/pressData";
 import {
-  BLOG_LIST_SIZE,
-  BLOG_STATUS_WHERE,
   blogDetailHref,
   blogImageSrc,
-  toBlogCard,
-  type BlogRow,
 } from "@/app/company/data/blogData";
 import {
-  ARTICLES_LIST_SIZE,
-  ARTICLES_STATUS_WHERE,
   articlesDetailHref,
   articlesImageSrc,
-  toArticlesCard,
-  type ArticlesRow,
 } from "@/app/company/data/articlesData";
-
-const HIGHLIGHT_LIMIT = 3;
 
 const MONTH_ABBR = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -41,107 +26,14 @@ function formatNewsDate(raw: string): string {
   return `${MONTH_ABBR[monthIdx]} ${m[3]}, ${m[1]}`;
 }
 
-type HighlightEntry = { item: HighlightNewsItem; sortKey: string; sortId: number };
-
-function mergeAndPickTopNews(
-  pressRows: PressRow[],
-  blogRows: BlogRow[],
-  articlesRows: ArticlesRow[],
-): HighlightNewsItem[] {
-  const entries: HighlightEntry[] = [];
-
-  for (const row of pressRows) {
-    const card = toPressCard(row);
-    entries.push({
-      sortKey: card.rawDate,
-      sortId: card.id,
-      item: {
-        id: `press-${card.id}`,
-        href: pressDetailHref(card.id, card.slug),
-        image: card.imageSrc,
-        imageAlt: card.title,
-        tag: "Press",
-        title: card.title,
-        date: formatNewsDate(card.date),
-      },
-    });
-  }
-
-  const emptyCategoryMap = new Map<string, string>();
-  for (const row of blogRows) {
-    const card = toBlogCard(row, emptyCategoryMap);
-    entries.push({
-      sortKey: card.rawDate,
-      sortId: card.id,
-      item: {
-        id: `blog-${card.id}`,
-        href: blogDetailHref(card.id, card.slug),
-        image: card.imageSrc,
-        imageAlt: card.title,
-        tag: "Blog",
-        title: card.title,
-        date: formatNewsDate(card.date),
-      },
-    });
-  }
-
-  for (const row of articlesRows) {
-    const card = toArticlesCard(row);
-    entries.push({
-      sortKey: card.rawDate,
-      sortId: card.id,
-      item: {
-        id: `articles-${card.id}`,
-        href: articlesDetailHref(card.id, card.slug),
-        image: card.imageSrc,
-        imageAlt: card.title,
-        tag: "Articles",
-        title: card.title,
-        date: formatNewsDate(card.date),
-      },
-    });
-  }
-
-  return entries
-    .sort((a, b) => b.sortKey.localeCompare(a.sortKey) || b.sortId - a.sortId)
-    .slice(0, HIGHLIGHT_LIMIT)
-    .map((entry) => entry.item);
-}
-
 async function fetchHighlightNews(
   market?: string,
 ): Promise<HighlightNewsItem[]> {
-  try {
-    const marketWhere: Record<string, string> = market
-      ? { has_markets_markets: market }
-      : {};
-    const [pressRes, blogRes, articlesRes] = await Promise.all([
-      fetchData({
-        slug: "press-data",
-        page: 0,
-        size: PRESS_LIST_SIZE,
-        where: { ...PRESS_STATUS_WHERE, ...marketWhere },
-        리턴함수: (rows) => rows,
-      }),
-      fetchData({
-        slug: "blog-data",
-        page: 0,
-        size: BLOG_LIST_SIZE,
-        where: { ...BLOG_STATUS_WHERE, ...marketWhere },
-        리턴함수: (rows) => rows,
-      }),
-      fetchData({
-        slug: "articles-data",
-        page: 0,
-        size: ARTICLES_LIST_SIZE,
-        where: { ...ARTICLES_STATUS_WHERE, ...marketWhere },
-        리턴함수: (rows) => rows,
-      }),
-    ]);
-    return mergeAndPickTopNews(pressRes.content, blogRes.content, articlesRes.content);
-  } catch {
-    return [];
-  }
+  return fetchInsights(
+    market
+      ? `/api/v1/fo/highlight-news?market=${market}`
+      : "/api/v1/fo/highlight-news",
+  );
 }
 
 export async function fetchMainHighlightNews(): Promise<HighlightNewsItem[]> {

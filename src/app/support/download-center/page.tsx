@@ -17,7 +17,12 @@ export async function generateMetadata(
 export default async function DownloadCenterPage() {
   const [meta, contents] = await Promise.all([
     fetchMenuMeta(PATHNAME),
-    fetchDownloadCenterContents({ size: 20 }),
+    fetchDownloadCenterContents({
+      sort: "newest",
+      includeFileContent: true,
+      page: 0,
+      size: 10,
+    }),
   ]);
   const graph = buildSimpleWebPageGraph(PATHNAME, meta, {
     type: "CollectionPage",
@@ -40,7 +45,10 @@ export default async function DownloadCenterPage() {
   return (
     <>
       <JsonLd data={graph} />
-      <DownloadCenterPageShell pageId="Page_support_download_center" />
+      <DownloadCenterPageShell
+        pageId="Page_support_download_center"
+        downloadCenterInitialContents={contents}
+      />
     </>
   );
 }
