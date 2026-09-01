@@ -129,7 +129,7 @@ export default async function TrainingDetailPage({
       { name: VARIANT_LABELS[variant], url: pageUrl(variantListHref) },
       { name: "Course", url: currentUrl },
     ]),
-  ]);
+  ], { orgFull: true });
 
   return (
     <main

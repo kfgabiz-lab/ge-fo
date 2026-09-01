@@ -150,7 +150,7 @@ export default async function TrainingSessionPage({
       { name: "Course", url: courseUrl },
       { name: "Session", url: currentUrl },
     ]),
-  ]);
+  ], { orgFull: true });
 
   return (
     <main
