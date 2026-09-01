@@ -1407,7 +1407,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: rgb(0 0 0 / 60%);
+    /* background: rgb(0 0 0 / 60%); */
     pointer-events: none;
   }
 
@@ -1594,7 +1594,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: rgb(0 0 0 / 60%);
+    /* background: rgb(0 0 0 / 60%); */
     pointer-events: none;
   }
 
@@ -3933,7 +3933,7 @@
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: rgb(0 0 0 / 60%);
+    /* background: rgb(0 0 0 / 60%); */
     pointer-events: none;
   }
 
