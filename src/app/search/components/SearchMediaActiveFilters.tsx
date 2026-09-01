@@ -1,10 +1,10 @@
 "use client";
 
-import { useSearchDocumentsFilter } from "./SearchDocumentsFilterProvider";
+import { useSearchMediaFilter } from "./SearchMediaFilterProvider";
 import SearchTabActiveFilters from "./SearchTabActiveFilters";
 
-export default function SearchDocumentsActiveFilters() {
-  const { activeChips, toggleFilter, clearAll } = useSearchDocumentsFilter();
+export default function SearchMediaActiveFilters() {
+  const { activeChips, toggleFilter, clearAll } = useSearchMediaFilter();
 
   return (
     <SearchTabActiveFilters

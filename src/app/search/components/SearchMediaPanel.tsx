@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import PageNumbering from "@/components/pagination/PageNumbering";
+import SearchMediaActiveFilters from "./SearchMediaActiveFilters";
 import SearchMediaFilterPanel from "./SearchMediaFilterPanel";
 import {
   SearchMediaFilterProvider,
@@ -102,7 +103,7 @@ function SearchMediaPanelContent({
           />
 
           <div className="search_media__main">
-            <div className="search_media__content-block">
+            <div className="search_documents__panel">
               <div className="search_media__mo-filter-wrap">
                 <button
                   type="button"
@@ -121,17 +122,19 @@ function SearchMediaPanelContent({
                 </button>
               </div>
 
-              <div className="search_media__results">
-                <p className="search_media__count">
-                  Total <strong>{totalResults.toLocaleString()}</strong>
-                </p>
+              <SearchMediaActiveFilters />
+            </div>
 
-                {isEmptyResult ? (
-                  <SearchEmptyResult />
-                ) : (
-                  <SearchMediaList items={pageItems} variant="card" />
-                )}
-              </div>
+            <div className="search_media__results">
+              <p className="search_media__count">
+                Total <strong>{totalResults.toLocaleString()}</strong>
+              </p>
+
+              {isEmptyResult ? (
+                <SearchEmptyResult />
+              ) : (
+                <SearchMediaList items={pageItems} variant="card" />
+              )}
             </div>
 
             {isEmptyResult ? null : (

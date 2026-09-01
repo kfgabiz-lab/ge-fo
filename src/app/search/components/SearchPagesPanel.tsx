@@ -5,6 +5,7 @@ import SupportFilterModal from "@/app/support/components/SupportFilterModal";
 import PageNumbering from "@/components/pagination/PageNumbering";
 import SearchEmptyResult from "./SearchEmptyResult";
 import SearchPageList from "./SearchPageList";
+import SearchPagesActiveFilters from "./SearchPagesActiveFilters";
 import SearchPagesFilterPanel from "./SearchPagesFilterPanel";
 import {
   SearchPagesFilterProvider,
@@ -102,7 +103,7 @@ function SearchPagesPanelContent({
           />
 
           <div className="search_pages__main">
-            <div className="search_pages__content-block">
+            <div className="search_documents__panel">
               <div className="search_pages__mo-filter-wrap">
                 <button
                   type="button"
@@ -121,22 +122,24 @@ function SearchPagesPanelContent({
                 </button>
               </div>
 
-              <div className="search_pages__results">
-                <p className="search_pages__count">
-                  Total <strong>{totalResults.toLocaleString()}</strong>
-                </p>
+              <SearchPagesActiveFilters />
+            </div>
 
-                {isEmptyResult ? (
-                  <SearchEmptyResult />
-                ) : (
-                  <SearchPageList
-                    items={pageItems}
-                    listClassName="search_all__pages"
-                    itemClassName="search_all__page-item"
-                    variant="pages"
-                  />
-                )}
-              </div>
+            <div className="search_pages__results">
+              <p className="search_pages__count">
+                Total <strong>{totalResults.toLocaleString()}</strong>
+              </p>
+
+              {isEmptyResult ? (
+                <SearchEmptyResult />
+              ) : (
+                <SearchPageList
+                  items={pageItems}
+                  listClassName="search_all__pages"
+                  itemClassName="search_all__page-item"
+                  variant="pages"
+                />
+              )}
             </div>
 
             {isEmptyResult ? null : (

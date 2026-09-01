@@ -23,7 +23,7 @@ export default function SearchPagesFilterPanel({
 
   const pageTypeSection = (
     <DevicesProductDownloadsFilterSection
-      title="Document Type"
+      title="Menu"
       variant={variant === "sidebar" ? "document" : undefined}
       compactHead={variant === "modal"}
       onRefresh={clearAll}

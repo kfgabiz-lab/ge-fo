@@ -2352,6 +2352,8 @@
   }
 
   section.search_documents .search_documents__active-filters,
+  section.search_media .search_documents__active-filters,
+  section.search_pages .search_documents__active-filters,
   section.search_products .search_products__active-filters {
     display: flex;
     align-items: center;
@@ -2360,6 +2362,8 @@
   }
 
   section.search_documents .search_documents__active-filters-chips,
+  section.search_media .search_documents__active-filters-chips,
+  section.search_pages .search_documents__active-filters-chips,
   section.search_products .search_products__active-filters-chips {
     display: flex;
     flex-wrap: wrap;
@@ -2371,6 +2375,8 @@
   }
 
   section.search_documents .search_documents__active-filters-chip,
+  section.search_media .search_documents__active-filters-chip,
+  section.search_pages .search_documents__active-filters-chip,
   section.search_products .search_products__active-filters-chip {
     display: inline-flex;
     align-items: center;
@@ -2386,11 +2392,15 @@
   }
 
   section.search_documents .search_documents__active-filters-chip:hover,
+  section.search_media .search_documents__active-filters-chip:hover,
+  section.search_pages .search_documents__active-filters-chip:hover,
   section.search_products .search_products__active-filters-chip:hover {
     border-color: var(--color-primary);
   }
 
   section.search_documents .search_documents__active-filters-chip-text,
+  section.search_media .search_documents__active-filters-chip-text,
+  section.search_pages .search_documents__active-filters-chip-text,
   section.search_products .search_products__active-filters-chip-text {
     font-size: 14px;
     line-height: 20px;
@@ -2398,6 +2408,8 @@
   }
 
   section.search_documents .search_documents__active-filters-chip-icon,
+  section.search_media .search_documents__active-filters-chip-icon,
+  section.search_pages .search_documents__active-filters-chip-icon,
   section.search_products .search_products__active-filters-chip-icon {
     display: inline-flex;
     align-items: center;
@@ -2407,6 +2419,8 @@
   }
 
   section.search_documents .search_documents__active-filters-chip-icon img,
+  section.search_media .search_documents__active-filters-chip-icon img,
+  section.search_pages .search_documents__active-filters-chip-icon img,
   section.search_products .search_products__active-filters-chip-icon img {
     display: block;
     width: 12px;
@@ -2414,6 +2428,8 @@
   }
 
   section.search_documents .search_documents__active-filters-clear,
+  section.search_media .search_documents__active-filters-clear,
+  section.search_pages .search_documents__active-filters-clear,
   section.search_products .search_products__active-filters-clear {
     display: inline-flex;
     flex-shrink: 0;
@@ -2432,12 +2448,16 @@
   }
 
   section.search_documents .search_documents__active-filters-clear:hover,
+  section.search_media .search_documents__active-filters-clear:hover,
+  section.search_pages .search_documents__active-filters-clear:hover,
   section.search_products .search_products__active-filters-clear:hover {
     background: #f5f7fa;
     border-color: #ccc;
   }
 
   section.search_documents .search_documents__active-filters-clear-icon,
+  section.search_media .search_documents__active-filters-clear-icon,
+  section.search_pages .search_documents__active-filters-clear-icon,
   section.search_products .search_products__active-filters-clear-icon {
     display: flex;
     align-items: center;
@@ -2447,6 +2467,8 @@
   }
 
   section.search_documents .search_documents__active-filters-clear-icon img,
+  section.search_media .search_documents__active-filters-clear-icon img,
+  section.search_pages .search_documents__active-filters-clear-icon img,
   section.search_products .search_products__active-filters-clear-icon img {
     display: block;
     width: 12px;
@@ -5016,7 +5038,9 @@
   }
 
   /* Figma 6571:104998 — filter + active filters */
-  section.search_documents .search_documents__panel {
+  section.search_documents .search_documents__panel,
+  section.search_media .search_documents__panel,
+  section.search_pages .search_documents__panel {
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -5070,7 +5094,9 @@
     height: 14px;
   }
 
-  section.search_documents .search_documents__active-filters {
+  section.search_documents .search_documents__active-filters,
+  section.search_media .search_documents__active-filters,
+  section.search_pages .search_documents__active-filters {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -5079,7 +5105,9 @@
     margin: 0;
   }
 
-  section.search_documents .search_documents__active-filters-chips {
+  section.search_documents .search_documents__active-filters-chips,
+  section.search_media .search_documents__active-filters-chips,
+  section.search_pages .search_documents__active-filters-chips {
     display: flex;
     flex: 1;
     flex-wrap: nowrap;
@@ -5094,17 +5122,23 @@
     scrollbar-width: none;
   }
 
-  section.search_documents .search_documents__active-filters-chips::-webkit-scrollbar {
+  section.search_documents .search_documents__active-filters-chips::-webkit-scrollbar,
+  section.search_media .search_documents__active-filters-chips::-webkit-scrollbar,
+  section.search_pages .search_documents__active-filters-chips::-webkit-scrollbar {
     display: none;
   }
 
-  section.search_documents .search_documents__active-filters-chips > li {
+  section.search_documents .search_documents__active-filters-chips > li,
+  section.search_media .search_documents__active-filters-chips > li,
+  section.search_pages .search_documents__active-filters-chips > li {
     display: flex;
     flex-shrink: 0;
     margin: 0;
   }
 
-  section.search_documents .search_documents__active-filters-chip {
+  section.search_documents .search_documents__active-filters-chip,
+  section.search_media .search_documents__active-filters-chip,
+  section.search_pages .search_documents__active-filters-chip {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -5118,11 +5152,15 @@
     transition: border-color 0.2s ease;
   }
 
-  section.search_documents .search_documents__active-filters-chip:hover {
+  section.search_documents .search_documents__active-filters-chip:hover,
+  section.search_media .search_documents__active-filters-chip:hover,
+  section.search_pages .search_documents__active-filters-chip:hover {
     border-color: #ccc;
   }
 
-  section.search_documents .search_documents__active-filters-chip-text {
+  section.search_documents .search_documents__active-filters-chip-text,
+  section.search_media .search_documents__active-filters-chip-text,
+  section.search_pages .search_documents__active-filters-chip-text {
     font-size: 12px;
     line-height: 18px;
     font-weight: 400;
@@ -5130,7 +5168,9 @@
     white-space: nowrap;
   }
 
-  section.search_documents .search_documents__active-filters-chip-icon {
+  section.search_documents .search_documents__active-filters-chip-icon,
+  section.search_media .search_documents__active-filters-chip-icon,
+  section.search_pages .search_documents__active-filters-chip-icon {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
@@ -5139,14 +5179,18 @@
     height: 12px;
   }
 
-  section.search_documents .search_documents__active-filters-chip-icon img {
+  section.search_documents .search_documents__active-filters-chip-icon img,
+  section.search_media .search_documents__active-filters-chip-icon img,
+  section.search_pages .search_documents__active-filters-chip-icon img {
     display: block;
     width: 12px;
     height: 12px;
     filter: brightness(25%);
   }
 
-  section.search_documents .search_documents__active-filters-clear {
+  section.search_documents .search_documents__active-filters-clear,
+  section.search_media .search_documents__active-filters-clear,
+  section.search_pages .search_documents__active-filters-clear {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
@@ -5163,12 +5207,16 @@
       border-color 0.2s ease;
   }
 
-  section.search_documents .search_documents__active-filters-clear:hover {
+  section.search_documents .search_documents__active-filters-clear:hover,
+  section.search_media .search_documents__active-filters-clear:hover,
+  section.search_pages .search_documents__active-filters-clear:hover {
     background: #f5f7fa;
     border-color: #ccc;
   }
 
-  section.search_documents .search_documents__active-filters-clear-icon {
+  section.search_documents .search_documents__active-filters-clear-icon,
+  section.search_media .search_documents__active-filters-clear-icon,
+  section.search_pages .search_documents__active-filters-clear-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5176,7 +5224,9 @@
     height: 12px;
   }
 
-  section.search_documents .search_documents__active-filters-clear-icon img {
+  section.search_documents .search_documents__active-filters-clear-icon img,
+  section.search_media .search_documents__active-filters-clear-icon img,
+  section.search_pages .search_documents__active-filters-clear-icon img {
     display: block;
     width: 12px;
     height: 12px;
