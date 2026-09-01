@@ -472,6 +472,7 @@ section .btn-line-30--on-dark .btn-line-30__icon--copy {
 }
 
 .devices_product_downloads__file-name {
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
