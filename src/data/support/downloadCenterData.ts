@@ -23,14 +23,18 @@ export interface DownloadCenterVersion {
   files: DownloadCenterFile[];
 }
 
+export interface DownloadCenterCategoryRef {
+  categoryL1Id: string | null;
+  categoryL2Id: string | null;
+}
+
 export interface DownloadCenterItem {
   id: number;
   docType: string | null;
   docTypeLabel: string | null;
   title: string | null;
   date: string | null;
-  categoryL1Id: string | null;
-  categoryL2Id: string | null;
+  categories: DownloadCenterCategoryRef[];
   versions: DownloadCenterVersion[];
 }
 
@@ -167,17 +171,23 @@ export function deriveCategoryCountsFromItems(
   const l2Counts = new Map<string, { categoryL1Id: string | null; count: number }>();
 
   for (const item of items) {
-    const l1Id = item.categoryL1Id;
-    if (l1Id) {
-      l1Counts.set(l1Id, (l1Counts.get(l1Id) ?? 0) + 1);
-    }
-    const l2Id = item.categoryL2Id;
-    if (l2Id) {
-      const prev = l2Counts.get(l2Id);
-      l2Counts.set(l2Id, {
-        categoryL1Id: prev?.categoryL1Id ?? l1Id ?? null,
-        count: (prev?.count ?? 0) + 1,
-      });
+    const countedL1 = new Set<string>();
+    const countedL2 = new Set<string>();
+    for (const ref of item.categories ?? []) {
+      const l1Id = ref.categoryL1Id;
+      if (l1Id && !countedL1.has(l1Id)) {
+        countedL1.add(l1Id);
+        l1Counts.set(l1Id, (l1Counts.get(l1Id) ?? 0) + 1);
+      }
+      const l2Id = ref.categoryL2Id;
+      if (l2Id && !countedL2.has(l2Id)) {
+        countedL2.add(l2Id);
+        const prev = l2Counts.get(l2Id);
+        l2Counts.set(l2Id, {
+          categoryL1Id: prev?.categoryL1Id ?? l1Id ?? null,
+          count: (prev?.count ?? 0) + 1,
+        });
+      }
     }
   }
 

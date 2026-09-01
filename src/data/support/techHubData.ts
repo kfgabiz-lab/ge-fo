@@ -8,13 +8,13 @@ import {
 import { fetchDevicesTreeRows } from "@/data/gnb/devicesTree";
 import { getYoutubeIdFromUrl, getYoutubePosterSrc } from "@/lib/youtubeEmbed";
 import type { DownloadCategoryOption } from "@/data/support/downloadCenterContent";
+import type { DownloadCenterCategoryRef } from "@/data/support/downloadCenterData";
 
 export interface TechHubCard {
   id: number;
   title: string;
   sourceUpdatedAt: string | null;
-  categoryL1Id: string | null;
-  categoryL2Id: string | null;
+  categories: DownloadCenterCategoryRef[];
   videoUrl: string | null;
   versionCount: number;
 }
@@ -78,8 +78,7 @@ export interface TechHubDetail {
   id: number;
   title: string;
   sourceUpdatedAt: string | null;
-  categoryL1Id: string | null;
-  categoryL2Id: string | null;
+  categories: DownloadCenterCategoryRef[];
   versionCount: number;
   chapters: TechHubChapter[];
   relatedVideos: TechHubCard[];

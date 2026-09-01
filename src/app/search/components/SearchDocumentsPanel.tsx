@@ -53,9 +53,18 @@ export default function SearchDocumentsPanel({
         return false;
       }
       if (!catSet && !parentSet) return true;
-      const matchesCategory = !!catSet && !!item.categoryL2Id && catSet.has(item.categoryL2Id);
+      const itemCategories = item.categories ?? [];
+      const matchesCategory =
+        !!catSet &&
+        itemCategories.some((c) => !!c.categoryL2Id && catSet.has(c.categoryL2Id));
       const matchesParent =
-        !!parentSet && !!item.categoryL1Id && parentSet.has(item.categoryL1Id);
+        !!parentSet &&
+        itemCategories.some(
+          (c) =>
+            !!c.categoryL1Id &&
+            parentSet.has(c.categoryL1Id) &&
+            c.categoryL2Id == null,
+        );
       return matchesCategory || matchesParent;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
