@@ -101,7 +101,7 @@ export function SearchProductsPanelContent({
           />
 
           <div className="search_products__main">
-            <div className="search_products__panel">
+            <div className="search_documents__panel">
               <div className="search_products__mo-filter-wrap">
                 <button
                   type="button"
@@ -121,27 +121,27 @@ export function SearchProductsPanelContent({
               </div>
 
               <SearchProductsActiveFilters />
+            </div>
 
-              <div className="search_products__results">
-                <p className="search_products__count">
-                  Total <strong>{totalResults.toLocaleString()}</strong>
-                </p>
+            <div className="search_products__results">
+              <p className="search_products__count">
+                Total <strong>{totalResults.toLocaleString()}</strong>
+              </p>
 
-                {isEmptyResult ? (
-                  <SearchEmptyResult />
-                ) : (
-                  <ul className="search_products__list">
-                    {pageItems.map((item, index) => (
-                      <li
-                        key={`${item.id}-${currentPage}-${index}`}
-                        className={searchAllListClasses.item}
-                      >
-                        <SearchProductCard item={item} searchTerm={query} />
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              {isEmptyResult ? (
+                <SearchEmptyResult />
+              ) : (
+                <ul className="search_products__list">
+                  {pageItems.map((item, index) => (
+                    <li
+                      key={`${item.id}-${currentPage}-${index}`}
+                      className={searchAllListClasses.item}
+                    >
+                      <SearchProductCard item={item} searchTerm={query} />
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {isEmptyResult ? null : (

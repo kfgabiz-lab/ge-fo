@@ -2025,97 +2025,6 @@
     gap: 100px;
   }
 
-  section.search_products .search_products__active-filters {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-
-  section.search_products .search_products__active-filters-chips {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  section.search_products .search_products__active-filters-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 6px 16px;
-    border: 1px solid rgb(15 31 69 / 30%);
-    border-radius: 20px;
-    background: #fff;
-    font: inherit;
-    color: var(--color-primary);
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-  }
-
-  section.search_products .search_products__active-filters-chip:hover {
-    border-color: var(--color-primary);
-  }
-
-  section.search_products .search_products__active-filters-chip-text {
-    font-size: 14px;
-    line-height: 20px;
-    white-space: nowrap;
-  }
-
-  section.search_products .search_products__active-filters-chip-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 12px;
-    height: 12px;
-  }
-
-  section.search_products .search_products__active-filters-chip-icon img {
-    display: block;
-    width: 12px;
-    height: 12px;
-  }
-
-  section.search_products .search_products__active-filters-clear {
-    display: inline-flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    background: #fff;
-    cursor: pointer;
-    transition:
-      background 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  section.search_products .search_products__active-filters-clear:hover {
-    background: #f5f7fa;
-    border-color: #ccc;
-  }
-
-  section.search_products .search_products__active-filters-clear-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 12px;
-    height: 12px;
-  }
-
-  section.search_products .search_products__active-filters-clear-icon img {
-    display: block;
-    width: 12px;
-    height: 12px;
-  }
-
   /* Figma 6430:108246 — Products tab list */
   section.search_products .search_products__list {
     display: flex;
@@ -2337,7 +2246,9 @@
   section.search_media .search_media__count,
   section.search_pages .search_pages__count,
   section.search_products .search_products__count {
-    margin: 23px 0 20px;
+    /* margin: 23px 0 20px; */
+            margin: 0 0 20px;
+        padding-top: 28px;
     font-size: 15px;
     line-height: 23px;
     color: #666;
@@ -2354,7 +2265,7 @@
   section.search_documents .search_documents__active-filters,
   section.search_media .search_documents__active-filters,
   section.search_pages .search_documents__active-filters,
-  section.search_products .search_products__active-filters {
+  section.search_products .search_documents__active-filters {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -2364,7 +2275,7 @@
   section.search_documents .search_documents__active-filters-chips,
   section.search_media .search_documents__active-filters-chips,
   section.search_pages .search_documents__active-filters-chips,
-  section.search_products .search_products__active-filters-chips {
+  section.search_products .search_documents__active-filters-chips {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -2377,7 +2288,7 @@
   section.search_documents .search_documents__active-filters-chip,
   section.search_media .search_documents__active-filters-chip,
   section.search_pages .search_documents__active-filters-chip,
-  section.search_products .search_products__active-filters-chip {
+  section.search_products .search_documents__active-filters-chip {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -2394,14 +2305,14 @@
   section.search_documents .search_documents__active-filters-chip:hover,
   section.search_media .search_documents__active-filters-chip:hover,
   section.search_pages .search_documents__active-filters-chip:hover,
-  section.search_products .search_products__active-filters-chip:hover {
+  section.search_products .search_documents__active-filters-chip:hover {
     border-color: var(--color-primary);
   }
 
   section.search_documents .search_documents__active-filters-chip-text,
   section.search_media .search_documents__active-filters-chip-text,
   section.search_pages .search_documents__active-filters-chip-text,
-  section.search_products .search_products__active-filters-chip-text {
+  section.search_products .search_documents__active-filters-chip-text {
     font-size: 14px;
     line-height: 20px;
     white-space: nowrap;
@@ -2410,7 +2321,7 @@
   section.search_documents .search_documents__active-filters-chip-icon,
   section.search_media .search_documents__active-filters-chip-icon,
   section.search_pages .search_documents__active-filters-chip-icon,
-  section.search_products .search_products__active-filters-chip-icon {
+  section.search_products .search_documents__active-filters-chip-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2421,7 +2332,7 @@
   section.search_documents .search_documents__active-filters-chip-icon img,
   section.search_media .search_documents__active-filters-chip-icon img,
   section.search_pages .search_documents__active-filters-chip-icon img,
-  section.search_products .search_products__active-filters-chip-icon img {
+  section.search_products .search_documents__active-filters-chip-icon img {
     display: block;
     width: 12px;
     height: 12px;
@@ -2430,7 +2341,7 @@
   section.search_documents .search_documents__active-filters-clear,
   section.search_media .search_documents__active-filters-clear,
   section.search_pages .search_documents__active-filters-clear,
-  section.search_products .search_products__active-filters-clear {
+  section.search_products .search_documents__active-filters-clear {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
@@ -2450,7 +2361,7 @@
   section.search_documents .search_documents__active-filters-clear:hover,
   section.search_media .search_documents__active-filters-clear:hover,
   section.search_pages .search_documents__active-filters-clear:hover,
-  section.search_products .search_products__active-filters-clear:hover {
+  section.search_products .search_documents__active-filters-clear:hover {
     background: #f5f7fa;
     border-color: #ccc;
   }
@@ -2458,7 +2369,7 @@
   section.search_documents .search_documents__active-filters-clear-icon,
   section.search_media .search_documents__active-filters-clear-icon,
   section.search_pages .search_documents__active-filters-clear-icon,
-  section.search_products .search_products__active-filters-clear-icon {
+  section.search_products .search_documents__active-filters-clear-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2469,7 +2380,7 @@
   section.search_documents .search_documents__active-filters-clear-icon img,
   section.search_media .search_documents__active-filters-clear-icon img,
   section.search_pages .search_documents__active-filters-clear-icon img,
-  section.search_products .search_products__active-filters-clear-icon img {
+  section.search_products .search_documents__active-filters-clear-icon img {
     display: block;
     width: 12px;
     height: 12px;
@@ -4267,15 +4178,6 @@
     min-width: 0;
   }
 
-  section.search_products .search_products__panel {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    width: 100%;
-    min-width: 0;
-    padding-bottom: 10px;
-  }
-
   section.search_products .search_products__mo-filter-wrap {
     display: block;
     width: 100%;
@@ -4320,79 +4222,6 @@
     display: block;
     width: 14px;
     height: 14px;
-  }
-
-  /* Figma 6571:104982 — active filters mobile */
-  section.search_products .search_products__active-filters {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 0;
-    width: 100%;
-    margin: 0;
-  }
-
-  section.search_products .search_products__active-filters-chips {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px 8px;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  section.search_products .search_products__active-filters-chips > li {
-    display: flex;
-    margin: 0;
-  }
-
-  section.search_products .search_products__active-filters-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    padding: 6px 16px;
-    border: 1px solid rgb(15 31 69 / 80%);
-    border-radius: 4px;
-    background: #fff;
-    font: inherit;
-    color: #0f1f45;
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-  }
-
-  section.search_products .search_products__active-filters-chip:hover {
-    border-color: #0f1f45;
-  }
-
-  section.search_products .search_products__active-filters-chip-text {
-    font-size: 13px;
-    line-height: 19px;
-    font-weight: 400;
-    color: #0f1f45;
-    white-space: nowrap;
-  }
-
-  section.search_products .search_products__active-filters-chip-group {
-    display: none;
-  }
-
-  section.search_products .search_products__active-filters-chip-value {
-    font-size: inherit;
-    line-height: inherit;
-    font-weight: inherit;
-    color: inherit;
-  }
-
-  section.search_products .search_products__active-filters-chip-icon {
-    display: none;
-  }
-
-  section.search_products .search_products__active-filters-clear {
-    display: none;
   }
 
   section.search_products .search_products__results {
@@ -5040,7 +4869,8 @@
   /* Figma 6571:104998 — filter + active filters */
   section.search_documents .search_documents__panel,
   section.search_media .search_documents__panel,
-  section.search_pages .search_documents__panel {
+  section.search_pages .search_documents__panel,
+  section.search_products .search_documents__panel {
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -5096,7 +4926,8 @@
 
   section.search_documents .search_documents__active-filters,
   section.search_media .search_documents__active-filters,
-  section.search_pages .search_documents__active-filters {
+  section.search_pages .search_documents__active-filters,
+  section.search_products .search_documents__active-filters {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -5107,7 +4938,8 @@
 
   section.search_documents .search_documents__active-filters-chips,
   section.search_media .search_documents__active-filters-chips,
-  section.search_pages .search_documents__active-filters-chips {
+  section.search_pages .search_documents__active-filters-chips,
+  section.search_products .search_documents__active-filters-chips {
     display: flex;
     flex: 1;
     flex-wrap: nowrap;
@@ -5124,13 +4956,15 @@
 
   section.search_documents .search_documents__active-filters-chips::-webkit-scrollbar,
   section.search_media .search_documents__active-filters-chips::-webkit-scrollbar,
-  section.search_pages .search_documents__active-filters-chips::-webkit-scrollbar {
+  section.search_pages .search_documents__active-filters-chips::-webkit-scrollbar,
+  section.search_products .search_documents__active-filters-chips::-webkit-scrollbar {
     display: none;
   }
 
   section.search_documents .search_documents__active-filters-chips > li,
   section.search_media .search_documents__active-filters-chips > li,
-  section.search_pages .search_documents__active-filters-chips > li {
+  section.search_pages .search_documents__active-filters-chips > li,
+  section.search_products .search_documents__active-filters-chips > li {
     display: flex;
     flex-shrink: 0;
     margin: 0;
@@ -5138,7 +4972,8 @@
 
   section.search_documents .search_documents__active-filters-chip,
   section.search_media .search_documents__active-filters-chip,
-  section.search_pages .search_documents__active-filters-chip {
+  section.search_pages .search_documents__active-filters-chip,
+  section.search_products .search_documents__active-filters-chip {
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -5154,13 +4989,15 @@
 
   section.search_documents .search_documents__active-filters-chip:hover,
   section.search_media .search_documents__active-filters-chip:hover,
-  section.search_pages .search_documents__active-filters-chip:hover {
+  section.search_pages .search_documents__active-filters-chip:hover,
+  section.search_products .search_documents__active-filters-chip:hover {
     border-color: #ccc;
   }
 
   section.search_documents .search_documents__active-filters-chip-text,
   section.search_media .search_documents__active-filters-chip-text,
-  section.search_pages .search_documents__active-filters-chip-text {
+  section.search_pages .search_documents__active-filters-chip-text,
+  section.search_products .search_documents__active-filters-chip-text {
     font-size: 12px;
     line-height: 18px;
     font-weight: 400;
@@ -5170,7 +5007,8 @@
 
   section.search_documents .search_documents__active-filters-chip-icon,
   section.search_media .search_documents__active-filters-chip-icon,
-  section.search_pages .search_documents__active-filters-chip-icon {
+  section.search_pages .search_documents__active-filters-chip-icon,
+  section.search_products .search_documents__active-filters-chip-icon {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
@@ -5181,7 +5019,8 @@
 
   section.search_documents .search_documents__active-filters-chip-icon img,
   section.search_media .search_documents__active-filters-chip-icon img,
-  section.search_pages .search_documents__active-filters-chip-icon img {
+  section.search_pages .search_documents__active-filters-chip-icon img,
+  section.search_products .search_documents__active-filters-chip-icon img {
     display: block;
     width: 12px;
     height: 12px;
@@ -5190,7 +5029,8 @@
 
   section.search_documents .search_documents__active-filters-clear,
   section.search_media .search_documents__active-filters-clear,
-  section.search_pages .search_documents__active-filters-clear {
+  section.search_pages .search_documents__active-filters-clear,
+  section.search_products .search_documents__active-filters-clear {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
@@ -5209,14 +5049,16 @@
 
   section.search_documents .search_documents__active-filters-clear:hover,
   section.search_media .search_documents__active-filters-clear:hover,
-  section.search_pages .search_documents__active-filters-clear:hover {
+  section.search_pages .search_documents__active-filters-clear:hover,
+  section.search_products .search_documents__active-filters-clear:hover {
     background: #f5f7fa;
     border-color: #ccc;
   }
 
   section.search_documents .search_documents__active-filters-clear-icon,
   section.search_media .search_documents__active-filters-clear-icon,
-  section.search_pages .search_documents__active-filters-clear-icon {
+  section.search_pages .search_documents__active-filters-clear-icon,
+  section.search_products .search_documents__active-filters-clear-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5226,7 +5068,8 @@
 
   section.search_documents .search_documents__active-filters-clear-icon img,
   section.search_media .search_documents__active-filters-clear-icon img,
-  section.search_pages .search_documents__active-filters-clear-icon img {
+  section.search_pages .search_documents__active-filters-clear-icon img,
+  section.search_products .search_documents__active-filters-clear-icon img {
     display: block;
     width: 12px;
     height: 12px;
