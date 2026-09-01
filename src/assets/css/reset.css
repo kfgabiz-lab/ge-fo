@@ -141,6 +141,19 @@ h6 {
   overflow-wrap: break-word;
 }
 
+/* iOS Safari — font-size below 16px on focusable fields triggers auto-zoom overflow */
+@media (max-width: 780px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
+  textarea,
+  select,
+  .MuiOutlinedInput-input,
+  .MuiInputBase-input,
+  .MuiSelect-select,
+  .MuiNativeSelect-select {
+    font-size: 16px;
+  }
+}
+
 /* screen reader only */
 .ir {
   position: absolute;

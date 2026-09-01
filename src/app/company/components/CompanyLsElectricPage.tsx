@@ -356,7 +356,7 @@ export default function CompanyLsElectricPage({
     <main className="company-page company-page--ls-electric" id="P-FO-COMP-020000P">
       <LsElectricTitleSection />
       <LsElectricIntroSection />
-      <LsElectricHighlightsSection />
+      {/* <LsElectricHighlightsSection /> */}
       <LsElectricBusinessSection />
       <LsElectricGlobalSection />
       <LsElectricPttSection />

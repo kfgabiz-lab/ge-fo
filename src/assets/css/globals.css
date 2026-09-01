@@ -177,6 +177,17 @@ html.is-page-scroll-lock body {
   overscroll-behavior: none;
 }
 
+@media (max-width: 780px) {
+  html.is-page-scroll-lock {
+    overflow: hidden;
+  }
+
+  html.is-page-scroll-lock.lenis.lenis-stopped,
+  html.is-page-scroll-lock.lenis:not(.lenis-autoToggle).lenis-stopped {
+    overflow: hidden;
+  }
+}
+
 body {
   min-height: 100%;
   display: flex;
