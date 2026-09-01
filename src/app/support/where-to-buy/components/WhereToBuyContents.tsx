@@ -129,8 +129,7 @@ export default function WhereToBuyContents({
 
   const handleRefresh = () => {
     setRefreshSpin(true);
-    setTextSearchResults(null);
-    setRadiusValue(whereToBuyDefaultDistance);
+    handleReset();
   };
 
   const handleRadiusChange = (value: string) => {
