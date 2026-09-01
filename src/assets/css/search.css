@@ -2314,12 +2314,14 @@
   /* — Documents tab (Figma 4701:85037) */
   section.search_documents.devices_product_downloads,
   section.search_media.devices_product_downloads,
+  section.search_products.devices_product_downloads,
   section.search_pages.devices_product_downloads {
-    padding: 28px 0 0px;
+    /* padding: 28px 0 0px; */
     background: #fff;
   }
 
   section.search_documents.devices_product_downloads .devices_product_downloads__body,
+  section.search_products.devices_product_downloads .devices_product_downloads__body,
   section.search_media.devices_product_downloads .devices_product_downloads__body,
   section.search_pages.devices_product_downloads .devices_product_downloads__body {
     grid-template-columns: 340px minmax(0, 1fr);
