@@ -141,6 +141,22 @@ h6 {
   overflow-wrap: break-word;
 }
 
+/* iOS Safari — font-size below 16px on focusable fields triggers auto-zoom on focus.
+   !important: page/component CSS (guide_field 등)가 14–15px로 덮어쓰는 것을 막음 */
+@media (max-width: 780px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
+  textarea,
+  select,
+  .MuiOutlinedInput-root,
+  .MuiOutlinedInput-input,
+  .MuiInputBase-root,
+  .MuiInputBase-input,
+  .MuiSelect-select,
+  .MuiNativeSelect-select {
+    font-size: 16px !important;
+  }
+}
+
 /* screen reader only */
 .ir {
   position: absolute;

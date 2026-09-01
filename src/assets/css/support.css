@@ -2573,9 +2573,11 @@
     display: flex;
     min-width: 0;
     width: 100%;
+    overflow: hidden;
   }
 
   section.support_download_contents.devices_product_downloads--center .devices_product_downloads__file-name {
+    flex: 1;
     min-width: 0;
     font-size: 14px;
     line-height: 20px;

@@ -4862,6 +4862,10 @@ section.company-blog-list .company-blog__tag:hover {
     padding: 60px 0 150px;
   }
 
+  .company-page--ls-electric section.company-about-intro {
+    padding-top: 0;
+  }
+
   section.company-about-intro .inner {
     max-width: 1440px;
     margin: 0 auto;
@@ -5170,7 +5174,7 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-ls-electric-business {
-    padding: 150px 0;
+    padding: 0 0 150px;
   }
 
   section.company-ls-electric-business .company-about__head .section_tit {
@@ -6392,6 +6396,10 @@ section.company-blog-list .company-blog__tag:hover {
     padding: 30px 0 70px;
   }
 
+  .company-page--ls-electric section.company-about-intro {
+    padding-top: 0;
+  }
+
   section.company-about-intro.company-about-intro--with-stats {
     padding: 30px 0 70px;
   }
@@ -6695,7 +6703,7 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-ls-electric-business {
-    padding: 70px 0;
+    padding: 0 0 70px;
   }
 
   section.company-ls-electric-business .company-about__head {
