@@ -2269,7 +2269,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    /* margin-bottom: 28px; */
+    margin-top: 28px;
   }
 
   section.search_documents .search_documents__active-filters-chips,
