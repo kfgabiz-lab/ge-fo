@@ -25,7 +25,7 @@ type SearchPanelTotalProps = {
   onFilteredChange?: (filtered: boolean) => void;
 };
 
-function SearchProductsPanelContent({
+export function SearchProductsPanelContent({
   onTotalChange,
   onFilteredChange,
 }: SearchPanelTotalProps) {
