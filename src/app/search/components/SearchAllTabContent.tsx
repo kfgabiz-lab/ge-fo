@@ -31,10 +31,13 @@ import SearchProductCard from "./SearchProductCard";
 import SearchDocumentsPanel from "./SearchDocumentsPanel";
 import { SearchDocumentsFilterProvider } from "./SearchDocumentsFilterProvider";
 import SearchMediaList from "./SearchMediaList";
-import SearchMediaPanel from "./SearchMediaPanel";
+import { SearchMediaPanelContent } from "./SearchMediaPanel";
+import { SearchMediaFilterProvider } from "./SearchMediaFilterProvider";
 import SearchPageList from "./SearchPageList";
-import SearchPagesPanel from "./SearchPagesPanel";
-import SearchProductsPanel from "./SearchProductsPanel";
+import { SearchPagesPanelContent } from "./SearchPagesPanel";
+import { SearchPagesFilterProvider } from "./SearchPagesFilterProvider";
+import { SearchProductsPanelContent } from "./SearchProductsPanel";
+import { SearchProductsFilterProvider } from "./SearchProductsFilterProvider";
 import { SearchQueryProvider } from "./SearchQueryContext";
 import { handleHorizontalTabListKeyDown } from "@/lib/tabKeyboardNav";
 
@@ -133,9 +136,21 @@ export default function SearchAllTabContent({
   const [documentsFilterMounted, setDocumentsFilterMounted] = useState(
     () => activeTab === "documents",
   );
+  const [productsFilterMounted, setProductsFilterMounted] = useState(
+    () => activeTab === "products",
+  );
+  const [mediaFilterMounted, setMediaFilterMounted] = useState(
+    () => activeTab === "media",
+  );
+  const [pagesFilterMounted, setPagesFilterMounted] = useState(
+    () => activeTab === "pages",
+  );
 
   useEffect(() => {
     if (activeTab === "documents") setDocumentsFilterMounted(true);
+    if (activeTab === "products") setProductsFilterMounted(true);
+    if (activeTab === "media") setMediaFilterMounted(true);
+    if (activeTab === "pages") setPagesFilterMounted(true);
   }, [activeTab]);
 
 
@@ -461,17 +476,21 @@ export default function SearchAllTabContent({
             })}
           </div>
 
-          {activeTab === "products" ? (
-            <div
-              role="tabpanel"
-              id="search-panel-products"
-              aria-labelledby="search-tab-products"
-            >
-              <SearchProductsPanel
-                onTotalChange={handleProductsTotal}
-                onFilteredChange={handleProductsFiltered}
-              />
-            </div>
+          {productsFilterMounted ? (
+            <SearchProductsFilterProvider>
+              {activeTab === "products" ? (
+                <div
+                  role="tabpanel"
+                  id="search-panel-products"
+                  aria-labelledby="search-tab-products"
+                >
+                  <SearchProductsPanelContent
+                    onTotalChange={handleProductsTotal}
+                    onFilteredChange={handleProductsFiltered}
+                  />
+                </div>
+              ) : null}
+            </SearchProductsFilterProvider>
           ) : null}
           {documentsFilterMounted ? (
             <SearchDocumentsFilterProvider items={keywordDocuments}>
@@ -489,29 +508,37 @@ export default function SearchAllTabContent({
               ) : null}
             </SearchDocumentsFilterProvider>
           ) : null}
-          {activeTab === "media" ? (
-            <div
-              role="tabpanel"
-              id="search-panel-media"
-              aria-labelledby="search-tab-media"
-            >
-              <SearchMediaPanel
-                onTotalChange={handleMediaTotal}
-                onFilteredChange={handleMediaFiltered}
-              />
-            </div>
+          {mediaFilterMounted ? (
+            <SearchMediaFilterProvider>
+              {activeTab === "media" ? (
+                <div
+                  role="tabpanel"
+                  id="search-panel-media"
+                  aria-labelledby="search-tab-media"
+                >
+                  <SearchMediaPanelContent
+                    onTotalChange={handleMediaTotal}
+                    onFilteredChange={handleMediaFiltered}
+                  />
+                </div>
+              ) : null}
+            </SearchMediaFilterProvider>
           ) : null}
-          {activeTab === "pages" ? (
-            <div
-              role="tabpanel"
-              id="search-panel-pages"
-              aria-labelledby="search-tab-pages"
-            >
-              <SearchPagesPanel
-                onTotalChange={handlePagesTotal}
-                onFilteredChange={handlePagesFiltered}
-              />
-            </div>
+          {pagesFilterMounted ? (
+            <SearchPagesFilterProvider>
+              {activeTab === "pages" ? (
+                <div
+                  role="tabpanel"
+                  id="search-panel-pages"
+                  aria-labelledby="search-tab-pages"
+                >
+                  <SearchPagesPanelContent
+                    onTotalChange={handlePagesTotal}
+                    onFilteredChange={handlePagesFiltered}
+                  />
+                </div>
+              ) : null}
+            </SearchPagesFilterProvider>
           ) : null}
 
           {isAllTab ? (

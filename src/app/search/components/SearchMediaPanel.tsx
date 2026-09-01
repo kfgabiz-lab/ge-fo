@@ -26,7 +26,7 @@ type SearchPanelTotalProps = {
   onFilteredChange?: (filtered: boolean) => void;
 };
 
-function SearchMediaPanelContent({
+export function SearchMediaPanelContent({
   onTotalChange,
   onFilteredChange,
 }: SearchPanelTotalProps) {
