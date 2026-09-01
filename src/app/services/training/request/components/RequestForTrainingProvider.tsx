@@ -219,6 +219,7 @@ export function RequestForTrainingProvider({
   todayStr: string;
 }) {
   const [step1, setStep1] = useState<RequestForTrainingStep1Values>(STEP1_INITIAL);
+  const trainingTrackRef = useRef(step1.trainingTrack);
   const [step2, setStep2] = useState<RequestForTrainingStep2Values>(() =>
     createStep2Initial(todayStr),
   );
@@ -260,11 +261,30 @@ export function RequestForTrainingProvider({
     }
   }, [step1, step2, step3, step4]);
 
+  useEffect(() => {
+    trainingTrackRef.current = step1.trainingTrack;
+  }, [step1.trainingTrack]);
+
   const setStep1Field = useCallback(
     <K extends RequestForTrainingStep1FieldKey>(
       key: K,
       value: RequestForTrainingStep1Values[K],
     ) => {
+      // trainingTrack 이 실제로 바뀌면 Step4의 제품 선택/제품 종속 질문(VFD 등)을 초기화한다.
+      // 그대로 두면 이전 트랙에서 고른 제품(예: Automation)이 남아있는 채로 제출돼
+      // VFD 질문이 잘못 노출되거나 담당자 메일이 엉뚱한 팀(Automation 등)으로 발송된다.
+      if (key === "trainingTrack" && trainingTrackRef.current !== value) {
+        setStep4((prev) => ({
+          ...prev,
+          productCategoryType: STEP4_INITIAL.productCategoryType,
+          productGroupId: STEP4_INITIAL.productGroupId,
+          selectedProducts: STEP4_INITIAL.selectedProducts,
+          jobTitles: STEP4_INITIAL.jobTitles,
+          studentInvolvement: STEP4_INITIAL.studentInvolvement,
+          vfdUnderstanding: STEP4_INITIAL.vfdUnderstanding,
+          vfdUnderstandingTopics: STEP4_INITIAL.vfdUnderstandingTopics,
+        }));
+      }
       setStep1((prev) => ({ ...prev, [key]: value }));
     },
     [],
