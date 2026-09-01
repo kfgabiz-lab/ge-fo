@@ -4862,9 +4862,6 @@ section.company-blog-list .company-blog__tag:hover {
     padding: 60px 0 150px;
   }
 
-  .company-page--ls-electric section.company-about-intro {
-    padding-top: 0;
-  }
 
   section.company-about-intro .inner {
     max-width: 1440px;
@@ -6393,15 +6390,12 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-about-intro {
-    padding: 30px 0 70px;
+    padding: 40px 0 70px;
   }
 
-  .company-page--ls-electric section.company-about-intro {
-    padding-top: 0;
-  }
 
   section.company-about-intro.company-about-intro--with-stats {
-    padding: 30px 0 70px;
+    padding: 40px 0 70px;
   }
 
   section.company-about-intro .company-about-intro__hero {
