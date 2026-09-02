@@ -518,7 +518,7 @@ header.main_header.is-invert.is-gnb-hidden .sub_breadcrumb .icon_external{
 
   .gnb_menu_wrap.sub_header .gnb_menu_inner {
     height: 60px;
-    border-bottom: 1px solid rgb(34 34 34 / 10%);
+    /* border-bottom: 1px solid rgb(34 34 34 / 10%); */
   }
 
   .gnb_menu_wrap.sub_header.is-top {
