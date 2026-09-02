@@ -197,8 +197,8 @@ export const americaBusiness = {
 };
 
 export const americaCareersBanner = {
-  bgImage: `${IMG}/banner-bg.webp`,
-  bgImageMo: `${IMG}/banner-bg-mo.webp`,
+  bgImage: `${IMG}/banner-bg.svg`,
+  bgImageMo: `${IMG}/banner-bg-mo.svg`,
   title: "Imagineers Dedicated to the Future of Smart Energy",
   description: "Join LS ELECTRIC and drive the energy transition in North America.",
   ctaLabel: "Explore Careers",

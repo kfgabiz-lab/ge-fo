@@ -88,7 +88,7 @@ function BannerCta({ linkLabel }: { linkLabel: string }) {
   );
 }
 
-const DEFAULT_BACKGROUND_SRC = "/img/devices/product/banner_hub_bg.svg";
+const DEFAULT_BACKGROUND_SRC = "/img/devices/product/banner_hub_bg.png";
 const DEFAULT_BACKGROUND_SRC_MO = "/img/devices/product/banner_hub_bg_mo.svg";
 
 export default function CommonBanner03({
