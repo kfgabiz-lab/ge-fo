@@ -163,6 +163,15 @@ export default function WhereToBuyContents({
   const activeLocation = filtered.find((item) => item.id === activeId);
   const hasResults = filtered.length > 0;
 
+  // 지도 핀 선택 시 좌측 목록에서 해당 대리점 카드로 스크롤 이동
+  useEffect(() => {
+    if (!activeId) return;
+    const card = listColRef.current?.querySelector<HTMLElement>(
+      `#where-to-buy-card-${CSS.escape(activeId)}`,
+    );
+    card?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [activeId]);
+
   const scrollElementToTop = (el: HTMLElement | null, offsetPx = 0) => {
     if (!el) return;
 
