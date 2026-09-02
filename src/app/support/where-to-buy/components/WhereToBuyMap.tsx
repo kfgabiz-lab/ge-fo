@@ -202,6 +202,36 @@ export default function WhereToBuyMap({
     circleRef.current?.setMap(map);
   };
 
+  // 현재 필터 상태에 맞춰 카메라(줌/중심)를 다시 맞춘다.
+  // 컨테이너가 display:none 이었다가 다시 보일 때(모바일 View Map 전환) 재호출한다.
+  const recenterCameraRef = useRef<() => void>(() => {});
+  recenterCameraRef.current = () => {
+    const map = mapRef.current;
+    if (!map || !window.google?.maps) return;
+    const maps = window.google.maps;
+    const mappable = locations.filter(hasValidCoords);
+
+    if (!boundsModeRef.current) {
+      // 반경필터 모드: 반경 원 전체에 맞춘다.
+      suppressUserMoveRef.current = true;
+      map.fitBounds(
+        computeRadiusBounds(
+          maps,
+          radiusOriginRef.current,
+          radiusMilesRef.current,
+        ),
+      );
+    } else if (mappable.length >= 1) {
+      // 영역/텍스트 검색 모드: 실제 매칭 지점 기준으로 맞춘다.
+      const bounds = new maps.LatLngBounds();
+      mappable.forEach((location) => {
+        bounds.extend({ lat: location.lat, lng: location.lng });
+      });
+      suppressUserMoveRef.current = true;
+      map.fitBounds(bounds);
+    }
+  };
+
   useEffect(() => {
     if (!apiKey || !mapCanvasRef.current) {
       clearPopupPositionRef.current();
@@ -352,6 +382,36 @@ export default function WhereToBuyMap({
     }
     drawMarkersRef.current();
   }, [locations, activeLocation, mapReady]);
+
+  // 지도 컨테이너가 숨겨졌다(display:none) 다시 보일 때 처리.
+  // 모바일에서 View List 상태로 mi(반경) 셀렉트를 바꾸면 0px 상태에서 fitBounds가
+  // 실행돼 지도가 축소된 채로 남는다. 다시 보이는 순간 resize 후 카메라를 재정렬한다.
+  useEffect(() => {
+    const canvas = mapCanvasRef.current;
+    if (!mapReady || !canvas || typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    let collapsed = canvas.offsetWidth === 0 || canvas.offsetHeight === 0;
+    const observer = new ResizeObserver(() => {
+      const hidden = canvas.offsetWidth === 0 || canvas.offsetHeight === 0;
+      if (hidden) {
+        collapsed = true;
+        return;
+      }
+      if (!collapsed) return;
+      collapsed = false;
+
+      const map = mapRef.current;
+      if (!map || !window.google?.maps) return;
+      window.google.maps.event.trigger(map, "resize");
+      recenterCameraRef.current();
+      updatePopupPositionRef.current();
+    });
+    observer.observe(canvas);
+
+    return () => observer.disconnect();
+  }, [mapReady]);
 
   useLayoutEffect(() => {
     if (!mapReady) {

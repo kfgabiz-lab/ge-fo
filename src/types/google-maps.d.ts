@@ -18,6 +18,14 @@ declare namespace google.maps {
     remove(): void;
   }
 
+  namespace event {
+    function trigger(
+      instance: object,
+      eventName: string,
+      ...args: unknown[]
+    ): void;
+  }
+
   class Marker {
     constructor(opts: MarkerOptions);
     setMap(map: Map | null): void;

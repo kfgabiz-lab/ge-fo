@@ -163,15 +163,6 @@ export default function WhereToBuyContents({
   const activeLocation = filtered.find((item) => item.id === activeId);
   const hasResults = filtered.length > 0;
 
-  // 지도 핀 선택 시 좌측 목록에서 해당 대리점 카드로 스크롤 이동
-  useEffect(() => {
-    if (!activeId) return;
-    const card = listColRef.current?.querySelector<HTMLElement>(
-      `#where-to-buy-card-${CSS.escape(activeId)}`,
-    );
-    card?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }, [activeId]);
-
   const scrollElementToTop = (el: HTMLElement | null, offsetPx = 0) => {
     if (!el) return;
 
@@ -186,6 +177,28 @@ export default function WhereToBuyContents({
     }
     scrollWindowTo(top);
   };
+
+  // 지도 핀/카드 선택 시 선택된 대리점을 목록 최상단으로 스크롤
+  useEffect(() => {
+    if (!activeId) return;
+    const listEl = listColRef.current?.querySelector<HTMLElement>(
+      ".support_where_to_buy_contents__list",
+    );
+    const card = listEl?.querySelector<HTMLElement>(
+      `#where-to-buy-card-${CSS.escape(activeId)}`,
+    );
+    if (!listEl || !card) return;
+
+    if (listEl.scrollHeight > listEl.clientHeight + 1) {
+      // PC: 목록이 자체 스크롤 영역 → 카드 상단을 목록 상단에 맞춘다
+      const delta =
+        card.getBoundingClientRect().top - listEl.getBoundingClientRect().top;
+      listEl.scrollTo({ top: listEl.scrollTop + delta, behavior: "smooth" });
+    } else {
+      // 모바일: 목록이 페이지와 함께 스크롤 → 윈도우(Lenis) 스크롤로 처리
+      scrollElementToTop(card);
+    }
+  }, [activeId]);
 
   const handleViewToggle = () => {
     setMobileView((current) => {
