@@ -2052,7 +2052,7 @@
 
   .support_service_warranty_table--3col thead th:first-child,
   .support_service_warranty_table--3col tbody th[scope="row"] {
-    width: 280px;
+    width: 600px;
   }
 
   .support_service_warranty_table--3col thead th:nth-child(2),
