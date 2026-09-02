@@ -20,7 +20,7 @@ const store = createSupportFilterStore({
   categorySection: "category",
   categories: [],
   secondaryIdPrefix: "search-product-doc",
-  secondaryGroup: "Types",
+  secondaryGroup: "Menu",
   secondarySection: "document",
   secondaryOptions: [],
 });

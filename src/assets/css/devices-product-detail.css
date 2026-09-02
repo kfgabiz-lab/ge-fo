@@ -867,12 +867,12 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     min-width: 0;
   }
 
-  section.devices_product_downloads
+  /* section.devices_product_downloads
     .devices_product_downloads__filter-section--certification,
   section.devices_product_downloads
     .devices_product_downloads__filter-section--document {
     gap: 24px;
-  }
+  } */
 
   section.devices_product_downloads .devices_product_downloads__filter-head {
     display: flex;

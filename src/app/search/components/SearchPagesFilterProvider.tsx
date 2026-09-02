@@ -10,7 +10,7 @@ const store = createSupportFilterStore({
   categorySection: "category",
   categories: [],
   secondaryIdPrefix: "search-page-type",
-  secondaryGroup: "Types",
+  secondaryGroup: "Menu",
   secondarySection: "document",
   secondaryOptions: searchPageTypes,
 });
