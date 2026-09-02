@@ -190,8 +190,8 @@ export function buildHwProductTechHubBannerCopy(
   return {
     title: `${name} Video Tutorials`,
     description: [
-      "Need help with installation, configuration, troubleshooting, or maintenance?",
-      `Watch step-by-step video guides for the ${name} series in our Tech Hub.`,
+      "Need help with installation, configuration, troubleshooting, or maintenance? ",
+      `Watch video guides in our Tech Hub.`,
     ],
   };
 }
