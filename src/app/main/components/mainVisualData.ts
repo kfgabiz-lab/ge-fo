@@ -2,7 +2,7 @@ import { cache } from "react";
 import { fetchApi } from "@/lib/api";
 import { pickField } from "@/lib/pageData";
 import { fetchData } from "@/lib/pageDataApi";
-import { getPreviewBannerId } from "@/lib/previewMode";
+import { getPreviewBannerId, getPreviewToken } from "@/lib/previewMode";
 
 const BANNER_SLUG = "banner-data";
 const BANNER_POSITION_HERO = "HERO";
@@ -125,9 +125,11 @@ const fetchPreviewBannerRow = cache(
   async (): Promise<Record<string, unknown> | null> => {
     const recordId = await getPreviewBannerId();
     if (!recordId) return null;
+    const previewToken = await getPreviewToken(BANNER_SLUG, recordId);
     return fetchData<Record<string, unknown>>({
       slug: BANNER_SLUG,
       id: recordId,
+      where: previewToken ? { previewToken } : undefined,
     });
   },
 );
