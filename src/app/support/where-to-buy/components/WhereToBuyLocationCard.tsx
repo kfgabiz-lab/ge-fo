@@ -21,6 +21,7 @@ export default function WhereToBuyLocationCard({
 
   return (
     <article
+      id={`where-to-buy-card-${location.id}`}
       data-slug-item
       className={
         isActive
