@@ -4805,14 +4805,18 @@ section.support_where_to_buy_banner .common_banner_02__link {
     transform: translate(-50%, -100%);
   }
 
-  /* Figma 6561:74413 — mobile map popup */
+  /* Figma 6561:74413 — mobile map popup
+     left/top은 JS(WhereToBuyMap)가 선택된 핀의 실제 화면 좌표로 인라인 지정하며,
+     지도 이동/줌마다 재계산되어 핀을 따라다닌다(데스크톱과 동일 패턴).
+     앵커는 pointer-events:none 이어야 지도 좌우 드래그가 앵커 박스에 막히지 않는다
+     (터치는 안쪽 흰 카드에서만 받는다). */
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_map__popup-anchor--mobile {
-    left: 20px;
-    top: 120px;
+    left: 50%;
+    top: 50%;
     z-index: 2;
     width: min(335px, calc(100vw - 40px));
-    transform: none;
-    pointer-events: auto;
+    transform: translate(-50%, 0);
+    pointer-events: none;
     position: absolute;
   }
 
@@ -4827,9 +4831,15 @@ section.support_where_to_buy_banner .common_banner_02__link {
     box-shadow:
       0 4px 9px rgb(0 0 0 / 8%),
       0 16px 24px rgb(0 0 0 / 6%);
-    transform: none;
-    opacity: 1;
+    transform: translateY(calc(-100% - 42px));
+    opacity: 0;
     pointer-events: auto;
+    transition: opacity 0.25s ease;
+  }
+
+  /* panTo가 핀을 화면에 안착시킨 뒤(idle)에만 노출 — 안착 전 위치로 잠깐 보였다 튀는 현상 방지 */
+  section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_map__popup-anchor--mobile.is-visible .support_where_to_buy_map__popup {
+    opacity: 1;
   }
 
   section.support_where_to_buy_contents.support_where_to_buy_contents--mobile-map .support_where_to_buy_map__popup-anchor--mobile .support_where_to_buy_map__popup::after {
