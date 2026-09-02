@@ -83,6 +83,7 @@ export default function WhereToBuyMap({
   const popupAnchorRefHolder = useRef(popupAnchorRef);
   const lastPopupPosRef = useRef<PopupPixel | null>(null);
   const onSearchAreaRef = useRef(onSearchArea);
+  const onLocationSelectRef = useRef(onLocationSelect);
   const [showAreaButton, setShowAreaButton] = useState(false);
   const showAreaButtonRef = useRef(false);
   const suppressUserMoveRef = useRef(false);
@@ -94,6 +95,7 @@ export default function WhereToBuyMap({
   activeLocationRef.current = activeLocation;
   popupAnchorRefHolder.current = popupAnchorRef;
   onSearchAreaRef.current = onSearchArea;
+  onLocationSelectRef.current = onLocationSelect;
   radiusOriginRef.current = radiusOrigin;
   radiusMilesRef.current = radiusMiles;
   boundsModeRef.current = boundsMode;
@@ -135,10 +137,6 @@ export default function WhereToBuyMap({
     const el = popupAnchorRefHolder.current?.current;
     if (!el) {
       lastPopupPosRef.current = null;
-      return;
-    }
-    if (window.matchMedia("(max-width: 780px)").matches) {
-      clearPopupPositionRef.current();
       return;
     }
     const map = mapRef.current;
@@ -291,6 +289,9 @@ export default function WhereToBuyMap({
           map.addListener("bounds_changed", scheduleUpdatePopupPosition),
           map.addListener("center_changed", scheduleUpdatePopupPosition),
           map.addListener("zoom_changed", () => updatePopupPositionRef.current()),
+          map.addListener("click", () => {
+            onLocationSelectRef.current?.("");
+          }),
         ];
 
         listeners.push(

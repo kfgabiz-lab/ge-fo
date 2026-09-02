@@ -9,16 +9,19 @@ export function mergeSeoMetadata(
   title: string,
   description: string,
   image?: string,
+  url?: string,
 ): Metadata {
   const socialTitle = `${title}${TITLE_SUFFIX}`;
 
   return {
     title,
     description,
+    ...(url ? { alternates: { canonical: url } } : {}),
     openGraph: {
       ...previous.openGraph,
       title: socialTitle,
       description,
+      ...(url ? { url } : {}),
       ...(image ? { images: [{ url: image }] } : {}),
     },
     twitter: {
