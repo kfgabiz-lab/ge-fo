@@ -61,7 +61,7 @@ export default async function MainVisual() {
                   href={noticeItem.url}
                   className="item"
                   data-slug="banner-data"
-                  data-slugkey="url"
+                  data-slugkey="url_information"
                   data-slugkey-attr="href"
                 >
                   {content}

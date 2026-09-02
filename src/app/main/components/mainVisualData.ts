@@ -150,7 +150,7 @@ function mapBannerRow(row: Record<string, unknown>): BannerItem {
       : null;
   return {
     id: row._id as number,
-    url: (pickField(row, "url") as string) ?? "",
+    url: (pickField(row, "url_hero", "url") as string) ?? "",
     mainTitle: (pickField(row, "banner_title", "mainTitle") as string) ?? "",
     subTitle: (pickField(row, "sub_title", "subTitle") as string) ?? "",
     sortOrder: (pickField(row, "sort_order", "sortOrder") as string) ?? "",
@@ -240,6 +240,6 @@ export async function fetchNoticeItem(): Promise<NoticeItem | null> {
   return {
     prefixLabel,
     bottomText: (pickField(row, "banner_text", "bottomText") as string) ?? "",
-    url: (pickField(row, "url") as string) ?? "",
+    url: (pickField(row, "url_information", "url") as string) ?? "",
   };
 }

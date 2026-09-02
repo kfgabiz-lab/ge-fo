@@ -100,7 +100,7 @@ export default function BannerSwiper({ bannerItems }: BannerSwiperProps) {
               <Link
                 href={slide.href}
                 className="link"
-                data-slugkey="url"
+                data-slugkey="url_hero"
                 data-slugkey-attr="href"
               >
                 <div className="img_area">
