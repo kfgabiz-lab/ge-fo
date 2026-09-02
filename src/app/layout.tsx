@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     siteName: "LS ELECTRIC",
     images: [
       {
-        url: `${SITE_URL}/img/OM_IMG.png`,
+        url: `${SITE_URL}/img/og_img.png`,
         width: 1200,
         height: 630,
         alt: "LS ELECTRIC Logo",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     title: "LS ELECTRIC | Smart Energy Global Leader",
     description:
       "LS ELECTRIC is starting a new chapter to bring smart energy to light everywhere around the world. We deliver safe, clean energy and innovative solutions for a sustainable future.",
-    images: [`${SITE_URL}/img/OM_IMG.png`],
+    images: [`${SITE_URL}/img/og_img.png`],
     site: "@lselectricglobal",
   },
   other: {
