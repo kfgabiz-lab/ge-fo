@@ -391,7 +391,8 @@ header.main_header.is-invert.is-gnb-hidden .sub_breadcrumb .icon_external{
 
   .gnb_menu_wrap.sub_header.is-gnb-revealed .sub_header__gnb-row,
   .gnb_menu_wrap.sub_header.is-mega-open .sub_header__gnb-row,
-  .gnb_menu_wrap.sub_header.is-search-open .sub_header__gnb-row {
+  .gnb_menu_wrap.sub_header.is-search-open .sub_header__gnb-row,
+  .gnb_menu_wrap.sub_header.is-mobile-open .sub_header__gnb-row {
     height: 80px;
     opacity: 1;
     pointer-events: auto;
@@ -399,7 +400,8 @@ header.main_header.is-invert.is-gnb-hidden .sub_breadcrumb .icon_external{
   }
 
   .gnb_menu_wrap.sub_header.is-mega-open .sub_header__gnb-row,
-  .gnb_menu_wrap.sub_header.is-search-open .sub_header__gnb-row {
+  .gnb_menu_wrap.sub_header.is-search-open .sub_header__gnb-row,
+  .gnb_menu_wrap.sub_header.is-mobile-open .sub_header__gnb-row {
     transition: none;
   }
 
@@ -506,6 +508,12 @@ header.main_header.is-invert.is-gnb-hidden .sub_breadcrumb .icon_external{
     height: 0;
     opacity: 0;
     pointer-events: none;
+  }
+
+  .gnb_menu_wrap.sub_header.is-mobile-open.is-gnb-hidden .sub_header__gnb-row {
+    height: 60px;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .gnb_menu_wrap.sub_header .gnb_menu_inner {
@@ -759,7 +767,7 @@ color: #fff;
   border-color: rgb(34 34 34 / 10%);
 }
 
-.main_header.is-gnb-hidden:not(.is-mega-open):not(.is-search-open) .main_header__gnb-row {
+.main_header.is-gnb-hidden:not(.is-mega-open):not(.is-search-open):not(.is-mobile-open) .main_header__gnb-row {
   height: 0;
   overflow: hidden;
   visibility: hidden;
@@ -855,7 +863,8 @@ color: #fff;
 
 /* mega menu open — Sub GNB와 동일 동작 */
 .main_header.is-mega-open,
-.main_header.is-search-open {
+.main_header.is-search-open,
+.main_header.is-mobile-open {
   background: #fff;
   border-bottom: none;
 }
@@ -3637,8 +3646,12 @@ color: #fff;
   }
 
   .main_header.is-search-open.is-gnb-hidden .main_header__gnb-row,
-  .main_header.is-mega-open.is-gnb-hidden .main_header__gnb-row {
+  .main_header.is-mega-open.is-gnb-hidden .main_header__gnb-row,
+  .main_header.is-mobile-open.is-gnb-hidden .main_header__gnb-row {
     height: 60px;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .main_header-wrap:not(.is-at-top)::after {

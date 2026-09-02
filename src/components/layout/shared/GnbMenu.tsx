@@ -128,7 +128,7 @@ function getHeaderClassName(
       classes.push("is-gnb-revealed");
     }
 
-    if (isHeaderHidden) {
+    if (isHeaderHidden && !isMobileMenuOpen) {
       classes.push("is-gnb-hidden");
     }
 
@@ -163,9 +163,9 @@ function getHeaderClassName(
     classes.push("is-gnb-revealed");
   }
 
-  if (hasBreadcrumb && isHeaderHidden) {
+  if (hasBreadcrumb && isHeaderHidden && !isMobileMenuOpen) {
     classes.push("is-gnb-hidden");
-  } else if (isHeaderHidden) {
+  } else if (isHeaderHidden && !isMobileMenuOpen) {
     classes.push("is-hidden");
   }
 
@@ -316,7 +316,6 @@ export default function GnbMenu({
 
       const scrollY = getWindowScrollY();
       megaOpenScrollYRef.current = scrollY;
-      lockPageScroll(scrollY);
 
       onMegaOpenChange?.(true);
 
@@ -396,7 +395,6 @@ export default function GnbMenu({
     onRevealHeader?.();
     const scrollY = getWindowScrollY();
     megaOpenScrollYRef.current = scrollY;
-    lockPageScroll(scrollY);
     setIsSearchOpen(true);
   }, [closeGlobal, closeMega, closeSearch, isSearchOpen, onRevealHeader]);
 
@@ -543,14 +541,13 @@ export default function GnbMenu({
         closeMega();
         closeSearch();
         closeGlobal();
-        const scrollY = getWindowScrollY();
-        megaOpenScrollYRef.current = scrollY;
-        lockPageScroll(scrollY);
+        onRevealHeader?.();
+        megaOpenScrollYRef.current = getWindowScrollY();
       }
 
       return next;
     });
-  }, [closeGlobal, closeMega, closeSearch]);
+  }, [closeGlobal, closeMega, closeSearch, onRevealHeader]);
 
   useEffect(() => {
     onMegaOpenChange?.(isMegaActive);
@@ -632,17 +629,20 @@ export default function GnbMenu({
     };
   }, [closeMobileMenu, isMobileMenuOpen]);
 
-  useLayoutEffect(() => {
-    const shouldLock = isOverlayOpen || isMobileMenuOpen;
-    if (!shouldLock) return;
+  const shouldLockScroll = isOverlayOpen || isMobileMenuOpen;
 
-    const scrollY = megaOpenScrollYRef.current;
+  useLayoutEffect(() => {
+    if (!shouldLockScroll) return;
+
+    const scrollY = megaOpenScrollYRef.current || getWindowScrollY();
+    megaOpenScrollYRef.current = scrollY;
     lockPageScroll(scrollY);
 
     return () => {
       unlockPageScroll(scrollY);
+      megaOpenScrollYRef.current = 0;
     };
-  }, [isMobileMenuOpen, isOverlayOpen]);
+  }, [shouldLockScroll]);
 
   useEffect(() => {
     if (!isDimMounted) return;
@@ -679,7 +679,10 @@ export default function GnbMenu({
     if (isScrollControlled) return;
 
     const updateScrollState = () => {
-      const currentScrollY = window.scrollY;
+      const currentScrollY =
+        isMobileMenuOpen || isOverlayOpen
+          ? megaOpenScrollYRef.current || getWindowScrollY()
+          : getWindowScrollY();
       const threshold = isMain ? 80 : SCROLL_THRESHOLD;
 
       if (isMobileMenuOpen || isOverlayOpen) {

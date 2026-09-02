@@ -32,7 +32,8 @@ export default function SubHeader({
       hideGnbOnScroll: !isMobileMenuOpen && !isMegaOpen && !isSearchOpen,
     });
 
-  const isGnbHidden = scrollGnbHidden && !isSearchOpen && !isMegaOpen;
+  const isGnbHidden =
+    scrollGnbHidden && !isSearchOpen && !isMegaOpen && !isMobileMenuOpen;
 
   return (
     <div
@@ -40,6 +41,7 @@ export default function SubHeader({
         "sub_header-wrap",
         isAtTop ? "is-at-top" : "",
         isGnbHidden ? "is-gnb-hidden" : "",
+        isMobileMenuOpen ? "is-mobile-open" : "",
       ]
         .filter(Boolean)
         .join(" ")}

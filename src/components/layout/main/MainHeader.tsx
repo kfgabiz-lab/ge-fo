@@ -30,7 +30,8 @@ export default function MainHeader({
       hideGnbOnScroll: !isMobileMenuOpen && !isMegaOpen && !isSearchOpen,
     });
 
-  const isGnbHidden = scrollGnbHidden && !isSearchOpen && !isMegaOpen;
+  const isGnbHidden =
+    scrollGnbHidden && !isSearchOpen && !isMegaOpen && !isMobileMenuOpen;
   const resolvedIsAtTop =
     frozenWrapAtTop !== null ? frozenWrapAtTop : isAtTop;
 
@@ -63,10 +64,11 @@ export default function MainHeader({
         resolvedIsAtTop && "is-at-top",
         isGnbHidden && "is-gnb-hidden",
         isSearchOpen && "is-search-open",
+        isMobileMenuOpen && "is-mobile-open",
       ]
         .filter(Boolean)
         .join(" "),
-    [resolvedIsAtTop, isGnbHidden, isSearchOpen],
+    [resolvedIsAtTop, isGnbHidden, isSearchOpen, isMobileMenuOpen],
   );
 
   return (
