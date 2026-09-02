@@ -49,15 +49,13 @@ export default function CompanyBlogPage({
   const [categoryMap, setCategoryMap] = useState<Map<string, string>>(
     toCategoryMap(initialCategories),
   );
-  const [categoryCode, setCategoryCode] = useState("");
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [rows, setRows] = useState<BlogRow[]>(initialRows);
   const [loaded, setLoaded] = useState(initialRows.length > 0);
-  const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
-  const { pageIndex, setPageIndex, goToPage, search, submitSearch } = useListPageMemory(
-    "blog",
-    "/company/blog",
-  );
+  const { pageIndex, setPageIndex, goToPage, search, submitSearch, filters, updateFilters } =
+    useListPageMemory("blog", "/company/blog");
+  const categoryCode = filters.categoryCode ?? "";
+  const sort = (filters.sort as "latest" | "oldest" | "az" | "za" | undefined) ?? "latest";
 
   useEffect(() => {
     if (initialCategories.length > 0) return;
@@ -138,7 +136,7 @@ export default function CompanyBlogPage({
   );
 
   const handleCategoryChange = (code: string) => {
-    setCategoryCode(code);
+    updateFilters({ categoryCode: code });
     goToPage(1);
   };
 
@@ -148,16 +146,14 @@ export default function CompanyBlogPage({
   };
 
   const handleViewAllClick = () => {
-    // Clear search and reset category filter so "View All" shows full list
-    setCategoryCode("");
-    // Reset sort to latest and go back to first page
-    setSort("latest");
+    // Clear search and reset category/sort filters so "View All" shows full list
+    updateFilters({ categoryCode: "", sort: "latest" });
     setPageIndex(0);
     handleSearchSubmit("");
   };
-  
+
   const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {
-    setSort(value);
+    updateFilters({ sort: value });
     goToPage(1);
   };
 

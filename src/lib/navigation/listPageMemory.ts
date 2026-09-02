@@ -58,6 +58,34 @@ export function getRememberedListQuery(pathname: string): string {
   }
 }
 
+const FILTER_IDS_PREFIX = "list-filter-ids:";
+
+/** 목록 페이지의 체크박스형 필터(선택된 항목 id 목록)를 경로별로 기억해 둔다. */
+export function rememberListFilterIds(pathname: string, ids: string[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (ids.length > 0) {
+      window.sessionStorage.setItem(`${FILTER_IDS_PREFIX}${pathname}`, JSON.stringify(ids));
+    } else {
+      window.sessionStorage.removeItem(`${FILTER_IDS_PREFIX}${pathname}`);
+    }
+  } catch {
+    // 프라이빗 모드 등 sessionStorage 접근 불가 시 조용히 무시
+  }
+}
+
+export function getRememberedListFilterIds(pathname: string): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.sessionStorage.getItem(`${FILTER_IDS_PREFIX}${pathname}`);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter((id) => typeof id === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
 /** 상세 화면의 LIST 버튼 클릭 시 호출 — "목록으로 돌아가는 중"임을 1회성으로 표시한다. */
 export function markListReturnIntent(pathname: string): void {
   if (typeof window === "undefined") return;
@@ -103,7 +131,11 @@ function consumeListReturnIntent(pathname: string): boolean {
  */
 export function restoreListStateIfReturning(
   pathname: string,
-  apply: { page?: (page: number) => void; query?: (query: string) => void },
+  apply: {
+    page?: (page: number) => void;
+    query?: (query: string) => void;
+    filterIds?: (ids: string[]) => void;
+  },
 ): void {
   if (typeof window === "undefined") return;
 
@@ -130,6 +162,7 @@ export function restoreListStateIfReturning(
     // 들어갔다 LIST로 돌아올 때 예전 값을 다시 읽어오게 된다).
     rememberListPage(pathname, 1);
     rememberListQuery(pathname, "");
+    rememberListFilterIds(pathname, []);
     return;
   }
 
@@ -140,6 +173,10 @@ export function restoreListStateIfReturning(
   if (apply.query) {
     const rememberedQuery = getRememberedListQuery(pathname);
     if (rememberedQuery) apply.query(rememberedQuery);
+  }
+  if (apply.filterIds) {
+    const rememberedIds = getRememberedListFilterIds(pathname);
+    if (rememberedIds.length > 0) apply.filterIds(rememberedIds);
   }
 }
 
@@ -174,6 +211,7 @@ export function watchForFreshListEntryClicks(
 
     rememberListPage(pathname, 1);
     rememberListQuery(pathname, "");
+    rememberListFilterIds(pathname, []);
     onFreshEntry();
   };
 

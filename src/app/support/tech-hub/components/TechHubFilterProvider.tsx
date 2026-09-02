@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -20,6 +21,7 @@ import {
 } from "@/data/support/techHubData";
 import {
   markReturnIntentOnLeavingToDetail,
+  rememberListFilterIds,
   rememberListPage,
   rememberListQuery,
   restoreListStateIfReturning,
@@ -57,6 +59,15 @@ type TechHubQueryContextValue = {
   certifications: DownloadFilterOption[];
   resetSignal: number;
   notifyReset: () => void;
+  /** LIST 버튼 복귀·뒤로가기로 돌아온 경우에만 채워지는, 복원해야 할 필터 id 목록(1회성). */
+  restoredFilterIds: string[];
+  /**
+   * restoreListStateIfReturning이 한 번이라도 실행돼 복귀 여부 판정이 끝났는지. 자식(Bridge)의
+   * effect가 부모(이 컴포넌트)보다 먼저 도는 React 실행 순서 때문에, 판정이 나기 전엔
+   * restoredFilterIds가 항상 빈 배열로 보인다 — "복원할 게 없음"과 "아직 판정 전"을
+   * 구분하지 못하면 판정 전에 찍힌 빈 활성 필터를 그대로 저장해 복원 값을 지워버린다.
+   */
+  filterRestoreReady: boolean;
 };
 
 const TechHubQueryContext = createContext<TechHubQueryContextValue | null>(null);
@@ -69,6 +80,46 @@ export function useTechHubQuery(): TechHubQueryContextValue {
     );
   }
   return ctx;
+}
+
+/**
+ * store.Provider 안쪽(useTechHubFilter를 쓸 수 있는 위치)에서 카테고리/인증서 체크박스
+ * 필터를 sessionStorage와 동기화한다 — 복귀 시 한 번 복원하고, 이후 변경될 때마다 기억해 둔다.
+ * TechHubFilterProvider 컴포넌트 자신은 store.Provider보다 바깥이라 useTechHubFilter를
+ * 직접 쓸 수 없어 별도 컴포넌트로 뺐다.
+ */
+function TechHubFilterMemoryBridge() {
+  const filter = useTechHubFilter();
+  const { restoredFilterIds, filterRestoreReady } = useTechHubQuery();
+  const hasAppliedRestore = useRef(false);
+
+  useEffect(() => {
+    if (hasAppliedRestore.current) return;
+    if (restoredFilterIds.length === 0) return;
+    hasAppliedRestore.current = true;
+    for (const id of restoredFilterIds) {
+      filter.toggleFilter(id, true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restoredFilterIds]);
+
+  const activeIdsKey = filter.activeChips.map((chip) => chip.id).join(",");
+  useEffect(() => {
+    // 복귀 여부 판정이 아직 안 끝났으면(부모 effect가 이 컴포넌트보다 늦게 도는 최초 렌더 등)
+    // 지금 빈 상태를 "선택 없음"으로 잘못 기억해 복원 값을 지워버리지 않도록 건너뛴다.
+    // 판정이 끝났어도 복원 적용이 아직이면(비동기로 카테고리 트리가 로드되기 전 등) 마찬가지.
+    // filterRestoreReady는 굳이 deps에 넣지 않는다 — 그것만 바뀌어서 이 effect가 다시
+    // 도는 순간엔 방금 적용한 toggleFilter가 아직 activeChips에 반영되기 전이라(다른
+    // 컴포넌트의 state 갱신은 다음 렌더에야 보임) activeIdsKey가 여전히 예전 값이다.
+    // activeIdsKey가 실제로 바뀔 때만(=toggleFilter 반영이 끝난 뒤) 다시 돌아야 안전하다.
+    if (!filterRestoreReady) return;
+    if (restoredFilterIds.length > 0 && !hasAppliedRestore.current) return;
+    const ids = activeIdsKey ? activeIdsKey.split(",") : [];
+    rememberListFilterIds(TECH_HUB_PATHNAME, ids);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIdsKey]);
+
+  return null;
 }
 
 export function TechHubFilterProvider({
@@ -85,6 +136,8 @@ export function TechHubFilterProvider({
   const [query, setQueryState] = useState("");
   const [page, setPageState] = useState(1);
   const [resetSignal, setResetSignal] = useState(0);
+  const [restoredFilterIds, setRestoredFilterIds] = useState<string[]>([]);
+  const [filterRestoreReady, setFilterRestoreReady] = useState(false);
 
   const setPage = (p: number) => {
     setPageState(p);
@@ -100,7 +153,9 @@ export function TechHubFilterProvider({
     restoreListStateIfReturning(TECH_HUB_PATHNAME, {
       page: setPageState,
       query: setQueryState,
+      filterIds: setRestoredFilterIds,
     });
+    setFilterRestoreReady(true);
   }, []);
 
   // 이미 이 목록 페이지에 있는 채로 GNB 등에서 같은 URL을 다시 클릭하면
@@ -194,13 +249,27 @@ export function TechHubFilterProvider({
       certifications,
       resetSignal,
       notifyReset,
+      restoredFilterIds,
+      filterRestoreReady,
     }),
-    [query, page, categories, categoriesLoaded, certifications, resetSignal],
+    [
+      query,
+      page,
+      categories,
+      categoriesLoaded,
+      certifications,
+      resetSignal,
+      restoredFilterIds,
+      filterRestoreReady,
+    ],
   );
 
   return (
     <TechHubQueryContext.Provider value={queryValue}>
-      <store.Provider categories={categories}>{children}</store.Provider>
+      <store.Provider categories={categories}>
+        <TechHubFilterMemoryBridge />
+        {children}
+      </store.Provider>
     </TechHubQueryContext.Provider>
   );
 }

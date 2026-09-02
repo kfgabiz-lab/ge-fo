@@ -59,6 +59,39 @@ export function getRememberedListSearch(variant: CompanyListVariant): string {
   }
 }
 
+const FILTERS_PREFIX = "company-last-list-filters:";
+
+/** 목록 페이지의 필터(카테고리·정렬·월/년 등)를 기억해 둔다 — 검색어/페이지와 동일한 목적. */
+export function rememberListFilters(
+  variant: CompanyListVariant,
+  filters: Record<string, string>,
+): void {
+  if (typeof window === "undefined") return;
+  try {
+    const hasAny = Object.values(filters).some((value) => value);
+    if (hasAny) {
+      window.sessionStorage.setItem(`${FILTERS_PREFIX}${variant}`, JSON.stringify(filters));
+    } else {
+      window.sessionStorage.removeItem(`${FILTERS_PREFIX}${variant}`);
+    }
+  } catch {
+    // 프라이빗 모드 등 sessionStorage 접근 불가 시 조용히 무시
+  }
+}
+
+/** 목록 페이지 마운트 시 직전에 적용돼 있던 필터를 복원한다(없으면 빈 객체). */
+export function getRememberedListFilters(variant: CompanyListVariant): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.sessionStorage.getItem(`${FILTERS_PREFIX}${variant}`);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
 const RETURN_INTENT_PREFIX = "company-list-return-intent:";
 
 /**
@@ -112,7 +145,11 @@ export function consumeListReturnIntent(variant: CompanyListVariant): boolean {
 export function restoreListStateIfReturning(
   variant: CompanyListVariant,
   basePath: string,
-  apply: { pageIndex?: (pageIndex: number) => void; search?: (search: string) => void },
+  apply: {
+    pageIndex?: (pageIndex: number) => void;
+    search?: (search: string) => void;
+    filters?: (filters: Record<string, string>) => void;
+  },
 ): void {
   if (typeof window === "undefined") return;
 
@@ -141,6 +178,7 @@ export function restoreListStateIfReturning(
     // 들어갔다 LIST로 돌아올 때 예전 값을 다시 읽어오게 된다).
     rememberListPage(variant, 1);
     rememberListSearch(variant, "");
+    rememberListFilters(variant, {});
     return;
   }
 
@@ -149,6 +187,9 @@ export function restoreListStateIfReturning(
 
   const rememberedSearch = getRememberedListSearch(variant);
   if (rememberedSearch) apply.search?.(rememberedSearch);
+
+  const rememberedFilters = getRememberedListFilters(variant);
+  if (Object.keys(rememberedFilters).length > 0) apply.filters?.(rememberedFilters);
 }
 
 /**
@@ -181,6 +222,7 @@ export function watchForFreshListEntryClicks(
     if (targetUrl.pathname !== basePath) return;
 
     rememberListPage(variant, 1);
+    rememberListFilters(variant, {});
     onFreshEntry();
   };
 

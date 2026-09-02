@@ -45,9 +45,12 @@ export default function CompanyEventsPage({
   const {
     pageIndex: pastPageIndex,
     goToPage: goToPastPage,
+    filters: pastFilters,
+    updateFilters: updatePastFilters,
   } = useListPageMemory("events", "/company/events");
   const [pastTotalPages, setPastTotalPages] = useState(initialPastTotalPages);
-  const [pastSort, setPastSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
+  const pastSort =
+    (pastFilters.sort as "latest" | "oldest" | "az" | "za" | undefined) ?? "latest";
 
   useEffect(() => {
     if (initialCalendarMonths.length > 0) return;
@@ -105,7 +108,7 @@ export default function CompanyEventsPage({
     goToPastPage(page);
   };
   const handlePastSortChange = (value: "latest" | "oldest" | "az" | "za") => {
-    setPastSort(value);
+    updatePastFilters({ sort: value });
     goToPastPage(1);
   };
 

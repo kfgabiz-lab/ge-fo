@@ -51,13 +51,11 @@ export default function CompanyArticlesPage({
   const [totalPages, setTotalPages] = useState(initialTotalPages);
   const [rows, setRows] = useState<ArticlesRow[]>(initialRows);
   const [loaded, setLoaded] = useState(initialRows.length > 0);
-  const [sort, setSort] = useState<"latest" | "oldest" | "az" | "za">("latest");
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
-  const { pageIndex, setPageIndex, goToPage, search, submitSearch } = useListPageMemory(
-    "articles",
-    "/company/articles",
-  );
+  const { pageIndex, setPageIndex, goToPage, search, submitSearch, filters, updateFilters } =
+    useListPageMemory("articles", "/company/articles");
+  const sort = (filters.sort as "latest" | "oldest" | "az" | "za" | undefined) ?? "latest";
+  const month = filters.month ?? "";
+  const year = filters.year ?? "";
 
   const currentYear = new Date().getFullYear();
   const [yearOptions, setYearOptions] = useState<string[]>([String(currentYear)]);
@@ -172,23 +170,20 @@ export default function CompanyArticlesPage({
     goToPage(1);
   };
   const handleSortChange = (value: "latest" | "oldest" | "az" | "za") => {
-    setSort(value);
+    updateFilters({ sort: value });
     goToPage(1);
   };
   const handleMonthChange = (value: string) => {
-    setMonth(value);
+    updateFilters({ month: value });
     goToPage(1);
   };
   const handleYearChange = (value: string) => {
-    setYear(value);
+    updateFilters({ year: value });
     goToPage(1);
   };
   const handleViewAllClick = () => {
-    // Clear search and reset month/year filters so "View All" shows full list
-    setMonth("");
-    setYear("");
-    // Reset sort to latest and go back to first page
-    setSort("latest");
+    // Clear search and reset month/year/sort filters so "View All" shows full list
+    updateFilters({ month: "", year: "", sort: "latest" });
     setPageIndex(0);
     handleSearchSubmit("");
   };
