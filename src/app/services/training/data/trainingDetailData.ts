@@ -22,6 +22,7 @@ import { contentDetailPath } from "@/lib/contentDetailPath";
 import {
   type CodeItem,
   TRAINING_COURSE_DETAIL_HREF_PREFIX,
+  TRAINING_SESSION_DETAIL_HREF_PREFIX,
   TRAINING_SLUG,
   TRAINING_VARIANT_BY_COURSE_CODE,
   trainingImageSrc,
@@ -610,8 +611,9 @@ function buildOgMetadata(
   title: string,
   description: string,
   image?: string,
+  url?: string,
 ): Metadata {
-  return mergeSeoMetadata(previous, title, description, image);
+  return mergeSeoMetadata(previous, title, description, image, url);
 }
 
 export async function buildCourseMetadata(
@@ -623,11 +625,17 @@ export async function buildCourseMetadata(
     parent,
   ]);
   if (!isCurriculumVisible(curriculum) || !curriculum) return {};
+  const courseUrl = `${SITE_URL}${contentDetailPath(
+    TRAINING_COURSE_DETAIL_HREF_PREFIX,
+    courseId,
+    curriculum.slug,
+  )}`;
   return buildOgMetadata(
     previous,
     curriculum.title ?? "",
     curriculum.description ?? "",
     ogImageFromCurriculum(curriculum),
+    courseUrl,
   );
 }
 
@@ -648,10 +656,16 @@ export async function buildSessionMetadata(
     .find(({ raw }) => Number(raw.id) === Number(sessionId));
   if (!matched) return {};
   const d2 = matched.json.curriculum_detail2 ?? {};
+  const sessionUrl = `${SITE_URL}${contentDetailPath(
+    TRAINING_SESSION_DETAIL_HREF_PREFIX,
+    sessionId,
+    matched.json.seo?.slug ?? null,
+  )}`;
   return buildOgMetadata(
     previous,
     d2.title ?? "",
     curriculum?.description ?? "",
     ogImageFromCurriculum(curriculum),
+    sessionUrl,
   );
 }
