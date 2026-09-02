@@ -98,15 +98,15 @@ export const oilGasMiningReferences: ReferenceItem[] = [
     image: "/img/markets/oil-gas-mining/references/ref_02.webp?27",
     title: "220/33kV AIS Turnkey Substation",
     description:
-      "To strengthen Sri Lanka's national power transmission grid, LS ELECTRIC executed a turnkey EPC contract for a major 220/33 kV substation in Mannar. The facility plays a critical role in supporting stable regional power distribution through an integrated high-voltage system equipped with advanced grid automation.",
+      "To strengthen Sri Lanka’s national power transmission grid, LS ELECTRIC delivered a turnkey EPC contract for a major 220/33 kV substation in Mannar. The project plays a critical role in supporting stable regional power distribution through an integrated system equipped with high-voltage switchgear, transformers, and advanced automation systems.",
     location: "Sri Lanka",
     country: "",
     modal: {
       modalTitle: "220/33kV AIS Turnkey Substation",
       images: ["/img/markets/oil-gas-mining/references/ref_02.webp?27"],
       overview: [
-        "To strengthen Sri Lanka's national power transmission grid, LS ELECTRIC executed a turnkey EPC contract for a major 220/33 kV substation in Mannar. The facility plays a critical role in supporting stable regional power distribution through an integrated high-voltage system equipped with advanced grid automation.",
-        "LS ELECTRIC managed complete end-to-end delivery—overseeing engineering, procurement, construction, and commissioning. The technical scope included high-voltage Air-Insulated Switchgear (AIS) and Gas-Insulated Switchgear (GIS), power transformers, protection and control panels, and a state-of-the-art Substation Automation System (SAS). The successful delivery established LS ELECTRIC's footprint in the Sri Lankan energy sector while highlighting its turnkey execution capabilities for large-scale utility infrastructure projects.",
+        "To strengthen Sri Lanka’s national power transmission grid, LS ELECTRIC delivered a turnkey EPC contract for a major 220/33 kV substation in Mannar. The project plays a critical role in supporting stable regional power distribution through an integrated system equipped with high-voltage switchgear, transformers, and advanced automation systems.",
+        "LS ELECTRIC provided complete end-to-end delivery—overseeing engineering, procurement, construction, and commissioning. The technical scope included high-voltage Air-Insulated Switchgear (AIS) and Gas-Insulated Switchgear (GIS), power transformers, protection and control systems, and a Substation Automation System (SAS). The successful execution established LS ELECTRIC’s presence in the Sri Lankan power market and demonstrated its capabilities in large-scale transmission infrastructure projects.",
       ],
       keyInfo: [
         { label: "Location", value: "Sri Lanka" },

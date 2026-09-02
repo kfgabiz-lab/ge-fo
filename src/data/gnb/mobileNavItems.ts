@@ -2,6 +2,8 @@ import {
   isDevicesMegaMenu,
   isSimpleMegaMenu,
 } from "@/data/gnb/types";
+import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
+import { sortMarketsGnbItems } from "@/data/gnb/mega/markets";
 import type {
   GnbMegaDepth3,
   GnbMegaProduct,
@@ -86,7 +88,12 @@ export function getMobileDepth2Items(navItem: GnbNavItem): GnbMobileDepth2Item[]
   if (!isSimpleMegaMenu(megaMenu)) return [];
 
   if (megaMenu.layout === "grid") {
-    return megaMenu.items.map((item) => ({
+    const items =
+      megaMenu.panelId === GNB_MEGA_PANEL_ID.markets
+        ? sortMarketsGnbItems(megaMenu.items)
+        : megaMenu.items;
+
+    return items.map((item) => ({
       id: item.id,
       label: item.title,
       href: item.href,

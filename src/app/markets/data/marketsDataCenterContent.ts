@@ -73,7 +73,7 @@ export const dataCenterReferences: ReferenceItem[] = [
     image: "/img/markets/data-center/references/ref_02.webp?27",
     title: "Large-Scale AI Data Center Power Distribution Project",
     description:
-      "LS ELECTRIC secured a major multi-million dollar supply contract with one of the world's leading technology and cloud service companies for a large scale AI data center project in North America.",
+      "LS ELECTRIC secured a major multi-million dollar supply contract with one of the world’s leading technology and cloud service companies for a large scale AI data center project in North America.",
     location: "North America",
     country: "",
     modal: {
@@ -82,7 +82,7 @@ export const dataCenterReferences: ReferenceItem[] = [
       overview: [
         "LS ELECTRIC secured a major multi-million dollar supply contract with one of the world's leading technology and cloud service companies for a large scale AI data center project in North America.",
         "LS ELECTRIC will provide highly reliable medium voltage power distribution solutions to support the intensive power demands and continuous operation of AI infrastructure. By leveraging an expanding North American production and service network, LS ELECTRIC will also enhance supply flexibility and significantly shorten delivery lead times to support the accelerated data center deployment.",
-        "This project demonstrates LS ELECTRIC's capability to support mission critical infrastructure for global technology leaders and reinforces its position as a trusted power solution partner for the growing AI data center market.",
+        "This project demonstrates LS ELECTRIC’s capability to support mission critical infrastructure for global technology leaders and reinforces its position as a trusted power solution partner for the growing AI data center market.",
       ],
       keyInfo: [
         { label: "Location", value: "North America" },

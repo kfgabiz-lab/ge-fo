@@ -89,14 +89,14 @@ export const commercialResidentialReferences: ReferenceItem[] = [
     image: "/img/markets/commercial-residential/references/ref_01.webp?27",
     title: "HVAC System for IFC Mall",
     description:
-      "LS ELECTRIC delivered a high-efficiency HVAC drive solution for the IFC Seoul complex, one of Korea's premier mixed-use commercial developments. By deploying 406 HVAC variable frequency drives (VFDs) with intelligent fan and pump control, the project significantly improved energy efficiency while ensuring reliable climate control across office towers, retail facilities, and hotel operations. The system achieves approximately 35% electricity cost savings, annual power consumption reduction by 14 GWh, and operating cost reduction by KRW 1.4 billion.",
+      "LS ELECTRIC delivered a high-efficiency HVAC drive solution for the IFC Seoul complex, one of Korea's premier mixed-use commercial developments. By deploying 406 HVAC variable frequency drives (VFDs) with intelligent fan and pump control, the project significantly improved energy efficiency while ensuring reliable climate control across office towers, retail facilities, and hotel operations. The system achieves approximately 35% electricity cost savings, annual power consumption reduction by 14 GWh, and operating cost  reduction by  KRW 1.4 billion.",
     location: "South Korea",
     country: "",
     modal: {
       modalTitle: "HVAC System for IFC Mall",
       images: ["/img/markets/commercial-residential/references/ref_01.webp?27"],
       overview: [
-        "LS ELECTRIC delivered a high-efficiency HVAC drive solution for the IFC Seoul complex, one of Korea's premier mixed-use commercial developments. By deploying 406 HVAC variable frequency drives (VFDs) with intelligent fan and pump control, the project significantly improved energy efficiency while ensuring reliable climate control across office towers, retail facilities, and hotel operations. The system achieves approximately 35% electricity cost savings, annual power consumption reduction by 14 GWh, and operating cost reduction by KRW 1.4 billion.\n\n- High-efficiency HVAC operation\n- Approximately 35% reduction in electricity costs\n- Annual energy savings of approximately 14 GWh\n- Reduced operating expenses\n- Stable climate control for a mixed-use commercial complex\n- Optimized fan and pump performance\n- Reliable 24/7 building operation",
+        "LS ELECTRIC delivered a high-efficiency HVAC drive solution for the IFC Seoul complex, one of Korea's premier mixed-use commercial developments. By deploying 406 HVAC variable frequency drives (VFDs) with intelligent fan and pump control, the project significantly improved energy efficiency while ensuring reliable climate control across office towers, retail facilities, and hotel operations. The system achieves approximately 35% electricity cost savings, annual power consumption reduction by 14 GWh, and operating cost  reduction by  KRW 1.4 billion.\n\n- High-efficiency HVAC operation\n- Approximately 35% reduction in electricity costs\n- Annual energy savings of approximately 14 GWh\n- Reduced operating expenses\n- Stable climate control for a mixed-use commercial complex\n- Optimized fan and pump performance\n- Reliable 24/7 building operation",
       ],
       keyInfo: [
         { label: "Location", value: "South Korea" },
