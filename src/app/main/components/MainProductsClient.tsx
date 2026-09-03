@@ -68,7 +68,9 @@ function getLinearPageCount(slideCount: number, slidesPerView: number) {
 }
 
 function canEnableProductLoop(slideCount: number, slidesPerView: number) {
-  return slideCount > 1 && slideCount > Math.ceil(slidesPerView);
+  // Swiper loop clones slides; fewer than ~2× slidesPerView causes
+  // the first slide to appear duplicated in the initial view.
+  return slideCount > 1 && slideCount >= Math.ceil(slidesPerView) * 2;
 }
 
 function getPageCount(
