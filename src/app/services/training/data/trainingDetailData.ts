@@ -140,14 +140,26 @@ const MONTH_ABBR = [
   "Dec",
 ];
 
+function depth2Of(ref: CurrDtlProductRef | null | undefined): number | null {
+  if (ref == null || typeof ref !== "object") return null;
+  const id = Number(ref.depth2);
+  return Number.isFinite(id) ? id : null;
+}
+
 function depth3Of(ref: CurrDtlProductRef | null | undefined): number | null {
   if (ref == null || typeof ref !== "object") return null;
   const id = Number(ref.depth3);
   return Number.isFinite(id) ? id : null;
 }
 
-function productRefsOf(json: CurrDtlDataJson): CurrDtlProductRef[] {
-  return [...(json.power_list ?? []), ...(json.automation_list ?? [])];
+/* power_list는 Lv2(카테고리) 기준, automation_list는 Lv3(개별 제품) 기준 — BO 편집화면 표시 단위와 동일하게 맞춘다 */
+function productRefsOf(
+  json: CurrDtlDataJson,
+): { ref: CurrDtlProductRef; depthOf: typeof depth2Of }[] {
+  return [
+    ...(json.power_list ?? []).map((ref) => ({ ref, depthOf: depth2Of })),
+    ...(json.automation_list ?? []).map((ref) => ({ ref, depthOf: depth3Of })),
+  ];
 }
 
 function extractProductNames(
@@ -156,8 +168,8 @@ function extractProductNames(
 ): string[] {
   const out: string[] = [];
   const seen = new Set<number>();
-  for (const ref of productRefsOf(json)) {
-    const id = depth3Of(ref);
+  for (const { ref, depthOf } of productRefsOf(json)) {
+    const id = depthOf(ref);
     if (id == null || seen.has(id)) continue;
     seen.add(id);
     const name = nameMap.get(id);
@@ -595,8 +607,8 @@ export async function fetchProductNamesForRows(
   const ids = new Set<number>();
   for (const raw of rows) {
     const json = (raw.dataJson ?? {}) as CurrDtlDataJson;
-    for (const ref of productRefsOf(json)) {
-      const id = depth3Of(ref);
+    for (const { ref, depthOf } of productRefsOf(json)) {
+      const id = depthOf(ref);
       if (id != null) ids.add(id);
     }
   }
