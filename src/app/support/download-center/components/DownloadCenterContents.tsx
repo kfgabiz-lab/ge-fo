@@ -198,13 +198,15 @@ function DownloadCenterContentsBody({
                   ))}
                 </div>
 
-                <PageNumbering
-                  className="devices_product_downloads__pagination"
-                  currentPage={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                  ariaLabel="Download Center pagination"
-                />
+                {totalPages > 1 ? (
+                  <PageNumbering
+                    className="devices_product_downloads__pagination"
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                    ariaLabel="Download Center pagination"
+                  />
+                ) : null}
               </>
             )}
           </div>

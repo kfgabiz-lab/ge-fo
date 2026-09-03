@@ -144,7 +144,7 @@ export function SearchProductsPanelContent({
               )}
             </div>
 
-            {isEmptyResult ? null : (
+            {isEmptyResult || totalPages <= 1 ? null : (
               <PageNumbering
                 className="search_products__pagination"
                 currentPage={currentPage}

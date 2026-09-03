@@ -142,7 +142,7 @@ export function SearchPagesPanelContent({
               )}
             </div>
 
-            {isEmptyResult ? null : (
+            {isEmptyResult || totalPages <= 1 ? null : (
               <PageNumbering
                 className="search_pages__pagination"
                 currentPage={currentPage}

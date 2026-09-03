@@ -137,7 +137,7 @@ export function SearchMediaPanelContent({
               )}
             </div>
 
-            {isEmptyResult ? null : (
+            {isEmptyResult || totalPages <= 1 ? null : (
               <PageNumbering
                 className="search_media__pagination"
                 currentPage={currentPage}

@@ -396,17 +396,19 @@ function DevicesProductDownloadsBody({
                 />
               ))}
             </div>
-            <PageNumbering
-              className="devices_product_downloads__pagination"
-              currentPage={currentPage}
-              totalPages={totalPages}
-              scrollTargetSelector=".section_tit"
-              onPageChange={(page) => {
-                setCurrentPage(page);
-                titleRef.current?.focus();
-              }}
-              ariaLabel="Downloads pagination"
-            />
+            {totalPages > 1 ? (
+              <PageNumbering
+                className="devices_product_downloads__pagination"
+                currentPage={currentPage}
+                totalPages={totalPages}
+                scrollTargetSelector=".section_tit"
+                onPageChange={(page) => {
+                  setCurrentPage(page);
+                  titleRef.current?.focus();
+                }}
+                ariaLabel="Downloads pagination"
+              />
+            ) : null}
               </>
             )}
           </div>

@@ -147,7 +147,7 @@ export default function SearchDocumentsPanel({
               )}
             </div>
 
-            {isLoading || isEmptyResult ? null : (
+            {isLoading || isEmptyResult || totalPages <= 1 ? null : (
               <PageNumbering
                 className="search_documents__pagination"
                 currentPage={currentPage}

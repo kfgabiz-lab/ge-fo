@@ -88,13 +88,15 @@ export default function CompanyFeedListSection({
                 detailHref={detailHref}
                 highlight={searchValue}
               />
-              <PageNumbering
-                className={`${prefix}__pagination`}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={onPageChange}
-                ariaLabel={paginationLabels[variant]}
-              />
+              {totalPages > 1 ? (
+                <PageNumbering
+                  className={`${prefix}__pagination`}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={onPageChange}
+                  ariaLabel={paginationLabels[variant]}
+                />
+              ) : null}
             </>
           )}
         </div>

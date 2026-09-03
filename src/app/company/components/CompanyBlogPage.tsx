@@ -340,13 +340,15 @@ export default function CompanyBlogPage({
                   ))}
                 </ul>
 
-                <PageNumbering
-                  className="company-blog-list__pagination"
-                  currentPage={pageIndex + 1}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                  ariaLabel="Blog pagination"
-                />
+                {totalPages > 1 ? (
+                  <PageNumbering
+                    className="company-blog-list__pagination"
+                    currentPage={pageIndex + 1}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                    ariaLabel="Blog pagination"
+                  />
+                ) : null}
               </>
             )}
           </div>
