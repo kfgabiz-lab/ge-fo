@@ -56,7 +56,16 @@ export default function CompanyMissionSection() {
                   alt="FUTURING SMART ENERGY"
                   className="company-mission__logo company-mission__logo--mission"
                 />
-                <p className="company-mission__text">{companyMission.missionText}</p>
+                <p className="company-mission__text">
+                  {companyMission.missionText
+                    .split(/<br\s*\/?>/i)
+                    .map((line, index) => (
+                      <span key={index}>
+                        {index > 0 ? <br /> : null}
+                        {line}
+                      </span>
+                    ))}
+                </p>
               </div>
             </div>
             <div className="company-mission__pillars">

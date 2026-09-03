@@ -21,7 +21,7 @@ export const companyMission = {
   bgImageMo: `${IMG}/mission-bg-mo.webp`,
   missionLogo: `${IMG}/mission-logo.svg`,
   missionText:
-    "LS ELECTRIC, which has been pioneering the power and automation industries for the past 40 years, now offers smart convergence solutions by combining ICT and DC technologies.",
+    "With over 50 years of innovation in the power and automation industries,<br/>LS ELECTRIC delivers smart convergence solutions integrating ICT and DC technologies.",
   pillars: [
     {
       id: "futuring",
@@ -50,8 +50,8 @@ export const companyMission = {
   coreValueArrow: `${IMG}/mission-arrow.webp`,
   coreValuePlusIcon: `${IMG}/mission-value-plus.svg`,
   coreValues: [
-    { id: "challenge", label: "Challenge", icon: `${IMG}/value-challenge.svg` },
-    { id: "agility", label: "Agility", icon: `${IMG}/value-agility.svg` },
+    { id: "agility", label: "Agility", icon: `${IMG}/value-challenge.svg` },
+    { id: "challenge", label: "Challenge", icon: `${IMG}/value-agility.svg` },
     { id: "excellence", label: "Excellence", icon: `${IMG}/value-excellence.svg` },
   ] satisfies CompanyCoreValue[],
   philosophyLabel: "Philosophy",
