@@ -217,6 +217,6 @@ export function eventsAdjacentQuery(id: string | number) {
     sortField: "events.period_from",
     titleField: "events.title",
     slugField: "seo.slug",
-    where: { ...EVENTS_VISIBLE_WHERE, ...EVENTS_PAST_WHERE },
+    where: { ...EVENTS_VISIBLE_WHERE },
   };
 }
