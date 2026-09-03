@@ -32,7 +32,7 @@ export default function TechHubContents({ empty = false }: TechHubContentsProps)
 }
 
 function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
-  const { query, page, setPage } = useTechHubQuery();
+  const { query, page, setPage, filtersSettled } = useTechHubQuery();
   const { getSelectedCategoryValues } = useTechHubFilter();
 
   const selectedCodes = getSelectedCategoryValues("category");
@@ -48,12 +48,19 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
   // query 변경 시 페이지 초기화는 setQuery(provider)가 이미 처리한다 — 여기서도
   // query를 deps에 넣으면 LIST 버튼 복귀/뒤로가기로 검색어와 페이지가 함께
   // 복원될 때 이 effect가 복원된 페이지를 다시 1로 덮어써 버린다.
+  //
+  // 필터(카테고리·인증서) 복원도 같은 문제가 있다 — LIST 버튼 복귀 시 Bridge가
+  // toggleFilter로 필터를 다시 체크해 주는데, 이건 codesKey/certsKey를 "사용자가 방금
+  // 필터를 바꾼 것"과 똑같이 바꿔서, firstResetRef 가드(최초 1회만 건너뜀)만으로는
+  // 부족하다 — 복원은 마운트 다음 렌더에야 반영되기 때문. filtersSettled가 false인
+  // 동안(=필터 복원이 아직 끝나지 않은 동안)에는 건너뛴다.
   const firstResetRef = useRef(true);
   useEffect(() => {
     if (firstResetRef.current) {
       firstResetRef.current = false;
       return;
     }
+    if (!filtersSettled) return;
     setPage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codesKey, certsKey]);
