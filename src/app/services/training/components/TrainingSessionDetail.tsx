@@ -106,6 +106,17 @@ function scrollToSection(id: string) {
   );
 }
 
+/**
+ * 모바일 여부. Google 캘린더 render URL은 모바일에서 앱 대신 PC 웹 화면으로
+ * 열리므로, 모바일에서는 OS 캘린더로 연결되는 .ics 방식으로 대체하기 위해 사용.
+ */
+function isMobileDevice() {
+  if (typeof navigator === "undefined") return false;
+  if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return true;
+  // iPadOS는 데스크톱 Safari로 위장 → 터치 포인트로 보정
+  return navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+}
+
 type AgendaGroup = {
   date: string;
   label: string; 
@@ -188,6 +199,12 @@ export default function TrainingSessionDetail({
 
   const handleGoogleCalendar = useCallback(() => {
     if (!calendarEvent) return;
+    // 모바일: render URL이 PC 웹으로 열리고 팝업도 차단되므로 .ics로 대체
+    // (Android는 Google 캘린더 앱, iOS는 기본 캘린더의 일정 추가 화면으로 연결)
+    if (isMobileDevice()) {
+      downloadIcs(calendarEvent);
+      return;
+    }
     // 교육일별 개별 이벤트 → 날짜마다 Google 캘린더 등록 창을 연다
     // (Google은 URL 하나당 이벤트 하나만 생성 가능)
     for (const url of buildGoogleCalendarUrls(calendarEvent)) {
