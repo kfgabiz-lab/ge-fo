@@ -40,9 +40,9 @@ export default async function TechHubViewDetailPage({
   if (!detail) notFound();
 
   const currentUrl = pageUrl(`/support/tech-hub/view/${id}`);
-  const videoUrl = detail.chapters[0]?.videoUrl ?? "";
+  const videoUrl = detail.chapters?.[0]?.videoUrl ?? "";
   const videoId = videoUrl ? getYoutubeIdFromUrl(videoUrl) : "";
-  const lv2Code = detail.categories[0]?.categoryL2Id;
+  const lv2Code = detail.categories?.[0]?.categoryL2Id;
   const lv2Category = lv2Code
     ? (await fetchCategoriesByCode([lv2Code])).get(lv2Code)
     : undefined;

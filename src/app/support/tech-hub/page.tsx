@@ -34,7 +34,7 @@ export default async function TechHubPage({
     fetchTechHubContents({ size: 12 }),
   ]);
   const lv2Codes = contents.content
-    .map((card) => card.categories[0]?.categoryL2Id)
+    .map((card) => card.categories?.[0]?.categoryL2Id)
     .filter((code): code is string => Boolean(code));
   const lv2CategoryMap = await fetchCategoriesByCode(lv2Codes);
 
@@ -43,7 +43,7 @@ export default async function TechHubPage({
     extra: {
       hasPart: contents.content.map((card) => {
         const videoId = card.videoUrl ? getYoutubeIdFromUrl(card.videoUrl) : "";
-        const lv2Code = card.categories[0]?.categoryL2Id;
+        const lv2Code = card.categories?.[0]?.categoryL2Id;
         const lv2Category = lv2Code ? lv2CategoryMap.get(lv2Code) : undefined;
         return {
           "@type": "VideoObject",
