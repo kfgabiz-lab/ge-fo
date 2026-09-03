@@ -5,6 +5,7 @@ import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { formatPhoneDisplay } from "@/lib/formatPhone";
 import { sanitizeHtml } from "@/lib/sanitizeHtml";
+import { stripHtmlText } from "@/lib/stripHtmlText";
 import type { PageDataItem } from "@/lib/pageData";
 import { fetchProductNamesByIds } from "@/lib/training/trainingProductTree";
 import {
@@ -486,7 +487,8 @@ export function toTrainingSessionDetail(
       timeFrom: eventTimeFrom || undefined,
       timeTo: eventTimeTo || eventTimeFrom || undefined,
       location: addressFull || undefined,
-      description: d2.content || undefined,
+      // 캘린더 메모에는 HTML 태그가 아닌 순수 텍스트만 넣는다
+      description: stripHtmlText(d2.content) || undefined,
       organizerName: d2.email ? ICS_ORGANIZER_NAME : undefined,
       organizerEmail: d2.email || undefined,
       categories: curriculum.title || undefined,
