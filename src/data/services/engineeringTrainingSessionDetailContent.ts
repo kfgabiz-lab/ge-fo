@@ -10,20 +10,12 @@ export type EngineeringTrainingAgendaRow = {
   trainer?: string;
 };
 
-export type EngineeringTrainingSessionEventDay = {
-  date: string;
-  timeFrom?: string;
-  timeTo?: string;
-};
-
 export type EngineeringTrainingSessionEvent = {
   title: string;
   startIso: string;
   endIso?: string;
   timeFrom?: string;
   timeTo?: string;
-  /** 교육일별 개별 이벤트 목록. 있으면 캘린더 공유 시 날짜별로 개별 이벤트를 생성 */
-  days?: EngineeringTrainingSessionEventDay[];
   location?: string;
   description?: string;
   organizerName?: string;

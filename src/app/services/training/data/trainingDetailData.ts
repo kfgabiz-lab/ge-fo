@@ -5,7 +5,6 @@ import { mergeSeoMetadata } from "@/lib/pageDataSeo";
 import { formatDisplayDate } from "@/lib/formatDate";
 import { formatPhoneDisplay } from "@/lib/formatPhone";
 import { sanitizeHtml } from "@/lib/sanitizeHtml";
-import { stripHtmlText } from "@/lib/stripHtmlText";
 import type { PageDataItem } from "@/lib/pageData";
 import { fetchProductNamesByIds } from "@/lib/training/trainingProductTree";
 import {
@@ -460,22 +459,6 @@ export function toTrainingSessionDetail(
   const lastDayEndTimes = timesOn(lastDay, (s) => s.time_to || s.time_from);
   const eventTimeTo = lastDayEndTimes[lastDayEndTimes.length - 1];
 
-  // 교육일별 개별 이벤트: 날짜별로 그 날의 가장 빠른 시작 ~ 가장 늦은 종료 시각
-  const eventDayKeys: string[] = [];
-  for (const s of scheduleSorted) {
-    const day = (s.date ?? "").slice(0, 10);
-    if (day && !eventDayKeys.includes(day)) eventDayKeys.push(day);
-  }
-  const eventDays = eventDayKeys.map((day) => {
-    const froms = timesOn(day, (s) => s.time_from);
-    const tos = timesOn(day, (s) => s.time_to || s.time_from);
-    return {
-      date: day,
-      timeFrom: froms[0] || undefined,
-      timeTo: tos[tos.length - 1] || froms[0] || undefined,
-    };
-  });
-
   return {
     courseHref,
     curriculumId,
@@ -502,10 +485,8 @@ export function toTrainingSessionDetail(
         (d2.training_date_to ?? "").slice(0, 10) || lastDay || undefined,
       timeFrom: eventTimeFrom || undefined,
       timeTo: eventTimeTo || eventTimeFrom || undefined,
-      days: eventDays.length > 0 ? eventDays : undefined,
       location: addressFull || undefined,
-      // 캘린더 메모에는 HTML 태그가 아닌 순수 텍스트만 넣는다
-      description: stripHtmlText(d2.content) || undefined,
+      description: d2.content || undefined,
       organizerName: d2.email ? ICS_ORGANIZER_NAME : undefined,
       organizerEmail: d2.email || undefined,
       categories: curriculum.title || undefined,

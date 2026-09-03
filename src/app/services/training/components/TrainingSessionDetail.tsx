@@ -18,7 +18,7 @@ import TrainingSessionDetailTableScroll from "./TrainingSessionDetailTableScroll
 import TrainingSessionShare from "./TrainingSessionShare";
 import { getLenisInstance, getWindowScrollY } from "@/lib/lenisScroll";
 import {
-  buildGoogleCalendarUrls,
+  buildGoogleCalendarUrl,
   downloadIcs,
   hasValidEventDate,
   type CalendarEvent,
@@ -188,11 +188,11 @@ export default function TrainingSessionDetail({
 
   const handleGoogleCalendar = useCallback(() => {
     if (!calendarEvent) return;
-    // 교육일별 개별 이벤트 → 날짜마다 Google 캘린더 등록 창을 연다
-    // (Google은 URL 하나당 이벤트 하나만 생성 가능)
-    for (const url of buildGoogleCalendarUrls(calendarEvent)) {
-      window.open(url, "_blank", "noopener,noreferrer");
-    }
+    window.open(
+      buildGoogleCalendarUrl(calendarEvent),
+      "_blank",
+      "noopener,noreferrer",
+    );
   }, [calendarEvent]);
 
   const handleIcalDownload = useCallback(() => {
