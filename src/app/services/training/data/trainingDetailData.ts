@@ -446,19 +446,6 @@ export function toTrainingSessionDetail(
   const firstSch = scheduleSorted[0];
   const lastSch = scheduleSorted[scheduleSorted.length - 1];
 
-  // 다중 일 교육: 가장 빠른 교육일의 가장 빠른 시작 시각 ~ 가장 늦은 교육일의 가장 늦은 종료 시각
-  const firstDay = (firstSch?.date ?? "").slice(0, 10);
-  const lastDay = (lastSch?.date ?? "").slice(0, 10);
-  const timesOn = (day: string, pick: (s: TrainingScheduleItemRaw) => string | undefined) =>
-    scheduleSorted
-      .filter((s) => (s.date ?? "").slice(0, 10) === day)
-      .map(pick)
-      .filter((t): t is string => Boolean(t))
-      .sort();
-  const eventTimeFrom = timesOn(firstDay, (s) => s.time_from)[0];
-  const lastDayEndTimes = timesOn(lastDay, (s) => s.time_to || s.time_from);
-  const eventTimeTo = lastDayEndTimes[lastDayEndTimes.length - 1];
-
   return {
     courseHref,
     curriculumId,
@@ -480,11 +467,10 @@ export function toTrainingSessionDetail(
     calendar: engineeringTrainingSessionCalendarLabels,
     event: {
       title: d2.title ?? "",
-      startIso: (d2.training_date_from ?? "").slice(0, 10) || firstDay,
-      endIso:
-        (d2.training_date_to ?? "").slice(0, 10) || lastDay || undefined,
-      timeFrom: eventTimeFrom || undefined,
-      timeTo: eventTimeTo || eventTimeFrom || undefined,
+      startIso: (d2.training_date_from ?? "").slice(0, 10),
+      endIso: (d2.training_date_to ?? "").slice(0, 10) || undefined,
+      timeFrom: firstSch?.time_from || undefined,
+      timeTo: lastSch?.time_to || firstSch?.time_from || undefined,
       location: addressFull || undefined,
       description: d2.content || undefined,
       organizerName: d2.email ? ICS_ORGANIZER_NAME : undefined,

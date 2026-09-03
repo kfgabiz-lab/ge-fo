@@ -21,8 +21,6 @@ export function buildShareHref(id: string, url: string, title: string): string {
 export interface CalendarEvent {
   title: string;
   startIso: string;
-  /** 다중 일 교육의 마지막 교육일(YYYY-MM-DD). 없으면 startIso와 동일한 하루 일정으로 처리 */
-  endIso?: string;
   timeFrom?: string;
   timeTo?: string;
   location?: string;
@@ -66,24 +64,15 @@ export function hasValidEventDate(ev: CalendarEvent): boolean {
   return /^\d{4}-\d{2}-\d{2}/.test(ev.startIso ?? "");
 }
 
-/** endIso가 없거나 startIso보다 앞서면 startIso를 종료일로 사용 (ISO 날짜는 문자열 비교로 대소 판별 가능) */
-function resolveEndIso(ev: CalendarEvent): string {
-  const end = (ev.endIso ?? "").slice(0, 10);
-  const start = ev.startIso.slice(0, 10);
-  return end && end >= start ? end : start;
-}
-
 export function buildGoogleCalendarUrl(ev: CalendarEvent): string {
   const allDay = !ev.timeFrom;
-  const endIso = resolveEndIso(ev);
   let dates: string;
   if (allDay) {
     const start = ev.startIso.slice(0, 10).replace(/-/g, "");
-    const end = endIso.replace(/-/g, "");
-    dates = `${start}/${addOneDayCompact(end)}`;
+    dates = `${start}/${addOneDayCompact(start)}`;
   } else {
     const start = toCompact(ev.startIso, ev.timeFrom);
-    const end = toCompact(endIso, ev.timeTo ?? ev.timeFrom);
+    const end = toCompact(ev.startIso, ev.timeTo ?? ev.timeFrom);
     dates = `${start}/${end}`;
   }
   const params = new URLSearchParams({
@@ -108,13 +97,12 @@ function nowStampUtc(): string {
 export function buildIcsContent(ev: CalendarEvent): string {
   const allDay = !ev.timeFrom;
   const startCompact = ev.startIso.slice(0, 10).replace(/-/g, "");
-  const endCompact = resolveEndIso(ev).replace(/-/g, "");
   const dtStart = allDay
     ? `DTSTART;VALUE=DATE:${startCompact}`
     : `DTSTART:${toCompact(ev.startIso, ev.timeFrom)}`;
   const dtEnd = allDay
-    ? `DTEND;VALUE=DATE:${addOneDayCompact(endCompact)}`
-    : `DTEND:${toCompact(resolveEndIso(ev), ev.timeTo ?? ev.timeFrom)}`;
+    ? `DTEND;VALUE=DATE:${addOneDayCompact(startCompact)}`
+    : `DTEND:${toCompact(ev.startIso, ev.timeTo ?? ev.timeFrom)}`;
   const uid = `${startCompact}-${Math.random().toString(36).slice(2)}@lselectric`;
 
   const lines = [
