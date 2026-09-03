@@ -68,6 +68,15 @@ type TechHubQueryContextValue = {
    * 구분하지 못하면 판정 전에 찍힌 빈 활성 필터를 그대로 저장해 복원 값을 지워버린다.
    */
   filterRestoreReady: boolean;
+  /**
+   * 필터 복원(Bridge가 toggleFilter를 호출하는 것)이 완전히 끝났는지. 복원 중인
+   * toggleFilter 호출은 "사용자가 방금 필터를 바꿨다"와 겉보기에 똑같아서, 이 값을
+   * false인 동안엔 필터 변경 시 페이지를 1로 되돌리는 로직(TechHubContentsBody)이
+   * 복원 중인 페이지 번호를 덮어쓰지 않도록 잠시 건너뛰어야 한다.
+   */
+  filtersSettled: boolean;
+  /** Bridge가 복원 적용(또는 "복원할 것 없음" 판정)을 마쳤을 때 호출한다. */
+  markFiltersSettled: () => void;
 };
 
 const TechHubQueryContext = createContext<TechHubQueryContextValue | null>(null);
@@ -90,21 +99,35 @@ export function useTechHubQuery(): TechHubQueryContextValue {
  */
 function TechHubFilterMemoryBridge() {
   const filter = useTechHubFilter();
-  const { restoredFilterIds, filterRestoreReady } = useTechHubQuery();
+  const { restoredFilterIds, filterRestoreReady, markFiltersSettled } = useTechHubQuery();
   const hasAppliedRestore = useRef(false);
 
   useEffect(() => {
     if (hasAppliedRestore.current) return;
-    if (restoredFilterIds.length === 0) return;
+    if (!filterRestoreReady) return;
     hasAppliedRestore.current = true;
+    if (restoredFilterIds.length === 0) {
+      // 복원할 필터가 없는 경우엔 toggleFilter로 인한 지연 반영을 기다릴 필요가 없어
+      // 바로 "복원 시도는 끝났다"고 알린다 — 필터 변경 시 페이지를 1로 되돌리는 로직이
+      // 계속 멈춰 있지 않도록.
+      markFiltersSettled();
+      return;
+    }
     for (const id of restoredFilterIds) {
       filter.toggleFilter(id, true);
     }
+    // 여기서 바로 markFiltersSettled()를 부르지 않는다 — 방금 부른 toggleFilter는 다른
+    // 컴포넌트(store.Provider)의 state 갱신이라 이 렌더에는 아직 반영 안 됐다. activeIdsKey가
+    // 실제로 바뀌는 걸 기다리는 아래 effect에서 대신 알린다(안 그러면 필터가 실제로 적용되기
+    // 전에 "끝났다"고 알려서, 진짜 반영되는 순간 페이지 리셋 로직이 또 끼어든다).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [restoredFilterIds]);
+  }, [restoredFilterIds, filterRestoreReady]);
 
   const activeIdsKey = filter.activeChips.map((chip) => chip.id).join(",");
   useEffect(() => {
+    if (hasAppliedRestore.current && restoredFilterIds.length > 0) {
+      markFiltersSettled();
+    }
     // 복귀 여부 판정이 아직 안 끝났으면(부모 effect가 이 컴포넌트보다 늦게 도는 최초 렌더 등)
     // 지금 빈 상태를 "선택 없음"으로 잘못 기억해 복원 값을 지워버리지 않도록 건너뛴다.
     // 판정이 끝났어도 복원 적용이 아직이면(비동기로 카테고리 트리가 로드되기 전 등) 마찬가지.
@@ -138,6 +161,8 @@ export function TechHubFilterProvider({
   const [resetSignal, setResetSignal] = useState(0);
   const [restoredFilterIds, setRestoredFilterIds] = useState<string[]>([]);
   const [filterRestoreReady, setFilterRestoreReady] = useState(false);
+  const [filtersSettled, setFiltersSettled] = useState(false);
+  const markFiltersSettled = () => setFiltersSettled(true);
 
   const setPage = (p: number) => {
     setPageState(p);
@@ -251,6 +276,8 @@ export function TechHubFilterProvider({
       notifyReset,
       restoredFilterIds,
       filterRestoreReady,
+      filtersSettled,
+      markFiltersSettled,
     }),
     [
       query,
@@ -261,6 +288,7 @@ export function TechHubFilterProvider({
       resetSignal,
       restoredFilterIds,
       filterRestoreReady,
+      filtersSettled,
     ],
   );
 
