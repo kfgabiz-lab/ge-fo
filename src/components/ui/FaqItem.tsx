@@ -40,6 +40,7 @@ export default function FaqItem({
         className="faq_answer_wrap"
         role="region"
         aria-hidden={!isOpen}
+        onClick={isOpen ? onToggle : undefined}
       >
         <div className="faq_answer_inner">
           <p className="faq_answer" data-slugkey="answer">{answer}</p>

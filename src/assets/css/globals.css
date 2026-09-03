@@ -2016,6 +2016,7 @@ section.common_faq .faq_answer_wrap {
 
 section.common_faq .faq_item.is-open .faq_answer_wrap {
   grid-template-rows: 1fr;
+  cursor: pointer;
 }
 
 section.common_faq .faq_answer_inner {

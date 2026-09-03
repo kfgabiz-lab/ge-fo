@@ -90,19 +90,13 @@ section.markets_solutions .markets_solutions__hotspot::after {
   pointer-events: none;
   content: "";
   animation: markets-solutions-hotspot-ripple 2s ease-out infinite;
- 
-}
-
-section.markets_solutions .markets_solutions__hotspot::after {
-  animation-delay: 1s;
 }
 
 section.markets_solutions .markets_solutions__hotspot:hover::before,
 section.markets_solutions .markets_solutions__hotspot:hover::after,
 section.markets_solutions .markets_solutions__hotspot.is-active::before,
 section.markets_solutions .markets_solutions__hotspot.is-active::after {
-  animation: none;
-  box-shadow: none;
+  opacity: 0;
 }
 
 section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
