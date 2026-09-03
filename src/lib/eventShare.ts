@@ -18,6 +18,13 @@ export function buildShareHref(id: string, url: string, title: string): string {
 }
 
 
+export interface CalendarEventDay {
+  /** 교육일 (YYYY-MM-DD) */
+  date: string;
+  timeFrom?: string;
+  timeTo?: string;
+}
+
 export interface CalendarEvent {
   title: string;
   startIso: string;
@@ -25,6 +32,11 @@ export interface CalendarEvent {
   endIso?: string;
   timeFrom?: string;
   timeTo?: string;
+  /**
+   * 교육일별 개별 이벤트 목록. 지정하면 캘린더 공유 시 각 날짜를
+   * 그 날의 시작/종료 시각을 가진 별도 이벤트로 생성한다.
+   */
+  days?: CalendarEventDay[];
   location?: string;
   description?: string;
   url?: string;
@@ -32,6 +44,14 @@ export interface CalendarEvent {
   organizerEmail?: string;
   categories?: string;
   attachUrl?: string;
+}
+
+/** 캘린더 이벤트 하나에 대응하는 날짜/시간 구간 */
+interface EventSpan {
+  startIso: string;
+  endIso: string;
+  timeFrom?: string;
+  timeTo?: string;
 }
 
 function toCompact(dateIso: string, time?: string): string {
@@ -73,17 +93,39 @@ function resolveEndIso(ev: CalendarEvent): string {
   return end && end >= start ? end : start;
 }
 
-export function buildGoogleCalendarUrl(ev: CalendarEvent): string {
-  const allDay = !ev.timeFrom;
-  const endIso = resolveEndIso(ev);
+/**
+ * 이벤트를 생성할 날짜/시간 구간 목록.
+ * days가 있으면 교육일별 개별 구간, 없으면 startIso~endIso 단일 구간.
+ */
+function resolveEventSpans(ev: CalendarEvent): EventSpan[] {
+  if (ev.days && ev.days.length > 0) {
+    return ev.days.map((d) => ({
+      startIso: d.date.slice(0, 10),
+      endIso: d.date.slice(0, 10),
+      timeFrom: d.timeFrom,
+      timeTo: d.timeTo,
+    }));
+  }
+  return [
+    {
+      startIso: ev.startIso.slice(0, 10),
+      endIso: resolveEndIso(ev),
+      timeFrom: ev.timeFrom,
+      timeTo: ev.timeTo,
+    },
+  ];
+}
+
+function buildGoogleCalendarUrlForSpan(ev: CalendarEvent, span: EventSpan): string {
+  const allDay = !span.timeFrom;
   let dates: string;
   if (allDay) {
-    const start = ev.startIso.slice(0, 10).replace(/-/g, "");
-    const end = endIso.replace(/-/g, "");
+    const start = span.startIso.replace(/-/g, "");
+    const end = span.endIso.replace(/-/g, "");
     dates = `${start}/${addOneDayCompact(end)}`;
   } else {
-    const start = toCompact(ev.startIso, ev.timeFrom);
-    const end = toCompact(endIso, ev.timeTo ?? ev.timeFrom);
+    const start = toCompact(span.startIso, span.timeFrom);
+    const end = toCompact(span.endIso, span.timeTo ?? span.timeFrom);
     dates = `${start}/${end}`;
   }
   const params = new URLSearchParams({
@@ -96,6 +138,20 @@ export function buildGoogleCalendarUrl(ev: CalendarEvent): string {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
+/**
+ * 교육일별 Google 캘린더 등록 URL 목록.
+ * Google은 URL 하나당 이벤트 하나만 만들 수 있어 days가 여러 개면
+ * URL도 여러 개가 되며, 호출부에서 각각 새 창으로 열어야 한다.
+ */
+export function buildGoogleCalendarUrls(ev: CalendarEvent): string[] {
+  return resolveEventSpans(ev).map((span) => buildGoogleCalendarUrlForSpan(ev, span));
+}
+
+/** 단일 이벤트용 Google 캘린더 URL (days가 있으면 첫 교육일 기준) */
+export function buildGoogleCalendarUrl(ev: CalendarEvent): string {
+  return buildGoogleCalendarUrls(ev)[0];
+}
+
 function nowStampUtc(): string {
   const dt = new Date();
   const p = (n: number) => String(n).padStart(2, "0");
@@ -105,23 +161,19 @@ function nowStampUtc(): string {
   );
 }
 
-export function buildIcsContent(ev: CalendarEvent): string {
-  const allDay = !ev.timeFrom;
-  const startCompact = ev.startIso.slice(0, 10).replace(/-/g, "");
-  const endCompact = resolveEndIso(ev).replace(/-/g, "");
+function buildVeventLines(ev: CalendarEvent, span: EventSpan): string[] {
+  const allDay = !span.timeFrom;
+  const startCompact = span.startIso.replace(/-/g, "");
+  const endCompact = span.endIso.replace(/-/g, "");
   const dtStart = allDay
     ? `DTSTART;VALUE=DATE:${startCompact}`
-    : `DTSTART:${toCompact(ev.startIso, ev.timeFrom)}`;
+    : `DTSTART:${toCompact(span.startIso, span.timeFrom)}`;
   const dtEnd = allDay
     ? `DTEND;VALUE=DATE:${addOneDayCompact(endCompact)}`
-    : `DTEND:${toCompact(resolveEndIso(ev), ev.timeTo ?? ev.timeFrom)}`;
+    : `DTEND:${toCompact(span.endIso, span.timeTo ?? span.timeFrom)}`;
   const uid = `${startCompact}-${Math.random().toString(36).slice(2)}@lselectric`;
 
-  const lines = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//LS ELECTRIC//Training//EN",
-    "CALSCALE:GREGORIAN",
+  return [
     "BEGIN:VEVENT",
     `UID:${uid}`,
     `DTSTAMP:${nowStampUtc()}`,
@@ -137,6 +189,16 @@ export function buildIcsContent(ev: CalendarEvent): string {
     ev.categories ? `CATEGORIES:${escapeIcs(ev.categories)}` : "",
     ev.attachUrl ? `ATTACH:${ev.attachUrl}` : "",
     "END:VEVENT",
+  ].filter(Boolean);
+}
+
+export function buildIcsContent(ev: CalendarEvent): string {
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//LS ELECTRIC//Training//EN",
+    "CALSCALE:GREGORIAN",
+    ...resolveEventSpans(ev).flatMap((span) => buildVeventLines(ev, span)),
     "END:VCALENDAR",
   ].filter(Boolean);
 
