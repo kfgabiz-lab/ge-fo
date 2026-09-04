@@ -27,6 +27,7 @@ import {
   buildHwProductTechHubBannerCopy,
   fetchProductTechHubBanner,
 } from "@/data/support/techHubData";
+import { productDetailHelpCards } from "../../data/motorControlContent";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildProductJsonLdGraph } from "@/lib/structuredData/productGraph";
 import "@/assets/css/devices-systems.css";
@@ -209,6 +210,7 @@ export default async function GenericProductDetail({
         <DevicesHelp
           variant="overlay"
           sectionId="product-help"
+          cards={productDetailHelpCards}
           connectPortalHref={detail.connectPortal}
         />
       </DevicesProductNavScope>

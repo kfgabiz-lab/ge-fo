@@ -222,6 +222,13 @@ export const motorControlHelpCards: DevicesHelpCard[] = [
   },
 ];
 
+/** LV3 product detail — Figma help card images (distinct from LV2 product-range). */
+export const productDetailHelpCards: DevicesHelpCard[] =
+  motorControlHelpCards.map((card, index) => ({
+    ...card,
+    image: `/img/devices-systems/devices_help_product_0${index + 1}.webp`,
+  }));
+
 export const motorControlHighlights: HighlightNewsItem[] = [
   {
     id: "ds-hl-1",

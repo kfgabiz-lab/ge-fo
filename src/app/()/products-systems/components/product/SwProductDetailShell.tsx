@@ -33,6 +33,7 @@ import {
   SW_PRODUCT_NAV_ITEMS,
   SW_PRODUCT_OTHER_PRODUCTS_TITLE,
 } from "../../data/swProductCommon";
+import { productDetailHelpCards } from "../../data/motorControlContent";
 
 const swFaqDescription = (
   <>
@@ -175,6 +176,7 @@ export default function SwProductDetailShell({
         <DevicesHelp
           variant="overlay"
           sectionId="product-help"
+          cards={productDetailHelpCards}
           connectPortalHref={connectPortalHref}
         />
       </DevicesProductNavScope>
