@@ -24,6 +24,23 @@ export class ApiError extends Error {
   }
 }
 
+const DEV_SITE_ID_COOKIE = "ge_dev_site_id";
+
+async function resolveSiteId(isServer: boolean): Promise<string> {
+  if (isServer) {
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    const devSiteId = cookieStore.get(DEV_SITE_ID_COOKIE)?.value;
+    return devSiteId || SITE_ID;
+  }
+
+  const match = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(`${DEV_SITE_ID_COOKIE}=`));
+  const devSiteId = match?.split("=")[1];
+  return devSiteId || SITE_ID;
+}
+
 export async function fetchApi<T>(
   endpoint: string,
   init?: RequestInit,
@@ -33,7 +50,7 @@ export async function fetchApi<T>(
 
   const headers = new Headers(init?.headers);
   if (!headers.has("X-Site-Id")) {
-    headers.set("X-Site-Id", SITE_ID);
+    headers.set("X-Site-Id", await resolveSiteId(isServer));
   }
 
   const cache = init?.cache ?? "no-store";
@@ -67,7 +84,7 @@ export async function fetchApiText(
 
   const headers = new Headers(init?.headers);
   if (!headers.has("X-Site-Id")) {
-    headers.set("X-Site-Id", SITE_ID);
+    headers.set("X-Site-Id", await resolveSiteId(isServer));
   }
 
   const cache = init?.cache ?? "no-store";

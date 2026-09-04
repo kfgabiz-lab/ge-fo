@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { fetchApi } from "@/lib/api";
-import { GNB_MEGA_PANEL_ID } from "@/data/gnb/panelIds";
+import { GNB_MEGA_PANEL_ID, getGnbMegaPanelId } from "@/data/gnb/panelIds";
 import type {
   GnbDevicesMegaMenu,
   GnbNavItem,
@@ -18,6 +18,7 @@ export type FoGnbMenuApiNode = {
   url: string | null;
   icon: string | null;
   sortOrder: number;
+  gnbTemplate: string | null;
   children: FoGnbMenuApiNode[];
 };
 
@@ -48,13 +49,6 @@ export const fetchGnbMenuData = cache(
   },
 );
 
-const SECTIONS_PANEL_IDS_BY_POSITION = [
-  GNB_MEGA_PANEL_ID.services,
-  GNB_MEGA_PANEL_ID.support,
-  GNB_MEGA_PANEL_ID.company,
-  GNB_MEGA_PANEL_ID.careers,
-];
-
 function buildGridMegaMenu(node: FoGnbMenuApiNode): GnbSimpleMegaMenu {
   return {
     type: "simple",
@@ -66,7 +60,7 @@ function buildGridMegaMenu(node: FoGnbMenuApiNode): GnbSimpleMegaMenu {
 
 function buildSectionsMegaMenu(
   node: FoGnbMenuApiNode,
-  sectionsPosition: number,
+  gnbTemplate: string,
 ): GnbSimpleMegaMenu {
   const sections: GnbSimpleMegaSection[] = (node.children ?? []).map(
     (section) => ({
@@ -78,9 +72,7 @@ function buildSectionsMegaMenu(
 
   return {
     type: "simple",
-    panelId:
-      SECTIONS_PANEL_IDS_BY_POSITION[sectionsPosition] ??
-      `gnb-mega-panel-${node.id}`,
+    panelId: getGnbMegaPanelId(gnbTemplate),
     layout: "sections",
     sections,
   };
@@ -95,10 +87,8 @@ export function resolveGnbNavItems(
     return [];
   }
 
-  return nodes.map((node, index) => {
-    const order = index + 1;
-
-    if (order === 1) {
+  return nodes.map((node) => {
+    if (node.gnbTemplate === "devices") {
       return {
         id: "devices",
         label: node.name,
@@ -108,16 +98,19 @@ export function resolveGnbNavItems(
     }
 
     const hasChildren = (node.children?.length ?? 0) > 0;
+    const megaMenu = !hasChildren
+      ? undefined
+      : node.gnbTemplate === "markets"
+        ? buildGridMegaMenu(node)
+        : node.gnbTemplate
+          ? buildSectionsMegaMenu(node, node.gnbTemplate)
+          : undefined;
 
     return {
       id: String(node.id),
       label: node.name,
       href: node.url ?? "",
-      megaMenu: !hasChildren
-        ? undefined
-        : order === 2
-          ? buildGridMegaMenu(node)
-          : buildSectionsMegaMenu(node, order - 3),
+      megaMenu,
     };
   });
 }
