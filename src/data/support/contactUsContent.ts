@@ -19,7 +19,7 @@ export const contactUsViewResponseModal = {
   heading: "Check the response to your submitted inquiry.",
   description: [
     "Please enter the inquiry number and password.",
-    "You can find your receipt number in the confirmation email",
+    "You can find your receipt number in the confirmation email.",
   ],
   inquiryNumberLabel: "Inquiry Number",
   passwordLabel: "Password",
