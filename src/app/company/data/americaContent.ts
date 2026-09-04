@@ -174,7 +174,7 @@ export const americaBusiness = {
       image: `${IMG}/business-01.webp`,
       title: "LV & MV Power Solutions",
       description:
-        "LS ELECTRIC America delivers LV and MV power distribution solutions, from transformers and switchgear to switchboards, panelboards, and DC power systems. These solutions provide reliable, efficient, and scalable power for data centers, manufacturing, and commericial infrastructure industries",
+        "LS ELECTRIC America delivers LV and MV power distribution solutions, from transformers and switchgear to switchboards, panelboards, and DC power systems. These solutions provide reliable, efficient, and scalable power for data centers, manufacturing, and commercial infrastructure industries",
       imagePosition: "left",
     },
     {
@@ -419,7 +419,7 @@ export { companyMission as americaMission } from "./companyMissionContent";
 
 export const americaFollow = {
   title:
-    "Follow us for the latest updates, insights,and innovations from LS ELECTRIC.",
+    "Follow us for the latest updates, insights, and innovations from LS ELECTRIC.",
   links: [
     {
       id: "instagram",

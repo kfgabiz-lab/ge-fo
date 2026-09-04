@@ -19,7 +19,7 @@ export const dataCenterHero = {
 
 export const dataCenterIntro = {
   titleLines: ["Powering the", "Next Generation of AI Data Centers"],
-  text: "As Asia’s first and only provider of a full UL-certified switchgear line-up , LS ELECTRIC delivers the mission-critical components that power the world’s leading data centers. From hyperscale cloud environments to gigawatt-scale AI infrastructure, our field-proven technologies ensure seamless integration and strict local compliance. By supplying modular power systems and intelligent management platforms, we optimize individual site deployment, reducing overall installation time by 30%.From the high-voltage utility source to the server rack, we invest in a high-performance portfolio engineered to give next-generation data centers exactly what they need, when they need it.",
+  text: "As Asia’s first and only provider of a full UL-certified switchgear line-up, LS ELECTRIC delivers the mission-critical components that power the world’s leading data centers. From hyperscale cloud environments to gigawatt-scale AI infrastructure, our field-proven technologies ensure seamless integration and strict local compliance. By supplying modular power systems and intelligent management platforms, we optimize individual site deployment, reducing overall installation time by 30%. From the high-voltage utility source to the server rack, we invest in a high-performance portfolio engineered to give next-generation data centers exactly what they need, when they need it.",
 };
 
 export type MarketStatItem = {
