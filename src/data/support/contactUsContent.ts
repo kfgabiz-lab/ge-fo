@@ -16,7 +16,7 @@ export const contactUsInquiryTypeLabels: Record<string, string> = {
 
 export const contactUsViewResponseModal = {
   title: "View Response",
-  heading: "Check your inquiry.",
+  heading: "Check the response to your submitted inquiry.",
   description: [
     "Please enter the inquiry number and password.",
     "You can find your receipt number in the confirmation email",
