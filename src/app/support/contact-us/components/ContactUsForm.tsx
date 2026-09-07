@@ -833,6 +833,8 @@ function ContactUsFormContent() {
               <Link
                 href="/privacy-policy"
                 className="support_contact_form__consent-note-link"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {contactUsFormCopy.submitAckLinkLabel}
               </Link>
