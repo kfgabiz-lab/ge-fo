@@ -45,12 +45,22 @@ export default function TrainingSessionShare({
         onClick={() => setOpen((current) => !current)}
       >
         <img
-          src="/ico/ico_share_24.svg"
+          src="/ico/ico_share_trigger_52.svg"
           alt=""
-          width={24}
-          height={24}
+          width={52}
+          height={52}
           loading="lazy"
           decoding="async"
+          className="support_service_training_session_detail__share-trigger-icon support_service_training_session_detail__share-trigger-icon--pc"
+        />
+        <img
+          src="/ico/ico_share_trigger_44.svg"
+          alt=""
+          width={44}
+          height={44}
+          loading="lazy"
+          decoding="async"
+          className="support_service_training_session_detail__share-trigger-icon support_service_training_session_detail__share-trigger-icon--mo"
         />
       </button>
 

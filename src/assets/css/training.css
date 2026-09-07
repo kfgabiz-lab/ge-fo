@@ -671,7 +671,7 @@
     padding: 0;
     border: none;
     border-radius: 50%;
-    background: #f5f5f5;
+    background: transparent;
     cursor: pointer;
     transition: opacity 0.2s ease;
   }
@@ -687,8 +687,12 @@
 
   section.support_service_training_session_detail .support_service_training_session_detail__share-trigger img {
     display: block;
-    width: 24px;
-    height: 24px;
+    width: 52px;
+    height: 52px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-trigger img.support_service_training_session_detail__share-trigger-icon--mo {
+    display: none;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__share-popover {
@@ -3074,14 +3078,22 @@
     padding: 0;
     border: none;
     border-radius: 50%;
-    background: #f5f5f5;
+    background: transparent;
     cursor: pointer;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__share-trigger img {
     display: block;
-    width: 24px;
-    height: 24px;
+    width: 44px;
+    height: 44px;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-trigger img.support_service_training_session_detail__share-trigger-icon--pc {
+    display: none;
+  }
+
+  section.support_service_training_session_detail .support_service_training_session_detail__share-trigger img.support_service_training_session_detail__share-trigger-icon--mo {
+    display: block;
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__share-popover {
