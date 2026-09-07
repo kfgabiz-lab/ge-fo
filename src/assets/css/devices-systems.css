@@ -701,6 +701,7 @@
   }
 
   section.devices_category .devices_category__tit {
+    font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 40px;
     line-height: 48px;
   }
@@ -923,6 +924,7 @@
   }
 
   section.devices_hero .devices_hero__tit {
+    font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 36px;
     line-height: 44px;
   }

@@ -3388,7 +3388,7 @@
 
   section.support_tech_hub_view .support_tech_hub_view__title {
     margin: 0;
-    font-family: inherit;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;

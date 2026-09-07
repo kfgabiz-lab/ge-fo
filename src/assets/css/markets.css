@@ -2044,6 +2044,7 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
 
   section.markets_stats .markets_stats__value {
     display: block;
+    font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 28px;
     line-height: 38px;
     letter-spacing: -2%;
@@ -2055,6 +2056,10 @@ section.markets_hero.markets_hero--key-visual .markets_hero__scroll-down img {
   section.markets_stats .markets_stats__value-suffix {
     font-size: 28px;
     line-height: 38px;
+  }
+
+  section.markets_stats .markets_stats__value-suffix {
+    font-family: jaka, Arial, Helvetica, sans-serif;
   }
 
   section.markets_stats .markets_stats__sublabel {

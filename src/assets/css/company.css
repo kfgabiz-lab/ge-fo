@@ -1421,12 +1421,14 @@ section.company-blog-list .company-blog__tag:hover {
   }
 
   section.company-article-detail.company-article-detail--articles .company-article-detail__section-title {
+    font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 24px;
     line-height: 34px;
   }
 
   section.company-article-detail.company-article-detail--articles .company-article-detail__subsection-title,
   section.company-article-detail.company-article-detail--articles .company-article-detail__pullquote {
+    font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 18px;
     line-height: 28px;
   }
@@ -2614,6 +2616,7 @@ section.company-blog-list .company-blog__tag:hover {
 
   section.company-events-past .company-events-past__heading {
     margin-bottom: 30px;
+    font-family: jaka, Arial, Helvetica, sans-serif;
     font-size: 30px;
     font-weight: 700;
     line-height: 40px;

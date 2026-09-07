@@ -2708,6 +2708,7 @@
   }
 
   section.support_service_training_detail_hero .support_service_training_detail_hero__title {
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
     font-size: 28px;
     font-weight: 800;
     line-height: 38px;
@@ -3049,7 +3050,7 @@
     flex: none;
     width: 100%;
     max-width: none;
-    font-family: var(--font-body);
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;

@@ -1285,6 +1285,7 @@
 
   section.support_service_offering .support_service_offering__head .section_tit {
     margin-bottom: 0;
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
     font-size: 30px;
     line-height: 40px;
     letter-spacing: -2%;
@@ -1339,7 +1340,7 @@
 
   section.support_service_offering .support_service_offering__num {
     color: var(--Grayscale-Gray-04, #E8E8E8);
-    font-family: "Pretendard Variable";
+    font-family: jaka, var(--font-display, "Plus Jakarta Sans"), sans-serif;
     font-size: 34px;
     font-style: normal;
     font-weight: 800;
