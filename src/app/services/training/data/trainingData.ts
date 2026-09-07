@@ -46,6 +46,8 @@ export function trainingHasSessionWhere(): Record<string, string> {
     exk_0: "curriculum_detail1.curriculum_id",
     exm_0: "id",
     exf_0: `curriculum_detail3.is_visible=${TRAINING_SESSION_VISIBLE_CODE}`,
+    // 접수 시작일 미도래 세션만 있는 코스는 목록에서 제외 (bo-api exd_ 게이트)
+    exd_0: "curriculum_detail2.register_period_from",
   };
 }
 
