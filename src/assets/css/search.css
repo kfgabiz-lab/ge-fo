@@ -261,7 +261,8 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    min-height: 198px;
+    /* min-height: 198px; */
+    min-height: 460px;
     margin-bottom: 120px;
     padding: 40px 40px 30px;
     border: 2px solid transparent;
@@ -2752,12 +2753,13 @@
     overflow: visible;
     border: 2px solid transparent;
     border-radius: 4px;
-    background: linear-gradient(#fff, #fff) padding-box,      linear-gradient(135deg, #028dff 50%, #9535ff 100%) border-box;
+    background: linear-gradient(#fff, #fff) padding-box,linear-gradient(135deg, #028dff 50%, #9535ff 100%) border-box;
     box-sizing: border-box;
     width: 100%;
     max-width: 100%;
     min-width: 0;
-    min-height: 198px;
+    /* min-height: 198px; */
+    min-height: 460px;
   }
 
   section.search_all .search_all__ai:not(.is-clamped):not(.is-expanded) {
