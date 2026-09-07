@@ -317,6 +317,7 @@
   section.search_all .search_all__ai:not(.is-expanded) {
     height: 460px;
     max-height: 460px;
+    overflow: hidden;
   }
 
   section.search_all .search_all__ai:not(.is-expanded).is-clamped .search_all__ai-content {
@@ -2802,15 +2803,13 @@
   section.search_all .search_all__ai:not(.is-expanded) {
     height: 460px;
     max-height: 460px;
-  }
-
-  section.search_all .search_all__ai:not(.is-expanded).is-clamped {
     overflow: hidden;
   }
 
   section.search_all .search_all__ai.is-expanded {
     height: auto;
     max-height: none;
+    overflow: visible;
   }
 
   /* Figma 6571:103395 — clamp일 때만 본문 clip, more 영역 확보 */
