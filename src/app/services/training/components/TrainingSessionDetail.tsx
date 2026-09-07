@@ -143,9 +143,14 @@ export default function TrainingSessionDetail({
   variant: TrainingVariant;
 }) {
   const hasContent = stripHtmlText(session.content).length > 0;
+  // 접수 마감된 세션은 Registration form 영역(폼/탭/사이드 등록 버튼)을 노출하지 않는다.
+  const registrationClosed = session.registrationClosed ?? false;
   const tabs = useMemo(
-    () => buildSessionTabs(variant, hasContent),
-    [variant, hasContent],
+    () =>
+      buildSessionTabs(variant, hasContent).filter(
+        (tab) => tab.id !== "registration" || !registrationClosed,
+      ),
+    [variant, hasContent, registrationClosed],
   );
   const [activeTab, setActiveTab] = useState<EngineeringTrainingSessionTabId>(
     tabs[0].id,
@@ -262,6 +267,7 @@ export default function TrainingSessionDetail({
           session={session}
           variant="mo"
           onRegister={handleRegister}
+          canRegister={!registrationClosed}
         />
 
         <div className="support_service_training_session_detail__layout">
@@ -420,15 +426,17 @@ export default function TrainingSessionDetail({
               ))}
             </div>
 
-            <div
-              id="session-registration"
-              className="support_service_training_session_detail__block support_service_training_session_detail__block--registration"
-            >
-              <h2 className="support_service_training_session_detail__block-tit">
-                Registration form
-              </h2>
-              <TrainingSessionDetailForm session={session} />
-            </div>
+            {registrationClosed ? null : (
+              <div
+                id="session-registration"
+                className="support_service_training_session_detail__block support_service_training_session_detail__block--registration"
+              >
+                <h2 className="support_service_training_session_detail__block-tit">
+                  Registration form
+                </h2>
+                <TrainingSessionDetailForm session={session} />
+              </div>
+            )}
 
             <div className="support_service_training_session_detail__block support_service_training_session_detail__block--calendar">
               <h2 className="support_service_training_session_detail__block-tit">
@@ -477,6 +485,7 @@ export default function TrainingSessionDetail({
             session={session}
             variant="pc"
             onRegister={handleRegister}
+            canRegister={!registrationClosed}
           />
         </div>
       </div>

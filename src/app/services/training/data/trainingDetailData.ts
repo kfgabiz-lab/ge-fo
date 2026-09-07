@@ -348,9 +348,12 @@ export function toTrainingCourseDetail(
     Array.isArray(imageArr) && imageArr.length > 0 ? Number(imageArr[0]) : null;
   const heroImage = mediaId != null ? trainingImageSrc(mediaId) : "";
 
-  const sessions: EngineeringTrainingSession[] = valid.map(({ raw, json }) =>
-    toCourseCard(raw, json, trainingTypeMap, productNameMap),
-  );
+  // 접수 시작일(register_period_from)이 아직 도래하지 않은 세션은 목록에서 제외한다.
+  const sessions: EngineeringTrainingSession[] = valid
+    .filter(({ json }) => json._registrationNotYetOpen !== true)
+    .map(({ raw, json }) =>
+      toCourseCard(raw, json, trainingTypeMap, productNameMap),
+    );
 
   return {
     courseId,
