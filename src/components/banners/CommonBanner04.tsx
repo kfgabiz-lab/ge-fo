@@ -13,7 +13,7 @@ type CommonBanner04Props = {
 
 const DEFAULT_BACKGROUND_SRC = "/img/banner/bg_banner_03.webp";
 const DEFAULT_BACKGROUND_SRC_MO = "/img/banner/bg_banner_03_mo.webp";
-const DEFAULT_TITLE = "Consult with an LS ELECTRIC Expert";
+const DEFAULT_TITLE = "Consult with a LS ELECTRIC Expert";
 const DEFAULT_DESCRIPTION =
   "Have a general question not related to quotes or technical service? Leave us a message and our team will get back to you.";
 const DEFAULT_LINK_LABEL = "Send a Message";

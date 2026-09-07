@@ -26,7 +26,7 @@ const DEFAULT_BACKGROUND_SRC = "/img/devices/product/banner_configurator_bg.webp
 const DEFAULT_BACKGROUND_SRC_MO =
   "/img/devices/product/banner_configurator_bg_mo.webp";
 
-const DEFAULT_TITLE = "Consult with an LS ELECTRIC Expert";
+const DEFAULT_TITLE = "Consult with a LS ELECTRIC Expert";
 const DEFAULT_EXPERT_TITLE = "Connect with Our Product Expert";
 const DEFAULT_DESCRIPTION = [
   "Have a general question not related to quotes or technical service?",
