@@ -27,7 +27,9 @@ export default async function ConnectPortalPage() {
         {
           "@type": "Service",
           name: "LS ELECTRIC Connect Portal",
-          description: connectPortalPage.detailSections[0]?.description ?? "",
+          description: (
+            connectPortalPage.detailSections[0]?.description ?? ""
+          ).replace(/\n/g, " "),
           url: CONNECT_PORTAL_EXTERNAL_URL,
           provider: { "@id": ORG_ID },
         },
