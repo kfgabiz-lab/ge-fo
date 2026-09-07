@@ -9,7 +9,7 @@ const COLLAPSED_HEIGHT = 460;
 
 type SearchAllAiProps = {
   children: ReactNode;
-  /** 챗봇 keyword 이벤트 전(스트리밍 시작 전) — 스켈레톤 표시 */
+  /** AI 답변 스트리밍이 끝나기 전 — 스켈레톤 표시 */
   loading?: boolean;
   /** 스트리밍 완료 — 이때부터 높이 측정(clamp 판정) 시작 */
   settled?: boolean;
