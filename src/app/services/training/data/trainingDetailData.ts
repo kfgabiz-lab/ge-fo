@@ -199,6 +199,22 @@ function parseYmd(dateStr?: string): { y: number; m: number; d: number } | null 
   return { y, m, d };
 }
 
+/**
+ * 접수 마감 카운트다운 대상일(YYYY-MM-DD).
+ * bo-api는 register_period_to 당일까지가 아니라 그 다음 날까지 접수를 허용한다
+ * (_registrationDaysLeft = register_period_to - today + 1, 마감일 당일에도 closesToday=true).
+ * 카운트다운도 이 규칙에 맞춰 register_period_to 다음 날 자정을 기준으로 삼는다.
+ */
+function registrationCountdownTarget(registerPeriodTo?: string): string | undefined {
+  const p = parseYmd(registerPeriodTo);
+  if (!p) return undefined;
+  const dt = new Date(Date.UTC(p.y, p.m - 1, p.d + 1));
+  const yy = dt.getUTCFullYear();
+  const mm = String(dt.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(dt.getUTCDate()).padStart(2, "0");
+  return `${yy}-${mm}-${dd}`;
+}
+
 function formatSessionDateRange(from?: string, to?: string): string {
   const f = parseYmd(from);
   const t = parseYmd(to);
@@ -508,7 +524,7 @@ export function toTrainingSessionDetail(
       organizerEmail: d2.email || undefined,
       categories: curriculum.title || undefined,
     },
-    countdownTo: d2.register_period_to || undefined,
+    countdownTo: registrationCountdownTarget(d2.register_period_to),
     sidebar: {
       date: compactDateRange.primary,
       dateTo: compactDateRange.secondary,
