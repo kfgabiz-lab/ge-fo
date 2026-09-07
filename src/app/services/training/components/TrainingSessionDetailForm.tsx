@@ -41,6 +41,10 @@ import { ApiError } from "@/lib/api";
 const AUTOCOMPLETE_MIN_LENGTH = 1;
 const AUTOCOMPLETE_DEBOUNCE_MS = 250;
 
+// 백엔드 캡차 토큰은 발급 후 5분(CaptchaService.EXPIRY_MILLIS)이 지나면 CAPTCHA_EXPIRED로 거부된다.
+// 만료 직전(4분 58초)에 새로고침 버튼과 동일하게 캡차를 자동 재발급해 만료로 인한 제출 실패를 막는다.
+const CAPTCHA_AUTO_REFRESH_MS = 298_000;
+
 const SUBMIT_SUCCESS_MESSAGE =
   "Your registration has been submitted successfully.";
 
@@ -146,6 +150,13 @@ export default function TrainingSessionDetailForm({
   useEffect(() => {
     loadCaptcha();
   }, [loadCaptcha]);
+
+  // 캡차가 새로 발급될 때마다(최초/수동 새로고침/자동 재발급) 만료 직전에 다시 새로고침을 예약한다.
+  useEffect(() => {
+    if (!captcha) return;
+    const timer = setTimeout(() => loadCaptcha(), CAPTCHA_AUTO_REFRESH_MS);
+    return () => clearTimeout(timer);
+  }, [captcha, loadCaptcha]);
 
   useEffect(() => {
     if (suppressFetchRef.current) {
