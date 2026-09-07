@@ -130,13 +130,15 @@ function TechHubContentsBody({ empty = false }: TechHubContentsProps) {
                   ))}
                 </div>
 
-                <PageNumbering
-                  className="support_tech_hub_contents__pagination"
-                  currentPage={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                  ariaLabel="Tech Hub pagination"
-                />
+                {totalPages > 1 ? (
+                  <PageNumbering
+                    className="support_tech_hub_contents__pagination"
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                    ariaLabel="Tech Hub pagination"
+                  />
+                ) : null}
               </>
             )}
           </div>
