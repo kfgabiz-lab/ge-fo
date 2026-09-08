@@ -377,7 +377,7 @@ export default function SearchAllTabContent({
             }
 
             setChatbotKeyword(keyword);
-            void logSearchKeyword("UNIFIED_SEARCH", keyword);
+            void logSearchKeyword("UNIFIED_SEARCH", keyword, trimmedQuery);
           },
 
           onChunk: (chunkEvent) => {

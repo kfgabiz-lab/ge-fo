@@ -4,7 +4,7 @@ export const SITE_URL =
 
 export const SITE_ID = process.env.NEXT_PUBLIC_SITE_ID || "1";
 
-const SERVER_API_BASE =
+export const SERVER_API_BASE =
   process.env.API_PROXY_TARGET || "http://localhost:8080";
 
 /**

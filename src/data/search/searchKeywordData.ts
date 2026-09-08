@@ -6,14 +6,20 @@ export type SearchKeywordSource = "DOWNLOAD_CENTER" | "UNIFIED_SEARCH";
 export async function logSearchKeyword(
   source: SearchKeywordSource,
   keyword: string,
+  userKeyword?: string,
 ): Promise<void> {
   const trimmed = keyword?.trim();
   if (!trimmed) return;
+  const trimmedUserKeyword = userKeyword?.trim();
   try {
     await fetchApi<void>(`/api/v1/fo/search-keywords`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ source, keyword: trimmed }),
+      body: JSON.stringify({
+        source,
+        keyword: trimmed,
+        ...(trimmedUserKeyword ? { userKeyword: trimmedUserKeyword } : {}),
+      }),
     });
   } catch {
   }
