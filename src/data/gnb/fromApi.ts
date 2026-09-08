@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { fetchApi } from "@/lib/api";
+import { sortMarketsGnbItems } from "@/data/gnb/mega/markets";
 import { GNB_MEGA_PANEL_ID, getGnbMegaPanelId } from "@/data/gnb/panelIds";
 import type {
   GnbDevicesMegaMenu,
@@ -54,7 +55,7 @@ function buildGridMegaMenu(node: FoGnbMenuApiNode): GnbSimpleMegaMenu {
     type: "simple",
     panelId: GNB_MEGA_PANEL_ID.markets,
     layout: "grid",
-    items: (node.children ?? []).map(toSimpleItem),
+    items: sortMarketsGnbItems((node.children ?? []).map(toSimpleItem)),
   };
 }
 

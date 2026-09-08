@@ -52,7 +52,7 @@ export const publicInfrastructureIndustryTabs: IndustryTab[] = [
     label: "Federal, State, and Municipal Government",
     title: "Federal, State, and Municipal Government",
     description:
-      "LS ELECTRIC offers robust power distribution and energy management solutions tailored for government administrative facilities and civic infrastructure. Our integrated systems, featuring UL-listed switchgear and intelligent protection relays, support facility modernization and provide enhanced energy visibility. By utilizing our IoT-enabled monitoring platforms, government entities can optimize operational efficiency and meet strict sustainability mandates with scalable, future-ready electrical architectures",
+      "LS ELECTRIC offers robust power distribution and energy management solutions tailored for government administrative facilities and civic infrastructure. Our integrated systems, featuring UL-listed switchgear and intelligent protection relays, support facility modernization and provide enhanced energy visibility. By utilizing our IoT-enabled monitoring platforms, government entities can optimize operational efficiency and meet strict sustainability mandates with scalable, future-ready electrical architectures.",
     image: "/img/markets/public-infrastructure/explore/img_government.webp",
   },
   {

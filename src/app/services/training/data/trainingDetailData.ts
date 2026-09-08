@@ -113,6 +113,8 @@ interface CurrDtlDataJson {
   _registrationClosed?: boolean;
   _registrationClosesToday?: boolean;
   _registrationNotYetOpen?: boolean | null;
+  /** 접수 마감 절대 시각(ISO-8601 UTC, 사이트 타임존 기준). 카운트다운 대상 */
+  _registrationCloseAt?: string | null;
 }
 
 interface ParsedRow {
@@ -348,9 +350,12 @@ export function toTrainingCourseDetail(
     Array.isArray(imageArr) && imageArr.length > 0 ? Number(imageArr[0]) : null;
   const heroImage = mediaId != null ? trainingImageSrc(mediaId) : "";
 
-  const sessions: EngineeringTrainingSession[] = valid.map(({ raw, json }) =>
-    toCourseCard(raw, json, trainingTypeMap, productNameMap),
-  );
+  // 접수 시작일(register_period_from)이 아직 도래하지 않은 세션은 목록에서 제외한다.
+  const sessions: EngineeringTrainingSession[] = valid
+    .filter(({ json }) => json._registrationNotYetOpen !== true)
+    .map(({ raw, json }) =>
+      toCourseCard(raw, json, trainingTypeMap, productNameMap),
+    );
 
   return {
     courseId,
@@ -505,7 +510,10 @@ export function toTrainingSessionDetail(
       organizerEmail: d2.email || undefined,
       categories: curriculum.title || undefined,
     },
-    countdownTo: d2.register_period_to || undefined,
+    // bo-api가 사이트 타임존 기준 마감 절대 시각을 주면 그걸 사용(접속자 타임존 무관, _registrationClosed 전환과 일치).
+    // 없으면 기존처럼 날짜만 넘겨 브라우저 로컬 자정 기준으로 폴백.
+    countdownTo:
+      json._registrationCloseAt || d2.register_period_to || undefined,
     sidebar: {
       date: compactDateRange.primary,
       dateTo: compactDateRange.secondary,

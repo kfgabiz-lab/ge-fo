@@ -549,7 +549,7 @@ export default function SearchAllTabContent({
             >
               {!isAllTabEmpty ? (
                 <SearchAllAi
-                  loading={!chatbotKeyword && !chatbotSettled}
+                  loading={!chatbotSettled}
                   settled={chatbotSettled}
                 >
                   {aiAnswer ? (

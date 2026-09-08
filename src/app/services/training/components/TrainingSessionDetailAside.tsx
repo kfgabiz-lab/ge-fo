@@ -45,10 +45,12 @@ export default function TrainingSessionDetailAside({
   session,
   variant,
   onRegister,
+  canRegister = true,
 }: {
   session: EngineeringTrainingSessionDetail;
   variant: "pc" | "mo";
   onRegister: () => void;
+  canRegister?: boolean;
 }) {
   const { sidebar } = session;
   const phoneHref = formatPhoneHref(sidebar.location.phone);
@@ -158,22 +160,24 @@ export default function TrainingSessionDetailAside({
           </p>
         </div>
 
-        <button
-          type="button"
-          className="btn-base btn-lv01 btn-lv01--line support_service_training_session_detail__register"
-          onClick={onRegister}
-        >
-          <span>{sidebar.registerLabel}</span>
-          <img
-            src={engineeringTrainingSessionAssets.registerScrollIcon}
-            alt=""
-            width={16}
-            height={16}
-            loading="lazy"
-            decoding="async"
-            aria-hidden
-          />
-        </button>
+        {canRegister ? (
+          <button
+            type="button"
+            className="btn-base btn-lv01 btn-lv01--line support_service_training_session_detail__register"
+            onClick={onRegister}
+          >
+            <span>{sidebar.registerLabel}</span>
+            <img
+              src={engineeringTrainingSessionAssets.registerScrollIcon}
+              alt=""
+              width={16}
+              height={16}
+              loading="lazy"
+              decoding="async"
+              aria-hidden
+            />
+          </button>
+        ) : null}
       </div>
     </aside>
   );

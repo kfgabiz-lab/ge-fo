@@ -39,7 +39,14 @@ export default function ConnectPortalDetail({
               ))
             )}
           </h2>
-          <p className="support_connect_detail__desc">{description}</p>
+          <p className="support_connect_detail__desc">
+            {description.split("\n").map((line, index) => (
+              <span key={`${index}-${line}`}>
+                {index > 0 ? <br /> : null}
+                {line}
+              </span>
+            ))}
+          </p>
           <ul className="support_connect_detail__list">
             {bullets.map((item) => (
               <li key={item} className="support_connect_detail__item">

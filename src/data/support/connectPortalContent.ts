@@ -67,7 +67,7 @@ export const connectPortalPage = {
         "sales rep.",
       ],
       description:
-        "Connect Portal simplifies your purchasing experience with easy access to product search, online ordering, shipment tracking, and project quote management - all from one convenient platform",
+        "Save valuable time with faster product selection.\nSearch by keyword, filter by specifications, or use the built-in configurator to quickly identify the right item code and pricing in minutes.",
       bullets: [
         "Unified keyword search across products and documents",
         "Spec-based product configurator — view item codes & pricing instantly",
