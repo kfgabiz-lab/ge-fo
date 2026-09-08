@@ -73,7 +73,7 @@ function findColumnIndex(cols: ColGroup[], target: HTMLElement): number {
   return cols.findIndex((col) => col.root.contains(target));
 }
 
-/** CSS grid with `grid-auto-flow: column` + fixed row count (Markets). */
+/** CSS grid with `grid-auto-flow: row` + fixed row count (Markets). */
 function handleGridArrowKey(
   event: KeyboardEvent,
   grid: HTMLElement,
@@ -92,9 +92,11 @@ function handleGridArrowKey(
   const index = cellItems.findIndex((el) => el === target);
   if (index < 0) return false;
 
-  const col = Math.floor(index / rows);
-  const row = index % rows;
   const colCount = Math.ceil(cells.length / rows);
+  const row = Math.floor(index / colCount);
+  const col = index % colCount;
+  const rowStart = row * colCount;
+  const rowEnd = Math.min(rowStart + colCount, cells.length);
 
   const focusAt = (nextIndex: number): boolean => {
     if (nextIndex < 0 || nextIndex >= cellItems.length) return false;
@@ -121,41 +123,33 @@ function handleGridArrowKey(
   switch (event.key) {
     case "ArrowUp": {
       if (row === 0) return false;
-      return findInDirection(index, -1, (i) => i >= col * rows);
+      for (let r = row - 1; r >= 0; r -= 1) {
+        if (focusAt(r * colCount + col)) return true;
+      }
+      return false;
     }
     case "ArrowDown": {
       if (row >= rows - 1) return false;
-      return findInDirection(
-        index,
-        1,
-        (i) => i < Math.min(col * rows + rows, cells.length),
-      );
+      for (let r = row + 1; r < rows; r += 1) {
+        const candidate = r * colCount + col;
+        if (candidate >= cells.length) continue;
+        if (focusAt(candidate)) return true;
+      }
+      return false;
     }
     case "ArrowLeft": {
       if (col === 0) return false;
-      for (let c = col - 1; c >= 0; c -= 1) {
-        const candidate = c * rows + row;
-        if (focusAt(candidate)) return true;
-      }
-      return false;
+      return findInDirection(index, -1, (i) => i >= rowStart);
     }
     case "ArrowRight": {
       if (col >= colCount - 1) return false;
-      for (let c = col + 1; c < colCount; c += 1) {
-        const candidate = c * rows + row;
-        if (focusAt(candidate)) return true;
-      }
-      return false;
+      return findInDirection(index, 1, (i) => i < rowEnd);
     }
     case "Home": {
-      return findInDirection(col * rows - 1, 1, (i) => i < col * rows + rows);
+      return findInDirection(rowStart - 1, 1, (i) => i < rowEnd);
     }
     case "End": {
-      return findInDirection(
-        Math.min(col * rows + rows, cells.length),
-        -1,
-        (i) => i >= col * rows,
-      );
+      return findInDirection(rowEnd, -1, (i) => i >= rowStart);
     }
     default:
       return false;

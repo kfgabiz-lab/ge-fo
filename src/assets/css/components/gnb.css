@@ -1883,7 +1883,7 @@ color: #fff;
   display: grid;
   flex: 0 0 auto;
   align-self: flex-start;
-  grid-auto-flow: column;
+  grid-auto-flow: row;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(2, 140px);
   width: 100%;
@@ -1943,8 +1943,8 @@ color: #fff;
   line-height: 20px;
 }
 
-/* Power Grid desc — Figma text width 316 */
-#gnb-mega-panel-markets .gnb_mega__cell:nth-child(3) .gnb_mega__item-desc {
+/* Power Grid desc — Figma text width 316 (mobile/sort order: 2nd) */
+#gnb-mega-panel-markets .gnb_mega__cell:nth-child(2) .gnb_mega__item-desc {
   max-width: 316px;
 }
 
