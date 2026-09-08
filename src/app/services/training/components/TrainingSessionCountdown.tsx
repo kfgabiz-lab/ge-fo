@@ -11,6 +11,12 @@ type Remaining = {
 
 function parseTargetMs(targetIso?: string): number | null {
   if (!targetIso) return null;
+  // 절대 시각(ISO-8601 datetime, 예: 2026-09-08T04:00:00Z) — 그대로 파싱해 모든 접속자가 동일 기준
+  if (/^\d{4}-\d{2}-\d{2}[T ]\d{2}:/.test(targetIso.trim())) {
+    const ms = Date.parse(targetIso.trim());
+    return Number.isNaN(ms) ? null : ms;
+  }
+  // 날짜만(YYYY-MM-DD) — 브라우저 로컬 그날 23:59:59 (폴백)
   const parts = targetIso.trim().slice(0, 10).split("-");
   if (parts.length !== 3) return null;
   const [y, m, d] = parts.map(Number);
