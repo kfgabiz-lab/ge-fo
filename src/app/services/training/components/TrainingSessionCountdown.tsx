@@ -42,18 +42,9 @@ export default function TrainingSessionCountdown({
       setRemaining(null);
       return;
     }
-    // 마감 시각이 지나면 0:0:0을 노출하지 않고 카운트다운 자체를 숨긴다
-    const tick = () => {
-      if (targetMs <= Date.now()) {
-        setRemaining(null);
-        return true;
-      }
-      setRemaining(computeRemaining(targetMs));
-      return false;
-    };
-    if (tick()) return;
+    setRemaining(computeRemaining(targetMs));
     const id = setInterval(() => {
-      if (tick()) clearInterval(id);
+      setRemaining(computeRemaining(targetMs));
     }, 1_000);
     return () => clearInterval(id);
   }, [targetIso]);
