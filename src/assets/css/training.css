@@ -932,7 +932,8 @@
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__block-date::before {
-    content: " / ";
+    /* flex 아이템 시작이라 일반 공백은 trim됨 — nbsp로 앞뒤 간격 고정 */
+    content: "\00a0/\00a0";
   }
 
   section.support_service_training_session_detail .support_service_training_session_detail__bullets {
