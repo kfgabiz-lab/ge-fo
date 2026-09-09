@@ -28,6 +28,7 @@ import {
   fetchProductTechHubBanner,
 } from "@/data/support/techHubData";
 import { productDetailHelpCards } from "../../data/motorControlContent";
+import { CONNECT_PORTAL_EXTERNAL_URL } from "@/data/support/connectPortalContent";
 import JsonLd from "@/components/seo/JsonLd";
 import { buildProductJsonLdGraph } from "@/lib/structuredData/productGraph";
 import "@/assets/css/devices-systems.css";
@@ -156,26 +157,24 @@ export default async function GenericProductDetail({
                   />
                 </DevicesProductLineupGrid>
               </div>
-              {detail.configuratorHref ? (
-                <div className="devices_product_lineup__footer">
-                  <div className="devices_product_lineup__note">
-                    <p>Explore all available configurations effortlessly.</p>
-                    <p>
-                      Our Configurator helps you select the right specifications in
-                      just a few clicks.
-                    </p>
-                  </div>
-                  <a
-                    href={detail.configuratorHref}
-                    className="btn-base btn-lv02 btn-lv02--solid"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Go to Configurator
-                    <span className="icon_link-14" aria-hidden="true" />
-                  </a>
+              <div className="devices_product_lineup__footer">
+                <div className="devices_product_lineup__note">
+                  <p>Explore all available configurations effortlessly.</p>
+                  <p>
+                    Our Configurator helps you select the right specifications in
+                    just a few clicks.
+                  </p>
                 </div>
-              ) : null}
+                <a
+                  href={detail.configuratorHref || CONNECT_PORTAL_EXTERNAL_URL}
+                  className="btn-base btn-lv02 btn-lv02--solid"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Go to Configurator
+                  <span className="icon_link-14" aria-hidden="true" />
+                </a>
+              </div>
             </div>
           </section>
         ) : null}
