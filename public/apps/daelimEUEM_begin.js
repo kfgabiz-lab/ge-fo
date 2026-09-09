@@ -20,6 +20,8 @@ window.daelimEUEMConf = {
                             'nahpdev-web.ls-electric.com',
                             'nahpdev.ls-electric.com',
                             'nahp.ls-electric.com',
+                            'www.lselectricamerica.com',
+                            'lselectricamerica.com',
                             'css?postfix',
                             '.wq?',
                             'xml?postfix',
