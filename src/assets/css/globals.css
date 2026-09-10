@@ -154,23 +154,31 @@ main:focus {
 }
 
 /* 오버레이(GNB·모달) 오픈 시 페이지 스크롤 잠금
-   overflow-y: scroll 유지 — 스크롤바 소실로 레이아웃 폭이 흔들리지 않게 */
+   scrollbar-gutter로 폭은 유지하고, 스크롤바만 감춤 */
 html.is-page-scroll-lock {
   overflow-y: scroll;
   overflow-x: clip;
   overscroll-behavior: none;
   scrollbar-gutter: stable;
+  scrollbar-width: none;
+}
+
+html.is-page-scroll-lock::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 /*
   Lenis stop() → .lenis-stopped { overflow: clip } (specificity 0,3,0)
-  이 규칙이 scroll-lock을 덮어 스크롤바가 사라지면 딤 뒤 페이지가 흔들림.
+  스크롤바 소실 시 레이아웃 폭 흔들림 방지: gutter 유지 + 바만 숨김
 */
 html.is-page-scroll-lock.lenis.lenis-stopped,
 html.is-page-scroll-lock.lenis:not(.lenis-autoToggle).lenis-stopped {
   overflow-y: scroll;
   overflow-x: clip;
   scrollbar-gutter: stable;
+  scrollbar-width: none;
 }
 
 html.is-page-scroll-lock body {
