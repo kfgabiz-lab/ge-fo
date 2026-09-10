@@ -241,7 +241,8 @@ export default function GnbMenu({
   const megaMenu = activeNav?.megaMenu;
   const showMegaPanel = Boolean(activeNavId && megaMenu);
   const isOverlayOpen = isMegaActive || isSearchOpen;
-  const isDimMounted = isOverlayOpen || holdMegaDim;
+  // Mega dim only — search uses its own `gnb_search_dim` in GnbSearchPanel
+  const isMegaDimMounted = isMegaActive || holdMegaDim;
 
   useModalFocusTrap(megaPanelRef, isMegaActive && showMegaPanel, {
     autoFocus: false,
@@ -283,8 +284,6 @@ export default function GnbMenu({
     setPrevSearchOpen(isSearchOpen);
     if (isSearchOpen) {
       setHoldMegaDim(false);
-    } else if (!isMegaActive) {
-      setHoldMegaDim(true);
     }
   }
 
@@ -586,11 +585,11 @@ export default function GnbMenu({
   }, [closeAllGnbMenus]);
 
   useEffect(() => {
-    if (isOverlayOpen || !holdMegaDim) return;
+    if (isMegaActive || !holdMegaDim) return;
 
     const timer = setTimeout(() => setHoldMegaDim(false), MEGA_TRANSITION_MS);
     return () => clearTimeout(timer);
-  }, [holdMegaDim, isOverlayOpen]);
+  }, [holdMegaDim, isMegaActive]);
 
   useEffect(() => {
     if (!showMegaPanel) return;
@@ -645,7 +644,7 @@ export default function GnbMenu({
   }, [shouldLockScroll]);
 
   useEffect(() => {
-    if (!isDimMounted) return;
+    if (!isOverlayOpen && !holdMegaDim) return;
 
     document.body.classList.add("is-gnb-overlay-open");
 
@@ -671,7 +670,8 @@ export default function GnbMenu({
     closeMega,
     closeSearch,
     focusMegaTrigger,
-    isDimMounted,
+    holdMegaDim,
+    isOverlayOpen,
     isSearchOpen,
   ]);
 
@@ -1152,19 +1152,16 @@ export default function GnbMenu({
 
       <GnbSearchPanel isOpen={isSearchOpen} onNavigate={closeSearch} />
 
-      {isDimMounted ? (
+      {isMegaDimMounted ? (
         <button
           type="button"
-          className={isOverlayOpen ? "gnb_mega_dim is-open" : "gnb_mega_dim"}
+          className={isMegaActive ? "gnb_mega_dim is-open" : "gnb_mega_dim"}
           aria-label="Close menu"
           tabIndex={-1}
           data-lenis-prevent
           onWheel={(event) => event.preventDefault()}
           onTouchMove={(event) => event.preventDefault()}
-          onClick={() => {
-            closeMega();
-            closeSearch();
-          }}
+          onClick={closeMega}
         />
       ) : null}
     </>

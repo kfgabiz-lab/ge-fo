@@ -7,6 +7,8 @@
   --gnb-mega-duration: 0.35s;
   --gnb-mega-ease: cubic-bezier(0.4, 0, 0.2, 1);
   --gnb-dim-duration: 0.35s;
+  /* GNB overlay dim — mega / search / mobile 공통 (Figma 50%) */
+  --gnb-dim-bg: rgb(0 0 0 / 50%);
   /* GNB row(80) + breadcrumb(48) — 최상단 메가 fixed 기준 */
   --gnb-mega-fixed-top: 128px;
   /* SubHeader 스크롤 숨김/표시 — 스페이서·GNB 행 동기화 */
@@ -3164,7 +3166,7 @@ color: #fff;
   inset: 0;
   z-index: 999;
   border: none;
-  background: rgb(0 0 0 / 60%);
+  background: var(--gnb-dim-bg);
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
@@ -3235,7 +3237,7 @@ color: #fff;
   z-index: 998;
   padding: 0;
   border: none;
-  background: rgb(0 0 0 / 50%);
+  background: var(--gnb-dim-bg);
   cursor: pointer;
   overscroll-behavior: none;
   touch-action: none;
@@ -4701,7 +4703,7 @@ color: #fff;
     inset: 0;
     z-index: 1000;
     border: none;
-    background: rgb(0 0 0 / 50%);
+    background: var(--gnb-dim-bg);
     cursor: pointer;
     opacity: 1;
     pointer-events: auto;
