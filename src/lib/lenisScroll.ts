@@ -8,6 +8,7 @@ const MOBILE_MAX_WIDTH = 780;
 let scrollLockCount = 0;
 let lockedScrollY = 0;
 let usesBodyFixedLock = false;
+let nativeScrollBlockAttached = false;
 
 let viewportHeightSyncHandler: (() => void) | null = null;
 
@@ -87,6 +88,115 @@ function clearBodyFixedLock() {
   document.body.style.height = "";
 }
 
+function isScrollableOverflowY(style: CSSStyleDeclaration) {
+  const overflowY = style.overflowY;
+  return (
+    overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay"
+  );
+}
+
+function canElementScrollY(el: HTMLElement, deltaY: number) {
+  if (!isScrollableOverflowY(window.getComputedStyle(el))) {
+    return false;
+  }
+
+  if (el.scrollHeight <= el.clientHeight + 1) {
+    return false;
+  }
+
+  if (deltaY < 0) {
+    return el.scrollTop > 0;
+  }
+
+  if (deltaY > 0) {
+    return el.scrollTop + el.clientHeight < el.scrollHeight - 1;
+  }
+
+  return true;
+}
+
+function findScrollableAncestor(target: EventTarget | null, deltaY: number) {
+  let el =
+    target instanceof HTMLElement
+      ? target
+      : target instanceof Node
+        ? target.parentElement
+        : null;
+
+  while (el && el !== document.documentElement && el !== document.body) {
+    if (canElementScrollY(el, deltaY)) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+
+  return null;
+}
+
+function isInsideNestedScrollArea(target: EventTarget | null) {
+  let el =
+    target instanceof HTMLElement
+      ? target
+      : target instanceof Node
+        ? target.parentElement
+        : null;
+
+  while (el && el !== document.documentElement && el !== document.body) {
+    if (
+      isScrollableOverflowY(window.getComputedStyle(el)) &&
+      el.scrollHeight > el.clientHeight + 1
+    ) {
+      return true;
+    }
+    el = el.parentElement;
+  }
+
+  return false;
+}
+
+function onLockedWheel(event: WheelEvent) {
+  if (findScrollableAncestor(event.target, event.deltaY)) {
+    return;
+  }
+
+  event.preventDefault();
+}
+
+function onLockedTouchMove(event: TouchEvent) {
+  if (event.touches.length > 1) return;
+  if (isInsideNestedScrollArea(event.target)) return;
+
+  event.preventDefault();
+}
+
+function onLockedNativeScroll() {
+  if (usesBodyFixedLock) return;
+
+  const currentY = window.scrollY || document.documentElement.scrollTop;
+  if (Math.abs(currentY - lockedScrollY) < 1) return;
+
+  window.scrollTo({ top: lockedScrollY, behavior: "auto" });
+  lenisInstance?.scrollTo(lockedScrollY, { immediate: true });
+}
+
+function attachNativeScrollBlock() {
+  if (nativeScrollBlockAttached) return;
+
+  nativeScrollBlockAttached = true;
+  window.addEventListener("wheel", onLockedWheel, { passive: false });
+  window.addEventListener("touchmove", onLockedTouchMove, { passive: false });
+  window.addEventListener("scroll", onLockedNativeScroll, { passive: true });
+}
+
+function detachNativeScrollBlock() {
+  if (!nativeScrollBlockAttached) return;
+
+  nativeScrollBlockAttached = false;
+  window.removeEventListener("wheel", onLockedWheel);
+  window.removeEventListener("touchmove", onLockedTouchMove);
+  window.removeEventListener("scroll", onLockedNativeScroll);
+}
+
 export function setLenisInstance(lenis: Lenis | null) {
   lenisInstance = lenis;
 }
@@ -149,6 +259,10 @@ export function lockPageScroll(scrollY: number) {
       usesBodyFixedLock = true;
       applyBodyFixedLock(scrollY);
     }
+
+    // Lenis stop() alone is not enough: is-page-scroll-lock keeps
+    // overflow-y: scroll (scrollbar gutter), so native wheel still moves the page.
+    attachNativeScrollBlock();
   }
 
   scrollLockCount += 1;
@@ -163,6 +277,7 @@ export function unlockPageScroll(scrollY?: number) {
   const restoreY = scrollY ?? lockedScrollY;
   lockedScrollY = 0;
 
+  detachNativeScrollBlock();
   document.documentElement.classList.remove(PAGE_SCROLL_LOCK_CLASS);
 
   if (usesBodyFixedLock) {

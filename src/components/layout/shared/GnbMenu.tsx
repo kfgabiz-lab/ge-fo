@@ -1084,6 +1084,7 @@ export default function GnbMenu({
         aria-label={`${activeNav?.label ?? ""} menu`}
         className={getMegaPanelClassName(megaMenu, isPanelOpen)}
         data-gnb-mega-root
+        data-lenis-prevent
         onKeyDown={handleMegaPanelKeyDown}
       >
         {isDevicesMegaMenu(megaMenu) ? (
