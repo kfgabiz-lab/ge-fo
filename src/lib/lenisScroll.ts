@@ -159,14 +159,18 @@ function onLockedWheel(event: WheelEvent) {
     return;
   }
 
-  event.preventDefault();
+  if (event.cancelable) {
+    event.preventDefault();
+  }
 }
 
 function onLockedTouchMove(event: TouchEvent) {
   if (event.touches.length > 1) return;
   if (isInsideNestedScrollArea(event.target)) return;
 
-  event.preventDefault();
+  if (event.cancelable) {
+    event.preventDefault();
+  }
 }
 
 function onLockedNativeScroll() {
@@ -179,22 +183,25 @@ function onLockedNativeScroll() {
   lenisInstance?.scrollTo(lockedScrollY, { immediate: true });
 }
 
+const nativeScrollBlockOptions = { passive: false, capture: true } as const;
+const nativeScrollListenerOptions = { passive: true, capture: true } as const;
+
 function attachNativeScrollBlock() {
   if (nativeScrollBlockAttached) return;
 
   nativeScrollBlockAttached = true;
-  window.addEventListener("wheel", onLockedWheel, { passive: false });
-  window.addEventListener("touchmove", onLockedTouchMove, { passive: false });
-  window.addEventListener("scroll", onLockedNativeScroll, { passive: true });
+  window.addEventListener("wheel", onLockedWheel, nativeScrollBlockOptions);
+  window.addEventListener("touchmove", onLockedTouchMove, nativeScrollBlockOptions);
+  window.addEventListener("scroll", onLockedNativeScroll, nativeScrollListenerOptions);
 }
 
 function detachNativeScrollBlock() {
   if (!nativeScrollBlockAttached) return;
 
   nativeScrollBlockAttached = false;
-  window.removeEventListener("wheel", onLockedWheel);
-  window.removeEventListener("touchmove", onLockedTouchMove);
-  window.removeEventListener("scroll", onLockedNativeScroll);
+  window.removeEventListener("wheel", onLockedWheel, nativeScrollBlockOptions);
+  window.removeEventListener("touchmove", onLockedTouchMove, nativeScrollBlockOptions);
+  window.removeEventListener("scroll", onLockedNativeScroll, nativeScrollListenerOptions);
 }
 
 export function setLenisInstance(lenis: Lenis | null) {

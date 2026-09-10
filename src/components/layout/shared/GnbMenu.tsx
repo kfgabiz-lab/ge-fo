@@ -1144,8 +1144,6 @@ export default function GnbMenu({
             className="gnb_mobile_dim"
             aria-label="Close menu"
             data-lenis-prevent
-            onWheel={(event) => event.preventDefault()}
-            onTouchMove={(event) => event.preventDefault()}
             onClick={closeMobileMenu}
           />
         ) : null}
@@ -1160,8 +1158,6 @@ export default function GnbMenu({
           aria-label="Close menu"
           tabIndex={-1}
           data-lenis-prevent
-          onWheel={(event) => event.preventDefault()}
-          onTouchMove={(event) => event.preventDefault()}
           onClick={closeMega}
         />
       ) : null}

@@ -129,8 +129,6 @@ export default function GnbSearchPanel({
           aria-label="Close search"
           tabIndex={-1}
           data-lenis-prevent
-          onWheel={(event) => event.preventDefault()}
-          onTouchMove={(event) => event.preventDefault()}
           onClick={() => onNavigate?.()}
         />
       ) : null}
