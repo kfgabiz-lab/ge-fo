@@ -237,6 +237,7 @@ section.devices_product_hero .devices_product_hero__btns .icon_download {
     color: #222;
     word-break: break-word;
     font-feature-settings: "liga" 0;
+    text-wrap: balance;
   }
 
   section.devices_product_hero .devices_product_hero__subtitle {
@@ -2134,6 +2135,7 @@ section.devices_product_lineup .devices_product_lineup__footer .btn-lv02--solid{
     line-height: 46px;
     letter-spacing: -0.72px;
     font-feature-settings: "liga" 0;
+    text-wrap: balance;
   }
 
   section.devices_product_hero .devices_product_hero__subtitle {
