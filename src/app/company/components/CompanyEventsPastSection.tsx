@@ -98,13 +98,15 @@ export default function CompanyEventsPastSection({
             ))}
           </ul>
 
-          <PageNumbering
-            className="company-events-past__pagination"
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={onPageChange}
-            ariaLabel="Past events pagination"
-          />
+          {totalPages > 1 ? (
+            <PageNumbering
+              className="company-events-past__pagination"
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange}
+              ariaLabel="Past events pagination"
+            />
+          ) : null}
         </div>
       </div>
     </section>
