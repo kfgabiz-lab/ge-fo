@@ -260,8 +260,7 @@ export function lockPageScroll(scrollY: number) {
       applyBodyFixedLock(scrollY);
     }
 
-    // Lenis stop() alone is not enough: is-page-scroll-lock keeps
-    // overflow-y: scroll (scrollbar gutter), so native wheel still moves the page.
+    // Lenis stop() alone is not enough while overflow allows native wheel.
     attachNativeScrollBlock();
   }
 
