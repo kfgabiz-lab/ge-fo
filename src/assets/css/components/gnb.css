@@ -600,6 +600,7 @@ header.main_header.is-invert.is-gnb-hidden .sub_breadcrumb .icon_external{
 .main_header-wrap.is-gnb-hidden
 .main_header.main_header--breadcrumb-nav .sub_breadcrumb .breadcrumb_nav .breadcrumb_current {
 color: #fff;
+
 }
 .main_header.is-invert.main_header--breadcrumb-nav .sub_breadcrumb .breadcrumb_nav .breadcrumb_current {
   color: #222;
@@ -747,6 +748,7 @@ color: #fff;
   left: 0;
   right: 0;
   z-index: 1000;
+  transition:0s;
 }
 
 .main_header .sub_breadcrumb {
