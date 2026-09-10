@@ -423,13 +423,15 @@ export default function TrainingCurriculum({
               ))}
             </ul>
 
-            <PageNumbering
-              className="support_service_training_curriculum__pagination"
-              currentPage={pageIndex + 1}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-              ariaLabel={ariaLabel}
-            />
+            {totalPages > 1 ? (
+              <PageNumbering
+                className="support_service_training_curriculum__pagination"
+                currentPage={pageIndex + 1}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                ariaLabel={ariaLabel}
+              />
+            ) : null}
           </>
         )}
       </div>
