@@ -2679,8 +2679,8 @@ color: #fff;
 /* Devices mega — Figma 8793:231462 · panel 672 */
 #gnb-mega-panel-devices.gnb_mega--devices.is-mounted,
 #gnb-mega-panel-devices .gnb_mega__inner {
-  height: 672px;
-  max-height: 672px;
+  height: 700px;
+  max-height: 700px;
 }
 
 @media (max-height: 816px) {
