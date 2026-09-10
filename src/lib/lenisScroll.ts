@@ -176,11 +176,19 @@ function onLockedTouchMove(event: TouchEvent) {
 function onLockedNativeScroll() {
   if (usesBodyFixedLock) return;
 
-  const currentY = window.scrollY || document.documentElement.scrollTop;
+  const currentY =
+    lenisInstance?.scroll ??
+    window.scrollY ??
+    document.documentElement.scrollTop;
   if (Math.abs(currentY - lockedScrollY) < 1) return;
 
+  // Avoid fighting Lenis with window.scrollTo while stopped — restore via Lenis only.
+  if (lenisInstance) {
+    lenisInstance.scrollTo(lockedScrollY, { immediate: true });
+    return;
+  }
+
   window.scrollTo({ top: lockedScrollY, behavior: "auto" });
-  lenisInstance?.scrollTo(lockedScrollY, { immediate: true });
 }
 
 const nativeScrollBlockOptions = { passive: false, capture: true } as const;

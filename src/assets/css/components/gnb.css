@@ -372,6 +372,33 @@ header.main_header.is-invert.is-gnb-hidden .sub_breadcrumb .icon_external{
     z-index: 1000;
   }
 
+  /* 최상단에서 메가/검색 오픈 시 relative면 잔여 스크롤에 헤더가 같이 움직임 → fixed 고정 */
+  .sub_header-wrap.is-at-top:has(.gnb_menu_wrap.is-mega-open) .gnb_menu_wrap.sub_header,
+  .sub_header-wrap.is-at-top:has(.gnb_menu_wrap.is-search-open) .gnb_menu_wrap.sub_header,
+  .sub_header-wrap.is-at-top.is-mobile-open .gnb_menu_wrap.sub_header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #fff;
+  }
+
+  .sub_header-wrap.is-at-top:has(.gnb_menu_wrap.is-mega-open)::after,
+  .sub_header-wrap.is-at-top:has(.gnb_menu_wrap.is-search-open)::after,
+  .sub_header-wrap.is-at-top.is-mobile-open::after {
+    display: block;
+    height: 80px;
+    content: "";
+  }
+
+  @media (min-width: 1201px) {
+    .sub_header-wrap.is-at-top:has(.gnb_menu_wrap.is-mega-open)::after,
+    .sub_header-wrap.is-at-top:has(.gnb_menu_wrap.is-search-open)::after {
+      height: 128px;
+    }
+  }
+
   .sub_header__gnb-row {
     flex-shrink: 0;
     height: 80px;
@@ -497,6 +524,20 @@ header.main_header.is-invert.is-gnb-hidden .sub_breadcrumb .icon_external{
     left: 0;
     right: 0;
     z-index: 1000;
+  }
+
+  .sub_header-wrap.is-at-top.is-mobile-open .gnb_menu_wrap.sub_header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  .sub_header-wrap.is-at-top.is-mobile-open::after {
+    display: block;
+    height: 60px;
+    content: "";
   }
 
   .sub_header__gnb-row {

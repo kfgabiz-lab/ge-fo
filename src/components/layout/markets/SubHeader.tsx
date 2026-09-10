@@ -41,6 +41,7 @@ export default function SubHeader({
         "sub_header-wrap",
         isAtTop ? "is-at-top" : "",
         isGnbHidden ? "is-gnb-hidden" : "",
+        isSearchOpen ? "is-search-open" : "",
         isMobileMenuOpen ? "is-mobile-open" : "",
       ]
         .filter(Boolean)

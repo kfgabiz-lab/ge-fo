@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { searchAllPage } from "@/data/search/searchAllContent";
 
-const AI_SKELETON_LINE_COUNT = 9;
+const AI_SKELETON_LINE_COUNT = 3;
 /** CSS collapsed 높이와 동일 */
 const COLLAPSED_HEIGHT = 460;
 

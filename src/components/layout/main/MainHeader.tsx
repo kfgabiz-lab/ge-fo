@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import GnbMenu from "@/components/layout/shared/GnbMenu";
 import HeaderBreadcrumb from "@/components/layout/shared/HeaderBreadcrumb";
 import { useHeaderScroll } from "@/components/layout/shared/useHeaderScroll";
+import { getWindowScrollY } from "@/lib/lenisScroll";
 import type { FoGnbMenuApiNode, GnbDevicesMegaMenu } from "@/data/gnb";
 
 const MAIN_TOP_THRESHOLD = 80;
@@ -38,7 +39,7 @@ export default function MainHeader({
   const handleMegaOpenChange = useCallback((open: boolean) => {
     if (open) {
       setFrozenWrapAtTop(
-        (prev) => prev ?? window.scrollY <= MAIN_TOP_THRESHOLD,
+        (prev) => prev ?? getWindowScrollY() <= MAIN_TOP_THRESHOLD,
       );
     } else if (!isSearchOpen) {
       requestAnimationFrame(() => setFrozenWrapAtTop(null));
@@ -49,7 +50,7 @@ export default function MainHeader({
   const handleSearchOpenChange = useCallback((open: boolean) => {
     if (open) {
       setFrozenWrapAtTop(
-        (prev) => prev ?? window.scrollY <= MAIN_TOP_THRESHOLD,
+        (prev) => prev ?? getWindowScrollY() <= MAIN_TOP_THRESHOLD,
       );
     } else if (!isMegaOpen) {
       requestAnimationFrame(() => setFrozenWrapAtTop(null));
