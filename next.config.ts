@@ -47,6 +47,12 @@ const nextConfig: NextConfig = {
      데이터 추가 보정으로 다른 slug 가 채워지면 매핑 갱신.  */
   async redirects() {
     return [
+      /* 루트(/) 접속 시 404 방지 — 메인 화면(/main)으로 이동 */
+      {
+        source: "/",
+        destination: "/main",
+        permanent: false,
+      },
       /* 구 사이트(WordPress, lselectricamerica.com) 레거시 경로 → 신규 URL 구조. src/data/legacyRedirects.ts 참고 */
       ...legacyRedirects,
       /* Blog/Press/Articles/Events 상세 URL 개편 — 구 /company/{type}/detail/{id} → /company/{type}/{id 또는 slug} */
