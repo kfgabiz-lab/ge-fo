@@ -76,7 +76,13 @@ export type WhereToBuyLocation = {
 
 function toPhoneHref(phone: string): string {
   const digits = phone.replace(/[^\d]/g, "");
-  return digits ? `tel:+${digits}` : "";
+  if (digits.length === 10) {
+    return `tel:+1${digits}`;
+  }
+  if (digits.length === 11 && digits.startsWith("1")) {
+    return `tel:+${digits}`;
+  }
+  return digits ? `tel:${digits}` : "";
 }
 
 export function hasValidCoords(location: WhereToBuyLocation): boolean {
