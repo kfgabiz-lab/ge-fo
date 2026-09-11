@@ -41,7 +41,7 @@ export async function fetchChatbotStream(
             credentials: "omit",
             body: JSON.stringify({
                 query: trimmedQuery,
-                data_market: "GLOBAL",
+                data_market: "NA",
                 web_enabled: "false",
             }),
             signal,
