@@ -47,7 +47,16 @@ type CommonLegalBodyProps = {
 
 function getDateValue(row: TermsRow): string {
   const raw = row.publish_dttm ?? row.createdAt ?? "";
-  return raw.slice(0, 10);
+  if (!raw) return "";
+  // publish_dttm은 순수 날짜 문자열(YYYY-MM-DD)이라 그대로 사용하고,
+  // createdAt은 ISO 타임스탬프(오프셋 포함)라 Date로 파싱해 로컬 날짜를 뽑는다.
+  if (!raw.includes("T")) return raw.slice(0, 10);
+  const d = new Date(raw);
+  if (Number.isNaN(d.getTime())) return raw.slice(0, 10);
+  const yyyy = String(d.getFullYear());
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
 }
 
 // mm dd, yyyy 형식으로 날짜 포맷
