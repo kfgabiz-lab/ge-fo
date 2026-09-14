@@ -53,7 +53,7 @@ const productImg = {
   ul67Panelboard: "/img/devices-systems/products/ul67-panelboard.webp",
   metalClad: "/img/devices-systems/products/metal-clad-switchgear.webp",
   metalEnclosed:
-    "/img/devices-systems/products/metal-enclosed-load-interrupter-switchgear.webp",
+    "/img/devices-systems/products/metal-enclosed-load-interrupter-switchgear.webp?1",
   ul1558: "/img/devices-systems/products/ul1558-switchgear.webp",
   padmount: "/img/devices-systems/products/padmount-transformer.webp",
   castResin: "/img/devices-systems/products/cast-resin-transformer.webp",
