@@ -99,12 +99,18 @@ export function useTechHubQuery(): TechHubQueryContextValue {
  */
 function TechHubFilterMemoryBridge() {
   const filter = useTechHubFilter();
-  const { restoredFilterIds, filterRestoreReady, markFiltersSettled } = useTechHubQuery();
+  const { restoredFilterIds, filterRestoreReady, categoriesLoaded, markFiltersSettled } =
+    useTechHubQuery();
   const hasAppliedRestore = useRef(false);
 
   useEffect(() => {
     if (hasAppliedRestore.current) return;
     if (!filterRestoreReady) return;
+    // 카테고리 트리가 로드되기 전에는 store의 descendantsMap이 비어 있어, 상위(비-leaf)
+    // 카테고리를 toggleFilter로 복원해도 하위 leaf로 캐스케이드되지 않는다 — getSelectedCategoryValues는
+    // leaf만 보므로 목록 필터에는 영원히 반영되지 않는 채 체크박스만 체크된 것처럼 보인다.
+    // 카테고리 복원이 없더라도(인증서만 복원하는 경우) 트리 로드를 기다려도 해는 없다.
+    if (!categoriesLoaded) return;
     hasAppliedRestore.current = true;
     if (restoredFilterIds.length === 0) {
       // 복원할 필터가 없는 경우엔 toggleFilter로 인한 지연 반영을 기다릴 필요가 없어
@@ -121,7 +127,7 @@ function TechHubFilterMemoryBridge() {
     // 실제로 바뀌는 걸 기다리는 아래 effect에서 대신 알린다(안 그러면 필터가 실제로 적용되기
     // 전에 "끝났다"고 알려서, 진짜 반영되는 순간 페이지 리셋 로직이 또 끼어든다).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [restoredFilterIds, filterRestoreReady]);
+  }, [restoredFilterIds, filterRestoreReady, categoriesLoaded]);
 
   const activeIdsKey = filter.activeChips.map((chip) => chip.id).join(",");
   useEffect(() => {
